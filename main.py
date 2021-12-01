@@ -30,8 +30,8 @@ notePixels = { 'si': [19],
             'mi':[6, 7],
             're#':[4, 5],
             're':[2, 3],
-            'do#':[0, 1],
-            'do':[]}
+            'do#':[1],
+            'do':[0]}
 
 
 def hue_to_rgb(t1, t2, hue):
@@ -128,7 +128,7 @@ async def main():
      starting + notes
     )
 
-    await p.play(printing)
+    await p.play(to_chroma_case)
 
     return 0
 
