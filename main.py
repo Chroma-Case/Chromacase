@@ -87,9 +87,10 @@ async def main():
     for msg in MidiFile('new_song_1.mid'):
         d = msg.dict()
         print(msg, d)
-        if "note" in d:
-            s += d['time'] * 1000
-            notes.append(Note(s, {"duration": 400, "color": default_color, "key": midi_key_my_key(d["note"])}))
+        s += d['time'] * 1000
+        if d["type"] == "note_on":
+            print(s)
+            notes.append(Note(s, {"duration": 470, "color": default_color, "key": midi_key_my_key(d["note"])}))
 
     p = Partition("test", 
         notes
