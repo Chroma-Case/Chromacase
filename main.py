@@ -20,6 +20,19 @@ notePixels = { 'si': [0, 1],
             're':[18, 19],
             'do#':[],
             'do':[]}
+notePixels = { 'si': [19],
+            'la#': [18],
+            'la': [15, 16, 17],
+            'sol#':[14],
+            'sol':[11, 12, 13],
+            'fa#':[10],
+            'fa':[8, 9],
+            'mi':[6, 7],
+            're#':[4, 5],
+            're':[2, 3],
+            'do#':[0, 1],
+            'do':[]}
+
 
 def hue_to_rgb(t1, t2, hue):
     if hue < 0: hue += 6
@@ -71,7 +84,7 @@ def midi_key_my_key(midi_key):
 
     keys.reverse()
 
-    return keys[midi_key - 48]
+    return keys[midi_key - 60]
 
 
 
@@ -82,18 +95,26 @@ async def main():
     default_color = (255, 0, 0)
 
     notes = []
-    s = 0
+    s = 3500
 
-    for msg in MidiFile('new_song_1.mid'):
+    for msg in MidiFile('new_song_2.mid'):
         d = msg.dict()
         print(msg, d)
         s += d['time'] * 1000
         if d["type"] == "note_on":
             print(s)
-            notes.append(Note(s, {"duration": 470, "color": default_color, "key": midi_key_my_key(d["note"])}))
+            notes.append(Note(s, {"duration": 270, "color": default_color, "key": midi_key_my_key(d["note"])}))
 
-    p = Partition("test", 
-        notes
+    starting = []
+    for i in notePixels.keys():
+        starting += [
+            Note(000, {"duration": default_duration, "color": default_color, "key": i}),
+            Note(1000, {"duration": default_duration, "color": (255, 255, 0), "key": i}),
+            Note(2000, {"duration": default_duration, "color": (0, 255, 0), "key": i}),
+    ]
+    
+    p = Partition("test",
+     starting + notes
     )
 
     """
