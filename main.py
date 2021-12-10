@@ -26,7 +26,7 @@ async def to_chroma_case(data):
     colored_pixels = notePixels[data["key"].lower()]
     for pixelId in colored_pixels:
         pixels[pixelId] = data["color"]
-    await asyncio.sleep((data['duration'] - 5) / 1000)
+    await asyncio.sleep(data['duration'] / 1000)
     for pixelId in colored_pixels:
         pixels[pixelId] = 0
         
@@ -38,7 +38,7 @@ async def printing(data):
 
 async def main():
 
-    default_duration = 1000
+    default_duration = 900
     default_color = (255, 0, 0)
 
     p = Partition("test", 
