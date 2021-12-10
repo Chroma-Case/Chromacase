@@ -47,7 +47,7 @@ async def to_chroma_case(data):
     colored_pixels = notePixels[data["key"].lower()]
     for i in range(11):
         for pixelId in colored_pixels:
-            pixels[pixelId] = hsl_to_rgb(hsl_starting_color)
+            pixels[pixelId] = hsl_to_rgb(hsl_starting_color[0], hsl_starting_color[1], hsl_starting_color[2])
             hsl_starting_color[2] += 0.1 
         await asyncio.sleep(0.1)
     for pixelId in colored_pixels:
