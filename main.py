@@ -36,8 +36,8 @@ def hsl_to_rgb(hue, sat, light):
         t2 = light + sat - (light * sat)
     t1 = light * 2 - t2
 
-    r = hue_to_rgb(t1, t2, hue + 2) * 255,
-    g = hue_to_rgb(t1, t2, hue) * 255,
+    r = hue_to_rgb(t1, t2, hue + 2) * 255
+    g = hue_to_rgb(t1, t2, hue) * 255
     b = hue_to_rgb(t1, t2, hue - 2) * 255
     return [round(r), round(g), round(b)]
 
