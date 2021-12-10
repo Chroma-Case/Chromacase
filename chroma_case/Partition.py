@@ -20,7 +20,7 @@ class Partition:
         self.__notes = notes
 
     
-    async def play(self, output_lambda:Callable[[str, tuple[int, int, int], int], None]):
+    async def play(self, output_lambda:Callable[[object], None]):
         now = datetime.datetime.now()
         tasks_to_wait = []
         for note in self.__notes:
@@ -28,11 +28,7 @@ class Partition:
                 asyncio.create_task(
                     run_at(
                         now + datetime.timedelta(milliseconds= note.get_start_time()),
-                        output_lambda(
-                            note.get_key(),
-                            note.get_color(),
-                            note.get_duration()
-                        )
+                        output_lambda(note.get_data())
                     )
                 )
             )

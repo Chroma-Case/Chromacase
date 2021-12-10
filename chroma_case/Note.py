@@ -1,21 +1,13 @@
 
 
 class Note:
-    def __init__(self, key, color, start_time, duration) -> None:
+    def __init__(self, start_time, data) -> None:
 
-        self.__key = key
-        self.__color = color
         self.__start_time = start_time
-        self.__duration = duration
-
-    def get_key(self):
-        return self.__key
-
-    def get_color(self):
-        return self.__color
+        self.__data = data
 
     def get_start_time(self):
         return self.__start_time
     
-    def get_duration(self):
-        return self.__duration
+    def get_data(self):
+        return self.__data
