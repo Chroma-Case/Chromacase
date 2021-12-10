@@ -20,12 +20,23 @@ notePixels = { 'si': [0, 1],
             'do#':[],
             'do':[]}
 
+def hue_to_rgb(t1, t2, hue):
+    if hue < 0: hue += 6
+    if hue >= 6: hue -= 6
+    if hue < 1: return (t2 - t1) * hue + t1
+    if hue < 3: return t2
+    if hue < 4: return (t2 - t1) * (4 - hue) + t1
+    return t1
+
 async def to_chroma_case(data):
     global pixels
 
+    starting_color = (252, 186, 3)
+
     colored_pixels = notePixels[data["key"].lower()]
     for pixelId in colored_pixels:
-        pixels[pixelId] = (0, 0, 100)
+        pixels[pixelId] = starting_color
+        starting_color -= py
     await asyncio.sleep(data['duration'] / 1000)
     for pixelId in colored_pixels:
         pixels[pixelId] = data["color"]
