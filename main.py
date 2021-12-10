@@ -28,16 +28,28 @@ def hue_to_rgb(t1, t2, hue):
     if hue < 4: return (t2 - t1) * (4 - hue) + t1
     return t1
 
+def hsl_to_rgb(hue, sat, light):
+    hue /= 60
+    if light <= 0.5:
+        t2 = light * (sat + 1)
+    else:
+        t2 = light + sat - (light * sat)
+    t1 = light * 2 - t2
+    return (hue_to_rgb(t1, t2, hue + 2) * 255,
+            hue_to_rgb(t1, t2, hue) * 255,
+            hue_to_rgb(t1, t2, hue - 2) * 255)
+
 async def to_chroma_case(data):
     global pixels
 
-    starting_color = (252, 186, 3)
+    hsl_starting_color = (55, 1, 0)
 
     colored_pixels = notePixels[data["key"].lower()]
-    for pixelId in colored_pixels:
-        pixels[pixelId] = starting_color
-        starting_color -= py
-    await asyncio.sleep(data['duration'] / 1000)
+    for i in range(11):
+        for pixelId in colored_pixels:
+            pixels[pixelId] = hsl_to_rgb(hsl_starting_color)
+            hsl_starting_color[2] += 0.1 
+        await asyncio.sleep(0.1)
     for pixelId in colored_pixels:
         pixels[pixelId] = data["color"]
     await asyncio.sleep(data['duration'] / 1000)
