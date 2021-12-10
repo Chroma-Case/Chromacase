@@ -44,7 +44,7 @@ def hsl_to_rgb(hue, sat, light):
 async def to_chroma_case(data):
     global pixels
 
-    hsl_starting_color = [55, 1, 0]
+    hsl_starting_color = [190, 1, 0]
 
     colored_pixels = notePixels[data["key"].lower()]
     for i in range(11):
