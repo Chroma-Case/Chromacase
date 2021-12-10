@@ -27,7 +27,6 @@ def playNote(color, secondsToStay, pixelsToFill):
         pixels[pixelIndex] = color
     time.sleep(secondsToStay)
 
-def incomingNote(color, time, pixelsToFill):
 
 
 

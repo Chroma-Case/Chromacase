@@ -11,6 +11,9 @@ class Note:
     def get_key(self):
         return self.__key
 
+    def get_color(self):
+        return self.__color
+
     def get_start_time(self):
         return self.__start_time
     
