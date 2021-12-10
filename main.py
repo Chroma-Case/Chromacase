@@ -3,9 +3,9 @@ from chroma_case.Note import Note
 import asyncio
 import sys
 
-#import board, neopixel
+import board, neopixel
 
-#pixels = neopixel.NeoPixel(board.D18, 20, brightness=0.1)
+pixels = neopixel.NeoPixel(board.D18, 20, brightness=0.1)
 
 notePixels = { 'si': [0, 1],
             'la#': [2, 3],
@@ -40,10 +40,6 @@ def hsl_to_rgb(hue, sat, light):
     g = hue_to_rgb(t1, t2, hue) * 255,
     b = hue_to_rgb(t1, t2, hue - 2) * 255
     return (round(r), round(g), round(b))
-
-print(hsl_to_rgb())
-
-pixels = {}
 
 async def to_chroma_case(data):
     global pixels
