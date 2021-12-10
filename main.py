@@ -5,7 +5,7 @@ import sys
 
 import board, neopixel
 
-pixels = neopixel.NeoPIxel(board.D18, 20, brightness=0.1)
+pixels = neopixel.NeoPixel(board.D18, 20, brightness=0.1)
 
 notePixels = { 'si': [0, 1],
             'la#': [2, 3],
