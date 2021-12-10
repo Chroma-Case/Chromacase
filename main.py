@@ -37,20 +37,30 @@ async def printing(data):
     print(f"end of {data['key']}")
 
 async def main():
-    n = Note(1000, {
-        "duration": 1500,
-        "color": (0, 255, 0),
-        "key": "fa",
-    })
+
+    default_duration = 1000
+    default_color = (255, 0, 0)
 
     p = Partition("test", 
         [
-            n,
-            Note(1500, {
-                "duration": 2000,
-                "color": (255, 0, 0),
-                "key": "fa lo",
-            })
+            Note(000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(1000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(2000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(3000, {"duration": default_duration, "color": default_color, "key": "re#"}),
+            Note(3000, {"duration": default_duration, "color": default_color, "key": "la#"}),
+            Note(4000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(5000, {"duration": default_duration, "color": default_color, "key": "re#"}),
+            Note(6000, {"duration": default_duration, "color": default_color, "key": "la#"}),
+
+            Note(7000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(8000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(9000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(10000, {"duration": default_duration, "color": default_color, "key": "re#"}),
+            Note(11000, {"duration": default_duration, "color": default_color, "key": "la#"}),
+            Note(12000, {"duration": default_duration, "color": default_color, "key": "sol"}),
+            Note(13000, {"duration": default_duration, "color": default_color, "key": "re#"}),
+            Note(14000, {"duration": default_duration, "color": default_color, "key": "la#"}),
+
         ]
     )
 
