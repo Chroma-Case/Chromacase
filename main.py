@@ -86,7 +86,7 @@ async def main():
         d = msg.dict()
         print(msg, d)
         if "note" in d:
-            notes.append(int(d.time * 1000), {"duration": 200, "color": default_color, "key": midi_key_my_key(d.note)})
+            notes.append(int(d['time'] * 1000), {"duration": 200, "color": default_color, "key": midi_key_my_key(d["note"])})
 
     p = Partition("test", 
         notes
