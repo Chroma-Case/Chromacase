@@ -84,8 +84,8 @@ async def main():
 
     for msg in MidiFile('new_song_1.mid'):
         d = msg.dict()
+        print(msg, d)
         notes.append(int(d.time * 1000), {"duration": 200, "color": default_color, "key": midi_key_my_key(d.note)})
-        print(msg)
 
     p = Partition("test", 
         notes
