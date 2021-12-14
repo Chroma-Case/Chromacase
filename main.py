@@ -67,7 +67,9 @@ async def printing(data):
 
 
 def midi_key_my_key(midi_key):
-    keys = list(notePixels.keys()).reverse()
+    keys = list(notePixels.keys())
+
+    keys.reverse()
 
     return keys[midi_key - 48]
 
