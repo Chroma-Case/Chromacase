@@ -65,17 +65,35 @@ async def printing(data):
     await asyncio.sleep(data['duration'] / 1000)
     print(f"end of {data['key']}")
 
+
+def midi_key_my_key(midi_key):
+    keys = list(notePixels.keys()).reverse()
+
+    return keys[midi_key - 48]
+
+
+
+
 async def main():
 
     default_duration = 900
     default_color = (255, 0, 0)
 
+    notes = []
+
 
     for msg in MidiFile('new_song_1.mid'):
+        d = msg.dict()
+        notes.append(int(d.time * 1000), {"duration": 200, "color": default_color, "key": midi_key_my_key(d.note)})
         print(msg)
 
     p = Partition("test", 
-        [
+        notes
+    )
+
+    """
+    
+    [
             Note(000, {"duration": default_duration, "color": default_color, "key": "sol"}),
             Note(1000, {"duration": default_duration, "color": default_color, "key": "sol"}),
             Note(2000, {"duration": default_duration, "color": default_color, "key": "sol"}),
@@ -95,7 +113,7 @@ async def main():
             Note(15000, {"duration": default_duration, "color": default_color, "key": "la#"}),
 
         ]
-    )
+    """
 
     await p.play(to_chroma_case)
 
