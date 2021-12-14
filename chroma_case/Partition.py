@@ -18,7 +18,6 @@ class Partition:
 
         self.__name = name
         self.__notes = notes
-
     
     async def play(self, output_lambda:Callable[[object], None]):
         now = datetime.datetime.now()

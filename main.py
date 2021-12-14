@@ -2,6 +2,7 @@ from chroma_case.Partition import Partition
 from chroma_case.Note import Note
 import asyncio
 import sys
+from mido import MidiFile
 
 import board, neopixel
 
@@ -68,6 +69,10 @@ async def main():
 
     default_duration = 900
     default_color = (255, 0, 0)
+
+
+    for msg in MidiFile('new_song_1.mid'):
+        print(msg)
 
     p = Partition("test", 
         [
