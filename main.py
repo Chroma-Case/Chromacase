@@ -48,11 +48,11 @@ async def to_chroma_case(data):
     hsl_starting_color = [190, 1, 0]
 
     colored_pixels = notePixels[data["key"].lower()]
-    for i in range(11):
+    """  for i in range(11):
         for pixelId in colored_pixels:
             pixels[pixelId] = hsl_to_rgb(hsl_starting_color[0], hsl_starting_color[1], hsl_starting_color[2])
             hsl_starting_color[2] += 0.01
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.01) """
     for pixelId in colored_pixels:
         pixels[pixelId] = data["color"]
     await asyncio.sleep(data['duration'] / 1000)
@@ -89,7 +89,7 @@ async def main():
         print(msg, d)
         if "note" in d:
             s += d['time'] * 1000
-            notes.append(Note(s, {"duration": 700, "color": default_color, "key": midi_key_my_key(d["note"])}))
+            notes.append(Note(s, {"duration": 450, "color": default_color, "key": midi_key_my_key(d["note"])}))
 
     p = Partition("test", 
         notes
