@@ -106,6 +106,7 @@ async def main():
         s += d['time'] * 1000
         if d["type"] == "note_on":
             print(s)
+            prev_note_on[d["note"]] = 0
             if d["note"] in notes_on:
                 prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
             notes_on[d["note"]] = s # 0
