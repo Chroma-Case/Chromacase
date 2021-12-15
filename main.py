@@ -98,6 +98,7 @@ async def main():
     s = 3500
 
     notes_on = {}
+    prev_note_on = {}
 
     for msg in MidiFile(sys.argv[1]):
         d = msg.dict()
@@ -105,10 +106,13 @@ async def main():
         s += d['time'] * 1000
         if d["type"] == "note_on":
             print(s)
-            notes_on[d["note"]] = s
+            if d["note"] in notes_on:
+                prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
+            notes_on[d["note"]] = s # 0
         if d["type"] == "note_off":
             duration = s - notes_on[d["note"]]
-            notes.append(Note(s - duration / 2, {"duration": duration / 2, "color": (0, 0, 255), "key": midi_key_my_key(d["note"])}))
+            notes_on[d["note"]] = s # 500
+            notes.append(Note(s - min(s - prev_note_on[d["note"]], 500), {"duration": min(s - prev_note_on[d["note"]], 500) / 2, "color": (0, 0, 255), "key": midi_key_my_key(d["note"])}))
             notes.append(Note(s, {"duration": duration, "color": default_color, "key": midi_key_my_key(d["note"])}))
 
     starting = []
