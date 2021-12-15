@@ -99,7 +99,7 @@ async def main():
 
     notes_on = {}
 
-    for msg in MidiFile('new_song_2.mid'):
+    for msg in MidiFile(sys.argv[1]):
         d = msg.dict()
         print(msg, d)
         s += d['time'] * 1000
