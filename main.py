@@ -108,7 +108,7 @@ async def main():
             notes_on[d["note"]] = s
         if d["type"] == "note_off":
             duration = s - notes_on[d["note"]]
-            notes.append(Note(s - 140, {"duration": 140, "color": (0, 0, 255), "key": midi_key_my_key(d["note"])}))
+            notes.append(Note(s - duration / 2, {"duration": duration / 2, "color": (0, 0, 255), "key": midi_key_my_key(d["note"])}))
             notes.append(Note(s, {"duration": duration, "color": default_color, "key": midi_key_my_key(d["note"])}))
 
     starting = []
