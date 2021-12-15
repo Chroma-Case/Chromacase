@@ -97,13 +97,17 @@ async def main():
     notes = []
     s = 3500
 
+    notes_on = {}
+
     for msg in MidiFile('new_song_2.mid'):
         d = msg.dict()
         print(msg, d)
         s += d['time'] * 1000
         if d["type"] == "note_on":
             print(s)
-            notes.append(Note(s, {"duration": 270, "color": default_color, "key": midi_key_my_key(d["note"])}))
+            notes_on[d["note"]] = s
+        if d["type"] == "note_off":
+            notes.append(Note(s, {"duration": s - notes_on[d["note"]], "color": default_color, "key": midi_key_my_key(d["note"])}))
 
     starting = []
     for i in notePixels.keys():
@@ -116,30 +120,6 @@ async def main():
     p = Partition("test",
      starting + notes
     )
-
-    """
-    
-    [
-            Note(000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(1000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(2000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(3000, {"duration": default_duration, "color": default_color, "key": "re#"}),
-            Note(4000, {"duration": default_duration, "color": default_color, "key": "la#"}),
-            Note(5000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(6000, {"duration": default_duration, "color": default_color, "key": "re#"}),
-            Note(7000, {"duration": default_duration, "color": default_color, "key": "la#"}),
-
-            Note(8000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(9000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(10000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(11000, {"duration": default_duration, "color": default_color, "key": "re#"}),
-            Note(12000, {"duration": default_duration, "color": default_color, "key": "la#"}),
-            Note(13000, {"duration": default_duration, "color": default_color, "key": "sol"}),
-            Note(14000, {"duration": default_duration, "color": default_color, "key": "re#"}),
-            Note(15000, {"duration": default_duration, "color": default_color, "key": "la#"}),
-
-        ]
-    """
 
     await p.play(to_chroma_case)
 
