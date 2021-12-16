@@ -128,7 +128,7 @@ async def main():
      starting + notes
     )
 
-    await p.play(to_chroma_case)
+    await p.play(printing)
 
     return 0
 
