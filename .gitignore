@@ -1,1 +1,6 @@
 __pycache__
+lib
+bin
+pyvenv.cfg
+include
+
