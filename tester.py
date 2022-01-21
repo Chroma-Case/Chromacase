@@ -23,7 +23,7 @@ class Key:
 
 def read_midi(file):
     notes = []
-    notes_on = []
+    notes_on = {}
     s = 0
     for msg in MidiFile(file):
         d = msg.dict()
