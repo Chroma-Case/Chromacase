@@ -43,7 +43,6 @@ def read_midi(file):
 keys_to_play = read_midi(sys.argv[1])
 for i in map(lambda x: str(x), keys_to_play):
     print(str(i))
-tempo = 1000 # The duration of a black key in ms.
 
 # List of keys currently holded. Format: (key, timestamp)
 keys_down = []
@@ -90,7 +89,7 @@ def poll(midi):
         elif status == TOUCH_UP or is_down:
             down_since = next(since for (h_key, since) in keys_down if h_key == key)
             keys_down.remove((key, down_since))
-            return Key(key, down_since, (timestamp - down_since) / tempo)
+            return Key(key, down_since, (timestamp - down_since))
 
 def is_timing_close(key, i):
     return abs(i.start - key.start) < 500
@@ -109,7 +108,7 @@ def run(midi):
         if to_play == None:
             print(f"Invalid key. Got {key.key}")
         else:
-            tempo_percent = max(0, min(100, 100 - abs(key.duration - to_play.duration) * 100)) + 50
+            tempo_percent = max(0, min(100, 100 - abs(key.duration - to_play.duration) * 100))
             if tempo_percent < 80:
                 points += tempo_percent / 2
                 print("Too short" if key.duration < to_play.duration else "Too long")
