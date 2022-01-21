@@ -20,6 +20,9 @@ class Key:
         self.start = start
         self.duration = duration
 
+    def __str__(self):
+        return f"{self.key} ({self.start} - {self.duration})"
+
 
 def read_midi(file):
     notes = []
@@ -34,9 +37,12 @@ def read_midi(file):
             duration = s - notes_on[d["note"]]
             notes_on[d["note"]] = s
             notes.append(Key(d["note"], s, duration))
+    return notes
 
 
 keys_to_play = read_midi(sys.argv[1])
+for i in map(lambda x: str(x), keys_to_play):
+    print(str(i))
 tempo = 1000 # The duration of a black key in ms.
 
 # List of keys currently holded. Format: (key, timestamp)
@@ -70,15 +76,19 @@ def _print_device_info():
 def poll(midi):
     if midi.poll():
         [((status, key, intensity, data3), timestamp)] = midi.read(1)
+        print(status, key, intensity, data3, timestamp)
         # For status, see STATUS DEFINITIONS up there (either TOUCH_DOWN, TOUCH_UP or others for pedals)
         # The key is between 21 and 108, C5 is 60
         # The itensity is how strong the key got struck (between 1 and 130ish)
         # data3 seems to always be 0
         # timestamp seems to be a unix timestamp since the midi has been oppened.
-        if status == TOUCH_DOWN:
+
+        # Sometimes, status is always TOUCH_DOWN so if the key is already down, we consider it the same as a key up
+        is_down = any(x[0] == key for x in keys_down)
+        if status == TOUCH_DOWN and not is_down:
             keys_down.append((key, timestamp))
             # print(f"Midi: {status} - {key} - {intensity} - {data3} at {timestamp}")
-        elif status == TOUCH_UP:
+        elif status == TOUCH_UP or is_down:
             down_since = next(since for (h_key, since) in keys_down if h_key == key)
             keys_down.remove((key, down_since))
             return Key(key, down_since, (timestamp - down_since) / tempo)
@@ -86,9 +96,10 @@ def poll(midi):
 def run(midi):
     global points
     while keys_to_play:
-        key =  poll(midi)
+        key = poll(midi)
         if key is None:
             continue
+        print(f"Got key {key}")
         to_play = keys_to_play.pop()
         if key.key == to_play.key:
             tempo_percent = 100 - abs(key.duration - to_play.duration) * 100
