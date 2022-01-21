@@ -104,12 +104,10 @@ def run(midi):
         clock_now = key.start
 
         to_play = next((i for i in keys_to_play if i.key == key.key and is_timing_close(key, i)), None)
-        print(str(to_play))
         if to_play == None:
             points -= 50
-            print(f"Invalid key. Got {key.key}")
+            print(f"Invalid key.")
         else:
-            points += 50
             tempo_percent = abs((key.duration / to_play.duration) - 1)
             points += tempo_percent * 50
             if tempo_percent < .3 : 
@@ -117,7 +115,6 @@ def run(midi):
             elif tempo_percent < .5:
                 print(f"GREAT.")
             else:
-                points += tempo_percent * 20
                 print(f"EXCELLENT.")
     points -= len(keys_to_play) * 20
 
