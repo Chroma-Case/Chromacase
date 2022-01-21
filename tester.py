@@ -76,7 +76,6 @@ def _print_device_info():
 def poll(midi):
     if midi.poll():
         [((status, key, intensity, data3), timestamp)] = midi.read(1)
-        print(status, key, intensity, data3, timestamp)
         # For status, see STATUS DEFINITIONS up there (either TOUCH_DOWN, TOUCH_UP or others for pedals)
         # The key is between 21 and 108, C5 is 60
         # The itensity is how strong the key got struck (between 1 and 130ish)
@@ -93,15 +92,24 @@ def poll(midi):
             keys_down.remove((key, down_since))
             return Key(key, down_since, (timestamp - down_since) / tempo)
 
+def is_timing_close(key, i):
+    return abs(i.start - key.start) < 500
+
 def run(midi):
     global points
-    while keys_to_play:
+    clock_now = 0
+    while sorted(keys_to_play, key=lambda x: x.start)[-1].start > clock_now:
         key = poll(midi)
         if key is None:
             continue
-        print(f"Got key {key}")
-        to_play = keys_to_play.pop()
-        if key.key == to_play.key:
+        clock_now = key.start
+        print(f"Clock at: {clock_now}")
+
+        to_play = next((i for i in keys_to_play if i.key == key.key and is_timing_close(key, i)), None)
+        print(str(to_play))
+        if to_play == None:
+            print(f"Invalid key. Got {key.key}")
+        else:
             tempo_percent = 100 - abs(key.duration - to_play.duration) * 100
             if tempo_percent < 80:
                 points += tempo_percent / 2
@@ -112,8 +120,6 @@ def run(midi):
             else:
                 points += tempo_percent * 2
                 print(f"EXCELLENT. {int(tempo_percent * 2)}pts")
-        else:
-            print(f"Invalid key. Got {key.key} expected {to_play.key}.")
 
 
 def input_main(device_id=None):
