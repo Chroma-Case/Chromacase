@@ -109,11 +109,11 @@ def run(midi):
             print(f"Invalid key. Got {key.key}")
         else:
             points += 50
-            tempo_percent = max(0, min(100, 100 - abs(key.duration - to_play.duration) * 100))
-            if tempo_percent < 30:
+            tempo_percent = key.duration / to_play.duration
+            if abs(tempo_percent - 1) < .3 :
                 points += tempo_percent / 2
                 print("Too short" if key.duration < to_play.duration else "Too long")
-            elif tempo_percent < 50:
+            elif tempo_percent < .5:
                 points += tempo_percent
                 print(f"GREAT. {int(tempo_percent)}pts")
             else:
