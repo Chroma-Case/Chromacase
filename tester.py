@@ -103,14 +103,13 @@ def run(midi):
         if key is None:
             continue
         clock_now = key.start
-        print(f"Clock at: {clock_now}")
 
         to_play = next((i for i in keys_to_play if i.key == key.key and is_timing_close(key, i)), None)
         print(str(to_play))
         if to_play == None:
             print(f"Invalid key. Got {key.key}")
         else:
-            tempo_percent = 100 - abs(key.duration - to_play.duration) * 100
+            tempo_percent = max(0, min(100, 100 - abs(key.duration - to_play.duration) * 100)) + 50
             if tempo_percent < 80:
                 points += tempo_percent / 2
                 print("Too short" if key.duration < to_play.duration else "Too long")
