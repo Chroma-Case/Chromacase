@@ -6,7 +6,7 @@ from mido import MidiFile
 
 import board, neopixel
 
-pixels = neopixel.NeoPixel(board.D18, 20, brightness=0.1)
+pixels = neopixel.NeoPixel(board.D18, 20, brightness=0.01)
 
 notePixels = { 'si': [0, 1],
             'la#': [2, 3],
@@ -58,14 +58,22 @@ def hsl_to_rgb(hue, sat, light):
 async def to_chroma_case(data):
     global pixels
 
-    hsl_starting_color = [190, 1, 0]
+    hsl_starting_color = [100, 100, 50]
 
     colored_pixels = notePixels[data["key"].lower()]
-    """  for i in range(11):
+    #if "announce" in data:
+    tmp = 1.0
+    c = data["color"]
+    """for i in range(5):
+        for pixelId in colored_pixels:
+            pixels[pixelId] = (c[0], int(c[1] * tmp), c[2])
+        tmp -= 0.2
+        await asyncio.sleep(data["duration"] / (5 * 1000))"""
+    """for i in range(11):
         for pixelId in colored_pixels:
             pixels[pixelId] = hsl_to_rgb(hsl_starting_color[0], hsl_starting_color[1], hsl_starting_color[2])
             hsl_starting_color[2] += 0.01
-        await asyncio.sleep(0.01) """
+        await asyncio.sleep(0.01)"""
     for pixelId in colored_pixels:
         pixels[pixelId] = data["color"]
     await asyncio.sleep(data['duration'] / 1000)
@@ -92,7 +100,7 @@ def midi_key_my_key(midi_key):
 async def main():
 
     default_duration = 900
-    default_color = (255, 0, 0)
+    default_color = (255, 255, 0)
 
     notes = []
     s = 3500
@@ -113,7 +121,15 @@ async def main():
         if d["type"] == "note_off":
             duration = s - notes_on[d["note"]]
             notes_on[d["note"]] = s # 500
-            #notes.append(Note(s - min(s - prev_note_on[d["note"]], 500), {"duration": min(s - prev_note_on[d["note"]], 500) / 2, "color": (0, 0, 255), "key": midi_key_my_key(d["note"])}))
+            """notes.append(Note(
+                s - min(s - prev_note_on[d["note"]], 500), 
+                {
+                    "duration": min(s - prev_note_on[d["note"]], 1000) / 2, 
+                    "color": (255, 255, 0), 
+                    "key": midi_key_my_key(d["note"]),
+                    "announce": True
+                }
+            ))"""
             notes.append(Note(s, {"duration": duration, "color": default_color, "key": midi_key_my_key(d["note"])}))
 
     starting = []
