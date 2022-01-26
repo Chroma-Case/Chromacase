@@ -70,7 +70,7 @@ async def to_chroma_case(data):
         
 
 async def printing(data):
-    print(f"key: {data['key']}, c:{data['color']} for {data['duration'] / 1000}s")
+    print(f"key: {data['key']}, c:{data['color']} for {data['duration'] / 1000}s, time: {data['time']}")
     await asyncio.sleep(data['duration'] / 1000)
     print(f"end of {data['key']}")
 
@@ -88,7 +88,7 @@ def midi_key_my_key(midi_key):
 async def main():
 
     default_duration = 900
-    default_color = (255, 255, 0)
+    default_color = (255, 0, 0)
 
     notes = []
     s = 3500
@@ -98,16 +98,15 @@ async def main():
 
     for msg in MidiFile(sys.argv[1]):
         d = msg.dict()
-        print(msg, d)
-        s += d['time'] * 1000
+        print(msg, s)
         if d["type"] == "note_on":
-            print(s)
             prev_note_on[d["note"]] = 0
             if d["note"] in notes_on:
                 prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
             notes_on[d["note"]] = s # 0
         if d["type"] == "note_off":
-            duration = s - notes_on[d["note"]]  - 100
+            #duration = s - notes_on[d["note"]]
+            duration = d["time"] * 1000
             notes_on[d["note"]] = s # 500
             """notes.append(Note(
                 s - min(s - prev_note_on[d["note"]], 500), 
@@ -118,21 +117,24 @@ async def main():
                     "announce": True
                 }
             ))"""
-            notes.append(Note(s, {"duration": duration, "color": default_color, "key": midi_key_my_key(d["note"])}))
+            notes.append(Note(s, {"time": s, "duration": duration - 0, "color": default_color, "key": midi_key_my_key(d["note"])}))
+
+            s += d['time'] * 1000
 
     starting = []
+
     for i in notePixels.keys():
         starting += [
-            Note(000, {"duration": default_duration, "color": default_color, "key": i}),
-            Note(1000, {"duration": default_duration, "color": (255, 255, 0), "key": i}),
-            Note(2000, {"duration": default_duration, "color": (0, 255, 0), "key": i}),
+            Note(000, {"duration": default_duration, "color": default_color, "key": i, "time": 0}),
+            Note(1000, {"duration": default_duration, "color": (255, 255, 0), "key": i, "time": 0}),
+            Note(2000, {"duration": default_duration, "color": (0, 255, 0), "key": i, "time": 0}),
     ]
     
     p = Partition("test",
      starting + notes
     )
 
-    await p.play(to_chroma_case)
+    await p.play(printing)
 
     return 0
 
