@@ -56,7 +56,6 @@ async def to_chroma_case(data):
 
     colored_pixels = notePixels[data["key"].lower()]
     #if "announce" in data:
-    tmp = 1.0
     c = data["color"]
     """for i in range(5):
         for pixelId in colored_pixels:
@@ -97,23 +96,28 @@ async def main():
     default_color = (255, 0, 0)
 
     notes = []
+    # notes will start to play at 3500 ms (colors at the start takes this amount of time)
     s = 3500
 
     notes_on = {}
     prev_note_on = {}
 
+
     for msg in MidiFile(sys.argv[1]):
         d = msg.dict()
-        print(msg, s)
+        #print(msg, s)
         s += d['time'] * 1000
+        
         if d["type"] == "note_on":
             prev_note_on[d["note"]] = 0
             if d["note"] in notes_on:
                 prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
             notes_on[d["note"]] = s # 0
+        
         if d["type"] == "note_off":
             #duration = s - notes_on[d["note"]]
             duration = s - notes_on[d["note"]]
+
             """notes.append(Note(
                 s - min(s - prev_note_on[d["note"]], 500), 
                 {
@@ -123,7 +127,9 @@ async def main():
                     "announce": True
                 }
             ))"""
+
             note_start = notes_on[d["note"]]
+            # time value is only used during debug
             notes.append(Note(note_start, {"time": note_start, "duration": duration - 10, "color": default_color, "key": midi_key_my_key(d["note"])}))
             notes_on[d["note"]] = s # 500
 
@@ -133,12 +139,12 @@ async def main():
     
     for i in notePixels.keys():
         starting += [
-            Note(000, {"duration": default_duration, "color": default_color, "key": i, "time": 0}),
+            Note(000, {"duration": default_duration, "color": (255, 0, 0), "key": i, "time": 0}),
             Note(1000, {"duration": default_duration, "color": (255, 255, 0), "key": i, "time": 0}),
             Note(2000, {"duration": default_duration, "color": (0, 255, 0), "key": i, "time": 0}),
     ]
     
-    p = Partition("test",
+    p = Partition("my_partition",
      starting + notes
     )
 
