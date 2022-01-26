@@ -1,0 +1,449 @@
+MetaMessage('time_signature', numerator=4, denominator=4, clocks_per_click=24, notated_32nd_notes_per_beat=8, time=0) 3500
+MetaMessage('set_tempo', tempo=600000, time=0) 3500
+MetaMessage('track_name', name='Elec. Piano (Classic)', time=0) 3500
+program_change channel=0 program=0 time=0 3500
+note_on channel=0 note=60 velocity=50 time=0 3500
+note_off channel=0 note=60 velocity=0 time=0.15 3500
+note_on channel=0 note=60 velocity=50 time=0.15 3650.0
+note_off channel=0 note=60 velocity=0 time=0.15 3800.0
+note_on channel=0 note=67 velocity=50 time=0.3 3950.0
+note_off channel=0 note=67 velocity=0 time=0.15 4250.0
+note_on channel=0 note=64 velocity=50 time=0.8999999999999999 4400.0
+note_off channel=0 note=64 velocity=0 time=0.15 5300.0
+note_on channel=0 note=62 velocity=50 time=0.44999999999999996 5450.0
+note_off channel=0 note=62 velocity=0 time=0.15 5900.0
+note_on channel=0 note=60 velocity=50 time=0.15 6050.0
+note_off channel=0 note=60 velocity=0 time=0.15 6200.0
+note_on channel=0 note=60 velocity=50 time=0.15 6350.0
+note_off channel=0 note=60 velocity=0 time=0.15 6500.0
+note_on channel=0 note=67 velocity=50 time=0.15 6650.0
+note_off channel=0 note=67 velocity=0 time=0.15 6800.0
+note_on channel=0 note=64 velocity=50 time=0.7499999999999999 6950.0
+note_off channel=0 note=64 velocity=0 time=0.15 7700.0
+note_on channel=0 note=62 velocity=50 time=0.44999999999999996 7850.0
+note_off channel=0 note=62 velocity=0 time=0.15 8300.0
+note_on channel=0 note=60 velocity=50 time=0.15 8450.0
+note_off channel=0 note=60 velocity=0 time=0.15 8600.0
+note_on channel=0 note=60 velocity=50 time=0.15 8750.0
+note_off channel=0 note=60 velocity=0 time=0.15 8900.0
+note_on channel=0 note=69 velocity=50 time=0.15 9050.0
+note_off channel=0 note=69 velocity=0 time=0.15 9200.0
+note_on channel=0 note=64 velocity=50 time=0.7499999999999999 9350.0
+note_off channel=0 note=64 velocity=0 time=0.15 10100.0
+note_on channel=0 note=62 velocity=50 time=0.44999999999999996 10250.0
+note_off channel=0 note=62 velocity=0 time=0.15 10700.0
+note_on channel=0 note=60 velocity=50 time=0.15 10850.0
+note_off channel=0 note=60 velocity=0 time=0.15 11000.0
+note_on channel=0 note=60 velocity=50 time=0.15 11150.0
+note_off channel=0 note=60 velocity=0 time=0.15 11300.0
+note_on channel=0 note=60 velocity=50 time=0.15 11450.0
+note_on channel=0 note=65 velocity=50 time=0 11600.0
+note_off channel=0 note=60 velocity=0 time=0.15 11600.0
+note_off channel=0 note=65 velocity=0 time=0 11750.0
+note_on channel=0 note=65 velocity=50 time=0.44999999999999996 11750.0
+note_off channel=0 note=65 velocity=0 time=0.15 12200.0
+note_on channel=0 note=65 velocity=50 time=0.44999999999999996 12350.0
+note_off channel=0 note=65 velocity=0 time=0.15 12800.0
+note_on channel=0 note=60 velocity=50 time=0.44999999999999996 12950.0
+note_off channel=0 note=60 velocity=0 time=0.15 13400.0
+note_on channel=0 note=60 velocity=50 time=0.15 13550.0
+note_off channel=0 note=60 velocity=0 time=0.15 13700.0
+note_on channel=0 note=60 velocity=50 time=0.15 13850.0
+note_on channel=0 note=67 velocity=50 time=0 14000.0
+note_off channel=0 note=60 velocity=0 time=0.15 14000.0
+note_off channel=0 note=67 velocity=0 time=0 14150.0
+note_on channel=0 note=60 velocity=50 time=0.7499999999999999 14150.0
+note_on channel=0 note=64 velocity=50 time=0 14900.0
+note_off channel=0 note=64 velocity=0 time=0.15 14900.0
+note_off channel=0 note=60 velocity=0 time=0 15050.0
+note_on channel=0 note=62 velocity=50 time=0.44999999999999996 15050.0
+note_off channel=0 note=62 velocity=0 time=0.15 15500.0
+note_on channel=0 note=60 velocity=50 time=0.15 15650.0
+note_off channel=0 note=60 velocity=0 time=0.15 15800.0
+note_on channel=0 note=60 velocity=50 time=0.15 15950.0
+note_off channel=0 note=60 velocity=0 time=0.15 16100.0
+note_on channel=0 note=62 velocity=50 time=0.15 16250.0
+note_on channel=0 note=67 velocity=50 time=0 16400.0
+note_off channel=0 note=67 velocity=0 time=0.15 16400.0
+note_off channel=0 note=62 velocity=0 time=0 16550.0
+note_on channel=0 note=64 velocity=50 time=0.7499999999999999 16550.0
+note_off channel=0 note=64 velocity=0 time=0.15 17300.0
+note_on channel=0 note=62 velocity=50 time=0.44999999999999996 17450.0
+note_off channel=0 note=62 velocity=0 time=0.15 17900.0
+note_on channel=0 note=60 velocity=50 time=0.15 18050.0
+note_off channel=0 note=60 velocity=0 time=0.15 18200.0
+note_on channel=0 note=60 velocity=50 time=0.15 18350.0
+note_off channel=0 note=60 velocity=0 time=0.15 18500.0
+note_on channel=0 note=69 velocity=50 time=0.15 18650.0
+note_on channel=0 note=64 velocity=50 time=0 18800.0
+note_off channel=0 note=64 velocity=0 time=0.15 18800.0
+note_off channel=0 note=69 velocity=0 time=0 18950.0
+note_on channel=0 note=64 velocity=50 time=0.7499999999999999 18950.0
+note_off channel=0 note=64 velocity=0 time=0.15 19700.0
+note_on channel=0 note=62 velocity=50 time=0.44999999999999996 19850.0
+note_off channel=0 note=62 velocity=0 time=0.15 20300.0
+note_on channel=0 note=60 velocity=50 time=0.15 20450.0
+note_off channel=0 note=60 velocity=0 time=0.15 20600.0
+note_on channel=0 note=60 velocity=50 time=0.15 20750.0
+note_off channel=0 note=60 velocity=0 time=0.15 20900.0
+note_on channel=0 note=60 velocity=50 time=0.15 21050.0
+note_on channel=0 note=67 velocity=50 time=0 21200.0
+note_off channel=0 note=67 velocity=0 time=0.15 21200.0
+note_off channel=0 note=60 velocity=0 time=0 21350.0
+note_on channel=0 note=60 velocity=50 time=0.44999999999999996 21350.0
+note_on channel=0 note=67 velocity=50 time=0 21800.0
+note_off channel=0 note=67 velocity=0 time=0.15 21800.0
+note_off channel=0 note=60 velocity=0 time=0 21950.0
+note_on channel=0 note=60 velocity=50 time=0.44999999999999996 21950.0
+note_on channel=0 note=67 velocity=50 time=0 22400.0
+note_off channel=0 note=67 velocity=0 time=0.15 22400.0
+note_off channel=0 note=60 velocity=0 time=0 22550.0
+note_on channel=0 note=64 velocity=50 time=1.65 22550.0
+note_on channel=0 note=67 velocity=50 time=0 24200.0
+note_off channel=0 note=64 velocity=0 time=0.15 24200.0
+note_off channel=0 note=67 velocity=0 time=0 24350.0
+note_on channel=0 note=67 velocity=50 time=0.15 24350.0
+note_on channel=0 note=64 velocity=50 time=0 24500.0
+note_off channel=0 note=64 velocity=0 time=0.15 24500.0
+note_off channel=0 note=67 velocity=0 time=0 24650.0
+note_on channel=0 note=64 velocity=50 time=0.15 24650.0
+note_on channel=0 note=67 velocity=50 time=0 24800.0
+note_off channel=0 note=67 velocity=0 time=0.15 24800.0
+note_off channel=0 note=64 velocity=0 time=0 24950.0
+note_on channel=0 note=67 velocity=50 time=0.15 24950.0
+note_on channel=0 note=64 velocity=50 time=0 25100.0
+note_off channel=0 note=64 velocity=0 time=0.15 25100.0
+note_off channel=0 note=67 velocity=0 time=0 25250.0
+note_on channel=0 note=64 velocity=50 time=0.3 25250.0
+note_off channel=0 note=64 velocity=0 time=0.15 25550.0
+note_on channel=0 note=62 velocity=50 time=0.3 25700.0
+note_on channel=0 note=67 velocity=50 time=0 26000.0
+note_off channel=0 note=67 velocity=0 time=0.15 26000.0
+note_off channel=0 note=62 velocity=0 time=0 26150.0
+note_on channel=0 note=62 velocity=50 time=0.44999999999999996 26150.0
+note_on channel=0 note=67 velocity=50 time=0 26600.0
+note_off channel=0 note=67 velocity=0 time=0.15 26600.0
+note_off channel=0 note=62 velocity=0 time=0 26750.0
+note_on channel=0 note=67 velocity=50 time=0.15 26750.0
+note_on channel=0 note=62 velocity=50 time=0 26900.0
+note_off channel=0 note=62 velocity=0 time=0.15 26900.0
+note_off channel=0 note=67 velocity=0 time=0 27050.0
+note_on channel=0 note=62 velocity=50 time=0.15 27050.0
+note_on channel=0 note=67 velocity=50 time=0 27200.0
+note_off channel=0 note=62 velocity=0 time=0.15 27200.0
+note_off channel=0 note=67 velocity=0 time=0 27350.0
+note_on channel=0 note=67 velocity=50 time=0.15 27350.0
+note_on channel=0 note=62 velocity=50 time=0 27500.0
+note_off channel=0 note=62 velocity=0 time=0.15 27500.0
+note_off channel=0 note=67 velocity=0 time=0 27650.0
+note_on channel=0 note=67 velocity=50 time=0.3 27650.0
+note_on channel=0 note=62 velocity=50 time=0 27950.0
+note_off channel=0 note=62 velocity=0 time=0.15 27950.0
+note_off channel=0 note=67 velocity=0 time=0 28100.0
+note_on channel=0 note=64 velocity=50 time=0.3 28100.0
+note_on channel=0 note=60 velocity=50 time=0 28400.0
+note_off channel=0 note=64 velocity=0 time=0.15 28400.0
+note_off channel=0 note=60 velocity=0 time=0 28550.0
+note_on channel=0 note=64 velocity=50 time=0.15 28550.0
+note_on channel=0 note=60 velocity=50 time=0 28700.0
+note_off channel=0 note=60 velocity=0 time=0.15 28700.0
+note_off channel=0 note=64 velocity=0 time=0 28850.0
+note_on channel=0 note=60 velocity=50 time=0.15 28850.0
+note_on channel=0 note=64 velocity=50 time=0 29000.0
+note_off channel=0 note=64 velocity=0 time=0.15 29000.0
+note_off channel=0 note=60 velocity=0 time=0 29150.0
+note_on channel=0 note=64 velocity=50 time=0.15 29150.0
+note_on channel=0 note=60 velocity=50 time=0 29300.0
+note_off channel=0 note=64 velocity=0 time=0.15 29300.0
+note_off channel=0 note=60 velocity=0 time=0 29450.0
+note_on channel=0 note=64 velocity=50 time=0.3 29450.0
+note_on channel=0 note=60 velocity=50 time=0 29750.0
+note_off channel=0 note=60 velocity=0 time=0.15 29750.0
+note_off channel=0 note=64 velocity=0 time=0 29900.0
+note_on channel=0 note=65 velocity=50 time=0.3 29900.0
+note_on channel=0 note=60 velocity=50 time=0 30200.0
+note_off channel=0 note=60 velocity=0 time=0.15 30200.0
+note_off channel=0 note=65 velocity=0 time=0 30350.0
+note_on channel=0 note=65 velocity=50 time=0.44999999999999996 30350.0
+note_on channel=0 note=60 velocity=50 time=0 30800.0
+note_off channel=0 note=65 velocity=0 time=0.15 30800.0
+note_off channel=0 note=60 velocity=0 time=0 30950.0
+note_on channel=0 note=65 velocity=50 time=0.15 30950.0
+note_on channel=0 note=60 velocity=50 time=0 31100.0
+note_off channel=0 note=65 velocity=0 time=0.15 31100.0
+note_off channel=0 note=60 velocity=0 time=0 31250.0
+note_on channel=0 note=60 velocity=50 time=0.15 31250.0
+note_on channel=0 note=65 velocity=50 time=0 31400.0
+note_off channel=0 note=65 velocity=0 time=0.15 31400.0
+note_off channel=0 note=60 velocity=0 time=0 31550.0
+note_on channel=0 note=60 velocity=50 time=0.15 31550.0
+note_on channel=0 note=65 velocity=50 time=0 31700.0
+note_off channel=0 note=60 velocity=0 time=0.15 31700.0
+note_off channel=0 note=65 velocity=0 time=0 31850.0
+note_on channel=0 note=64 velocity=50 time=0.3 31850.0
+note_on channel=0 note=60 velocity=50 time=0 32150.0
+note_off channel=0 note=60 velocity=0 time=0.15 32150.0
+note_off channel=0 note=64 velocity=0 time=0 32300.0
+note_on channel=0 note=64 velocity=50 time=0.3 32300.0
+note_on channel=0 note=60 velocity=50 time=0 32600.0
+note_off channel=0 note=60 velocity=0 time=0.15 32600.0
+note_off channel=0 note=64 velocity=0 time=0 32750.0
+MetaMessage('end_of_track', time=0) 32750.0
+key: si, c:(255, 0, 0) for 0.9s, time: 0
+key: la#, c:(255, 0, 0) for 0.9s, time: 0
+key: la, c:(255, 0, 0) for 0.9s, time: 0
+key: sol#, c:(255, 0, 0) for 0.9s, time: 0
+key: sol, c:(255, 0, 0) for 0.9s, time: 0
+key: fa#, c:(255, 0, 0) for 0.9s, time: 0
+key: fa, c:(255, 0, 0) for 0.9s, time: 0
+key: mi, c:(255, 0, 0) for 0.9s, time: 0
+key: re#, c:(255, 0, 0) for 0.9s, time: 0
+key: re, c:(255, 0, 0) for 0.9s, time: 0
+key: do#, c:(255, 0, 0) for 0.9s, time: 0
+key: do, c:(255, 0, 0) for 0.9s, time: 0
+end of si
+end of la#
+end of la
+end of sol#
+end of sol
+end of fa#
+end of fa
+end of mi
+end of re#
+end of re
+end of do#
+end of do
+key: re, c:(255, 255, 0) for 0.9s, time: 0
+key: do#, c:(255, 255, 0) for 0.9s, time: 0
+key: fa, c:(255, 255, 0) for 0.9s, time: 0
+key: mi, c:(255, 255, 0) for 0.9s, time: 0
+key: re#, c:(255, 255, 0) for 0.9s, time: 0
+key: sol, c:(255, 255, 0) for 0.9s, time: 0
+key: sol#, c:(255, 255, 0) for 0.9s, time: 0
+key: la, c:(255, 255, 0) for 0.9s, time: 0
+key: fa#, c:(255, 255, 0) for 0.9s, time: 0
+key: si, c:(255, 255, 0) for 0.9s, time: 0
+key: do, c:(255, 255, 0) for 0.9s, time: 0
+key: la#, c:(255, 255, 0) for 0.9s, time: 0
+end of re
+end of do#
+end of fa
+end of mi
+end of re#
+end of sol
+end of sol#
+end of la
+end of fa#
+end of si
+end of do
+end of la#
+key: sol#, c:(0, 255, 0) for 0.9s, time: 0
+key: do#, c:(0, 255, 0) for 0.9s, time: 0
+key: fa#, c:(0, 255, 0) for 0.9s, time: 0
+key: re#, c:(0, 255, 0) for 0.9s, time: 0
+key: la, c:(0, 255, 0) for 0.9s, time: 0
+key: fa, c:(0, 255, 0) for 0.9s, time: 0
+key: do, c:(0, 255, 0) for 0.9s, time: 0
+key: mi, c:(0, 255, 0) for 0.9s, time: 0
+key: la#, c:(0, 255, 0) for 0.9s, time: 0
+key: si, c:(0, 255, 0) for 0.9s, time: 0
+key: sol, c:(0, 255, 0) for 0.9s, time: 0
+key: re, c:(0, 255, 0) for 0.9s, time: 0
+end of sol#
+end of do#
+end of fa#
+end of re#
+end of la
+end of fa
+end of do
+end of mi
+end of la#
+end of si
+end of sol
+end of re
+key: do, c:(255, 0, 0) for 0.15s, time: 3500
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 3800.0
+end of do
+key: sol, c:(255, 0, 0) for 0.15s, time: 4250.0
+end of sol
+key: mi, c:(255, 0, 0) for 0.15s, time: 5300.0
+end of mi
+key: re, c:(255, 0, 0) for 0.15s, time: 5900.0
+end of re
+key: do, c:(255, 0, 0) for 0.15s, time: 6200.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 6500.0
+end of do
+key: sol, c:(255, 0, 0) for 0.15s, time: 6800.0
+end of sol
+key: mi, c:(255, 0, 0) for 0.15s, time: 7700.0
+end of mi
+key: re, c:(255, 0, 0) for 0.15s, time: 8300.0
+end of re
+key: do, c:(255, 0, 0) for 0.15s, time: 8600.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 8900.0
+end of do
+key: la, c:(255, 0, 0) for 0.15s, time: 9200.0
+end of la
+key: mi, c:(255, 0, 0) for 0.15s, time: 10100.0
+end of mi
+key: re, c:(255, 0, 0) for 0.15s, time: 10700.0
+end of re
+key: do, c:(255, 0, 0) for 0.15s, time: 11000.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 11300.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 11600.0
+key: fa, c:(255, 0, 0) for 0.0s, time: 11750.0
+end of fa
+end of do
+key: fa, c:(255, 0, 0) for 0.15s, time: 12200.0
+end of fa
+key: fa, c:(255, 0, 0) for 0.15s, time: 12800.0
+end of fa
+key: do, c:(255, 0, 0) for 0.15s, time: 13400.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 13700.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 14000.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 14150.0
+end of sol
+end of do
+key: mi, c:(255, 0, 0) for 0.15s, time: 14900.0
+key: do, c:(255, 0, 0) for 0.0s, time: 15050.0
+end of do
+end of mi
+key: re, c:(255, 0, 0) for 0.15s, time: 15500.0
+end of re
+key: do, c:(255, 0, 0) for 0.15s, time: 15800.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 16100.0
+end of do
+key: sol, c:(255, 0, 0) for 0.15s, time: 16400.0
+key: re, c:(255, 0, 0) for 0.0s, time: 16550.0
+end of re
+end of sol
+key: mi, c:(255, 0, 0) for 0.15s, time: 17300.0
+end of mi
+key: re, c:(255, 0, 0) for 0.15s, time: 17900.0
+end of re
+key: do, c:(255, 0, 0) for 0.15s, time: 18200.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 18500.0
+end of do
+key: mi, c:(255, 0, 0) for 0.15s, time: 18800.0
+key: la, c:(255, 0, 0) for 0.0s, time: 18950.0
+end of la
+end of mi
+key: mi, c:(255, 0, 0) for 0.15s, time: 19700.0
+end of mi
+key: re, c:(255, 0, 0) for 0.15s, time: 20300.0
+end of re
+key: do, c:(255, 0, 0) for 0.15s, time: 20600.0
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 20900.0
+end of do
+key: sol, c:(255, 0, 0) for 0.15s, time: 21200.0
+key: do, c:(255, 0, 0) for 0.0s, time: 21350.0
+end of do
+end of sol
+key: sol, c:(255, 0, 0) for 0.15s, time: 21800.0
+key: do, c:(255, 0, 0) for 0.0s, time: 21950.0
+end of do
+end of sol
+key: sol, c:(255, 0, 0) for 0.15s, time: 22400.0
+key: do, c:(255, 0, 0) for 0.0s, time: 22550.0
+end of do
+end of sol
+key: mi, c:(255, 0, 0) for 0.15s, time: 24200.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 24350.0
+end of sol
+end of mi
+key: mi, c:(255, 0, 0) for 0.15s, time: 24500.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 24650.0
+end of mi
+end of sol
+key: sol, c:(255, 0, 0) for 0.15s, time: 24800.0
+key: mi, c:(255, 0, 0) for 0.0s, time: 24950.0
+end of mi
+end of sol
+key: mi, c:(255, 0, 0) for 0.15s, time: 25100.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 25250.0
+end of sol
+end of mi
+key: mi, c:(255, 0, 0) for 0.15s, time: 25550.0
+end of mi
+key: sol, c:(255, 0, 0) for 0.15s, time: 26000.0
+key: re, c:(255, 0, 0) for 0.0s, time: 26150.0
+end of re
+end of sol
+key: sol, c:(255, 0, 0) for 0.15s, time: 26600.0
+key: re, c:(255, 0, 0) for 0.0s, time: 26750.0
+end of re
+end of sol
+key: re, c:(255, 0, 0) for 0.15s, time: 26900.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 27050.0
+end of re
+end of sol
+key: re, c:(255, 0, 0) for 0.15s, time: 27200.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 27350.0
+end of sol
+end of re
+key: re, c:(255, 0, 0) for 0.15s, time: 27500.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 27650.0
+end of sol
+end of re
+key: re, c:(255, 0, 0) for 0.15s, time: 27950.0
+key: sol, c:(255, 0, 0) for 0.0s, time: 28100.0
+end of sol
+end of re
+key: mi, c:(255, 0, 0) for 0.15s, time: 28400.0
+key: do, c:(255, 0, 0) for 0.0s, time: 28550.0
+end of do
+end of mi
+key: do, c:(255, 0, 0) for 0.15s, time: 28700.0
+key: mi, c:(255, 0, 0) for 0.0s, time: 28850.0
+end of do
+end of mi
+key: mi, c:(255, 0, 0) for 0.15s, time: 29000.0
+key: do, c:(255, 0, 0) for 0.0s, time: 29150.0
+end of do
+end of mi
+key: mi, c:(255, 0, 0) for 0.15s, time: 29300.0
+key: do, c:(255, 0, 0) for 0.0s, time: 29450.0
+end of mi
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 29750.0
+key: mi, c:(255, 0, 0) for 0.0s, time: 29900.0
+end of mi
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 30200.0
+key: fa, c:(255, 0, 0) for 0.0s, time: 30350.0
+end of do
+end of fa
+key: fa, c:(255, 0, 0) for 0.15s, time: 30800.0
+key: do, c:(255, 0, 0) for 0.0s, time: 30950.0
+end of do
+end of fa
+key: fa, c:(255, 0, 0) for 0.15s, time: 31100.0
+key: do, c:(255, 0, 0) for 0.0s, time: 31250.0
+end of do
+end of fa
+key: fa, c:(255, 0, 0) for 0.15s, time: 31400.0
+key: do, c:(255, 0, 0) for 0.0s, time: 31550.0
+end of fa
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 31700.0
+key: fa, c:(255, 0, 0) for 0.0s, time: 31850.0
+end of fa
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 32150.0
+key: mi, c:(255, 0, 0) for 0.0s, time: 32300.0
+end of mi
+end of do
+key: do, c:(255, 0, 0) for 0.15s, time: 32600.0
+key: mi, c:(255, 0, 0) for 0.0s, time: 32750.0
+end of mi
+end of do

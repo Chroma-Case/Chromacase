@@ -1,4 +1,3 @@
-from xmlrpc.client import TRANSPORT_ERROR
 from chroma_case.Partition import Partition
 from chroma_case.Note import Note
 import asyncio
@@ -7,23 +6,30 @@ from mido import MidiFile
 
 import board, neopixel
 
-# on octave is 12
-OCTAVE = 5
-OCTAVE_AMOUNT_KEYS = 12
-TRANSPOSE_AMOUNT = OCTAVE_AMOUNT_KEYS * OCTAVE
+pixels = neopixel.NeoPixel(board.D18, 20, brightness=0.1)
 
-pixels = neopixel.NeoPixel(board.D18, 20, brightness=0.01)
-
+notePixels = { 'si': [0, 1],
+            'la#': [2, 3],
+            'la': [4, 5],
+            'sol#':[6],
+            'sol':[7, 8, 9],
+            'fa#':[10],
+            'fa':[11, 12, 13],
+            'mi':[14, 15, 16],
+            're#':[17],
+            're':[18, 19],
+            'do#':[],
+            'do':[]}
 notePixels = { 'si': [19],
             'la#': [18],
-            'la': [17],
-            'sol#':[15],
-            'sol':[13],
+            'la': [15, 16, 17],
+            'sol#':[14],
+            'sol':[11, 12, 13],
             'fa#':[10],
-            'fa':[8],
-            'mi':[7],
-            're#':[5],
-            're':[3],
+            'fa':[8, 9],
+            'mi':[6, 7],
+            're#':[4, 5],
+            're':[2, 3],
             'do#':[1],
             'do':[0]}
 
@@ -52,22 +58,9 @@ def hsl_to_rgb(hue, sat, light):
 async def to_chroma_case(data):
     global pixels
 
-    hsl_starting_color = [100, 100, 50]
+    hsl_starting_color = [190, 1, 0]
 
     colored_pixels = notePixels[data["key"].lower()]
-    #if "announce" in data:
-    tmp = 1.0
-    c = data["color"]
-    """for i in range(5):
-        for pixelId in colored_pixels:
-            pixels[pixelId] = (c[0], int(c[1] * tmp), c[2])
-        tmp -= 0.2
-        await asyncio.sleep(data["duration"] / (5 * 1000))"""
-    """for i in range(11):
-        for pixelId in colored_pixels:
-            pixels[pixelId] = hsl_to_rgb(hsl_starting_color[0], hsl_starting_color[1], hsl_starting_color[2])
-            hsl_starting_color[2] += 0.01
-        await asyncio.sleep(0.01)"""
     for pixelId in colored_pixels:
         pixels[pixelId] = data["color"]
     await asyncio.sleep(data['duration'] / 1000)
@@ -86,7 +79,7 @@ def midi_key_my_key(midi_key):
 
     keys.reverse()
 
-    return keys[midi_key - TRANSPOSE_AMOUNT]
+    return keys[midi_key - 60]
 
 
 
@@ -112,25 +105,12 @@ async def main():
                 prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
             notes_on[d["note"]] = s # 0
         if d["type"] == "note_off":
-            #duration = s - notes_on[d["note"]]
             duration = s - notes_on[d["note"]]
-            """notes.append(Note(
-                s - min(s - prev_note_on[d["note"]], 500), 
-                {
-                    "duration": min(s - prev_note_on[d["note"]], 1000) / 2, 
-                    "color": (255, 255, 0), 
-                    "key": midi_key_my_key(d["note"]),
-                    "announce": True
-                }
-            ))"""
-            note_start = notes_on[d["note"]]
-            notes.append(Note(note_start, {"time": note_start, "duration": duration - 10, "color": default_color, "key": midi_key_my_key(d["note"])}))
             notes_on[d["note"]] = s # 500
-
-
+            #notes.append(Note(s - min(s - prev_note_on[d["note"]], 500), {"duration": min(s - prev_note_on[d["note"]], 500) / 2, "color": (0, 0, 255), "key": midi_key_my_key(d["note"])}))
+            notes.append(Note(s, {"time": s, "duration": duration, "color": default_color, "key": midi_key_my_key(d["note"])}))
 
     starting = []
-    
     for i in notePixels.keys():
         starting += [
             Note(000, {"duration": default_duration, "color": default_color, "key": i, "time": 0}),
@@ -142,7 +122,7 @@ async def main():
      starting + notes
     )
 
-    await p.play(to_chroma_case)
+    await p.play(printing)
 
     return 0
 
