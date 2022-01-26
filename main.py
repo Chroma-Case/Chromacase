@@ -107,7 +107,7 @@ async def main():
                 prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
             notes_on[d["note"]] = s # 0
         if d["type"] == "note_off":
-            duration = s - notes_on[d["note"]]
+            duration = s - notes_on[d["note"]]  - 100
             notes_on[d["note"]] = s # 500
             """notes.append(Note(
                 s - min(s - prev_note_on[d["note"]], 500), 
