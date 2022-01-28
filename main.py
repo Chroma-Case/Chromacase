@@ -8,6 +8,7 @@ from mido import MidiFile
 import board, neopixel
 
 # on octave is 12
+RATIO = float(sys.argv[2] if len(sys.argv) > 2 else 1)
 OCTAVE = 5
 OCTAVE_AMOUNT_KEYS = 12
 TRANSPOSE_AMOUNT = OCTAVE_AMOUNT_KEYS * OCTAVE
@@ -20,8 +21,8 @@ notePixels = { 'si': [19],
             'sol#':[15],
             'sol':[13],
             'fa#':[10],
-            'fa':[8],
-            'mi':[7],
+            'fa':[9],
+            'mi':[6],
             're#':[5],
             're':[3],
             'do#':[1],
@@ -85,7 +86,12 @@ def midi_key_my_key(midi_key):
 
     keys.reverse()
 
-    return keys[midi_key - TRANSPOSE_AMOUNT]
+    key_index = midi_key - TRANSPOSE_AMOUNT
+    if key_index >= len(keys):
+        print("key out of leb barre", key_index)
+        return "no_key"
+
+    return keys[key_index]
 
 
 
@@ -101,18 +107,21 @@ async def main():
 
     notes_on = {}
     prev_note_on = {}
-
+    note_color = {}
 
     for msg in MidiFile(sys.argv[1]):
         d = msg.dict()
-        #print(msg, s)
-        s += d['time'] * 1000
+        print(msg, s)
+        s += d['time'] * 1000 * RATIO
         
         if d["type"] == "note_on":
             prev_note_on[d["note"]] = 0
             if d["note"] in notes_on:
                 prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
             notes_on[d["note"]] = s # 0
+            if d["note"] not in note_color.keys():
+                note_color[d["note"]] = 1
+            note_color[d["note"]] = not note_color[d["note"]]
         
         if d["type"] == "note_off":
             #duration = s - notes_on[d["note"]]
@@ -130,7 +139,7 @@ async def main():
 
             note_start = notes_on[d["note"]]
             # time value is only used during debug
-            notes.append(Note(note_start, {"time": note_start, "duration": duration - 10, "color": default_color, "key": midi_key_my_key(d["note"])}))
+            notes.append(Note(note_start, {"time": note_start, "duration": duration - 10, "color": default_color if note_color[d["note"]] else (255, 100, 0), "key": midi_key_my_key(d["note"])}))
             notes_on[d["note"]] = s # 500
 
 
