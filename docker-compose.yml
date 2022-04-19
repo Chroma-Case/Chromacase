@@ -3,4 +3,4 @@ services:
   carbone:
     build: .
     volumes:
-      - /home/cbihan/Documents/carbone:/carbone
+      - .:/carbone
