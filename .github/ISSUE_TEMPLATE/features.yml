@@ -4,10 +4,10 @@ labels: [feature]
 body:
   - type: markdown
     attributes:
-      value: Ecrire tout en francais
+      value: Écrire tout en francais
   - type: input
     attributes:
-      label: "En temps que"
+      label: "En tant que"
       description: "personne qui fait l'action"
     validations:
       required: true
@@ -20,15 +20,15 @@ body:
   - type: input
     attributes:
       label: "Estimation du temps"
-      placeholder: "3 jours ouvree"
+      placeholder: "3 jours ouvrés (3J/H)"
     validations:
       required: true
   - type: textarea
     attributes:
-      label: "Descritpion"
-      description: "La desciption de la feature"
+      label: "Description"
+      description: "La description de la feature"
   - type: textarea
     attributes:
-      label: "Desciption of done"
+      label: "Definition of Done (DoD)"
       description: "Liste de ticks"
 
