@@ -1,0 +1,34 @@
+name: Feature Request
+description: Request a new feature
+labels: [feature]
+body:
+  - type: markdown
+    attributes:
+      value: Ecrire tout en francais
+  - type: input
+    attributes:
+      label: "En temps que"
+      description: "personne qui fait l'action"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Je veux"
+      description: "description de la feature en une phrase"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: "Estimation du temps"
+      placeholder: "3 jours ouvree"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Descritpion"
+      description: "La desciption de la feature"
+  - type: textarea
+    attributes:
+      label: "Desciption of done"
+      description: "Liste de ticks"
+
