@@ -15,10 +15,15 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primaryColor: Colors.green,
+        dividerColor: Colors.grey,
         backgroundColor: Colors.white,
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           titleLarge: TextStyle(
             fontWeight: FontWeight.bold,
+          ),
+          titleSmall: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12
           ),
         )
       ),

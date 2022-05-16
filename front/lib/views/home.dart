@@ -1,5 +1,9 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:front/widgets/level_widget.dart';
+import 'package:front/widgets/track_button.dart';
+import 'package:front/widgets/track_icon.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -25,6 +29,13 @@ class HomeView extends StatelessWidget {
               )
             ],
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              for (var i = 1; i <= 5; i++)
+              const TrackButton()   
+            ],
+          )
         ],
       ),
     );
