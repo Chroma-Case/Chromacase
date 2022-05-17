@@ -22,8 +22,8 @@ class LevelWidget extends StatelessWidget {
             child: LinearProgressIndicator(
               value: 3 / 4,
               semanticsLabel: 'Linear progress indicator',
-              color: Theme.of(context).primaryColor,
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
+              color: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
             ),
           ),
           Text(

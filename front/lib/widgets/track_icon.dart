@@ -11,7 +11,7 @@ class TrackIcon extends StatelessWidget {
       children: [
         Image.asset(
           'assets/images/template_art.png',
-          width: 100,
+          width: 80,
         ),
         const Padding(
           padding: EdgeInsets.only(

@@ -1,6 +1,8 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:front/widgets/colored_button.dart';
 import 'package:front/widgets/level_widget.dart';
 import 'package:front/widgets/track_button.dart';
 import 'package:front/widgets/track_icon.dart';
@@ -29,13 +31,54 @@ class HomeView extends StatelessWidget {
               )
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          StaggeredGrid.count(
+            crossAxisCount: 6,
+            mainAxisSpacing: 3,
             children: [
-              for (var i = 1; i <= 5; i++)
-              const TrackButton()   
+              StaggeredGridTile.fit(
+                crossAxisCellCount: 4,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (var i = 1; i <= 5; i++)
+                    const TrackButton()
+                  ],
+                ),
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: 1,
+                child: Center(
+                  child: ColoredButton(
+                    label: "Search",
+                    color: Theme.of(context).colorScheme.secondary,
+                    onTap: () {},
+                  ),
+                )
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: 2,
+                child: const Text("Track"),
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: 2,
+                child: const Text("Track"),
+              ),
+              StaggeredGridTile.count(
+                crossAxisCellCount: 2,
+                mainAxisCellCount: 2,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: [
+                    for (var i = 1; i <= 4; i++)
+                    const TrackButton()
+                  ],
+                ),
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

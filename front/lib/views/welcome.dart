@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/widgets/colored_button.dart';
 
 class WelcomeView extends StatelessWidget {
   const WelcomeView({Key? key}) : super(key: key);
@@ -15,17 +16,10 @@ class WelcomeView extends StatelessWidget {
               'assets/images/title.png',
               width: MediaQuery.of(context).size.width * 0.8,
             ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed('/login'),
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text('Login'),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-                shape: const StadiumBorder(),
-              ),
-            )
+            ColoredButton(
+              label: "Login",
+              onTap: () => Navigator.of(context).pushNamed('/login')
+            ),
           ],
         ),
       )
