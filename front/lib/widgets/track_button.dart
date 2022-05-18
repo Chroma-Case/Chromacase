@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:front/widgets/track_icon.dart';
+import 'package:front/widgets/utils/rounded_borders.dart';
 
 class TrackButton extends StatelessWidget {
   const TrackButton({Key? key}) : super(key: key);
@@ -7,15 +8,7 @@ class TrackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          side: BorderSide(
-            width: 0.5,
-            color: Theme.of(context).dividerColor
-          )
-        ),
-      ),
+      decoration: roundedBorders(Theme.of(context).dividerColor),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
         onTap: () {},

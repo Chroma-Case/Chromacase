@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:front/widgets/colored_button.dart';
 import 'package:front/widgets/level_widget.dart';
+import 'package:front/widgets/progress_table.dart';
 import 'package:front/widgets/track_button.dart';
 import 'package:front/widgets/track_icon.dart';
 
@@ -33,12 +34,13 @@ class HomeView extends StatelessWidget {
           ),
           StaggeredGrid.count(
             crossAxisCount: 6,
-            mainAxisSpacing: 3,
+            mainAxisSpacing: 40,
+            crossAxisSpacing: 40,
             children: [
               StaggeredGridTile.fit(
                 crossAxisCellCount: 4,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     for (var i = 1; i <= 5; i++)
                     const TrackButton()
@@ -56,26 +58,31 @@ class HomeView extends StatelessWidget {
                   ),
                 )
               ),
-              StaggeredGridTile.count(
+              const StaggeredGridTile.count(
                 crossAxisCellCount: 2,
                 mainAxisCellCount: 2,
-                child: const Text("Track"),
+                child: ProgressTable()
               ),
-              StaggeredGridTile.count(
+              for (int i = 0; i < 2; i++)
+              StaggeredGridTile.fit(
                 crossAxisCellCount: 2,
-                mainAxisCellCount: 2,
-                child: const Text("Track"),
-              ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: 2,
-                child: Wrap(
-                  alignment: WrapAlignment.spaceEvenly,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for (var i = 1; i <= 4; i++)
-                    const TrackButton()
+                    for (int i = 0; i < 2; i++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                        for (int i = 0; i < 2; i++)
+                          const TrackButton()
+                        ],
+                      ),
+                    )
                   ],
-                ),
+                )
               ),
             ],
           ),
