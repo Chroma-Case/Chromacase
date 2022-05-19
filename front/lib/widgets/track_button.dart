@@ -7,16 +7,20 @@ class TrackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: roundedBorders(Theme.of(context).dividerColor),
-      clipBehavior: Clip.hardEdge,
-      child: InkWell(
-        onTap: () {},
-        child: const Padding(
-          padding: EdgeInsets.all(10),
-          child: TrackIcon(),
-        ),
-      )
+    return SizedBox(
+      height: 150,
+      width: 100,
+      child: Container(
+        decoration: roundedBorders(Theme.of(context).dividerColor),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          onTap: () {},
+          child: const Padding(
+            padding: EdgeInsets.all(10),
+            child: TrackIcon(),
+          ),
+        )
+      ),
     );
   }
 }

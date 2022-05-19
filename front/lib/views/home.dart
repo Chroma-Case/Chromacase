@@ -1,12 +1,13 @@
 import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:front/widgets/colored_button.dart';
 import 'package:front/widgets/level_widget.dart';
 import 'package:front/widgets/progress_table.dart';
 import 'package:front/widgets/track_button.dart';
+import 'package:front/widgets/track_grid.dart';
 import 'package:front/widgets/track_icon.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -17,22 +18,91 @@ class HomeView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(40),
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ResponsiveGridRow(
+            rowSegments: 3,
             children: [
-              Text(
-                'Bienvenue, John Doe!',
-                style: Theme.of(context).textTheme.titleLarge
+              ResponsiveGridCol(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Bienvenue, John Doe!',
+                      style: Theme.of(context).textTheme.titleLarge
+                    ),
+                    LevelWidget(
+                      level: 23,
+                      goodNotesCount: 23000,
+                      progressWidth: MediaQuery.of(context).size.width * 0.2,
+                    )
+                  ],
+                ),
               ),
-              LevelWidget(
-                level: 23,
-                goodNotesCount: 23000,
-                progressWidth: MediaQuery.of(context).size.width * 0.2,
+              ResponsiveGridCol(
+                xs: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: List.generate(
+                        5, (index) => const TrackButton()
+                      ).toList(),
+                    ),
+                    Row(
+                      children: [
+                        const ProgressTable(),
+                        Expanded(
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceEvenly,
+                            children: List.generate(
+                              5, (index) => const TrackButton()
+                            ).toList(),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              ResponsiveGridCol(
+                xs: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ColoredButton(
+                      label: "Search",
+                      color: Theme.of(context).colorScheme.secondary,
+                      onTap: () {},
+                    ),
+                    TrackGrid(
+                      horizontalCount: 4,
+                      trackButtons: List.generate(6, (index) => const TrackButton())
+                    ),
+                  ],
+                ),
+              ),
+            ], 
+          )
+          /*,*/
+          /*Wrap(
+            runAlignment: WrapAlignment.spaceBetween,
+            children: [
+              TrackGrid(
+                horizontalCount: 4,
+                trackButtons: List.generate(6, (index) => const TrackButton())
+              ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  
+                ],
               )
             ],
-          ),
-          StaggeredGrid.count(
+          )*/
+          /*StaggeredGrid.count(
             crossAxisCount: 6,
             mainAxisSpacing: 40,
             crossAxisSpacing: 40,
@@ -47,45 +117,42 @@ class HomeView extends StatelessWidget {
                   ],
                 ),
               ),
-              StaggeredGridTile.count(
-                crossAxisCellCount: 2,
-                mainAxisCellCount: 1,
-                child: Center(
-                  child: ColoredButton(
-                    label: "Search",
-                    color: Theme.of(context).colorScheme.secondary,
-                    onTap: () {},
-                  ),
+              StaggeredGridTile.fit(
+                crossAxisCellCount: 4,
+                child: Row(
+                  children: const [
+                    ProgressTable(),
+                    // TrackGrid(
+                    //   horizontalCount: 2,
+                    //   trackButtons: [
+                    //     for (int i = 0; i < 6; i++)
+                    //     const TrackButton()
+                    //   ]
+                    // )
+                  ],
                 )
               ),
-              const StaggeredGridTile.count(
+              StaggeredGridTile.count(
                 crossAxisCellCount: 2,
-                mainAxisCellCount: 2,
-                child: ProgressTable()
-              ),
-              for (int i = 0; i < 2; i++)
-              StaggeredGridTile.fit(
-                crossAxisCellCount: 2,
+                mainAxisCellCount: 3,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    for (int i = 0; i < 2; i++)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                        for (int i = 0; i < 2; i++)
-                          const TrackButton()
-                        ],
-                      ),
+                    ColoredButton(
+                      label: "Search",
+                      color: Theme.of(context).colorScheme.secondary,
+                      onTap: () {},
+                    ),
+                    TrackGrid(
+                      horizontalCount: 2,
+                      trackButtons: List.generate(6, (index) => const TrackButton())
                     )
                   ],
                 )
               ),
             ],
-          ),
+          ),*/
         ],
       ),
     );
