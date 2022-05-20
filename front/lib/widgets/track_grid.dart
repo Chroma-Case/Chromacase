@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
 class TrackGrid extends StatelessWidget {
   final int horizontalCount;
@@ -9,7 +10,7 @@ class TrackGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    /*return Padding(
       padding: const EdgeInsets.all(10),
       child: Wrap(
         children: trackButtons.map(
@@ -19,7 +20,16 @@ class TrackGrid extends StatelessWidget {
           )
         ).toList(),
       ),
-    );
+    );*/
+    /*return ResponsiveGridRow(
+      rowSegments: horizontalCount,
+      children: trackButtons.map(
+        (button) => ResponsiveGridCol(
+          xs: 1,
+          child: button
+        )
+      ).toList(),
+    );*/
     /*return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -31,25 +41,27 @@ class TrackGrid extends StatelessWidget {
       ),
       children: trackButtons
     );*/
-    /*return Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         for (int i = 0; i < trackButtons.length / horizontalCount; i++)
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: trackButtons
               .sublist(i, i + horizontalCount)
-              .map((button) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: button,
-              ))
+              //.map((button) => Padding(
+              //  padding: const EdgeInsets.symmetric(horizontal: 10),
+              //  child: button,
+              //))
               .toList(),
           ),
         ),
       ],
-    );*/
+    );
   }
   
 }

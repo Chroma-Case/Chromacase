@@ -40,47 +40,51 @@ class HomeView extends StatelessWidget {
               ),
               ResponsiveGridCol(
                 xs: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        5, (index) => const TrackButton()
-                      ).toList(),
-                    ),
-                    Row(
-                      children: [
-                        const ProgressTable(),
-                        Expanded(
-                          child: Wrap(
-                            alignment: WrapAlignment.spaceEvenly,
-                            children: List.generate(
-                              5, (index) => const TrackButton()
-                            ).toList(),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(
+                    5, (index) => const TrackButton()
+                  ).toList(),
                 ),
               ),
               ResponsiveGridCol(
                 xs: 1,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ColoredButton(
                       label: "Search",
                       color: Theme.of(context).colorScheme.secondary,
                       onTap: () {},
                     ),
-                    TrackGrid(
-                      horizontalCount: 4,
-                      trackButtons: List.generate(6, (index) => const TrackButton())
-                    ),
                   ],
+                ),
+              ),
+              ResponsiveGridCol(
+                xs: 2,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: const ProgressTable()
+                    ),
+                    Expanded(
+                      child: TrackGrid(
+                        horizontalCount: 3,
+                        trackButtons: List.generate(
+                          5, (index) => const TrackButton()
+                        ).toList()
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              ResponsiveGridCol(
+                xs: 1,
+                child: Center(
+                  child: TrackGrid(
+                    horizontalCount: 2,
+                    trackButtons: List.generate(6, (index) => const TrackButton())
+                  ),
                 ),
               ),
             ], 
