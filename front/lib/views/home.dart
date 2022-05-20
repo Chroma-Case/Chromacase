@@ -18,26 +18,30 @@ class HomeView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(40),
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Bienvenue, John Doe!',
-                style: Theme.of(context).textTheme.titleLarge
-              ),
-              LevelWidget(
-                level: 23,
-                goodNotesCount: 23000,
-                progressWidth: MediaQuery.of(context).size.width * 0.2,
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Bienvenue, John Doe!',
+                  style: Theme.of(context).textTheme.titleLarge
+                ),
+                LevelWidget(
+                  level: 23,
+                  goodNotesCount: 23000,
+                  progressWidth: MediaQuery.of(context).size.width * 0.2,
+                )
+              ],
+            ),
           ),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: [
               Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TrackGrid(
                     horizontalCount: 5,
@@ -45,11 +49,12 @@ class HomeView extends StatelessWidget {
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const ProgressTable(),
                       TrackGrid(
-                        horizontalCount: 2,
-                        trackButtons: List.generate(4, (index) => const TrackButton())
+                        horizontalCount: 3,
+                        trackButtons: List.generate(10, (index) => const TrackButton())
                       ),
                     ],
                   )
@@ -66,8 +71,8 @@ class HomeView extends StatelessWidget {
                     ),
                   ),
                   TrackGrid(
-                    horizontalCount: 2,
-                    trackButtons: List.generate(4, (index) => const TrackButton())
+                    horizontalCount: 3,
+                    trackButtons: List.generate(12, (index) => const TrackButton())
                   )
                 ],
               )

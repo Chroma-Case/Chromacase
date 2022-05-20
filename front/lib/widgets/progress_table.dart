@@ -11,25 +11,31 @@ class ProgressTable extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             for (int i = 0; i < 6; i++)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Ability $i"),
-                SizedBox(
-                  width: 200,
-                  child: LinearProgressIndicator(
-                    value: 3 / 4,
-                    minHeight: 10,
-                    semanticsLabel: '"Ability $i"',
-                    color: Theme.of(context).colorScheme.primary,
-                    backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Wrap(
+                alignment: WrapAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Text("Ability $i"),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: 200,
+                    child: LinearProgressIndicator(
+                      value: 3 / 4,
+                      minHeight: 10,
+                      semanticsLabel: '"Ability $i"',
+                      color: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),
