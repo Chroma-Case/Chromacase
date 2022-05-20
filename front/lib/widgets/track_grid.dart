@@ -10,37 +10,6 @@ class TrackGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Wrap(
-        children: trackButtons.map(
-          (button) => Padding(
-            padding: const EdgeInsets.all(10),
-            child: button,
-          )
-        ).toList(),
-      ),
-    );*/
-    /*return ResponsiveGridRow(
-      rowSegments: horizontalCount,
-      children: trackButtons.map(
-        (button) => ResponsiveGridCol(
-          xs: 1,
-          child: button
-        )
-      ).toList(),
-    );*/
-    /*return GridView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
-        childAspectRatio: 100 / 150,
-        crossAxisCount: horizontalCount
-      ),
-      children: trackButtons
-    );*/
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -49,14 +18,14 @@ class TrackGrid extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
           child: Row(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: trackButtons
               .sublist(i, i + horizontalCount)
-              //.map((button) => Padding(
-              //  padding: const EdgeInsets.symmetric(horizontal: 10),
-              //  child: button,
-              //))
+              .map((button) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: button
+              ))
               .toList(),
           ),
         ),
