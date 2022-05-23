@@ -37,7 +37,7 @@ class HomeView extends StatelessWidget {
             ),
           ),
           Wrap(
-            alignment: WrapAlignment.spaceEvenly,
+            alignment: WrapAlignment.center,
             children: [
               Column(
                 mainAxisSize: MainAxisSize.max,
@@ -46,6 +46,7 @@ class HomeView extends StatelessWidget {
                   TrackGrid(
                     horizontalCount: 5,
                     trackButtons: List.generate(5, (index) => const TrackButton())
+                    ),
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
