@@ -17,7 +17,7 @@ class TrackIcon extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 2, bottom: 12),
-          child: Text(trackArtist),
+          child: Text(trackName),
         ),
         Text(trackArtist, style: Theme.of(context).textTheme.titleSmall)
       ],
