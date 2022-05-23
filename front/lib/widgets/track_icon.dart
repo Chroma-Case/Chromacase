@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TrackIcon extends StatelessWidget {
-  const TrackIcon({Key? key}) : super(key: key);
+  const TrackIcon({Key? key, required this.trackName, required this.trackArtist}) : super(key: key);
+  final String trackName;
+  final String trackArtist;
 
   @override
   Widget build(BuildContext context) {
@@ -13,19 +15,12 @@ class TrackIcon extends StatelessWidget {
           'assets/images/template_art.png',
           width: 80,
         ),
-        const Padding(
-          padding: EdgeInsets.only(
-            top: 2,
-            bottom: 12
-          ),
-          child: Text("Title track"),
+        Padding(
+          padding: const EdgeInsets.only(top: 2, bottom: 12),
+          child: Text(trackArtist),
         ),
-        Text(
-          "Artist #1",
-          style: Theme.of(context).textTheme.titleSmall
-        )
+        Text(trackArtist, style: Theme.of(context).textTheme.titleSmall)
       ],
     );
   }
-
 }

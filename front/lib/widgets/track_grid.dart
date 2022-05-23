@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 
 class TrackGrid extends StatelessWidget {
   final int horizontalCount;

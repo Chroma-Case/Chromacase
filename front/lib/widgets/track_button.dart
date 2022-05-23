@@ -3,7 +3,9 @@ import 'package:front/widgets/track_icon.dart';
 import 'package:front/widgets/utils/rounded_borders.dart';
 
 class TrackButton extends StatelessWidget {
-  const TrackButton({Key? key}) : super(key: key);
+  const TrackButton({Key? key, required this.trackName, required this.trackArtist}) : super(key: key);
+  final String trackName;
+  final String trackArtist;
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +17,12 @@ class TrackButton extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         child: InkWell(
           onTap: () {},
-          child: const Padding(
-            padding: EdgeInsets.all(10),
-            child: TrackIcon(),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: TrackIcon(
+              trackName: trackName,
+              trackArtist: trackArtist,
+            ),
           ),
         )
       ),
