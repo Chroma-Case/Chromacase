@@ -3,6 +3,8 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
+      args:
+        DATABASE_URL: ${DATABASE_URL}
     privileged: true
     ports:
       - "8080:3000"
@@ -12,6 +14,9 @@ services:
       - "db"
     env_file:
       - .env
+    environment:
+    - DATABASE_URL=${DATABASE_URL}
+    
   db:
     container_name: db
     image: postgres:alpine3.14
