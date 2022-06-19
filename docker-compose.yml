@@ -1,0 +1,18 @@
+services:
+  back:
+    build: ./back
+    ports:
+      - "8080:3000"
+    depends_on:
+      - "db"
+    env_file:
+      - .env
+  db:
+    container_name: db
+    image: postgres:alpine3.14
+    environment:
+    - POSTGRES_USER=${POSTGRES_USER}
+    - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    - POSTGRES_DB=${POSTGRES_NAME}
+    ports:
+      - "5432:5432"
