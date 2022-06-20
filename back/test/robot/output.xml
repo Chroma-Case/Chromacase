@@ -1,0 +1,664 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 5.0.1 (Python 3.8.13 on darwin)" generated="20220620 17:08:51.829" rpa="false" schemaversion="3">
+<suite id="s1" name="Auth" source="/Users/lauzuret/r/Chromacase/back/test/robot/auth/auth.robot">
+<test id="s1-t1" name="Me cant be accessed without an account" line="32">
+<kw name="GET" library="REST">
+<arg>/auth/me</arg>
+<tag>http</tag>
+<doc>*Sends a GET request to the endpoint.*</doc>
+<status status="PASS" starttime="20220620 17:08:51.956" endtime="20220620 17:08:51.967"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<msg timestamp="20220620 17:08:51.967" level="INFO">
+{
+    "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/auth/me",
+        "scheme": "http",
+        "netloc": "localhost:3000",
+        "path": "/auth/me",
+        "query": {},
+        "body": null,
+        "data": null,
+        "auth": null,
+        "headers": {
+            "Accept": "application/json, */*",
+            "Content-Type": "application/json",
+            "User-Agent": "RESTinstance/1.3.0"
+        },
+        "proxies": {},
+        "timeout": [
+            null,
+            null
+        ],
+        "cert": null,
+        "sslVerify": true,
+        "allowRedirects": true,
+        "timestamp": {
+            "utc": "2022-06-20T15:08:51.964898+00:00",
+            "local": "2022-06-20T17:08:51.964898+02:00"
+        }
+    },
+    "response": {
+        "seconds": 0.005562999999999999,
+        "status": 401,
+        "reason": "Unauthorized",
+        "body": {
+            "statusCode": 401,
+            "message": "Unauthorized"
+        },
+        "headers": {
+            "X-Powered-By": "Express",
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": "43",
+            "ETag": "W/\"2b-hGShxOkieaAVDloBubJVM+h58D8\"",
+            "Date": "Mon, 20 Jun 2022 15:08:51 GMT",
+            "Connection": "keep-alive",
+            "Keep-Alive": "timeout=5"
+        }
+    }
+}</msg>
+<status status="PASS" starttime="20220620 17:08:51.967" endtime="20220620 17:08:51.972"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>401</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="PASS" starttime="20220620 17:08:51.972" endtime="20220620 17:08:51.978"/>
+</kw>
+<status status="PASS" starttime="20220620 17:08:51.955" endtime="20220620 17:08:51.978"/>
+</test>
+<test id="s1-t2" name="Bad Account" line="37">
+<kw name="POST" library="REST">
+<arg>/auth/login</arg>
+<arg>{"username": "i-don-t-exist", "password": "pass"}</arg>
+<tag>http</tag>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<status status="PASS" starttime="20220620 17:08:51.979" endtime="20220620 17:08:52.005"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<msg timestamp="20220620 17:08:52.005" level="INFO">
+{
+    "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/auth/login",
+        "scheme": "http",
+        "netloc": "localhost:3000",
+        "path": "/auth/login",
+        "query": {},
+        "body": {
+            "username": "i-don-t-exist",
+            "password": "pass"
+        },
+        "data": null,
+        "auth": null,
+        "headers": {
+            "Accept": "application/json, */*",
+            "Content-Type": "application/json",
+            "User-Agent": "RESTinstance/1.3.0"
+        },
+        "proxies": {},
+        "timeout": [
+            null,
+            null
+        ],
+        "cert": null,
+        "sslVerify": true,
+        "allowRedirects": true,
+        "timestamp": {
+            "utc": "2022-06-20T15:08:52.004571+00:00",
+            "local": "2022-06-20T17:08:52.004571+02:00"
+        }
+    },
+    "response": {
+        "seconds": 0.025097,
+        "status": 401,
+        "reason": "Unauthorized",
+        "body": {
+            "statusCode": 401,
+            "message": "Unauthorized"
+        },
+        "headers": {
+            "X-Powered-By": "Express",
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": "43",
+            "ETag": "W/\"2b-hGShxOkieaAVDloBubJVM+h58D8\"",
+            "Date": "Mon, 20 Jun 2022 15:08:52 GMT",
+            "Connection": "keep-alive",
+            "Keep-Alive": "timeout=5"
+        }
+    }
+}</msg>
+<status status="PASS" starttime="20220620 17:08:52.005" endtime="20220620 17:08:52.006"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>401</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.006" endtime="20220620 17:08:52.006"/>
+</kw>
+<doc>Login fails if user does not exist</doc>
+<status status="PASS" starttime="20220620 17:08:51.979" endtime="20220620 17:08:52.007"/>
+</test>
+<test id="s1-t3" name="Register" line="43">
+<kw name="Register">
+<arg>user-1</arg>
+<doc>Shortcut to register with the given username for future requests</doc>
+<kw name="POST" library="REST">
+<var>&amp;{res}</var>
+<arg>/auth/register</arg>
+<arg>{"username": "${username}", "password": "password-${username}", "email": "${username}@chromacase.moe"}</arg>
+<tag>http</tag>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<msg timestamp="20220620 17:08:52.049" level="INFO">&amp;{res} = { seconds=0.04032 | status=200 | reason=OK | body={'status': 'user created'} | headers={'X-Powered-By': 'Express', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '25', 'ETag': 'W...</msg>
+<status status="PASS" starttime="20220620 17:08:52.007" endtime="20220620 17:08:52.049"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<msg timestamp="20220620 17:08:52.049" level="INFO">
+{
+    "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/auth/register",
+        "scheme": "http",
+        "netloc": "localhost:3000",
+        "path": "/auth/register",
+        "query": {},
+        "body": {
+            "username": "user-1",
+            "password": "password-user-1",
+            "email": "user-1@chromacase.moe"
+        },
+        "data": null,
+        "auth": null,
+        "headers": {
+            "Accept": "application/json, */*",
+            "Content-Type": "application/json",
+            "User-Agent": "RESTinstance/1.3.0"
+        },
+        "proxies": {},
+        "timeout": [
+            null,
+            null
+        ],
+        "cert": null,
+        "sslVerify": true,
+        "allowRedirects": true,
+        "timestamp": {
+            "utc": "2022-06-20T15:08:52.048176+00:00",
+            "local": "2022-06-20T17:08:52.048176+02:00"
+        }
+    },
+    "response": {
+        "seconds": 0.04032,
+        "status": 200,
+        "reason": "OK",
+        "body": {
+            "status": "user created"
+        },
+        "headers": {
+            "X-Powered-By": "Express",
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": "25",
+            "ETag": "W/\"19-4jxoN1lg0lSIMFsWuqddNOnJK4U\"",
+            "Date": "Mon, 20 Jun 2022 15:08:52 GMT",
+            "Connection": "keep-alive",
+            "Keep-Alive": "timeout=5"
+        }
+    }
+}</msg>
+<status status="PASS" starttime="20220620 17:08:52.049" endtime="20220620 17:08:52.050"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>200</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.050" endtime="20220620 17:08:52.050"/>
+</kw>
+<status status="PASS" starttime="20220620 17:08:52.007" endtime="20220620 17:08:52.050"/>
+</kw>
+<kw name="Login">
+<arg>user-1</arg>
+<doc>Shortcut to login with the given username for future requests</doc>
+<kw name="POST" library="REST">
+<var>&amp;{res}</var>
+<arg>/auth/login</arg>
+<arg>{"username": "${username}", "password": "password-${username}"}</arg>
+<tag>http</tag>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<msg timestamp="20220620 17:08:52.074" level="INFO">&amp;{res} = { seconds=0.022338999999999998 | status=201 | reason=Created | body={'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXItMSIsImlkIjoxLCJpYXQiOjE2NTU3Mzc3MzIsImV4cCI6MTY1NTc0M...</msg>
+<status status="PASS" starttime="20220620 17:08:52.051" endtime="20220620 17:08:52.074"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<msg timestamp="20220620 17:08:52.074" level="INFO">
+{
+    "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/auth/login",
+        "scheme": "http",
+        "netloc": "localhost:3000",
+        "path": "/auth/login",
+        "query": {},
+        "body": {
+            "username": "user-1",
+            "password": "password-user-1"
+        },
+        "data": null,
+        "auth": null,
+        "headers": {
+            "Accept": "application/json, */*",
+            "Content-Type": "application/json",
+            "User-Agent": "RESTinstance/1.3.0"
+        },
+        "proxies": {},
+        "timeout": [
+            null,
+            null
+        ],
+        "cert": null,
+        "sslVerify": true,
+        "allowRedirects": true,
+        "timestamp": {
+            "utc": "2022-06-20T15:08:52.073700+00:00",
+            "local": "2022-06-20T17:08:52.073700+02:00"
+        }
+    },
+    "response": {
+        "seconds": 0.022338999999999998,
+        "status": 201,
+        "reason": "Created",
+        "body": {
+            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXItMSIsImlkIjoxLCJpYXQiOjE2NTU3Mzc3MzIsImV4cCI6MTY1NTc0MTMzMn0.C8jYer1F18rOggIocgPbCBTGGOuYpNfCS7QRTean_2U"
+        },
+        "headers": {
+            "X-Powered-By": "Express",
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": "183",
+            "ETag": "W/\"b7-OoE0oHbrmVEjytahelCosnkCOO4\"",
+            "Date": "Mon, 20 Jun 2022 15:08:52 GMT",
+            "Connection": "keep-alive",
+            "Keep-Alive": "timeout=5"
+        }
+    }
+}</msg>
+<status status="PASS" starttime="20220620 17:08:52.074" endtime="20220620 17:08:52.075"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>201</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.075" endtime="20220620 17:08:52.076"/>
+</kw>
+<kw name="String" library="REST">
+<arg>response body access_token</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON string.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.076" endtime="20220620 17:08:52.076"/>
+</kw>
+<kw name="Set Headers" library="REST">
+<arg>{"Authorization": "Bearer ${res.body.access_token}"}</arg>
+<tag>settings</tag>
+<doc>*Sets new request headers or updates the existing.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.076" endtime="20220620 17:08:52.077"/>
+</kw>
+<status status="PASS" starttime="20220620 17:08:52.050" endtime="20220620 17:08:52.077"/>
+</kw>
+<kw name="DELETE" library="REST" type="TEARDOWN">
+<arg>/auth/me</arg>
+<tag>http</tag>
+<doc>*Sends a DELETE request to the endpoint.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.077" endtime="20220620 17:08:52.081"/>
+</kw>
+<doc>Create a new user and login in it</doc>
+<status status="PASS" starttime="20220620 17:08:52.007" endtime="20220620 17:08:52.081"/>
+</test>
+<test id="s1-t4" name="Register Duplicates" line="49">
+<kw name="Register">
+<arg>user-duplicate</arg>
+<doc>Shortcut to register with the given username for future requests</doc>
+<kw name="POST" library="REST">
+<var>&amp;{res}</var>
+<arg>/auth/register</arg>
+<arg>{"username": "${username}", "password": "password-${username}", "email": "${username}@chromacase.moe"}</arg>
+<tag>http</tag>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<msg timestamp="20220620 17:08:52.111" level="INFO">&amp;{res} = { seconds=0.028901 | status=200 | reason=OK | body={'status': 'user created'} | headers={'X-Powered-By': 'Express', 'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '25', 'ETag': '...</msg>
+<status status="PASS" starttime="20220620 17:08:52.081" endtime="20220620 17:08:52.111"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<msg timestamp="20220620 17:08:52.112" level="INFO">
+{
+    "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/auth/register",
+        "scheme": "http",
+        "netloc": "localhost:3000",
+        "path": "/auth/register",
+        "query": {},
+        "body": {
+            "username": "user-duplicate",
+            "password": "password-user-duplicate",
+            "email": "user-duplicate@chromacase.moe"
+        },
+        "data": null,
+        "auth": null,
+        "headers": {
+            "Accept": "application/json, */*",
+            "Content-Type": "application/json",
+            "User-Agent": "RESTinstance/1.3.0",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXItMSIsImlkIjoxLCJpYXQiOjE2NTU3Mzc3MzIsImV4cCI6MTY1NTc0MTMzMn0.C8jYer1F18rOggIocgPbCBTGGOuYpNfCS7QRTean_2U"
+        },
+        "proxies": {},
+        "timeout": [
+            null,
+            null
+        ],
+        "cert": null,
+        "sslVerify": true,
+        "allowRedirects": true,
+        "timestamp": {
+            "utc": "2022-06-20T15:08:52.111019+00:00",
+            "local": "2022-06-20T17:08:52.111019+02:00"
+        }
+    },
+    "response": {
+        "seconds": 0.028901,
+        "status": 200,
+        "reason": "OK",
+        "body": {
+            "status": "user created"
+        },
+        "headers": {
+            "X-Powered-By": "Express",
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": "25",
+            "ETag": "W/\"19-4jxoN1lg0lSIMFsWuqddNOnJK4U\"",
+            "Date": "Mon, 20 Jun 2022 15:08:52 GMT",
+            "Connection": "keep-alive",
+            "Keep-Alive": "timeout=5"
+        }
+    }
+}</msg>
+<status status="PASS" starttime="20220620 17:08:52.111" endtime="20220620 17:08:52.112"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>200</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.112" endtime="20220620 17:08:52.113"/>
+</kw>
+<status status="PASS" starttime="20220620 17:08:52.081" endtime="20220620 17:08:52.113"/>
+</kw>
+<kw name="POST" library="REST">
+<arg>/auth/register</arg>
+<arg>{"username": "user-duplicate", "password": "pass", "email": "mail@kyoo.moe"}</arg>
+<tag>http</tag>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.113" endtime="20220620 17:08:52.142"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<msg timestamp="20220620 17:08:52.142" level="INFO">
+{
+    "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/auth/register",
+        "scheme": "http",
+        "netloc": "localhost:3000",
+        "path": "/auth/register",
+        "query": {},
+        "body": {
+            "username": "user-duplicate",
+            "password": "pass",
+            "email": "mail@kyoo.moe"
+        },
+        "data": null,
+        "auth": null,
+        "headers": {
+            "Accept": "application/json, */*",
+            "Content-Type": "application/json",
+            "User-Agent": "RESTinstance/1.3.0",
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXItMSIsImlkIjoxLCJpYXQiOjE2NTU3Mzc3MzIsImV4cCI6MTY1NTc0MTMzMn0.C8jYer1F18rOggIocgPbCBTGGOuYpNfCS7QRTean_2U"
+        },
+        "proxies": {},
+        "timeout": [
+            null,
+            null
+        ],
+        "cert": null,
+        "sslVerify": true,
+        "allowRedirects": true,
+        "timestamp": {
+            "utc": "2022-06-20T15:08:52.141228+00:00",
+            "local": "2022-06-20T17:08:52.141228+02:00"
+        }
+    },
+    "response": {
+        "seconds": 0.027575,
+        "status": 400,
+        "reason": "Bad Request",
+        "body": {
+            "status": "user not created"
+        },
+        "headers": {
+            "X-Powered-By": "Express",
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": "29",
+            "ETag": "W/\"1d-DIy5mKe3nrwyA2OAiB+MjydXCUM\"",
+            "Date": "Mon, 20 Jun 2022 15:08:52 GMT",
+            "Connection": "keep-alive",
+            "Keep-Alive": "timeout=5"
+        }
+    }
+}</msg>
+<status status="PASS" starttime="20220620 17:08:52.142" endtime="20220620 17:08:52.142"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>400</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.142" endtime="20220620 17:08:52.143"/>
+</kw>
+<kw name="Login user-duplicate">
+<msg timestamp="20220620 17:08:52.144" level="FAIL">No keyword with name 'Login user-duplicate' found. Did you try using keyword 'BuiltIn.Log' or 'Login' and forgot to use enough whitespace between keyword and arguments?</msg>
+<status status="FAIL" starttime="20220620 17:08:52.144" endtime="20220620 17:08:52.144"/>
+</kw>
+<kw name="DELETE" library="REST" type="TEARDOWN">
+<arg>/auth/me</arg>
+<tag>http</tag>
+<doc>*Sends a DELETE request to the endpoint.*</doc>
+<status status="PASS" starttime="20220620 17:08:52.145" endtime="20220620 17:08:52.147"/>
+</kw>
+<doc>If two users tries to register with the same username, it fails</doc>
+<status status="FAIL" starttime="20220620 17:08:52.081" endtime="20220620 17:08:52.147">No keyword with name 'Login user-duplicate' found. Did you try using keyword 'BuiltIn.Log' or 'Login' and forgot to use enough whitespace between keyword and arguments?</status>
+</test>
+<test id="s1-t5" name="Delete Account" line="59">
+<kw name="Register">
+<arg>I-should-be-deleted</arg>
+<doc>Shortcut to register with the given username for future requests</doc>
+<kw name="POST" library="REST">
+<var>&amp;{res}</var>
+<arg>/auth/register</arg>
+<arg>{"username": "${username}", "password": "password-${username}", "email": "${username}@chromacase.moe"}</arg>
+<tag>http</tag>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<msg timestamp="20220620 17:08:52.177" level="FAIL">ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))</msg>
+<status status="FAIL" starttime="20220620 17:08:52.148" endtime="20220620 17:08:52.181"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.181" endtime="20220620 17:08:52.181"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>200</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.181" endtime="20220620 17:08:52.181"/>
+</kw>
+<status status="FAIL" starttime="20220620 17:08:52.148" endtime="20220620 17:08:52.181"/>
+</kw>
+<kw name="Login">
+<arg>I-should-be-deleted</arg>
+<doc>Shortcut to login with the given username for future requests</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.181" endtime="20220620 17:08:52.181"/>
+</kw>
+<kw name="DELETE" library="REST">
+<arg>/auth/me</arg>
+<tag>http</tag>
+<doc>*Sends a DELETE request to the endpoint.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.181" endtime="20220620 17:08:52.181"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.181" endtime="20220620 17:08:52.182"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>201</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.182" endtime="20220620 17:08:52.182"/>
+</kw>
+<doc>Check if a user can delete it's account</doc>
+<status status="FAIL" starttime="20220620 17:08:52.148" endtime="20220620 17:08:52.182">ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))</status>
+</test>
+<test id="s1-t6" name="Login" line="67">
+<kw name="Register">
+<arg>login-user</arg>
+<doc>Shortcut to register with the given username for future requests</doc>
+<kw name="POST" library="REST">
+<var>&amp;{res}</var>
+<arg>/auth/register</arg>
+<arg>{"username": "${username}", "password": "password-${username}", "email": "${username}@chromacase.moe"}</arg>
+<tag>http</tag>
+<doc>*Sends a POST request to the endpoint.*</doc>
+<msg timestamp="20220620 17:08:52.184" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x104630280&gt;: Failed to establish a new connection: [Errno 61] Connection refused'))</msg>
+<status status="FAIL" starttime="20220620 17:08:52.182" endtime="20220620 17:08:52.185"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.185" endtime="20220620 17:08:52.185"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>200</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.185" endtime="20220620 17:08:52.185"/>
+</kw>
+<status status="FAIL" starttime="20220620 17:08:52.182" endtime="20220620 17:08:52.185"/>
+</kw>
+<kw name="Login">
+<arg>login-user</arg>
+<doc>Shortcut to login with the given username for future requests</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.185" endtime="20220620 17:08:52.185"/>
+</kw>
+<kw name="GET" library="REST">
+<var>${res}</var>
+<arg>/auth/me</arg>
+<tag>http</tag>
+<doc>*Sends a GET request to the endpoint.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.185" endtime="20220620 17:08:52.185"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.185" endtime="20220620 17:08:52.185"/>
+</kw>
+<kw name="Integer" library="REST">
+<arg>response status</arg>
+<arg>200</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON integer.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="String" library="REST">
+<arg>response body username</arg>
+<arg>login-user</arg>
+<tag>assertions</tag>
+<doc>*Asserts the field as JSON string.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="Logout">
+<doc>Logout the current user, only the local client is affected.</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="Login">
+<arg>login-user</arg>
+<doc>Shortcut to login with the given username for future requests</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="GET" library="REST">
+<var>${me}</var>
+<arg>/auth/me</arg>
+<tag>http</tag>
+<doc>*Sends a GET request to the endpoint.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="Output" library="REST">
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="Output" library="REST">
+<arg>${me}</arg>
+<tag>I/O</tag>
+<doc>*Outputs JSON to terminal or a file.*</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<arg>${res["body"]}</arg>
+<arg>${me["body"]}</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="NOT RUN" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.186"/>
+</kw>
+<kw name="DELETE" library="REST" type="TEARDOWN">
+<arg>/auth/me</arg>
+<tag>http</tag>
+<doc>*Sends a DELETE request to the endpoint.*</doc>
+<msg timestamp="20220620 17:08:52.189" level="FAIL">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /auth/me (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x10464b3a0&gt;: Failed to establish a new connection: [Errno 61] Connection refused'))</msg>
+<status status="FAIL" starttime="20220620 17:08:52.186" endtime="20220620 17:08:52.189">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /auth/me (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x10464b3a0&gt;: Failed to establish a new connection: [Errno 61] Connection refused'))</status>
+</kw>
+<doc>Create a new user and login in it</doc>
+<status status="FAIL" starttime="20220620 17:08:52.182" endtime="20220620 17:08:52.189">ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /auth/register (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x104630280&gt;: Failed to establish a new connection: [Errno 61] Connection refused'))
+
+Also teardown failed:
+ConnectionError: HTTPConnectionPool(host='localhost', port=3000): Max retries exceeded with url: /auth/me (Caused by NewConnectionError('&lt;urllib3.connection.HTTPConnection object at 0x10464b3a0&gt;: Failed to establish a new connection: [Errno 61] Connection refused'))</status>
+</test>
+<doc>Tests of the /auth route.
+Ensures that the user can authenticate on kyoo.</doc>
+<status status="FAIL" starttime="20220620 17:08:51.829" endtime="20220620 17:08:52.189"/>
+</suite>
+<statistics>
+<total>
+<stat pass="3" fail="3" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="3" fail="3" skip="0" id="s1" name="Auth">Auth</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

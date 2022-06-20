@@ -1,6 +1,6 @@
 services:
   back:
-     build: ./back
+    build: ./back
     ports:
       - "3000:3000"
     depends_on:
