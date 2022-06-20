@@ -40,7 +40,7 @@ Bad Account
     Output
     Integer    response status    401
 
-Register
+RegisterAndLogin
     [Documentation]    Create a new user and login in it
     Register    user-1
     Login       user-1
@@ -53,7 +53,7 @@ Register Duplicates
     POST    /auth/register    {"username": "user-duplicate", "password": "pass", "email": "mail@kyoo.moe"}
     Output
     Integer    response status    400
-    Login user-duplicate
+    Login        user-duplicate
     [Teardown]    DELETE    /auth/me
 
 Delete Account
@@ -62,7 +62,7 @@ Delete Account
     Login       I-should-be-deleted
     DELETE    /auth/me
     Output
-    Integer    response status    201
+    Integer    response status    200
 
 Login
     [Documentation]    Create a new user and login in it

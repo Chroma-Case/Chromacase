@@ -40,14 +40,14 @@ export class AuthController {
 	getProfile(@Request() req) {
   		return req.user;
   	}
-  @UseGuards(JwtAuthGuard)
+
+  	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({ description: 'Successfully logged in' })
+	@ApiOkResponse({ description: 'Successfully deleted' })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Delete('me')
 	deleteSelf(@Request() req) {
-      this.usersService.deleteUser({"id": req.user.id})
-  		return req.user;
+      return this.usersService.deleteUser({"id": req.user.id})
   	}
 
 }
