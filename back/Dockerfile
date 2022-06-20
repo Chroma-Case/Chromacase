@@ -3,7 +3,5 @@ WORKDIR /app
 COPY ./package.json ./
 RUN npm install
 COPY . .
-RUN npx prisma generate
-RUN npx prisma migrate dev
 RUN npm run build
-CMD ["npm", "run", "start:prod"]
+CMD npx prisma generate ; npx prisma migrate dev ; npm run start:prod
