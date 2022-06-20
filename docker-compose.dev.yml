@@ -3,19 +3,15 @@ services:
     build:
       context: ./back
       dockerfile: Dockerfile.dev
-      args:
-        DATABASE_URL: ${DATABASE_URL}
     privileged: true
     ports:
-      - "8080:3000"
+      - "3000:3000"
     volumes:
       - ./back:/app
     depends_on:
       - "db"
     env_file:
       - .env
-    environment:
-    - DATABASE_URL=${DATABASE_URL}
     
   db:
     container_name: db
@@ -23,6 +19,6 @@ services:
     environment:
     - POSTGRES_USER=${POSTGRES_USER}
     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    - POSTGRES_DB=${POSTGRES_NAME}
+    - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "5432:5432"
