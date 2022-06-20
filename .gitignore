@@ -4,3 +4,4 @@ bin
 pyvenv.cfg
 include
 .env
+prisma/migrations
