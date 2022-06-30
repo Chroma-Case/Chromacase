@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches: *
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+ build_front:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+    - run: cd front/
+    - uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: install
+    - name: Build Android Release
+        run: |
+          cd android && ./gradlew assembleRelease
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: chromacase.apk
+        path: android/app/build/outputs/apk/release/
+    
