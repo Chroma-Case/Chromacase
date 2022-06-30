@@ -26,5 +26,5 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: chromacase.apk
-        path: android/app/build/outputs/apk/release/
+        path: front/android/app/build/outputs/apk/release/
     
