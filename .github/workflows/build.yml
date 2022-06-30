@@ -16,9 +16,10 @@ jobs:
       working-directory: ./front
   steps:
     - uses: actions/checkout@v3
-    - uses: borales/actions-yarn@v3.0.0
-      with:
-        cmd: install
+    - name: Install Yarn
+      run: npm install -g yarn
+    - name: Install dependencies
+      run: yarn install
     - name: Build Android Release
       run: cd android && ./gradlew assembleRelease
     - name: Upload Artifact
