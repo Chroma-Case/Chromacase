@@ -23,8 +23,11 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#FFFFFF",
+        "package": "com.chromacase.chromacase",
+        "versionCode": 1
+      },
+      "package": "build.apk"
     },
     "web": {
       "favicon": "./assets/favicon.png"
