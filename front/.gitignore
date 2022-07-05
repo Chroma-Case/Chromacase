@@ -12,3 +12,5 @@ web-build/
 *.apk
 # macOS
 .DS_Store
+
+.idea/
