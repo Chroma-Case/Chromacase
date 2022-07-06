@@ -12,8 +12,10 @@ const ColorTheme = {
 	secondaryVariant: '#008b8c',
 	onSecondary: '#ffffff',
 
-	background: '#F5F5F5',
-	onBackground: '#000000',
+	backgroundLight: '#F0F0F0',
+	onBackgroundLight: '#000000',
+	backgroundDark: '#292929',
+	onBackgroundDark: '#FFFFFF',
 
 	surface: '#F6F6F6',
 	onSurface: '#000000',

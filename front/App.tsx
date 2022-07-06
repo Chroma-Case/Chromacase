@@ -18,7 +18,8 @@ export default function App() {
       <ExampleBox backgroundColor={ColorTheme.error} textColor={ColorTheme.onError}/>
       <ExampleBox backgroundColor={ColorTheme.surface} textColor={ColorTheme.onSurface}/>
       <ExampleBox backgroundColor={ColorTheme.surface} textColor={ColorTheme.placeholder}/>
-      <ExampleBox backgroundColor={ColorTheme.background} textColor={ColorTheme.onBackground}/>
+      <ExampleBox backgroundColor={ColorTheme.backgroundLight} textColor={ColorTheme.onBackgroundLight}/>
+      <ExampleBox backgroundColor={ColorTheme.backgroundDark} textColor={ColorTheme.onBackgroundDark}/>
       <View
         style={{
           paddingVertical: 20,
@@ -34,6 +35,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: ColorTheme.backgroundDark,
     justifyContent: 'center',
   },
 });
