@@ -19,6 +19,13 @@ export default function App() {
       <ExampleBox backgroundColor={ColorTheme.surface} textColor={ColorTheme.onSurface}/>
       <ExampleBox backgroundColor={ColorTheme.surface} textColor={ColorTheme.placeholder}/>
       <ExampleBox backgroundColor={ColorTheme.background} textColor={ColorTheme.onBackground}/>
+      <View
+        style={{
+          paddingVertical: 20,
+          borderBottomColor: ColorTheme.divider,
+          borderBottomWidth: StyleSheet.hairlineWidth,
+        }}
+      />
       <StatusBar style="auto" />
     </View>
   );

@@ -22,6 +22,8 @@ const ColorTheme = {
 
 	error: '#B00020',
 	onError: '#FFFFFF',
+
+	divider: "#DDDDDD",
 };
 
 export default ColorTheme;
