@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ColorValue } from 'react-native';
 import ColorTheme from './Theme';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const ExampleBox = (props: { textColor: ColorValue, backgroundColor: ColorValue }) => (
   <View style={{ backgroundColor: props.backgroundColor }}>
@@ -10,6 +11,7 @@ const ExampleBox = (props: { textColor: ColorValue, backgroundColor: ColorValue 
 
 export default function App() {
   return (
+    <PaperProvider>
     <View style={styles.container}>
       <ExampleBox backgroundColor={ColorTheme.primary} textColor={ColorTheme.onPrimary}/>
       <ExampleBox backgroundColor={ColorTheme.primaryVariant} textColor={ColorTheme.onPrimary}/>
@@ -29,13 +31,14 @@ export default function App() {
       />
       <StatusBar style="auto" />
     </View>
+    </PaperProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: ColorTheme.backgroundDark,
+    backgroundColor: ColorTheme.backgroundLight,
     justifyContent: 'center',
   },
 });
