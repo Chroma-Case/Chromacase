@@ -6,6 +6,6 @@ import { AppContent } from './App';
 describe('<AppContent />', () => {
   it('has 1 child', () => {
     const tree = TestRenderer.create(<AppContent />).toJSON();
-    expect(tree.children.length).toBe(10);
+    expect(tree.children.length).toBe(6);
   });
 });
