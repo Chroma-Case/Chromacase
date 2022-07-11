@@ -9,9 +9,8 @@ const ExampleBox = (props: { textColor: ColorValue, backgroundColor: ColorValue 
   </View>
 )
 
-export default function App() {
+export function AppContent() {
   return (
-    <PaperProvider>
     <View style={styles.container}>
       <ExampleBox backgroundColor={ColorTheme.primary} textColor={ColorTheme.onPrimary}/>
       <ExampleBox backgroundColor={ColorTheme.primaryVariant} textColor={ColorTheme.onPrimary}/>
@@ -31,6 +30,13 @@ export default function App() {
       />
       <StatusBar style="auto" />
     </View>
+  );
+}
+
+export default function App() {
+  return (
+    <PaperProvider>
+      <AppContent/>
     </PaperProvider>
   );
 }
