@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ColorValue } from 'react-native';
-import ColorTheme from './Theme';
+import { Text, View, ColorValue } from 'react-native';
+import { Provider as PaperProvider, useTheme } from 'react-native-paper';
+import Theme from './Theme';
 
 const ExampleBox = (props: { textColor: ColorValue, backgroundColor: ColorValue }) => (
   <View style={{ backgroundColor: props.backgroundColor }}>
@@ -8,34 +9,25 @@ const ExampleBox = (props: { textColor: ColorValue, backgroundColor: ColorValue 
   </View>
 )
 
-export default function App() {
+export function AppContent() {
+  const { colors } = useTheme();
   return (
-    <View style={styles.container}>
-      <ExampleBox backgroundColor={ColorTheme.primary} textColor={ColorTheme.onPrimary}/>
-      <ExampleBox backgroundColor={ColorTheme.primaryVariant} textColor={ColorTheme.onPrimary}/>
-      <ExampleBox backgroundColor={ColorTheme.secondary} textColor={ColorTheme.onSecondary}/>
-      <ExampleBox backgroundColor={ColorTheme.secondaryVariant} textColor={ColorTheme.onPrimary}/>
-      <ExampleBox backgroundColor={ColorTheme.error} textColor={ColorTheme.onError}/>
-      <ExampleBox backgroundColor={ColorTheme.surface} textColor={ColorTheme.onSurface}/>
-      <ExampleBox backgroundColor={ColorTheme.surface} textColor={ColorTheme.placeholder}/>
-      <ExampleBox backgroundColor={ColorTheme.backgroundLight} textColor={ColorTheme.onBackgroundLight}/>
-      <ExampleBox backgroundColor={ColorTheme.backgroundDark} textColor={ColorTheme.onBackgroundDark}/>
-      <View
-        style={{
-          paddingVertical: 20,
-          borderBottomColor: ColorTheme.divider,
-          borderBottomWidth: StyleSheet.hairlineWidth,
-        }}
-      />
+    <View style={{flex: 1, justifyContent: 'center' }}>
+      <ExampleBox backgroundColor={colors.primary} textColor={colors.text}/>
+      <ExampleBox backgroundColor={colors.accent} textColor={colors.text}/>
+      <ExampleBox backgroundColor={colors.error} textColor={colors.text}/>
+      <ExampleBox backgroundColor={colors.surface} textColor={colors.onSurface}/>
+      <ExampleBox backgroundColor={colors.surface} textColor={colors.placeholder}/>
+      <ExampleBox backgroundColor={colors.notification} textColor={colors.text}/>
       <StatusBar style="auto" />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: ColorTheme.backgroundDark,
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <PaperProvider theme={Theme}>
+      <AppContent/>
+    </PaperProvider>
+  );
+}
