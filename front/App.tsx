@@ -1,18 +1,21 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import Theme from './Theme';
-import { Stack, protectedRoutes, publicRoutes } from './Navigation';
+import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Provider } from 'react-redux';
+import store from './state/Store';
+import { Router } from './Navigation';
 
-const isAuthentified = true;
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <PaperProvider theme={Theme}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          { isAuthentified ? protectedRoutes : publicRoutes }
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <PaperProvider theme={Theme}>
+          <Router/>
+        </PaperProvider>
+      </QueryClientProvider>
+    </Provider>
   );
 }
