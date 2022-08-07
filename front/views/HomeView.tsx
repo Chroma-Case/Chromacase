@@ -1,26 +1,17 @@
 import React from "react";
-import { Text, View, ColorValue } from 'react-native';
-import { useTheme } from "react-native-paper";
-
-const ExampleBox = (props: { textColor: ColorValue, backgroundColor: ColorValue }) => (
-  <View style={{ backgroundColor: props.backgroundColor }}>
-    <Text style={{ fontSize: 20, textAlign: 'center', color: props.textColor }} >Hello</Text>
-  </View>
-)
+import { Text, View } from 'react-native';
+import { Button } from "react-native-paper";
+import { useDispatch } from "react-redux";
+import { unsetUserToken } from "../state/UserSlice";
 
 const HomeView = () => {
-  const { colors } = useTheme();
+  const dispatch = useDispatch();
   return (
     <View style={{ flex: 1, justifyContent: 'center' }}>
-      <ExampleBox backgroundColor={colors.primary} textColor={colors.text} />
-      <ExampleBox backgroundColor={colors.accent} textColor={colors.text} />
-      <ExampleBox backgroundColor={colors.error} textColor={colors.text} />
-      <ExampleBox backgroundColor={colors.surface} textColor={colors.onSurface} />
-      <ExampleBox backgroundColor={colors.surface} textColor={colors.placeholder} />
-      <ExampleBox backgroundColor={colors.notification} textColor={colors.text} />
+      <Text style={{ textAlign: "center" }}>This is the Home Screen</Text>
+      <Button onPress={() => dispatch(unsetUserToken())}>Log out</Button>
     </View>
   );
 }
-
 
 export default HomeView;
