@@ -1,6 +1,10 @@
-import { en, fr } from './translations';
+import { en, fr } from './Translations';
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+
+
+export type AvailableLanguages = 'en' | 'fr';
+export const DefaultLanguage: AvailableLanguages = 'en';
 
 i18n
 	.use(initReactI18next)
@@ -13,10 +17,17 @@ i18n
 				translation: fr
 			}
 		},
-		lng: "en",
-		fallbackLng: "en",
+		lng: DefaultLanguage,
+		fallbackLng: DefaultLanguage,
 		interpolation: {
 			escapeValue: false
 		}
 	});
+
 export default i18n;
+/**
+ * Typesafe translation method
+ * @param textKey the key of th text to translate
+ * @returns the translated text
+ */
+export const translate = (textKey: keyof typeof en) => i18n.t(textKey);
