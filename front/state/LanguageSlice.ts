@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AvailableLanguages, DefaultLanguage } from "../i18n/i18n";
+import i18n, { AvailableLanguages, DefaultLanguage } from "../i18n/i18n";
 
 
 export const languageSlice = createSlice({
@@ -10,6 +10,7 @@ export const languageSlice = createSlice({
 	reducers: {
 		useLanguage: (state, action: PayloadAction<AvailableLanguages>) => {
 			state.value = action.payload;
+			i18n.changeLanguage(state.value);
 		},
 		resetLanguage: (state) => {
 			state.value = DefaultLanguage;
