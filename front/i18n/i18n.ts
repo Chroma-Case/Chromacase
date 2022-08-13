@@ -18,7 +18,7 @@ i18n
 			}
 		},
 		lng: DefaultLanguage,
-		fallbackLng: DefaultLanguage,
+		fallbackLng: 'en',
 		interpolation: {
 			escapeValue: false
 		}
