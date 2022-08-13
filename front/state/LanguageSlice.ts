@@ -14,6 +14,7 @@ export const languageSlice = createSlice({
 		},
 		resetLanguage: (state) => {
 			state.value = DefaultLanguage;
+			i18n.changeLanguage(DefaultLanguage);
 		},
 	},
 });
