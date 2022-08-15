@@ -1,4 +1,4 @@
-import { Metrics } from "react-native-safe-area-context";
+import Metrics from "./Metrics";
 import Model from "./Model";
 import UserSettings from "./UserSettings";
 
