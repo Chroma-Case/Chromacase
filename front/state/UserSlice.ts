@@ -15,4 +15,4 @@ export const userSlice = createSlice({
   },
 });
 export const { setUserToken, unsetUserToken } = userSlice.actions;
-export default userSlice.reducer
+export default userSlice.reducer;
