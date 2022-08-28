@@ -1,8 +1,8 @@
-import Competency from "./Competency";
+import Skill from "./Skill";
 import Model from "./Model";
 
 /**
- * A Lesson is an exercice that the user can try to practice a competency
+ * A Lesson is an exercice that the user can try to practice a skill
  */
 interface Lesson extends Model {
 	/**
@@ -18,9 +18,9 @@ interface Lesson extends Model {
 	 */
 	requiredLevel: number;
 	/**
-	 * The main competency learnt in this lesson
+	 * The main skill learnt in this lesson
 	 */
-	mainCompetency: Competency;
+	mainSkill: Skill;
 }
 
 export default Lesson;

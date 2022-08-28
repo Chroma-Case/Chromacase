@@ -117,7 +117,7 @@ export default class API {
 			title: "Song",
 			description: "A song",
 			requiredLevel: 1,
-			mainCompetency: 'lead-head-change',
+			mainSkill: 'lead-head-change',
 			id: lessonId
 		};
 	}

@@ -1,4 +1,4 @@
-type Competency = 'rhythm'
+type Skill = 'rhythm'
 	| 'two-hands'
 	| 'combos'
 	| 'arpeggio'
@@ -12,4 +12,4 @@ type Competency = 'rhythm'
 	| 'precision'
 
 
-export default Competency;
+export default Skill;

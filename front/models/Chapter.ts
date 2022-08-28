@@ -1,4 +1,4 @@
-import Competency from "./Competency";
+import Skill from "./Skill";
 import Model from "./Model";
 
 interface Chapter extends Model {
@@ -7,7 +7,7 @@ interface Chapter extends Model {
 	songId: number;
 	name: string;
 	type: 'chorus' | 'verse';
-	key_aspect: Competency;
+	key_aspect: Skill;
 	difficulty: number
 }
 
