@@ -4,12 +4,14 @@ import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import SongLobbyView from './views/SongLobbyView';
 
 const Stack = createNativeStackNavigator();
 
-export const protectedRoutes = <React.Fragment>
+export const protectedRoutes = <>
 	<Stack.Screen name="Home" component={HomeView} options={{ title: 'Welcome' }} />
-</React.Fragment>;
+	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: 'Play' }} />
+</>;
 
 export const publicRoutes = <React.Fragment>
 	<Stack.Screen name="Login" component={AuthenticationView} options={{}} />

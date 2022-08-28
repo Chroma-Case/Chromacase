@@ -6,6 +6,8 @@ import Song from "./models/Song";
 import SongHistory from "./models/SongHistory";
 import User from "./models/User";
 
+const delay = (seconds: number) => new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
 declare type AuthenticationInput = { email: string, password: string };
 
 export default class API {
@@ -55,13 +57,13 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	static async getSong(songId: number): Promise<Song> {
-		return {
+		return delay(1).then(() => ({
 			title: "Song",
 			description: "A song",
 			album: "Album",
 			metrics: {},
 			id: songId
-		};
+		}));
 		
 	}
 
