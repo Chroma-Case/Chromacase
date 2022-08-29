@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, TouchableOpacity, Switch } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+//import { Picker } from '@react-native-picker/picker';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useDispatch } from "react-redux";
 import { unsetUserToken } from "../state/UserSlice";
@@ -13,29 +13,29 @@ const MainView = ({navigation}) => {
     const dispatch = useDispatch();
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', backgroundColor: Theme.colors.background }}>
+        <View style={{ flex: 1, justifyContent: 'center', goBackgroundColor: Theme.colors.goBackground }}>
             <Text >Main settings view</Text>
-            <TouchableOpacity onPress={() => navigation.push('Preferences')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Preferences')}>
                 <Text style={{ textAlign: 'center' }}>Preference</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.push('Notifications')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
                 <Text style={{ textAlign: 'center' }}>Notifications</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.push('Privacy')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Privacy')}>
                 <Text style={{ textAlign: 'center' }}>Privacy</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.push('ChangePassword')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ChangePassword')}>
                 <Text style={{ textAlign: 'center' }}>Change Password</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.push('ChangeEmail')}>
+            <TouchableOpacity onPress={() => navigation.navigate('ChangeEmail')}>
                 <Text style={{ textAlign: 'center' }}>Change Email</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.push('GoogleAccount')}>
+            <TouchableOpacity onPress={() => navigation.navigate('GoogleAccount')}>
                 <Text style={{ textAlign: 'center' }}>Google Account</Text>
             </TouchableOpacity>
 
@@ -50,8 +50,8 @@ const PreferencesView = ({navigation}) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <Text>Preferences</Text>
-            <Button onPress={navigation.back()} >Back</Button>
-            <View>
+            <Button onPress={() => navigation.navigate('Main')}>Back</Button>
+            {/* <View>
                 <Picker selectedValue={undefined}
                     style={{ height: 50, width: 150}}
                     // onValueChange={(itemValue, itemIndex) => changeLang(itemValue)}
@@ -70,7 +70,7 @@ const PreferencesView = ({navigation}) => {
                 <Picker.Item label="English" value="light"/>
                 <Picker.Item label="Italiano" value="system"/>
                 <Picker.Item label="Espanol" value="system"/>
-            </Picker>
+            </Picker> */}
 
             <View>
                 <Text>Color blind mode</Text>
@@ -84,7 +84,7 @@ const PreferencesView = ({navigation}) => {
 const NotificationsView = ({navigation}) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Button onPress={navigation.back()} >Back</Button>
+            <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>Notifications</Text>
         </View>
     )
@@ -93,7 +93,7 @@ const NotificationsView = ({navigation}) => {
 const PrivacyView = ({navigation}) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Button onPress={navigation.back()} >Back</Button>
+            <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>Privacy</Text>
         </View>
     )
@@ -102,7 +102,7 @@ const PrivacyView = ({navigation}) => {
 const ChangePasswordView = ({navigation}) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Button onPress={navigation.back()} >Back</Button>
+            <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>ChangePassword</Text>
         </View>
     )
@@ -111,7 +111,7 @@ const ChangePasswordView = ({navigation}) => {
 const ChangeEmailView = ({navigation}) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Button onPress={navigation.back()} >Back</Button>
+            <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>ChangeEmail</Text>
         </View>
     )
@@ -120,7 +120,7 @@ const ChangeEmailView = ({navigation}) => {
 const GoogleAccountView = ({navigation}) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Button onPress={navigation.back()} >Back</Button>
+            <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>GoogleAccount</Text>
         </View>
     )
@@ -128,7 +128,7 @@ const GoogleAccountView = ({navigation}) => {
 
 const SetttingsNavigator = () => {
     return (
-        <SettingsStack.Navigator initialRouteName="Main">
+        <SettingsStack.Navigator initialRouteName="Main" screenOptions={{headerShown: false}}>
             <SettingsStack.Screen name='Main' component={MainView} />
             <SettingsStack.Screen name='Preferences' component={PreferencesView} />
             <SettingsStack.Screen name='Notifications' component={NotificationsView} />

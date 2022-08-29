@@ -6,7 +6,7 @@ import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i1
 import { useLanguage } from "../state/LanguageSlice";
 import { unsetUserToken } from "../state/UserSlice";
 
-const HomeView = () => {
+const HomeView = ({navigation}) => {
   const dispatch = useDispatch();
   const language: AvailableLanguages = useSelector((state) => state.language.value);
   return (
@@ -24,6 +24,7 @@ const HomeView = () => {
         }
         dispatch(useLanguage(newLanguage));
       }}>Change language</Button>
+      <Button onPress={() => navigation.navigate('Settings')}>Settings</Button>
       <Text style={{ textAlign: "center" }}>Current language: { language }</Text>
     </View>
   );
