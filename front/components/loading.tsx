@@ -1,7 +1,7 @@
 import { useTheme } from "@react-navigation/native";
-import Spinner from 'react-native-loading-spinner-overlay';
+import { ActivityIndicator } from "react-native-paper";
 const LoadingComponent = () => {
-	return <Spinner	visible={true} />
+	return <ActivityIndicator />
 }
 
 export default LoadingComponent;

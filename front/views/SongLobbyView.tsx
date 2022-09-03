@@ -14,8 +14,12 @@ const SongLobbyView = () => {
 	const route = useRoute();
 	const props: SongLobbyProps = route.params as any;
 	const { isLoading, isError, data } = useQuery(['song', props.songId], API.getSong(props.songId))
+	if (isLoading)
+		return <View style={{ flexGrow: 1, justifyContent: 'center' }}>
+			<LoadingComponent/>
+		</View>
 	return <View>
-		{ isLoading && <LoadingComponent/> }
+		
 		<Text>
 			{props.songId}
 		</Text>
