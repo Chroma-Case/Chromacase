@@ -4,7 +4,9 @@ export const en = {
 	signinBtn: 'Sign in',
 	playBtn: 'Play',
 	level: 'Level',
-	chapters: 'Chapters'
+	chapters: 'Chapters',
+	bestScore: 'Best Score',
+	lastScore: 'Last Score',
 };
 
 export const fr: typeof en = {
@@ -13,5 +15,7 @@ export const fr: typeof en = {
 	signinBtn: 'Se connecter',
 	playBtn: 'Jouer',
 	level: 'Niveau',
-	chapters: 'Chapitres'
+	chapters: 'Chapitres',
+	bestScore: 'Meilleur Score',
+	lastScore: 'Dernier Score',
 };

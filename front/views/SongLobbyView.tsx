@@ -51,11 +51,11 @@ const SongLobbyView = () => {
 			</View>
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
 				<View style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text style={{ fontWeight: 'bold', fontSize: 15 }}>Best Score</Text>
+					<Text style={{ fontWeight: 'bold', fontSize: 15 }}>{translate('bestScore') }</Text>
 					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
 				</View>
 				<View style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text style={{ fontWeight: 'bold', fontSize: 15}}>Last Score</Text>
+					<Text style={{ fontWeight: 'bold', fontSize: 15}}>{translate('lastScore') }</Text>
 					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
 				</View>
 			</View>
@@ -70,7 +70,7 @@ const SongLobbyView = () => {
 						<List.Item
 							key={chapter.id}
 							title={chapter.name}
-							description={`Level ${chapter.difficulty} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}
+							description={`${translate('level')} ${chapter.difficulty} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}
 						/>
 						<Divider />
 					</>
