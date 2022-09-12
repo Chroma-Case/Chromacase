@@ -32,11 +32,9 @@ const SongLobbyView = () => {
 		</View>
 	return (
 		<View style={{ padding: 30, flexDirection: 'column' }}>
-			<View style={{ flexDirection: 'row'}}>
+			<View style={{ flexDirection: 'row', height: '30%'}}>
 				<View style={{ flex: 3 }}>
-					<Surface style={{ aspectRatio: 1, zIndex: 0 }}>
-						<Image source={logo} style={{ height: '100%', width: undefined, resizeMode: 'contain' }}/>
-					</Surface>
+					<Image source={logo} style={{ height: '100%', width: undefined, resizeMode: 'contain' }}/>
 				</View>
 				<View style={{ flex: 0.5 }}/>
 				<View style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
