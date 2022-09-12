@@ -5,16 +5,17 @@ import HomeView from './views/HomeView';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import SongLobbyView from './views/SongLobbyView';
+import { translate } from './i18n/i18n';
 
 const Stack = createNativeStackNavigator();
 
 export const protectedRoutes = <>
-	<Stack.Screen name="Home" component={HomeView} options={{ title: 'Welcome' }} />
-	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: 'Play' }} />
+	<Stack.Screen name="Home" component={HomeView} options={{ title: translate('welcome') }} />
+	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: translate('play') }} />
 </>;
 
 export const publicRoutes = <React.Fragment>
-	<Stack.Screen name="Login" component={AuthenticationView} options={{}} />
+	<Stack.Screen name="Login" component={AuthenticationView} options={{ title: translate('signinBtn')}} />
 </React.Fragment>;
 
 export const Router = () => {

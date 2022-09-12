@@ -1,5 +1,5 @@
 export const en = {
-	welcome: 'Welcome to Chromacase',
+	welcome: 'Welcome',
 	signoutBtn: 'Sign out',
 	signinBtn: 'Sign in',
 	playBtn: 'Play',
@@ -7,10 +7,11 @@ export const en = {
 	chapters: 'Chapters',
 	bestScore: 'Best Score',
 	lastScore: 'Last Score',
+	play: 'Play'
 };
 
 export const fr: typeof en = {
-	welcome: 'Bienvenue sur Chromacase',
+	welcome: 'Bienvenue',
 	signoutBtn: 'Se déconnecter',
 	signinBtn: 'Se connecter',
 	playBtn: 'Jouer',
@@ -18,4 +19,5 @@ export const fr: typeof en = {
 	chapters: 'Chapitres',
 	bestScore: 'Meilleur Score',
 	lastScore: 'Dernier Score',
+	play: 'Jouer'
 };
