@@ -13,7 +13,7 @@ const SongCard = (
 
     const cardFormat = {
         margin: 10,
-        padding: 10,
+        padding: 5,
         width: 300,
         backgroundColor: '#C5C5C5'
     }
