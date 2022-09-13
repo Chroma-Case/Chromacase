@@ -1,11 +1,23 @@
 export const en = {
-	welcome: 'Welcome to Chromacase',
+	welcome: 'Welcome',
 	signoutBtn: 'Sign out',
 	signinBtn: 'Sign in',
+	playBtn: 'Play',
+	level: 'Level',
+	chapters: 'Chapters',
+	bestScore: 'Best Score',
+	lastScore: 'Last Score',
+	play: 'Play'
 };
 
 export const fr: typeof en = {
-	welcome: 'Bienvenue sur Chromacase',
+	welcome: 'Bienvenue',
 	signoutBtn: 'Se déconnecter',
 	signinBtn: 'Se connecter',
+	playBtn: 'Jouer',
+	level: 'Niveau',
+	chapters: 'Chapitres',
+	bestScore: 'Meilleur Score',
+	lastScore: 'Dernier Score',
+	play: 'Jouer'
 };

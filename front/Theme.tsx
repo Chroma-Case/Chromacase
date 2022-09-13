@@ -15,7 +15,7 @@ const Theme = {
 		surface: '#F6F6F6',
 		accent: '#00bdbd',
 		error: '#B00020',
-		text: '#ffffff',
+		text: '#000000',
 		onSurface: '#000000',
 		placeholder: '#C9C9C9',
 		notification: '#FF0000'

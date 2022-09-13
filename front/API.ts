@@ -6,6 +6,8 @@ import Song from "./models/Song";
 import SongHistory from "./models/SongHistory";
 import User from "./models/User";
 
+const delay = (seconds: number) => new Promise(resolve => setTimeout(resolve, seconds * 1000));
+
 declare type AuthenticationInput = { email: string, password: string };
 
 export default class API {
@@ -55,13 +57,13 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	static async getSong(songId: number): Promise<Song> {
-		return {
+		return delay(1).then(() => ({
 			title: "Song",
-			description: "A song",
+			description: "A very very very very very very very very very very very very very very very very very very very very very very very very good song",
 			album: "Album",
 			metrics: {},
 			id: songId
-		};
+		}));
 		
 	}
 
@@ -70,16 +72,16 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	 static async getSongChapters(songId: number): Promise<Chapter[]> {
-		return [{
-			start: 0,
-			end: 100,
+		return [1, 2, 3, 4, 5].map((value) => ({
+			start: 100 * (value - 1),
+			end: 100 * value,
 			songId: songId,
-			name: "Chapter",
+			name: `Chapter ${value}`,
 			type: "chorus",
 			key_aspect: "rhythm",
-			difficulty: 1,
-			id: 1
-		}];
+			difficulty: value,
+			id: value * 10
+		}));
 	}
 
 	/**
@@ -87,11 +89,11 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	 static async getSongHistory(songId: number): Promise<SongHistory[]> {
-		return [{
+		return [6, 1, 2, 3, 4, 5].map((value) => ({
 			songId: songId,
 			userId: 1,
-			score: 2
-		}];
+			score: value
+		}));
 	}
 
 	/**
