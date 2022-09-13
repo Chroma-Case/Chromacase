@@ -24,7 +24,7 @@ const HomeView = ({navigation}) => {
         }
         dispatch(useLanguage(newLanguage));
       }}>Change language</Button>
-      <Button onPress={() => navigation.navigate('Settings')}>Settings</Button>
+      <Button onPress={() => navigation.navigate('Settings')}>{ translate('settingsBtn')}</Button>
       <Text style={{ textAlign: "center" }}>Current language: { language }</Text>
     </View>
   );
