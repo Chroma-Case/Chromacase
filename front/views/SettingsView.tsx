@@ -57,7 +57,7 @@ const PreferencesView = ({navigation}) => {
         <View style={{ flex: 1, justifyContent: 'center' }}>
             <Text style={{ textAlign: "center" }}>{ translate('prefBtn')}</Text>
 
-            <Button onPress={() => navigation.navigate('Main')}>{ translate('backBtn') }</Button>
+            <Button onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Themes</Text>

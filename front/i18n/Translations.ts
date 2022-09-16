@@ -7,7 +7,6 @@ export const en = {
 	chapters: 'Chapters',
 	bestScore: 'Best Score',
 	lastScore: 'Last Score',
-	play: 'Play',
 	langBtn: 'Language',
 	diffBtn: 'Difficulty',
 	backBtn: 'Back',
@@ -24,6 +23,7 @@ export const en = {
 	dark: 'Dark',
 	system: 'System',
 	light: 'Light',
+	play: 'Play'
 };
 
 export const fr: typeof en = {
@@ -35,7 +35,6 @@ export const fr: typeof en = {
 	chapters: 'Chapitres',
 	bestScore: 'Meilleur Score',
 	lastScore: 'Dernier Score',
-	play: 'Jouer',
 	langBtn: 'Langage',
 	diffBtn: 'Difficulté',
 	backBtn: 'Retour',
@@ -52,6 +51,7 @@ export const fr: typeof en = {
 	dark: 'Foncé',
 	system: 'Système',
 	light: 'Clair',
+	play: 'Jouer'
 };
 
 export const sp: any = {
@@ -74,4 +74,5 @@ export const sp: any = {
 	dark: 'Oscuro',
 	system: 'Sistema',
 	light: 'Claro',
+	play: 'Jouer'
 };
