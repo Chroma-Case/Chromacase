@@ -1,4 +1,4 @@
-import { Controller, Request, Post, Get, UseGuards, Res, Body } from '@nestjs/common';
+import { Controller, Request, Post, Get, UseGuards, Res, Body, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -40,4 +40,14 @@ export class AuthController {
 	getProfile(@Request() req) {
   		return req.user;
   	}
+
+  	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'Successfully deleted' })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Delete('me')
+	deleteSelf(@Request() req) {
+      return this.usersService.deleteUser({"id": req.user.id})
+  	}
+
 }
