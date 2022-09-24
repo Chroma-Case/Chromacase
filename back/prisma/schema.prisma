@@ -15,3 +15,8 @@ model User {
   password  String
   email     String
 }
+
+model Song {
+  id    Int     @default(autoincrement()) @id
+  name  String @unique
+}
