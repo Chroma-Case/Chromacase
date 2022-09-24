@@ -1,12 +1,12 @@
 services:
   back:
-     build: ./back
-    ports:
-      - "3000:3000"
-    depends_on:
-      - "db"
-    env_file:
-      - .env
+   build: ./back
+   ports:
+     - "3000:3000"
+   depends_on:
+     - "db"
+   env_file:
+     - .env
   db:
     container_name: db
     image: postgres:alpine3.14
