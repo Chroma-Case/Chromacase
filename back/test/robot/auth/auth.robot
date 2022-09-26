@@ -10,7 +10,7 @@ Login
     [Arguments]    ${username}
     &{res}=    POST    /auth/login    {"username": "${username}", "password": "password-${username}"}
     Output
-    Integer    response status    201
+    Integer    response status    200
     String    response body access_token
     Set Headers    {"Authorization": "Bearer ${res.body.access_token}"}
 
@@ -21,7 +21,7 @@ Register
     ...    /auth/register
     ...    {"username": "${username}", "password": "password-${username}", "email": "${username}@chromacase.moe"}
     Output
-    Integer    response status    200
+    Integer    response status    201
 
 Logout
     [Documentation]    Logout the current user, only the local client is affected.

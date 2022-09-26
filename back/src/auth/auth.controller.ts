@@ -7,6 +7,7 @@ import {
 	Body,
 	Delete,
 	BadRequestException,
+    HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -43,6 +44,7 @@ export class AuthController {
 	}
 
 	@ApiBody({ type: LoginDto })
+	@HttpCode(200)
 	@UseGuards(LocalAuthGuard)
 	@Post('login')
 	async login(@Request() req: any): Promise<JwtToken> {
