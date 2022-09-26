@@ -30,4 +30,12 @@ export class LessonService {
 			},
 		});
 	}
+
+	async create(lesson: Lesson): Promise<Lesson> {
+		return this.prisma.lesson.create({ data: lesson });
+	}
+
+	async delete(id: number): Promise<Lesson> {
+		return this.prisma.lesson.delete({ where: { id: id } });
+	}
 }

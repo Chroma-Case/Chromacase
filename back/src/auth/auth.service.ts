@@ -13,7 +13,7 @@ export class AuthService {
 	async validateUser(
 		username: string,
 		password: string,
-	): Promise<PayloadInterface> {
+	): Promise<PayloadInterface | null> {
 		const user = await this.userService.user({ username });
 		if (user && bcrypt.compareSync(password, user.password)) {
 			return {
@@ -21,7 +21,7 @@ export class AuthService {
 				id: user.id,
 			};
 		}
-		throw new BadRequestException(null, 'Invald username or password');
+		return null;
 	}
 
 	async login(user: PayloadInterface) {
