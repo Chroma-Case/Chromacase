@@ -4,8 +4,8 @@ import { SongController } from './song.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-  imports: [PrismaModule],
-  providers: [SongService],
-  controllers: [SongController]
+	imports: [PrismaModule],
+	providers: [SongService],
+	controllers: [SongController],
 })
 export class SongModule {}
