@@ -14,7 +14,7 @@ const SongCard = (
     const cardFormat = {
         margin: 10,
         padding: 5,
-        width: 300,
+        width: 200,
         backgroundColor: '#C5C5C5'
     }
 
@@ -23,16 +23,25 @@ const SongCard = (
     }
 
     const songTitleStyle = {
-        fontweight: '900',
+        fontSize: 17,
         color: 'black'
+    }
+
+    const coverImageStyle = {
+        height: 150,
+        width: 190
     }
 
     return (
         <Card style={cardFormat}>
-          <Card.Cover source={{ uri: albumCover }} />
+          <Card.Cover source={{ uri: albumCover }} style={coverImageStyle}/>
           <Card.Content>
-          <Title style={songTitleStyle}> {songTitle}</Title>
-            <Text style={artistNameStyle}> {artistName}</Text>
+            <Title style={songTitleStyle}> 
+                {songTitle}
+            </Title>
+            <Text style={artistNameStyle}> 
+                {artistName}
+            </Text>
           </Card.Content>
         </Card>
     );
