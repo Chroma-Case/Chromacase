@@ -2,12 +2,16 @@
  * Thanks to https://github.com/Arthi-chaud/Meelo/blob/master/src/pagination/models/paginated-response.ts
  */
 
+import { ApiProperty } from '@nestjs/swagger';
+
 export class Plage<T> {
+	@ApiProperty()
 	metadata: {
 		this: string;
 		next: string | null;
 		previous: string | null;
 	};
+	@ApiProperty()
 	data: T[];
 
 	constructor(data: T[], request: Request | any) {

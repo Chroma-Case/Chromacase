@@ -4,5 +4,8 @@ bin
 pyvenv.cfg
 include
 .env
-migrations
+prisma/migrations/*
 .vscode
+output.xml
+report.html
+log.html
