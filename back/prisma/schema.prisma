@@ -17,6 +17,39 @@ model User {
   LessonHistory LessonHistory[]
 }
 
+model Song {
+  id           Int    @id @default(autoincrement())
+  name         String @unique
+  artistId     Int?
+  artist       Artist? @relation(fields: [artistId], references: [id])
+  albumId      Int?
+  album        Album? @relation(fields: [albumId], references: [id])
+  genreId      Int?
+  genre        Genre?  @relation(fields: [genreId], references: [id])
+  difficulties Json
+}
+
+model Genre {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Song Song[]
+}
+
+model Artist {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Song Song[]
+}
+
+model Album {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Song Song[]
+}
+
 model Lesson {
   id            Int             @id @default(autoincrement())
   name          String

@@ -7,7 +7,7 @@ import {
 	Body,
 	Delete,
 	BadRequestException,
-    HttpCode,
+	HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -62,7 +62,7 @@ export class AuthController {
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({ description: 'Successfully deleted', type: User})
+	@ApiOkResponse({ description: 'Successfully deleted', type: User })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Delete('me')
 	deleteSelf(@Request() req: any): Promise<User> {
