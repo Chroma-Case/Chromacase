@@ -10,8 +10,45 @@ datasource db {
 }
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  username  String @unique
-  password  String
-  email     String
+  id            Int             @id @default(autoincrement())
+  username      String          @unique
+  password      String
+  email         String
+  LessonHistory LessonHistory[]
+}
+
+model Lesson {
+  id            Int             @id @default(autoincrement())
+  name          String
+  description   String
+  requiredLevel Int
+  mainSkill     Skill
+  LessonHistory LessonHistory[]
+}
+
+model LessonHistory {
+  lesson   Lesson @relation(fields: [lessonID], references: [id])
+  lessonID Int
+  user     User   @relation(fields: [userID], references: [id])
+  userID   Int
+
+  @@id([lessonID, userID])
+}
+
+enum Skill {
+  TwoHands
+  Rhythm
+  NoteCombo
+  Arpeggio
+  Distance
+  LeftHand
+  RightHand
+  LeadHandChange
+  ChordComplexity
+  ChordTiming
+  Length
+  PedalPoint
+  Precision
+
+  @@map("DifficultyPoint")
 }

@@ -6,3 +6,6 @@ include
 .env
 prisma/migrations/*
 .vscode
+output.xml
+report.html
+log.html
