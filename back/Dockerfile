@@ -5,4 +5,4 @@ RUN npm install --frozen-lockfile
 COPY . .
 RUN npx prisma generate
 RUN npm run build
-CMD npx prisma migrate ; npm run start:prod
+CMD npx prisma migrate dev; npm run start:prod
