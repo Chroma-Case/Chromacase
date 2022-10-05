@@ -3,7 +3,7 @@ import { Image, View } from "react-native"
 import { Button, Divider, IconButton, List, Surface, Text } from "react-native-paper";
 import API from "../API";
 import { useQuery } from 'react-query';
-import LoadingComponent from "../components/loading";
+import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
 import logo from '../assets/cover.png';
 import { translate } from "../i18n/i18n";
