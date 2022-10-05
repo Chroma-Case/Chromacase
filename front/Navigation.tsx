@@ -28,9 +28,9 @@ export const Router = () => {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
-				<Stack.Screen name="Login" component={LoginForm} options={{ title: translate('signinBtn')}} />
+				{isAuthentified ? protectedRoutes : publicRoutes}
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
 }
-// //{isAuthentified ? protectedRoutes : publicRoutes}
+// //
