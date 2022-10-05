@@ -47,19 +47,13 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit}>
             <TextInput
                 name="email"
-                value=[values.email]
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
                 mode="outlined"
                 label="Outlined input"
                 placeholder="Type something"
-                right={<TextInput.Affix text="/100" />}
                 />
-          <input
-            type="email"
-            name="email"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.email}
-          />
           {errors.email && touched.email && errors.email}
           <input
             type="password"
