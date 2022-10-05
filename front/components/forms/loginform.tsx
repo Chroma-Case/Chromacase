@@ -1,9 +1,8 @@
 // a form for login
 
 import React, { useEffect } from "react";
-//import { useForm, FielderProvider, useField } from 'fielder';
 import { useTranslation } from "react-i18next";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { translate } from "../../i18n/i18n";
 import { setUserToken, unsetUserToken } from "../../state/UserSlice";
@@ -30,6 +29,7 @@ const LoginForm = () => {
 			error: null as string | null,
 		},
 	});
+	const [submittingForm, setSubmittingForm] = React.useState(false);
 
 	const validationSchemas = {
 		username: string()
@@ -46,9 +46,13 @@ const LoginForm = () => {
 		<Box alignItems="center">
 			<Box w="100%" maxWidth="300px">
 				<Stack mx="4">
-					<FormControl isRequired isInvalid={formData.username.error !== null}>
+					<FormControl
+						isRequired
+						isInvalid={formData.username.error !== null || formData.password.error !== null}
+					>
 						<FormControl.Label>Username</FormControl.Label>
 						<Input
+							isRequired
 							type="text"
 							placeholder="Katerina"
 							value={formData.username.value}
@@ -68,10 +72,9 @@ const LoginForm = () => {
 						>
 							{formData.username.error}
 						</FormControl.ErrorMessage>
-					</FormControl>
-					<FormControl isRequired isInvalid={formData.password.error !== null}>
 						<FormControl.Label>Password</FormControl.Label>
 						<Input
+							isRequired
 							type="password"
 							placeholder="password"
 							value={formData.password.value}
@@ -93,7 +96,35 @@ const LoginForm = () => {
 						>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
-						<Button isLoading>Button</Button>
+						<Button
+							isLoading={submittingForm}
+							isDisabled={
+								formData.password.error !== null ||
+								formData.username.error !== null ||
+								formData.username.value === "" ||
+								formData.password.value === ""
+							}
+							onPress={() => {
+								setSubmittingForm(true);
+								setTimeout(() => {
+									setSubmittingForm(false);
+									Alert.alert(
+										"Form submitted",
+										"Data: " + JSON.stringify(formData),
+										[
+											{
+												text: "Cancel",
+												onPress: () => console.log("Cancel Pressed"),
+												style: "cancel",
+											},
+											{ text: "OK", onPress: () => console.log("OK Pressed") },
+										]
+									);
+								}, 2000);
+							}}
+						>
+							Login
+						</Button>
 					</FormControl>
 				</Stack>
 			</Box>
