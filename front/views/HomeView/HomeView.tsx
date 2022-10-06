@@ -21,6 +21,7 @@ const ProgressBar = ({ xp }: { xp: number}) => {
 }
 
 const HomeView = () => {
+	const screenSize = useBreakpointValue({ base: 'small', xl: "big"});
 	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	if (!userQuery.data) {
@@ -30,16 +31,17 @@ const HomeView = () => {
 	}
 	return <ScrollView>
 		<Box style={{ display: 'flex', padding: 10 }}>
-			<Box textAlign={ flexDirection == 'column' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
+			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
 				<Text fontSize="xl" flex={1}>Bienvenue {userQuery.data.name}!</Text>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
 				</Box>
 			</Box>
 			<Box style={{ flexDirection }}>
-				<Box flex={1}>
+				<Box flex={2}>
 					<Text fontSize="md">Passer à l'étape supérieure</Text>
-					<FlatGrid	
+					<FlatGrid
+						maxItemsPerRow={screenSize === 'small' ? 2 : undefined}
 						data={[ ...Array(4).keys() ]}
 						renderItem={({ item }) =>
 							<SongCard albumCover={"https://meelo.arthichaud.me/api/illustrations/releases/120"} songTitle={"Song"} artistName={"Artist"}/>
@@ -47,11 +49,19 @@ const HomeView = () => {
 						spacing={20}
 					/>
 				</Box>
-				<VStack flex={1} >
+				<VStack flex={1}>
 					<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
 						<Button size="sm">Search</Button>
-
 					</Box>
+					<Text fontSize="md">Dernière recherches</Text>
+					<FlatGrid
+						maxItemsPerRow={2}
+						data={[ ...Array(4).keys() ]}
+						renderItem={({ item }) =>
+							<SongCard albumCover={"https://meelo.arthichaud.me/api/illustrations/releases/120"} songTitle={"Song"} artistName={"Artist"}/>
+						}
+						spacing={20}
+					/>
 				</VStack>
 			</Box>
 		</Box>
