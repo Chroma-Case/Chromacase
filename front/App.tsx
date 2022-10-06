@@ -1,5 +1,4 @@
-import { Provider as PaperProvider } from 'react-native-paper';
-import Theme from './Theme';
+import { NativeBaseProvider } from "native-base";
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
@@ -12,9 +11,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <PaperProvider theme={Theme}>
+        <NativeBaseProvider>
           <Router/>
-        </PaperProvider>
+        </NativeBaseProvider>
       </QueryClientProvider>
     </Provider>
   );

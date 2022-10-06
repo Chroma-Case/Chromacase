@@ -1,57 +1,62 @@
 import React from "react";
-import { FlatList, ScrollView, View } from "react-native";
-import { Button, ProgressBar, Text } from "react-native-paper";
 import { useQuery } from "react-query";
 import API from "../../API";
 import LoadingComponent from "../../components/Loading";
+import { Box, ScrollView, useBreakpointValue, Text, VStack, Progress, Button, HStack } from 'native-base';
 import SongCard from "../../components/SongCard";
+import { FlatGrid } from 'react-native-super-grid';
+
+const ProgressBar = ({ xp }: { xp: number}) => {
+	const level = Math.floor(xp / 1000);
+	const nextLevel = level + 1;
+	const nextLevelThreshold = nextLevel * 1000;
+	const progessValue = 100 * xp / nextLevelThreshold;
+	return <VStack alignItems={'center'}>
+		<Text>Niveau {level}</Text>
+		<Box w="90%" maxW="400">
+			<Progress value={progessValue} mx="4" />
+		</Box>
+		<Text>{xp} / {nextLevelThreshold} bonnes notes</Text>
+	</VStack>
+}
 
 const HomeView = () => {
+	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	if (!userQuery.data) {
-		return <View style={{ flexGrow: 1, justifyContent: 'center' }}>
+		return <Box style={{ flexGrow: 1, justifyContent: 'center' }}>
 			<LoadingComponent/>
-		</View>
+		</Box>
 	}
-	return <ScrollView style={{ flex: 1, padding: 20, }}>
-		<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-			<Text>Bievenue { userQuery.data.name }!</Text>
-			<View>
-				<Text style={{  textAlign: 'center'}}>Niveau {userQuery.data.xp / 1000}</Text>
-				<ProgressBar progress={(userQuery.data.xp) / (((userQuery.data.xp / 1000) + 1) * 1000)} />
-				<Text style={{  textAlign: 'center'}}>{userQuery.data.xp} / {(Math.floor(userQuery.data.xp / 1000) + 1) * 1000} Bonnes notes</Text>
-			</View>
-		</View>
-		<View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
-			<View style={{ borderColor: 'red',  borderWidth: 1, borderStyle: 'solid', minWidth: '50%', flex: 2 }}>
-				<Text>Next step</Text>
-				<FlatList
-					style={{ flexGrow: 0, flexShrink: 1 }}
-					scrollEnabled
-					horizontal
-					data={[...Array(5).keys()]}
-					renderItem={() => <SongCard albumCover={""} songTitle={"Song title"} artistName={"artist name"} />}
-					keyExtractor={(item) => item.toString()}
-				/>
-			</View>
-			<View style={{ borderColor: 'blue',  borderWidth: 1, borderStyle: 'solid', minWidth: '30%', flexGrow: 1 }}>
-				<Text>This is the left section This is the left sectionThis is the left sectionThis is the left sectionThis is the left section</Text>
-				<View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-					<Button compact mode="contained">Search</Button>
-				</View>
-				<View>
-					<View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-						<SongCard albumCover={""} songTitle={"Song title"} artistName={"artist name"} />
-						<SongCard albumCover={""} songTitle={"Song title"} artistName={"artist name"} />
-					</View>
-					<View style={{ flexDirection: 'row', justifyContent: 'center'}}>
-						<SongCard albumCover={""} songTitle={"Song title"} artistName={"artist name"} />
-						<SongCard albumCover={""} songTitle={"Song title"} artistName={"artist name"} />
-					</View>
-				</View>
-			</View>
-		</View>
+	return <ScrollView>
+		<Box style={{ display: 'flex', padding: 10 }}>
+			<Box textAlign={ flexDirection == 'column' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
+				<Text fontSize="xl" flex={1}>Bienvenue {userQuery.data.name}!</Text>
+				<Box flex={1}>
+					<ProgressBar xp={userQuery.data.xp}/>
+				</Box>
+			</Box>
+			<Box style={{ flexDirection }}>
+				<Box flex={1}>
+					<Text fontSize="md">Passer à l'étape supérieure</Text>
+					<FlatGrid	
+						data={[ ...Array(4).keys() ]}
+						renderItem={({ item }) =>
+							<SongCard albumCover={"https://meelo.arthichaud.me/api/illustrations/releases/120"} songTitle={"Song"} artistName={"Artist"}/>
+						}
+						spacing={20}
+					/>
+				</Box>
+				<VStack flex={1} >
+					<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
+						<Button size="sm">Search</Button>
+
+					</Box>
+				</VStack>
+			</Box>
+		</Box>
 	</ScrollView>
+	
 }
 
 export default HomeView;
