@@ -9,7 +9,7 @@ const AuthenticationView = () => {
 	return (
 		<Center style={{ flex: 1 }}>
 			<Text>{translate('welcome')}</Text>
-			<Button onPress={() => dispatch(setUserToken('kkkk'))}>
+			<Button variant='ghost' onPress={() => dispatch(setUserToken('kkkk'))}>
 				{translate('signinBtn')}
 			</Button>
 		</Center>
