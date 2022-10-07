@@ -1,0 +1,10 @@
+node_modules
+Dockerfile
+Dockerfile.dev
+dist
+test
+.dockerignore
+.gitignore
+.eslintrc.json
+.pretiierrc
+README.MD
