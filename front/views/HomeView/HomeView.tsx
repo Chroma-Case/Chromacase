@@ -21,7 +21,7 @@ const ProgressBar = ({ xp }: { xp: number}) => {
 }
 
 const HomeView = () => {
-	const screenSize = useBreakpointValue({ base: 'small', xl: "big"});
+	const screenSize = useBreakpointValue({ base: 'small', md: "big"});
 	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	if (!userQuery.data) {
@@ -30,14 +30,14 @@ const HomeView = () => {
 		</Box>
 	}
 	return <ScrollView>
-		<Box style={{ display: 'flex', padding: 10 }}>
+		<Box style={{ display: 'flex', padding: 30 }}>
 			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
-				<Text fontSize="xl" flex={1}>Bienvenue {userQuery.data.name}!</Text>
+				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>Bienvenue {userQuery.data.name}!</Text>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
 				</Box>
 			</Box>
-			<Box style={{ flexDirection }}>
+			<Box paddingY={5} style={{ flexDirection }}>
 				<Box flex={2}>
 					<Text fontSize="md">Passer à l'étape supérieure</Text>
 					<FlatGrid
