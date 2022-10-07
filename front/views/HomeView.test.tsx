@@ -1,10 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import store from '../../state/Store';
+import store from '../state/Store';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import HomeView from './HomeView';
-import { en, fr } from '../../i18n/Translations';
+import { en, fr } from '../i18n/Translations';
 
 describe('<HomeView />', () => {
   const view = <Provider store={store}><HomeView /></Provider>;

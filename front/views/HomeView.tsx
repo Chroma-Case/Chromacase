@@ -1,12 +1,11 @@
 import React from "react";
 import { useQuery } from "react-query";
-import API from "../../API";
-import LoadingComponent from "../../components/Loading";
-import { Box, ScrollView, useBreakpointValue, Text, Heading, VStack, Progress, Button, HStack, useTheme } from 'native-base';
-import SongCard from "../../components/SongCard";
-import { FlatGrid } from 'react-native-super-grid';
+import API from "../API";
+import LoadingComponent from "../components/Loading";
+import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Progress, Button, useTheme, Heading } from 'native-base';
 import { useNavigation } from "@react-navigation/native";
-import SongCardGrid from '../../components/SongCardGrid'
+import SongCardGrid from '../components/SongCardGrid';
+import CompetenciesTable from '../components/CompetenciesTable'
 
 const ProgressBar = ({ xp }: { xp: number}) => {
 	const level = Math.floor(xp / 1000);
@@ -52,8 +51,21 @@ const HomeView = () => {
 							songId: 1
 						}))}
 					/>
-					<Box style={{ flexDirection }}>
-						<Box>
+					<Flex style={{ flexDirection }}>
+						<Box flex={1} paddingY={5}>
+							<Heading>Mes Competences à améliorer</Heading>
+							<Box padding={5}>
+								<CompetenciesTable
+									pedalsCompetency={Math.random() * 100}
+									rightHandCompetency={Math.random() * 100}
+									leftHandCompetency={Math.random() * 100}
+									accuracyCompetency={Math.random() * 100}
+									arpegeCompetency={Math.random() * 100}
+									chordsCompetency={Math.random() * 100}
+								/>
+							</Box>
+						</Box>
+						<Box flex={1}>
 							<SongCardGrid
 								heading="Récemment joués"
 								songs={[ ...Array(4).keys() ].map(() => ({
@@ -64,14 +76,13 @@ const HomeView = () => {
 								}))}
 							/>
 						</Box>
-					</Box>
+					</Flex>
 				</Box>
-				<VStack flex={1} space={5}>
+				<VStack padding={5} flex={1} space={10}>
 					<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
 						<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >Search</Button>
 					</Box>
 					<SongCardGrid
-						maxItemPerRow={screenSize == 'big' ? 2 : undefined}
 						heading="Dernieres recherches"
 						songs={[ ...Array(4).keys() ].map(() => ({
 							albumCover: "",

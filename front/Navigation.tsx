@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import AuthenticationView from './views/AuthenticationView';
-import HomeView from './views/HomeView/HomeView';
+import HomeView from './views/HomeView';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from './state/Store';
 import SongLobbyView from './views/SongLobbyView';
