@@ -12,6 +12,11 @@ export const en = {
 	bestScore: 'Best Score',
 	lastScore: 'Last Score',
 	play: 'Play',
+	goNextStep: 'Step Up!',
+	mySkillsToImprove: "My Competencies to work on",
+	recentlyPlayed: 'Recently played',
+	search: 'Search',
+	lastSearched: "Last searched",
 
 	// competencies
 	pedalsCompetency: 'Pedals',
@@ -37,6 +42,12 @@ export const fr: typeof en = {
 	bestScore: 'Meilleur Score',
 	lastScore: 'Dernier Score',
 	play: 'Jouer',
+	goNextStep: "Passer à l'étape supérieure",
+	mySkillsToImprove: 'Mes Competences à améliorer',
+	recentlyPlayed: "Récemment joués",
+	lastSearched: "Dernières recherches",
+	search: 'Rechercher',
+	
 
 	// competencies
 	pedalsCompetency: 'Pédales',

@@ -6,6 +6,7 @@ import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Progress, Butt
 import { useNavigation } from "@react-navigation/native";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
+import { translate } from "../i18n/i18n";
 
 const ProgressBar = ({ xp }: { xp: number}) => {
 	const level = Math.floor(xp / 1000);
@@ -13,7 +14,7 @@ const ProgressBar = ({ xp }: { xp: number}) => {
 	const nextLevelThreshold = nextLevel * 1000;
 	const progessValue = 100 * xp / nextLevelThreshold;
 	return <VStack alignItems={'center'}>
-		<Text>Niveau {level}</Text>
+		<Text>{`${translate('level')} ${level}`}</Text>
 		<Box w="90%" maxW="400">
 			<Progress value={progessValue} mx="4" />
 		</Box>
@@ -35,7 +36,7 @@ const HomeView = () => {
 	return <ScrollView>
 		<Box style={{ display: 'flex', padding: 30 }}>
 			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
-				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>Bienvenue {userQuery.data.name}!</Text>
+				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>{`${translate('welcome')} ${userQuery.data.name}!`} </Text>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
 				</Box>
@@ -43,7 +44,7 @@ const HomeView = () => {
 			<Box paddingY={5} style={{ flexDirection }}>
 				<Box flex={2}>
 					<SongCardGrid
-						heading="Passer à l'étape supérieure"
+						heading={translate('goNextStep')}
 						songs={[ ...Array(4).keys() ].map(() => ({
 							albumCover: "",
 							songTitle: "Song",
@@ -53,7 +54,7 @@ const HomeView = () => {
 					/>
 					<Flex style={{ flexDirection }}>
 						<Box flex={1} paddingY={5}>
-							<Heading>Mes Competences à améliorer</Heading>
+							<Heading>{translate('mySkillsToImprove')}</Heading>
 							<Box padding={5}>
 								<CompetenciesTable
 									pedalsCompetency={Math.random() * 100}
@@ -67,7 +68,7 @@ const HomeView = () => {
 						</Box>
 						<Box flex={1}>
 							<SongCardGrid
-								heading="Récemment joués"
+								heading={translate('recentlyPlayed')}
 								songs={[ ...Array(4).keys() ].map(() => ({
 									albumCover: "",
 									songTitle: "Song",
@@ -80,10 +81,10 @@ const HomeView = () => {
 				</Box>
 				<VStack padding={5} flex={1} space={10}>
 					<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-						<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >Search</Button>
+						<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >{translate('search')}</Button>
 					</Box>
 					<SongCardGrid
-						heading="Dernieres recherches"
+						heading={translate('lastSearched')}
 						songs={[ ...Array(4).keys() ].map(() => ({
 							albumCover: "",
 							songTitle: "Song",

@@ -1,4 +1,4 @@
-import { HStack, VStack, Text, Progress, useTheme } from "native-base";
+import { HStack, VStack, Text, Progress } from "native-base";
 import { translate } from "../i18n/i18n";
 import Card from './Card';
 type CompetenciesTableProps = {
