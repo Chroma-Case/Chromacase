@@ -1,8 +1,8 @@
 import { useTheme } from "native-base";
-import { ActivityIndicator } from "react-native-paper";
+import { Spinner } from "native-base";
 const LoadingComponent = () => {
 	const theme = useTheme();
-	return <ActivityIndicator color={theme.colors.primary[500]}/>
+	return <Spinner color={theme.colors.primary[500]}/>
 }
 
 export default LoadingComponent;
