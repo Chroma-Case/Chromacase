@@ -23,6 +23,7 @@ const SongCard = (props: SongCardProps) => {
 	return <Pressable onPress={() => navigation.navigate('Song', { songId })}>
 		{({ isHovered,  isFocused }) => (
 		<Box
+			shadow={3}
 			flexDirection='column'
 			alignContent='space-around'
 			bg={(isHovered || isFocused) ? 'coolGray.200' : undefined }
