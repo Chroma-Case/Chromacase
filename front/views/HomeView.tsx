@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Center, Button, Text } from "native-base";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "../state/Store";
 import { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i18n";
 import { useLanguage } from "../state/LanguageSlice";
 import { unsetUserToken } from "../state/UserSlice";

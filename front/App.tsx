@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import store from './state/Store';
 import { Router } from './Navigation';
 import './i18n/i18n';
-import { NativeBaseProvider, extendTheme } from "native-base";
+import { NativeBaseProvider } from "native-base";
 
 const queryClient = new QueryClient();
 

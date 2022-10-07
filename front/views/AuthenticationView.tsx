@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch } from '../state/Store';
 import { translate } from "../i18n/i18n";
 import { setUserToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
