@@ -4,8 +4,8 @@ import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Alert, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
+import { setUserToken } from "../../state/UserSlice";
 import { translate } from "../../i18n/i18n";
-import { setUserToken, unsetUserToken } from "../../state/UserSlice";
 import { object, string, number, date, InferType } from "yup";
 import {
 	FormControl,
@@ -14,11 +14,13 @@ import {
 	WarningOutlineIcon,
 	Box,
 	Button,
-	Center,
-	NativeBaseProvider,
 } from "native-base";
 
-const LoginForm = () => {
+interface LoginFormProps {
+	onSubmit: (username: string, password: string) => Promise<string>;
+};
+
+const LoginForm = ({ onSubmit }: LoginFormProps) => {
 	const [formData, setFormData] = React.useState({
 		username: {
 			value: "",
@@ -30,6 +32,7 @@ const LoginForm = () => {
 		},
 	});
 	const [submittingForm, setSubmittingForm] = React.useState(false);
+	const [formHelperText, setFormHelperText] = React.useState("");
 
 	const validationSchemas = {
 		username: string()
@@ -89,7 +92,7 @@ const LoginForm = () => {
 							}}
 						/>
 						<FormControl.HelperText>
-							Must be at least 4 characters.
+							{formHelperText}
 						</FormControl.HelperText>
 						<FormControl.ErrorMessage
 							leftIcon={<WarningOutlineIcon size="xs" />}
@@ -104,23 +107,19 @@ const LoginForm = () => {
 								formData.username.value === "" ||
 								formData.password.value === ""
 							}
-							onPress={() => {
+							onPress={async () => {
 								setSubmittingForm(true);
-								setTimeout(() => {
+								try {
+									const resp = await onSubmit(formData.username.value, formData.password.value);
+									setFormHelperText(resp);
+									//useDispatch()(setUserToken(resp));
+									//setUserToken(resp);
+								} catch (e) {
+									setFormHelperText(e as string);
+									console.error("catch", e);
+								} finally {
 									setSubmittingForm(false);
-									Alert.alert(
-										"Form submitted",
-										"Data: " + JSON.stringify(formData),
-										[
-											{
-												text: "Cancel",
-												onPress: () => console.log("Cancel Pressed"),
-												style: "cancel",
-											},
-											{ text: "OK", onPress: () => console.log("OK Pressed") },
-										]
-									);
-								}, 2000);
+								}
 							}}
 						>
 							Login

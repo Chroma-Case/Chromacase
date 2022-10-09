@@ -6,7 +6,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from './state/Store';
 import SongLobbyView from './views/SongLobbyView';
 import { translate } from './i18n/i18n';
-import LoginForm from "./components/forms/loginform";
 
 
 const Stack = createNativeStackNavigator();
@@ -22,9 +21,6 @@ export const publicRoutes = <React.Fragment>
 
 export const Router = () => {
 	const isAuthentified = useSelector((state) => state.user.token !== undefined)
-	return (
-		<LoginForm />
-	);
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
