@@ -27,6 +27,7 @@ const AuthenticationView = () => {
       <Text>username, password:</Text>
       <Text>katerina, 1234</Text>
       <LoginForm onSubmit={(u, p) => checkLoginCredentials(u, p, (t) => dispatch(setUserToken(t)))} />
+      <Button variant="ghost" colorScheme="secondary" >{translate("forgottenPassword")}</Button>
 		</Center>
 	);
 };

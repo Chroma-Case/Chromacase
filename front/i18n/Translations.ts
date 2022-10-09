@@ -51,6 +51,7 @@ export const en = {
 	password: 'Password',
 	login: 'Login',
 	invalidCredentials: 'Invalid credentials',
+	forgottenPassword: 'Forgotten password',
 };
 
 export const fr: typeof en = {
@@ -157,4 +158,5 @@ export const sp: typeof en = {
 	password: 'Mot de passe',
 	login: 'Se connecter',
 	invalidCredentials: "Informations d'identification invalides",
+	forgottenPassword: 'Mot de passe oublié',
 };
