@@ -7,7 +7,15 @@ export const en = {
 	chapters: 'Chapters',
 	bestScore: 'Best Score',
 	lastScore: 'Last Score',
-	play: 'Play'
+	play: 'Play',
+	usernameTooShort: 'Username is too short',
+	passwordTooShort: 'Password is too short',
+	usernameTooLong: 'Username is too long',
+	passwordTooLong: 'Password is too long',
+	username: 'Username',
+	password: 'Password',
+	login: 'Login',
+	invalidCredentials: 'Invalid credentials',
 };
 
 export const fr: typeof en = {
@@ -19,5 +27,13 @@ export const fr: typeof en = {
 	chapters: 'Chapitres',
 	bestScore: 'Meilleur Score',
 	lastScore: 'Dernier Score',
-	play: 'Jouer'
+	play: 'Jouer',
+	usernameTooShort: 'Le nom d\'utilisateur est trop court',
+	passwordTooShort: 'Le mot de passe est trop court',
+	usernameTooLong: 'Le nom d\'utilisateur est trop long',
+	passwordTooLong: 'Le mot de passe est trop long',
+	username: 'Nom d\'utilisateur',
+	password: 'Mot de passe',
+	login: 'Se connecter',
+	invalidCredentials: "Informations d'identification invalides",
 };
