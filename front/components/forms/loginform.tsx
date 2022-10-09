@@ -112,17 +112,14 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
 								try {
 									const resp = await onSubmit(formData.username.value, formData.password.value);
 									setFormHelperText(resp);
-									//useDispatch()(setUserToken(resp));
-									//setUserToken(resp);
 								} catch (e) {
 									setFormHelperText(e as string);
-									console.error("catch", e);
 								} finally {
 									setSubmittingForm(false);
 								}
 							}}
 						>
-							Login
+							{translate("login")}
 						</Button>
 					</FormControl>
 				</Stack>
