@@ -53,7 +53,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
 						isRequired
 						isInvalid={formData.username.error !== null || formData.password.error !== null}
 					>
-						<FormControl.Label>Username</FormControl.Label>
+						<FormControl.Label>{translate("username")}</FormControl.Label>
 						<Input
 							isRequired
 							type="text"
@@ -75,7 +75,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
 						>
 							{formData.username.error}
 						</FormControl.ErrorMessage>
-						<FormControl.Label>Password</FormControl.Label>
+						<FormControl.Label>{translate("password")}</FormControl.Label>
 						<Input
 							isRequired
 							type="password"

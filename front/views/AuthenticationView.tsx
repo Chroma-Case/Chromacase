@@ -24,6 +24,8 @@ const AuthenticationView = () => {
 	return (
 		<Center style={{ flex: 1 }}>
 			<Text>{translate('welcome')}</Text>
+      <Text>username, password:</Text>
+      <Text>katerina, 1234</Text>
       <LoginForm onSubmit={(u, p) => checkLoginCredentials(u, p, (t) => dispatch(setUserToken(t)))} />
 		</Center>
 	);

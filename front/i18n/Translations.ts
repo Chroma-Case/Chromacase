@@ -43,6 +43,14 @@ export const en = {
 	arpegeCompetency: 'Arpeges',
 	chordsCompetency: 'Chords',
 
+	usernameTooShort: 'Username is too short',
+	passwordTooShort: 'Password is too short',
+	usernameTooLong: 'Username is too long',
+	passwordTooLong: 'Password is too long',
+	username: 'Username',
+	password: 'Password',
+	login: 'Login',
+	invalidCredentials: 'Invalid credentials',
 };
 
 export const fr: typeof en = {
@@ -86,7 +94,15 @@ export const fr: typeof en = {
 	leftHandCompetency: "Main gauche",
 	accuracyCompetency: "Justesse",
 	arpegeCompetency: "Arpege",
-	chordsCompetency: "Accords"
+	chordsCompetency: "Accords",
+	usernameTooShort: 'Le nom d\'utilisateur est trop court',
+	passwordTooShort: 'Le mot de passe est trop court',
+	usernameTooLong: 'Le nom d\'utilisateur est trop long',
+	passwordTooLong: 'Le mot de passe est trop long',
+	username: 'Nom d\'utilisateur',
+	password: 'Mot de passe',
+	login: 'Se connecter',
+	invalidCredentials: "Informations d'identification invalides",
 };
 
 export const sp: typeof en = {
@@ -132,5 +148,13 @@ export const sp: typeof en = {
 	chapters: "Chapitres",
 	bestScore: "Meilleur Score",
 	lastScore: "Dernier score",
-	recentlyPlayed: "Joués récemment"
+	recentlyPlayed: "Joués récemment",
+	usernameTooShort: 'Le nom d\'utilisateur est trop court',
+	passwordTooShort: 'Le mot de passe est trop court',
+	usernameTooLong: 'Le nom d\'utilisateur est trop long',
+	passwordTooLong: 'Le mot de passe est trop long',
+	username: 'Nom d\'utilisateur',
+	password: 'Mot de passe',
+	login: 'Se connecter',
+	invalidCredentials: "Informations d'identification invalides",
 };
