@@ -74,9 +74,9 @@ const HomeView = () => {
 							</Box>
 						</Box>
 
-						<Divider bg="red.500" size={1} mx={3} height={500} orientation="vertical"/>
+						<Divider orientation="vertical" w="1"/>
 
-						<Box flex={1}>
+						<Box flex={1} padding={5}>
 							<SongCardGrid
 								heading={translate('recentlyPlayed')}
 								maxItemPerRow={2}
@@ -95,25 +95,26 @@ const HomeView = () => {
 
 				<VStack padding={5} flex={1} space={10}>
 
-				<Divider 
-					bg="red.500" 
-					size={1} 
-					orientation="vertical"
-				/>
+						<Box style={{flexDirection: 'row'}}>
+							<Divider orientation="vertical" w="1"/>
+							
+							<Box flex="2" padding={5}>
+								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
+									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >{translate('search')}</Button>
+								</Box>
 
-					<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-						<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >{translate('search')}</Button>
-					</Box>
-					<SongCardGrid
-						maxItemPerRow={2}
-						heading={translate('lastSearched')}
-						songs={[ ...Array(4).keys() ].map(() => ({
-							albumCover: "",
-							songTitle: "Song",
-							artistName: "Artist",
-							songId: 1
-						}))}
-					/>
+								<SongCardGrid
+									maxItemPerRow={2}
+									heading={translate('lastSearched')}
+									songs={[ ...Array(4).keys() ].map(() => ({
+										albumCover: "",
+										songTitle: "Song",
+										artistName: "Artist",
+										songId: 1
+									}))}
+								/>
+							</Box>
+						</Box>
 				</VStack>
 
 			</Box>
