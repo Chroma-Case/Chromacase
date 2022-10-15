@@ -3,7 +3,7 @@ import { useDispatch } from '../state/Store';
 import { translate } from "../i18n/i18n";
 import { setUserToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
-import LoginForm from "../components/forms/loginform";
+import SigninForm from "../components/forms/signinform";
 
 const checkLoginCredentials = async (username: string, password: string, tokenSetter: (token: string) => void) => {
 	return new Promise<string>((resolve, reject) => {
@@ -26,7 +26,7 @@ const AuthenticationView = () => {
 			<Text>{translate('welcome')}</Text>
       <Text>username, password:</Text>
       <Text>katerina, 1234</Text>
-      <LoginForm onSubmit={(u, p) => checkLoginCredentials(u, p, (t) => dispatch(setUserToken(t)))} />
+      <SigninForm onSubmit={(u, p) => checkLoginCredentials(u, p, (t) => dispatch(setUserToken(t)))} />
       <Button variant="ghost" colorScheme="secondary" >{translate("forgottenPassword")}</Button>
 		</Center>
 	);
