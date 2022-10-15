@@ -20,7 +20,7 @@ const ProgressBar = ({ xp }: { xp: number}) => {
 			<Box w="90%" maxW="400">
 				<Progress value={progessValue} mx="4" />
 			</Box>
-			<Text>{xp} / {nextLevelThreshold} bonnes notes</Text>
+			<Text>{xp} / {nextLevelThreshold} {translate('levelProgress')}</Text>
 		</VStack>
 	);
 }
@@ -87,22 +87,21 @@ const HomeView = () => {
 									songId: 1
 								}))}
 							/>
-						</Box>
-						
+						</Box>						
 					</Flex>
 				</Box>
-
 
 				<VStack padding={5} flex={1} space={10}>
 
 						<Box style={{flexDirection: 'row'}}>
+
 							<Divider orientation="vertical" w="1"/>
-							
+
 							<Box flex="2" padding={5}>
 								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
 									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >{translate('search')}</Button>
 								</Box>
-
+								
 								<SongCardGrid
 									maxItemPerRow={2}
 									heading={translate('lastSearched')}
@@ -116,9 +115,7 @@ const HomeView = () => {
 							</Box>
 						</Box>
 				</VStack>
-
 			</Box>
-
 		</Box>
 	</ScrollView>
 	
