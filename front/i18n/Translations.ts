@@ -22,7 +22,9 @@ export const en = {
 	repeatPassword: 'Repeat password',
 	passwordsDontMatch: 'Passwords don\'t match',
 	signUp: 'Sign up',
+	signIn: 'Sign in',
 	"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character": "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character",
+	accountCreated: 'Account created',
 };
 
 export const fr: typeof en = {
@@ -49,5 +51,7 @@ export const fr: typeof en = {
 	repeatPassword: 'Répéter le mot de passe',
 	passwordsDontMatch: 'Les mots de passe ne correspondent pas',
 	signUp: 'S\'inscrire',
+	signIn: 'Se connecter',
 	"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character": "Doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial",
+	accountCreated: 'Compte créé',
 };
