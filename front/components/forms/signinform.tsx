@@ -69,7 +69,6 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 									});
 							}}
 						/>
-						<FormControl.HelperText></FormControl.HelperText>
 						<FormControl.ErrorMessage
 							leftIcon={<WarningOutlineIcon size="xs" />}
 						>
