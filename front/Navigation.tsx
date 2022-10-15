@@ -7,7 +7,6 @@ import { useSelector } from './state/Store';
 import SongLobbyView from './views/SongLobbyView';
 import { translate } from './i18n/i18n';
 
-
 const Stack = createNativeStackNavigator();
 
 export const protectedRoutes = <>
@@ -29,4 +28,3 @@ export const Router = () => {
 		</NavigationContainer>
 	)
 }
-// //

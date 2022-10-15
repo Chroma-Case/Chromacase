@@ -1,12 +1,8 @@
-// a form for login
+// a form for sign in
 
-import React, { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { Alert, Text, View } from "react-native";
-import { useDispatch } from "react-redux";
-import { setUserToken } from "../../state/UserSlice";
+import React from "react";
 import { translate } from "../../i18n/i18n";
-import { object, string, number, date, InferType } from "yup";
+import { string } from "yup";
 import {
 	FormControl,
 	Input,
@@ -18,7 +14,7 @@ import {
 
 interface SigninFormProps {
 	onSubmit: (username: string, password: string) => Promise<string>;
-};
+}
 
 const LoginForm = ({ onSubmit }: SigninFormProps) => {
 	const [formData, setFormData] = React.useState({
@@ -51,7 +47,10 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 				<Stack mx="4">
 					<FormControl
 						isRequired
-						isInvalid={formData.username.error !== null || formData.password.error !== null}
+						isInvalid={
+							formData.username.error !== null ||
+							formData.password.error !== null
+						}
 					>
 						<FormControl.Label>{translate("username")}</FormControl.Label>
 						<Input
@@ -95,9 +94,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
-						<FormControl.HelperText>
-							{formHelperText}
-						</FormControl.HelperText>
+						<FormControl.HelperText>{formHelperText}</FormControl.HelperText>
 						<Button
 							isLoading={submittingForm}
 							isDisabled={
@@ -109,7 +106,10 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 							onPress={async () => {
 								setSubmittingForm(true);
 								try {
-									const resp = await onSubmit(formData.username.value, formData.password.value);
+									const resp = await onSubmit(
+										formData.username.value,
+										formData.password.value
+									);
 									setFormHelperText(resp);
 								} catch (e) {
 									setFormHelperText(e as string);
