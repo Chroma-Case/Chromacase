@@ -4,6 +4,7 @@ import { translate } from "../i18n/i18n";
 import { setUserToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
+import SignupForm from "../components/forms/signupform";
 
 const checkLoginCredentials = async (username: string, password: string, tokenSetter: (token: string) => void) => {
 	return new Promise<string>((resolve, reject) => {

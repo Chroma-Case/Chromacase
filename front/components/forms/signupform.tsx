@@ -16,17 +16,25 @@ import {
 	Button,
 } from "native-base";
 
-interface SigninFormProps {
-	onSubmit: (username: string, password: string) => Promise<string>;
+interface SignupFormProps {
+	onSubmit: (username: string, password: string, email: string) => Promise<string>;
 };
 
-const LoginForm = ({ onSubmit }: SigninFormProps) => {
+const LoginForm = ({ onSubmit }: SignupFormProps) => {
 	const [formData, setFormData] = React.useState({
 		username: {
 			value: "",
 			error: null as string | null,
 		},
 		password: {
+			value: "",
+			error: null as string | null,
+		},
+		repeatPassword: {
+			value: "",
+			error: null as string | null,
+		},
+		email: {
 			value: "",
 			error: null as string | null,
 		},
@@ -43,6 +51,9 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 			.min(4, translate("passwordTooShort"))
 			.max(100, translate("passwordTooLong"))
 			.required("Password is required"),
+		email: string()
+			.email("Invalid email")
+			.required("Email is required"),
 	};
 
 	return (
@@ -75,6 +86,28 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						>
 							{formData.username.error}
 						</FormControl.ErrorMessage>
+						<FormControl.Label>{translate("email")}</FormControl.Label>
+						<Input
+							isRequired
+							type="text"
+							placeholder="lucy@er.com"
+							value={formData.email.value}
+							onChangeText={(t) => {
+								let error: null | string = null;
+								validationSchemas.email
+									.validate(t)
+									.catch((e) => (error = e.message))
+									.finally(() => {
+										setFormData({ ...formData, email: { value: t, error } });
+									});
+							}}
+						/>
+						<FormControl.HelperText></FormControl.HelperText>
+						<FormControl.ErrorMessage
+							leftIcon={<WarningOutlineIcon size="xs" />}
+						>
+							{formData.email.error}
+						</FormControl.ErrorMessage>
 						<FormControl.Label>{translate("password")}</FormControl.Label>
 						<Input
 							isRequired
@@ -96,6 +129,30 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
+						<FormControl.Label>{translate("repeatPassword")}</FormControl.Label>
+						<Input
+							isRequired
+							type="password"
+							placeholder="password"
+							value={formData.repeatPassword.value}
+							onChangeText={(t) => {
+								let error: null | string = null;
+								validationSchemas.password
+									.validate(t)
+									.catch((e) => (error = e.message))
+									.finally(() => {
+										if (t !== formData.password.value) {
+											error = translate("passwordsDontMatch");
+										}
+										setFormData({ ...formData, repeatPassword: { value: t, error } });
+									});
+							}}
+						/>
+						<FormControl.ErrorMessage
+							leftIcon={<WarningOutlineIcon size="xs" />}
+						>
+							{formData.repeatPassword.error}
+						</FormControl.ErrorMessage>
 						<FormControl.HelperText>
 							{formHelperText}
 						</FormControl.HelperText>
@@ -104,8 +161,10 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 							isDisabled={
 								formData.password.error !== null ||
 								formData.username.error !== null ||
+								formData.repeatPassword.error !== null ||
 								formData.username.value === "" ||
-								formData.password.value === ""
+								formData.password.value === "" ||
+								formData.repeatPassword.value === ""
 							}
 							onPress={async () => {
 								setSubmittingForm(true);
