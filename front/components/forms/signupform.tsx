@@ -1,10 +1,7 @@
+
 // a form for login
 
 import React, { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { Alert, Text, View } from "react-native";
-import { useDispatch } from "react-redux";
-import { setUserToken } from "../../state/UserSlice";
 import { translate } from "../../i18n/i18n";
 import { object, string, number, date, InferType } from "yup";
 import {
@@ -47,13 +44,13 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 			.min(3, translate("usernameTooShort"))
 			.max(20, translate("usernameTooLong"))
 			.required("Username is required"),
+		email: string()
+			.email("Invalid email")
+			.required("Email is required"),
 		password: string()
 			.min(4, translate("passwordTooShort"))
 			.max(100, translate("passwordTooLong"))
 			.required("Password is required"),
-		email: string()
-			.email("Invalid email")
-			.required("Email is required"),
 	};
 
 	return (
@@ -62,7 +59,10 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 				<Stack mx="4">
 					<FormControl
 						isRequired
-						isInvalid={formData.username.error !== null || formData.password.error !== null}
+						isInvalid={formData.username.error !== null ||
+						           formData.password.error !== null ||
+						           formData.repeatPassword.error !== null ||
+						           formData.email.error !== null}
 					>
 						<FormControl.Label>{translate("username")}</FormControl.Label>
 						<Input
@@ -80,7 +80,6 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 									});
 							}}
 						/>
-						<FormControl.HelperText></FormControl.HelperText>
 						<FormControl.ErrorMessage
 							leftIcon={<WarningOutlineIcon size="xs" />}
 						>
@@ -102,7 +101,6 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 									});
 							}}
 						/>
-						<FormControl.HelperText></FormControl.HelperText>
 						<FormControl.ErrorMessage
 							leftIcon={<WarningOutlineIcon size="xs" />}
 						>
@@ -141,7 +139,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 									.validate(t)
 									.catch((e) => (error = e.message))
 									.finally(() => {
-										if (t !== formData.password.value) {
+										if (!error && t !== formData.password.value) {
 											error = translate("passwordsDontMatch");
 										}
 										setFormData({ ...formData, repeatPassword: { value: t, error } });
@@ -162,14 +160,16 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 								formData.password.error !== null ||
 								formData.username.error !== null ||
 								formData.repeatPassword.error !== null ||
+								formData.email.error !== null ||
 								formData.username.value === "" ||
 								formData.password.value === "" ||
+								formData.repeatPassword.value === "" ||
 								formData.repeatPassword.value === ""
 							}
 							onPress={async () => {
 								setSubmittingForm(true);
 								try {
-									const resp = await onSubmit(formData.username.value, formData.password.value);
+									const resp = await onSubmit(formData.username.value, formData.password.value, formData.email.value);
 									setFormHelperText(resp);
 								} catch (e) {
 									setFormHelperText(e as string);
@@ -178,7 +178,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 								}
 							}}
 						>
-							{translate("login")}
+							{translate("signUp")}
 						</Button>
 					</FormControl>
 				</Stack>
