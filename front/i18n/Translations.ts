@@ -17,6 +17,11 @@ export const en = {
 	login: 'Login',
 	invalidCredentials: 'Invalid credentials',
 	forgottenPassword: 'Forgotten password',
+	invalidEmail: 'Invalid email',
+	email: 'Email',
+	repeatPassword: 'Repeat password',
+	passwordsDontMatch: 'Passwords don\'t match',
+	signUp: 'Sign up',
 };
 
 export const fr: typeof en = {
@@ -38,4 +43,9 @@ export const fr: typeof en = {
 	login: 'Se connecter',
 	invalidCredentials: "Informations d'identification invalides",
 	forgottenPassword: 'Mot de passe oublié',
+	invalidEmail: 'Email invalide',
+	email: 'Email',
+	repeatPassword: 'Répéter le mot de passe',
+	passwordsDontMatch: 'Les mots de passe ne correspondent pas',
+	signUp: 'S\'inscrire',
 };
