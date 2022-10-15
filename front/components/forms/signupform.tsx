@@ -1,9 +1,8 @@
+// a form for sign up
 
-// a form for login
-
-import React, { useEffect } from "react";
+import React from "react";
 import { translate } from "../../i18n/i18n";
-import { object, string, number, date, InferType } from "yup";
+import { string } from "yup";
 import {
 	FormControl,
 	Input,
@@ -14,8 +13,12 @@ import {
 } from "native-base";
 
 interface SignupFormProps {
-	onSubmit: (username: string, password: string, email: string) => Promise<string>;
-};
+	onSubmit: (
+		username: string,
+		password: string,
+		email: string
+	) => Promise<string>;
+}
 
 const LoginForm = ({ onSubmit }: SignupFormProps) => {
 	const [formData, setFormData] = React.useState({
@@ -44,15 +47,15 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 			.min(3, translate("usernameTooShort"))
 			.max(20, translate("usernameTooLong"))
 			.required("Username is required"),
-		email: string()
-			.email("Invalid email")
-			.required("Email is required"),
+		email: string().email("Invalid email").required("Email is required"),
 		password: string()
 			.min(4, translate("passwordTooShort"))
 			.max(100, translate("passwordTooLong"))
 			.matches(
 				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-				translate("Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character")
+				translate(
+					"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+				)
 			)
 			.required("Password is required"),
 	};
@@ -63,10 +66,12 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 				<Stack mx="4">
 					<FormControl
 						isRequired
-						isInvalid={formData.username.error !== null ||
-						           formData.password.error !== null ||
-						           formData.repeatPassword.error !== null ||
-						           formData.email.error !== null}
+						isInvalid={
+							formData.username.error !== null ||
+							formData.password.error !== null ||
+							formData.repeatPassword.error !== null ||
+							formData.email.error !== null
+						}
 					>
 						<FormControl.Label>{translate("username")}</FormControl.Label>
 						<Input
@@ -146,7 +151,10 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 										if (!error && t !== formData.password.value) {
 											error = translate("passwordsDontMatch");
 										}
-										setFormData({ ...formData, repeatPassword: { value: t, error } });
+										setFormData({
+											...formData,
+											repeatPassword: { value: t, error },
+										});
 									});
 							}}
 						/>
@@ -155,9 +163,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						>
 							{formData.repeatPassword.error}
 						</FormControl.ErrorMessage>
-						<FormControl.HelperText>
-							{formHelperText}
-						</FormControl.HelperText>
+						<FormControl.HelperText>{formHelperText}</FormControl.HelperText>
 						<Button
 							isLoading={submittingForm}
 							isDisabled={
@@ -173,7 +179,11 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							onPress={async () => {
 								setSubmittingForm(true);
 								try {
-									const resp = await onSubmit(formData.username.value, formData.password.value, formData.email.value);
+									const resp = await onSubmit(
+										formData.username.value,
+										formData.password.value,
+										formData.email.value
+									);
 									setFormHelperText(resp);
 								} catch (e) {
 									setFormHelperText(e as string);
