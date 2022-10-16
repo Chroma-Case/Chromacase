@@ -10,6 +10,7 @@ import {
 	WarningOutlineIcon,
 	Box,
 	Button,
+	useToast,
 } from "native-base";
 
 interface SignupFormProps {
@@ -40,7 +41,6 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 		},
 	});
 	const [submittingForm, setSubmittingForm] = React.useState(false);
-	const [formHelperText, setFormHelperText] = React.useState("");
 
 	const validationSchemas = {
 		username: string()
@@ -59,10 +59,11 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 			)
 			.required("Password is required"),
 	};
+	const toast = useToast();
 
 	return (
-		<Box alignItems="center">
-			<Box w="100%" maxWidth="300px">
+		<Box alignItems="center" style={{ width: '100%' }}>
+			<Box style={{ width: '80%', maxWidth: 400 }}>
 				<Stack mx="4">
 					<FormControl
 						isRequired
@@ -163,8 +164,8 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						>
 							{formData.repeatPassword.error}
 						</FormControl.ErrorMessage>
-						<FormControl.HelperText>{formHelperText}</FormControl.HelperText>
 						<Button
+							style={{ marginTop: 10 }}
 							isLoading={submittingForm}
 							isDisabled={
 								formData.password.error !== null ||
@@ -184,9 +185,9 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 										formData.password.value,
 										formData.email.value
 									);
-									setFormHelperText(resp);
+									toast.show({ description: resp });
 								} catch (e) {
-									setFormHelperText(e as string);
+									toast.show({ description: e as string });
 								} finally {
 									setSubmittingForm(false);
 								}

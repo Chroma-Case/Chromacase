@@ -10,6 +10,7 @@ import {
 	WarningOutlineIcon,
 	Box,
 	Button,
+	useToast,
 } from "native-base";
 
 interface SigninFormProps {
@@ -28,7 +29,6 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 		},
 	});
 	const [submittingForm, setSubmittingForm] = React.useState(false);
-	const [formHelperText, setFormHelperText] = React.useState("");
 
 	const validationSchemas = {
 		username: string()
@@ -40,11 +40,10 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 			.max(100, translate("passwordTooLong"))
 			.required("Password is required"),
 	};
-
+	const toast = useToast();
 	return (
-		<Box alignItems="center">
-			<Box w="100%" maxWidth="300px">
-				<Stack mx="4">
+		<Box alignItems="center" style={{ width: '100%' }}>
+			<Stack mx="4" style={{ width: '80%', maxWidth: 400 }}>
 					<FormControl
 						isRequired
 						isInvalid={
@@ -56,7 +55,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						<Input
 							isRequired
 							type="text"
-							placeholder="Katerina"
+							placeholder="Username"
 							value={formData.username.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -94,8 +93,8 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
-						<FormControl.HelperText>{formHelperText}</FormControl.HelperText>
 						<Button
+							style={{ marginTop: 10 }}
 							isLoading={submittingForm}
 							isDisabled={
 								formData.password.error !== null ||
@@ -110,9 +109,9 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 										formData.username.value,
 										formData.password.value
 									);
-									setFormHelperText(resp);
+									toast.show({ description: resp, colorScheme: 'secondary' })
 								} catch (e) {
-									setFormHelperText(e as string);
+									toast.show({ description: e as string, colorScheme: 'red', avoidKeyboard: true })
 								} finally {
 									setSubmittingForm(false);
 								}
@@ -122,7 +121,6 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						</Button>
 					</FormControl>
 				</Stack>
-			</Box>
 		</Box>
 	);
 };
