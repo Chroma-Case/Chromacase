@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/core";
 import { HStack, VStack, Text, Progress, Pressable } from "native-base";
 import { translate } from "../i18n/i18n";
 import Card from './Card';
+
 type CompetenciesTableProps = {
 	pedalsCompetency: number;
 	rightHandCompetency: number;

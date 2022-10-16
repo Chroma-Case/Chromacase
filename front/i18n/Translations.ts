@@ -17,6 +17,7 @@ export const en = {
 	recentlyPlayed: 'Recently played',
 	search: 'Search',
 	lastSearched: "Last searched",
+	levelProgress: 'good notes',
 
 	// competencies
 	pedalsCompetency: 'Pedals',
@@ -47,7 +48,7 @@ export const fr: typeof en = {
 	recentlyPlayed: "Récemment joués",
 	lastSearched: "Dernières recherches",
 	search: 'Rechercher',
-	
+	levelProgress: 'bonnes notes',
 
 	// competencies
 	pedalsCompetency: 'Pédales',
