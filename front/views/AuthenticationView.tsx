@@ -1,21 +1,19 @@
 import React from "react";
-import { useTranslation } from "react-i18next";
-import { Text, View } from 'react-native';
-import { Button } from "react-native-paper";
-import { useDispatch } from "react-redux";
+import { useDispatch } from '../state/Store';
 import { translate } from "../i18n/i18n";
 import { setUserToken } from "../state/UserSlice";
+import { Center, Button, Text } from 'native-base';
 
 const AuthenticationView = () => {
-  const dispatch = useDispatch();
-  return (
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      <Text style={{ textAlign: "center" }}>{ translate('welcome') }</Text>
-      <Button onPress={() => dispatch(setUserToken('kkkk'))}>
-      { translate('signinBtn') }
-      </Button>
-    </View>
-  );
+	const dispatch = useDispatch();
+	return (
+		<Center style={{ flex: 1 }}>
+			<Text>{translate('welcome')}</Text>
+			<Button variant='ghost' onPress={() => dispatch(setUserToken('kkkk'))}>
+				{translate('signinBtn')}
+			</Button>
+		</Center>
+	);
 }
 
 

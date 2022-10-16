@@ -1,7 +1,6 @@
-import { useTheme } from "@react-navigation/native";
-import { ActivityIndicator } from "react-native-paper";
+import { useTheme } from "native-base";
+import { Spinner } from "native-base";
 const LoadingComponent = () => {
-	return <ActivityIndicator />
+	const theme = useTheme();
+	return <Spinner color={theme.colors.primary[500]}/>
 }
-
-export default LoadingComponent;

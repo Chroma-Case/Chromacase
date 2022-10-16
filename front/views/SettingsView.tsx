@@ -1,14 +1,11 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
+import { Center, Button, Text, Switch, Slider, Select } from "native-base";
 import { Picker } from '@react-native-picker/picker';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { unsetUserToken } from '../state/UserSlice';
-import { Button, Switch } from 'react-native-paper';
-import Slider from '@react-native-community/slider';
 import { useDispatch, useSelector } from "react-redux";
 import { useLanguage } from "../state/LanguageSlice";
-
-import Theme from '../Theme'
 import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i18n";
 
 const SettingsStack = createNativeStackNavigator();
@@ -17,35 +14,35 @@ const MainView = ({navigation}) => {
     const dispatch = useDispatch();
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', backgroundColor: Theme.colors.background }}>
-            <Button onPress={() => navigation.navigate('Preferences')}>
+        <Center style={{ flex: 1}}>
+            <Button variant='ghost' onPress={() => navigation.navigate('Preferences')}>
                 { translate('prefBtn')}
             </Button>
 
-            <Button onPress={() => navigation.navigate('Notifications')}>
+            <Button variant='ghost' onPress={() => navigation.navigate('Notifications')}>
             { translate('notifBtn')}
             </Button>
 
-            <Button onPress={() => navigation.navigate('Privacy')}>
+            <Button variant='ghost' onPress={() => navigation.navigate('Privacy')}>
             { translate('privBtn')}
             </Button>
 
-            <Button onPress={() => navigation.navigate('ChangePassword')}>
+            <Button variant='ghost' onPress={() => navigation.navigate('ChangePassword')}>
                 { translate('changepasswdBtn')}
             </Button>
 
-            <Button onPress={() => navigation.navigate('ChangeEmail')}>
+            <Button variant='ghost' onPress={() => navigation.navigate('ChangeEmail')}>
             { translate('changeemailBtn')}
             </Button>
 
-            <Button onPress={() => navigation.navigate('GoogleAccount')}>
+            <Button variant='ghost' onPress={() => navigation.navigate('GoogleAccount')}>
             { translate('googleacctBtn')}
             </Button>
 
-            <Button onPress={() => dispatch(unsetUserToken())} >
+            <Button variant='ghost' onPress={() => dispatch(unsetUserToken())} >
                 { translate('signoutBtn')}
             </Button>
-        </View>
+        </Center>
     )
 }
 
@@ -54,163 +51,162 @@ const PreferencesView = ({navigation}) => {
     const language: AvailableLanguages = useSelector((state) => state.language.value);
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Center style={{ flex: 1}}>
             <Text style={{ textAlign: "center" }}>{ translate('prefBtn')}</Text>
 
             <Button onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
 
             <View style={{margin: 20}}>
-                <Text style={{ textAlign: "center" }}>Themes</Text>
-                <Picker selectedValue={undefined}
+                <Select selectedValue={undefined}
+                placeholder={'Theme'}
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
                     // onValueChange={(itemValue, itemIndex) => switch themes}
                     >
-                    <Picker.Item label={ translate('dark') } value='dark'/>
-                    <Picker.Item label={ translate('light') } value='light'/>
-                    <Picker.Item label={ translate('system') } value='system'/>
-                </Picker>
+                    <Select.Item label={ translate('dark') } value='dark'/>
+                    <Select.Item label={ translate('light') } value='light'/>
+                    <Select.Item label={ translate('system') } value='system'/>
+                </Select>
             </View>
 
             <View style={{margin: 20}}>
-                <Text style={{ textAlign: "center" }}>{ translate('langBtn') }</Text>
-                <Picker selectedValue={language}
+                <Select selectedValue={language}
+                    placeholder={translate('langBtn')} 
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
                     onValueChange={(itemValue: AvailableLanguages, itemIndex) => {
                         let newLanguage = DefaultLanguage;
                         newLanguage = itemValue;
                         dispatch(useLanguage(newLanguage));
                     }}>
-                    <Picker.Item label='Français' value='fr'/>
-                    <Picker.Item label='English' value='en'/>
-                    <Picker.Item label='Italiano' value='it'/>
-                    <Picker.Item label='Espanol' value='sp'/>
-                </Picker>
+                    <Select.Item label='Français' value='fr'/>
+                    <Select.Item label='English' value='en'/>
+                    <Select.Item label='Italiano' value='it'/>
+                    <Select.Item label='Espanol' value='sp'/>
+                </Select>
             </View>
 
             <View style={{margin: 20}}>
-                <Text style={{ textAlign: "center" }}>{ translate('diffBtn') }</Text>
-                <Picker selectedValue={undefined}
+                <Select selectedValue={undefined}
+                    placeholder={ translate('diffBtn') }
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
                     // onValueChange={(itemValue, itemIndex) => change level}
                     >
-                    <Picker.Item label={ translate('easy') } value='easy'/>
-                    <Picker.Item label={ translate('medium') } value='medium'/>
-                    <Picker.Item label={ translate('hard') } value='hard'/>
-                </Picker>
+
+                    <Select.Item label={ translate('easy') } value='easy'/>
+                    <Select.Item label={ translate('medium') } value='medium'/>
+                    <Select.Item label={ translate('hard') } value='hard'/>
+                </Select>
             </View>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Color blind mode</Text>
-                <Switch style={{ alignSelf: 'center'}} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center'}} colorScheme="primary"/>
             </View>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Mic volume</Text>
-                <Slider
-                    style={{width: 200, height: 40, alignSelf: 'center'}}
-                    minimumValue={0}
-                    maximumValue={1}
-                    minimumTrackTintColor={Theme.colors.primary}
-                    maximumTrackTintColor={Theme.colors.disabled}
-                    thumbTintColor={Theme.colors.accent}
-                />
+                <Slider defaultValue={50} minValue={0} maxValue={1000} accessibilityLabel="hello world" step={100}>
+                    <Slider.Track>
+                        <Slider.FilledTrack/>
+                    </Slider.Track>
+                    <Slider.Thumb/>
+                </Slider>
             </View>
 
             <View style={{margin: 20}}>
-                <Text style={{ textAlign: "center" }}>Device</Text>
-                <Picker selectedValue={undefined}
+                <Select selectedValue={undefined}
+                    placeholder={'Device'}
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
                     // onValueChange={(itemValue, itemIndex) => change device}
                     >
-                    <Picker.Item label='Mic_0' value='0'/>
-                    <Picker.Item label='Mic_1' value='1'/>
-                    <Picker.Item label='Mic_2' value='2'/>
-                </Picker>
+                    <Select.Item label='Mic_0' value='0'/>
+                    <Select.Item label='Mic_1' value='1'/>
+                    <Select.Item label='Mic_2' value='2'/>
+                </Select>
             </View>
-        </View>
+        </Center>
     )
 }
 
 const NotificationsView = ({navigation}) => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Center style={{ flex: 1, justifyContent: 'center' }}>
 
-            <Button onPress={() => navigation.navigate('Main')}>{ translate('backBtn') }</Button>
+            <Button onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
 
             <Text style={{ textAlign: "center" }}>{ translate('notifBtn')}</Text>
 
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Push notifications</Text>
-                <Switch style={{ alignSelf: 'center', margin: 10 }} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Email notifications</Text>
-                <Switch style={{ alignSelf: 'center', margin: 10 }} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Training reminder</Text>
-                <Switch style={{ alignSelf: 'center', margin: 10 }} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>New songs</Text>
-                <Switch style={{ alignSelf: 'center', margin: 10 }} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
-        </View>
+        </Center>
     )
 }
 
 const PrivacyView = ({navigation}) => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>{ translate('backBtn') }</Button>
 
             <Text style={{ textAlign: "center" }}>{ translate('privBtn')}</Text>
 
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Data Collection</Text>
-                <Switch style={{ alignSelf: 'center', margin: 10 }} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Custom Adds</Text>
-                <Switch style={{ alignSelf: 'center', margin: 10 }} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Recommendations</Text>
-                <Switch style={{ alignSelf: 'center', margin: 10 }} thumbColor={Theme.colors.accent}/>
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
-        </View>
+        </Center>
     )
 }
 
 const ChangePasswordView = ({navigation}) => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>ChangePassword</Text>
-        </View>
+        </Center>
     )
 }
 
 const ChangeEmailView = ({navigation}) => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>ChangeEmail</Text>
-        </View>
+        </Center>
     )
 }
 
 const GoogleAccountView = ({navigation}) => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
             <Text>GoogleAccount</Text>
-        </View>
+        </Center>
     )
 }
 

@@ -4,7 +4,7 @@ import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
 import SetttingsNavigator from './views/SettingsView';
 import { NavigationContainer } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useSelector } from './state/Store';
 import SongLobbyView from './views/SongLobbyView';
 import { translate } from './i18n/i18n';
 
