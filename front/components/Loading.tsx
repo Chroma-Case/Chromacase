@@ -4,3 +4,5 @@ const LoadingComponent = () => {
 	const theme = useTheme();
 	return <Spinner color={theme.colors.primary[500]}/>
 }
+
+export default LoadingComponent;

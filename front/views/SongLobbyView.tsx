@@ -2,7 +2,7 @@ import { useRoute } from "@react-navigation/native";
 import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
 import API from "../API";
 import { useQuery } from 'react-query';
-import LoadingComponent from "../components/loading";
+import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
 import logo from '../assets/cover.png';
 import { translate } from "../i18n/i18n";

@@ -4,7 +4,6 @@ import { extendTheme } from 'native-base';
  * Using the Material Color guidelines
  */
 const Theme = extendTheme({
-	roundness: 10,
 	colors: {
 		primary:
 		{
@@ -45,7 +44,7 @@ const Theme = extendTheme({
 			800: '#262626',
 			900: '#0d0d0d',
 		},
-		accent:
+		secondary:
 		{
 			50: '#d8ffff',
 			100: '#acffff',

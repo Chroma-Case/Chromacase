@@ -10,7 +10,7 @@ import { translate } from './i18n/i18n';
 const Stack = createNativeStackNavigator();
 
 export const protectedRoutes = <>
-	<Stack.Screen name="Home" component={HomeView} options={{ title: translate('welcome') }} />
+	<Stack.Screen name="Home" component={HomeView} options={{ title: translate('welcome') }}/>
 	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: translate('play') }} />
 </>;
 
