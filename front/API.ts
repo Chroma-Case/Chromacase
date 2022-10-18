@@ -19,7 +19,7 @@ export default class API {
 		return {
 			name: "User",
 			email: "user@chromacase.com",
-			xp: 0,
+			xp: 2345,
 			premium: false,
 			metrics: {},
 			settings: {},

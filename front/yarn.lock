@@ -8129,6 +8129,13 @@ react-native-screens@~3.11.1:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
+react-native-super-grid@^4.6.1:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-4.6.1.tgz#620a59e98375dd5138d3e6618991d09e93cbe318"
+  integrity sha512-YEKN//TT3DZlbz+1m6YqnclYS+T/Qn2ELrZ0fjoXzB2U/AQoBflvtw0VsJkcPkf3RGWLbD1GKbKN6Hz9fPCVfg==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-svg@12.3.0:
   version "12.3.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-12.3.0.tgz#40f657c5d1ee366df23f3ec8dae76fd276b86248"

@@ -2,7 +2,7 @@ import { useRoute } from "@react-navigation/native";
 import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
 import API from "../API";
 import { useQuery } from 'react-query';
-import LoadingComponent from "../components/loading";
+import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
 import logo from '../assets/cover.png';
 import { translate } from "../i18n/i18n";
@@ -41,7 +41,7 @@ const SongLobbyView = () => {
 					<Box flex={1}>
 						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
 						<Text>{'3:20'} - {translate('level')} { chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }</Text>
-						<Button width='fit-content'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
+						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
 					</Box>
 				</Box>
 			</Box>

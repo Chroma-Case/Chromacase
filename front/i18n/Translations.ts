@@ -1,8 +1,12 @@
 export const en = {
 	welcome: 'Welcome',
+	welcomeMessage: 'Welcome back ',
 	signoutBtn: 'Sign out',
 	signinBtn: 'Sign in',
+	changeLanguageBtn: "Change language",
+	searchBtn: "Search",
 	playBtn: 'Play',
+	songPageBtn: 'Go to song page',
 	level: 'Level',
 	chapters: 'Chapters',
 	bestScore: 'Best Score',
@@ -23,14 +27,33 @@ export const en = {
 	dark: 'Dark',
 	system: 'System',
 	light: 'Light',
-	play: 'Play'
+	play: 'Play',
+	goNextStep: 'Step Up!',
+	mySkillsToImprove: "My Competencies to work on",
+	recentlyPlayed: 'Recently played',
+	search: 'Search',
+	lastSearched: "Last searched",
+	levelProgress: 'good notes',
+
+	// competencies
+	pedalsCompetency: 'Pedals',
+	rightHandCompetency: 'Right hand',
+	leftHandCompetency: 'Left hand',
+	accuracyCompetency: 'Accuracy',
+	arpegeCompetency: 'Arpeges',
+	chordsCompetency: 'Chords',
+
 };
 
 export const fr: typeof en = {
 	welcome: 'Bienvenue',
+	welcomeMessage: 'Re-Bonjour ',
 	signoutBtn: 'Se déconnecter',
 	signinBtn: 'Se connecter',
+	changeLanguageBtn: "Changer la langue",
+	searchBtn: "Rechercher",
 	playBtn: 'Jouer',
+	songPageBtn: 'Aller sur la page de la chanson',
 	level: 'Niveau',
 	chapters: 'Chapitres',
 	bestScore: 'Meilleur Score',
@@ -38,7 +61,6 @@ export const fr: typeof en = {
 	langBtn: 'Langage',
 	diffBtn: 'Difficulté',
 	backBtn: 'Retour',
-	settingsBtn: 'Parametres',
 	prefBtn: 'Préférences',
 	notifBtn: 'Notifications',
 	privBtn: 'Confidentialité',
@@ -51,28 +73,64 @@ export const fr: typeof en = {
 	dark: 'Foncé',
 	system: 'Système',
 	light: 'Clair',
-	play: 'Jouer'
+	play: 'Jouer',
+	settingsBtn: "Réglages",
+	goNextStep: "Prochaine Etape",
+	mySkillsToImprove: "Mes Skills",
+	recentlyPlayed: "Joués récemment",
+	search: "Rechercher",
+	lastSearched: "Dernières recherches",
+	levelProgress: "Niveau",
+	pedalsCompetency: "Pédales",
+	rightHandCompetency: "Main droite",
+	leftHandCompetency: "Main gauche",
+	accuracyCompetency: "Justesse",
+	arpegeCompetency: "Arpege",
+	chordsCompetency: "Accords"
 };
 
-export const sp: any = {
+export const sp: typeof en = {
 	welcome: 'Benvenido a Chromacase',
 	signoutBtn: 'Desconectarse',
 	signinBtn: 'Connectarse',
 	langBtn: 'Langua',
 	diffBtn: 'Dificultad',
 	backBtn: 'Volver',
-	settingsBtn: 'Settings', //to translate in spanish
-	prefBtn: 'Préférences', //to translate in spanish
-	notifBtn: 'Notifications', //to translate in spanish
-	privBtn: 'Confidentialité', //to translate in spanish
-	changepasswdBtn: 'Changer le mot de pass', //to translate in spanish
-	changeemailBtn: 'Change l\'email', //to translate in spanish
-	googleacctBtn: 'Compte Google', //to translate in spanish
+	settingsBtn: 'Settings',
+	prefBtn: 'Préférences',
+	notifBtn: 'Notifications',
+	privBtn: 'Confidentialité',
+	changepasswdBtn: 'Changer le mot de pass',
+	changeemailBtn: 'Change l\'email',
+	googleacctBtn: 'Compte Google',
 	easy: 'Principiante',
 	medium: 'Intermedio',
 	hard: 'Avanzado',
 	dark: 'Oscuro',
 	system: 'Sistema',
 	light: 'Claro',
-	play: 'Jouer'
+	play: 'Jouer',
+	goNextStep: "Passer à l'étape supérieure",
+	mySkillsToImprove: 'Mes Competences à améliorer',
+	lastSearched: "Dernières recherches",
+	search: 'Rechercher',
+	levelProgress: 'bonnes notes',
+
+	// competencies
+	pedalsCompetency: 'Pédales',
+	rightHandCompetency: 'Main droite',
+	leftHandCompetency: 'Main gauche',
+	accuracyCompetency: 'Précision',
+	arpegeCompetency: 'Arpèges',
+	chordsCompetency: 'Accords',
+	welcomeMessage: "Bienvenue",
+	changeLanguageBtn: "Changer de langue",
+	searchBtn: "Rechercher",
+	playBtn: "Jouer",
+	songPageBtn: "Chanson",
+	level: "Niveau",
+	chapters: "Chapitres",
+	bestScore: "Meilleur Score",
+	lastScore: "Dernier score",
+	recentlyPlayed: "Joués récemment"
 };
