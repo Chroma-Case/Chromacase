@@ -1,9 +1,9 @@
-import { en, fr } from './Translations';
+import { en, fr, sp } from './Translations';
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 
-export type AvailableLanguages = 'en' | 'fr';
+export type AvailableLanguages = 'en' | 'fr' | 'sp';
 export const DefaultLanguage: AvailableLanguages = 'en';
 
 i18n
@@ -15,6 +15,9 @@ i18n
 			},
 			fr: {
 				translation: fr
+			},
+			sp: {
+				translation: sp
 			}
 		},
 		lng: DefaultLanguage,

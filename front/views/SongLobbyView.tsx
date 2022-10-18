@@ -41,7 +41,7 @@ const SongLobbyView = () => {
 					<Box flex={1}>
 						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
 						<Text>{'3:20'} - {translate('level')} { chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }</Text>
-						<Button width='fit-content'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
+						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
 					</Box>
 				</Box>
 			</Box>

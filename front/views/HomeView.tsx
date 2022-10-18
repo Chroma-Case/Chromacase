@@ -74,8 +74,6 @@ const HomeView = () => {
 							</Box>
 						</Box>
 
-						<Divider orientation="vertical" w="1"/>
-
 						<Box flex={1} padding={5}>
 							<SongCardGrid
 								heading={translate('recentlyPlayed')}
@@ -92,16 +90,12 @@ const HomeView = () => {
 				</Box>
 
 				<VStack padding={5} flex={1} space={10}>
-
 						<Box style={{flexDirection: 'row'}}>
-
-							<Divider orientation="vertical" w="1"/>
-
+							
 							<Box flex="2" padding={5}>
 								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
 									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >{translate('search')}</Button>
 								</Box>
-								
 								<SongCardGrid
 									maxItemPerRow={2}
 									heading={translate('lastSearched')}
@@ -113,6 +107,9 @@ const HomeView = () => {
 									}))}
 								/>
 							</Box>
+						</Box>
+						<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
+							<Button backgroundColor={theme.colors.primary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Settings')} >{translate('settingsBtn')}</Button>
 						</Box>
 				</VStack>
 			</Box>
