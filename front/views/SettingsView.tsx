@@ -1,7 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Center, Button, Text, Switch, Slider, Select } from "native-base";
-import { Picker } from '@react-native-picker/picker';
+import { Center, Button, Text, Switch, Slider, Select, Heading } from "native-base";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { unsetUserToken } from '../state/UserSlice';
 import { useDispatch, useSelector } from "react-redux";
@@ -52,14 +51,14 @@ const PreferencesView = ({navigation}) => {
 
     return (
         <Center style={{ flex: 1}}>
-            <Text style={{ textAlign: "center" }}>{ translate('prefBtn')}</Text>
+            <Heading style={{ textAlign: "center" }}>{ translate('prefBtn')}</Heading>
 
-            <Button onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>{ translate('backBtn') }</Button>
 
-            <View style={{margin: 20}}>
+            <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Select selectedValue={undefined}
                 placeholder={'Theme'}
-                    style={{ height: 50, width: 150, alignSelf: 'center'}}
+                    style={{ alignSelf: 'center'}}
                     // onValueChange={(itemValue, itemIndex) => switch themes}
                     >
                     <Select.Item label={ translate('dark') } value='dark'/>
@@ -68,13 +67,13 @@ const PreferencesView = ({navigation}) => {
                 </Select>
             </View>
 
-            <View style={{margin: 20}}>
+            <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Select selectedValue={language}
                     placeholder={translate('langBtn')} 
-                    style={{ height: 50, width: 150, alignSelf: 'center'}}
+                    style={{ alignSelf: 'center'}}
                     onValueChange={(itemValue: AvailableLanguages, itemIndex) => {
                         let newLanguage = DefaultLanguage;
-                        newLanguage = itemValue;
+                        newLanguage = itemValue;Heading
                         dispatch(useLanguage(newLanguage));
                     }}>
                     <Select.Item label='Français' value='fr'/>
@@ -84,7 +83,7 @@ const PreferencesView = ({navigation}) => {
                 </Select>
             </View>
 
-            <View style={{margin: 20}}>
+            <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Select selectedValue={undefined}
                     placeholder={ translate('diffBtn') }
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
@@ -102,9 +101,9 @@ const PreferencesView = ({navigation}) => {
                 <Switch style={{ alignSelf: 'center'}} colorScheme="primary"/>
             </View>
 
-            <View style={{margin: 20}}>
+            <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Text style={{ textAlign: "center" }}>Mic volume</Text>
-                <Slider defaultValue={50} minValue={0} maxValue={1000} accessibilityLabel="hello world" step={100}>
+                <Slider defaultValue={50} minValue={0} maxValue={1000} accessibilityLabel="hello world" step={10}>
                     <Slider.Track>
                         <Slider.FilledTrack/>
                     </Slider.Track>
@@ -112,7 +111,7 @@ const PreferencesView = ({navigation}) => {
                 </Slider>
             </View>
 
-            <View style={{margin: 20}}>
+            <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Select selectedValue={undefined}
                     placeholder={'Device'}
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
@@ -131,9 +130,8 @@ const NotificationsView = ({navigation}) => {
     return (
         <Center style={{ flex: 1, justifyContent: 'center' }}>
 
-            <Button onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
-
-            <Text style={{ textAlign: "center" }}>{ translate('notifBtn')}</Text>
+            <Heading style={{ textAlign: "center" }}>{ translate('notifBtn')}</Heading>
+            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
 
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Push notifications</Text>
@@ -161,9 +159,9 @@ const NotificationsView = ({navigation}) => {
 const PrivacyView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
-            <Button onPress={() => navigation.navigate('Main')}>{ translate('backBtn') }</Button>
+            <Heading style={{ textAlign: "center" }}>{ translate('privBtn')}</Heading>
 
-            <Text style={{ textAlign: "center" }}>{ translate('privBtn')}</Text>
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>{ translate('backBtn') }</Button>
 
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Data Collection</Text>
