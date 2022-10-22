@@ -5,6 +5,7 @@ import LessonHistory from "./models/LessonHistory";
 import Song from "./models/Song";
 import SongHistory from "./models/SongHistory";
 import User from "./models/User";
+import { translate } from "./i18n/i18n";
 
 const delay = (seconds: number) => new Promise(resolve => setTimeout(resolve, seconds * 1000));
 
@@ -19,7 +20,7 @@ export default class API {
 		return {
 			name: "User",
 			email: "user@chromacase.com",
-			xp: 0,
+			xp: 2345,
 			premium: false,
 			metrics: {},
 			settings: {},
@@ -133,5 +134,34 @@ export default class API {
 			lessonId,
 			userId: 1
 		}];
+	}
+
+	/**
+	 * Get the login information status
+	 * 
+	 */
+	static async checkSigninCredentials(username: string, password: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			setTimeout(() => {
+				if (username === "katerina" && password === "1234") {
+					return resolve("token signin");
+				}
+				return reject(translate("invalidCredentials"));
+			}, 1000);
+		});
+	};
+
+	/**
+	 * Get the register information status
+	 */
+	static async checkSignupCredentials(username: string, password: string, email: string): Promise<string> {
+		return new Promise<string>((resolve, reject) => {
+			setTimeout(() => {
+				if (username === "bluub") {
+					return reject(translate("usernameTaken"));
+				}
+				return resolve("token signup");
+			}, 1000);
+		});
 	}
 }

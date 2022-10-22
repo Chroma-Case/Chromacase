@@ -1,34 +1,30 @@
 import React from "react";
 import { useDispatch } from '../state/Store';
 import { translate } from "../i18n/i18n";
+import API from "../API";
 import { setUserToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
 import SignupForm from "../components/forms/signupform";
 
-const checkLoginCredentials = async (username: string, password: string, tokenSetter: (token: string) => void) => {
-	return new Promise<string>((resolve, reject) => {
-		setTimeout(() => {
-			if (username === "katerina" && password === "1234") {
-				// got a red warning if i don't wait a little bit before setting the token 
-				setTimeout(() => tokenSetter("1234"), 500);
-				return resolve("st germain c'est stylé, big up à Arthur");
-			}
-			return reject(translate("invalidCredentials"));
-		}, 1000);
-	});
+const hanldeSignin = async (username: string, password: string, tokenSetter: (token: string) => void): Promise<string> => {
+	try {
+		const response = await API.checkSigninCredentials(username, password);
+		tokenSetter(response);
+		return translate("loggedIn");
+	} catch (error) {
+		return error as string;
+	}
 };
 
-const checkSignupCredentials = async (username: string, password: string, email: string, tokenSetter: (t: string) => void) => {
-	return new Promise<string>((resolve, reject) => {
-		setTimeout(() => {
-			if (username === "bluub") {
-				return reject("bluub is a cool username but déjà prit");
-			}
-			setTimeout(() => tokenSetter("4321"), 100);
-			return resolve(translate("accountCreated"));
-		}, 1000);
-	});
+const handleSignup = async (username: string, password: string, email: string, tokenSetter: (t: string) => void): Promise<string> => {
+	try {
+		const response = await API.checkSignupCredentials(username, password, email);
+		tokenSetter(response);
+		return translate("loggedIn");
+	} catch (error) {
+		return error as string;
+	}
 };
 
 const AuthenticationView = () => {
@@ -41,9 +37,9 @@ const AuthenticationView = () => {
 			{mode === "signin" ? (<>
 				<Text fontWeight='thin'>username, password:</Text>
 				<Text fontWeight='thin'>katerina, 1234</Text>
-				<SigninForm onSubmit={(username, password) => checkLoginCredentials(username, password, (token) => dispatch(setUserToken(token)))} />
+				<SigninForm onSubmit={(username, password) => hanldeSignin(username, password, (token) => dispatch(setUserToken(token)))} />
 			</>) : (
-				<SignupForm onSubmit={(username, password, email) => checkSignupCredentials(username, password, email, (token) => dispatch(setUserToken(token)))} />
+				<SignupForm onSubmit={(username, password, email) => handleSignup(username, password, email, (token) => dispatch(setUserToken(token)))} />
 			)}
 			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" >{translate("forgottenPassword")}</Button> }
 			<Button variant='outline' marginTop={5} colorScheme='primary' onPress={() => setMode(mode === "signin" ? "signup" : "signin")}>
