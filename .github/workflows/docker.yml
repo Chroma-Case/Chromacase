@@ -11,6 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{github.repository_owner}}/back
+          tags: |
+            type=edge
+            type=ref
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -30,4 +39,4 @@ jobs:
         with:
           context: ./back
           push: true
-          tags: ghcr.io/${{github.repository_owner}}/back
+          tags: ${{steps.meta.outputs.tags}} 
