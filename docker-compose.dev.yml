@@ -8,6 +8,7 @@ services:
       - "3000:3000"
     volumes:
       - ./back:/app
+      - ./musics:/musics
     depends_on:
       - "db"
     env_file:
