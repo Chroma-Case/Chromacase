@@ -1,4 +1,4 @@
-import { Input, Column, Text, Box } from "native-base";
+import { Input, Column, Text, Box, Button, Pressable } from "native-base";
 import React from "react";
 
 interface SearchBarProps {
@@ -9,13 +9,13 @@ interface SearchBarProps {
 
 // debounce function
 const debounce = (func: any, delay: number) => {
-    let inDebounce: any;
-    return function (this: any) {
-        const context = this;
-        const args = arguments;
-        clearTimeout(inDebounce);
-        inDebounce = setTimeout(() => func.apply(context, args), delay);
-    };
+	let inDebounce: any;
+	return function (this: any) {
+		const context = this;
+		const args = arguments;
+		clearTimeout(inDebounce);
+		inDebounce = setTimeout(() => func.apply(context, args), delay);
+	};
 };
 
 const SearchBar = ({
@@ -23,7 +23,9 @@ const SearchBar = ({
 	onTextSubmit,
 	suggestions,
 }: SearchBarProps) => {
-    const debouncedOnTextChange = React.useRef(debounce((t: string) => onTextChange(t), 500)).current;
+	const debouncedOnTextChange = React.useRef(
+		debounce((t: string) => onTextChange(t), 70)
+	).current;
 	return (
 		<>
 			<Input
@@ -35,9 +37,20 @@ const SearchBar = ({
 			<Column>
 				{suggestions.map((suggestion, idx) => {
 					return (
-						<Box key={idx} padding={2} bg={"gray.100"}>
+						<Pressable
+							key={idx}
+							padding={2}
+							bg={"white"}
+							_hover={{
+								bg: "primary.200",
+							}}
+							_pressed={{
+								bg: "primary.300",
+							}}
+							onPress={() => onTextSubmit(suggestion)}
+						>
 							<Text>{suggestion}</Text>
-						</Box>
+						</Pressable>
 					);
 				})}
 			</Column>

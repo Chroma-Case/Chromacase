@@ -1,19 +1,24 @@
 import React from "react";
 import { useDispatch } from "../state/Store";
 import { translate } from "../i18n/i18n";
-import { Center, Button, Text } from "native-base";
-import SearchBar from "../components/SearchBar";
+import { Button } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-
-const onChangeText = (text: string) => {
-	console.log("change", text);
-};
+import SearchBarSuggestions from "../components/SearchBarSuggestions";
 
 const onTextSubmit = (text: string) => {
 	console.log(text);
 };
 
-const suggestions = ["a", "bfzefzef", "cfe"];
+const suggestions = [
+	"Taylor Swift",
+	"Taylor Swift - Love Story",
+	"Lady Gaga",
+	"Lady Gaga - Poker Face",
+	"Beyonce",
+	"Beyonce - Single Ladies",
+	"DJ Snake",
+	"DJ Snake - Taki Taki",
+];
 
 const SearchView = () => {
 	const dispatch = useDispatch();
@@ -24,8 +29,7 @@ const SearchView = () => {
 			<Button variant="ghost" onPress={() => navigation.navigate("Home")}>
 				{translate("back")}
 			</Button>
-			<SearchBar
-				onTextChange={onChangeText}
+			<SearchBarSuggestions
 				onTextSubmit={onTextSubmit}
 				suggestions={suggestions}
 			/>
