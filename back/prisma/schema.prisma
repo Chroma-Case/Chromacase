@@ -15,6 +15,20 @@ model User {
   password      String
   email         String
   LessonHistory LessonHistory[]
+  userSettings UserSettings[]
+}
+
+model UserSettings {
+  id                    Int @id @default(autoincrement())
+  user                  User @relation(fields: [userId], references: [id])
+  userId                Int
+  pushNotification      Boolean @default(true)
+  emailNotification     Boolean @default(true)
+  trainingNotification  Boolean @default(true)
+  newsongNotification   Boolean @default(true)
+  dataCollection        Boolean @default(true)
+  CustomAdds            Boolean @default(true)
+  Recommendations       Boolean @default(true)
 }
 
 model Song {
