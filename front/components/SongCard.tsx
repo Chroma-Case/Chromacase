@@ -18,7 +18,7 @@ const SongCard = (props: SongCardProps) => {
 			shadow={3}
 			flexDirection='column'
 			alignContent='space-around'
-			bg={(isHovered || isFocused) ? 'coolGray.200' : undefined }
+			bg={(isHovered || isFocused) ? 'coolGray.200' : 'background.50' }
 		>
 			<Image
 				style={{ zIndex: 0, aspectRatio: 1, margin: 5, borderRadius: CardBorderRadius}}
