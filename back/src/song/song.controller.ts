@@ -21,8 +21,10 @@ import { SongService } from './song.service';
 import { Request } from 'express';
 import { Prisma, Song } from '@prisma/client';
 import { createReadStream } from 'fs';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('song')
+@ApiTags('song')
 export class SongController {
 	constructor(private readonly songService: SongService) {}
 
