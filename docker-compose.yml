@@ -16,3 +16,9 @@ services:
     - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
+  front:
+    build: ./front
+    ports:
+      - "8080:80"
+    depends_on:
+      - "back"
