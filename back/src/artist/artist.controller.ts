@@ -18,8 +18,10 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { Request } from 'express';
 import { ArtistService } from './artist.service';
 import { Prisma, Artist } from '@prisma/client';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('artist')
+@ApiTags('artist')
 export class ArtistController {
 	constructor(private readonly service: ArtistService) {}
 
