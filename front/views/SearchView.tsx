@@ -35,6 +35,16 @@ const SearchView = () => {
 			data: IllustratedSuggestion,
 		},
 		{
+			type: SuggestionType.ILLUSTRATED,
+			data: {
+				text: "Shed a Light",
+				subtext: "Robin Schulz & David Guetta",
+				imageSrc:
+					"https://imgs.search.brave.com/O9j2Z-oWiniq3lj7d-dAOgXLWCIqnHaFegmaSeIkWOY/rs:fit:560:320:1/g:ce/aHR0cHM6Ly91cGxv/YWQud2lraW1lZGlh/Lm9yZy93aWtpcGVk/aWEvZW4vdGh1bWIv/OC84ZS9TaGVkX2Ff/TGlnaHRfUm9iaW5f/U2NodWx6LmpwZy81/MTJweC1TaGVkX2Ff/TGlnaHRfUm9iaW5f/U2NodWx6LmpwZw",
+				onPress: () => navigation.navigate("Song", { songId: 1 }),
+			},
+		},
+		{
 			type: SuggestionType.TEXT,
 			data: {
 				text: "Lady Gaga",
