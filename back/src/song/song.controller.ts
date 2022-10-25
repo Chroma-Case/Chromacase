@@ -6,6 +6,7 @@ import {
 	DefaultValuePipe,
 	Delete,
 	Get,
+	InternalServerErrorException,
 	NotFoundException,
 	Param,
 	ParseIntPipe,
@@ -30,8 +31,12 @@ export class SongController {
 		const song = await this.songService.song({ id });
 		if (!song) throw new NotFoundException('Song not found');
 
-		const file = createReadStream(song.midiPath);
-		return new StreamableFile(file);
+		try {
+			const file = createReadStream(song.midiPath);
+			return new StreamableFile(file, { type: 'audio/midi' });
+		} catch {
+			throw new InternalServerErrorException();
+		}
 	}
 
 	@Get(':id/musicXml')
