@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import store from '../state/Store';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
-import HomeView from '../views/HomeView';
+import HomeView from './HomeView';
 import { en, fr } from '../i18n/Translations';
 
 describe('<HomeView />', () => {

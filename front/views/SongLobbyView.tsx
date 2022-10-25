@@ -1,13 +1,13 @@
 import { useRoute } from "@react-navigation/native";
-import { Image, View } from "react-native"
-import { Button, Divider, IconButton, List, Surface, Text } from "react-native-paper";
+import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
 import API from "../API";
 import { useQuery } from 'react-query';
-import LoadingComponent from "../components/loading";
+import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
 import logo from '../assets/cover.png';
 import { translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
+import { Ionicons } from '@expo/vector-icons';
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -27,54 +27,60 @@ const SongLobbyView = () => {
 	}, [chaptersOpen]);
 	useEffect(() => {}, [songQuery.isLoading]);
 	if (songQuery.isLoading || scoresQuery.isLoading)
-		return <View style={{ flexGrow: 1, justifyContent: 'center' }}>
+		return <Center style={{ flexGrow: 1 }}>
 			<LoadingComponent/>
-		</View>
+		</Center>
 	return (
-		<View style={{ padding: 30, flexDirection: 'column' }}>
-			<View style={{ flexDirection: 'row', height: '30%'}}>
-				<View style={{ flex: 3 }}>
+		<Box style={{ padding: 30, flexDirection: 'column' }}>
+			<Box style={{ flexDirection: 'row', height: '30%'}}>
+				<Box style={{ flex: 3 }}>
 					<Image source={logo} style={{ height: '100%', width: undefined, resizeMode: 'contain' }}/>
-				</View>
-				<View style={{ flex: 0.5 }}/>
-				<View style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
-					<View>
-						<Text style={{ fontWeight: 'bold', fontSize: 25 }}>{songQuery.data!.title}</Text>
+				</Box>
+				<Box style={{ flex: 0.5 }}/>
+				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
+					<Box flex={1}>
+						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
 						<Text>{'3:20'} - {translate('level')} { chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }</Text>
-					</View>
-					<Button icon="play" mode="contained" labelStyle={{ color: 'white' }} contentStyle={{ flexDirection: 'row-reverse' }}>
-						{ translate('playBtn') }
-					</Button>
-				</View>
-			</View>
-			<View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
-				<View style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text style={{ fontWeight: 'bold', fontSize: 15 }}>{translate('bestScore') }</Text>
+						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
+					</Box>
+				</Box>
+			</Box>
+			<Box style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
+				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
+					<Text bold fontSize='lg'>{translate('bestScore') }</Text>
 					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
-				</View>
-				<View style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text style={{ fontWeight: 'bold', fontSize: 15}}>{translate('lastScore') }</Text>
+				</Box>
+				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
+					<Text bold fontSize='lg'>{translate('lastScore') }</Text>
 					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
-				</View>
-			</View>
+				</Box>
+			</Box>
 			<Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text>
-			<List.Accordion
-    			title={translate('chapters')}
-    			expanded={chaptersOpen}
-    			onPress={() => setChaptersOpen(!chaptersOpen)}>
-    			{ chaptersQuery.isLoading && <LoadingComponent/>}
-				{ !chaptersQuery.isLoading && chaptersQuery.data!.map((chapter) => 
-					<>
-						<List.Item
-							key={chapter.id}
-							title={chapter.name}
-							description={`${translate('level')} ${chapter.difficulty} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}
-						/>
-						<Divider />
-					</>
-				)}
-    		</List.Accordion>
-		</View>
+			<Box flexDirection='row'>
+				<Button
+					variant='ghost'
+					onPress={() => setChaptersOpen(!chaptersOpen)}
+					endIcon={<Icon as={Ionicons} name={chaptersOpen ? "chevron-up-outline" : "chevron-down-outline"}/>}
+				>
+					{translate('chapters')}
+				</Button>
+			</Box>
+			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>
+				{ chaptersQuery.isLoading && <LoadingComponent/>}
+				{ !chaptersQuery.isLoading && 
+					<VStack flex={1} space={4} padding="4" divider={<Divider />}>
+					{ chaptersQuery.data!.map((chapter) =>
+						<Box flexGrow={1} flexDirection='row' justifyContent="space-between">
+							<Text>{chapter.name}</Text>
+							<Text>
+								{`${translate('level')} ${chapter.difficulty} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}
+							</Text>
+						</Box>
+					)}
+					</VStack>
+				}
+			</PresenceTransition>
+		</Box>
 	)
 }
 

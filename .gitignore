@@ -9,3 +9,4 @@ prisma/migrations/*
 output.xml
 report.html
 log.html
+.expo
