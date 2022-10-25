@@ -24,8 +24,8 @@ def populateFile(path, midi, mxl):
 	print(f"Populating {metadata['Name']}")
 	res = requests.post(f"{url}/song", json={
 		"name": metadata["Name"],
-		"midiPath": midi,
-		"musicXmlPath": mxl,
+		"midiPath": f"/musics/{midi}",
+		"musicXmlPath": f"/musics/{mxl}",
 		"difficulties": dificulties,
 		"artist": getOrCreateArtist(metadata["Artist"]),
 		# "album": metadata["Album"],
@@ -40,7 +40,6 @@ def main():
 		url = "http://localhost:3000"
 	print("Searching for files...")
 	for file in glob.glob("**/*.ini", recursive=True):
-		file = os.path.abspath(file)
 		print(f"File found: {file}")
 		path = os.path.splitext(file)[0]
 		populateFile(file, path + ".midi", path + ".mxl")

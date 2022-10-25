@@ -100,9 +100,10 @@ Find multiples songs filtered by type
 Get midi file
     &{res}=    POST
     ...    /song
-    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl"}
+    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4/Beethoven-125-4.mxl"}
     Output
     Integer    response status    201
-	GET    /song/${res.body.id}/midi
-	Output
-	[Teardown]    DELETE    /song/${res.body.id}
+    GET    /song/${res.body.id}/midi
+    Integer    response status    200
+    #Output
+    [Teardown]    DELETE    /song/${res.body.id}
