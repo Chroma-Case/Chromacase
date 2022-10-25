@@ -8,6 +8,23 @@ from configparser import ConfigParser
 
 url = os.environ.get("API_URL")
 
+def getOrCreateAlbum(name, artistId):
+	res = requests.post(f"{url}/album", json={
+		"name": name,
+		"artist": artistId,
+	})
+	out = res.json()
+	print(out)
+	return out["id"]
+
+def getOrCreateGenre(name):
+	res = requests.post(f"{url}/genre", json={
+		"name": name,
+	})
+	out = res.json()
+	print(out)
+	return out["id"]
+
 def getOrCreateArtist(name):
 	res = requests.post(f"{url}/artist", json={
 		"name": name,
@@ -21,15 +38,16 @@ def populateFile(path, midi, mxl):
 	config.read(path)
 	metadata = config["Metadata"];
 	dificulties = dict(config["Difficulties"])
+	artistId = getOrCreateArtist(metadata["Artist"])
 	print(f"Populating {metadata['Name']}")
 	res = requests.post(f"{url}/song", json={
 		"name": metadata["Name"],
 		"midiPath": f"/musics/{midi}",
 		"musicXmlPath": f"/musics/{mxl}",
 		"difficulties": dificulties,
-		"artist": getOrCreateArtist(metadata["Artist"]),
-		# "album": metadata["Album"],
-		# "genre": metadata["Genre"],
+		"artist": artistId,
+		"album": getOrCreateAlbum(metadata["Album"], artistId),
+		"genre": getOrCreateGenre(metadata["Genre"]),
 	})
 	print(res.json())
 

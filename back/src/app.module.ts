@@ -9,10 +9,13 @@ import { SongModule } from './song/song.module';
 import { LessonModule } from './lesson/lesson.module';
 import { ArtistController } from './artist/artist.controller';
 import { ArtistService } from './artist/artist.service';
+import { GenreModule } from './genre/genre.module';
+import { ArtistModule } from './artist/artist.module';
+import { AlbumModule } from './album/album.module';
 
 @Module({
-	imports: [UsersModule, PrismaModule, AuthModule, SongModule, LessonModule],
-	controllers: [AppController, ArtistController],
+	imports: [UsersModule, PrismaModule, AuthModule, SongModule, LessonModule, GenreModule, ArtistModule, AlbumModule],
+	controllers: [AppController],
 	providers: [AppService, PrismaService, ArtistService],
 })
 export class AppModule {}
