@@ -1,9 +1,9 @@
 import React from "react";
 import SearchBar from "../components/SearchBar";
-
+import { SuggestionList } from "../components/SearchBar"
 interface SearchBarSuggestionsProps {
 	onTextSubmit: (text: string) => void;
-	suggestions: string[];
+	suggestions: SuggestionList;
 }
 
 const SearchBarSuggestions = ({
@@ -17,14 +17,19 @@ const SearchBarSuggestions = ({
 			onTextChange={(t) => setSearchText(t)}
 			onTextSubmit={onTextSubmit}
 			suggestions={
-				searchText === ""
-					? []
-					: suggestions.filter((suggestion) =>
-							suggestion.toLowerCase().includes(searchText.toLowerCase())
-					  )
+				suggestions
 			}
 		/>
 	);
 };
+
+/*
+
+searchText === ""
+					? []
+					: suggestions.filter((suggestion) =>
+							suggestion.toLowerCase().includes(searchText.toLowerCase())
+					  )
+					  */
 
 export default SearchBarSuggestions;
