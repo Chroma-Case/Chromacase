@@ -83,8 +83,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Yarn
+        run: npm install -g yarn
+
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
@@ -94,10 +97,10 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install Jest
-        run: npm install -g jest
+        run: yarn install -g jest
 
       - name: Test App
-        run: npm test
+        run: yarn test
 
 ## Build App ##
 
@@ -117,8 +120,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install Yarn
+        run: npm install -g yarn
+
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
@@ -126,9 +132,6 @@ jobs:
           expo-version: latest
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Install Jest
-        run: npm install -g jest
 
       - name: Build Android APK
         run: |
