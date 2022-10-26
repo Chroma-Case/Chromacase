@@ -97,9 +97,6 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Install Jest
-        run: yarn add jest
-
       - name: Test App
         run: yarn test
 
