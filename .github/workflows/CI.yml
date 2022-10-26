@@ -101,7 +101,7 @@ jobs:
         run: yarn add jest
 
       - name: Test App
-        run: yarn test
+        run: jest
 
 ## Build App ##
 
