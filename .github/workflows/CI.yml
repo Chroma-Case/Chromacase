@@ -13,7 +13,7 @@ jobs:
 
   Job_Summary:
     runs-on: ubuntu-latest
-    if : github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
+    if : github.event_name == 'pull_request' || github.ref == 'refs/heads/amélioration_CI'
     steps:
       - name: title
         run: echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
@@ -98,7 +98,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install Jest
-        run: yarn install -g jest
+        run: yarn add jest
 
       - name: Test App
         run: yarn test
