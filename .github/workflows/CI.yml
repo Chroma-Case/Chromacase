@@ -28,7 +28,7 @@ jobs:
     defaults:
       run:
         working-directory: ./back
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/amélioration_CI'
     environment:
       name: Production
 
@@ -55,7 +55,7 @@ jobs:
     defaults:
       run:
         working-directory: ./back
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/amélioration_CI'
     environment:
       name: Production
     needs: [ Test_Back ]
@@ -76,7 +76,7 @@ jobs:
     defaults:
       run:
         working-directory: ./front
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/amélioration_CI'
     environment:
       name: Production
 
@@ -109,7 +109,7 @@ jobs:
     defaults:
       run:
         working-directory: ./front
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/amélioration_CI'
     environment:
       name: Production
     needs: [ Test_Front ]
@@ -148,7 +148,7 @@ jobs:
     defaults:
       run:
         working-directory: ./
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/amélioration_CI'
     environment:
       name: Production
     needs: [ Build_Back, Build_Front ]
@@ -189,7 +189,7 @@ jobs:
 ## Deployement ##
 
   #Deployement:
-  #  if: github.ref == 'refs/heads/main'
+  #  if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/amélioration_CI'
   #  needs: [ Build_Back, Build_Front, Build_Docker ]
   #  runs-on: ubuntu-latest
   #  environment:
