@@ -13,6 +13,7 @@ jobs:
 
   Job_Summary:
     runs-on: ubuntu-latest
+    if : github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
     steps:
       - name: title
         run: echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
