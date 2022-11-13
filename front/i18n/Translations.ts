@@ -34,6 +34,7 @@ export const en = {
 	search: 'Search',
 	lastSearched: "Last searched",
 	levelProgress: 'good notes',
+	user: 'Profile',
 
 	// competencies
 	pedalsCompetency: 'Pedals',
@@ -43,6 +44,7 @@ export const en = {
 	arpegeCompetency: 'Arpeges',
 	chordsCompetency: 'Chords',
 
+	// login logs
 	usernameTooShort: 'Username is too short',
 	passwordTooShort: 'Password is too short',
 	usernameTooLong: 'Username is too long',
@@ -124,7 +126,8 @@ export const fr: typeof en = {
 	signUp: "S'inscrire",
 	signIn: "Se connecter",
 	"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character": "",
-	accountCreated: "Compte créé"
+	accountCreated: "Compte créé",
+	user: 'Profil',
 };
 
 export const sp: typeof en = {
@@ -190,4 +193,5 @@ export const sp: typeof en = {
 	accountCreated: 'Compte créé',
 	loggedIn: 'Connectado',
 	usernameTaken: 'Nombre de usuario ya tomado',
+	user: 'Profil',
 };
