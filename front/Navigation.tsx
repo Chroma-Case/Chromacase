@@ -9,9 +9,9 @@ import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/SettingsView';
-import ProfileView from './views/ProfileView';
 import { useQuery } from 'react-query';
 import API from './API';
+import ProfileView from './views/ProfileView';
 
 const Stack = createNativeStackNavigator();
 
