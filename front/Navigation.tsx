@@ -26,7 +26,7 @@ export const publicRoutes = <React.Fragment>
 </React.Fragment>;
 
 export const Router = () => {
-	const isAuthentified = useSelector((state) => state.user.token !== undefined)
+	const isAuthentified = useSelector((state) => state.user.accessToken !== undefined)
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>

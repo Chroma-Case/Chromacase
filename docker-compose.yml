@@ -21,6 +21,8 @@ services:
   front:
     build: ./front
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - "back"
+    env_file:
+      - .env
