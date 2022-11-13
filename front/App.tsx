@@ -9,9 +9,7 @@ import './i18n/i18n';
 import * as SplashScreen from 'expo-splash-screen';
 import { PersistGate } from "redux-persist/integration/react";
 import LanguageGate from "./i18n/LanguageGate";
-import Entypo from '@expo/vector-icons/Entypo';
 import * as SplashScreen from 'expo-splash-screen';
-import * as Font from 'expo-font';
 
 const queryClient = new QueryClient();
 
