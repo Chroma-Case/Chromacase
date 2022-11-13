@@ -28,8 +28,7 @@ const CompetenciesTable = (props: CompetenciesTableProps) => {
 					<Progress flex={1} value={props[competencyName as keyof CompetenciesTableProps]} />
 				))}
 				</VStack>
-			</HStack>
-				
+			</HStack>	
 		</Card>
 	)}
 	</Pressable>
