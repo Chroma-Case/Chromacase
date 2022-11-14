@@ -27,10 +27,11 @@ const HomeView = () => {
 			<LoadingComponent/>
 		</Box>
 	}
+	console.log(userQuery.data);
 	return <ScrollView>
 		<Box style={{ display: 'flex', padding: 30 }}>
 			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
-				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>{`${translate('welcome')} ${userQuery.data.name}!`} </Text>
+				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>{`${translate('welcome')} ${userQuery.data.username}!`} </Text>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
 				</Box>
