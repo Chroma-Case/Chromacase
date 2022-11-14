@@ -109,7 +109,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 										formData.username.value,
 										formData.password.value
 									);
-									toast.show({ description: resp, colorScheme: 'secondary' })
+									toast.show({ description: resp, colorScheme: 'secondary' });
 								} catch (e) {
 									toast.show({ description: e as string, colorScheme: 'red', avoidKeyboard: true })
 									setSubmittingForm(false);

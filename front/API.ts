@@ -33,13 +33,18 @@ export default class API {
 			body: JSON.stringify(params.body),
 			method: params.method ?? 'GET' 
 		});
-		const jsonResponse = await response.json().catch(() => {
-			throw new Error("Error while parsing Server's response");
-		});
-		if (!response.ok) {
-			throw new Error(jsonResponse.error ?? response.statusText)
+		const body = await response.text();
+		try {
+			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
+			if (!response.ok) {
+				throw new Error(jsonResponse.error ?? response.statusText)
+			}
+			return jsonResponse;
+		} catch (e) {
+			if (e instanceof SyntaxError)
+				throw new Error("Error while parsing Server's response");
+			throw e;
 		}
-		return jsonResponse;
 	}
 
 	public static async authenticate(authenticationInput: AuthenticationInput): Promise<AccessToken> {
@@ -60,7 +65,7 @@ export default class API {
 			body: registrationInput,
 			method: 'POST'
 		});
-		return API.authenticate(registrationInput);
+		return API.authenticate({ username: registrationInput.username, password: registrationInput.password });
 	}
 
 	/***
