@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Center, Button, Text, Switch, Slider, Select, Heading } from "native-base";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { unsetAPIAccess } from '../state/UserSlice';
+import { unsetAccessToken } from '../state/UserSlice';
 import { useDispatch } from "react-redux";
 import { useSelector } from '../state/Store';
 import { useLanguage } from "../state/LanguageSlice";
@@ -39,7 +39,7 @@ const MainView = ({navigation}) => {
             { translate('googleacctBtn')}
             </Button>
 
-            <Button variant='ghost' onPress={() => dispatch(unsetAPIAccess())} >
+            <Button variant='ghost' onPress={() => dispatch(unsetAccessToken())} >
                 { translate('signoutBtn')}
             </Button>
         </Center>

@@ -186,9 +186,9 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 										formData.email.value
 									);
 									toast.show({ description: resp });
+									setSubmittingForm(false);
 								} catch (e) {
 									toast.show({ description: e as string });
-								} finally {
 									setSubmittingForm(false);
 								}
 							}}
