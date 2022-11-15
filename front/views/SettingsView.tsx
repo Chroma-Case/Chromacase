@@ -6,8 +6,27 @@ import { unsetUserToken } from '../state/UserSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { useLanguage } from "../state/LanguageSlice";
 import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i18n";
+import API from '../API';
 
 const SettingsStack = createNativeStackNavigator();
+
+const handleChangeEmail = async (newEmail: string): Promise<string> => {
+    try {
+        let response = await API.updateUserCredentials("email", newEmail);
+        return response as string;
+    } catch (error) {
+        return ("error: " + error);
+    }
+}
+
+const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
+    try {
+        let response = await API.updateUserCredentials("password", newPassword);
+        return response as string;
+    } catch (error) {
+        return ("error: " + error);
+    }
+}
 
 const MainView = ({navigation}) => {
     const dispatch = useDispatch();
@@ -194,7 +213,7 @@ const ChangeEmailView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
-            <Text>ChangeEmail</Text>
+            <ChangeEmailView></ChangeEmailView>
         </Center>
     )
 }
