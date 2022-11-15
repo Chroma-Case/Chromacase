@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Box, Image, Heading, HStack, Card, Text } from 'native-base';
+import { Box, Image, Heading, HStack, Card, Text, Button } from 'native-base';
 
 const ProfileView = () => {
     return (
@@ -21,19 +21,19 @@ const ProfileView = () => {
             <Heading>Medals</Heading>
             <HStack alignItems={'row'} space='5'>
                 <Image source={{
-                    uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
+                    uri: "https://wallpaperaccess.com/full/317501.jpg"
                 }} alt="Profile picture" size="lg"
                 />
                 <Image source={{
-                    uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
+                    uri: "https://wallpaperaccess.com/full/317501.jpg"
                 }} alt="Profile picture" size="lg"
                 />
                 <Image source={{
-                    uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
+                    uri: "https://wallpaperaccess.com/full/317501.jpg"
                 }} alt="Profile picture" size="lg"
                 />
                 <Image source={{
-                    uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
+                    uri: "https://wallpaperaccess.com/full/317501.jpg"
                 }} alt="Profile picture" size="lg"
                 />
             </HStack>
@@ -46,6 +46,8 @@ const ProfileView = () => {
             <Text>Longest combo : ...</Text>
             <Text>Favorite genre : ...</Text>
         </Card>
+
+        <Button>Settings</Button>
     </View>
     );
 }
