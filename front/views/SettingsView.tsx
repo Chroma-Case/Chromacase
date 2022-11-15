@@ -10,9 +10,30 @@ import { SettingsState, updateSettings } from '../state/SettingsSlice';
 import { AvailableLanguages, translate, Translate } from "../i18n/i18n";
 import TextButton from '../components/TextButton';
 
+import API from '../API';
+
+
 const SettingsStack = createNativeStackNavigator();
 
-export const MainView = ({navigation}) => {
+const handleChangeEmail = async (newEmail: string): Promise<string> => {
+    try {
+        let response = await API.updateUserCredentials("email", newEmail);
+        return response as string;
+    } catch (error) {
+        return ("error: " + error);
+    }
+}
+
+const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
+    try {
+        let response = await API.updateUserCredentials("password", newPassword);
+        return response as string;
+    } catch (error) {
+        return ("error: " + error);
+    }
+}
+
+const MainView = ({navigation}) => {
     const dispatch = useDispatch();
 
     return (
@@ -218,7 +239,7 @@ export const ChangeEmailView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
-            <Text>ChangeEmail</Text>
+            <ChangeEmailView></ChangeEmailView>
         </Center>
     )
 }

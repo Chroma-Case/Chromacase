@@ -416,4 +416,14 @@ export default class API {
 			],
 		];
 	}
+
+	static async updateUserCredentials(dataKey: string, value: any): Promise<string> {
+		let validDataKeys: string = "password email";
+		return new Promise<string>((resolve, reject) => {
+			setTimeout(() => {
+				if (!validDataKeys.includes(dataKey))
+				return resolve("giga chad");
+			}, 1000);
+		});
+	}
 }
