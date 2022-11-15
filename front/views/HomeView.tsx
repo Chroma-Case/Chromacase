@@ -7,40 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
 import { translate } from "../i18n/i18n";
-import { Pressable, Image } from "native-base";
-import Card from "../components/Card";
-
-
-const ProgressBar = ({ xp }: { xp: number}) => {
-	const level = Math.floor(xp / 1000);
-	const nextLevel = level + 1;
-	const nextLevelThreshold = nextLevel * 1000;
-	const progessValue = 100 * xp / nextLevelThreshold;
-	const nav = useNavigation();
-	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
-
-	return (
-		<Pressable onPress={() => nav.navigate('User')}>
-		{({ isHovered,  isFocused }) => (
-			<Card w="90%" maxW='500' style={{ flexDirection, justifyContent: 'center'}} 
-				  bg={(isHovered || isFocused) ? 'coolGray.200' : undefined }>
-				<Box w="20%" paddingRight={2} >
-					<Image borderRadius={100} source={{
-      					uri: "https://wallpaperaccess.com/full/317501.jpg"
-    				}} alt="Profile picture" size="sm"/>
-				</Box>
-				<VStack alignItems={'center'}>
-					<Text>{`${translate('level')} ${level}`}</Text>
-					<Box w="100%">
-						<Progress value={progessValue} mx="4" />
-					</Box>
-					<Text>{xp} / {nextLevelThreshold} {translate('levelProgress')}</Text>
-				</VStack>
-			</Card>
-		)}
-		</Pressable>
-	);
-}
+import ProgressBar from "../components/ProgressBar";
 
 const HomeView = () => {
 	const theme = useTheme();
