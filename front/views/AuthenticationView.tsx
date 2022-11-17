@@ -6,6 +6,9 @@ import { setUserToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
 import SignupForm from "../components/forms/signupform";
+import { Provider } from "react-redux";
+import store from '../state/Store';
+
 
 const hanldeSignin = async (username: string, password: string, tokenSetter: (token: string) => void): Promise<string> => {
 	try {
@@ -32,6 +35,7 @@ const AuthenticationView = () => {
 	const [mode, setMode] = React.useState("signin" as "signin" | "signup");
 
 	return (
+		<Provider store={store}>
 		<Center style={{ flex: 1 }}>
 			<Text>{translate('welcome')}</Text>
 			{mode === "signin" ? (<>
@@ -46,6 +50,7 @@ const AuthenticationView = () => {
 				<Text>{translate(mode === "signin" ? "signUp" : "signIn")}</Text>
 			</Button>
 		</Center>
+		</Provider>
 	);
 };
 

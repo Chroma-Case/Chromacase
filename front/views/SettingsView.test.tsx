@@ -3,11 +3,20 @@ import { Provider } from 'react-redux';
 import TestRenderer from 'react-test-renderer';
 import store from '../state/Store';
 
-import AuthenticationView from '../views/AuthenticationView';
+import { NativeBaseProvider } from "native-base";
+import Theme from '../Theme';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 
-describe('<AuthenticationView />', () => {
-  it('has 3 children', () => {
-    const tree = TestRenderer.create(<Provider store={store}><AuthenticationView /></Provider>).toJSON();
-    expect(tree.children.length).toBe(3);
-  });
+
+import { MainView, PreferencesView } from './SettingsView'
+
+describe('testing Setting\'s main view', () => {
+  jest.setTimeout(150000);
+  const MainView = () => <NativeBaseProvider theme={Theme}><MainView/></NativeBaseProvider>;
+  const PreferencesView = () => <NativeBaseProvider theme={Theme}><PreferencesView/></NativeBaseProvider>;
+
+  it('should render correctly', () => {
+    let truc = render(MainView()).toJSON();
+    expect(truc).toBeDefined();
+  })
 });

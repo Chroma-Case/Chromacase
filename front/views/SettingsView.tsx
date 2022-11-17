@@ -9,7 +9,7 @@ import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i1
 
 const SettingsStack = createNativeStackNavigator();
 
-const MainView = ({navigation}) => {
+export const MainView = ({navigation}) => {
     const dispatch = useDispatch();
 
     return (
@@ -45,7 +45,7 @@ const MainView = ({navigation}) => {
     )
 }
 
-const PreferencesView = ({navigation}) => {
+export const PreferencesView = ({navigation}) => {
     const dispatch = useDispatch();
     const language: AvailableLanguages = useSelector((state) => state.language.value);
 
@@ -126,7 +126,7 @@ const PreferencesView = ({navigation}) => {
     )
 }
 
-const NotificationsView = ({navigation}) => {
+export const NotificationsView = ({navigation}) => {
     return (
         <Center style={{ flex: 1, justifyContent: 'center' }}>
 
@@ -156,7 +156,7 @@ const NotificationsView = ({navigation}) => {
     )
 }
 
-const PrivacyView = ({navigation}) => {
+export const PrivacyView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Heading style={{ textAlign: "center" }}>{ translate('privBtn')}</Heading>
@@ -181,7 +181,7 @@ const PrivacyView = ({navigation}) => {
     )
 }
 
-const ChangePasswordView = ({navigation}) => {
+export const ChangePasswordView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
@@ -190,7 +190,7 @@ const ChangePasswordView = ({navigation}) => {
     )
 }
 
-const ChangeEmailView = ({navigation}) => {
+export const ChangeEmailView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
@@ -199,7 +199,7 @@ const ChangeEmailView = ({navigation}) => {
     )
 }
 
-const GoogleAccountView = ({navigation}) => {
+export const GoogleAccountView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
