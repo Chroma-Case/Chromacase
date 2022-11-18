@@ -10,6 +10,7 @@ const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage
 }
+
 let store = configureStore({
 	reducer: persistCombineReducers(persistConfig, {
 		user: userReducer,

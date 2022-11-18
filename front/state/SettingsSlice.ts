@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type SettingsState = {
+export type SettingsState = {
+	colorScheme: "dark" | "light" | "system",
 	enablePushNotifications: boolean,
 	enableMailNotifications: boolean,
 	enableLessongsReminders: boolean,
 	enableReleaseAlerts: boolean,
-	preferedLevel: number,
+	preferedLevel: 'easy' | 'medium' | 'hard',
 	colorBlind: boolean,
 	micLevel: number,
 	preferedInputName?: string
@@ -18,15 +19,16 @@ export const settingsSlice = createSlice({
 		enableMailNotifications: true,
 		enableLessongsReminders: true,
 		enableReleaseAlerts: true,
-		preferedLevel: 1,
+		preferedLevel: 'easy',
 		colorBlind: false,
-		micLevel: 1
+		micLevel: 50,
+		colorScheme: "system"
 	},
 	reducers: {
-		udpateSettings: (state, action: PayloadAction<Partial<SettingsState>>) => {
+		updateSettings: (state, action: PayloadAction<Partial<SettingsState>>) => {
 			state = { ...state, ...action }; 
 		}
 	}
 });
-export const { udpateSettings } = settingsSlice.actions;
+export const { updateSettings } = settingsSlice.actions;
 export default settingsSlice.reducer;
