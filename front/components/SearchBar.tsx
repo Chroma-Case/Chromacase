@@ -11,7 +11,7 @@ import {
 	Square,
 } from "native-base";
 import React from "react";
-import { Ionicons, FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export enum SuggestionType {
 	TEXT,

@@ -1,8 +1,8 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import LoadingComponent from "../components/Loading";
-import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Progress, Button, useTheme, Heading, Divider } from 'native-base';
+import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Progress, Button, useTheme, Heading } from 'native-base';
 import { useNavigation } from "@react-navigation/native";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
@@ -31,17 +31,22 @@ const HomeView = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: "big"});
 	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
-
-	if (!userQuery.data) {
+	const playHistoryQuery = useQuery(['history', 'play'], () => API.getUserPlayHistory());
+	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory());
+	const skillsQuery = useQuery(['skills'], () => API.getUserSkills());
+	const nextStepQuery = useQuery(['user', 'recommendations'], () => API.getUserRecommendations());
+	const artistsQueries = useQueries((playHistoryQuery.data?.concat(searchHistoryQuery.data ?? []).concat(nextStepQuery.data ?? []) ?? []).map((song) => (
+		{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
+	)));
+	if (!userQuery.data || !skillsQuery.data || !searchHistoryQuery.data || !playHistoryQuery.data) {
 		return <Box style={{ flexGrow: 1, justifyContent: 'center' }}>
 			<LoadingComponent/>
 		</Box>
 	}
 	return <ScrollView>
 		<Box style={{ display: 'flex', padding: 30 }}>
-
 			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
-				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>{`${translate('welcome')} ${userQuery.data.name}!`} </Text>
+				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>{`${translate('welcome')} ${userQuery.data.username}!`} </Text>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
 				</Box>
@@ -51,26 +56,21 @@ const HomeView = () => {
 				<Box flex={2}>
 					<SongCardGrid
 						heading={translate('goNextStep')}
-						songs={[ ...Array(4).keys() ].map(() => ({
-							albumCover: "",
-							songTitle: "Song",
-							artistName: "Artist",
-							songId: 1
-						}))}
+						songs={nextStepQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+							.map((song) => ({
+								albumCover: song.cover,
+								songTitle: song.name,
+								songId: song.id,
+								artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+							})) ?? []
+						}
 					/>
 
 					<Flex style={{ flexDirection }}>
 						<Box flex={1} paddingY={5}>
 							<Heading>{translate('mySkillsToImprove')}</Heading>
 							<Box padding={5}>
-								<CompetenciesTable
-									pedalsCompetency=	{Math.random() * 100}
-									rightHandCompetency={Math.random() * 100}
-									leftHandCompetency=	{Math.random() * 100}
-									accuracyCompetency=	{Math.random() * 100}
-									arpegeCompetency=	{Math.random() * 100}
-									chordsCompetency=	{Math.random() * 100}
-								/>
+								<CompetenciesTable {...skillsQuery.data}/>
 							</Box>
 						</Box>
 
@@ -78,12 +78,14 @@ const HomeView = () => {
 							<SongCardGrid
 								heading={translate('recentlyPlayed')}
 								maxItemPerRow={2}
-								songs={[ ...Array(4).keys() ].map(() => ({
-									albumCover: "",
-									songTitle: "Song",
-									artistName: "Artist",
-									songId: 1
-								}))}
+								songs={playHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+									.map((song) => ({
+										albumCover: song.cover,
+										songTitle: song.name,
+										songId: song.id,
+										artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+									})) ?? []
+								}
 							/>
 						</Box>						
 					</Flex>
@@ -99,12 +101,14 @@ const HomeView = () => {
 								<SongCardGrid
 									maxItemPerRow={2}
 									heading={translate('lastSearched')}
-									songs={[ ...Array(4).keys() ].map(() => ({
-										albumCover: "",
-										songTitle: "Song",
-										artistName: "Artist",
-										songId: 1
-									}))}
+									songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+										.map((song) => ({
+											albumCover: song.cover,
+											songTitle: song.name,
+											songId: song.id,
+											artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+										})) ?? []
+									}
 								/>
 							</Box>
 						</Box>

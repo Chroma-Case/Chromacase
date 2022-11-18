@@ -52,7 +52,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 			.min(4, translate("passwordTooShort"))
 			.max(100, translate("passwordTooLong"))
 			.matches(
-				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$-_%\^&\*])(?=.{8,})/,
 				translate(
 					"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
 				)
@@ -186,9 +186,9 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 										formData.email.value
 									);
 									toast.show({ description: resp });
+									setSubmittingForm(false);
 								} catch (e) {
 									toast.show({ description: e as string });
-								} finally {
 									setSubmittingForm(false);
 								}
 							}}

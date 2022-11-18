@@ -2,8 +2,9 @@ import React from 'react';
 import { View } from 'react-native';
 import { Center, Button, Text, Switch, Slider, Select, Heading } from "native-base";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { unsetUserToken } from '../state/UserSlice';
-import { useDispatch, useSelector } from "react-redux";
+import { unsetAccessToken } from '../state/UserSlice';
+import { useDispatch } from "react-redux";
+import { useSelector } from '../state/Store';
 import { useLanguage } from "../state/LanguageSlice";
 import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i18n";
 
@@ -38,7 +39,7 @@ const MainView = ({navigation}) => {
             { translate('googleacctBtn')}
             </Button>
 
-            <Button variant='ghost' onPress={() => dispatch(unsetUserToken())} >
+            <Button variant='ghost' onPress={() => dispatch(unsetAccessToken())} >
                 { translate('signoutBtn')}
             </Button>
         </Center>
