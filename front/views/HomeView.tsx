@@ -27,7 +27,6 @@ const HomeView = () => {
 			<LoadingComponent/>
 		</Box>
 	}
-	console.log(userQuery.data);
 	return <ScrollView>
 		<Box style={{ display: 'flex', padding: 30 }}>
 			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>

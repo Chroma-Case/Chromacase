@@ -23,7 +23,6 @@ const handleSignup = async (username: string, password: string, email: string, a
 		apiSetter(apiAccess);
 		return translate("loggedIn");
 	} catch (error) {
-		console.log(error);
 		return "User already exists";
 	}
 };
