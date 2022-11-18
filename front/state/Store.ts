@@ -2,22 +2,24 @@ import userReducer from '../state/UserSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import languageReducer from './LanguageSlice';
 import { TypedUseSelectorHook, useDispatch as reduxDispatch, useSelector as reduxSelector } from 'react-redux'
-import createSecureStore from "redux-persist-expo-securestore";
-import { persistStore, persistCombineReducers } from "redux-persist";
-
-// Secure storage
-const storage = createSecureStore();
+import { persistStore, persistCombineReducers, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from "redux-persist";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const persistConfig = {
 	key: 'root',
-	storage
+	storage: AsyncStorage
 }
-
 let store = configureStore({
 	reducer: persistCombineReducers(persistConfig, {
 		user: userReducer,
 		language: languageReducer
 	}),
+	middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+    	serializableCheck: {
+    		ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    	},
+    }),
 })
 let persistor = persistStore(store);
 
