@@ -8,6 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from './state/Store';
 import SongLobbyView from './views/SongLobbyView';
 import { translate } from './i18n/i18n';
+import { useQuery } from 'react-query';
+import API from './API';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,11 +25,12 @@ export const publicRoutes = <React.Fragment>
 </React.Fragment>;
 
 export const Router = () => {
-	const isAuthentified = useSelector((state) => state.user.accessToken !== undefined)
+	const isAuthentified = useSelector((state) => state.user.accessToken !== undefined);
+	const userProfile = useQuery(['user', 'me'], () => API.getUserInfo());
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
-				{isAuthentified ? protectedRoutes : publicRoutes}
+				{(isAuthentified && userProfile.data && !userProfile.isError) ? protectedRoutes : publicRoutes}
 			</Stack.Navigator>
 		</NavigationContainer>
 	)
