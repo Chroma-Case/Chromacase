@@ -64,12 +64,14 @@ const HomeView = () => {
 				<Box flex={2}>
 					<SongCardGrid
 						heading={<Translate translationKey='goNextStep'/>}
-						songs={[ ...Array(4).keys() ].map(() => ({
-							albumCover: "",
-							songTitle: "Song",
-							artistName: "Artist",
-							songId: 1
-						}))}
+						songs={nextStepQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+							.map((song) => ({
+								albumCover: song.cover,
+								songTitle: song.name,
+								songId: song.id,
+								artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+							})) ?? []
+						}
 					/>
 
 					<Flex style={{ flexDirection }}>
@@ -107,12 +109,14 @@ const HomeView = () => {
 								<SongCardGrid
 									maxItemPerRow={2}
 									heading={<Translate translationKey='lastSearched'/>}
-									songs={[ ...Array(4).keys() ].map(() => ({
-										albumCover: "",
-										songTitle: "Song",
-										artistName: "Artist",
-										songId: 1
-									}))}
+									songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+										.map((song) => ({
+											albumCover: song.cover,
+											songTitle: song.name,
+											songId: song.id,
+											artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+										})) ?? []
+									}
 								/>
 							</Box>
 						</Box>
