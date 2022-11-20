@@ -26,12 +26,19 @@ export const publicRoutes = <React.Fragment>
 
 export const Router = () => {
 	const isAuthentified = useSelector((state) => state.user.accessToken !== undefined);
-	const userProfile = useQuery(['user', 'me'], () => API.getUserInfo());
+	const userProfile = useQuery(['user', 'me'], () => API.getUserInfo(), {
+		enabled: isAuthentified
+	});
 	return (
 		<NavigationContainer>
-			<Stack.Navigator>
-				{(isAuthentified && userProfile.data && !userProfile.isError) ? protectedRoutes : publicRoutes}
-			</Stack.Navigator>
+			{isAuthentified && !userProfile.isError
+				? <Stack.Navigator>
+					{protectedRoutes}
+				</Stack.Navigator>
+				: <Stack.Navigator>
+					{publicRoutes}
+				</Stack.Navigator>
+			}
 		</NavigationContainer>
 	)
 }
