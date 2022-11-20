@@ -1,6 +1,8 @@
 import { en, fr, sp } from './Translations';
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { RootState, useSelector } from '../state/Store';
+import React from 'react';
 
 
 export type AvailableLanguages = 'en' | 'fr' | 'sp';
@@ -28,9 +30,31 @@ i18n
 	});
 
 export default i18n;
+
 /**
  * Typesafe translation method
  * @param textKey the key of th text to translate
  * @returns the translated text
  */
-export const translate = (textKey: keyof typeof en) => i18n.t(textKey);
+export const translate = (key: keyof typeof en, language?: AvailableLanguages) => {
+	return i18n.t(key, {
+		lng: language
+	});
+}
+
+type TranslateProps = {
+	key: keyof typeof en;
+	format?: (translated: string) => string;
+} 
+/**
+ * Translation component
+ * @param param0 
+ * @returns 
+ */
+export const Translate = ({ key, format }: TranslateProps) => {
+	const selectedLanguage = useSelector((state: RootState) => state.language.value);
+	const translated = translate(key, selectedLanguage);
+	return React.Fragment({ children: [
+		format ? format(translated) : translated
+	]});
+}
