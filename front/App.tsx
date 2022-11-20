@@ -1,6 +1,6 @@
 import { NativeBaseProvider } from "native-base";
 import Theme from './Theme';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import store, { persistor } from './state/Store';
