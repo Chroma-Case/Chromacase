@@ -1,6 +1,6 @@
 import { NativeBaseProvider } from "native-base";
 import Theme from './Theme';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import store from './state/Store';
@@ -13,15 +13,7 @@ const queryClient = new QueryClient();
 export default function App() {
 
 	SplashScreen.preventAutoHideAsync();
-	setTimeout(SplashScreen.hideAsync, 2000);
-
-	useEffect(() => {
-		async function prepare() {
-			try { await new Promise((resolve) => setTimeout(resolve, 2000)); }
-			catch (e) { console.warn(e); }
-		}
-		prepare();
-	}, []);
+	setTimeout(SplashScreen.hideAsync, 0);
 
 	return (
 		<Provider store={store}>
