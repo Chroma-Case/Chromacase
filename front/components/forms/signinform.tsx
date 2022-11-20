@@ -1,7 +1,7 @@
 // a form for sign in
 
 import React from "react";
-import { translate } from "../../i18n/i18n";
+import { Translate, translate } from "../../i18n/i18n";
 import { string } from "yup";
 import {
 	FormControl,
@@ -51,7 +51,9 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 							formData.password.error !== null
 						}
 					>
-						<FormControl.Label>{translate("username")}</FormControl.Label>
+						<FormControl.Label>
+							<Translate key='username'/>
+						</FormControl.Label>
 						<Input
 							isRequired
 							type="text"
@@ -72,7 +74,9 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						>
 							{formData.username.error}
 						</FormControl.ErrorMessage>
-						<FormControl.Label>{translate("password")}</FormControl.Label>
+						<FormControl.Label>
+							<Translate key='password'/>
+						</FormControl.Label>
 						<Input
 							isRequired
 							type="password"
@@ -117,7 +121,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 								}
 							}}
 						>
-							{translate("login")}
+							<Translate key='login'/>
 						</Button>
 					</FormControl>
 				</Stack>

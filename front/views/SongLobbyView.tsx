@@ -5,7 +5,7 @@ import { useQuery } from 'react-query';
 import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
 import logo from '../assets/cover.png';
-import { translate } from "../i18n/i18n";
+import { Translate, translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
 
@@ -40,18 +40,28 @@ const SongLobbyView = () => {
 				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
 					<Box flex={1}>
 						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
-						<Text>{'3:20'} - {translate('level')} { chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }</Text>
-						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
+						<Text>
+							<Translate key='level'
+								format={(level) => `3:20 - ${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
+							/>
+						</Text>
+						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
+							<Translate key='playBtn'/>
+						</Button>
 					</Box>
 				</Box>
 			</Box>
 			<Box style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text bold fontSize='lg'>{translate('bestScore') }</Text>
+					<Text bold fontSize='lg'>
+						<Translate key='bestScore'/>
+					</Text>
 					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text bold fontSize='lg'>{translate('lastScore') }</Text>
+					<Text bold fontSize='lg'>
+						<Translate key='lastScore'/>
+					</Text>
 					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
 				</Box>
 			</Box>
@@ -62,7 +72,7 @@ const SongLobbyView = () => {
 					onPress={() => setChaptersOpen(!chaptersOpen)}
 					endIcon={<Icon as={Ionicons} name={chaptersOpen ? "chevron-up-outline" : "chevron-down-outline"}/>}
 				>
-					{translate('chapters')}
+					<Translate key='chapters'/>
 				</Button>
 			</Box>
 			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>

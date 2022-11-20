@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from '../state/Store';
-import { translate } from "../i18n/i18n";
+import { Translate, translate } from "../i18n/i18n";
 import API from "../API";
 import { setUserToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
@@ -33,7 +33,7 @@ const AuthenticationView = () => {
 
 	return (
 		<Center style={{ flex: 1 }}>
-			<Text>{translate('welcome')}</Text>
+			<Text><Translate key='welcome'/></Text>
 			{mode === "signin" ? (<>
 				<Text fontWeight='thin'>username, password:</Text>
 				<Text fontWeight='thin'>katerina, 1234</Text>
@@ -41,9 +41,11 @@ const AuthenticationView = () => {
 			</>) : (
 				<SignupForm onSubmit={(username, password, email) => handleSignup(username, password, email, (token) => dispatch(setUserToken(token)))} />
 			)}
-			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" >{translate("forgottenPassword")}</Button> }
+			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" ><Translate key='forgottenPassword'/></Button> }
 			<Button variant='outline' marginTop={5} colorScheme='primary' onPress={() => setMode(mode === "signin" ? "signup" : "signin")}>
-				<Text>{translate(mode === "signin" ? "signUp" : "signIn")}</Text>
+				<Text>
+					<Translate key={mode === "signin" ? "signUp" : "signIn"}/>
+				</Text>
 			</Button>
 		</Center>
 	);
