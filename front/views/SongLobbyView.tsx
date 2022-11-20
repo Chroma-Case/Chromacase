@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import { translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector } from "../state/Store";
 import API from "../API";
 
 interface SongLobbyProps {

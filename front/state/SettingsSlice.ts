@@ -14,19 +14,21 @@ export type SettingsState = {
 
 export const settingsSlice = createSlice({
 	name: 'settings',
-	initialState: <SettingsState>{
-		enablePushNotifications: true,
-		enableMailNotifications: true,
-		enableLessongsReminders: true,
-		enableReleaseAlerts: true,
-		preferedLevel: 'easy',
-		colorBlind: false,
-		micLevel: 50,
-		colorScheme: "system"
+	initialState: {
+		settings: <SettingsState>{
+			enablePushNotifications: true,
+			enableMailNotifications: true,
+			enableLessongsReminders: true,
+			enableReleaseAlerts: true,
+			preferedLevel: 'easy',
+			colorBlind: false,
+			micLevel: 50,
+			colorScheme: "system"
+		},
 	},
 	reducers: {
 		updateSettings: (state, action: PayloadAction<Partial<SettingsState>>) => {
-			state = { ...state, ...action }; 
+			state.settings = { ...state.settings, ...action.payload }; 
 		}
 	}
 });

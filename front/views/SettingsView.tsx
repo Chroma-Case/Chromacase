@@ -6,7 +6,7 @@ import { unsetAccessToken } from '../state/UserSlice';
 import { useDispatch } from "react-redux";
 import { RootState, useSelector } from '../state/Store';
 import { useLanguage } from "../state/LanguageSlice";
-import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i18n";
+import { AvailableLanguages, translate } from "../i18n/i18n";
 import { SettingsState, updateSettings } from '../state/SettingsSlice';
 
 const SettingsStack = createNativeStackNavigator();
@@ -50,7 +50,7 @@ const MainView = ({navigation}) => {
 const PreferencesView = ({navigation}) => {
     const dispatch = useDispatch();
     const language: AvailableLanguages = useSelector((state: RootState) => state.language.value);
-    const settings: SettingsState = useSelector((state: RootState) => state.settings)
+    const settings = useSelector((state: RootState) => (state.settings.settings as SettingsState));
     return (
         <Center style={{ flex: 1}}>
             <Heading style={{ textAlign: "center" }}>{ translate('prefBtn')}</Heading>
@@ -61,8 +61,10 @@ const PreferencesView = ({navigation}) => {
                 <Select selectedValue={settings.colorScheme}
                     placeholder={'Theme'}
                     style={{ alignSelf: 'center'}}
-                    onValueChange={(newColorScheme) => dispatch(updateSettings({ colorScheme: newColorScheme as any }))}
-                    >
+                    onValueChange={(newColorScheme) => {
+                        dispatch(updateSettings({ colorScheme: newColorScheme as any }))
+                    }}
+                >
                     <Select.Item label={ translate('dark') } value='dark'/>
                     <Select.Item label={ translate('light') } value='light'/>
                     <Select.Item label={ translate('system') } value='system'/>
@@ -84,7 +86,7 @@ const PreferencesView = ({navigation}) => {
             </View>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
-                <Select selectedValue={undefined}
+                <Select selectedValue={settings.preferedLevel}
                     placeholder={ translate('diffBtn') }
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
                     onValueChange={(itemValue) => {
