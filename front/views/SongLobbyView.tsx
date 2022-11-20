@@ -41,12 +41,12 @@ const SongLobbyView = () => {
 					<Box flex={1}>
 						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
 						<Text>
-							<Translate key='level'
+							<Translate translationKey='level'
 								format={(level) => `3:20 - ${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
 							/>
 						</Text>
 						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
-							<Translate key='playBtn'/>
+							<Translate translationKey='playBtn'/>
 						</Button>
 					</Box>
 				</Box>
@@ -54,13 +54,13 @@ const SongLobbyView = () => {
 			<Box style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize='lg'>
-						<Translate key='bestScore'/>
+						<Translate translationKey='bestScore'/>
 					</Text>
 					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize='lg'>
-						<Translate key='lastScore'/>
+						<Translate translationKey='lastScore'/>
 					</Text>
 					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
 				</Box>
@@ -72,7 +72,7 @@ const SongLobbyView = () => {
 					onPress={() => setChaptersOpen(!chaptersOpen)}
 					endIcon={<Icon as={Ionicons} name={chaptersOpen ? "chevron-up-outline" : "chevron-down-outline"}/>}
 				>
-					<Translate key='chapters'/>
+					<Translate translationKey='chapters'/>
 				</Button>
 			</Box>
 			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>

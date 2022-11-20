@@ -15,31 +15,31 @@ const MainView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button variant='ghost' onPress={() => navigation.navigate('Preferences')}>
-                <Translate key='prefBtn'/>
+                <Translate translationKey='prefBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Notifications')}>
-                <Translate key='notifBtn'/>
+                <Translate translationKey='notifBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Privacy')}>
-                <Translate key='privBtn'/>
+                <Translate translationKey='privBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangePassword')}>
-                <Translate key='changepasswdBtn'/>
+                <Translate translationKey='changepasswdBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangeEmail')}>
-                <Translate key='changeemailBtn'/>
+                <Translate translationKey='changeemailBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('GoogleAccount')}>
-                <Translate key='googleacctBtn'/>
+                <Translate translationKey='googleacctBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => dispatch(unsetUserToken())} >
-                <Translate key='signoutBtn'/>
+                <Translate translationKey='signoutBtn'/>
             </Button>
         </Center>
     )
@@ -52,10 +52,10 @@ const PreferencesView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Heading style={{ textAlign: "center" }}>
-                <Translate key='prefBtn'/>
+                <Translate translationKey='prefBtn'/>
             </Heading>
             <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>
-                <Translate key='backBtn'/>
+                <Translate translationKey='backBtn'/>
             </Button>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
@@ -134,10 +134,10 @@ const NotificationsView = ({navigation}) => {
         <Center style={{ flex: 1, justifyContent: 'center' }}>
 
             <Heading style={{ textAlign: "center" }}>
-                <Translate key='notifBtn'/>
+                <Translate translationKey='notifBtn'/>
             </Heading>
             <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >
-                <Translate key='backBtn'/>
+                <Translate translationKey='backBtn'/>
             </Button>
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Push notifications</Text>
@@ -163,11 +163,11 @@ const PrivacyView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Heading style={{ textAlign: "center" }}>
-                <Translate key='privBtn'/>
+                <Translate translationKey='privBtn'/>
             </Heading>
 
             <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>
-                <Translate key='backBtn'/>
+                <Translate translationKey='backBtn'/>
             </Button>
 
             <View style={{margin: 20}} >

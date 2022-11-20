@@ -75,7 +75,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						}
 					>
 						<FormControl.Label>
-							<Translate key='username'/>
+							<Translate translationKey='username'/>
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -98,7 +98,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							{formData.username.error}
 						</FormControl.ErrorMessage>
 						<FormControl.Label>
-							<Translate key='email'/>
+							<Translate translationKey='email'/>
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -121,7 +121,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							{formData.email.error}
 						</FormControl.ErrorMessage>
 						<FormControl.Label>
-							<Translate key='password'/>
+							<Translate translationKey='password'/>
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -144,7 +144,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							{formData.password.error}
 						</FormControl.ErrorMessage>
 						<FormControl.Label>
-							<Translate key='repeatPassword'/>
+							<Translate translationKey='repeatPassword'/>
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -201,7 +201,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 								}
 							}}
 						>
-							<Translate key='signUp'/>
+							<Translate translationKey='signUp'/>
 						</Button>
 					</FormControl>
 				</Stack>

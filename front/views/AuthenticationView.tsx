@@ -33,7 +33,7 @@ const AuthenticationView = () => {
 
 	return (
 		<Center style={{ flex: 1 }}>
-			<Text><Translate key='welcome'/></Text>
+			<Text><Translate translationKey='welcome'/></Text>
 			{mode === "signin" ? (<>
 				<Text fontWeight='thin'>username, password:</Text>
 				<Text fontWeight='thin'>katerina, 1234</Text>
@@ -41,10 +41,10 @@ const AuthenticationView = () => {
 			</>) : (
 				<SignupForm onSubmit={(username, password, email) => handleSignup(username, password, email, (token) => dispatch(setUserToken(token)))} />
 			)}
-			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" ><Translate key='forgottenPassword'/></Button> }
+			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" ><Translate translationKey='forgottenPassword'/></Button> }
 			<Button variant='outline' marginTop={5} colorScheme='primary' onPress={() => setMode(mode === "signin" ? "signup" : "signin")}>
 				<Text>
-					<Translate key={mode === "signin" ? "signUp" : "signIn"}/>
+					<Translate translationKey={mode === "signin" ? "signUp" : "signIn"}/>
 				</Text>
 			</Button>
 		</Center>

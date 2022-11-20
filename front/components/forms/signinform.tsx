@@ -52,7 +52,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						}
 					>
 						<FormControl.Label>
-							<Translate key='username'/>
+							<Translate translationKey='username'/>
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -75,7 +75,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 							{formData.username.error}
 						</FormControl.ErrorMessage>
 						<FormControl.Label>
-							<Translate key='password'/>
+							<Translate translationKey='password'/>
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -121,7 +121,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 								}
 							}}
 						>
-							<Translate key='login'/>
+							<Translate translationKey='login'/>
 						</Button>
 					</FormControl>
 				</Stack>

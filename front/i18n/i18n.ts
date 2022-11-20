@@ -1,9 +1,7 @@
 import { en, fr, sp } from './Translations';
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import { RootState, useSelector } from '../state/Store';
-import React from 'react';
-
+import Translate from '../components/Translate';
 
 export type AvailableLanguages = 'en' | 'fr' | 'sp';
 export const DefaultLanguage: AvailableLanguages = 'en';
@@ -42,19 +40,4 @@ export const translate = (key: keyof typeof en, language?: AvailableLanguages) =
 	});
 }
 
-type TranslateProps = {
-	key: keyof typeof en;
-	format?: (translated: string) => string;
-} 
-/**
- * Translation component
- * @param param0 
- * @returns 
- */
-export const Translate = ({ key, format }: TranslateProps) => {
-	const selectedLanguage = useSelector((state: RootState) => state.language.value);
-	const translated = translate(key, selectedLanguage);
-	return React.Fragment({ children: [
-		format ? format(translated) : translated
-	]});
-}
+export { Translate };

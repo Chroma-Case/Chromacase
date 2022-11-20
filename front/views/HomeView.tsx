@@ -17,13 +17,13 @@ const ProgressBar = ({ xp }: { xp: number}) => {
 	return (
 		<VStack alignItems={'center'}>
 			<Text>
-				<Translate key='level' format={(id) => `${id} ${level}`}/>
+				<Translate translationKey='level' format={(id) => `${id} ${level}`}/>
 			</Text>
 			<Box w="90%" maxW="400">
 				<Progress value={progessValue} mx="4" />
 			</Box>
 			<Text>
-				<Translate key='levelProgress'
+				<Translate translationKey='levelProgress'
 					format={(levelProgress) => `${xp} / ${nextLevelThreshold} ${levelProgress}`}
 				/>
 			</Text>
@@ -48,7 +48,7 @@ const HomeView = () => {
 
 			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
 				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>
-					<Translate key="welcome" format={(welcome) => `${welcome} ${userQuery.data.name}!`}/>
+					<Translate translationKey="welcome" format={(welcome) => `${welcome} ${userQuery.data.name}!`}/>
 				</Text>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
@@ -58,7 +58,7 @@ const HomeView = () => {
 			<Box paddingY={5} style={{ flexDirection }}>
 				<Box flex={2}>
 					<SongCardGrid
-						heading={<Translate key='goNextStep'/>}
+						heading={<Translate translationKey='goNextStep'/>}
 						songs={[ ...Array(4).keys() ].map(() => ({
 							albumCover: "",
 							songTitle: "Song",
@@ -69,7 +69,7 @@ const HomeView = () => {
 
 					<Flex style={{ flexDirection }}>
 						<Box flex={1} paddingY={5}>
-							<Heading><Translate key='mySkillsToImprove'/></Heading>
+							<Heading><Translate translationKey='mySkillsToImprove'/></Heading>
 							<Box padding={5}>
 								<CompetenciesTable
 									pedalsCompetency=	{Math.random() * 100}
@@ -84,7 +84,7 @@ const HomeView = () => {
 
 						<Box flex={1} padding={5}>
 							<SongCardGrid
-								heading={<Translate key='recentlyPlayed'/>}
+								heading={<Translate translationKey='recentlyPlayed'/>}
 								maxItemPerRow={2}
 								songs={[ ...Array(4).keys() ].map(() => ({
 									albumCover: "",
@@ -102,11 +102,11 @@ const HomeView = () => {
 							
 							<Box flex="2" padding={5}>
 								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} ><Translate key='search'/></Button>
+									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} ><Translate translationKey='search'/></Button>
 								</Box>
 								<SongCardGrid
 									maxItemPerRow={2}
-									heading={<Translate key='lastSearched'/>}
+									heading={<Translate translationKey='lastSearched'/>}
 									songs={[ ...Array(4).keys() ].map(() => ({
 										albumCover: "",
 										songTitle: "Song",
@@ -118,7 +118,7 @@ const HomeView = () => {
 						</Box>
 						<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
 							<Button backgroundColor={theme.colors.primary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Settings')} >
-								<Translate key='settingsBtn'/>
+								<Translate translationKey='settingsBtn'/>
 							</Button>
 						</Box>
 				</VStack>
