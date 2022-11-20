@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 export default function App() {
 
 	SplashScreen.preventAutoHideAsync();
-	setTimeout(SplashScreen.hideAsync, 0);
+	setTimeout(SplashScreen.hideAsync, 500);
 
 	return (
 		<Provider store={store}>
