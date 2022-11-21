@@ -8,16 +8,28 @@ import { useLanguage } from '../state/LanguageSlice';
 import renderer from 'react-test-renderer'
 import { NativeBaseProvider } from "native-base";
 import Theme from '../Theme';
+import { setUserToken } from '../state/UserSlice';
 
 describe('AuthenticationView Component', () => {
 
   jest.setTimeout(150000);
   const view = () => <NativeBaseProvider theme={Theme}><AuthenticationView/></NativeBaseProvider>;
+  beforeEach(() => render(view()));
 
-  it('should render correctly', () => {
-    let truc = render(view()).toJSON();
-    expect(truc).toBeDefined();
-  })
+
+  it('view should render', () => {
+    expect(screen).toBeDefined();
+  });
+
+  // it('should render forms', async () => {
+  //   expect(await screen.findByDisplayValue('username')).toBeTruthy();
+  // });
+  it('renders the submit button', () => {
+    expect(screen.findAllByText('en.signinBtn')).toBeTruthy();
+  });
+  // it('renders the forms', async () => {
+  //   expect(screen.findAllByPlaceholderText)
+  // })
   // const view = () => <Provider store={store}><AuthenticationView /></Provider>;
   
   // beforeEach(() => render(view()));

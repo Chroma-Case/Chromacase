@@ -12,13 +12,12 @@ describe('<HomeView />', () => {
 
   jest.setTimeout(150000);
   const view = () => <NativeBaseProvider theme={Theme}><HomeView/></NativeBaseProvider>;
+  beforeEach(() => render(view()));
 
   it('should render correctly', () => {
-    let truc = render(view()).toJSON();
-    expect(truc).toBeDefined();
+    expect(screen).toBeDefined();
   })
 
-  // beforeEach(() => render(view));
 
   // it('has should display the text in default language', async () => {
   //   expect((await screen.findAllByText(en.signoutBtn)).length).toBe(1);
