@@ -3,10 +3,9 @@ import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, 
 import { useQuery } from 'react-query';
 import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
-import { translate } from "../i18n/i18n";
+import { Translate, translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
-import { useSelector } from "../state/Store";
 import API from "../API";
 
 interface SongLobbyProps {
@@ -39,19 +38,29 @@ const SongLobbyView = () => {
 				<Box style={{ flex: 0.5 }}/>
 				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
 					<Box flex={1}>
-						<Text bold fontSize='lg'>{songQuery.data!.name}</Text>
-						<Text>{'3:20'} - {translate('level')} { chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }</Text>
-						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
+						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
+						<Text>
+							<Translate translationKey='level'
+								format={(level) => `3:20 - ${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
+							/>
+						</Text>
+						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
+							<Translate translationKey='playBtn'/>
+						</Button>
 					</Box>
 				</Box>
 			</Box>
 			<Box style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text bold fontSize='lg'>{translate('bestScore') }</Text>
+					<Text bold fontSize='lg'>
+						<Translate translationKey='bestScore'/>
+					</Text>
 					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text bold fontSize='lg'>{translate('lastScore') }</Text>
+					<Text bold fontSize='lg'>
+						<Translate translationKey='lastScore'/>
+					</Text>
 					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
 				</Box>
 			</Box>
@@ -62,7 +71,7 @@ const SongLobbyView = () => {
 					onPress={() => setChaptersOpen(!chaptersOpen)}
 					endIcon={<Icon as={Ionicons} name={chaptersOpen ? "chevron-up-outline" : "chevron-down-outline"}/>}
 				>
-					{translate('chapters')}
+					<Translate translationKey='chapters'/>
 				</Button>
 			</Box>
 			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>

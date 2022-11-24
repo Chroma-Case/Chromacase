@@ -6,7 +6,7 @@ import { unsetAccessToken } from '../state/UserSlice';
 import { useDispatch } from "react-redux";
 import { useSelector } from '../state/Store';
 import { useLanguage } from "../state/LanguageSlice";
-import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i18n";
+import { AvailableLanguages, DefaultLanguage, translate, Translate } from "../i18n/i18n";
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -16,31 +16,31 @@ const MainView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button variant='ghost' onPress={() => navigation.navigate('Preferences')}>
-                { translate('prefBtn')}
+                <Translate translationKey='prefBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Notifications')}>
-            { translate('notifBtn')}
+                <Translate translationKey='notifBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Privacy')}>
-            { translate('privBtn')}
+                <Translate translationKey='privBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangePassword')}>
-                { translate('changepasswdBtn')}
+                <Translate translationKey='changepasswdBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangeEmail')}>
-            { translate('changeemailBtn')}
+                <Translate translationKey='changeemailBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('GoogleAccount')}>
-            { translate('googleacctBtn')}
+                <Translate translationKey='googleacctBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => dispatch(unsetAccessToken())} >
-                { translate('signoutBtn')}
+                <Translate translationKey='signoutBtn'/>
             </Button>
         </Center>
     )
@@ -52,9 +52,12 @@ const PreferencesView = ({navigation}) => {
 
     return (
         <Center style={{ flex: 1}}>
-            <Heading style={{ textAlign: "center" }}>{ translate('prefBtn')}</Heading>
-
-            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>{ translate('backBtn') }</Button>
+            <Heading style={{ textAlign: "center" }}>
+                <Translate translationKey='prefBtn'/>
+            </Heading>
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>
+                <Translate translationKey='backBtn'/>
+            </Button>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Select selectedValue={undefined}
@@ -62,9 +65,9 @@ const PreferencesView = ({navigation}) => {
                     style={{ alignSelf: 'center'}}
                     // onValueChange={(itemValue, itemIndex) => switch themes}
                     >
-                    <Select.Item label={ translate('dark') } value='dark'/>
-                    <Select.Item label={ translate('light') } value='light'/>
-                    <Select.Item label={ translate('system') } value='system'/>
+                    <Select.Item label={translate('dark')} value='dark'/>
+                    <Select.Item label={translate('light')} value='light'/>
+                    <Select.Item label={translate('system')} value='system'/>
                 </Select>
             </View>
 
@@ -131,24 +134,24 @@ const NotificationsView = ({navigation}) => {
     return (
         <Center style={{ flex: 1, justifyContent: 'center' }}>
 
-            <Heading style={{ textAlign: "center" }}>{ translate('notifBtn')}</Heading>
-            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
-
+            <Heading style={{ textAlign: "center" }}>
+                <Translate translationKey='notifBtn'/>
+            </Heading>
+            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >
+                <Translate translationKey='backBtn'/>
+            </Button>
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Push notifications</Text>
                 <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
-
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Email notifications</Text>
                 <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
-
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Training reminder</Text>
                 <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
-
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>New songs</Text>
                 <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
@@ -160,9 +163,13 @@ const NotificationsView = ({navigation}) => {
 const PrivacyView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
-            <Heading style={{ textAlign: "center" }}>{ translate('privBtn')}</Heading>
+            <Heading style={{ textAlign: "center" }}>
+                <Translate translationKey='privBtn'/>
+            </Heading>
 
-            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>{ translate('backBtn') }</Button>
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>
+                <Translate translationKey='backBtn'/>
+            </Button>
 
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Data Collection</Text>
