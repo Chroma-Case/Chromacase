@@ -30,7 +30,9 @@ const HomeView = () => {
 	return <ScrollView>
 		<Box style={{ display: 'flex', padding: 30 }}>
 			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
-				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>{`${translate('welcome')} ${userQuery.data.username}!`} </Text>
+				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>
+					<Translate translationKey="welcome" format={(welcome) => `${welcome} ${userQuery.data.name}!`}/>
+				</Text>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
 				</Box>
@@ -39,7 +41,7 @@ const HomeView = () => {
 			<Box paddingY={5} style={{ flexDirection }}>
 				<Box flex={2}>
 					<SongCardGrid
-						heading={translate('goNextStep')}
+						heading={<Translate translationKey='goNextStep'/>}
 						songs={nextStepQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 							.map((song) => ({
 								albumCover: song.cover,
@@ -52,7 +54,7 @@ const HomeView = () => {
 
 					<Flex style={{ flexDirection }}>
 						<Box flex={1} paddingY={5}>
-							<Heading>{translate('mySkillsToImprove')}</Heading>
+							<Heading><Translate translationKey='mySkillsToImprove'/></Heading>
 							<Box padding={5}>
 								<CompetenciesTable {...skillsQuery.data}/>
 							</Box>
@@ -60,7 +62,7 @@ const HomeView = () => {
 
 						<Box flex={1} padding={5}>
 							<SongCardGrid
-								heading={translate('recentlyPlayed')}
+								heading={<Translate translationKey='recentlyPlayed'/>}
 								maxItemPerRow={2}
 								songs={playHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 									.map((song) => ({
@@ -80,11 +82,11 @@ const HomeView = () => {
 							
 							<Box flex="2" padding={5}>
 								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} >{translate('search')}</Button>
+									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} ><Translate translationKey='search'/></Button>
 								</Box>
 								<SongCardGrid
 									maxItemPerRow={2}
-									heading={translate('lastSearched')}
+									heading={<Translate translationKey='lastSearched'/>}
 									songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 										.map((song) => ({
 											albumCover: song.cover,
@@ -97,7 +99,9 @@ const HomeView = () => {
 							</Box>
 						</Box>
 						<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-							<Button backgroundColor={theme.colors.primary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Settings')} >{translate('settingsBtn')}</Button>
+							<Button backgroundColor={theme.colors.primary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Settings')} >
+								<Translate translationKey='settingsBtn'/>
+							</Button>
 						</Box>
 				</VStack>
 			</Box>

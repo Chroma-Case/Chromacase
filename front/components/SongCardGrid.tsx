@@ -6,7 +6,7 @@ import { Heading, VStack } from 'native-base';
 type SongCardGrid = {
 	songs: Parameters<typeof SongCard>[0][];
 	maxItemPerRow?: number,
-	heading?: string
+	heading?: JSX.Element,
 }
 
 const SongCardGrid = (props: SongCardGrid) => {

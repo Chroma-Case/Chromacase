@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from '../state/Store';
-import { translate } from "../i18n/i18n";
+import { Translate, translate } from "../i18n/i18n";
 import API from "../API";
 import { setAccessToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
@@ -33,13 +33,16 @@ const AuthenticationView = () => {
 
 	return (
 		<Center style={{ flex: 1 }}>
+			<Text><Translate translationKey='welcome'/></Text>
 			{mode === "signin" 
 				? <SigninForm onSubmit={(username, password) => hanldeSignin(username, password, (accessToken) => dispatch(setAccessToken(accessToken)))} />
 			  	: <SignupForm onSubmit={(username, password, email) => handleSignup(username, password, email, (accessToken) => dispatch(setAccessToken(accessToken)))} />
 			}
 			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" >{translate("forgottenPassword")}</Button> }
 			<Button variant='outline' marginTop={5} colorScheme='primary' onPress={() => setMode(mode === "signin" ? "signup" : "signin")}>
-				<Text>{translate(mode === "signin" ? "signUp" : "signIn")}</Text>
+				<Text>
+					<Translate translationKey={mode === "signin" ? "signUp" : "signIn"}/>
+				</Text>
 			</Button>
 		</Center>
 	);
