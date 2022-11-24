@@ -3,7 +3,7 @@ import Model from "./Model";
 import UserSettings from "./UserSettings";
 
 interface User extends Model {
-	username: string;
+	name: string;
 	email: string;
 	xp: number;
 	premium: boolean;
