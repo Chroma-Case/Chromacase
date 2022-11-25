@@ -6,8 +6,8 @@ import { unsetAccessToken } from '../state/UserSlice';
 import { useDispatch } from "react-redux";
 import { RootState, useSelector } from '../state/Store';
 import { useLanguage } from "../state/LanguageSlice";
-import { AvailableLanguages, translate } from "../i18n/i18n";
 import { SettingsState, updateSettings } from '../state/SettingsSlice';
+import { AvailableLanguages, translate, Translate } from "../i18n/i18n";
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -17,31 +17,31 @@ const MainView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button variant='ghost' onPress={() => navigation.navigate('Preferences')}>
-                { translate('prefBtn')}
+                <Translate translationKey='prefBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Notifications')}>
-            { translate('notifBtn')}
+                <Translate translationKey='notifBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Privacy')}>
-            { translate('privBtn')}
+                <Translate translationKey='privBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangePassword')}>
-                { translate('changepasswdBtn')}
+                <Translate translationKey='changepasswdBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangeEmail')}>
-            { translate('changeemailBtn')}
+                <Translate translationKey='changeemailBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('GoogleAccount')}>
-            { translate('googleacctBtn')}
+                <Translate translationKey='googleacctBtn'/>
             </Button>
 
             <Button variant='ghost' onPress={() => dispatch(unsetAccessToken())} >
-                { translate('signoutBtn')}
+                <Translate translationKey='signoutBtn'/>
             </Button>
         </Center>
     )
@@ -53,9 +53,12 @@ const PreferencesView = ({navigation}) => {
     const settings = useSelector((state: RootState) => (state.settings.settings as SettingsState));
     return (
         <Center style={{ flex: 1}}>
-            <Heading style={{ textAlign: "center" }}>{ translate('prefBtn')}</Heading>
-
-            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>{ translate('backBtn') }</Button>
+            <Heading style={{ textAlign: "center" }}>
+                <Translate translationKey='prefBtn'/>
+            </Heading>
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>
+                <Translate translationKey='backBtn'/>
+            </Button>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Select selectedValue={settings.colorScheme}
@@ -138,30 +141,30 @@ const NotificationsView = ({navigation}) => {
     return (
         <Center style={{ flex: 1, justifyContent: 'center' }}>
 
-            <Heading style={{ textAlign: "center" }}>{ translate('notifBtn')}</Heading>
-            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
-
+            <Heading style={{ textAlign: "center" }}>
+                <Translate translationKey='notifBtn'/>
+            </Heading>
+            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >
+                <Translate translationKey='backBtn'/>
+            </Button>
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Push notifications</Text>
                 <Switch value={settings.enablePushNotifications} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
                     onValueChange={(value) => { dispatch(updateSettings({ enablePushNotifications: value })) }}
                 />
             </View>
-
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Email notifications</Text>
                 <Switch value={settings.enableMailNotifications} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
                     onValueChange={(value) => { dispatch(updateSettings({ enableMailNotifications: value })) }}
                 />
             </View>
-
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Training reminder</Text>
                 <Switch value={settings.enableLessongsReminders} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
                     onValueChange={(value) => { dispatch(updateSettings({ enableLessongsReminders: value })) }}
                 />
             </View>
-
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>New songs</Text>
                 <Switch value={settings.enableReleaseAlerts} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
@@ -175,9 +178,13 @@ const NotificationsView = ({navigation}) => {
 const PrivacyView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
-            <Heading style={{ textAlign: "center" }}>{ translate('privBtn')}</Heading>
+            <Heading style={{ textAlign: "center" }}>
+                <Translate translationKey='privBtn'/>
+            </Heading>
 
-            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>{ translate('backBtn') }</Button>
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>
+                <Translate translationKey='backBtn'/>
+            </Button>
 
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Data Collection</Text>
