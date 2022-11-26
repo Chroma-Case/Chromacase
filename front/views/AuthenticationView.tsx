@@ -13,7 +13,7 @@ const hanldeSignin = async (username: string, password: string, apiSetter: (acce
 		apiSetter(apiAccess);
 		return translate("loggedIn");
 	} catch (error) {
-		return "Username of password incorrect";
+		return "Username or password incorrect";
 	}
 };
 
