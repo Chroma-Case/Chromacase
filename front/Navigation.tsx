@@ -10,6 +10,8 @@ import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/SettingsView';
 import ProfileView from './views/ProfileView';
+import { useQuery } from 'react-query';
+import API from './API';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,12 +28,20 @@ export const publicRoutes = <React.Fragment>
 </React.Fragment>;
 
 export const Router = () => {
-	const isAuthentified = useSelector((state) => state.user.accessToken !== undefined)
+	const isAuthentified = useSelector((state) => state.user.accessToken !== undefined);
+	const userProfile = useQuery(['user', 'me'], () => API.getUserInfo(), {
+		enabled: isAuthentified
+	});
 	return (
 		<NavigationContainer>
-			<Stack.Navigator>
-				{isAuthentified ? protectedRoutes : publicRoutes}
-			</Stack.Navigator>
+			{isAuthentified && !userProfile.isError
+				? <Stack.Navigator>
+					{protectedRoutes}
+				</Stack.Navigator>
+				: <Stack.Navigator>
+					{publicRoutes}
+				</Stack.Navigator>
+			}
 		</NavigationContainer>
 	)
 }
