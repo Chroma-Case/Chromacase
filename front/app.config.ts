@@ -6,7 +6,7 @@ module.exports = {
   "icon": "./assets/icon.png",
   "userInterfaceStyle": "light",
   "splash": {
-    "image": "./assets/cover.png",
+    "image": "./assets/splashLogo.png",
     "resizeMode": "contain",
     "backgroundColor": "#ffffff"
   },
