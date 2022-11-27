@@ -2,11 +2,9 @@ import Metrics from "./Metrics";
 import Model from "./Model";
 
 interface Song extends Model {
-	name: string
-	artistId: number | null
-	albumId: number | null
-	genreId: number | null;
-	cover: string;
+	title: string;
+	description: string;
+	album: string;
 	metrics: Metrics;
 }
 

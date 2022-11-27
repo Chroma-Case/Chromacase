@@ -2,12 +2,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { Center, Button, Text, Switch, Slider, Select, Heading } from "native-base";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { unsetAccessToken } from '../state/UserSlice';
-import { useDispatch } from "react-redux";
-import { RootState, useSelector } from '../state/Store';
+import { unsetUserToken } from '../state/UserSlice';
+import { useDispatch, useSelector } from "react-redux";
 import { useLanguage } from "../state/LanguageSlice";
-import { SettingsState, updateSettings } from '../state/SettingsSlice';
-import { AvailableLanguages, translate, Translate } from "../i18n/i18n";
+import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../i18n/i18n";
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -17,31 +15,31 @@ const MainView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button variant='ghost' onPress={() => navigation.navigate('Preferences')}>
-                <Translate translationKey='prefBtn'/>
+                { translate('prefBtn')}
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Notifications')}>
-                <Translate translationKey='notifBtn'/>
+            { translate('notifBtn')}
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('Privacy')}>
-                <Translate translationKey='privBtn'/>
+            { translate('privBtn')}
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangePassword')}>
-                <Translate translationKey='changepasswdBtn'/>
+                { translate('changepasswdBtn')}
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('ChangeEmail')}>
-                <Translate translationKey='changeemailBtn'/>
+            { translate('changeemailBtn')}
             </Button>
 
             <Button variant='ghost' onPress={() => navigation.navigate('GoogleAccount')}>
-                <Translate translationKey='googleacctBtn'/>
+            { translate('googleacctBtn')}
             </Button>
 
-            <Button variant='ghost' onPress={() => dispatch(unsetAccessToken())} >
-                <Translate translationKey='signoutBtn'/>
+            <Button variant='ghost' onPress={() => dispatch(unsetUserToken())} >
+                { translate('signoutBtn')}
             </Button>
         </Center>
     )
@@ -49,25 +47,20 @@ const MainView = ({navigation}) => {
 
 const PreferencesView = ({navigation}) => {
     const dispatch = useDispatch();
-    const language: AvailableLanguages = useSelector((state: RootState) => state.language.value);
-    const settings = useSelector((state: RootState) => (state.settings.settings as SettingsState));
+    const language: AvailableLanguages = useSelector((state) => state.language.value);
+
     return (
         <Center style={{ flex: 1}}>
-            <Heading style={{ textAlign: "center" }}>
-                <Translate translationKey='prefBtn'/>
-            </Heading>
-            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>
-                <Translate translationKey='backBtn'/>
-            </Button>
+            <Heading style={{ textAlign: "center" }}>{ translate('prefBtn')}</Heading>
+
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>{ translate('backBtn') }</Button>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
-                <Select selectedValue={settings.colorScheme}
-                    placeholder={'Theme'}
+                <Select selectedValue={undefined}
+                placeholder={'Theme'}
                     style={{ alignSelf: 'center'}}
-                    onValueChange={(newColorScheme) => {
-                        dispatch(updateSettings({ colorScheme: newColorScheme as any }))
-                    }}
-                >
+                    // onValueChange={(itemValue, itemIndex) => switch themes}
+                    >
                     <Select.Item label={ translate('dark') } value='dark'/>
                     <Select.Item label={ translate('light') } value='light'/>
                     <Select.Item label={ translate('system') } value='system'/>
@@ -78,8 +71,10 @@ const PreferencesView = ({navigation}) => {
                 <Select selectedValue={language}
                     placeholder={translate('langBtn')} 
                     style={{ alignSelf: 'center'}}
-                    onValueChange={(itemValue) => {
-                        dispatch(useLanguage(itemValue as AvailableLanguages));
+                    onValueChange={(itemValue: AvailableLanguages, itemIndex) => {
+                        let newLanguage = DefaultLanguage;
+                        newLanguage = itemValue;Heading
+                        dispatch(useLanguage(newLanguage));
                     }}>
                     <Select.Item label='Français' value='fr'/>
                     <Select.Item label='English' value='en'/>
@@ -89,12 +84,12 @@ const PreferencesView = ({navigation}) => {
             </View>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
-                <Select selectedValue={settings.preferedLevel}
+                <Select selectedValue={undefined}
                     placeholder={ translate('diffBtn') }
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
-                    onValueChange={(itemValue) => {
-                        dispatch(updateSettings({ preferedLevel: itemValue as any }));
-                    }}>
+                    // onValueChange={(itemValue, itemIndex) => change level}
+                    >
+
                     <Select.Item label={ translate('easy') } value='easy'/>
                     <Select.Item label={ translate('medium') } value='medium'/>
                     <Select.Item label={ translate('hard') } value='hard'/>
@@ -103,16 +98,12 @@ const PreferencesView = ({navigation}) => {
 
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Color blind mode</Text>
-                <Switch style={{ alignSelf: 'center'}} value={settings.colorBlind} colorScheme="primary"
-                    onValueChange={(enabled) => { dispatch(updateSettings({ colorBlind: enabled })) }}
-                />
+                <Switch style={{ alignSelf: 'center'}} colorScheme="primary"/>
             </View>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Text style={{ textAlign: "center" }}>Mic volume</Text>
-                <Slider defaultValue={settings.micLevel} minValue={0} maxValue={1000} accessibilityLabel="hello world" step={10}
-                    onChangeEnd={(value) => { dispatch(updateSettings({ micLevel: value })) }}
-                >
+                <Slider defaultValue={50} minValue={0} maxValue={1000} accessibilityLabel="hello world" step={10}>
                     <Slider.Track>
                         <Slider.FilledTrack/>
                     </Slider.Track>
@@ -121,11 +112,11 @@ const PreferencesView = ({navigation}) => {
             </View>
 
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
-                <Select selectedValue={settings.preferedInputName}
+                <Select selectedValue={undefined}
                     placeholder={'Device'}
                     style={{ height: 50, width: 150, alignSelf: 'center'}}
-                    onValueChange={(itemValue: string) => { dispatch(updateSettings({ preferedInputName: itemValue })) }}
-                >
+                    // onValueChange={(itemValue, itemIndex) => change device}
+                    >
                     <Select.Item label='Mic_0' value='0'/>
                     <Select.Item label='Mic_1' value='1'/>
                     <Select.Item label='Mic_2' value='2'/>
@@ -136,40 +127,30 @@ const PreferencesView = ({navigation}) => {
 }
 
 const NotificationsView = ({navigation}) => {
-    const dispatch = useDispatch();
-    const settings: SettingsState = useSelector((state: RootState) => state.settings);
     return (
         <Center style={{ flex: 1, justifyContent: 'center' }}>
 
-            <Heading style={{ textAlign: "center" }}>
-                <Translate translationKey='notifBtn'/>
-            </Heading>
-            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >
-                <Translate translationKey='backBtn'/>
-            </Button>
+            <Heading style={{ textAlign: "center" }}>{ translate('notifBtn')}</Heading>
+            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >{ translate('backBtn') }</Button>
+
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Push notifications</Text>
-                <Switch value={settings.enablePushNotifications} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-                    onValueChange={(value) => { dispatch(updateSettings({ enablePushNotifications: value })) }}
-                />
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
+
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Email notifications</Text>
-                <Switch value={settings.enableMailNotifications} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-                    onValueChange={(value) => { dispatch(updateSettings({ enableMailNotifications: value })) }}
-                />
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
+
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>Training reminder</Text>
-                <Switch value={settings.enableLessongsReminders} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-                    onValueChange={(value) => { dispatch(updateSettings({ enableLessongsReminders: value })) }}
-                />
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
+
             <View style={{margin: 20}}>
                 <Text style={{ textAlign: "center" }}>New songs</Text>
-                <Switch value={settings.enableReleaseAlerts} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-                    onValueChange={(value) => { dispatch(updateSettings({ enableReleaseAlerts: value })) }}
-                />
+                <Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
             </View>
         </Center>
     )
@@ -178,13 +159,9 @@ const NotificationsView = ({navigation}) => {
 const PrivacyView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
-            <Heading style={{ textAlign: "center" }}>
-                <Translate translationKey='privBtn'/>
-            </Heading>
+            <Heading style={{ textAlign: "center" }}>{ translate('privBtn')}</Heading>
 
-            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>
-                <Translate translationKey='backBtn'/>
-            </Button>
+            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}>{ translate('backBtn') }</Button>
 
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Data Collection</Text>
