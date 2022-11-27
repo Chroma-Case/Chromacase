@@ -1,13 +1,12 @@
 import { useRoute } from "@react-navigation/native";
 import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
-import API from "../API";
 import { useQuery } from 'react-query';
 import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
-import logo from '../assets/cover.png';
-import { translate } from "../i18n/i18n";
+import { Translate, translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
+import API from "../API";
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -34,35 +33,45 @@ const SongLobbyView = () => {
 		<Box style={{ padding: 30, flexDirection: 'column' }}>
 			<Box style={{ flexDirection: 'row', height: '30%'}}>
 				<Box style={{ flex: 3 }}>
-					<Image source={logo} style={{ height: '100%', width: undefined, resizeMode: 'contain' }}/>
+					<Image source={{ uri: songQuery.data!.cover }} style={{ height: '100%', width: undefined, resizeMode: 'contain' }}/>
 				</Box>
 				<Box style={{ flex: 0.5 }}/>
 				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
 					<Box flex={1}>
 						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
-						<Text>{'3:20'} - {translate('level')} { chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }</Text>
-						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>{ translate('playBtn') }</Button>
+						<Text>
+							<Translate translationKey='level'
+								format={(level) => `3:20 - ${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
+							/>
+						</Text>
+						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
+							<Translate translationKey='playBtn'/>
+						</Button>
 					</Box>
 				</Box>
 			</Box>
 			<Box style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text bold fontSize='lg'>{translate('bestScore') }</Text>
+					<Text bold fontSize='lg'>
+						<Translate translationKey='bestScore'/>
+					</Text>
 					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
-					<Text bold fontSize='lg'>{translate('lastScore') }</Text>
+					<Text bold fontSize='lg'>
+						<Translate translationKey='lastScore'/>
+					</Text>
 					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
 				</Box>
 			</Box>
-			<Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text>
+			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}
 			<Box flexDirection='row'>
 				<Button
 					variant='ghost'
 					onPress={() => setChaptersOpen(!chaptersOpen)}
 					endIcon={<Icon as={Ionicons} name={chaptersOpen ? "chevron-up-outline" : "chevron-down-outline"}/>}
 				>
-					{translate('chapters')}
+					<Translate translationKey='chapters'/>
 				</Button>
 			</Box>
 			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>

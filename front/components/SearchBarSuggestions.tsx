@@ -1,5 +1,5 @@
 import React from "react";
-import SearchBar from "../components/SearchBar";
+import SearchBar, { IllustratedSuggestionProps } from "../components/SearchBar";
 import { SuggestionList, SuggestionType } from "../components/SearchBar";
 interface SearchBarSuggestionsProps {
 	onTextSubmit: (text: string) => void;
@@ -15,7 +15,7 @@ const filterSuggestions = (text: string, suggestions: SuggestionList) => {
 			case SuggestionType.ILLUSTRATED:
 				return (
 					suggestion.data.text.toLowerCase().includes(text.toLowerCase()) ||
-					suggestion.data.subtext.toLowerCase().includes(text.toLowerCase())
+					(suggestion.data as IllustratedSuggestionProps).subtext.toLowerCase().includes(text.toLowerCase())
 				);
 		}
 	});

@@ -3,10 +3,12 @@ import Theme from './Theme';
 import React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
-import store from './state/Store';
+import store, { persistor } from './state/Store';
 import { Router } from './Navigation';
 import './i18n/i18n';
 import * as SplashScreen from 'expo-splash-screen';
+import { PersistGate } from "redux-persist/integration/react";
+import LanguageGate from "./i18n/LanguageGate";
 
 const queryClient = new QueryClient();
 
@@ -17,11 +19,15 @@ export default function App() {
 
 	return (
 		<Provider store={store}>
-			<QueryClientProvider client={queryClient}>
-				<NativeBaseProvider theme={Theme}>
-					<Router />
-				</NativeBaseProvider>
-			</QueryClientProvider>
+			<PersistGate loading={null} persistor={persistor}>
+				<QueryClientProvider client={queryClient}>
+					<NativeBaseProvider theme={Theme}>
+						<LanguageGate>
+							<Router/>
+						</LanguageGate>
+					</NativeBaseProvider>
+				</QueryClientProvider>
+			</PersistGate>
 		</Provider>
 	);
 }
