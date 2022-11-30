@@ -48,8 +48,8 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Copy env file to secret env file
-        run: touch .env && cat {{ secrets.ENV }} >> .env
+      - name: Copy env file to github secret env file
+        run: touch .env && cat ${{ secrets.ENV }} >> .env
 
       - name: Build the app
         run: docker-compose build
