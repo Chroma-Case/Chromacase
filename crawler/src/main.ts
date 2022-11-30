@@ -6,12 +6,13 @@ const crawler = new PlaywrightCrawler({
 	launchContext: {
 		userDataDir: "/home/bluub/.config/chromium",
 	},
+	maxConcurrency: 1,
 	requestHandler: router,
 	// This function is called if the page processing failed more than maxRequestRetries+1 times.
 	failedRequestHandler({ request, log }) {
 		log.info(`Request ${request.url} failed too many times.`);
 	},
-	//headless: false,
+	headless: false,
 });
 
 // Add first URL to the queue and start the crawl.
