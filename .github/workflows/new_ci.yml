@@ -51,6 +51,9 @@ jobs:
       - name: Copy env file to github secret env file
         run: touch .env && echo "POSTGRES_USER=user\nPOSTGRES_PASSWORD=eip\nPOSTGRES_NAME=chromacase\nPOSTGRES_HOST=db\nDATABASE_URL=postgresql://user:eip@db:5432/chromacase\nJWT_SECRET=wow" >> .env
 
+      - name: print .env
+        run: cat .env
+
       - name: Build the app
         run: docker-compose build
 
