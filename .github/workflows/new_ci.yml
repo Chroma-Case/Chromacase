@@ -48,6 +48,9 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Copy env file to secret env file
+        run: touch .env && cat {{ secrets.ENV }} >> .env
+
       - name: Build the app
         run: docker-compose build
 
@@ -73,6 +76,9 @@ jobs:
         with:
           name: results
           path: out
+
+      - name: Remove .env && stop the service
+        run: rm .env && docker-compose down
 
 #### Test App ##
 ##
