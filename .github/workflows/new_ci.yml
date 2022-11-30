@@ -57,10 +57,10 @@ jobs:
       - name: Start the service
         run: docker-compose up -d
 
-      #- name: Perform healthchecks
-      #  run: |
-      #    docker-compose ps -a
-      #    wget --retry-connrefused http://localhost:3000 # /healthcheck
+      - name: Perform healthchecks
+        run: |
+          docker-compose ps -a
+          wget --retry-connrefused http://localhost:3000 # /healthcheck
 
       - name: Run robot tests
         run: |
