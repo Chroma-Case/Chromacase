@@ -49,7 +49,14 @@ jobs:
           fetch-depth: 0
 
       - name: Copy env file to github secret env file
-        run: touch .env && echo "POSTGRES_USER=user\nPOSTGRES_PASSWORD=eip\nPOSTGRES_NAME=chromacase\nPOSTGRES_HOST=db\nDATABASE_URL=postgresql://user:eip@db:5432/chromacase\nJWT_SECRET=wow" >> .env
+        run: |
+          touch .env
+          echo "POSTGRES_USER=user" >> .env
+          echo "POSTGRES_PASSWORD=eip" >> .env
+          echo "POSTGRES_NAME=chromacase >> .env
+          echo "POSTGRES_HOST=db" >> .env
+          echo "DATABASE_URL=postgresql://user:eip@db:5432/chromacase" >> .env
+          echo "JWT_SECRET=wow" >> .env
 
       - name: print .env
         run: cat .env
