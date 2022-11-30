@@ -3,22 +3,27 @@ import { PlaywrightCrawler, Dataset } from 'crawlee';
 // PlaywrightCrawler crawls the web using a headless
 // browser controlled by the Playwright library.
 const crawler = new PlaywrightCrawler({
+	launchContext: {
+		userDataDir: "/home/bluub/.config/chromium",
+	},
 	// Use the requestHandler to process each of the crawled pages.
 	async requestHandler({ request, page, enqueueLinks, log }) {
 		log.info(`Processing ${request.url}...`);
 		if (request.label === 'SONG') {
 			await Dataset.pushData({ url: request.loadedUrl });
-			await page.waitForSelector('button#e81a5f7abe1f420e755794816f010f0b');
-			await page.$$eval('button#e81a5f7abe1f420e755794816f010f0b', (els) => {
-				// Extract text content from the actor cards
-				return els.forEach((el) => el.click());
-			});
+			await page.waitForSelector(' button');
+			await page.locator('aside div div section button[name="download"]').click()
 			await page.waitForSelector('section.b_r17 button.HFvdW');
-			await page.$$eval('section.b_r17 button.HFvdW', (els) => {
-				// Extract text content from the actor cards
-				return els.forEach((el) => el.click());
-			});
-
+			const [ download ] = await Promise.all([
+				// Start waiting for the download
+				page.waitForEvent('download'),
+			// Perform the action that initiates download
+			page.locator('section.b_r17 section section div:nth-child(3) button.HFvdW').click(),
+			]);
+			// Wait for the download process to complete
+			console.log(await download.path());
+		// Save downloaded file somewhere
+		await download.saveAs('a.midi');
 		}
 		else {
 			//
