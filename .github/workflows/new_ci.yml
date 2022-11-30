@@ -81,11 +81,17 @@ jobs:
           pip install -r back/test/robot/requirements.txt
           robot -d out back/test/robot/
 
-      - name: Print robot results in the first step summary
+      - name: Print robot results in the first step summary && convertir le .html en markdown
         if: always()
         run: |
-          echo "### Robot results :robot:" >> $GITHUB_STEP_SUMMARY
-          cat out/output.xml | grep -oP '(?<=<total>).*(?=</total>)' | sed 's/ /%20/g' | xargs -I {} echo "![Robot results](https://img.shields.io/badge/Robot%20results-{}-blue)" >> $GITHUB_STEP_SUMMARY
+          echo "### Robot tests results :robot:" >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY
+          cat out/output.xml >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY
+          echo "### Robot tests report :robot:" >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY
+          pandoc out/report.html -f html -t markdown >> $GITHUB_STEP_SUMMARY
+          echo "```" >> $GITHUB_STEP_SUMMARY
 
       - uses: actions/upload-artifact@v2
         with:
