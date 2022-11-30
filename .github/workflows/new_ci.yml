@@ -62,6 +62,10 @@ jobs:
           docker-compose ps -a
           wget --retry-connrefused http://localhost:3000 # /healthcheck
 
+      - name: Docker logs
+        if: failure()
+        run: docker-compose logs
+
       - name: Run robot tests
         run: |
           pip install -r back/test/robot/requirements.txt
