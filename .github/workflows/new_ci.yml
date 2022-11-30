@@ -1,0 +1,221 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+## Job Summarry ##
+
+  Job_Summary:
+    runs-on: ubuntu-latest
+    if : github.event_name == 'pull_request' || github.ref == 'refs/heads/Améliorer_CI_back'
+    steps:
+      - name: title
+        run: echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+
+## Build Back ##
+
+  Build_Back:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./back
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Améliorer_CI_back'
+    environment: Staging
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker
+        run: docker build -t testback .
+
+## Test Backend ##
+
+  Test_Back:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Améliorer_CI_back'
+    needs: [ Build_Back ]
+    environment: Staging
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Build the app
+        run: docker-compose build
+
+      - name: Start the service
+        run: docker-compose up -d
+
+      - name: Perform healthchecks
+        run: |
+          docker-compose ps -a
+          wget --retry-connrefused http://localhost:3000 # /healthcheck
+
+      - name: Run robot tests
+        run: |
+          pip install -r back/tests/robot/requirements.txt
+          robot -d out back/tests/robot/
+
+      - name: Print robot results into summary
+        run: |
+          echo "### Robot results:" >> $GITHUB_STEP_SUMMARY
+          cat out/log.html >> $GITHUB_STEP_SUMMARY
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: out
+
+#### Test App ##
+##
+##  Test_Front:
+##    strategy:
+##      matrix:
+##        os: [ ubuntu-latest, windows-latest, macos-latest ]
+##    runs-on: ${{ matrix.os }}
+##    defaults:
+##      run:
+##        working-directory: ./front
+##    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Améliorer_CI_back'
+##    environment: Staging
+##
+##    steps:
+##      - uses: actions/checkout@v3
+##
+##      - name: Install Yarn
+##        run: npm install -g yarn
+##
+##      - name: Install dependencies
+##        run: yarn install
+##
+##      - name: 🏗 Setup Expo
+##        uses: expo/expo-github-action@v7
+##        with:
+##          expo-version: latest
+##          eas-version: latest
+##          token: ${{ secrets.EXPO_TOKEN }}
+##
+##      - name: Test App
+##        run: yarn test
+
+## Build App ##
+
+  Build_Front:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: ./front
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Améliorer_CI_back'
+    environment: Staging
+    #needs: [ Test_Front ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build Android APK
+        run: |
+          eas build -p android --profile debug --local --non-interactive
+          mv *.apk chromacase.apk
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: chromacase.apk
+          path: front/
+
+## Build Docker ##
+
+  Build_Docker:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Améliorer_CI_back'
+    environment: Staging
+    needs: [ Test_Back, Build_Front ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker
+        run: docker-compose build
+
+      - name: Start service
+        run: docker-compose up -d
+
+      - name: Perform healthchecks
+        run: |
+          docker-compose ps -a
+          wget --retry-connrefused http://localhost:3000 # /healthcheck
+
+      - name: Run tests
+        run: |
+          docker-compose exec backend npm install
+          docker-compose exec backend npm test
+
+      - name: Run robot tests
+        run: |
+          docker-compose exec backend pip install -r test/robot/requirements.txt
+          docker-compose exec backend robot -d out test/robot/
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: results
+          path: out
+
+      - name: Stop service
+        run: docker-compose stop
+
+## Deployement ##
+
+  #Deployement:
+  #  if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/Améliorer_CI_back'
+  #  needs: [ Build_Back, Build_Front, Build_Docker ]
+  #  runs-on: ubuntu-latest
+  #  environment:
+  #    name: Production
+  #    url: https://chromacase.com
+#
+  #  steps:
+  #    - uses: actions/checkout@v3
+#
+  #    - name: Commit files
+  #      run: |
+  #        git config --local user.name "github-actions[bot]"
+  #        git config user.email "github-actions[bot]@github.com"
+  #        git commit -m "Deployment" --allow-empty
+#
+  #    - name: Push to deployment branch
+  #      uses: ad-m/github-push-action@master
+  #      with:
+  #        branch: deployement
+  #        github_token: ${{ secrets.GITHUB_TOKEN }}
+  #        force: true
+#
+  #    - name: Deployement
+  #      run: echo "Push successful, deploying..."
