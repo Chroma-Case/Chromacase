@@ -92,7 +92,7 @@ jobs:
           path: out
 
       - name: Remove .env && stop the service
-        run: rm .env && docker-compose down
+        run: docker-compose down && rm .env
 
 #### Test App ##
 ##
