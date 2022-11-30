@@ -64,8 +64,8 @@ jobs:
 
       - name: Run robot tests
         run: |
-          pip install -r back/tests/robot/requirements.txt
-          robot -d out back/tests/robot/
+          pip install -r back/test/robot/requirements.txt
+          robot -d out back/test/robot/
 
       - name: Print robot results into summary
         run: |
