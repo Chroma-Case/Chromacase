@@ -10,13 +10,13 @@ on:
 jobs:
 
 ## Job Summarry ##
-
-  Job_Summary:
-    runs-on: ubuntu-latest
-    if : github.event_name == 'pull_request' || github.ref == 'refs/heads/Améliorer_CI_back'
-    steps:
-      - name: title
-        run: echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+#
+#  Job_Summary:
+#    runs-on: ubuntu-latest
+#    if : github.event_name == 'pull_request' || github.ref == 'refs/heads/Améliorer_CI_back'
+#    steps:
+#      - name: title
+#        run: echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
 
 ## Build Back ##
 
@@ -81,10 +81,11 @@ jobs:
           pip install -r back/test/robot/requirements.txt
           robot -d out back/test/robot/
 
-      - name: Print robot results into summary
+      - name: Print robot results in the first step summary
+        if: always()
         run: |
-          echo "### Robot results:" >> $GITHUB_STEP_SUMMARY
-          cat out/log.html >> $GITHUB_STEP_SUMMARY
+          echo "### Robot results :robot:" >> $GITHUB_STEP_SUMMARY
+          cat out/output.xml | grep -oP '(?<=<total>).*(?=</total>)' | sed 's/ /%20/g' | xargs -I {} echo "![Robot results](https://img.shields.io/badge/Robot%20results-{}-blue)" >> $GITHUB_STEP_SUMMARY
 
       - uses: actions/upload-artifact@v2
         with:
