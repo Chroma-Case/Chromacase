@@ -15,10 +15,10 @@ import PlayView from './views/PlayView';
 const Stack = createNativeStackNavigator();
 
 export const protectedRoutes = <>
-	<Stack.Screen name="Play" component={PlayView} options={{ title: translate('play') }} />
 	<Stack.Screen name="Home" component={HomeView} options={{ title: translate('welcome') }} />
 	<Stack.Screen name="Settings" component={SetttingsNavigator} options={{ title: 'Settings' }} />
 	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: translate('play') }} />
+	<Stack.Screen name="Play" component={PlayView} options={{ title: translate('play') }} />
 	<Stack.Screen name="Search" component={SearchView} options={{ title: translate('search') }} />
 </>;
 

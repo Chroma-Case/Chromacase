@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {  Box, Card, Center, Column, Container, IconButton, Progress, Row, View } from 'native-base';
+import {  Box, Center, Column, IconButton, Progress, Row, View } from 'native-base';
 import { Ionicons } from "@expo/vector-icons";
-// on mount force landscape
-// On unmount reset
 
 class PlayView extends Component {
 

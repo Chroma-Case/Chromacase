@@ -1,4 +1,4 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
 import { useQuery } from 'react-query';
 import LoadingComponent from "../components/Loading";
@@ -15,6 +15,7 @@ interface SongLobbyProps {
 
 const SongLobbyView = () => {
 	const route = useRoute();
+	const navigation = useNavigation();
 	const props: SongLobbyProps = route.params as any;
 	const songQuery = useQuery(['song', props.songId], () => API.getSong(props.songId));
 	const chaptersQuery = useQuery(['song', props.songId, 'chapters'], () => API.getSongChapters(props.songId));
@@ -41,10 +42,10 @@ const SongLobbyView = () => {
 						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
 						<Text>
 							<Translate translationKey='level'
-								format={(level) => `3:20 - ${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
+								format={(level) => `${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
 							/>
 						</Text>
-						<Button width='auto'  rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
+						<Button width='auto'  onPress={() => navigation.navigate('Play')} rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
 							<Translate translationKey='playBtn'/>
 						</Button>
 					</Box>
