@@ -10,10 +10,12 @@ import SongLobbyView from './views/SongLobbyView';
 import { translate } from './i18n/i18n';
 import { useQuery } from 'react-query';
 import API from './API';
+import PlayView from './views/PlayView';
 
 const Stack = createNativeStackNavigator();
 
 export const protectedRoutes = <>
+	<Stack.Screen name="Play" component={PlayView} options={{ title: translate('play') }} />
 	<Stack.Screen name="Home" component={HomeView} options={{ title: translate('welcome') }} />
 	<Stack.Screen name="Settings" component={SetttingsNavigator} options={{ title: 'Settings' }} />
 	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: translate('play') }} />
