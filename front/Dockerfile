@@ -10,6 +10,9 @@ RUN yarn global add expo-cli
 # add sharp-cli (^2.1.0) for faster image processing
 RUN yarn global add sharp-cli@^2.1.0
 COPY . .
+ARG API_URL
+ENV API_URL=$API_URL
+
 RUN expo build:web
 
 # Serve the app
