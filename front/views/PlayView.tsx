@@ -3,6 +3,7 @@ import { SafeAreaView, Text } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, IconButton, Progress, Row, View } from 'native-base';
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from '@react-navigation/native';
 
 class PlayView extends Component {
 
@@ -41,7 +42,7 @@ class PlayView extends Component {
 							<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
 							    as: Ionicons,
 							    name: "stop"
-							}}/>
+							}} onPress={() => this.props.navigation.navigate('Score')}/>
 						</Row>
 					</Row>
 				</Box>
@@ -50,4 +51,7 @@ class PlayView extends Component {
 	}
 }
 
-export default PlayView;
+export default function () {
+	const navigation = useNavigation();
+	return <PlayView navigation={navigation}/>;
+};

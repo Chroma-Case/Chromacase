@@ -34,6 +34,7 @@ export const en = {
 	search: 'Search',
 	lastSearched: "Last searched",
 	levelProgress: 'good notes',
+	score: 'Score',
 
 	// competencies
 	pedalsCompetency: 'Pedals',
@@ -124,7 +125,8 @@ export const fr: typeof en = {
 	signUp: "S'inscrire",
 	signIn: "Se connecter",
 	"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character": "",
-	accountCreated: "Compte créé"
+	accountCreated: "Compte créé",
+	score: 'Score'
 };
 
 export const sp: typeof en = {
@@ -190,4 +192,5 @@ export const sp: typeof en = {
 	accountCreated: 'Compte créé',
 	loggedIn: 'Connectado',
 	usernameTaken: 'Nombre de usuario ya tomado',
+	score: 'Score'
 };
