@@ -6,6 +6,7 @@ export const en = {
 	changeLanguageBtn: "Change language",
 	searchBtn: "Search",
 	playBtn: 'Play',
+	playAgain: 'Play Again',
 	songPageBtn: 'Go to song page',
 	level: 'Level',
 	chapters: 'Chapters',
@@ -32,6 +33,7 @@ export const en = {
 	mySkillsToImprove: "My Competencies to work on",
 	recentlyPlayed: 'Recently played',
 	search: 'Search',
+	songsToGetBetter: 'Recommendations',
 	lastSearched: "Last searched",
 	levelProgress: 'good notes',
 	score: 'Score',
@@ -62,7 +64,10 @@ export const en = {
 	"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character": "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character",
 	accountCreated: 'Account created',
 	loggedIn: 'Logged in',
+	precisionScore: "Precision",
+	goodNotesInARow: 'Good notes in a row',
 	usernameTaken: 'Username already taken',
+	goodNotes: 'good notes',
 };
 
 export const fr: typeof en = {
@@ -73,6 +78,7 @@ export const fr: typeof en = {
 	changeLanguageBtn: "Changer la langue",
 	searchBtn: "Rechercher",
 	playBtn: 'Jouer',
+	playAgain: 'Rejouer',
 	songPageBtn: 'Aller sur la page de la chanson',
 	level: 'Niveau',
 	chapters: 'Chapitres',
@@ -126,7 +132,11 @@ export const fr: typeof en = {
 	signIn: "Se connecter",
 	"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character": "",
 	accountCreated: "Compte créé",
-	score: 'Score'
+	score: 'Score',
+	precisionScore: "Précision",
+	goodNotesInARow: 'Bonnes notes à la suite',
+	songsToGetBetter: 'Recommendations',
+	goodNotes: 'bonnes notes',
 };
 
 export const sp: typeof en = {
@@ -155,6 +165,7 @@ export const sp: typeof en = {
 	lastSearched: "Dernières recherches",
 	search: 'Rechercher',
 	levelProgress: 'bonnes notes',
+	goodNotes: 'bonnes notes',
 
 	// competencies
 	pedalsCompetency: 'Pédales',
@@ -167,6 +178,8 @@ export const sp: typeof en = {
 	changeLanguageBtn: "Changer de langue",
 	searchBtn: "Rechercher",
 	playBtn: "Jouer",
+	playAgain: 'Rejouer',
+	precisionScore: "Précision",
 	songPageBtn: "Chanson",
 	level: "Niveau",
 	chapters: "Chapitres",
@@ -192,5 +205,7 @@ export const sp: typeof en = {
 	accountCreated: 'Compte créé',
 	loggedIn: 'Connectado',
 	usernameTaken: 'Nombre de usuario ya tomado',
-	score: 'Score'
+	score: 'Score',
+	goodNotesInARow: 'Bonnes notes à la suite',
+	songsToGetBetter: 'Recommendations',
 };
