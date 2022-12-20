@@ -6,8 +6,8 @@ import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Button, useThe
 import { useNavigation } from "@react-navigation/native";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
-import { translate } from "../i18n/i18n";
 import ProgressBar from "../components/ProgressBar";
+import Translate from "../components/Translate";
 
 const HomeView = () => {
 	const theme = useTheme();
