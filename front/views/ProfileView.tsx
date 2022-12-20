@@ -1,25 +1,14 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Box, Image, Heading, HStack, Card, Text, Button } from 'native-base';
+import { Box, Image, Heading, HStack, Card, Button, Spacer } from 'native-base';
+import Translate from '../components/Translate';
+import { useNavigation } from '@react-navigation/native';
 
-const ProfileView = () => {
+const UserMedals = () => {
     return (
-    <View style={{flexDirection: 'column'}}>
-        <View style={{flexDirection: 'row'}}>
-            <Box w="20%" paddingRight={2} paddingLeft={5} paddingY={2}>
-	    		<Image borderRadius={100} source={{
-          			   uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
-        			}} alt="Profile picture" size="lg"
-	    		/>
-	    	</Box>
-            <Box w="80%" paddingY={10}>
-                <Heading>User</Heading>
-            </Box>
-        </View>
-
-        <Card>
-            <Heading>Medals</Heading>
-            <HStack alignItems={'row'} space='5'>
+        <Card marginX={20} marginY={10}>
+            <Translate translationKey='medals'/>
+            <HStack alignItems={'row'} space='10'>
                 <Image source={{
                     uri: "https://wallpaperaccess.com/full/317501.jpg"
                 }} alt="Profile picture" size="lg"
@@ -38,16 +27,51 @@ const ProfileView = () => {
                 />
             </HStack>
         </Card>
-            
-        <Card>
-            <Heading>My stats</Heading>
-            <Text>Most played song : ...</Text>
-            <Text>Good notes played : ...</Text>
-            <Text>Longest combo : ...</Text>
-            <Text>Favorite genre : ...</Text>
-        </Card>
+    );
+}
 
-        <Button>Settings</Button>
+const PlayerStats = () => {
+    return(
+        <Card marginX={20} marginY={10}>
+            <Translate translationKey='playerStats'/>
+            <Translate translationKey='mostPlayedSong'/>
+            <Translate translationKey='goodNotesPlayed'/>
+            <Translate translationKey='longestCombo'/>
+            <Translate translationKey='favoriteGenre'/>
+        </Card>
+    );
+}
+
+const ProfilePicture = () => {
+    return (
+        <View style={{flexDirection: 'row', marginHorizontal: 30, marginVertical: 10}}>
+	    	<Image borderRadius={100} source={{
+          		   uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
+        		}} alt="Profile picture" size="lg"
+	    	/>
+            <Box w="100%" paddingY={10} paddingLeft={5}>
+            <Heading>Username</Heading>
+            </Box>
+        </View>
+    );
+}
+
+const ProfileView = () => {
+    const navigation = useNavigation();
+
+    return (
+    <View style={{flexDirection: 'column'}}>
+        <View style={{flexDirection: 'row'}}>
+            <ProfilePicture/>
+            <Spacer/>
+            <Box w="10%" paddingY={10} paddingLeft={5} paddingRight={50}>
+                <Button onPress={() => navigation.navigate('Settings')} style={{margin: 10}}>
+                    <Translate translationKey='settingsBtn'/>
+                </Button>
+            </Box>
+        </View>
+        <UserMedals/>
+        <PlayerStats/>
     </View>
     );
 }
