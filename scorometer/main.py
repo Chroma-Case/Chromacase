@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from time import sleep
 from chroma_case.Partition import Partition
 from chroma_case.Note import Note
@@ -78,13 +79,16 @@ class Scorometer():
 		self.sendEnd(0, {})
 
 def main():
-	start_message = json.loads(input())
-	if start_message["type"] != "start" or "name" not in start_message.keys():
-		print(json.dumps({"error": "Error with the start message"}))
-		exit()
-	song_name = start_message["name"]
-	sc = Scorometer(f"partitions/{song_name}.midi")
-	sc.gameLoop()
+	try:
+		start_message = json.loads(input())
+		if start_message["type"] != "start" or "name" not in start_message.keys():
+			print(json.dumps({"error": "Error with the start message"}))
+			exit()
+		song_name = start_message["name"]
+		sc = Scorometer(f"partitions/{song_name}.midi")
+		sc.gameLoop()
+	except Exception as error:
+		print({ "error": error })
 
 if __name__ == "__main__":
 	main()
