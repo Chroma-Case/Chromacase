@@ -1,5 +1,3 @@
-
-
 class Note:
     def __init__(self, start_time, data) -> None:
 
