@@ -69,13 +69,13 @@ class Scorometer():
 	def gameLoop(self):
 		while True:
 			if select.select([sys.stdin, ], [], [], 0.0)[0]:
-				line = sys.stdin.readline()
+				line = input()
 				if not line:
 					break
+				print("handling message")
 				self.handleMessage(line.rstrip())
 			else:
 				pass
-			sleep(0.5)
 		self.sendEnd(0, {})
 
 def main():
@@ -84,6 +84,7 @@ def main():
 		if start_message["type"] != "start" or "name" not in start_message.keys():
 			print(json.dumps({"error": "Error with the start message"}))
 			exit()
+		print("loaded")
 		song_name = start_message["name"]
 		sc = Scorometer(f"partitions/{song_name}.midi")
 		sc.gameLoop()
