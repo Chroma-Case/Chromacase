@@ -83,7 +83,7 @@ def main():
 		print(json.dumps({"error": "Error with the start message"}))
 		exit()
 	song_name = start_message["name"]
-	sc = Scorometer(song_name)
+	sc = Scorometer(f"partitions/{song_name}.midi")
 	sc.gameLoop()
 
 if __name__ == "__main__":
