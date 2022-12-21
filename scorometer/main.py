@@ -78,7 +78,12 @@ class Scorometer():
 		self.sendEnd(0, {})
 
 def main():
-	sc = Scorometer(sys.argv[1])
+	start_message = json.loads(input())
+	if start_message["type"] != "start" or "name" not in start_message.keys():
+		print(json.dumps({"error": "Error with the start message"}))
+		exit()
+	song_name = start_message["name"]
+	sc = Scorometer(song_name)
 	sc.gameLoop()
 
 if __name__ == "__main__":
