@@ -117,7 +117,6 @@ def main():
 		if start_message["type"] != "start" or "name" not in start_message.keys():
 			print(json.dumps({"error": "Error with the start message"}))
 			exit()
-		print("loaded")
 		song_name = start_message["name"]
 		sc = Scorometer(f"partitions/{song_name}.midi")
 		sc.gameLoop()
