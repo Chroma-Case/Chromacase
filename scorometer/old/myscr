@@ -1,7 +1,0 @@
-#!/usr/bin/bash
-
-while true
-do
-  sudo python main.py new_song_2.mid
-done
-
