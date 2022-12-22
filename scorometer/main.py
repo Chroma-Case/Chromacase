@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from time import sleep
+import logging
 from chroma_case.Partition import Partition
 from chroma_case.Key import Key
 import sys
@@ -55,24 +55,26 @@ class Scorometer():
 			key = Key(_key, down_since, (timestamp - down_since))
 		if key is None:
 			return
-		to_play = next((i for i in self.partition.__notes if i.key == key.key and self.is_timing_close(key, i)), None)
+		n = self.partition.notes
+		to_play = next((i for i in n if i.key == key.key and self.is_timing_close(key, i)), None)
 		if to_play == None:
 			pass
 			## TODO handle invalid key 
 			#points -= 50
 			#print(f"Invalid key.")
 		else:
+			# 500 / 490 0.9 - 1
 			tempo_percent = abs((key.duration / to_play.duration) - 1)
 			#points += tempo_percent * 50
 			if tempo_percent < .3 : 
-				timingScore = "good"
+				timingScore = "perfect"
 			elif tempo_percent < .5:
 				timingScore = f"great"
 			else:
-				timingScore = "perfect"
+				timingScore = "good"
 			
 			timingInformation = "fast" if key.start < to_play.start else "late"
-			if timingScore == "perfect": timingInformation = "perfect"
+			if abs(key.start - to_play.start) < 200: timingInformation = "perfect"
 			self.sendScore(obj["id"], timingScore, timingInformation)
 	
 
@@ -91,13 +93,13 @@ class Scorometer():
 			pass
 
 	def sendEnd(self, overall, difficulties):
-		print(json.dumps({"overallScore": overall, "score": difficulties}))
+		print(json.dumps({"overallScore": overall, "score": difficulties}), flush=True)
 
 	def sendError(self, message):
-		print(json.dumps({"error": f"Could not handle message {message}"}))
+		print(json.dumps({"error": f"Could not handle message {message}"}), flush=True)
 
 	def sendScore(self, id, timingScore, timingInformation):
-		print(json.dumps({"id": id, "timingScore": timingScore, "timingInformation": timingInformation}))
+		print(json.dumps({"id": id, "timingScore": timingScore, "timingInformation": timingInformation}), flush=True)
 
 	def gameLoop(self):
 		while True:
@@ -105,23 +107,24 @@ class Scorometer():
 				line = input()
 				if not line:
 					break
-				print("handling message")
+				logging.info("handling message")
 				self.handleMessage(line.rstrip())
 			else:
 				pass
 		self.sendEnd(0, {})
 
 def main():
-	try:
+	#try:
 		start_message = json.loads(input())
-		if start_message["type"] != "start" or "name" not in start_message.keys():
-			print(json.dumps({"error": "Error with the start message"}))
+		if "type" not in start_message.keys() or start_message["type"] != "start" or "name" not in start_message.keys():
+			print(json.dumps({"error": "Error with the start message"}), flush=True)
 			exit()
 		song_name = start_message["name"]
+		logging.info(f"started {song_name}")
 		sc = Scorometer(f"partitions/{song_name}.midi")
 		sc.gameLoop()
-	except Exception as error:
-		print({ "error": error })
+	#except Exception as error:
+	#	print({ "error": error })
 
 if __name__ == "__main__":
 	main()

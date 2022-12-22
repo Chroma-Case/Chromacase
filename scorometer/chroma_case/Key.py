@@ -4,7 +4,7 @@ class Key:
         self.start = start
         self.duration = duration
 
-    def __str__(self):
+    def __repr__(self):
         return f"{self.key} ({self.start} - {self.duration})"
 
 
