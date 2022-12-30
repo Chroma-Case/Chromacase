@@ -3,7 +3,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from './state/Store';
 import { translate } from './i18n/i18n';
-
 import SongLobbyView from './views/SongLobbyView';
 import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
