@@ -1,0 +1,7 @@
+# run tests
+FROM node:17
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
+RUN yarn global add expo-cli
+RUN yarn test

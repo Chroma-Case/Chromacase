@@ -1,22 +1,30 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import store from '../state/Store';
-import { fireEvent, render, screen } from '@testing-library/react-native';
+// import { Provider } from 'react-redux';
+// import store from '../state/Store';
+// import { fireEvent, render, screen } from '@testing-library/react-native';
 import { NativeBaseProvider } from "native-base";
 import Theme from '../Theme';
 
 import HomeView from './HomeView';
-import { en, fr } from '../i18n/Translations';
+// import { en, fr } from '../i18n/Translations';
+import renderer from 'react-test-renderer'
+
 
 describe('<HomeView />', () => {
 
   jest.setTimeout(150000);
-  const view = () => <NativeBaseProvider theme={Theme}><HomeView/></NativeBaseProvider>;
-  beforeEach(() => render(view()));
+  // const view = () => <NativeBaseProvider theme={Theme}><HomeView/></NativeBaseProvider>;
+  // beforeEach(() => render(view()));
 
-  it('should render correctly', () => {
-    expect(screen).toBeDefined();
-  })
+  // it('should render correctly', () => {
+  //   expect(screen).toBeDefined();
+  // })
+  //const View = () => <NativeBaseProvider theme={Theme}><HomeView/></NativeBaseProvider>;
+
+  it('Main View should render correctly', async () => {
+    const tree = renderer.create(<NativeBaseProvider theme={Theme}><HomeView/></NativeBaseProvider>).toJSON;
+    expect(tree).toMatchSnapshot();
+  });
 
 
   // it('has should display the text in default language', async () => {

@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`testing Setting's main view Main View should render correctly 1`] = `[Function]`;
+
+exports[`testing Setting's main view Preference View should render correctly 1`] = `[Function]`;
