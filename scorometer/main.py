@@ -48,6 +48,7 @@ class Scorometer():
 		key = None
 		if status == "note_on" and not is_down:
 			self.keys_down.append((_key, timestamp))
+			print(json.dumps({"note": _key}), flush=True)
 			# print(f"Midi: {status} - {key} - {intensity} - {data3} at {timestamp}")
 		elif status == "note_off" or is_down:
 			down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
@@ -121,6 +122,7 @@ def main():
 			exit()
 		song_name = start_message["name"]
 		logging.info(f"started {song_name}")
+		print(json.dumps({"song_launched": song_name}), flush=True)
 		sc = Scorometer(f"partitions/{song_name}.midi")
 		sc.gameLoop()
 	#except Exception as error:
