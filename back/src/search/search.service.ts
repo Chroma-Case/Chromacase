@@ -5,18 +5,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class SearchService {
     constructor(private prisma: PrismaService) {}
-    // async songByTitle(songWhereUniqueInput: Prisma.SongWhereUniqueInput): Promise<Song | null> {
-	// 	// return this.prisma.song.findUnique({
-	// 	// 	where: songWhereUniqueInput,
-	// 	// });
-    //     return this.prisma.song.findMany({
-    //         where: 
-    //     })
-	// }
+    async songByTitle(songWhereUniqueInput: Prisma.SongWhereUniqueInput): Promise<Song | null> {
+		return this.prisma.song.findUnique({
+			where: songWhereUniqueInput,
+		});
+	}
 
-    // async all(): Promise<Song[] | null> {
-    //     return this.prisma.song.findMany
-    // }
+    async all(): Promise<Song[] | null> {
+        return this.prisma.song.findMany
+    }
 
     getHello(): string {
 		return 'Hello World!';

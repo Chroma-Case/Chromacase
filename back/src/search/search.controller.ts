@@ -16,11 +16,6 @@ export class SearchController {
         return this.searchService.getHello();
     }
 
-    // @Get('/all')
-    // findall(): Promise<Song[] | null> {
-    //     return this.songService.songs();
-    // }
-
     @Get()
 	async findAll(
 		@Req() req: Request,
@@ -46,10 +41,10 @@ export class SearchController {
 
     @Get('/title/:name')
     async findByName(@Param('name') name: string): Promise<Song> {
-        // const ret = await this.searchService.songByTitle({ name })
-        // if (!ret) throw new NotFoundException();
+        const ret = await this.searchService.songByTitle({ name })
+        if (!ret) throw new NotFoundException();
         throw new NotFoundException();
-		// return ret;
+		return ret;
     }
 
     @Get('/advanced')
