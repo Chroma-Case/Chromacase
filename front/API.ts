@@ -34,6 +34,7 @@ export default class API {
 			method: params.method ?? 'GET' 
 		});
 		const body = await response.text();
+
 		try {
 			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
 			if (!response.ok) {

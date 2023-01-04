@@ -5,13 +5,15 @@ import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/SettingsView';
 import { NavigationContainer } from '@react-navigation/native';
-import { useSelector } from './state/Store';
 import SongLobbyView from './views/SongLobbyView';
 import { translate } from './i18n/i18n';
 import { useQuery } from 'react-query';
 import API from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
+import { Center, Text } from 'native-base';
+import LoadingComponent from './components/Loading';
+import { RootState, useSelector } from './state/Store';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,20 +31,25 @@ export const publicRoutes = <React.Fragment>
 </React.Fragment>;
 
 export const Router = () => {
-	const isAuthentified = useSelector((state) => state.user.accessToken !== undefined);
-	const userProfile = useQuery(['user', 'me'], () => API.getUserInfo(), {
-		enabled: isAuthentified
+	const accessToken = useSelector((state: RootState) => state.user.accessToken);
+	const userProfile = useQuery(['user', 'me', accessToken], () => API.getUserInfo(), {
+		retry: 1,
+		refetchOnWindowFocus: false
 	});
+
+	if (userProfile.isLoading && !userProfile.data) {
+		return <Center style={{ flexGrow: 1 }}>
+			<LoadingComponent/>
+		</Center>
+	}
 	return (
 		<NavigationContainer>
-			{isAuthentified && !userProfile.isError
-				? <Stack.Navigator>
-					{protectedRoutes}
-				</Stack.Navigator>
-				: <Stack.Navigator>
-					{publicRoutes}
-				</Stack.Navigator>
+			<Stack.Navigator>
+			{ userProfile.isSuccess && accessToken
+				? protectedRoutes
+				: publicRoutes
 			}
+			</Stack.Navigator>
 		</NavigationContainer>
 	)
 }
