@@ -1,24 +1,33 @@
 import React, { Component } from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {  Box, Center, Column, IconButton, Progress, Row, View } from 'native-base';
+import {  Box, Center, Column, IconButton, Progress, Row, Toast, View } from 'native-base';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
+
+function onMIDISuccess(midiAccess) {
+	Toast.show({ description: `MIDI ready!` });
+}
+  
+function onMIDIFailure(msg) {
+	Toast.show({ description: `Failed to get MIDI access - ${msg}` });
+}
 
 class PlayView extends Component {
 
 	override componentDidMount(): void {
-		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
+		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
+		navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 	}
+
 	override componentWillUnmount(): void {
-		ScreenOrientation.unlockAsync();
+		ScreenOrientation.unlockAsync().catch(() => {});
 	}
 	override render() {
 		const score = 20;
 		return (
 			<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
 				<View style={{ flexGrow: 1 }}>
-
 				</View>
 				<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5 }}>
 					<Row justifyContent='space-between' style={{ flexGrow: 1, alignItems: 'center' }} >

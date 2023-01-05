@@ -11,17 +11,17 @@ import { useQuery } from 'react-query';
 import API from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
-import { Center, Text } from 'native-base';
+import { Center } from 'native-base';
 import LoadingComponent from './components/Loading';
 import { RootState, useSelector } from './state/Store';
 
 const Stack = createNativeStackNavigator();
 
 export const protectedRoutes = <>
+	<Stack.Screen name="Play" component={PlayView} options={{ title: translate('play') }} />
 	<Stack.Screen name="Home" component={HomeView} options={{ title: translate('welcome') }} />
 	<Stack.Screen name="Settings" component={SetttingsNavigator} options={{ title: 'Settings' }} />
 	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: translate('play') }} />
-	<Stack.Screen name="Play" component={PlayView} options={{ title: translate('play') }} />
 	<Stack.Screen name="Score" component={ScoreView} options={{ title: translate('score') }} />
 	<Stack.Screen name="Search" component={SearchView} options={{ title: translate('search') }} />
 </>;
