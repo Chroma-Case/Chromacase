@@ -10,6 +10,12 @@ services:
       - .env
     volumes:
       - ./musics:/musics
+  scorometer:
+    build: ./scorometer
+    ports:
+      - "6543:6543"
+    volumes:
+      - ./musics:/musics
   db:
     container_name: db
     image: postgres:alpine3.14

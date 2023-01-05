@@ -14,6 +14,16 @@ services:
         condition: service_healthy
     env_file:
       - .env
+
+  scorometer:
+    build: 
+      context: ./scorometer
+      dockerfile: Dockerfile.dev
+    ports:
+      - "6543:6543"
+    volumes:
+      - ./scorometer:/app
+      - ./musics:/musics
     
   db:
     container_name: db
