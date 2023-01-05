@@ -115,7 +115,7 @@ class Scorometer():
 		self.sendEnd(0, {})
 
 def main():
-	#try:
+	try:
 		start_message = json.loads(input())
 		if "type" not in start_message.keys() or start_message["type"] != "start" or "name" not in start_message.keys():
 			print(json.dumps({"error": "Error with the start message"}), flush=True)
@@ -125,8 +125,8 @@ def main():
 		print(json.dumps({"song_launched": song_name}), flush=True)
 		sc = Scorometer(f"partitions/{song_name}.midi")
 		sc.gameLoop()
-	#except Exception as error:
-	#	print({ "error": error })
+	except Exception as error:
+		print({ "error": error }, flush=True)
 
 if __name__ == "__main__":
 	main()
