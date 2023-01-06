@@ -18,10 +18,10 @@ router.addHandler('SONG', async ({ request, page }) => {
     await Dataset.pushData({ url: request.loadedUrl });
 	await page.waitForSelector('aside div div section button[name="download"]');
 	const title = await page.locator('h1').textContent()
-    const artist = 'a';
-	//const artist = await page.locator('body > div.js-page.react-container > div > section > aside > div:nth-child(4) > div > section > h3:nth-child(2) > a').textContent()
-	const genre = 'b';
-	//const genre = await page.locator('body > div.js-page.react-container > div > section > aside > div:nth-child(5) > div > table > tbody > tr:nth-child(5) > td > div > a').textContent()
+ //   const artist = 'a';
+	const artist = await page.locator('body > div.js-page.react-container > div > section > aside > div:nth-child(5) > div > section > h3:nth-child(2) > a').textContent()
+	//const genre = 'b';
+	const genre = await page.locator('body > div.js-page.react-container > div > section > aside > div:nth-child(6) > div > table > tbody > tr:nth-child(5) > td > div > a').textContent()
 	await page.locator('aside div div section button[name="download"]').click()
 	await page.waitForSelector('section.b_r17 button');
 	const [ downloadMxl ] = await Promise.all([
