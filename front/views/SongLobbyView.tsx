@@ -45,7 +45,7 @@ const SongLobbyView = () => {
 								format={(level) => `${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
 							/>
 						</Text>
-						<Button width='auto'  onPress={() => navigation.navigate('Play')} rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
+						<Button width='auto'  onPress={() => navigation.navigate('Play', { songId: songQuery.data?.id })} rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
 							<Translate translationKey='playBtn'/>
 						</Button>
 					</Box>
