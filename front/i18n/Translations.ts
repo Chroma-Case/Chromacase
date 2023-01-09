@@ -62,6 +62,12 @@ export const en = {
 	accountCreated: 'Account created',
 	loggedIn: 'Logged in',
 	usernameTaken: 'Username already taken',
+
+	changePassword: 'Change password',
+	oldPassword: 'Old password',
+	newPassword: 'New password',
+	confirmNewPassword: 'Confirm new password',
+	submitBtn: 'Submit',
 };
 
 export const fr: typeof en = {
@@ -124,7 +130,13 @@ export const fr: typeof en = {
 	signUp: "S'inscrire",
 	signIn: "Se connecter",
 	"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character": "",
-	accountCreated: "Compte créé"
+	accountCreated: "Compte créé",
+
+	changePassword: 'Modification du mot de passe',
+	oldPassword: 'Ancien mot de passe',
+	newPassword: 'Nouveau mot de passe',
+	confirmNewPassword: 'Confirmer le nouveau mot de passe',
+	submitBtn: 'Soumettre',
 };
 
 export const sp: typeof en = {
@@ -190,4 +202,10 @@ export const sp: typeof en = {
 	accountCreated: 'Compte créé',
 	loggedIn: 'Connectado',
 	usernameTaken: 'Nombre de usuario ya tomado',
+
+	changePassword: 'Change password',
+	oldPassword: 'Old password',
+	newPassword: 'New password',
+	confirmNewPassword: 'Confirm new password',
+	submitBtn: 'Submit',
 };
