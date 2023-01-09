@@ -3,7 +3,7 @@ import React from 'react';
 import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
-import SetttingsNavigator from './views/SettingsView';
+import SetttingsNavigator from './views/settings/SettingsView';
 import { NavigationContainer } from '@react-navigation/native';
 import { useSelector } from './state/Store';
 import SongLobbyView from './views/SongLobbyView';
