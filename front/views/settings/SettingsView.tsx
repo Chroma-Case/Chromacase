@@ -9,6 +9,7 @@ import PreferencesView from './PreferencesView';
 import NotificationsView from './NotificationView';
 import PrivacyView from './PrivacyView';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
+import ChangeEmailForm from '../../components/forms/changeEmailForm';
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -71,7 +72,7 @@ const ChangePasswordView = ({navigation}) => {
         <Center style={{ flex: 1}}>
             <Heading paddingBottom={'2%'}>{translate('changePassword')}</Heading>
             <ChangePasswordForm onSubmit={(oldPassword, newPassword) => handleChangePassword(oldPassword, newPassword)}/>
-            <Button paddingTop={'2%'} variant='outline' onPress={() => navigation.navigate('Settings')}>Back</Button>
+            <Button marginTop={'2%'} variant='outline' onPress={() => navigation.navigate('Settings')}>Back</Button>
         </Center>
     )
 }
@@ -79,8 +80,9 @@ const ChangePasswordView = ({navigation}) => {
 const ChangeEmailView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
-            <Button variant='outline' onPress={() => navigation.navigate('Settings')}>Back</Button>
-            <Text>ChangeEmail</Text>
+            <Heading paddingBottom={'2%'}>{translate('changeEmail')}</Heading>
+            <ChangeEmailForm onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}/>
+            <Button marginTop={'2%'} variant='outline' onPress={() => navigation.navigate('Settings')}>Back</Button>
         </Center>
     )
 }
