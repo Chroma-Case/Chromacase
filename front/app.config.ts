@@ -33,6 +33,7 @@ module.exports = {
   },
   "extra": {
     apiUrl: process.env.API_URL,
+    scoroUrl: process.env.SCORO_URL,
     "eas": {
       "projectId": "dade8e5e-3e2c-49f7-98c5-cf8834c7ebb2"
     }

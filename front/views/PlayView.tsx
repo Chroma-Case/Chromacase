@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from 'react-query';
 import API from '../API';
 import LoadingComponent from '../components/Loading';
+import Constants from 'expo-constants';
+import { useStopwatch } from 'react-timer-hook';
 
 type PlayViewProps = {
 	songId: number
@@ -17,11 +19,11 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const song = useQuery(['song'], () => API.getSong(songId));
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
-	const timer = useRef<NodeJS.Timer>();
-	// If paused is undefined, it means the song as not started yet
+	const timer = useStopwatch({ autoStart: false });
 	const [paused, setPause] = useState<boolean>();
 
 	const onPause = () => {
+		timer.pause();
 		setPause(true);
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
@@ -49,18 +51,27 @@ const PlayView = ({ songId }: PlayViewProps) => {
 			time: Date.now()
 		}));
 		
-		if (inputs.size < 1) {
+		if (inputs.size < 2) {
+			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
 		}
 		toast.show({ description: `MIDI ready!`, placement: 'top' });
 		let inputIndex = 0;
-		webSocket.current = new WebSocket(process.env.SCORO_URL!);
-		webSocket.current.send(JSON.stringify({
-			type: "start",
-			name: "clair-de-lune" /*song.data.id*/,
-		}));
+		webSocket.current = new WebSocket(Constants.manifest?.extra?.scoroUrl);
+		webSocket.current.onopen = () => {
+			webSocket.current!.send(JSON.stringify({
+				type: "start",
+				name: "clair-de-lune" /*song.data.id*/,
+			}));
+			timer.start();
+		};
 		webSocket.current.onmessage = (message) => {
-			toast.show({ description: message.data });
+			const data = JSON.parse(message.data);
+			if (data.type == 'end') {
+				navigation.navigate('Score');
+			} else if (data.song_launched == undefined) {
+				toast.show({ description: data, placement: 'top', colorScheme: 'secondary' });
+			}
 		}
 		setPause(false);
 		inputs.forEach((input) => {
@@ -89,6 +100,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
+			clearInterval(timer);
 			onEnd();
 		}
 	}, [])
@@ -117,7 +129,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						    as: Ionicons,
 						    name: "play-back"
 						}}/>
-						<IconButton size='sm'  variant='solid'  _icon={{
+						<IconButton size='sm' variant='solid' _icon={{
 						    as: Ionicons,
 						    name: paused === false ? "pause" : "play"
 						}} onPress={() => { 
@@ -127,7 +139,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 								onPause();
 							}
 						 }}/>
-						<Text>0:30</Text>
+						<Text>{timer.minutes}:{timer.seconds.toString().padStart(2, '0')}</Text>
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
 						    as: Ionicons,
 						    name: "stop"
