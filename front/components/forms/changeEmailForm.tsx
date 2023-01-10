@@ -12,12 +12,22 @@ import {
 } from "native-base";
 
 interface ChangeEmailFormProps {
-	onSubmit: (newEmail: string) => Promise<string>;
+	onSubmit: (
+		oldEmail: string,
+		newEmail: string
+	) => Promise<string>;
 }
 
+const validationSchemas = {
+	email: string().email("Invalid email").required("Email is required"),
+};
 
 const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
     const [formData, setFormData] = React.useState({
+		oldEmail: {
+			value: "",
+			error: null as string | null,
+		},
 		newEmail: {
 			value: "",
 			error: null as string | null,
@@ -30,44 +40,79 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
     return (
         <Box>
             <Stack mx="4" style={{ width: '80%', maxWidth: 400 }}>
-                <FormControl>
-                    <FormControl.Label>Test</FormControl.Label>
-                    <Input
-                        // type="text"
-                        // placeholder="Current Email address"
-                        // value={formData.newEmail.value}
-                        // onChangeText={(t) => {
-                        // let error: null | string = null;
-                        //         setFormData({ ...formData, newEmail: { value: t, error } });
-                        //     }
-                        // }
-                    />
-                </FormControl>
-                <Button
-							style={{ marginTop: 10 }}
-							// isLoading={submittingForm}
-							// isDisabled={
-							// 	formData.newEmail.error !== null
-							// }
-							// onPress={async () => {
-							// 	setSubmittingForm(true);
-							// 	try {
-							// 		const resp = await onSubmit(
-							// 			formData.newEmail.value
-							// 		);
-							// 		toast.show({ description: resp });
-							// 	} catch (e) {
-							// 		toast.show({ description: e as string });
-							// 	} finally {
-							// 		setSubmittingForm(false);
-							// 	}
-							// }}
-						>
-                            Bite
-						</Button>
+				<FormControl
+					isRequired
+					isInvalid={
+						formData.oldEmail.error !== null ||
+						formData.newEmail.error !== null
+					}
+				>
+				<FormControl.Label>{translate("oldEmail")}</FormControl.Label>
+				<Input
+					isRequired
+					type="text"
+					placeholder="lucy@er.com"
+					value={formData.oldEmail.value}
+					onChangeText={(t) => {
+						let error: null | string = null;
+						validationSchemas.email
+							.validate(t)
+							.catch((e) => (error = e.message))
+							.finally(() => {
+								setFormData({ ...formData, oldEmail: { value: t, error } });
+							});
+					}}
+				/>
+				<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} >
+					{formData.oldEmail.error}
+				</FormControl.ErrorMessage>
+
+				<FormControl.Label>{translate("newEmail")}</FormControl.Label>
+				<Input
+					isRequired
+					type="text"
+					placeholder="lucy2@er.com"
+					value={formData.newEmail.value}
+					onChangeText={(t) => {
+						let error: null | string = null;
+						validationSchemas.email
+							.validate(t)
+							.catch((e) => (error = e.message))
+							.finally(() => {
+								setFormData({ ...formData, newEmail: { value: t, error } });
+							});
+					}}
+				/>
+				<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} >
+					{formData.oldEmail.error}
+				</FormControl.ErrorMessage>
+                
+				<Button
+					style={{ marginTop: 10 }}
+					// isLoading={submittingForm}
+					// isDisabled={
+					// 	formData.newEmail.error !== null
+					// }
+					// onPress={async () => {
+					// 	setSubmittingForm(true);
+					// 	try {
+					// 		const resp = await onSubmit(
+					// 			formData.newEmail.value
+					// 		);
+					// 		toast.show({ description: resp });
+					// 	} catch (e) {
+					// 		toast.show({ description: e as string });
+					// 	} finally {
+					// 		setSubmittingForm(false);
+					// 	}
+					// }}
+				>
+                    Bite
+				</Button>
+				</FormControl>
             </Stack>
         </Box>
     );
 }
 
-export default ChangeEmailForm
+export default ChangeEmailForm;
