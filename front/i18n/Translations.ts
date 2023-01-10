@@ -98,6 +98,10 @@ export const en = {
 	newPassword: 'New password',
 	confirmNewPassword: 'Confirm new password',
 	submitBtn: 'Submit',
+
+	changeEmail: 'Change email',
+	oldEmail: 'Old email',
+	newEmail: 'New email',
 };
 
 export const fr: typeof en = {
