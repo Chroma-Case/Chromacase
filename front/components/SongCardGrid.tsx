@@ -20,7 +20,6 @@ const SongCardGrid = (props: SongCardGrid) => {
 			spacing={20}
 		/>
 	</VStack>
-	
 }
 
 export default SongCardGrid;

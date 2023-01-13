@@ -2,34 +2,12 @@ import React from "react";
 import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import LoadingComponent from "../components/Loading";
-import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Progress, Button, useTheme, Heading } from 'native-base';
+import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Button, useTheme, Heading, Progress } from 'native-base';
 import { useNavigation } from "@react-navigation/native";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
-import { Translate } from "../i18n/i18n";
-
-const ProgressBar = ({ xp }: { xp: number}) => {
-	const level = Math.floor(xp / 1000);
-	const nextLevel = level + 1;
-	const nextLevelThreshold = nextLevel * 1000;
-	const progessValue = 100 * xp / nextLevelThreshold;
-
-	return (
-		<VStack alignItems={'center'}>
-			<Text>
-				<Translate translationKey='level' format={(id) => `${id} ${level}`}/>
-			</Text>
-			<Box w="90%" maxW="400">
-				<Progress value={progessValue} mx="4" />
-			</Box>
-			<Text>
-				<Translate translationKey='levelProgress'
-					format={(levelProgress) => `${xp} / ${nextLevelThreshold} ${levelProgress}`}
-				/>
-			</Text>
-		</VStack>
-	);
-}
+import ProgressBar from "../components/ProgressBar";
+import Translate from "../components/Translate";
 
 const HomeView = () => {
 	const theme = useTheme();
