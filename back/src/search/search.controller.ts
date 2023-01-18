@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, DefaultValuePipe, Get, NotFoundException, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
+import { BadRequestException, Body, Controller, DefaultValuePipe, Get, HttpCode, HttpStatus, NotFoundException, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { Prisma, Song } from '@prisma/client';
 import { Plage } from 'src/models/plage';
@@ -12,33 +12,6 @@ import { type } from 'os';
 @Controller('search')
 export class SearchController {
 	constructor(private readonly searchService: SearchService, private readonly songService: SongService) {}
-	@Get()
-	getHello(): string {
-		return this.searchService.getHello();
-	}
-
-	@Get()
-	async findAll(
-		@Req() req: Request,
-		@Query() filter: Prisma.SongWhereInput,
-		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
-	): Promise<Plage<Song>> {
-		try {
-			const ret = await this.songService.songs({
-				skip,
-				take,
-				where: {
-					...filter,
-					id: filter.id ? +filter.id : undefined,
-				},
-			});
-			return new Plage(ret, req);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e?.toString());
-		}
-	}
 
 	@Get('/title/:name')
 	async findByName(@Param('name') name: string): Promise<Song | null> {
@@ -48,6 +21,7 @@ export class SearchController {
 	}
 
 	@Post('/advanced/song')
+	@HttpCode(200) // change from '201 created' to '200 OK' http default response code
 	async findAdvanced(@Body() searchSongDto: SearchSongDto): Promise<Song[] | null> {
 		const ret = await this.searchService.findAdvanced({
 			albumId: searchSongDto.album ? + searchSongDto.album : undefined,
@@ -99,6 +73,5 @@ export class SearchController {
 		}
 		if (!ret || ret.length == 0) throw new NotFoundException;
 		else return ret;
-		console.log(params.type);
 	}
 }

@@ -5,10 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class SearchService {
 	constructor(private prisma: PrismaService) {}
-	
-	getHello(): string {
-		return 'Hello World!';
-	}
 
 	async songByTitle(songWhereUniqueInput: Prisma.SongWhereUniqueInput): Promise<Song | null> {
 		return this.prisma.song.findUnique({
