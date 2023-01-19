@@ -16,7 +16,9 @@ export class SearchService {
 		return this.prisma.song.findMany({
 			where: {
 				artistId: artistId
-			}
+			},
+			orderBy: [
+			]
 		});
 	}
 
