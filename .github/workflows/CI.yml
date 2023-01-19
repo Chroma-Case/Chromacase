@@ -56,7 +56,7 @@ jobs:
           mv *.apk chromacase.apk
 
       - name: Upload Artifact
-        if: github.event_name == 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
         with:
           name: chromacase.apk
