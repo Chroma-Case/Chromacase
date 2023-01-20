@@ -34,3 +34,4 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: [ Test_Back ]
     uses: ./.github/workflows/deployment_docker.yml
+    secrets: inherit
