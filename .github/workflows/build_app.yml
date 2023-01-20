@@ -2,9 +2,6 @@ name: Build_App
 
 on:
   workflow_call:
-    secrets:
-      EXPO_TOKEN:
-        required: true
 
 jobs:
 
