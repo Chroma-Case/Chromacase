@@ -18,8 +18,7 @@ jobs:
 
   Test_Build_Front:
     uses: ./.github/workflows/build_app.yml
-    with:
-      expo-token: ${{ secrets.EXPO_TOKEN }}
+    secrets: inherit
 
 ## Test Backend ##
 
