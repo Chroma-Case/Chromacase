@@ -11,6 +11,39 @@ const delay = (seconds: number) => new Promise(resolve => setTimeout(resolve, se
 
 declare type AuthenticationInput = { email: string, password: string };
 
+const requestGet = async (url: string) => {
+	try {
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		return json;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+const requestPost = async (url: string, params: any[]) => {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body : JSON.stringify(params),
+		});
+		const json = await response.json();
+		return json;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 export default class API {
 
 	/***
@@ -72,7 +105,7 @@ export default class API {
 	 * Retrive a song's chapters
 	 * @param songId the id to find the song
 	 */
-	 static async getSongChapters(songId: number): Promise<Chapter[]> {
+	static async getSongChapters(songId: number): Promise<Chapter[]> {
 		return [1, 2, 3, 4, 5].map((value) => ({
 			start: 100 * (value - 1),
 			end: 100 * value,
@@ -89,7 +122,7 @@ export default class API {
 	 * Retrieve a song's play history
 	 * @param songId the id to find the song
 	 */
-	 static async getSongHistory(songId: number): Promise<SongHistory[]> {
+	static async getSongHistory(songId: number): Promise<SongHistory[]> {
 		return [6, 1, 2, 3, 4, 5].map((value) => ({
 			songId: songId,
 			userId: 1,
@@ -101,7 +134,7 @@ export default class API {
 	 * Search a song by its name
 	 * @param query the string used to find the songs
 	 */
-	 static async searchSongs(query: string): Promise<Song[]> {
+	static async searchSongs(query: string): Promise<Song[]> {
 		return [{
 			title: "Song",
 			description: "A song",
@@ -115,7 +148,7 @@ export default class API {
 	 * Retrieve a lesson
 	 * @param lessonId the id to find the lesson
 	 */
-	 static async getLesson(lessonId: number): Promise<Lesson> {
+	static async getLesson(lessonId: number): Promise<Lesson> {
 		return {
 			title: "Song",
 			description: "A song",
@@ -129,7 +162,7 @@ export default class API {
 	 * Retrieve a lesson's history
 	 * @param lessonId the id to find the lesson
 	 */
-	 static async getLessonHistory(lessonId: number): Promise<LessonHistory[]> {
+	static async getLessonHistory(lessonId: number): Promise<LessonHistory[]> {
 		return [{
 			lessonId,
 			userId: 1
@@ -165,12 +198,20 @@ export default class API {
 		});
 	}
 
-	static async updateUserCredentials(dataKey: string, value: any): Promise<string> {
-		let validDataKeys: string = "password email";
+	/**
+	 * 
+	 * @param dataKey
+	 * @param value
+	 * @description update user's account credentials. Either email or password, you choose via the datakey param
+	 * @returns new user's credentials
+	 */
+
+	static async updateUserCredentials(dataKey: 'password' | 'email', value: any): Promise<string> {
+		let validDataKeys: string[] = ['password', 'email'];
 		return new Promise<string>((resolve, reject) => {
 			setTimeout(() => {
 				if (!validDataKeys.includes(dataKey))
-				return resolve("giga chad");
+				return resolve('giga chad');
 			}, 1000);
 		});
 	}

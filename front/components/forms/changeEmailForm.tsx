@@ -23,7 +23,7 @@ const validationSchemas = {
 };
 
 const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
-    const [formData, setFormData] = React.useState({
+	const [formData, setFormData] = React.useState({
 		oldEmail: {
 			value: "",
 			error: null as string | null,
@@ -34,12 +34,12 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 		}
 	});
 
-    const [submittingForm, setSubmittingForm] = React.useState(false);
+	const [submittingForm, setSubmittingForm] = React.useState(false);
 	const toast = useToast();
 
-    return (
-        <Box>
-            <Stack mx="4" style={{ width: '80%', maxWidth: 400 }}>
+	return (
+		<Box>
+			<Stack mx="4" style={{ width: '80%', maxWidth: 400 }}>
 				<FormControl
 					isRequired
 					isInvalid={
@@ -51,7 +51,7 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 				<Input
 					isRequired
 					type="text"
-					placeholder="lucy@er.com"
+					placeholder={translate("oldEmail")}
 					value={formData.oldEmail.value}
 					onChangeText={(t) => {
 						let error: null | string = null;
@@ -71,7 +71,7 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 				<Input
 					isRequired
 					type="text"
-					placeholder="lucy2@er.com"
+					placeholder={translate("newEmail")}
 					value={formData.newEmail.value}
 					onChangeText={(t) => {
 						let error: null | string = null;
@@ -86,7 +86,7 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 				<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} >
 					{formData.oldEmail.error}
 				</FormControl.ErrorMessage>
-                
+				
 				<Button
 					style={{ marginTop: 10 }}
 					// isLoading={submittingForm}
@@ -107,12 +107,12 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 					// 	}
 					// }}
 				>
-                    Bite
+					{translate("submitBtn")}
 				</Button>
 				</FormControl>
-            </Stack>
-        </Box>
-    );
+			</Stack>
+		</Box>
+	);
 }
 
 export default ChangeEmailForm;
