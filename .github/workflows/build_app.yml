@@ -23,10 +23,6 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: debug print env
-        run: |
-          echo ${{ secrets.EXPO_TOKEN }}
-
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
         with:
