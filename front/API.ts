@@ -61,6 +61,39 @@ const baseAPIUrl =
 		? "/api"
 		: Constants.manifest?.extra?.apiUrl;
 
+const requestGet = async (url: string) => {
+	try {
+		const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			}
+		});
+		const json = await response.json();
+		return json;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+const requestPost = async (url: string, params: any[]) => {
+	try {
+		const response = await fetch(url, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body : JSON.stringify(params),
+		});
+		const json = await response.json();
+		return json;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
 export default class API {
 	private static async fetch(params: FetchParams) {
 		const jwtToken = store.getState().user.accessToken;
@@ -417,12 +450,20 @@ export default class API {
 		];
 	}
 
-	static async updateUserCredentials(dataKey: string, value: any): Promise<string> {
-		let validDataKeys: string = "password email";
+	/**
+	 * 
+	 * @param dataKey
+	 * @param value
+	 * @description update user's account credentials. Either email or password, you choose via the datakey param
+	 * @returns new user's credentials
+	 */
+
+	static async updateUserCredentials(dataKey: 'password' | 'email', value: any): Promise<string> {
+		let validDataKeys: string[] = ['password', 'email'];
 		return new Promise<string>((resolve, reject) => {
 			setTimeout(() => {
 				if (!validDataKeys.includes(dataKey))
-				return resolve("giga chad");
+				return resolve('giga chad');
 			}, 1000);
 		});
 	}
