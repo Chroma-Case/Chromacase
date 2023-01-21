@@ -15,6 +15,7 @@ class Scorometer():
 	def __init__(self, midiFile) -> None:
 		self.partition = self.getPartition(midiFile)
 		self.keys_down = []
+		self.score = 0
 		pass
 	def getPartition(self, midiFile):
 		notes = []
@@ -62,22 +63,27 @@ class Scorometer():
 			#print(f"Invalid key.")
 		else:
 			# 500 / 490 0.9 - 1
-			tempo_percent = abs((key.duration / to_play.duration) - 1)
-			#points += tempo_percent * 50
-			if tempo_percent < .3 : 
-				timingScore = "perfect"
-			elif tempo_percent < .5:
-				timingScore = f"great"
-			else:
-				timingScore = "good"
-			
-			timingInformation = "fast" if key.start < to_play.start else "late"
-			if abs(key.start - to_play.start) < 200: timingInformation = "perfect"
+			timingScore, timingInformation = self.getTiming(key, to_play)
+			timingInformation = self.getTimingInfo(key, to_play)
 			self.sendScore(obj["id"], timingScore, timingInformation)
 	
+	def getTiming(self, key: Key, to_play: Key):
+		return self.getTimingScore(key, to_play), self.getTimingInfo(key, to_play)
 
+	def getTimingScore(self, key: Key, to_play: Key):
+		tempo_percent = abs((key.duration / to_play.duration) - 1)
+		if tempo_percent < .3 : 
+			timingScore = "perfect"
+		elif tempo_percent < .5:
+			timingScore = f"great"
+		else:
+			timingScore = "good"
+		return timingScore
 
-	def is_timing_close(self, key: Key, i):
+	def getTimingInfo(self, key: Key, to_play: Key):
+		return "perfect" if abs(key.start - to_play.start) < 200 else "fast" if key.start < to_play.start else "late"
+
+	def is_timing_close(self, key: Key, i: Key):
 		return abs(i.start - key.start) < 500
 
 	def handleMessage(self, message: str):
