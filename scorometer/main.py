@@ -32,10 +32,8 @@ class Scorometer():
 				notes_on[d["note"]] = s # 0
 
 			if d["type"] == "note_off":
-				#duration = s - notes_on[d["note"]]
 				duration = s - notes_on[d["note"]]
 				note_start = notes_on[d["note"]]
-				# time value is only used during debug
 				notes.append(Key(d["note"], note_start, duration - 10))
 				notes_on[d["note"]] = s # 500
 		return Partition(midiFile, notes)
@@ -48,16 +46,15 @@ class Scorometer():
 		key = None
 		if status == "note_on" and not is_down:
 			self.keys_down.append((_key, timestamp))
-			print(json.dumps({"note": _key}), flush=True)
-			# print(f"Midi: {status} - {key} - {intensity} - {data3} at {timestamp}")
+			self.sendDebug({"note": _key})
 		elif status == "note_off" or is_down:
 			down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
 			self.keys_down.remove((_key, down_since))
 			key = Key(_key, down_since, (timestamp - down_since))
+			self.sendDebug({key: key})
 		if key is None:
 			return
-		n = self.partition.notes
-		to_play = next((i for i in n if i.key == key.key and self.is_timing_close(key, i)), None)
+		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i)), None)
 		if to_play == None:
 			pass
 			## TODO handle invalid key 
@@ -92,6 +89,9 @@ class Scorometer():
 			self.handleNote(obj)
 		if obj["type"] == "pause":
 			pass
+
+	def sendDebug(self, obj):
+		print(json.dumps({ "type": "debug", "msg": obj}), flush=True)
 
 	def sendEnd(self, overall, difficulties):
 		print(json.dumps({"overallScore": overall, "score": difficulties}), flush=True)
