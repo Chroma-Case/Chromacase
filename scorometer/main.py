@@ -95,18 +95,21 @@ class Scorometer():
 			self.handleNote(obj)
 		if obj["type"] == "pause":
 			pass
+	
+	def send(self, o):
+		print(json.dumps(o), flush=True)
 
 	def sendDebug(self, obj):
-		print(json.dumps({ "type": "debug", "msg": obj}), flush=True)
+		self.send({ "type": "debug", "msg": obj})
 
 	def sendEnd(self, overall, difficulties):
-		print(json.dumps({"overallScore": overall, "score": difficulties}), flush=True)
+		self.send({"overallScore": overall, "score": difficulties})
 
 	def sendError(self, message):
-		print(json.dumps({"error": f"Could not handle message {message}"}), flush=True)
+		self.send({"error": f"Could not handle message {message}"})
 
 	def sendScore(self, id, timingScore, timingInformation):
-		print(json.dumps({"id": id, "timingScore": timingScore, "timingInformation": timingInformation}), flush=True)
+		self.send({"id": id, "timingScore": timingScore, "timingInformation": timingInformation})
 
 	def gameLoop(self):
 		while True:
@@ -118,7 +121,7 @@ class Scorometer():
 				self.handleMessage(line.rstrip())
 			else:
 				pass
-		self.sendEnd(0, {})
+		self.sendEnd(self.score, {})
 
 def main():
 	try:
