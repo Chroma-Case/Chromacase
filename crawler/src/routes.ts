@@ -35,7 +35,7 @@ router.addHandler('SONG', async ({ request, page }) => {
 
     await page.locator('body > article > section > button').click();
 
-	await page.waitForTimeout(3000);
+	await page.waitForTimeout(15000);
     await page.locator('aside div div section button[name="download"]').click()
 	await page.waitForSelector('section.b_r17 button');
 	const [ downloadMidi ] = await Promise.all([
@@ -69,4 +69,5 @@ Length=0
 PedalPoint=0
 Precision=0
 `, () => {})
+	await page.waitForTimeout(15000);
 });
