@@ -54,6 +54,7 @@ jobs:
         run: |
           eas build -p android --profile debug --local --non-interactive
           mv *.apk chromacase.apk
+
       - name: Upload Artifact
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3
