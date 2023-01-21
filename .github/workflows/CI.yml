@@ -52,7 +52,7 @@ jobs:
 
       - name: Build Android APK
         run: |
-          eas build -p android --profile --local --non-interactive
+          eas build -p android --profile debug --local --non-interactive
           mv *.apk chromacase.apk
 
       - name: Upload Artifact
