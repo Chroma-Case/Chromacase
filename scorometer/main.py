@@ -11,6 +11,22 @@ RATIO = float(sys.argv[2] if len(sys.argv) > 2 else 1)
 OCTAVE = 5
 OCTAVE_AMOUNT_KEYS = 12
 
+def send(o):
+	print(json.dumps(o), flush=True)
+
+
+def log(level, message):
+	send({"type": "log", "level": level, "message": message})
+
+def info(message):
+	log("INFO", message)
+
+def warn(message):
+	log("WARN", message)
+
+def fatal(message):
+	log("FATAL", message)
+
 class Scorometer():
 	def __init__(self, midiFile) -> None:
 		self.partition = self.getPartition(midiFile)
@@ -58,7 +74,7 @@ class Scorometer():
 		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i)), None)
 		if to_play == None:
 			pass
-			## TODO handle invalid key 
+		## TODO handle invalid key 
 			#points -= 50
 			#print(f"Invalid key.")
 		else:
@@ -66,7 +82,7 @@ class Scorometer():
 			timingScore, timingInformation = self.getTiming(key, to_play)
 			timingInformation = self.getTimingInfo(key, to_play)
 			self.sendScore(obj["id"], timingScore, timingInformation)
-	
+
 	def getTiming(self, key: Key, to_play: Key):
 		return self.getTimingScore(key, to_play), self.getTimingInfo(key, to_play)
 
@@ -95,21 +111,18 @@ class Scorometer():
 			self.handleNote(obj)
 		if obj["type"] == "pause":
 			pass
-	
-	def send(self, o):
-		print(json.dumps(o), flush=True)
 
 	def sendDebug(self, obj):
-		self.send({ "type": "debug", "msg": obj})
+		send({ "type": "debug", "msg": obj})
 
 	def sendEnd(self, overall, difficulties):
-		self.send({"overallScore": overall, "score": difficulties})
+		send({"overallScore": overall, "score": difficulties})
 
 	def sendError(self, message):
-		self.send({"error": f"Could not handle message {message}"})
+		send({"error": f"Could not handle message {message}"})
 
 	def sendScore(self, id, timingScore, timingInformation):
-		self.send({"id": id, "timingScore": timingScore, "timingInformation": timingInformation})
+		send({"id": id, "timingScore": timingScore, "timingInformation": timingInformation})
 
 	def gameLoop(self):
 		while True:
@@ -123,19 +136,33 @@ class Scorometer():
 				pass
 		self.sendEnd(self.score, {})
 
+NORMAL = 0
+PRACTICE = 1
+
+def handleStartMessage(start_message):
+	if "type" not in start_message.keys():
+		raise Exception("type of start message not specified")
+	if start_message["type"] != "start":
+		raise Exception("start message is not of type start")
+	if "name" not in start_message.keys():
+		raise Exception("name of song not specified in start message")
+	if "mode" not in start_message.keys():
+		raise Exception("mode of song not specified in start message")
+	mode = NORMAL if start_message["mode"] == "NORMAL" else PRACTICE
+	# TODO get song path from the API
+	song_path = f"partitions/{start_message['name']}.midi"
+	return mode, song_path
+
+
 def main():
 	try:
 		start_message = json.loads(input())
-		if "type" not in start_message.keys() or start_message["type"] != "start" or "name" not in start_message.keys():
-			print(json.dumps({"error": "Error with the start message"}), flush=True)
-			exit()
-		song_name = start_message["name"]
-		logging.info(f"started {song_name}")
-		print(json.dumps({"song_launched": song_name}), flush=True)
-		sc = Scorometer(f"partitions/{song_name}.midi")
+		# TODO handle mode
+		mode, song_path = handleStartMessage(start_message)
+		sc = Scorometer(song_path)
 		sc.gameLoop()
 	except Exception as error:
-		print({ "error": error }, flush=True)
+		send({ "error": error })
 
 if __name__ == "__main__":
 	main()
