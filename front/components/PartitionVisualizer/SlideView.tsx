@@ -6,6 +6,7 @@ import {
 	Row,
 	ZStack,
 } from "native-base";
+import { MotiView } from "moti";
 import React from "react";
 
 type ImgSlideViewProps = {
@@ -18,20 +19,19 @@ const SlideView = ({ sources }: ImgSlideViewProps) => {
 	return (
 		<ZStack>
 			<Box overflow={"hidden"} maxWidth={750} paddingLeft={250}>
-				<PresenceTransition
-					visible={true}
-					onTransitionComplete={(s) => {
-						console.log(s);
-						//setCurrent(trsize + 500);
-						setPlaying(false);
+				<MotiView
+					from={{ translateX: 0 }}
+					animate={{ translateX: -1000 }}
+					transition={{
+						translateX: {
+							delay: 1000,
+						}
 					}}
-					initial={{ translateX: 0 }}
-					animate={{ translateX: trsize, transition: { duration: 1000 } }}
-					exit={{ translateX: 1500, transition: { duration: 1500 } }}
 				>
 					<Row>
 						{sources.map((source, index) => (
 							<Image
+								key={index}
 								source={{ uri: source }}
 								alt="image"
 								resizeMode="cover"
@@ -40,7 +40,7 @@ const SlideView = ({ sources }: ImgSlideViewProps) => {
 							/>
 						))}
 					</Row>
-				</PresenceTransition>
+				</MotiView>
 			</Box>
 			<Box
 				overflow={"hidden"}

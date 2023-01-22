@@ -22,7 +22,7 @@ export default function App() {
 			<PersistGate loading={null} persistor={persistor}>
 				<QueryClientProvider client={queryClient}>
 					<NativeBaseProvider theme={Theme}>
-						<Box maxWidth={1000} paddingLeft={200}>
+						<Box maxWidth={1000} paddingLeft={50}>
 						<SlideView
 							sources={[
 								"https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U",
