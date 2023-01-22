@@ -131,7 +131,7 @@ jobs:
 
   Deployement_Docker:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+      #    if: github.ref == 'refs/heads/main'
     needs: [ Test_Back ]
     environment: Production
 
