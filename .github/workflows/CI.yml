@@ -175,7 +175,7 @@ jobs:
           context: ./front
           push: true
           tags: ${{steps.meta_front.outputs.tags}}
-          build_args: API_URL=${{secrets.API_URL}}
+          build-args: API_URL=${{secrets.API_URL}}
       - name: Docker meta scorometer
         id: meta_scorometer
         uses: docker/metadata-action@v4
