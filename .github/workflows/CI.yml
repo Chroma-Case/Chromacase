@@ -170,7 +170,7 @@ jobs:
           push: true
           tags: ${{steps.meta.outputs.tags}}
       - name: Docker meta front
-        id: meta
+        id: meta_front
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{github.repository_owner}}/front
@@ -180,10 +180,10 @@ jobs:
         with:
           context: ./front
           push: true
-          tags: ${{steps.meta.outputs.tags}}
+          tags: ${{steps.meta_front.outputs.tags}}
           build_args: API_URL=${{secrets.API_URL}}
       - name: Docker meta scorometer
-        id: meta
+        id: meta_scorometer
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{github.repository_owner}}/scorometer
@@ -193,5 +193,5 @@ jobs:
         with:
           context: ./scorometer
           push: true
-          tags: ${{steps.meta.outputs.tags}}
+          tags: ${{steps.meta_scorometer.outputs.tags}}
 
