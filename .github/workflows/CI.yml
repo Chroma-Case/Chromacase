@@ -144,7 +144,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Docker meta
+      - name: Docker meta back
         id: meta
         uses: docker/metadata-action@v4
         with:
@@ -169,8 +169,13 @@ jobs:
           context: ./back
           push: true
           tags: ${{steps.meta.outputs.tags}}
+      - name: Docker meta front
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{github.repository_owner}}/front
       -
-        name: Build and push
+        name: Build and push front
         uses: docker/build-push-action@v3
         with:
           context: ./front
@@ -178,8 +183,13 @@ jobs:
           tags: ${{steps.meta.outputs.tags}}
           build_args:
             - API_URL=${{secrets.API_URL}}
+      - name: Docker meta scorometer
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/${{github.repository_owner}}/scorometer
       -
-        name: Build and push
+        name: Build and push scorometer
         uses: docker/build-push-action@v3
         with:
           context: ./scorometer
