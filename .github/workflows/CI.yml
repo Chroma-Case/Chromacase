@@ -88,14 +88,8 @@ jobs:
           echo "POSTGRES_DB=chromacase" >> .env
           echo "API_URL=http://localhost:80/api" >> .env
 
-      - name: Down all volumes
-        run: docker-compose down --volumes
-
-      - name: Build the app
-        run: docker-compose build
-
       - name: Start the service
-        run: docker-compose up -d
+        run: docker-compose up -d back db
 
       - name: Perform healthchecks
         run: |
