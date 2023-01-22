@@ -18,6 +18,9 @@ def send(o):
 def log(level, message):
 	send({"type": "log", "level": level, "message": message})
 
+def debug(message):
+	log("DEBUG", message)
+
 def info(message):
 	log("INFO", message)
 
@@ -28,11 +31,12 @@ def fatal(message):
 	log("FATAL", message)
 
 class Scorometer():
-	def __init__(self, midiFile) -> None:
+	def __init__(self, mode, midiFile) -> None:
 		self.partition = self.getPartition(midiFile)
 		self.keys_down = []
 		self.score = 0
-		pass
+		self.mode = mode
+
 	def getPartition(self, midiFile):
 		notes = []
 		s = 3500
@@ -63,24 +67,48 @@ class Scorometer():
 		key = None
 		if status == "note_on" and not is_down:
 			self.keys_down.append((_key, timestamp))
-			self.sendDebug({"note": _key})
+			debug({"note": _key})
 		elif status == "note_off" or is_down:
 			down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
 			self.keys_down.remove((_key, down_since))
 			key = Key(_key, down_since, (timestamp - down_since))
-			self.sendDebug({key: key})
+			debug({key: key})
 		if key is None:
 			return
 		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i)), None)
 		if to_play == None:
-			pass
-		## TODO handle invalid key 
-			#points -= 50
-			#print(f"Invalid key.")
+			self.score -= 50
+			debug(f"Invalid key.")
 		else:
-			# 500 / 490 0.9 - 1
 			timingScore, timingInformation = self.getTiming(key, to_play)
 			timingInformation = self.getTimingInfo(key, to_play)
+			self.score += 100 if timingScore == "perfect" else 75 if timingScore == "great" else 50
+			self.sendScore(obj["id"], timingScore, timingInformation)
+
+	def handleNotePractice(self, obj):
+		_key = obj["note"]
+		status = obj["type"]
+		timestamp = obj["time"]
+		is_down = any(x[0] == _key for x in self.keys_down)
+		key = None
+		if status == "note_on" and not is_down:
+			self.keys_down.append((_key, timestamp))
+			debug({"note": _key})
+		elif status == "note_off" or is_down:
+			down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
+			self.keys_down.remove((_key, down_since))
+			key = Key(_key, down_since, (timestamp - down_since))
+			debug({key: key})
+		if key is None:
+			return
+		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i)), None)
+		if to_play == None:
+			self.score -= 50
+			debug(f"Invalid key.")
+		else:
+			timingScore, timingInformation = self.getTiming(key, to_play)
+			timingInformation = self.getTimingInfo(key, to_play)
+			self.score += 100 if timingScore == "perfect" else 75 if timingScore == "great" else 50
 			self.sendScore(obj["id"], timingScore, timingInformation)
 
 	def getTiming(self, key: Key, to_play: Key):
@@ -99,27 +127,25 @@ class Scorometer():
 	def getTimingInfo(self, key: Key, to_play: Key):
 		return "perfect" if abs(key.start - to_play.start) < 200 else "fast" if key.start < to_play.start else "late"
 
+	# is it in the 500 ms range
 	def is_timing_close(self, key: Key, i: Key):
 		return abs(i.start - key.start) < 500
 
 	def handleMessage(self, message: str):
 		obj = json.loads(message)
 		if "type" not in obj.keys():
-			self.sendError(message)
+			warn(f"Could not handle message {message}")
 			return
 		if obj["type"] == "note_on" or obj["type"] == "note_off":
-			self.handleNote(obj)
+			if self.mode == NORMAL:
+				self.handleNote(obj)
+			elif self.mode == PRACTICE:
+				self.handleNotePractice(obj)
 		if obj["type"] == "pause":
 			pass
 
-	def sendDebug(self, obj):
-		send({ "type": "debug", "msg": obj})
-
 	def sendEnd(self, overall, difficulties):
 		send({"overallScore": overall, "score": difficulties})
-
-	def sendError(self, message):
-		send({"error": f"Could not handle message {message}"})
 
 	def sendScore(self, id, timingScore, timingInformation):
 		send({"id": id, "timingScore": timingScore, "timingInformation": timingInformation})
@@ -130,7 +156,7 @@ class Scorometer():
 				line = input()
 				if not line:
 					break
-				logging.info("handling message")
+				info(f"handling message {line}")
 				self.handleMessage(line.rstrip())
 			else:
 				pass
@@ -159,7 +185,7 @@ def main():
 		start_message = json.loads(input())
 		# TODO handle mode
 		mode, song_path = handleStartMessage(start_message)
-		sc = Scorometer(song_path)
+		sc = Scorometer(mode, song_path)
 		sc.gameLoop()
 	except Exception as error:
 		send({ "error": error })
