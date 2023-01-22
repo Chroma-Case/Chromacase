@@ -169,3 +169,20 @@ jobs:
           context: ./back
           push: true
           tags: ${{steps.meta.outputs.tags}}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./front
+          push: true
+          tags: ${{steps.meta.outputs.tags}}
+          build_args:
+            - API_URL=${{secrets.API_URL}}
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ./scorometer
+          push: true
+          tags: ${{steps.meta.outputs.tags}}
+
