@@ -1,9 +1,10 @@
 #!/usr/bin/python3
-import logging
 from chroma_case.Partition import Partition
 from chroma_case.Key import Key
 import sys
 import select
+import itertools
+import operator
 import json
 from mido import MidiFile
 
@@ -11,9 +12,13 @@ RATIO = float(sys.argv[2] if len(sys.argv) > 2 else 1)
 OCTAVE = 5
 OCTAVE_AMOUNT_KEYS = 12
 
+# MODES
+NORMAL = 0
+PRACTICE = 1
+
+
 def send(o):
 	print(json.dumps(o), flush=True)
-
 
 def log(level, message):
 	send({"type": "log", "level": level, "message": message})
@@ -36,6 +41,11 @@ class Scorometer():
 		self.keys_down = []
 		self.score = 0
 		self.mode = mode
+		if mode == PRACTICE:
+			get_start = operator.attrgetter("start")
+			self.practice_partition = [list(g) for _, g in itertools.groupby(sorted(self.partition.notes, key=get_start), get_start)]
+		else:
+			self.practice_partition: list[list[Key]] = []
 
 	def getPartition(self, midiFile):
 		notes = []
@@ -72,17 +82,18 @@ class Scorometer():
 			down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
 			self.keys_down.remove((_key, down_since))
 			key = Key(_key, down_since, (timestamp - down_since))
-			debug({key: key})
+			#debug({key: key})
 		if key is None:
+			warn("Note off sent but did not receive earlier note on")
 			return
-		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i)), None)
+		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i) and i.done == False), None)
 		if to_play == None:
 			self.score -= 50
 			debug(f"Invalid key.")
 		else:
 			timingScore, timingInformation = self.getTiming(key, to_play)
-			timingInformation = self.getTimingInfo(key, to_play)
 			self.score += 100 if timingScore == "perfect" else 75 if timingScore == "great" else 50
+			to_play.done = True
 			self.sendScore(obj["id"], timingScore, timingInformation)
 
 	def handleNotePractice(self, obj):
@@ -98,18 +109,23 @@ class Scorometer():
 			down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
 			self.keys_down.remove((_key, down_since))
 			key = Key(_key, down_since, (timestamp - down_since))
-			debug({key: key})
+			#debug({key: key})
 		if key is None:
+			warn("Note off sent but did not receive earlier note on")
 			return
-		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i)), None)
+		keys_to_play = next((i for i in self.practice_partition if any(x.done != True for x in i)), None)
+		if keys_to_play is None:
+			warn("Key sent but there is no keys to play")
+			return
+		to_play = next((i for i in keys_to_play if i.key == key.key and i.done != True), None)
 		if to_play == None:
 			self.score -= 50
 			debug(f"Invalid key.")
 		else:
-			timingScore, timingInformation = self.getTiming(key, to_play)
-			timingInformation = self.getTimingInfo(key, to_play)
+			timingScore, _ = self.getTiming(key, to_play)
 			self.score += 100 if timingScore == "perfect" else 75 if timingScore == "great" else 50
-			self.sendScore(obj["id"], timingScore, timingInformation)
+			to_play.done = True
+			self.sendScore(obj["id"], timingScore, "practice")
 
 	def getTiming(self, key: Key, to_play: Key):
 		return self.getTimingScore(key, to_play), self.getTimingInfo(key, to_play)
@@ -162,9 +178,6 @@ class Scorometer():
 				pass
 		self.sendEnd(self.score, {})
 
-NORMAL = 0
-PRACTICE = 1
-
 def handleStartMessage(start_message):
 	if "type" not in start_message.keys():
 		raise Exception("type of start message not specified")
@@ -174,7 +187,7 @@ def handleStartMessage(start_message):
 		raise Exception("name of song not specified in start message")
 	if "mode" not in start_message.keys():
 		raise Exception("mode of song not specified in start message")
-	mode = NORMAL if start_message["mode"] == "NORMAL" else PRACTICE
+	mode = PRACTICE if start_message["mode"] == "practice" else NORMAL
 	# TODO get song path from the API
 	song_path = f"partitions/{start_message['name']}.midi"
 	return mode, song_path
@@ -183,7 +196,6 @@ def handleStartMessage(start_message):
 def main():
 	try:
 		start_message = json.loads(input())
-		# TODO handle mode
 		mode, song_path = handleStartMessage(start_message)
 		sc = Scorometer(mode, song_path)
 		sc.gameLoop()
