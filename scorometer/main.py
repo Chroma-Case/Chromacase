@@ -3,7 +3,9 @@ from chroma_case.Partition import Partition
 from chroma_case.Key import Key
 import sys
 import select
+import os
 import itertools
+import requests
 import operator
 import json
 from mido import MidiFile
@@ -84,7 +86,6 @@ class Scorometer():
 			key = Key(_key, down_since, (timestamp - down_since))
 			#debug({key: key})
 		if key is None:
-			warn("Note off sent but did not receive earlier note on")
 			return
 		to_play = next((i for i in self.partition.notes if i.key == key.key and self.is_timing_close(key, i) and i.done == False), None)
 		if to_play == None:
@@ -111,11 +112,11 @@ class Scorometer():
 			key = Key(_key, down_since, (timestamp - down_since))
 			#debug({key: key})
 		if key is None:
-			warn("Note off sent but did not receive earlier note on")
 			return
 		keys_to_play = next((i for i in self.practice_partition if any(x.done != True for x in i)), None)
 		if keys_to_play is None:
 			warn("Key sent but there is no keys to play")
+			self.score -= 50
 			return
 		to_play = next((i for i in keys_to_play if i.key == key.key and i.done != True), None)
 		if to_play == None:
@@ -183,13 +184,14 @@ def handleStartMessage(start_message):
 		raise Exception("type of start message not specified")
 	if start_message["type"] != "start":
 		raise Exception("start message is not of type start")
-	if "name" not in start_message.keys():
-		raise Exception("name of song not specified in start message")
+	if "id" not in start_message.keys():
+		raise Exception("id of song not specified in start message")
 	if "mode" not in start_message.keys():
 		raise Exception("mode of song not specified in start message")
 	mode = PRACTICE if start_message["mode"] == "practice" else NORMAL
 	# TODO get song path from the API
-	song_path = f"partitions/{start_message['name']}.midi"
+	song_id = start_message["id"]
+	song_path = requests.get(f"http://back:3000/song/{song_id}").json()["midiPath"]
 	return mode, song_path
 
 
