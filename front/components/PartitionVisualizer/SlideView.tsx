@@ -2,11 +2,20 @@ import { useTheme, Box, Image, Row, Column, ZStack, Button } from "native-base";
 import { MotiView, useDynamicAnimation } from "moti";
 import { Easing } from "react-native-reanimated";
 import React from "react";
+import { count } from "console";
 
 type ImgSlideViewProps = {
-	sources: [url:string, width:number, height:number][];
+	sources: [url: string, width: number, height: number][];
 	// number of pixels per second
 	speed: number;
+};
+
+const range = (start: number, end: number, step: number) => {
+	const arr = [];
+	for (let i = start; i < end; i += step) {
+		arr.push(i);
+	}
+	return arr;
 };
 
 const SlideView = ({ sources, speed }: ImgSlideViewProps) => {
@@ -17,6 +26,8 @@ const SlideView = ({ sources, speed }: ImgSlideViewProps) => {
 		translateX: 0,
 	}));
 
+	let stepCount = 0;
+
 	console.log("computedDuration", computedDuration);
 	console.log("totalWidth", totalWidth);
 
@@ -24,7 +35,20 @@ const SlideView = ({ sources, speed }: ImgSlideViewProps) => {
 		<Column>
 			<ZStack>
 				<Box overflow={"hidden"} maxWidth={750}>
-					<MotiView state={animation}>
+					<MotiView
+						state={animation}
+						onDidAnimate={(
+							styleProp,
+							didAnimationFinish,
+							maybeValue,
+							{attemptedValue}
+						) => {
+							if (styleProp === "translateX" && didAnimationFinish) {
+								console.log("attemptedValue", attemptedValue);
+								stepCount++;
+							}
+						}}
+					>
 						<Row>
 							{sources.map(([source, w, h], index) => (
 								<Image
@@ -51,11 +75,11 @@ const SlideView = ({ sources, speed }: ImgSlideViewProps) => {
 				marginTop={500}
 				onPress={() => {
 					animation.animateTo({
-						translateX: -totalWidth,
+						translateX: range(-totalWidth, 0, speed).reverse().slice(stepCount),
 						transition: {
 							type: "timing",
 							easing: Easing.linear,
-							duration: computedDuration,
+							duration: 1000,
 						},
 					});
 				}}
@@ -64,6 +88,7 @@ const SlideView = ({ sources, speed }: ImgSlideViewProps) => {
 			</Button>
 			<Button
 				onPress={() => {
+					console.log("pause", stepCount);
 					animation.animateTo({});
 				}}
 			>
@@ -71,6 +96,7 @@ const SlideView = ({ sources, speed }: ImgSlideViewProps) => {
 			</Button>
 			<Button
 				onPress={() => {
+					stepCount = 0;
 					animation.animateTo({
 						translateX: 0,
 					});
