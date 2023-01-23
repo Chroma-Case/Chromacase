@@ -25,10 +25,11 @@ export default function App() {
 						<Box maxWidth={1000} paddingLeft={50}>
 						<SlideView
 							sources={[
-								"https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U",
-								"https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U",
-								"https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U",
+								["https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U", 500, 200],
+								["https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U", 200, 200],
+								["https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U", 1000, 200]
 							]}
+							speed={200}
 						/>
 						</Box>
 					</NativeBaseProvider>
