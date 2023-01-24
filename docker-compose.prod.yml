@@ -1,6 +1,6 @@
 services:
   back:
-    image: ghcr.io/chroma-case/back
+    image: ghcr.io/chroma-case/back:main
     ports:
       - "3000:3000"
     depends_on:
@@ -11,7 +11,7 @@ services:
     volumes:
       - ./musics:/musics
   scorometer:
-    image: ghcr.io/chroma-case/scorometer
+    image: ghcr.io/chroma-case/scorometer:main
     ports:
       - "6543:6543"
     volumes:
@@ -32,7 +32,7 @@ services:
       retries: 5
 
   front:
-    image: ghcr.io/chroma-case/front
+    image: ghcr.io/chroma-case/front:main
     ports:
       - "80:80"
     depends_on:
