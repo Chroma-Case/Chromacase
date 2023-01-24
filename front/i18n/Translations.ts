@@ -81,6 +81,8 @@ export const en = {
 	changeemailBtn: 'Change Email',
 	googleacctBtn: 'Google Account',
 	forgottenPassword: 'Forgotten password',
+
+	partition: 'Partition',
 };
 
 export const fr: typeof en = {
@@ -166,6 +168,8 @@ export const fr: typeof en = {
 	changeemailBtn: 'Changer l\'email',
 	googleacctBtn: 'Compte Google',
 	forgottenPassword: "Mot de passe oublié",
+
+	partition: 'Partition',
 };
 
 export const sp: typeof en = {
@@ -251,4 +255,6 @@ export const sp: typeof en = {
 	changepasswdBtn: 'Changer le mot de pass',
 	changeemailBtn: 'Change l\'email',
 	googleacctBtn: 'Compte Google',
+
+	partition: 'Partition',
 };

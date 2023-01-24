@@ -18,7 +18,7 @@ type ImgSlideViewProps = {
 	// number of pixels per second
 	speed: number;
 	// percentage of the partition
-	startAt: number | undefined;
+	startAt: number | null;
 };
 
 const range = (start: number, end: number, step: number) => {
@@ -31,7 +31,6 @@ const range = (start: number, end: number, step: number) => {
 
 const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 	const totalWidth = sources.reduce((acc, [_, width]) => acc + width, 0);
-	const computedDuration = (totalWidth / speed) * 1000;
 	const stepSize = speed / 2;
 	const stepDuration = 1000 / 2;
 	const animation = useDynamicAnimation(() => ({
@@ -40,7 +39,7 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 
 	let stepCount = 0;
 
-	if (startAt !== undefined) {
+	if (startAt) {
 		const nbPixelsToSkip = totalWidth * startAt;
 		animation.animateTo({
 			translateX: -nbPixelsToSkip,
@@ -62,13 +61,13 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 			stepCount = Math.floor(value / stepSize);
 		}
 		animation.animateTo({
-			translateX: -(stepCount * stepSize)
-		})
-	}
+			translateX: -(stepCount * stepSize),
+		});
+	};
 
 	return (
 		<Column>
-			<Box overflow={"hidden"} maxWidth={750}>
+			<Box overflow={"hidden"}>
 				<MotiView
 					state={animation}
 					onDidAnimate={(
@@ -88,7 +87,7 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 								key={index}
 								source={{ uri: source }}
 								alt="image"
-								resizeMode="cover"
+								resizeMode="contain"
 								height={h}
 								width={w}
 							/>
@@ -111,29 +110,29 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 							},
 						});
 					}}
-				>
-					Play
-				</Button>
+				/>
 				<Button
 					leftIcon={<Icon as={FontAwesome5} name="pause" size="sm" />}
 					onPress={() => {
 						animation.animateTo({});
 					}}
-				>
-					Pause
-				</Button>
+				/>
 				<Button
-					leftIcon={<Icon as={MaterialCommunityIcons} name="rewind-10" size="sm" />}
+					leftIcon={
+						<Icon as={MaterialCommunityIcons} name="rewind-10" size="sm" />
+					}
 					onPress={() => jumpAt(-200, false)}
-				>
-					Rewind
-				</Button>
+				/>
 				<Button
-					leftIcon={<Icon as={MaterialCommunityIcons} name="fast-forward-10" size="sm" />}
+					leftIcon={
+						<Icon
+							as={MaterialCommunityIcons}
+							name="fast-forward-10"
+							size="sm"
+						/>
+					}
 					onPress={() => jumpAt(200, false)}
-				>
-					Fast forward
-				</Button>
+				/>
 				<Button
 					leftIcon={<Icon as={FontAwesome5} name="stop" size="sm" />}
 					onPress={() => {
@@ -142,9 +141,7 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 							translateX: 0,
 						});
 					}}
-				>
-					Reset
-				</Button>
+				/>
 			</Button.Group>
 		</Column>
 	);
