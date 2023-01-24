@@ -30,6 +30,7 @@ export default function App() {
 								["https://i.picsum.photos/id/950/200/300.jpg?hmac=EEKbkKLpjWodOy9F68WA1hJkukq9UBUCIREC8fDW44U", 1000, 200]
 							]}
 							speed={200}
+							startAt={0.2}
 						/>
 						</Box>
 					</NativeBaseProvider>
