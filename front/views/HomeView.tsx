@@ -102,6 +102,9 @@ const HomeView = () => {
 							<Button backgroundColor={theme.colors.primary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Settings')} >
 								<Translate translationKey='settingsBtn'/>
 							</Button>
+							<Button backgroundColor={theme.colors.primary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Partition')} >
+								<Translate translationKey='partition'/>
+							</Button>
 						</Box>
 				</VStack>
 			</Box>
