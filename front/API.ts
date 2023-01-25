@@ -492,7 +492,6 @@ export default class API {
 				try {
 					if (dataKey == 'email') {
 						this.getRequest('http://localhost:3000/users/24').then((res) => {
-							console.table(res);
 							console.log(oldValue, newValue);
 							if (res.email === oldValue) {
 								this.patchRequest('http://localhost:3000/users/24', {'email': newValue}).finally(() => {
@@ -502,7 +501,6 @@ export default class API {
 						});
 					} else if (dataKey == 'password') {
 						this.getRequest('http://localhost:3000/users/24').then((res) => {
-							console.table(res);
 							if (res.password == oldValue) {
 								this.patchRequest('http://localhost:3000/users/24', {'password': newValue}).finally(() => {
 									return resolve('password successfully changed');
