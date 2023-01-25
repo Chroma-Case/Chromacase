@@ -232,4 +232,22 @@ export default class API {
 			userId: 1
 		}];
 	}
+
+	/**
+	 * Retrieve a partition images
+	 * @param songId the id of the song
+	 * This API may be merged with the fetch song in the future
+	 */
+	public static async getPartitionRessources(songId: number): Promise<[string, number, number][]> {
+		return [
+			["https://media.discordapp.net/attachments/717080637038788731/1067469560426545222/vivaldi_split_1.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469560900505660/vivaldi_split_2.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469561261203506/vivaldi_split_3.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469561546424381/vivaldi_split_4.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469562058133564/vivaldi_split_5.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469562347528202/vivaldi_split_6.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469562792136815/vivaldi_split_7.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469563073142804/vivaldi_split_8.png", 1868, 400],
+		];
+	}
 }

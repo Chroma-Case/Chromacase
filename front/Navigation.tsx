@@ -1,19 +1,21 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { RootState, useSelector } from './state/Store';
+import { translate } from './i18n/i18n';
+import SongLobbyView from './views/SongLobbyView';
 import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
+import PartitionView from './views/PartitionView';
 import SetttingsNavigator from './views/SettingsView';
-import { NavigationContainer } from '@react-navigation/native';
-import SongLobbyView from './views/SongLobbyView';
-import { translate } from './i18n/i18n';
 import { useQuery } from 'react-query';
 import API from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
 import { Center } from 'native-base';
 import LoadingComponent from './components/Loading';
-import { RootState, useSelector } from './state/Store';
+import ProfileView from './views/ProfileView';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +26,8 @@ export const protectedRoutes = <>
 	<Stack.Screen name="Play" component={() => PlayView({ songId: 1 })} options={{ title: translate('play') }} />
 	<Stack.Screen name="Score" component={ScoreView} options={{ title: translate('score') }} />
 	<Stack.Screen name="Search" component={SearchView} options={{ title: translate('search') }} />
+	<Stack.Screen name="User" component={ProfileView} options={{ title: translate('user') }} />
+	<Stack.Screen name="Partition" component={PartitionView} options={{ title: translate('partition') }} />
 </>;
 
 export const publicRoutes = <React.Fragment>
