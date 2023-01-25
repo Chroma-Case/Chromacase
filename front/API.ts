@@ -34,6 +34,7 @@ export default class API {
 			method: params.method ?? 'GET' 
 		});
 		const body = await response.text();
+
 		try {
 			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
 			if (!response.ok) {
@@ -196,7 +197,7 @@ export default class API {
 	 */
 	public static async getUserRecommendations(): Promise<Song[]> {
 		return Array.of(4).map((i) => ({
-			id: i,
+			id: 1,
 			name: `Recommended Song ${i}`,
 			artistId: i,
 			genreId: i,

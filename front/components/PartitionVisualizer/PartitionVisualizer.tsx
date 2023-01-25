@@ -10,9 +10,7 @@ type PartitionVisualizerProps = {
 };
 
 const PartitionVisualizer = ({ songId }: PartitionVisualizerProps) => {
-	const partitionRessources = useQuery(["partition"], () =>
-		API.getPartitionRessources(songId)
-	);
+	
 
 	if (!partitionRessources.data) {
 		return (
@@ -22,7 +20,7 @@ const PartitionVisualizer = ({ songId }: PartitionVisualizerProps) => {
 		);
 	}
 	return (
-		<SlideView sources={partitionRessources.data} speed={200} startAt={0} />
+		
 	);
 };
 

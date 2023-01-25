@@ -6,6 +6,7 @@ export const en = {
 	changeLanguageBtn: "Change language",
 	searchBtn: "Search",
 	playBtn: 'Play',
+	playAgain: 'Play Again',
 	songPageBtn: 'Go to song page',
 	level: 'Level',
 	chapters: 'Chapters',
@@ -22,8 +23,10 @@ export const en = {
 	mySkillsToImprove: "My Competencies to work on",
 	recentlyPlayed: 'Recently played',
 	search: 'Search',
+	songsToGetBetter: 'Recommendations',
 	lastSearched: "Last searched",
 	levelProgress: 'good notes',
+	score: 'Score',
 
 	// profile page
 	user: 'Profile',
@@ -70,7 +73,10 @@ export const en = {
 	invalidEmail: 'Invalid email',
 	accountCreated: 'Account created',
 	loggedIn: 'Logged in',
+	precisionScore: "Precision",
+	goodNotesInARow: 'Good notes in a row',
 	usernameTaken: 'Username already taken',
+	goodNotes: 'good notes',
 
 	// categories
 	username: 'Username',
@@ -93,6 +99,7 @@ export const fr: typeof en = {
 	changeLanguageBtn: "Changer la langue",
 	searchBtn: "Rechercher",
 	playBtn: 'Jouer',
+	playAgain: 'Rejouer',
 	songPageBtn: 'Aller sur la page de la chanson',
 	level: 'Niveau',
 	chapters: 'Chapitres',
@@ -164,6 +171,11 @@ export const fr: typeof en = {
 	password: 'Mot de passe',
 	email: "Email",
 	repeatPassword: "Confirmer",
+	score: 'Score',
+	precisionScore: "Précision",
+	goodNotesInARow: 'Bonnes notes à la suite',
+	songsToGetBetter: 'Recommendations',
+	goodNotes: 'bonnes notes',
 	changepasswdBtn: 'Changer le mot de pass',
 	changeemailBtn: 'Changer l\'email',
 	googleacctBtn: 'Compte Google',
@@ -177,9 +189,17 @@ export const sp: typeof en = {
 	welcomeMessage: "Bienvenue",
 	signoutBtn: 'Desconectarse',
 	signinBtn: 'Connectarse',
+	changepasswdBtn: 'Changer le mot de pass',
+	changeemailBtn: 'Change l\'email',
+	googleacctBtn: 'Compte Google',
+	goodNotes: 'bonnes notes',
+
+	// competencies
 	changeLanguageBtn: "Changer de langue",
 	searchBtn: "Rechercher",
 	playBtn: "Jouer",
+	playAgain: 'Rejouer',
+	precisionScore: "Précision",
 	songPageBtn: "Chanson",
 	level: "Niveau",
 	chapters: "Chapitres",
@@ -246,15 +266,15 @@ export const sp: typeof en = {
 	accountCreated: 'Compte créé',
 	loggedIn: 'Connectado',
 	usernameTaken: 'Nombre de usuario ya tomado',
+	score: 'Score',
+	goodNotesInARow: 'Bonnes notes à la suite',
+	songsToGetBetter: 'Recommendations',
 
 	// categories
 	username: 'Nom d\'utilisateur',
 	password: 'Mot de passe',
 	email: 'Email',
 	repeatPassword: 'Répéter le mot de passe',
-	changepasswdBtn: 'Changer le mot de pass',
-	changeemailBtn: 'Change l\'email',
-	googleacctBtn: 'Compte Google',
 
 	partition: 'Partition',
 };
