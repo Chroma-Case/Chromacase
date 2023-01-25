@@ -53,13 +53,14 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 	}
 
 	const jumpAt = (value: number, absolute: boolean) => {
-		if (value < 0) value = 0;
+		if (absolute && value < 0) value = 0;
 		if (value > totalWidth) value = totalWidth;
 		if (!absolute) {
 			stepCount += Math.floor(value / stepSize);
 		} else {
 			stepCount = Math.floor(value / stepSize);
 		}
+		if (stepCount < 0) stepCount = 0;
 		animation.animateTo({
 			translateX: -(stepCount * stepSize),
 		});
