@@ -7,7 +7,6 @@ import SongLobbyView from './views/SongLobbyView';
 import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
-import PartitionView from './views/PartitionView';
 import SetttingsNavigator from './views/SettingsView';
 import { useQuery } from 'react-query';
 import API from './API';
@@ -27,7 +26,6 @@ export const protectedRoutes = <>
 	<Stack.Screen name="Score" component={ScoreView} options={{ title: translate('score') }} />
 	<Stack.Screen name="Search" component={SearchView} options={{ title: translate('search') }} />
 	<Stack.Screen name="User" component={ProfileView} options={{ title: translate('user') }} />
-	<Stack.Screen name="Partition" component={PartitionView} options={{ title: translate('partition') }} />
 </>;
 
 export const publicRoutes = <React.Fragment>

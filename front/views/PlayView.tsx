@@ -9,6 +9,8 @@ import API from '../API';
 import LoadingComponent from '../components/Loading';
 import Constants from 'expo-constants';
 import { useStopwatch } from 'react-timer-hook';
+import PartitionVisualizer from '../components/PartitionVisualizer/PartitionVisualizer';
+import SlideView from '../components/PartitionVisualizer/SlideView';
 
 type PlayViewProps = {
 	songId: number
@@ -21,6 +23,9 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const webSocket = useRef<WebSocket>();
 	const timer = useStopwatch({ autoStart: false });
 	const [paused, setPause] = useState<boolean>();
+	const partitionRessources = useQuery(["partition"], () =>
+		API.getPartitionRessources(songId)
+	);
 
 	const onPause = () => {
 		timer.pause();
@@ -33,6 +38,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	}
 	const onResume = () => {
 		setPause(false);
+		timer.start();
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: false,
@@ -66,11 +72,15 @@ const PlayView = ({ songId }: PlayViewProps) => {
 			timer.start();
 		};
 		webSocket.current.onmessage = (message) => {
-			const data = JSON.parse(message.data);
-			if (data.type == 'end') {
-				navigation.navigate('Score');
-			} else if (data.song_launched == undefined) {
-				toast.show({ description: data, placement: 'top', colorScheme: 'secondary' });
+			try {
+				const data = JSON.parse(message.data);
+				if (data.type == 'end') {
+					navigation.navigate('Score');
+				} else if (data.song_launched == undefined) {
+					toast.show({ description: data, placement: 'top', colorScheme: 'secondary' });
+				}
+			} catch {
+
 			}
 		}
 		setPause(false);
@@ -106,7 +116,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	}, [])
 	const score = 20;
 
-	if (!song.data) {
+	if (!song.data || !partitionRessources.data) {
 		return <Center style={{ flexGrow: 1 }}>
 			<LoadingComponent/>
 		</Center>
@@ -114,6 +124,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
 			<View style={{ flexGrow: 1 }}>
+				<SlideView sources={partitionRessources.data} speed={200} startAt={0} />
 			</View>
 			<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5 }}>
 				<Row justifyContent='space-between' style={{ flexGrow: 1, alignItems: 'center' }} >

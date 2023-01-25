@@ -2,7 +2,6 @@ import { Text } from "native-base";
 import { translate } from "../i18n/i18n";
 import { en } from "../i18n/Translations";
 import { RootState, useSelector } from "../state/Store";
-import { Text } from "native-base";
 
 type TranslateProps = {
 	translationKey: keyof typeof en;
