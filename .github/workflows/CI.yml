@@ -131,7 +131,7 @@ jobs:
 
   Deployement_Docker:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
     needs: [ Test_Back ]
     environment: Production
 
@@ -175,7 +175,9 @@ jobs:
           context: ./front
           push: true
           tags: ${{steps.meta_front.outputs.tags}}
-          build-args: API_URL=${{secrets.API_URL}}
+          build-args: 
+            - API_URL=${{secrets.API_URL}}
+            - SCORO_URL=${{secrets.SCORO_URL}}
       - name: Docker meta scorometer
         id: meta_scorometer
         uses: docker/metadata-action@v4
