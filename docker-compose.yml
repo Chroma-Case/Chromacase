@@ -35,8 +35,8 @@ services:
     build: 
       context: ./front
       args:
-      - API_URL=${API_URL}
-      - SCORO_URL=${SCORO_URL}
+        - API_URL=${API_URL}
+        - SCORO_URL=${SCORO_URL}
     ports:
       - "80:80"
     depends_on:
