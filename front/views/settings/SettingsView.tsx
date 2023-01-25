@@ -13,9 +13,9 @@ import ChangeEmailForm from '../../components/forms/changeEmailForm';
 
 const SettingsStack = createNativeStackNavigator();
 
-const handleChangeEmail = async (newEmail: string): Promise<string> => {
+const handleChangeEmail = async (oldEmail: string, newEmail: string): Promise<string> => {
     try {
-        let response = await API.updateUserCredentials("email", newEmail);
+        let response = await API.updateUserCredentials("email", oldEmail, newEmail);
         return response as string;
     } catch (error) {
         return ("error: " + error);
@@ -24,7 +24,7 @@ const handleChangeEmail = async (newEmail: string): Promise<string> => {
 
 const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
     try {
-        let response = await API.updateUserCredentials("password", newPassword);
+        let response = await API.updateUserCredentials("password", oldPassword, newPassword);
         return response as string;
     } catch (error) {
         return ("error: " + error);
@@ -81,7 +81,7 @@ const ChangeEmailView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Heading paddingBottom={'2%'}>{translate('changeEmail')}</Heading>
-            <ChangeEmailForm onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}/>
+            <ChangeEmailForm onSubmit={(oldEmail, newEmail) => handleChangeEmail(oldEmail, newEmail)}/>
             <Button marginTop={'2%'} variant='outline' onPress={() => navigation.navigate('Settings')}>Back</Button>
         </Center>
     )
