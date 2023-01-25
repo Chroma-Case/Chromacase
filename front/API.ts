@@ -197,7 +197,7 @@ export default class API {
 	 */
 	public static async getUserRecommendations(): Promise<Song[]> {
 		return Array.of(4).map((i) => ({
-			id: i,
+			id: 1,
 			name: `Recommended Song ${i}`,
 			artistId: i,
 			genreId: i,
