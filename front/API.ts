@@ -61,41 +61,49 @@ const baseAPIUrl =
 		? "/api"
 		: Constants.manifest?.extra?.apiUrl;
 
-const requestGet = async (url: string) => {
-	try {
-		const response = await fetch(url, {
+export default class API {
+
+	/**
+	 * 
+	 * @param url 
+	 * @returns 
+	 */
+	public static async getRequest(url: string) {
+		console.log('Fetching on', url)
+		const res = await fetch(url, {
 			method: 'GET',
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			}
-		});
-		const json = await response.json();
-		return json;
-	} catch (error) {
-		console.error(error);
+		})
+		const data = await res.json()
+		if (data.error)
+			throw data.message;
+		return data;
 	}
-}
 
-const requestPost = async (url: string, params: any[]) => {
-	try {
-		const response = await fetch(url, {
-			method: 'POST',
+	/**
+	 * 
+	 * @param url 
+	 * @param body 
+	 * @returns 
+	 */
+	public static async postRequest(url: string, body: {}) {
+		console.log('Fetching on', url)
+		const res = await fetch(url, {
+			method: 'PATCH',
 			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 			},
-			body : JSON.stringify(params),
-		});
-		const json = await response.json();
-		return json;
-	} catch (error) {
-		console.error(error);
+			body: JSON.stringify(body)
+		})
+		const data = await res.json()
+		if (data.error)
+			throw data.message;
+		return data;
 	}
-}
 
-export default class API {
-	private static async fetch(params: FetchParams) {
+	public static async fetch(params: FetchParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
 			"Content-Type": "application/json",
@@ -162,6 +170,26 @@ export default class API {
 			username: registrationInput.username,
 			password: registrationInput.password,
 		});
+	}
+	/**
+	 * 
+	 * @param url 
+	 * @param body 
+	 * @returns 
+	 */
+	public static async patchRequest(url: string, body: {}) {
+		console.log('Fetching on', url)
+		const res = await fetch(url, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(body)
+		})
+		const data = await res.json()
+		if (data.error)
+			throw data.message;
+		return data;
 	}
 
 	/***
@@ -458,12 +486,35 @@ export default class API {
 	 * @returns new user's credentials
 	 */
 
-	static async updateUserCredentials(dataKey: 'password' | 'email', value: any): Promise<string> {
-		let validDataKeys: string[] = ['password', 'email'];
+	static async updateUserCredentials(dataKey: 'password' | 'email', oldValue: string, newValue: string): Promise<string> {
 		return new Promise<string>((resolve, reject) => {
 			setTimeout(() => {
-				if (!validDataKeys.includes(dataKey))
-				return resolve('giga chad');
+				try {
+					if (dataKey == 'email') {
+						this.getRequest('http://localhost:3000/users/24').then((res) => {
+							console.table(res);
+							console.log(oldValue, newValue);
+							if (res.email === oldValue) {
+								this.patchRequest('http://localhost:3000/users/24', {'email': newValue}).finally(() => {
+									return resolve('email successfully changed');
+								});
+							} else return reject("wrong email");
+						});
+					} else if (dataKey == 'password') {
+						this.getRequest('http://localhost:3000/users/24').then((res) => {
+							console.table(res);
+							if (res.password == oldValue) {
+								this.patchRequest('http://localhost:3000/users/24', {'password': newValue}).finally(() => {
+									return resolve('password successfully changed');
+								});
+							} else return reject("wrong password");
+						});
+					}
+				} catch (error) {
+					console.error(error);
+					return reject("something went wrong: unable to update");
+				}
+				
 			}, 1000);
 		});
 	}

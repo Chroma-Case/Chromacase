@@ -89,23 +89,23 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 				
 				<Button
 					style={{ marginTop: 10 }}
-					// isLoading={submittingForm}
-					// isDisabled={
-					// 	formData.newEmail.error !== null
-					// }
-					// onPress={async () => {
-					// 	setSubmittingForm(true);
-					// 	try {
-					// 		const resp = await onSubmit(
-					// 			formData.newEmail.value
-					// 		);
-					// 		toast.show({ description: resp });
-					// 	} catch (e) {
-					// 		toast.show({ description: e as string });
-					// 	} finally {
-					// 		setSubmittingForm(false);
-					// 	}
-					// }}
+					isLoading={submittingForm}
+					isDisabled={
+						formData.newEmail.error !== null
+					}
+					onPress={async () => {
+						setSubmittingForm(true);
+						try {
+							const resp = await onSubmit(formData.oldEmail.value,
+								formData.newEmail.value
+							);
+							toast.show({ description: resp });
+						} catch (e) {
+							toast.show({ description: e as string });
+						} finally {
+							setSubmittingForm(false);
+						}
+					}}
 				>
 					{translate("submitBtn")}
 				</Button>
