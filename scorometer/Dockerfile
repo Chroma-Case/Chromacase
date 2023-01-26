@@ -10,4 +10,4 @@ COPY ./requirements.txt .
 RUN pip install -r ./requirements.txt
 
 COPY . .
-CMD ["/usr/bin/websocketd", "--port=6543", "--staticdir=." "./main.py"]
+CMD /usr/bin/websocketd --port=6543 --staticdir=. ./main.py
