@@ -1,0 +1,10 @@
+FROM node:16-alpine
+
+WORKDIR /app
+
+RUN yarn global add expo-cli
+COPY package.json yarn.lock ./
+RUN yarn install
+
+ENV DEVAPIURL http://back:3000
+CMD expo start --web

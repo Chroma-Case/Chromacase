@@ -11,5 +11,11 @@ module.exports = async function (env, argv) {
 
   config.resolve.alias['framer-motion'] = 'framer-motion/dist/framer-motion'
 
+  config.devServer = {
+    proxy: {
+      '/api': env.DEVAPIURL ?? 'http://localhost:3000',
+    }
+  }
+
   return config
 }
