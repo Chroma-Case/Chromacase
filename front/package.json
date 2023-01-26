@@ -35,7 +35,6 @@
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "format-duration": "^2.0.0",
-    "hermes-engine": "^0.11.0",
     "i18next": "^21.8.16",
     "install": "^0.13.0",
     "jest": "^26.6.3",

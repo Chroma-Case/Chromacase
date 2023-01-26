@@ -43,7 +43,6 @@ services:
       build: 
         context: ./front
         dockerfile: Dockerfile.dev
-      network_mode: "host"
       ports:
         - "19006:19006"
       volumes:
