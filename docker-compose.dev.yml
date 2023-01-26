@@ -42,11 +42,12 @@ services:
   front:
       build: 
         context: ./front
-        args:
-          - API_URL=${API_URL}
-          - SCORO_URL=${SCORO_URL}
+        dockerfile: Dockerfile.dev
+      network_mode: "host"
       ports:
-        - "80:80"
+        - "19006:19006"
+      volumes:
+        - ./front:/app
       depends_on:
         - "back"
       env_file:
