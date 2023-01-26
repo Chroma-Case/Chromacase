@@ -7,7 +7,7 @@ RUN wget -q -O /tmp/websocketd.zip \
 WORKDIR /app
 
 COPY ./requirements.txt .
-RUN pip install -r ./requirements.txt
+RUN pip3 install -r ./requirements.txt
 
 COPY . .
-CMD /usr/bin/websocketd --port=6543 --staticdir=. ./main.py
+CMD /usr/bin/websocketd --port=6543 --staticdir=. -- python3 main.py
