@@ -39,3 +39,15 @@ services:
       retries: 5
     ports:
       - "5432:5432"
+  front:
+      build: 
+        context: ./front
+        args:
+          - API_URL=${API_URL}
+          - SCORO_URL=${SCORO_URL}
+      ports:
+        - "80:80"
+      depends_on:
+        - "back"
+      env_file:
+        - .env
