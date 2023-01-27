@@ -4,13 +4,14 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, IconButton, Progress, Row, View, useToast } from 'native-base';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
 import LoadingComponent from '../components/Loading';
 import Constants from 'expo-constants';
 import { useStopwatch } from 'react-timer-hook';
-import PartitionVisualizer from '../components/PartitionVisualizer/PartitionVisualizer';
 import SlideView from '../components/PartitionVisualizer/SlideView';
+import MidiPlayer from 'midi-player-js';
+import SoundFont from 'soundfont-player';
 
 type PlayViewProps = {
 	songId: number
@@ -18,17 +19,21 @@ type PlayViewProps = {
 
 const PlayView = ({ songId }: PlayViewProps) => {
 	const navigation = useNavigation();
-	const song = useQuery(['song'], () => API.getSong(songId));
+	const queryClient = useQueryClient();
+	const song = useQuery(['song', songId], () => API.getSong(songId));
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
 	const timer = useStopwatch({ autoStart: false });
-	const [paused, setPause] = useState<boolean>();
-	const partitionRessources = useQuery(["partition"], () =>
+	const [paused, setPause] = useState<boolean>(true);
+	const [midiPlayer, setMidiPlayer] = useState();
+	
+	const partitionRessources = useQuery(["partition", songId], () =>
 		API.getPartitionRessources(songId)
 	);
 
 	const onPause = () => {
 		timer.pause();
+		midiPlayer?.pause();
 		setPause(true);
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
@@ -38,6 +43,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	}
 	const onResume = () => {
 		setPause(false);
+		midiPlayer?.play();
 		timer.start();
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
@@ -47,15 +53,11 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	}
 	const onEnd = () => {
 		webSocket.current?.close();
+		midiPlayer?.destroy();
 	}
 
 	const onMIDISuccess = (access) => {
 		const inputs = access.inputs;
-		webSocket.current?.send(JSON.stringify({
-			type: "start",
-			paused: false,
-			time: Date.now()
-		}));
 		
 		if (inputs.size < 2) {
 			toast.show({ description: 'No MIDI Keyboard found' });
@@ -69,7 +71,6 @@ const PlayView = ({ songId }: PlayViewProps) => {
 				type: "start",
 				name: "clair-de-lune" /*song.data.id*/,
 			}));
-			timer.start();
 		};
 		webSocket.current.onmessage = (message) => {
 			try {
@@ -83,7 +84,6 @@ const PlayView = ({ songId }: PlayViewProps) => {
 
 			}
 		}
-		setPause(false);
 		inputs.forEach((input) => {
 			if (inputIndex != 0) {
 				return;
@@ -100,6 +100,18 @@ const PlayView = ({ songId }: PlayViewProps) => {
 			}
 			inputIndex++;
 		});
+		Promise.all([
+			queryClient.fetchQuery(['song', songId, 'midi'], () => API.getSongMidi(songId)),
+			SoundFont.instrument(new AudioContext(), 'electric_piano_1'),
+		]).then(([midiFile, audioController]) => {
+				const player = new MidiPlayer.Player((event) => {
+					if (event['noteName']) {
+						audioController.play(event['noteName']);
+					}
+				});
+				player.loadArrayBuffer(midiFile);
+				setMidiPlayer(player);
+			})
 	}
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
@@ -142,11 +154,11 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						}}/>
 						<IconButton size='sm' variant='solid' _icon={{
 						    as: Ionicons,
-						    name: paused === false ? "pause" : "play"
+						    name: paused ? "play" : "pause"
 						}} onPress={() => { 
-							if (paused == true) {
+							if (paused) {
 								onResume();
-							} else if (paused === false) {
+							} else {
 								onPause();
 							}
 						 }}/>
