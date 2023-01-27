@@ -8,6 +8,7 @@ import SongHistory from "./models/SongHistory";
 import User from "./models/User";
 import Constants from 'expo-constants';
 import store from "./state/Store";
+import { Platform } from "react-native";
 
 type AuthenticationInput = { username: string, password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -21,6 +22,9 @@ type FetchParams = {
 
 const dummyIllustration = "https://i.discogs.com/syRCX8NaLwK2SMk8X6TVU_DWc8RRqE4b-tebAQ6kVH4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTgyNTQz/OC0xNjE3ODE0NDI2/LTU1MjUuanBlZw.jpeg";
 
+// we will need the same thing for the scorometer API url
+const baseAPIUrl = Platform.OS === 'web' ? '/api' : Constants.manifest?.extra?.apiUrl;
+
 export default class API {
 
 	private static async fetch(params: FetchParams) {
@@ -28,12 +32,13 @@ export default class API {
 		const header = {
 			'Content-Type': 'application/json'
 		}
-		const response = await fetch(`${Constants.manifest?.extra?.apiUrl}${params.route}`, {
+		const response = await fetch(`${baseAPIUrl}${params.route}`, {
 			headers: jwtToken && { ...header, 'Authorization': `Bearer ${jwtToken}` } || header,
 			body: JSON.stringify(params.body),
 			method: params.method ?? 'GET' 
 		});
 		const body = await response.text();
+
 		try {
 			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
 			if (!response.ok) {
@@ -196,7 +201,7 @@ export default class API {
 	 */
 	public static async getUserRecommendations(): Promise<Song[]> {
 		return Array.of(4).map((i) => ({
-			id: i,
+			id: 1,
 			name: `Recommended Song ${i}`,
 			artistId: i,
 			genreId: i,
@@ -230,5 +235,23 @@ export default class API {
 			lessonId,
 			userId: 1
 		}];
+	}
+
+	/**
+	 * Retrieve a partition images
+	 * @param songId the id of the song
+	 * This API may be merged with the fetch song in the future
+	 */
+	public static async getPartitionRessources(songId: number): Promise<[string, number, number][]> {
+		return [
+			["https://media.discordapp.net/attachments/717080637038788731/1067469560426545222/vivaldi_split_1.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469560900505660/vivaldi_split_2.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469561261203506/vivaldi_split_3.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469561546424381/vivaldi_split_4.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469562058133564/vivaldi_split_5.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469562347528202/vivaldi_split_6.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469562792136815/vivaldi_split_7.png", 1868, 400],
+			["https://media.discordapp.net/attachments/717080637038788731/1067469563073142804/vivaldi_split_8.png", 1868, 400],
+		];
 	}
 }

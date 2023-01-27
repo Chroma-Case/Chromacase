@@ -1,13 +1,13 @@
 FROM python:latest
 RUN wget -q -O /tmp/websocketd.zip \
-	https://github.com/joewalnes/websocketd/releases/download/v0.4.1/websocketd-0.4.1-linux_amd64.zip \
-	&& unzip /tmp/websocketd.zip -d /tmp/websocketd && mv /tmp/websocketd/websocketd /usr/bin \
-	&& chmod +x /usr/bin/websocketd
+    https://github.com/joewalnes/websocketd/releases/download/v0.4.1/websocketd-0.4.1-linux_amd64.zip \
+    && unzip /tmp/websocketd.zip -d /tmp/websocketd && mv /tmp/websocketd/websocketd /usr/bin \
+    && chmod +x /usr/bin/websocketd
 
 WORKDIR /app
 
 COPY ./requirements.txt .
-RUN pip install -r ./requirements.txt
+RUN pip3 install -r ./requirements.txt
 
 COPY . .
-CMD ["/usr/bin/websocketd", "--port=6543", "--staticdir=." "./main.py"]
+CMD /usr/bin/websocketd --port=6543 --staticdir=. -- python3 main.py

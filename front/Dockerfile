@@ -12,6 +12,8 @@ RUN yarn global add sharp-cli@^2.1.0
 COPY . .
 ARG API_URL
 ENV API_URL=$API_URL
+ARG SCORO_URL
+ENV SCORO_URL=$SCORO_URL
 
 RUN expo build:web
 
