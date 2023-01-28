@@ -18,12 +18,14 @@ type FetchParams = {
 	route: string;
 	body?: Object;
 	method?: 'GET' | 'POST' | 'DELETE' | 'PATCH'
+	// If true, No JSON parsing is done, the raw response's content is returned 
+	raw?: true;
 }
 
 const dummyIllustration = "https://i.discogs.com/syRCX8NaLwK2SMk8X6TVU_DWc8RRqE4b-tebAQ6kVH4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTgyNTQz/OC0xNjE3ODE0NDI2/LTU1MjUuanBlZw.jpeg";
 
 // we will need the same thing for the scorometer API url
-const baseAPIUrl = Platform.OS === 'web' ? '/api' : Constants.manifest?.extra?.apiUrl;
+const baseAPIUrl = process.env.NODE_ENV != 'development' && Platform.OS === 'web' ? '/api' : Constants.manifest?.extra?.apiUrl;
 
 export default class API {
 
@@ -37,6 +39,9 @@ export default class API {
 			body: JSON.stringify(params.body),
 			method: params.method ?? 'GET' 
 		});
+		if (params.raw) {
+			return response.arrayBuffer();
+		}
 		const body = await response.text();
 
 		try {
@@ -108,6 +113,16 @@ export default class API {
 	public static async getSong(songId: number): Promise<Song> {
 		return API.fetch({
 			route: `/song/${songId}`
+		});
+	}
+	/**
+	 * Retrive a song's midi partition
+	 * @param songId the id to find the song
+	 */
+	public static async getSongMidi(songId: number): Promise<any> {
+		return API.fetch({
+			route: `/song/${songId}/midi`,
+			raw: true,
 		});
 	}
 
