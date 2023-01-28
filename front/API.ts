@@ -14,12 +14,13 @@ import { useQuery, QueryClient } from "react-query";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
+
 export type AccessToken = string;
 
 type FetchParams = {
 	route: string;
 	body?: Object;
-	method?: "GET" | "POST" | "DELETE";
+	method?: "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
 	// If true, No JSON parsing is done, the raw response's content is returned
 	raw?: true;
 };
@@ -500,12 +501,15 @@ export default class API {
 							} else return reject("wrong email");
 						});
 					} else if (dataKey == 'password') {
-						this.getRequest('http://localhost:3000/users/24').then((res) => {
-							if (res.password == oldValue) {
-								this.patchRequest('http://localhost:3000/users/24', {'password': newValue}).finally(() => {
+						API.fetch({route: '/auth/me'}).then((res) => {
+							API.fetch({
+								route: '/auth/me',
+								method: 'PATCH',
+								body: {'password': newValue}}).then(() => {
 									return resolve('password successfully changed');
+								}).catch((err) => {
+									return reject('something went wrong: unable to update the password');
 								});
-							} else return reject("wrong password");
 						});
 					}
 				} catch (error) {
