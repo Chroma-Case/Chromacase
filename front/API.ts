@@ -306,8 +306,7 @@ export default class API {
 						});
 					}
 				} catch (error) {
-					console.error(error);
-					return reject("something went wrong: unable to update");
+					return reject("something went wrong: unable to update the " + dataKey);
 				}
 				
 			}, 1000);
