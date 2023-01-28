@@ -1,0 +1,178 @@
+asyncapi: "2.5.0"
+info:
+  title: Scorometer
+  version: "1.0.0"
+channels:
+  /start:
+    publish:
+      summary: "To start a song, send the start message with name of the song"
+      message:
+        summary: "Start message"
+        payload:
+          type: "object"
+          required:
+            - type
+            - name
+          properties:
+            type:
+              type: "string"
+              enum: ["start"]
+            name:
+              type: "string"
+              description: "The name of the song"
+      operationId: "startSong"
+  /midi:
+    publish:
+      summary: "Every time a note is played, a midi message should be sent from the client to the server."
+      message:
+        summary: "Midi message"
+        payload:
+          type: "object"
+          required:
+            - type
+            - time
+            - note
+            - intensity
+          properties:
+            id:
+              type: "object"
+              description: "An arbitrary data that will be sent back on the score message."
+            type:
+              type: "string"
+              enum: ["note_on", "note_off"]
+              description: "note_on => on_key_down, note_off => on_key_up"
+            time:
+              type: "number"
+              description: "The event time in the midi message, I don't know the unit. A timestamp with the start as the epoch could work"
+            note:
+              type: "number"
+              description: "The note played (between 21 and 108, C5 is 60)"
+            intensity:
+              type: "number"
+              description: "How strong the key was pressed. On some MIDI libraries, this is named velocity. Should be between 30 and 130ish. If the piano does not support this, send null instead."
+      operationId: "sendMidi"
+  /score:
+    subscribe:
+      summary: "At each tempo (containing notes), a or multiple scores message will be sent. Note that this is not a 1/1 mapping with midi messages, chords will be grouped together."
+      message:
+        summary: "Score message"
+        payload:
+          type: "object"
+          required:
+            - type
+            - time
+            - timingScore
+            - timingInformation
+            - notes
+          properties:
+            ids:
+              type: "array"
+              items:
+                type: "object"
+                description: "The list of IDs of the events sent."
+            type:
+              type: "string"
+              enum: ["note_on", "note_off"]
+              description: "note_on => on_key_down, note_off => on_key_up"
+            time:
+              type: "number"
+              description: "The event time in the midi message , I don't know the unit. A timestamp with the start as the epoch could work"
+            timingScore:
+              type: "string"
+              enum: ["perfect", "great", "good", "miss"]
+              description: "The score attributed to the timing."
+            timingInformation:
+              type: "string"
+              enum: ["late", "perfect", "fast"]
+              description: "Detailed informations on the timing. This information can be useful to the player."
+            notes:
+              type: "object"
+              required:
+                - good
+                - missing
+                - bad
+              properties:
+                good:
+                  type: "array"
+                  items:
+                    type: "object"
+                    required:
+                      - note
+                    properties:
+                      id:
+                        type: "object"
+                        description: "The id of the events sent."
+                      note:
+                        type: "number"
+                        description: "The note played (between 21 and 108, C5 is 60)"
+                missing:
+                  type: "array"
+                  items:
+                    type: "object"
+                    required:
+                      - note
+                    properties:
+                      id:
+                        type: "object"
+                        description: "The id of the events sent."
+                      note:
+                        type: "number"
+                        description: "The note played (between 21 and 108, C5 is 60)"
+                bad:
+                  type: "array"
+                  items:
+                    type: "object"
+                    required:
+                      - note
+                    properties:
+                      id:
+                        type: "object"
+                        description: "The id of the events sent."
+                      note:
+                        type: "number"
+                        description: "The note played (between 21 and 108, C5 is 60)"
+      operationId: "receiveScore"
+  /pause:
+    publish:
+      summary: "When the client pause/resume the playback, this message should be sent."
+      message:
+        summary: "Pause message"
+        payload:
+          type: "object"
+          required:
+            - type
+            - paused
+            - time
+          properties:
+            type:
+              type: "string"
+              enum: ["pause"]
+            paused:
+              type: "boolean"
+              description: "True if the new state is paused, false if it is resumed"
+            time:
+              type: "number"
+              description: "The timing at witch this event was sent. This is used to prevent network trafics to offset future notes and be sure the server/client are well timed together."
+      operationId: "pauseSong"
+  /end:
+    subscribe:
+      summary: "When the music has ended, the server will send this message with a recap of the whole score."
+      message:
+        summary: "End message"
+        payload:
+          type: "object"
+          required:
+            - type
+            - overrallScore
+            - score
+          properties:
+            type:
+              type: "string"
+              enum: ["end"]
+            overralScore:
+              type: number
+              description: "An overrall score between 0 and 100."
+            score:
+              type: object
+              description: "An object containing every difficulties as a key and a score between 0 and 100 for each."
+      operationId: "endSong"

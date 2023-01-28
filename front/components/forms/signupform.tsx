@@ -1,7 +1,7 @@
 // a form for sign up
 
 import React from "react";
-import { translate } from "../../i18n/i18n";
+import { Translate, translate } from "../../i18n/i18n";
 import { string } from "yup";
 import {
 	FormControl,
@@ -52,7 +52,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 			.min(4, translate("passwordTooShort"))
 			.max(100, translate("passwordTooLong"))
 			.matches(
-				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$-_%\^&\*])(?=.{8,})/,
 				translate(
 					"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
 				)
@@ -74,7 +74,9 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							formData.email.error !== null
 						}
 					>
-						<FormControl.Label>{translate("username")}</FormControl.Label>
+						<FormControl.Label>
+							<Translate translationKey='username'/>
+						</FormControl.Label>
 						<Input
 							isRequired
 							type="text"
@@ -95,7 +97,9 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						>
 							{formData.username.error}
 						</FormControl.ErrorMessage>
-						<FormControl.Label>{translate("email")}</FormControl.Label>
+						<FormControl.Label>
+							<Translate translationKey='email'/>
+						</FormControl.Label>
 						<Input
 							isRequired
 							type="text"
@@ -116,7 +120,9 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						>
 							{formData.email.error}
 						</FormControl.ErrorMessage>
-						<FormControl.Label>{translate("password")}</FormControl.Label>
+						<FormControl.Label>
+							<Translate translationKey='password'/>
+						</FormControl.Label>
 						<Input
 							isRequired
 							type="password"
@@ -137,7 +143,9 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
-						<FormControl.Label>{translate("repeatPassword")}</FormControl.Label>
+						<FormControl.Label>
+							<Translate translationKey='repeatPassword'/>
+						</FormControl.Label>
 						<Input
 							isRequired
 							type="password"
@@ -186,14 +194,14 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 										formData.email.value
 									);
 									toast.show({ description: resp });
+									setSubmittingForm(false);
 								} catch (e) {
 									toast.show({ description: e as string });
-								} finally {
 									setSubmittingForm(false);
 								}
 							}}
 						>
-							{translate("signUp")}
+							<Translate translationKey='signUp'/>
 						</Button>
 					</FormControl>
 				</Stack>
