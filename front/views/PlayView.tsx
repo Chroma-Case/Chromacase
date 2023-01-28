@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { SafeAreaView, Text, Platform } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, IconButton, Progress, Row, View, useToast } from 'native-base';
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +15,18 @@ import SoundFont from 'soundfont-player';
 
 type PlayViewProps = {
 	songId: number
+}
+
+
+// this a hot fix this should be reverted soon
+let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
+
+if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
+	if (location.protocol !== 'https:') {
+		scoroBaseApiUrl = "wss://" + location.host + "/ws";
+	} else {
+		scoroBaseApiUrl = "ws://" + location.host + "/ws";
+	}
 }
 
 const PlayView = ({ songId }: PlayViewProps) => {
@@ -65,7 +77,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 		}
 		toast.show({ description: `MIDI ready!`, placement: 'top' });
 		let inputIndex = 0;
-		webSocket.current = new WebSocket(Constants.manifest?.extra?.scoroUrl);
+		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
 			webSocket.current!.send(JSON.stringify({
 				type: "start",
