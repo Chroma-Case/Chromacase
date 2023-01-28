@@ -1,4 +1,19 @@
-import { BadRequestException, Body, Controller, DefaultValuePipe, Get, HttpCode, HttpStatus, InternalServerErrorException, NotFoundException, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
+import {
+	BadRequestException,
+	Body,
+	Controller,
+	DefaultValuePipe,
+	Get,
+	HttpCode,
+	HttpStatus,
+	InternalServerErrorException,
+	NotFoundException,
+	Param,
+	ParseIntPipe,
+	Post,
+	Query,
+	Req,
+} from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Song } from '@prisma/client';
 import { SongService } from 'src/song/song.service';
@@ -8,7 +23,10 @@ import { SearchService } from './search.service';
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-	constructor(private readonly searchService: SearchService, private readonly songService: SongService) {}
+	constructor(
+		private readonly searchService: SearchService,
+		private readonly songService: SongService,
+	) {}
 
 	@ApiOperation({
 		summary: 'Get a song details by song name',
@@ -16,8 +34,8 @@ export class SearchController {
 	})
 	@Get('song/:name')
 	async findByName(@Param('name') name: string): Promise<Song | null> {
-		const ret = await this.searchService.songByTitle({ name })
-		if (!ret) throw new NotFoundException;
+		const ret = await this.searchService.songByTitle({ name });
+		if (!ret) throw new NotFoundException();
 		return ret;
 	}
 
@@ -27,14 +45,16 @@ export class SearchController {
 	})
 	@Post('song/advanced')
 	@HttpCode(200) // change from '201 created' to '200 OK' http default response code
-	async findAdvanced(@Body() searchSongDto: SearchSongDto): Promise<Song[] | null> {
+	async findAdvanced(
+		@Body() searchSongDto: SearchSongDto,
+	): Promise<Song[] | null> {
 		try {
 			const ret = await this.searchService.findAdvanced({
-				albumId: searchSongDto.album ? + searchSongDto.album : undefined,
-				artistId: searchSongDto.artist ? + searchSongDto.artist : undefined,
-				genreId: searchSongDto.genre ? + searchSongDto.genre: undefined
+				albumId: searchSongDto.album ? +searchSongDto.album : undefined,
+				artistId: searchSongDto.artist ? +searchSongDto.artist : undefined,
+				genreId: searchSongDto.genre ? +searchSongDto.genre : undefined,
 			});
-			if (!ret.length) throw new NotFoundException;
+			if (!ret.length) throw new NotFoundException();
 			else return ret;
 		} catch (error) {
 			console.log(error);
@@ -47,9 +67,11 @@ export class SearchController {
 		description: 'Get songs details by artist',
 	})
 	@Get('song/artist/:artistId')
-	async findByArtist(@Param('artistId', ParseIntPipe) artistId: number): Promise<Song[] | null> {
+	async findByArtist(
+		@Param('artistId', ParseIntPipe) artistId: number,
+	): Promise<Song[] | null> {
 		const ret = await this.searchService.songsByArtist(artistId);
-		if (!ret.length) throw new NotFoundException;
+		if (!ret.length) throw new NotFoundException();
 		else return ret;
 	}
 
@@ -58,9 +80,11 @@ export class SearchController {
 		description: 'Get songs details by genre',
 	})
 	@Get('song/genre/:genreId')
-	async findByGenre(@Param('genreId', ParseIntPipe) genreId: number): Promise<Song[] | null> {
+	async findByGenre(
+		@Param('genreId', ParseIntPipe) genreId: number,
+	): Promise<Song[] | null> {
 		const ret = await this.searchService.songsByGenre(genreId);
-		if (!ret.length) throw new NotFoundException;
+		if (!ret.length) throw new NotFoundException();
 		else return ret;
 	}
 
@@ -69,9 +93,11 @@ export class SearchController {
 		description: 'Get songs details by album',
 	})
 	@Get('song/album/:albumId')
-	async findByAlbum(@Param('albumId', ParseIntPipe) albumId: number): Promise<Song[] | null> {
+	async findByAlbum(
+		@Param('albumId', ParseIntPipe) albumId: number,
+	): Promise<Song[] | null> {
 		const ret = await this.searchService.songsByAlbum(albumId);
-		if (ret.length) throw new NotFoundException;
+		if (ret.length) throw new NotFoundException();
 		else return ret;
 	}
 
@@ -80,9 +106,16 @@ export class SearchController {
 		description: 'Guess elements details by keyword',
 	})
 	@Get('guess/:type/:word')
-	@ApiParam({name: 'word', type: 'string', required: true, example: 'Yoko Shimomura'})
-	@ApiParam({name: 'type', type: 'string', required: true, example: 'artist'})
-	async guess(@Param() params: {'type': string, 'word': string}): Promise<any[] | null> {
+	@ApiParam({
+		name: 'word',
+		type: 'string',
+		required: true,
+		example: 'Yoko Shimomura',
+	})
+	@ApiParam({ name: 'type', type: 'string', required: true, example: 'artist' })
+	async guess(
+		@Param() params: { type: string; word: string },
+	): Promise<any[] | null> {
 		try {
 			let ret: any[];
 			switch (params.type) {
@@ -96,9 +129,9 @@ export class SearchController {
 					ret = await this.searchService.guessSong(params.word);
 					break;
 				default:
-					throw new BadRequestException;
+					throw new BadRequestException();
 			}
-			if (!ret.length) throw new NotFoundException;
+			if (!ret.length) throw new NotFoundException();
 			else return ret;
 		} catch (error) {
 			console.log(error);

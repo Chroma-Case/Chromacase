@@ -17,7 +17,17 @@ import { SearchService } from './search/search.service';
 import { SearchModule } from './search/search.module';
 
 @Module({
-	imports: [UsersModule, PrismaModule, AuthModule, SongModule, LessonModule, GenreModule, ArtistModule, AlbumModule, SearchModule],
+	imports: [
+		UsersModule,
+		PrismaModule,
+		AuthModule,
+		SongModule,
+		LessonModule,
+		GenreModule,
+		ArtistModule,
+		AlbumModule,
+		SearchModule,
+	],
 	controllers: [AppController],
 	providers: [AppService, PrismaService, ArtistService],
 })

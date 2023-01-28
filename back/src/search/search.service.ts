@@ -1,4 +1,10 @@
-import { DefaultValuePipe, Injectable, ParseIntPipe, Query, Req } from '@nestjs/common';
+import {
+	DefaultValuePipe,
+	Injectable,
+	ParseIntPipe,
+	Query,
+	Req,
+} from '@nestjs/common';
 import { Album, Artist, Prisma, Song } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -6,7 +12,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SearchService {
 	constructor(private prisma: PrismaService) {}
 
-	async songByTitle(songWhereUniqueInput: Prisma.SongWhereUniqueInput): Promise<Song | null> {
+	async songByTitle(
+		songWhereUniqueInput: Prisma.SongWhereUniqueInput,
+	): Promise<Song | null> {
 		return this.prisma.song.findUnique({
 			where: songWhereUniqueInput,
 		});
@@ -15,59 +23,57 @@ export class SearchService {
 	async songsByArtist(artistId: number): Promise<Song[]> {
 		return this.prisma.song.findMany({
 			where: {
-				artistId: artistId
+				artistId: artistId,
 			},
-			orderBy: [
-			]
+			orderBy: [],
 		});
 	}
 
 	async songsByGenre(genreId: number): Promise<Song[]> {
 		return this.prisma.song.findMany({
 			where: {
-				genreId: genreId
-			}
+				genreId: genreId,
+			},
 		});
 	}
-	
+
 	async songsByAlbum(albumId: number): Promise<Song[]> {
 		return this.prisma.song.findMany({
 			where: {
-				albumId: albumId
-			}
+				albumId: albumId,
+			},
 		});
 	}
 
 	async artistByName(artistName: string): Promise<Artist | null> {
 		return this.prisma.artist.findUnique({
 			where: {
-				name: artistName
-			}
+				name: artistName,
+			},
 		});
 	}
 
 	async guessSong(word: string): Promise<Song[]> {
 		return this.prisma.song.findMany({
 			where: {
-				name: {contains: word}
-			}
+				name: { contains: word },
+			},
 		});
 	}
 
 	async guessArtist(word: string): Promise<Artist[]> {
 		return this.prisma.artist.findMany({
 			where: {
-				name: {contains: word},
-			}
+				name: { contains: word },
+			},
 		});
-		
 	}
 
 	async guessAlbum(word: string): Promise<Album[]> {
 		return this.prisma.album.findMany({
 			where: {
-				name: {contains: word},
-			}
+				name: { contains: word },
+			},
 		});
 	}
 
@@ -77,18 +83,23 @@ export class SearchService {
 		artistId?: number;
 		orderBy?: Prisma.SongOrderByWithRelationInput;
 	}): Promise<Song[]> {
-		const { albumId: albumId, genreId: genreId, artistId: artistId, orderBy: orderBy } = params;
+		const {
+			albumId: albumId,
+			genreId: genreId,
+			artistId: artistId,
+			orderBy: orderBy,
+		} = params;
 		return this.prisma.song.findMany({
 			where: {
-				OR:[
+				OR: [
 					{
 						albumId: { equals: albumId },
 						genreId: { equals: genreId },
 						artistId: { equals: artistId },
-					}
-				]
+					},
+				],
 			},
-			orderBy
+			orderBy,
 		});
 	}
 }

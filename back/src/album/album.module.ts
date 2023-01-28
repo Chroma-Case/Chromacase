@@ -5,7 +5,7 @@ import { AlbumService } from './album.service';
 
 @Module({
 	imports: [PrismaModule],
-  controllers: [AlbumController],
-  providers: [AlbumService]
+	controllers: [AlbumController],
+	providers: [AlbumService],
 })
 export class AlbumModule {}
