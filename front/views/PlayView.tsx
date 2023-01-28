@@ -37,7 +37,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const webSocket = useRef<WebSocket>();
 	const timer = useStopwatch({ autoStart: false });
 	const [paused, setPause] = useState<boolean>(true);
-	const [midiPlayer, setMidiPlayer] = useState();
+	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	
 	const partitionRessources = useQuery(["partition", songId], () =>
 		API.getPartitionRessources(songId)
@@ -65,7 +65,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	}
 	const onEnd = () => {
 		webSocket.current?.close();
-		midiPlayer?.destroy();
+		midiPlayer?.pause();
 	}
 
 	const onMIDISuccess = (access) => {
@@ -116,14 +116,15 @@ const PlayView = ({ songId }: PlayViewProps) => {
 			queryClient.fetchQuery(['song', songId, 'midi'], () => API.getSongMidi(songId)),
 			SoundFont.instrument(new AudioContext(), 'electric_piano_1'),
 		]).then(([midiFile, audioController]) => {
-				const player = new MidiPlayer.Player((event) => {
-					if (event['noteName']) {
-						audioController.play(event['noteName']);
-					}
-				});
-				player.loadArrayBuffer(midiFile);
-				setMidiPlayer(player);
-			})
+			const player = new MidiPlayer.Player((event) => {
+				if (event['noteName']) {
+					console.log(event);
+					audioController.play(event['noteName']);
+				}
+			});
+			player.loadArrayBuffer(midiFile);
+			setMidiPlayer(player);
+		});
 	}
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
@@ -178,7 +179,10 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
 						    as: Ionicons,
 						    name: "stop"
-						}} onPress={() => navigation.navigate('Score')}/>
+						}} onPress={() => {
+							onEnd();
+							navigation.navigate('Score')
+						}}/>
 					</Row>
 				</Row>
 			</Box>
