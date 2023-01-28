@@ -9,9 +9,11 @@ import User from "./models/User";
 import Constants from 'expo-constants';
 import store from "./state/Store";
 import { Platform } from "react-native";
+import * as bcrypt from 'bcryptjs';
 
 type AuthenticationInput = { username: string, password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
+
 export type AccessToken = string;
 
 type FetchParams = {
@@ -169,7 +171,7 @@ export default class API {
 	 * Search a song by its name
 	 * @param query the string used to find the songs
 	 */
-	 public static async searchSongs(query: string): Promise<Song[]> {
+	public static async searchSongs(query: string): Promise<Song[]> {
 		return Array.of(4).map((i) => ({
 			id: i,
 			name: `Searched Song ${i}`,
@@ -295,11 +297,11 @@ export default class API {
 						});
 					} else if (dataKey == 'password') {
 						API.fetch({route: '/auth/me'}).then((res) => {
-							if (res.password === oldValue) {
+							if (res.password === bcrypt.hash(oldValue, 8)) {
 								API.fetch({
 									route: '/auth/me',
 									method: 'PATCH',
-									body: {'email': newValue}}).finally(() => {
+									body: {'password': newValue}}).finally(() => {
 										return resolve('password successfully changed');
 									});
 							} else return reject('Wrong password');
