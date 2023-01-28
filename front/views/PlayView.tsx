@@ -22,7 +22,7 @@ type PlayViewProps = {
 let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
 
 if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
-	if (location.protocol !== 'https:') {
+	if (location.protocol === 'https:') {
 		scoroBaseApiUrl = "wss://" + location.host + "/ws";
 	} else {
 		scoroBaseApiUrl = "ws://" + location.host + "/ws";
