@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install
 # install expo cli
-RUN yarn global add expo-cli
+RUN yarn global add expo-cli@6.0.5
 # add sharp-cli (^2.1.0) for faster image processing
 RUN yarn global add sharp-cli@^2.1.0
 COPY . .
