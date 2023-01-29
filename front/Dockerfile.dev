@@ -1,12 +1,7 @@
 FROM node:16-alpine
 
 WORKDIR /app
-
-COPY package.json yarn.lock ./
-RUN yarn install
 RUN yarn global add npx expo-cli
-RUN npx expo install
-
 
 ENV DEVAPIURL http://back:3000
 CMD npx expo start --web
