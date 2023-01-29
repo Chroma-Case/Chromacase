@@ -1382,6 +1382,27 @@
     node-forge "^1.2.1"
     nullthrows "^1.1.1"
 
+"@expo/config-plugins@4.1.5":
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-4.1.5.tgz#9d357d2cda9c095e511b51583ede8a3b76174068"
+  integrity sha512-RVvU40RtZt12HavuDAe+LDIq9lHj7sheOfMEHdmpJ/uTA8pgvkbc56XF6JHQD+yRr6+uhhb+JnAasGq49dsQbw==
+  dependencies:
+    "@expo/config-types" "^45.0.0"
+    "@expo/json-file" "8.2.36"
+    "@expo/plist" "0.0.18"
+    "@expo/sdk-runtime-versions" "^1.0.0"
+    "@react-native/normalize-color" "^2.0.0"
+    chalk "^4.1.2"
+    debug "^4.3.1"
+    find-up "~5.0.0"
+    getenv "^1.0.0"
+    glob "7.1.6"
+    resolve-from "^5.0.0"
+    semver "^7.3.5"
+    slash "^3.0.0"
+    xcode "^3.0.1"
+    xml2js "0.4.23"
+
 "@expo/config-plugins@5.0.4", "@expo/config-plugins@~5.0.3":
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-5.0.4.tgz#216fea6558fe66615af1370de55193f4181cb23e"
@@ -1403,6 +1424,11 @@
     xcode "^3.0.1"
     xml2js "0.4.23"
 
+"@expo/config-types@^45.0.0":
+  version "45.0.0"
+  resolved "https://registry.yarnpkg.com/@expo/config-types/-/config-types-45.0.0.tgz#963c2fdce8fbcbd003758b92ed8a25375f437ef6"
+  integrity sha512-/QGhhLWyaGautgEyU50UJr5YqKJix5t77ePTwreOVAhmZH+ff3nrrtYTTnccx+qF08ZNQmfAyYMCD3rQfzpiJA==
+
 "@expo/config-types@^47.0.0":
   version "47.0.0"
   resolved "https://registry.yarnpkg.com/@expo/config-types/-/config-types-47.0.0.tgz#99eeabe0bba7a776e0f252b78beb0c574692c38d"
@@ -1416,6 +1442,23 @@
     "@babel/code-frame" "~7.10.4"
     "@expo/config-plugins" "~5.0.3"
     "@expo/config-types" "^47.0.0"
+    "@expo/json-file" "8.2.36"
+    getenv "^1.0.0"
+    glob "7.1.6"
+    require-from-string "^2.0.2"
+    resolve-from "^5.0.0"
+    semver "7.3.2"
+    slugify "^1.3.4"
+    sucrase "^3.20.0"
+
+"@expo/config@^6.0.14":
+  version "6.0.26"
+  resolved "https://registry.yarnpkg.com/@expo/config/-/config-6.0.26.tgz#2c9255ab618a354c8c8bd97366d60992ed21195f"
+  integrity sha512-nMQaZl69r6CMJFhCj0xcGJN9bIi4Uws0k9K6q6rGFPFNarS0z0aexeyNLv93/J+hsTJVn0GEYtGz5Y/R8boXxw==
+  dependencies:
+    "@babel/code-frame" "~7.10.4"
+    "@expo/config-plugins" "4.1.5"
+    "@expo/config-types" "^45.0.0"
     "@expo/json-file" "8.2.36"
     getenv "^1.0.0"
     glob "7.1.6"
@@ -10958,12 +11001,12 @@ jest-environment-node@^26.6.2:
     jest-mock "^26.6.2"
     jest-util "^26.6.2"
 
-jest-expo@^47.0.0:
-  version "47.0.1"
-  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-47.0.1.tgz#c6dd18d64b9e4ff69a74732225c349c73799573e"
-  integrity sha512-v/qq689LRqa6OPU2Z6mGHLpjNB0SBqWuwE9WdreCaSFurISD75ZlN3vEiq6ZojcHxYAX+4FW4xWd2CCJtubi4w==
+jest-expo@^45.0.1:
+  version "45.0.1"
+  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-45.0.1.tgz#59b26f30cb2198d7b5aa17886f08b31b38482ad1"
+  integrity sha512-45+QiO6FRnYgJKavhUly53NRBtld68SGAsHUGUOgL3XkAcwfDLqnaWyeWwbuqT1BjKp99lisg7Iaw5mUlB/WYw==
   dependencies:
-    "@expo/config" "~7.0.2"
+    "@expo/config" "^6.0.14"
     "@jest/create-cache-key-function" "^27.0.1"
     babel-jest "^26.6.3"
     find-up "^5.0.0"
@@ -10971,7 +11014,7 @@ jest-expo@^47.0.0:
     jest-watch-typeahead "0.6.4"
     json5 "^2.1.0"
     lodash "^4.17.19"
-    react-test-renderer "~18.1.0"
+    react-test-renderer "~17.0.2"
 
 jest-get-type@^26.3.0:
   version "26.3.0"
@@ -14699,7 +14742,7 @@ react-is@17.0.2, react-is@^17.0.1, react-is@^17.0.2:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-"react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^18.0.0, react-is@^18.1.0:
+"react-is@^16.12.0 || ^17.0.0 || ^18.0.0", react-is@^18.0.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
@@ -14896,7 +14939,7 @@ react-shallow-renderer@^16.13.1, react-shallow-renderer@^16.15.0:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0 || ^18.0.0"
 
-react-test-renderer@17.0.2:
+react-test-renderer@17.0.2, react-test-renderer@~17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-17.0.2.tgz#4cd4ae5ef1ad5670fc0ef776e8cc7e1231d9866c"
   integrity sha512-yaQ9cB89c17PUb0x6UfWRs7kQCorVdHlutU1boVPEsB8IDZH6n9tHxMacc3y0JoXOJUsZb/t/Mb8FUWMKaM7iQ==
@@ -14905,15 +14948,6 @@ react-test-renderer@17.0.2:
     react-is "^17.0.2"
     react-shallow-renderer "^16.13.1"
     scheduler "^0.20.2"
-
-react-test-renderer@~18.1.0:
-  version "18.1.0"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-18.1.0.tgz#35b75754834cf9ab517b6813db94aee0a6b545c3"
-  integrity sha512-OfuueprJFW7h69GN+kr4Ywin7stcuqaYAt1g7airM5cUgP0BoF5G5CXsPGmXeDeEkncb2fqYNECO4y18sSqphg==
-  dependencies:
-    react-is "^18.1.0"
-    react-shallow-renderer "^16.15.0"
-    scheduler "^0.22.0"
 
 react-timer-hook@^3.0.5:
   version "3.0.5"
@@ -18114,11 +18148,6 @@ yargs@^16.2.0:
     string-width "^4.2.0"
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
-
-yarn@^1.22.19:
-  version "1.22.19"
-  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.19.tgz#4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
-  integrity sha512-/0V5q0WbslqnwP91tirOvldvYISzaqhClxzyUKXYxs07yUILIs5jx/k6CFe8bvKSkds5w+eiOqta39Wk3WxdcQ==
 
 yocto-queue@^0.1.0:
   version "0.1.0"
