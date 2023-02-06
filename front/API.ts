@@ -296,16 +296,8 @@ export default class API {
 							} else return reject('Wrong email');
 						});
 					} else if (dataKey == 'password') {
-						API.fetch({route: '/auth/me'}).then((res) => {
-							if (res.password === bcrypt.hash(oldValue, 8)) {
-								API.fetch({
-									route: '/auth/me',
-									method: 'PATCH',
-									body: {'password': newValue}}).finally(() => {
-										return resolve('password successfully changed');
-									});
-							} else return reject('Wrong password');
-						});
+						//password check has to be implemented in the back-end.
+						return reject("to be implemented");
 					}
 				} catch (error) {
 					return reject("something went wrong: unable to update the " + dataKey);
