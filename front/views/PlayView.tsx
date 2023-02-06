@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, Text } from 'react-native';
+import { SafeAreaView, Text, Platform } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, IconButton, Progress, Row, View, useToast } from 'native-base';
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +17,18 @@ type PlayViewProps = {
 	songId: number
 }
 
+
+// this a hot fix this should be reverted soon
+let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
+
+if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
+	if (location.protocol === 'https:') {
+		scoroBaseApiUrl = "wss://" + location.host + "/ws";
+	} else {
+		scoroBaseApiUrl = "ws://" + location.host + "/ws";
+	}
+}
+
 const PlayView = ({ songId }: PlayViewProps) => {
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
@@ -25,7 +37,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const webSocket = useRef<WebSocket>();
 	const timer = useStopwatch({ autoStart: false });
 	const [paused, setPause] = useState<boolean>(true);
-	const [midiPlayer, setMidiPlayer] = useState();
+	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	
 	const partitionRessources = useQuery(["partition", songId], () =>
 		API.getPartitionRessources(songId)
@@ -53,7 +65,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	}
 	const onEnd = () => {
 		webSocket.current?.close();
-		midiPlayer?.destroy();
+		midiPlayer?.pause();
 	}
 
 	const onMIDISuccess = (access) => {
@@ -65,7 +77,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 		}
 		toast.show({ description: `MIDI ready!`, placement: 'top' });
 		let inputIndex = 0;
-		webSocket.current = new WebSocket(Constants.manifest?.extra?.scoroUrl);
+		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
 			webSocket.current!.send(JSON.stringify({
 				type: "start",
@@ -104,14 +116,15 @@ const PlayView = ({ songId }: PlayViewProps) => {
 			queryClient.fetchQuery(['song', songId, 'midi'], () => API.getSongMidi(songId)),
 			SoundFont.instrument(new AudioContext(), 'electric_piano_1'),
 		]).then(([midiFile, audioController]) => {
-				const player = new MidiPlayer.Player((event) => {
-					if (event['noteName']) {
-						audioController.play(event['noteName']);
-					}
-				});
-				player.loadArrayBuffer(midiFile);
-				setMidiPlayer(player);
-			})
+			const player = new MidiPlayer.Player((event) => {
+				if (event['noteName']) {
+					console.log(event);
+					audioController.play(event['noteName']);
+				}
+			});
+			player.loadArrayBuffer(midiFile);
+			setMidiPlayer(player);
+		});
 	}
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
@@ -166,7 +179,10 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
 						    as: Ionicons,
 						    name: "stop"
-						}} onPress={() => navigation.navigate('Score')}/>
+						}} onPress={() => {
+							onEnd();
+							navigation.navigate('Score')
+						}}/>
 					</Row>
 				</Row>
 			</Box>
