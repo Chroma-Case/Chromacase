@@ -63,13 +63,13 @@ const ProfilePictureBannerAndLevel = () => {
     return (
         <View style={{flexDirection: 'row'}}>
             <Image source={{ uri : "https://wallpaperaccess.com/full/317501.jpg" }} size="lg" 
-                   style={{ height: imageHeight, width: imageWidth, zIndex:0, opacity: 0.5 }}
+                    style={{ height: imageHeight, width: imageWidth, zIndex:0, opacity: 0.5 }}
             />
             <Box zIndex={1} position={"absolute"} marginY={10} marginX={10}>
                 <Image borderRadius={100} source={{ uri: profilePic }} 
-                       alt="Profile picture" size="lg" 
-                       style= {{position: 'absolute'}}
-	            />
+                    alt="Profile picture" size="lg" 
+                    style= {{position: 'absolute'}}
+				/>
                 <Box w="100%" paddingY={3} paddingLeft={100}>
                     <Heading>{username}</Heading>
                     <Heading>Level : {level}</Heading>

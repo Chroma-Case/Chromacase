@@ -26,7 +26,9 @@ const handleSignup = async (username: string, password: string, email: string, a
 		apiSetter(apiAccess);
 		return translate("loggedIn");
 	} catch (error) {
-		return "User already exists";
+		if (error instanceof APIError) return translate(error.userMessage);
+		if (error instanceof Error) return error.message;
+		return translate("unknownError");
 	}
 };
 
@@ -43,7 +45,7 @@ const AuthenticationView = () => {
 			}
 			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" >{translate("forgottenPassword")}</Button> }
 			<TextButton
-				translate={{ translationKey: mode === "signin" ? "signUp" : "signIn" }}
+				translate={{ translationKey: mode === "signin" ? "signUpBtn" : "signInBtn" }}
 				variant='outline' marginTop={5} colorScheme='primary'
 				onPress={() => setMode(mode === "signin" ? "signup" : "signin")}
 			/>
