@@ -30,7 +30,7 @@ export const protectedRoutes = <>
 </>;
 
 export const publicRoutes = <React.Fragment>
-	<Stack.Screen name="Login" component={AuthenticationView} options={{ title: translate('signinBtn')}} />
+	<Stack.Screen name="Login" component={AuthenticationView} options={{ title: translate('signInBtn')}} />
 </React.Fragment>;
 
 export const Router = () => {

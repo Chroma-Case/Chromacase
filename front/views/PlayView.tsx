@@ -162,23 +162,23 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					</Center>
 					<Row style={{ flex: 1, height: '100%', justifyContent: 'space-evenly', alignItems: 'center'  }}>
 						<IconButton size='sm' colorScheme='secondary' variant='solid'  _icon={{
-						    as: Ionicons,
-						    name: "play-back"
+							as: Ionicons,
+							name: "play-back"
 						}}/>
 						<IconButton size='sm' variant='solid' _icon={{
-						    as: Ionicons,
-						    name: paused ? "play" : "pause"
+							as: Ionicons,
+							name: paused ? "play" : "pause"
 						}} onPress={() => { 
 							if (paused) {
 								onResume();
 							} else {
 								onPause();
 							}
-						 }}/>
+						}}/>
 						<Text>{timer.minutes}:{timer.seconds.toString().padStart(2, '0')}</Text>
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
-						    as: Ionicons,
-						    name: "stop"
+							as: Ionicons,
+							name: "stop"
 						}} onPress={() => {
 							onEnd();
 							navigation.navigate('Score')

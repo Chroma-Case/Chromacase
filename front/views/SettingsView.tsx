@@ -42,7 +42,7 @@ export const MainView = ({navigation}) => {
             </Button>
 
             <Button variant='ghost' onPress={() => dispatch(unsetAccessToken())} >
-                <Translate translationKey='signoutBtn'/>
+                <Translate translationKey='signOutBtn'/>
             </Button>
         </Center>
     )
@@ -103,7 +103,7 @@ export const PreferencesView = ({navigation}) => {
             </View>
 
             <View style={{margin: 20}}>
-                <Text style={{ textAlign: "center" }}>Color blind mode</Text>
+                <Text style={{ textAlign: 'center' }}>Color blind mode</Text>
                 <Switch style={{ alignSelf: 'center'}} value={settings.colorBlind} colorScheme="primary"
                     onValueChange={(enabled) => { dispatch(updateSettings({ colorBlind: enabled })) }}
                 />
