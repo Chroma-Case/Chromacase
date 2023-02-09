@@ -3,7 +3,7 @@ import { RootState, useSelector } from './state/Store';
 import { SettingsState } from './state/SettingsSlice';
 import { Appearance } from 'react-native';
 
-const baseTheme = {
+const BaseTheme = {
 	primary:
 	{
 		50: '#e6faea',
@@ -17,8 +17,7 @@ const baseTheme = {
 		800: '#14341f',
 		900: '#001405',
 	},
-	secondary:
-	{
+	secondary: {
 		50: '#d8ffff',
 		100: '#acffff',
 		200: '#7dffff',
@@ -30,8 +29,7 @@ const baseTheme = {
 		800: '#004d4e',
 		900: '#001b1d',
 	},
-	error:
-	{
+	error: {
 		50: '#ffe2e9',
 		100: '#ffb1bf',
 		200: '#ff7f97',
@@ -43,21 +41,7 @@ const baseTheme = {
 		800: '#4f000c',
 		900: '#200004',
 	},
-	placeholder:
-	{
-		50: '#fbf0f2',
-		100: '#dcd8d9',
-		200: '#bfbfbf',
-		300: '#a6a6a6',
-		400: '#8c8c8c',
-		500: '#737373',
-		600: '#595959',
-		700: '#404040',
-		800: '#282626',
-		900: '#150a0d',
-	},
-	notification:
-	{
+	notification: {
 		50: '#ffe1e1',
 		100: '#ffb1b1',
 		200: '#ff7f7f',
@@ -71,7 +55,7 @@ const baseTheme = {
 	}
 }
 
-const lightBackground = {
+const LightBackground = {
 	50: '#f2f2f2',
 	100: '#d9d9d9',
 	200: '#bfbfbf',
@@ -84,47 +68,49 @@ const lightBackground = {
 	900: '#0d0d0d',
 };
 
-const lightTheme = {
-	...baseTheme,
-	background: lightBackground,
-	onSurface: lightBackground,
-	surface: lightBackground,
-	text: lightBackground,
-}
+const LightTheme = {
+	...BaseTheme,
+	background: LightBackground,
+	surface: LightBackground,
+	onSurface: LightBackground,
+	placeholder: LightBackground
+};
 
-const darkBackground = {
-	50: "#3f3a3a",
-	100: "#393636",
-	200: "#343232",
-	300: "#2e2e2e",
-	400: "#292929",
-	500: "#252626",
-	600: "#222424",
-	700: "#1f2121",
-	800: "#1b1f1f",
-	900: "#181c1c"
-  }
+const DarkBackground = {
+	50: "#1a02a4",
+	100: "#19048d",
+	200: "#160577",
+	300: "#140661",
+	400: "#0f054b",
+	500: "#0e0540",
+	600: "#0c0533",
+	700: "#0a0527",
+	800: "#07041b",
+	900: "#050310"
+};
 
-const darkTheme = {
-	...baseTheme,
-	background: darkBackground,
-	onSurface: darkBackground,
-	surface: darkBackground,
-	text: darkBackground,
-}
+const DarkTheme = {
+	...BaseTheme,
+	background: DarkBackground,
+	surface: DarkBackground,
+	onSurface: DarkBackground,
+	placeholder: DarkBackground
+};
+
 
 
 const ThemeProvider = ({ children }: { children: JSX.Element }) => {
-	const colorScheme: SettingsState['colorScheme'] = useSelector((state: RootState) => state.settings.colorScheme);
+	const colorScheme: SettingsState['colorScheme'] = useSelector((state: RootState) => state.settings.settings.colorScheme);
+	console.log(colorScheme);
 	const systemColorScheme = Appearance.getColorScheme();
 	return <NativeBaseProvider theme={extendTheme({
 		colors: colorScheme == 'dark'
-			? darkTheme
+			? DarkTheme
 			: colorScheme == 'light'
-				? lightTheme
-				: systemColorScheme == 'light'
-					? lightTheme
-					: darkTheme
+				? LightTheme
+				: systemColorScheme == 'dark'
+					? DarkTheme
+					: LightTheme
 	})}>
 		{ children }
 	</NativeBaseProvider>;
