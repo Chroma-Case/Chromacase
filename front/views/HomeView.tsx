@@ -2,7 +2,7 @@ import React from "react";
 import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import LoadingComponent from "../components/Loading";
-import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Button, useTheme, Heading, Progress } from 'native-base';
+import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Button, Heading } from 'native-base';
 import { useNavigation } from "@react-navigation/native";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
@@ -10,7 +10,6 @@ import ProgressBar from "../components/ProgressBar";
 import Translate from "../components/Translate";
 
 const HomeView = () => {
-	const theme = useTheme();
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: "big"});
 	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
@@ -82,7 +81,9 @@ const HomeView = () => {
 							
 							<Box flex="2" padding={5}>
 								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-									<Button backgroundColor={theme.colors.secondary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Search')} ><Translate translationKey='search'/></Button>
+									<Button colorScheme='secondary' size="sm" onPress={() => navigation.navigate('Search')} >
+										<Translate translationKey='search'/>
+									</Button>
 								</Box>
 								<SongCardGrid
 									maxItemPerRow={2}
@@ -99,7 +100,7 @@ const HomeView = () => {
 							</Box>
 						</Box>
 						<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-							<Button backgroundColor={theme.colors.primary[600]} rounded={"full"} size="sm" onPress={() => navigation.navigate('Settings')} >
+							<Button size="sm" onPress={() => navigation.navigate('Settings')} >
 								<Translate translationKey='settingsBtn'/>
 							</Button>
 						</Box>

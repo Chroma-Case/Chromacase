@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import { HStack, VStack, Text, Progress, Pressable } from "native-base";
+import { HStack, VStack, Text, Progress } from "native-base";
 import { translate } from "../i18n/i18n";
 import Card from './Card';
 
@@ -14,9 +14,8 @@ type CompetenciesTableProps = {
 
 const CompetenciesTable = (props: CompetenciesTableProps) => {
 	const navigation = useNavigation();
-	return <Pressable onPress={() => navigation.navigate('User')}>
-	{({ isHovered,  isFocused }) => (
-		<Card padding={5} bg={(isHovered || isFocused) ? 'coolGray.200' : undefined }>
+	return (
+		<Card padding={5} onPress={() => navigation.navigate('User')} shadow={3}>
 			<HStack space={5} flex={1}> 
 				<VStack space={5}> 
 				{ Object.keys(props).map((competencyName) => (
@@ -30,8 +29,7 @@ const CompetenciesTable = (props: CompetenciesTableProps) => {
 				</VStack>
 			</HStack>	
 		</Card>
-	)}
-	</Pressable>
+	)
 }
 
 export default CompetenciesTable

@@ -12,13 +12,12 @@ type SongCardProps = {
 const SongCard = (props: SongCardProps) => {
 	const { albumCover, songTitle, artistName, songId } = props;
 	const navigation = useNavigation();
-	return <Pressable onPress={() => navigation.navigate('Song', { songId })}>
-		{({ isHovered,  isFocused }) => (
+	return (
 		<Card
 			shadow={3}
 			flexDirection='column'
 			alignContent='space-around'
-			bg={(isHovered || isFocused) ? 'coolGray.200' : 'background.50' }
+			onPress={() => navigation.navigate('Song', { songId })}
 		>
 			<Image
 				style={{ zIndex: 0, aspectRatio: 1, margin: 5, borderRadius: CardBorderRadius}}
@@ -34,8 +33,7 @@ const SongCard = (props: SongCardProps) => {
 				</Text>
 			</VStack>
 		</Card>
-		)}
-	</Pressable>
+	)
 }
 
 export default SongCard;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import SearchBarSuggestions from "../components/SearchBarSuggestions";
