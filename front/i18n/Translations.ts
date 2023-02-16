@@ -58,7 +58,7 @@ export const en = {
 
 	/* account settings and logs */
 	// buttons
-	'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character': 'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character',
+	requirementsSentence: 'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character',
 	
 
 	// feedback for the user
@@ -150,7 +150,7 @@ export const fr: typeof en = {
 
 	/* account settings and logs */
 	// buttons
-	'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character': 'Doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial',
+	requirementsSentence: 'Doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial',
 
 	// feedback for the user
 	usernameTooShort: 'Le nom d\'utilisateur est trop court',
@@ -249,7 +249,7 @@ export const sp: typeof en = {
 
 	/* account settings and logs */
 	// buttons
-	'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character': 'Debe contener 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial',
+	requirementsSentence: 'Debe contener 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial',
 
 	// feedback for the user
 	usernameTooShort: 'Nombre de usuario demasiado corto',
