@@ -8,6 +8,7 @@ import { RootState, useSelector } from '../state/Store';
 import { useLanguage } from "../state/LanguageSlice";
 import { SettingsState, updateSettings } from '../state/SettingsSlice';
 import { AvailableLanguages, translate, Translate } from "../i18n/i18n";
+import TextButton from '../components/TextButton';
 
 const SettingsStack = createNativeStackNavigator();
 
@@ -56,10 +57,10 @@ const PreferencesView = ({navigation}) => {
             <Heading style={{ textAlign: "center" }}>
                 <Translate translationKey='prefBtn'/>
             </Heading>
-            <Button onPress={() => navigation.navigate('Main')} style={{ margin: 10}}>
-                <Translate translationKey='backBtn'/>
-            </Button>
-
+            <TextButton
+                onPress={() => navigation.navigate('Main')} style={{ margin: 10 }}
+                translate={{ translationKey: 'backBtn' }}
+            />
             <View style={{margin: 20, maxHeight: 100, maxWidth: 500, width: '80%'}}>
                 <Select selectedValue={settings.colorScheme}
                     placeholder={'Theme'}
