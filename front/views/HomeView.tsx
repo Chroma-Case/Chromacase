@@ -8,6 +8,7 @@ import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
 import ProgressBar from "../components/ProgressBar";
 import Translate from "../components/Translate";
+import TextButton from "../components/TextButton";
 
 const HomeView = () => {
 	const navigation = useNavigation();
@@ -81,9 +82,11 @@ const HomeView = () => {
 							
 							<Box flex="2" padding={5}>
 								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-									<Button colorScheme='secondary' size="sm" onPress={() => navigation.navigate('Search')} >
-										<Translate translationKey='search'/>
-									</Button>
+									<TextButton
+										translate={{ translationKey: 'search' }}
+										colorScheme='secondary' size="sm"
+										onPress={() => navigation.navigate('Search')}
+									/>
 								</Box>
 								<SongCardGrid
 									maxItemPerRow={2}
@@ -100,9 +103,9 @@ const HomeView = () => {
 							</Box>
 						</Box>
 						<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-							<Button size="sm" onPress={() => navigation.navigate('Settings')} >
-								<Translate translationKey='settingsBtn'/>
-							</Button>
+							<TextButton translate={{ translationKey: 'settingsBtn' }}
+								size="sm" onPress={() => navigation.navigate('Settings')} 
+							/>
 						</Box>
 				</VStack>
 			</Box>

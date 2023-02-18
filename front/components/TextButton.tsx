@@ -16,7 +16,7 @@ const TextButton = (props: TextButtonProps) => {
 	return <Button {...props}>
 		{ props.label !== undefined
 			? <Text color={textColor}>{props.label}</Text>
-			: <Translate {...props.translate} color={textColor} />
+			: <Translate color={textColor} {...props.translate} />
 		}
 	</Button>
 }

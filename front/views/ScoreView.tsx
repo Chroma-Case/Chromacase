@@ -3,6 +3,7 @@ import Translate from "../components/Translate";
 import SongCardGrid from "../components/SongCardGrid";
 import { useNavigation } from "@react-navigation/native";
 import { CardBorderRadius } from "../components/Card";
+import TextButton from "../components/TextButton";
 
 const ScoreView = (/*{ songId }, { songId: number }*/) => {
 	const theme = useTheme();
@@ -57,12 +58,14 @@ const ScoreView = (/*{ songId }, { songId: number }*/) => {
 			}))}
 		/>
 		<Row space={3} style={{ width: '100%', justifyContent: 'center' }}>
-			<Button backgroundColor='gray.300' onPress={() => navigation.navigate('Home')}>
-				<Translate translationKey='backBtn'/>
-			</Button>
-			<Button onPress={() => navigation.navigate('Song', { songId: 1 })}>
-				<Translate translationKey='playAgain'/>
-			</Button>
+			<TextButton backgroundColor='gray.300'
+				translate={{ translationKey: 'backBtn' }}
+				onPress={() => navigation.navigate('Home')}
+			/>
+			<TextButton
+				onPress={() => navigation.navigate('Song', { songId: 1 })}
+				translate={{ translationKey: 'playAgain' }}
+			/>
 		</Row>
 	</Column>
 }
