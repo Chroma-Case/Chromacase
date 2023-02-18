@@ -41,21 +41,22 @@ export const Router = () => {
 	});
 	const colorScheme = useColorScheme();
 
-	if (userProfile.isLoading && !userProfile.data) {
-		return <Center style={{ flexGrow: 1 }}>
-			<LoadingComponent/>
-		</Center>
-	}
 	return (
 		<NavigationContainer theme={colorScheme == 'light'
 			? DefaultTheme
 			: DarkTheme
 		}>
 			<Stack.Navigator>
-			{ userProfile.isSuccess && accessToken
-				? protectedRoutes
-				: publicRoutes
-			}
+				{ userProfile.isLoading && !userProfile.data ?
+					<Stack.Screen name="Loading" component={() =>
+						<Center style={{ flexGrow: 1 }}>
+							<LoadingComponent/>
+						</Center>
+					}/>
+					: userProfile.isSuccess && accessToken
+						? protectedRoutes
+						: publicRoutes
+				}
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
