@@ -7,6 +7,7 @@ import { Translate, translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
 import API from "../API";
+import TextButton from "../components/TextButton";
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -45,9 +46,10 @@ const SongLobbyView = () => {
 								format={(level) => `${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
 							/>
 						</Text>
-						<Button width='auto'  onPress={() => navigation.navigate('Play', { songId: songQuery.data?.id })} rightIcon={<Icon as={Ionicons} name="play-outline"/>}>
-							<Translate translationKey='playBtn'/>
-						</Button>
+						<TextButton translate={{ translationKey: 'playBtn' }} width='auto'
+							onPress={() => navigation.navigate('Play', { songId: songQuery.data?.id })}
+							rightIcon={<Icon as={Ionicons} name="play-outline"/>}
+						/>
 					</Box>
 				</Box>
 			</Box>
@@ -67,13 +69,12 @@ const SongLobbyView = () => {
 			</Box>
 			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}
 			<Box flexDirection='row'>
-				<Button
+				<TextButton
+					translate={{ translationKey: 'chapters' }}
 					variant='ghost'
 					onPress={() => setChaptersOpen(!chaptersOpen)}
 					endIcon={<Icon as={Ionicons} name={chaptersOpen ? "chevron-up-outline" : "chevron-down-outline"}/>}
-				>
-					<Translate translationKey='chapters'/>
-				</Button>
+				/>
 			</Box>
 			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>
 				{ chaptersQuery.isLoading && <LoadingComponent/>}

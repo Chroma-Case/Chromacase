@@ -9,9 +9,9 @@ import {
 	Stack,
 	WarningOutlineIcon,
 	Box,
-	Button,
 	useToast,
 } from "native-base";
+import TextButton from "../TextButton";
 
 interface SigninFormProps {
 	onSubmit: (username: string, password: string) => Promise<string>;
@@ -97,7 +97,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
-						<Button
+						<TextButton translate={{ translationKey: 'login' }}
 							style={{ marginTop: 10 }}
 							isLoading={submittingForm}
 							isDisabled={
@@ -120,9 +120,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 									setSubmittingForm(false);
 								}
 							}}
-						>
-							<Translate translationKey='login'/>
-						</Button>
+						/>
 					</FormControl>
 				</Stack>
 		</Box>

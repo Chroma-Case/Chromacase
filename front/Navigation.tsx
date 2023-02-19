@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
 import { translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
@@ -15,6 +15,7 @@ import ScoreView from './views/ScoreView';
 import { Center } from 'native-base';
 import LoadingComponent from './components/Loading';
 import ProfileView from './views/ProfileView';
+import useColorScheme from './hooks/colorScheme';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,20 +39,25 @@ export const Router = () => {
 		retry: 1,
 		refetchOnWindowFocus: false
 	});
+	const colorScheme = useColorScheme();
 
-	if (userProfile.isLoading && !userProfile.data) {
-		return <Center style={{ flexGrow: 1 }}>
-			<LoadingComponent/>
-		</Center>
-	}
 	return (
-		<NavigationContainer>
+		<NavigationContainer theme={colorScheme == 'light'
+			? DefaultTheme
+			: DarkTheme
+		}>
 			<Stack.Navigator>
-			{ userProfile.isSuccess && accessToken
-				? protectedRoutes
-				: publicRoutes
-			}
+				{ userProfile.isLoading && !userProfile.data ?
+					<Stack.Screen name="Loading" component={() =>
+						<Center style={{ flexGrow: 1 }}>
+							<LoadingComponent/>
+						</Center>
+					}/>
+					: userProfile.isSuccess && accessToken
+						? protectedRoutes
+						: publicRoutes
+				}
 			</Stack.Navigator>
 		</NavigationContainer>
-	)
+	);
 }

@@ -6,6 +6,7 @@ import { setAccessToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
 import SignupForm from "../components/forms/signupform";
+import TextButton from "../components/TextButton";
 
 const hanldeSignin = async (username: string, password: string, apiSetter: (accessToken: string) => void): Promise<string> => {
 	try {
@@ -39,11 +40,11 @@ const AuthenticationView = () => {
 			  	: <SignupForm onSubmit={(username, password, email) => handleSignup(username, password, email, (accessToken) => dispatch(setAccessToken(accessToken)))} />
 			}
 			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" >{translate("forgottenPassword")}</Button> }
-			<Button variant='outline' marginTop={5} colorScheme='primary' onPress={() => setMode(mode === "signin" ? "signup" : "signin")}>
-				<Text>
-					<Translate translationKey={mode === "signin" ? "signUp" : "signIn"}/>
-				</Text>
-			</Button>
+			<TextButton
+				translate={{ translationKey: mode === "signin" ? "signUp" : "signIn" }}
+				variant='outline' marginTop={5} colorScheme='primary'
+				onPress={() => setMode(mode === "signin" ? "signup" : "signin")}
+			/>
 		</Center>
 	);
 };

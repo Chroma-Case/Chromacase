@@ -1,5 +1,5 @@
 import userReducer from '../state/UserSlice';
-import settingsReduder from '../state/SettingsSlice';
+import settingsReduder from './SettingsSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import languageReducer from './LanguageSlice';
 import { TypedUseSelectorHook, useDispatch as reduxDispatch, useSelector as reduxSelector } from 'react-redux'

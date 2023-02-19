@@ -15,29 +15,25 @@ const ProgressBar = ({ xp }: { xp: number}) => {
 	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
 
 	return (
-		<Pressable onPress={() => nav.navigate('User')}>
-		{({ isHovered,  isFocused }) => (
-			<Card w="90%" maxW='500' style={{flexDirection}}
-				  bg={(isHovered || isFocused) ? 'coolGray.200' : undefined }>
-				<Box w="20%" paddingRight={2} paddingLeft={2} paddingY={2}>
-					<Image borderRadius={100} source={{
-      					uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
-    				}} alt="Profile picture" size="sm"
-					/>
-				</Box>
-
-				<Box w='80%' paddingY={4}>
-					<VStack alignItems={'center'}>
-						<Text>{`${translate('level')} ${level}`}</Text>
-						<Box w="100%">
-							<Progress value={progessValue} mx="4" />
-						</Box>
-						<Text>{xp} / {nextLevelThreshold} {translate('levelProgress')}</Text>
-					</VStack>
-				</Box>
-			</Card>
-		)}
-		</Pressable>
+		<Card w="90%" maxW='500' style={{flexDirection}}
+			onPress={() => nav.navigate('User')}
+		>
+			<Box w="20%" paddingRight={2} paddingLeft={2} paddingY={2}>
+				<Image borderRadius={100} source={{
+      				uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
+    			}} alt="Profile picture" size="sm"
+				/>
+			</Box>
+			<Box w='80%' paddingY={4}>
+				<VStack alignItems={'center'}>
+					<Text>{`${translate('level')} ${level}`}</Text>
+					<Box w="100%">
+						<Progress value={progessValue} mx="4" />
+					</Box>
+					<Text>{xp} / {nextLevelThreshold} {translate('levelProgress')}</Text>
+				</VStack>
+			</Box>
+		</Card>
 	);
 }
 

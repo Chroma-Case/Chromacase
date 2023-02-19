@@ -6,16 +6,17 @@ import { RootState, useSelector } from "../state/Store";
 type TranslateProps = {
 	translationKey: keyof typeof en;
 	format?: (translated: string) => string;
-} 
+} & Parameters<typeof Text>[0];
 /**
  * Translation component
  * @param param0 
  * @returns 
  */
-const Translate = ({ translationKey, format }: TranslateProps) => {
+const Translate = ({ translationKey, format, ...props }: TranslateProps) => {
 	const selectedLanguage = useSelector((state: RootState) => state.language.value);
 	const translated = translate(translationKey, selectedLanguage);
-	return <Text>{format ? format(translated) : translated}</Text>;
+
+	return <Text {...props}>{format ? format(translated) : translated}</Text>;
 }
 
 export default Translate;
