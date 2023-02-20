@@ -12,7 +12,7 @@ import TextButton from '../components/TextButton';
 
 const SettingsStack = createNativeStackNavigator();
 
-const MainView = ({navigation}) => {
+export const MainView = ({navigation}) => {
     const dispatch = useDispatch();
 
     return (
@@ -48,7 +48,7 @@ const MainView = ({navigation}) => {
     )
 }
 
-const PreferencesView = ({navigation}) => {
+export const PreferencesView = ({navigation}) => {
     const dispatch = useDispatch();
     const language: AvailableLanguages = useSelector((state: RootState) => state.language.value);
     const settings = useSelector((state: RootState) => (state.settings.settings as SettingsState));
@@ -176,7 +176,7 @@ const NotificationsView = ({navigation}) => {
     )
 }
 
-const PrivacyView = ({navigation}) => {
+export const PrivacyView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Heading style={{ textAlign: "center" }}>
@@ -205,7 +205,7 @@ const PrivacyView = ({navigation}) => {
     )
 }
 
-const ChangePasswordView = ({navigation}) => {
+export const ChangePasswordView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
@@ -214,7 +214,7 @@ const ChangePasswordView = ({navigation}) => {
     )
 }
 
-const ChangeEmailView = ({navigation}) => {
+export const ChangeEmailView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
@@ -223,7 +223,7 @@ const ChangeEmailView = ({navigation}) => {
     )
 }
 
-const GoogleAccountView = ({navigation}) => {
+export const GoogleAccountView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>

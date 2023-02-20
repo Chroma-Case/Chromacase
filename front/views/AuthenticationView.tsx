@@ -37,7 +37,7 @@ const AuthenticationView = () => {
 			<Text><Translate translationKey='welcome'/></Text>
 			{mode === "signin" 
 				? <SigninForm onSubmit={(username, password) => hanldeSignin(username, password, (accessToken) => dispatch(setAccessToken(accessToken)))} />
-			  	: <SignupForm onSubmit={(username, password, email) => handleSignup(username, password, email, (accessToken) => dispatch(setAccessToken(accessToken)))} />
+				: <SignupForm onSubmit={(username, password, email) => handleSignup(username, password, email, (accessToken) => dispatch(setAccessToken(accessToken)))} />
 			}
 			{ mode ==="signin" && <Button variant="outline" marginTop={5} colorScheme="error" >{translate("forgottenPassword")}</Button> }
 			<TextButton

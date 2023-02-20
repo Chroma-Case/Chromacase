@@ -35,7 +35,7 @@ export class AlbumController {
 				...createAlbumDto,
 				artist: createAlbumDto.artist
 					? { connect: { id: createAlbumDto.artist } }
-					: undefined
+					: undefined,
 			});
 		} catch {
 			throw new ConflictException(
