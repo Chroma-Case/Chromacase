@@ -13,11 +13,11 @@ const SongCardGrid = (props: SongCardGrid) => {
 	return <VStack>
 		<Heading>{props.heading}</Heading>
 		<FlatGrid
-			maxItemsPerRow={props.maxItemPerRow ?? 5}
+			itemDimension={250}
 			additionalRowStyle={{ justifyContent: 'space-between' }}
 			data={props.songs}
 			renderItem={({ item }) => <SongCard {...item} /> }
-			spacing={20}
+			spacing={10}
 		/>
 	</VStack>
 }
