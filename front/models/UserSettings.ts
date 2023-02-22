@@ -15,7 +15,7 @@ interface UserSettings {
     },
     privacy: {
         dataCollection: boolean,
-        customAdd: boolean,
+        customAd: boolean,
         recommendation: boolean
     }
 }

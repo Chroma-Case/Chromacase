@@ -82,9 +82,46 @@ export default class API {
 	 * Retrieve information of the currently authentified user
 	 */
 	public static async getUserInfo(): Promise<User> {
-		return API.fetch({
+		let me = await API.fetch({
 			route: '/auth/me'
 		});
+
+		// /auth/me only returns username and id (it needs to be changed)
+
+		let user = await API.fetch({
+			route: `/users/${me.id}`
+		});
+
+		// this a dummy settings object, we will need to fetch the real one from the API
+		return {
+			id: user.id as number,
+			name: (user.username ?? user.name) as string,
+			email: user.email as string,
+			xp: 0,
+			premium: false,
+			metrics: {},
+			settings: {
+				preferences: {
+					deviceId: 1,
+					micVolume: 10,
+					theme: 'system',
+					lang: 'fr',
+					difficulty: 'beg',
+					colorBlind: false
+				},
+				notifications: {
+					pushNotif: false,
+					emailNotif: false,
+					trainNotif: false,
+					newSongNotif: false
+				},
+				privacy: {
+					dataCollection: true,
+					customAd: true,
+					recommendation: true
+				}
+			},
+		} as User;
 	}
 
 	public static async getUserSkills() {
