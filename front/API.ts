@@ -148,9 +148,21 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static async getSong(songId: number): Promise<Song> {
-		return API.fetch({
+		let song = await API.fetch({
 			route: `/song/${songId}`
 		});
+
+		// this is a dummy illustration, we will need to fetch the real one from the API
+		return {
+			id: song.id as number,
+			name : song.name as string,
+			artistId: song.artistId as number,
+			albumId: song.albumId as number,
+			genreId: song.genreId as number,
+			details: song.difficulties,
+			cover: dummyIllustration,
+			metrics: {}
+		} as Song;
 	}
 	/**
 	 * Retrive a song's midi partition
@@ -158,8 +170,17 @@ export default class API {
 	 */
 	public static async getSongMidi(songId: number): Promise<any> {
 		return API.fetch({
-			route: `/song/${songId}/midi`,
-			raw: true,
+			route: `/song/${songId}/midi`
+		});
+	}
+
+	/**
+	 * Retrive a song's musicXML partition
+	 * @param songId the id to find the song
+	 */
+	public static async getSongMusicXML(songId: number): Promise<any> {
+		return API.fetch({
+			route: `/song/${songId}/musicXml`
 		});
 	}
 
@@ -195,7 +216,7 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
-		return [6, 1, 2, 3, 4, 5].map((value) => ({
+		return [].map((value) => ({
 			songId: songId,
 			userId: 1,
 			score: value
@@ -207,15 +228,7 @@ export default class API {
 	 * @param query the string used to find the songs
 	 */
 	 public static async searchSongs(query: string): Promise<Song[]> {
-		return Array.of(4).map((i) => ({
-			id: i,
-			name: `Searched Song ${i}`,
-			artistId: i,
-			genreId: i,
-			albumId: i,
-			cover: dummyIllustration,
-			metrics: {}
-		}));
+		return [];
 	}
 
 	/**
@@ -237,45 +250,21 @@ export default class API {
 	 * @param lessonId the id to find the lesson
 	 */
 	public static async getSearchHistory(): Promise<Song[]> {
-		return Array.of(4).map((i) => ({
-			id: i,
-			name: `Song in history ${i}`,
-			artistId: i,
-			genreId: i,
-			albumId: i,
-			cover: dummyIllustration,
-			metrics: {}
-		}));
+		return [];
 	}
 
 	/**
 	 * Retrieve the authenticated user's recommendations
 	 */
 	public static async getUserRecommendations(): Promise<Song[]> {
-		return Array.of(4).map((i) => ({
-			id: 1,
-			name: `Recommended Song ${i}`,
-			artistId: i,
-			genreId: i,
-			albumId: i,
-			cover: dummyIllustration,
-			metrics: {}
-		}));
+		return [];
 	}
 
 	/**
 	 * Retrieve the authenticated user's play history
 	 */
 	public static async getUserPlayHistory(): Promise<Song[]> {
-		return Array.of(4).map((i) => ({
-			id: i,
-			name: `played Song ${i}`,
-			artistId: i,
-			genreId: i,
-			albumId: i,
-			cover: dummyIllustration,
-			metrics: {}
-		}));
+		return [];
 	}
 
 	/**
