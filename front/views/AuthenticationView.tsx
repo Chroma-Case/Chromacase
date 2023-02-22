@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from '../state/Store';
 import { Translate, translate } from "../i18n/i18n";
-import API from "../API";
+import API, { APIError } from "../API";
 import { setAccessToken } from "../state/UserSlice";
 import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
@@ -14,7 +14,9 @@ const hanldeSignin = async (username: string, password: string, apiSetter: (acce
 		apiSetter(apiAccess);
 		return translate("loggedIn");
 	} catch (error) {
-		return "Username or password incorrect";
+		if (error instanceof APIError) return translate(error.userMessage);
+		if (error instanceof Error) return error.message;
+		return "Unknown error";
 	}
 };
 
