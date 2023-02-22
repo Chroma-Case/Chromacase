@@ -16,7 +16,7 @@ const hanldeSignin = async (username: string, password: string, apiSetter: (acce
 	} catch (error) {
 		if (error instanceof APIError) return translate(error.userMessage);
 		if (error instanceof Error) return error.message;
-		return "Unknown error";
+		return translate("unknownError");
 	}
 };
 
