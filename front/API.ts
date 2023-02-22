@@ -22,8 +22,21 @@ type FetchParams = {
 	raw?: true;
 };
 
-const dummyIllustration =
-	"https://i.discogs.com/syRCX8NaLwK2SMk8X6TVU_DWc8RRqE4b-tebAQ6kVH4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTgyNTQz/OC0xNjE3ODE0NDI2/LTU1MjUuanBlZw.jpeg";
+const dummyIllustrations =
+[
+	"https://i.discogs.com/syRCX8NaLwK2SMk8X6TVU_DWc8RRqE4b-tebAQ6kVH4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTgyNTQz/OC0xNjE3ODE0NDI2/LTU1MjUuanBlZw.jpeg",
+	"https://folkr.fr/wp-content/uploads/2017/06/dua-lipa-folkr-2017-cover-04.jpg",
+	"https://folkr.fr/wp-content/uploads/2017/06/dua-lipa-folkr-2017-cover-03.jpg",
+	"https://cdn.fireemblemwiki.org/e/eb/Album_106698A.jpg",
+	"https://upload.wikimedia.org/wikipedia/en/8/84/California_Gurls_cover.png",
+	"https://upload.wikimedia.org/wikipedia/en/a/a2/Katy_Perry_-_Peacock_%282012%29.jpg",
+	"https://upload.wikimedia.org/wikipedia/en/d/d5/Katy_Perry_feat._Riff_Raff_-_This_Is_How_We_Do.png",
+	"https://upload.wikimedia.org/wikipedia/en/8/83/David_Guetta_-_I_Can_Only_Imagine.jpg",
+	"https://upload.wikimedia.org/wikipedia/en/f/f3/David_Guetta_-_Pop_Life_-_2007.jpg",
+	"https://upload.wikimedia.org/wikipedia/en/b/ba/David_Guetta_2U.jpg",
+];
+
+const getDummyIllustration = () => dummyIllustrations[Math.floor(Math.random() * dummyIllustrations.length)];
 
 // we will need the same thing for the scorometer API url
 const baseAPIUrl =
@@ -172,7 +185,7 @@ export default class API {
 			albumId: song.albumId as number,
 			genreId: song.genreId as number,
 			details: song.difficulties,
-			cover: dummyIllustration,
+			cover: getDummyIllustration(),
 			metrics: {},
 		} as Song;
 	}
