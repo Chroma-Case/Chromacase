@@ -9,6 +9,7 @@ import User from "./models/User";
 import Constants from "expo-constants";
 import store from "./state/Store";
 import { Platform } from "react-native";
+import { en } from "./i18n/Translations";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -22,8 +23,23 @@ type FetchParams = {
 	raw?: true;
 };
 
-const dummyIllustrations =
-[
+// This Exception is intended to cover all business logic errors (invalid credentials, couldn't find a song, etc.)
+// technical errors (network, server, etc.) should be handled as standard Error exceptions
+// it helps to filter errors in the catch block, APIErrors messages should
+// be safe to use in combination with the i18n library
+export class APIError extends Error {
+	constructor(
+		message: string,
+		public status: number,
+		// Set the message to the correct error this is a placeholder 
+		// when the error is only used internally (middleman)
+		public userMessage : keyof typeof en = "unknownError"
+	) {
+		super(message);
+	}
+}
+
+const dummyIllustrations = [
 	"https://i.discogs.com/syRCX8NaLwK2SMk8X6TVU_DWc8RRqE4b-tebAQ6kVH4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTgyNTQz/OC0xNjE3ODE0NDI2/LTU1MjUuanBlZw.jpeg",
 	"https://folkr.fr/wp-content/uploads/2017/06/dua-lipa-folkr-2017-cover-04.jpg",
 	"https://folkr.fr/wp-content/uploads/2017/06/dua-lipa-folkr-2017-cover-03.jpg",
@@ -56,16 +72,20 @@ export default class API {
 				header,
 			body: JSON.stringify(params.body),
 			method: params.method ?? "GET",
+		}).catch(() => {
+			throw new Error("Error while fetching API: " + baseAPIUrl);
 		});
 		if (params.raw) {
 			return response.arrayBuffer();
 		}
 		const body = await response.text();
-
 		try {
 			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
 			if (!response.ok) {
-				throw new Error(jsonResponse.error ?? response.statusText);
+				throw new APIError(
+					jsonResponse ?? response.statusText,
+					response.status
+				);
 			}
 			return jsonResponse;
 		} catch (e) {
@@ -82,7 +102,14 @@ export default class API {
 			route: "/auth/login",
 			body: authenticationInput,
 			method: "POST",
-		}).then((responseBody) => responseBody.access_token);
+		})
+			.then((responseBody) => responseBody.access_token)
+			.catch((e) => {
+				if (!(e instanceof APIError)) throw e;
+
+				if (e.status == 401) throw new APIError("invalidCredentials", 401, "invalidCredentials");
+				throw e;
+			});
 	}
 	/**
 	 * Create a new user profile, with an email and a password

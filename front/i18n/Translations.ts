@@ -89,6 +89,7 @@ export const en = {
 	forgottenPassword: 'Forgotten password',
 
 	partition: 'Partition',
+	unknownError: 'Unknown error',
 };
 
 export const fr: typeof en = {
@@ -182,6 +183,7 @@ export const fr: typeof en = {
 	forgottenPassword: "Mot de passe oublié",
 
 	partition: 'Partition',
+	unknownError: 'Erreur inconnue',
 };
 
 export const sp: typeof en = {
@@ -277,4 +279,5 @@ export const sp: typeof en = {
 	repeatPassword: 'Répéter le mot de passe',
 
 	partition: 'Partition',
+	unknownError: 'Error desconocido',
 };
