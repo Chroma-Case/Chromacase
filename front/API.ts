@@ -6,38 +6,43 @@ import LessonHistory from "./models/LessonHistory";
 import Song from "./models/Song";
 import SongHistory from "./models/SongHistory";
 import User from "./models/User";
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 import store from "./state/Store";
 import { Platform } from "react-native";
 
-type AuthenticationInput = { username: string, password: string };
+type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
 export type AccessToken = string;
 
 type FetchParams = {
 	route: string;
 	body?: Object;
-	method?: 'GET' | 'POST' | 'DELETE',
-	// If true, No JSON parsing is done, the raw response's content is returned 
+	method?: "GET" | "POST" | "DELETE";
+	// If true, No JSON parsing is done, the raw response's content is returned
 	raw?: true;
-}
+};
 
-const dummyIllustration = "https://i.discogs.com/syRCX8NaLwK2SMk8X6TVU_DWc8RRqE4b-tebAQ6kVH4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTgyNTQz/OC0xNjE3ODE0NDI2/LTU1MjUuanBlZw.jpeg";
+const dummyIllustration =
+	"https://i.discogs.com/syRCX8NaLwK2SMk8X6TVU_DWc8RRqE4b-tebAQ6kVH4/rs:fit/g:sm/q:90/h:600/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTgyNTQz/OC0xNjE3ODE0NDI2/LTU1MjUuanBlZw.jpeg";
 
 // we will need the same thing for the scorometer API url
-const baseAPIUrl = process.env.NODE_ENV != 'development' && Platform.OS === 'web' ? '/api' : Constants.manifest?.extra?.apiUrl;
+const baseAPIUrl =
+	process.env.NODE_ENV != "development" && Platform.OS === "web"
+		? "/api"
+		: Constants.manifest?.extra?.apiUrl;
 
 export default class API {
-
 	private static async fetch(params: FetchParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
-			'Content-Type': 'application/json'
-		}
+			"Content-Type": "application/json",
+		};
 		const response = await fetch(`${baseAPIUrl}${params.route}`, {
-			headers: jwtToken && { ...header, 'Authorization': `Bearer ${jwtToken}` } || header,
+			headers:
+				(jwtToken && { ...header, Authorization: `Bearer ${jwtToken}` }) ||
+				header,
 			body: JSON.stringify(params.body),
-			method: params.method ?? 'GET' 
+			method: params.method ?? "GET",
 		});
 		if (params.raw) {
 			return response.arrayBuffer();
@@ -47,7 +52,7 @@ export default class API {
 		try {
 			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
 			if (!response.ok) {
-				throw new Error(jsonResponse.error ?? response.statusText)
+				throw new Error(jsonResponse.error ?? response.statusText);
 			}
 			return jsonResponse;
 		} catch (e) {
@@ -57,25 +62,32 @@ export default class API {
 		}
 	}
 
-	public static async authenticate(authenticationInput: AuthenticationInput): Promise<AccessToken> {
+	public static async authenticate(
+		authenticationInput: AuthenticationInput
+	): Promise<AccessToken> {
 		return API.fetch({
-			route: '/auth/login',
+			route: "/auth/login",
 			body: authenticationInput,
-			method: 'POST'
-		}).then((responseBody) => responseBody.access_token)
+			method: "POST",
+		}).then((responseBody) => responseBody.access_token);
 	}
 	/**
 	 * Create a new user profile, with an email and a password
 	 * @param registrationInput the credentials to create a new profile
 	 * @returns A Promise. On success, will be resolved into an instance of the API wrapper
 	 */
-	public static async createAccount(registrationInput: RegistrationInput): Promise<AccessToken> {
+	public static async createAccount(
+		registrationInput: RegistrationInput
+	): Promise<AccessToken> {
 		await API.fetch({
-			route: '/auth/register',
+			route: "/auth/register",
 			body: registrationInput,
-			method: 'POST'
+			method: "POST",
 		});
-		return API.authenticate({ username: registrationInput.username, password: registrationInput.password });
+		return API.authenticate({
+			username: registrationInput.username,
+			password: registrationInput.password,
+		});
 	}
 
 	/***
@@ -83,13 +95,13 @@ export default class API {
 	 */
 	public static async getUserInfo(): Promise<User> {
 		let me = await API.fetch({
-			route: '/auth/me'
+			route: "/auth/me",
 		});
 
 		// /auth/me only returns username and id (it needs to be changed)
 
 		let user = await API.fetch({
-			route: `/users/${me.id}`
+			route: `/users/${me.id}`,
 		});
 
 		// this a dummy settings object, we will need to fetch the real one from the API
@@ -104,22 +116,22 @@ export default class API {
 				preferences: {
 					deviceId: 1,
 					micVolume: 10,
-					theme: 'system',
-					lang: 'fr',
-					difficulty: 'beg',
-					colorBlind: false
+					theme: "system",
+					lang: "fr",
+					difficulty: "beg",
+					colorBlind: false,
 				},
 				notifications: {
 					pushNotif: false,
 					emailNotif: false,
 					trainNotif: false,
-					newSongNotif: false
+					newSongNotif: false,
 				},
 				privacy: {
 					dataCollection: true,
 					customAd: true,
-					recommendation: true
-				}
+					recommendation: true,
+				},
 			},
 		} as User;
 	}
@@ -128,11 +140,11 @@ export default class API {
 		return {
 			pedalsCompetency: Math.random() * 100,
 			rightHandCompetency: Math.random() * 100,
-			leftHandCompetency:	Math.random() * 100,
-			accuracyCompetency:	Math.random() * 100,
+			leftHandCompetency: Math.random() * 100,
+			accuracyCompetency: Math.random() * 100,
 			arpegeCompetency: Math.random() * 100,
 			chordsCompetency: Math.random() * 100,
-		}
+		};
 	}
 
 	/**
@@ -149,19 +161,19 @@ export default class API {
 	 */
 	public static async getSong(songId: number): Promise<Song> {
 		let song = await API.fetch({
-			route: `/song/${songId}`
+			route: `/song/${songId}`,
 		});
 
 		// this is a dummy illustration, we will need to fetch the real one from the API
 		return {
 			id: song.id as number,
-			name : song.name as string,
+			name: song.name as string,
 			artistId: song.artistId as number,
 			albumId: song.albumId as number,
 			genreId: song.genreId as number,
 			details: song.difficulties,
 			cover: dummyIllustration,
-			metrics: {}
+			metrics: {},
 		} as Song;
 	}
 	/**
@@ -170,7 +182,8 @@ export default class API {
 	 */
 	public static async getSongMidi(songId: number): Promise<any> {
 		return API.fetch({
-			route: `/song/${songId}/midi`
+			route: `/song/${songId}/midi`,
+			raw: true,
 		});
 	}
 
@@ -180,7 +193,8 @@ export default class API {
 	 */
 	public static async getSongMusicXML(songId: number): Promise<any> {
 		return API.fetch({
-			route: `/song/${songId}/musicXml`
+			route: `/song/${songId}/musicXml`,
+			raw: true,
 		});
 	}
 
@@ -189,10 +203,9 @@ export default class API {
 	 */
 	public static async getArtist(artistId: number): Promise<Artist> {
 		return API.fetch({
-			route: `/artist/${artistId}`
+			route: `/artist/${artistId}`,
 		});
 	}
-
 
 	/**
 	 * Retrive a song's chapters
@@ -207,7 +220,7 @@ export default class API {
 			type: "chorus",
 			key_aspect: "rhythm",
 			difficulty: value,
-			id: value * 10
+			id: value * 10,
 		}));
 	}
 
@@ -216,10 +229,10 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
-		return [].map((value) => ({
+		return [67, 4578, 2, 9990].map((value) => ({
 			songId: songId,
 			userId: 1,
-			score: value
+			score: value,
 		}));
 	}
 
@@ -227,8 +240,8 @@ export default class API {
 	 * Search a song by its name
 	 * @param query the string used to find the songs
 	 */
-	 public static async searchSongs(query: string): Promise<Song[]> {
-		return [];
+	public static async searchSongs(query: string): Promise<Song[]> {
+		return Promise.all([1, 5, 2].map(API.getSong));
 	}
 
 	/**
@@ -240,8 +253,8 @@ export default class API {
 			title: "Song",
 			description: "A song",
 			requiredLevel: 1,
-			mainSkill: 'lead-head-change',
-			id: lessonId
+			mainSkill: "lead-head-change",
+			id: lessonId,
 		};
 	}
 
@@ -250,32 +263,38 @@ export default class API {
 	 * @param lessonId the id to find the lesson
 	 */
 	public static async getSearchHistory(): Promise<Song[]> {
-		return [];
+		return Promise.all([1, 2].map(API.getSong));
 	}
 
 	/**
 	 * Retrieve the authenticated user's recommendations
 	 */
 	public static async getUserRecommendations(): Promise<Song[]> {
-		return [];
+		// we can assume at least 5 songs
+		// in the future the API will return the songs directly to avoid spamming the API
+		return Promise.all([1, 2, 3, 4, 5].map(API.getSong));
 	}
 
 	/**
 	 * Retrieve the authenticated user's play history
 	 */
 	public static async getUserPlayHistory(): Promise<Song[]> {
-		return [];
+		return Promise.all([3, 4].map(API.getSong));
 	}
 
 	/**
 	 * Retrieve a lesson's history
 	 * @param lessonId the id to find the lesson
 	 */
-	public static async getLessonHistory(lessonId: number): Promise<LessonHistory[]> {
-		return [{
-			lessonId,
-			userId: 1
-		}];
+	public static async getLessonHistory(
+		lessonId: number
+	): Promise<LessonHistory[]> {
+		return [
+			{
+				lessonId,
+				userId: 1,
+			},
+		];
 	}
 
 	/**
@@ -283,16 +302,50 @@ export default class API {
 	 * @param songId the id of the song
 	 * This API may be merged with the fetch song in the future
 	 */
-	public static async getPartitionRessources(songId: number): Promise<[string, number, number][]> {
+	public static async getPartitionRessources(
+		songId: number
+	): Promise<[string, number, number][]> {
 		return [
-			["https://media.discordapp.net/attachments/717080637038788731/1067469560426545222/vivaldi_split_1.png", 1868, 400],
-			["https://media.discordapp.net/attachments/717080637038788731/1067469560900505660/vivaldi_split_2.png", 1868, 400],
-			["https://media.discordapp.net/attachments/717080637038788731/1067469561261203506/vivaldi_split_3.png", 1868, 400],
-			["https://media.discordapp.net/attachments/717080637038788731/1067469561546424381/vivaldi_split_4.png", 1868, 400],
-			["https://media.discordapp.net/attachments/717080637038788731/1067469562058133564/vivaldi_split_5.png", 1868, 400],
-			["https://media.discordapp.net/attachments/717080637038788731/1067469562347528202/vivaldi_split_6.png", 1868, 400],
-			["https://media.discordapp.net/attachments/717080637038788731/1067469562792136815/vivaldi_split_7.png", 1868, 400],
-			["https://media.discordapp.net/attachments/717080637038788731/1067469563073142804/vivaldi_split_8.png", 1868, 400],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469560426545222/vivaldi_split_1.png",
+				1868,
+				400,
+			],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469560900505660/vivaldi_split_2.png",
+				1868,
+				400,
+			],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469561261203506/vivaldi_split_3.png",
+				1868,
+				400,
+			],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469561546424381/vivaldi_split_4.png",
+				1868,
+				400,
+			],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469562058133564/vivaldi_split_5.png",
+				1868,
+				400,
+			],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469562347528202/vivaldi_split_6.png",
+				1868,
+				400,
+			],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469562792136815/vivaldi_split_7.png",
+				1868,
+				400,
+			],
+			[
+				"https://media.discordapp.net/attachments/717080637038788731/1067469563073142804/vivaldi_split_8.png",
+				1868,
+				400,
+			],
 		];
 	}
 }
