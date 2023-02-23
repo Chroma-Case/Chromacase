@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import AuthToken from '../models/AuthToken';
+import { AccessToken } from '../API';
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-	token: undefined as AuthToken | undefined
+	  accessToken: undefined as AccessToken | undefined
   },
   reducers: {
-    setUserToken: (state, action: PayloadAction<AuthToken>) => {
-      state.token = action.payload;
+    setAccessToken: (state, action: PayloadAction<AccessToken>) => {
+      state.accessToken = action.payload;
     },
-    unsetUserToken: (state) => {
-      state.token = undefined;
+    unsetAccessToken: (state) => {
+      state.accessToken = undefined;
     },
   },
 });
-export const { setUserToken, unsetUserToken } = userSlice.actions;
+export const { setAccessToken, unsetAccessToken } = userSlice.actions;
 export default userSlice.reducer;

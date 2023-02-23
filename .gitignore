@@ -9,3 +9,6 @@ prisma/migrations/*
 output.xml
 report.html
 log.html
+.expo
+node_modules/
+./front/coverage

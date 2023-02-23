@@ -1,101 +1,105 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  username      String          @unique
-  password      String
-  email         String
-  LessonHistory LessonHistory[]
-  userSettings UserSettings[]
+    id            Int             @id @default(autoincrement())
+    username      String          @unique
+    password      String
+    email         String
+    LessonHistory LessonHistory[]
+    userSettings UserSettings[]
 }
 
 model UserSettings {
-  id                    Int @id @default(autoincrement())
-  user                  User @relation(fields: [userId], references: [id])
-  userId                Int
-  pushNotification      Boolean @default(true)
-  emailNotification     Boolean @default(true)
-  trainingNotification  Boolean @default(true)
-  newsongNotification   Boolean @default(true)
-  dataCollection        Boolean @default(true)
-  CustomAdds            Boolean @default(true)
-  Recommendations       Boolean @default(true)
+    id                    Int @id @default(autoincrement())
+    user                  User @relation(fields: [userId], references: [id])
+    userId                Int
+    pushNotification      Boolean @default(true)
+    emailNotification     Boolean @default(true)
+    trainingNotification  Boolean @default(true)
+    newsongNotification   Boolean @default(true)
+    dataCollection        Boolean @default(true)
+    CustomAdds            Boolean @default(true)
+    Recommendations       Boolean @default(true)
 }
 
 model Song {
-  id           Int    @id @default(autoincrement())
-  name         String @unique
-  artistId     Int?
-  artist       Artist? @relation(fields: [artistId], references: [id])
-  albumId      Int?
-  album        Album? @relation(fields: [albumId], references: [id])
-  genreId      Int?
-  genre        Genre?  @relation(fields: [genreId], references: [id])
-  difficulties Json
+    id           Int     @id @default(autoincrement())
+    name         String  @unique
+    midiPath     String
+    musicXmlPath String
+    artistId     Int?
+    artist       Artist? @relation(fields: [artistId], references: [id])
+    albumId      Int?
+    album        Album?  @relation(fields: [albumId], references: [id])
+    genreId      Int?
+    genre        Genre?  @relation(fields: [genreId], references: [id])
+    difficulties Json
 }
 
 model Genre {
-  id   Int    @id @default(autoincrement())
-  name String
+    id   Int    @id @default(autoincrement())
+    name String @unique
 
-  Song Song[]
+    Song Song[]
 }
 
 model Artist {
-  id   Int    @id @default(autoincrement())
-  name String
+    id   Int    @id @default(autoincrement())
+    name String @unique
 
-  Song Song[]
+    Song Song[]
+    Album Album[]
 }
 
 model Album {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  Song Song[]
+    id   Int    @id @default(autoincrement())
+    name String @unique
+    artistId     Int?
+    artist       Artist? @relation(fields: [artistId], references: [id])
+    Song Song[]
 }
 
 model Lesson {
-  id            Int             @id @default(autoincrement())
-  name          String
-  description   String
-  requiredLevel Int
-  mainSkill     Skill
-  LessonHistory LessonHistory[]
+    id            Int             @id @default(autoincrement())
+    name          String
+    description   String
+    requiredLevel Int
+    mainSkill     Skill
+    LessonHistory LessonHistory[]
 }
 
 model LessonHistory {
-  lesson   Lesson @relation(fields: [lessonID], references: [id])
-  lessonID Int
-  user     User   @relation(fields: [userID], references: [id])
-  userID   Int
+    lesson   Lesson @relation(fields: [lessonID], references: [id])
+    lessonID Int
+    user     User   @relation(fields: [userID], references: [id])
+    userID   Int
 
-  @@id([lessonID, userID])
+    @@id([lessonID, userID])
 }
 
 enum Skill {
-  TwoHands
-  Rhythm
-  NoteCombo
-  Arpeggio
-  Distance
-  LeftHand
-  RightHand
-  LeadHandChange
-  ChordComplexity
-  ChordTiming
-  Length
-  PedalPoint
-  Precision
+    TwoHands
+    Rhythm
+    NoteCombo
+    Arpeggio
+    Distance
+    LeftHand
+    RightHand
+    LeadHandChange
+    ChordComplexity
+    ChordTiming
+    Length
+    PedalPoint
+    Precision
 
-  @@map("DifficultyPoint")
+    @@map("DifficultyPoint")
 }
