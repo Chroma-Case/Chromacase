@@ -10,6 +10,7 @@ import Constants from "expo-constants";
 import store from "./state/Store";
 import { Platform } from "react-native";
 import { en } from "./i18n/Translations";
+import { useQuery, QueryClient } from "react-query";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -195,8 +196,26 @@ export default class API {
 		return "11111";
 	}
 
+	public static async getAllSongs(): Promise<Song[]> {
+		let songs = await API.fetch({
+			route: "/song",
+		});
+
+		// this is a dummy illustration, we will need to fetch the real one from the API
+		return songs.data.map((song: any) => ({
+			id: song.id as number,
+			name: song.name as string,
+			artistId: song.artistId as number,
+			albumId: song.albumId as number,
+			genreId: song.genreId as number,
+			details: song.difficulties,
+			cover: getDummyIllustration(),
+			metrics: {},
+		} as Song));
+	}
+
 	/**
-	 * Retrive a song
+	 * Retrieve a song
 	 * @param songId the id to find the song
 	 */
 	public static async getSong(songId: number): Promise<Song> {
@@ -310,9 +329,8 @@ export default class API {
 	 * Retrieve the authenticated user's recommendations
 	 */
 	public static async getUserRecommendations(): Promise<Song[]> {
-		// we can assume at least 5 songs
-		// in the future the API will return the songs directly to avoid spamming the API
-		return Promise.all([1, 2, 3, 4, 5].map(API.getSong));
+		const queryClient = new QueryClient();
+		return await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
 	}
 
 	/**
