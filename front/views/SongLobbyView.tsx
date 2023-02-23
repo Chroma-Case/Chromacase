@@ -40,7 +40,7 @@ const SongLobbyView = () => {
 				<Box style={{ flex: 0.5 }}/>
 				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
 					<Box flex={1}>
-						<Text bold fontSize='lg'>{songQuery.data!.name}</Text>
+						<Text bold isTruncated numberOfLines={2} fontSize='lg'>{songQuery.data!.name}</Text>
 						<Text>
 							<Translate translationKey='level'
 								format={(level) => `${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
