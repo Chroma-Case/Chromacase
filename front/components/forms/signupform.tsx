@@ -174,7 +174,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						>
 							{formData.repeatPassword.error}
 						</FormControl.ErrorMessage>
-						<TextButton translate={{ translationKey: 'signUp' }}
+						<TextButton translate={{ translationKey: 'signUpBtn' }}
 							style={{ marginTop: 10 }}
 							isLoading={submittingForm}
 							isDisabled={
