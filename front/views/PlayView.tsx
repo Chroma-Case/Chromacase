@@ -29,7 +29,8 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	}
 }
 
-const PlayView = ({ songId }: PlayViewProps) => {
+const PlayView = () => {
+	const songId = 1;
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
 	const song = useQuery(['song', songId], () => API.getSong(songId));
