@@ -81,6 +81,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							isRequired
 							type="text"
 							placeholder="Katerina"
+							autoComplete="username-new"
 							value={formData.username.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -104,6 +105,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							isRequired
 							type="text"
 							placeholder="lucy@er.com"
+							autoComplete="email"
 							value={formData.email.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -126,7 +128,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						<Input
 							isRequired
 							type="password"
-							placeholder="password"
+							autoComplete="password-new"
 							value={formData.password.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -149,7 +151,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						<Input
 							isRequired
 							type="password"
-							placeholder="password"
+							autoComplete="password-new"
 							value={formData.repeatPassword.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
