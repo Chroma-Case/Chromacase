@@ -322,7 +322,11 @@ export default class API {
 	 * @param lessonId the id to find the lesson
 	 */
 	public static async getSearchHistory(): Promise<Song[]> {
-		return Promise.all([1, 2].map(API.getSong));
+		const queryClient = new QueryClient();
+		let songs = await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
+		const shuffled = [...songs].sort(() => 0.5 - Math.random());
+
+		return shuffled.slice(0, 2);
 	}
 
 	/**
@@ -337,7 +341,11 @@ export default class API {
 	 * Retrieve the authenticated user's play history
 	 */
 	public static async getUserPlayHistory(): Promise<Song[]> {
-		return Promise.all([3, 4].map(API.getSong));
+		const queryClient = new QueryClient();
+		let songs = await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
+		const shuffled = [...songs].sort(() => 0.5 - Math.random());
+
+		return shuffled.slice(0, 3);
 	}
 
 	/**
