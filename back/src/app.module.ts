@@ -15,6 +15,7 @@ import { AlbumModule } from './album/album.module';
 import { SearchController } from './search/search.controller';
 import { SearchService } from './search/search.service';
 import { SearchModule } from './search/search.module';
+import { HistoryModule } from './history/history.module';
 
 @Module({
 	imports: [
@@ -27,6 +28,7 @@ import { SearchModule } from './search/search.module';
 		ArtistModule,
 		AlbumModule,
 		SearchModule,
+		HistoryModule,
 	],
 	controllers: [AppController],
 	providers: [AppService, PrismaService, ArtistService],
