@@ -12,7 +12,7 @@ Get history without behing connected
     Output
     Integer    response status    401
 
-Create an history record
+Create and get an history record
     [Documentation]    Create an history item
     &{song}=    POST
     ...    /song
@@ -36,3 +36,20 @@ Create an history record
 
     [Teardown]    Run Keywords    DELETE    /users/${userID}
     ...    AND    DELETE    /song/${song.body.id}
+
+Create and get a search history record
+    [Documentation]    Create a search history item
+    ${userID}=    RegisterLogin    historyqueryuser
+
+    GET    /search/song/toto
+    Output
+    Integer    response status    404
+
+    &{res}=    GET    /history/search
+    Output
+    Integer    response status    200
+    Array    response body
+    String    $[0].type    "song"
+    String    $[0].query    "toto"
+
+    [Teardown]    DELETE    /users/${userID}

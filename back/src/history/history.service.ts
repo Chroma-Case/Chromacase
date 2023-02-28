@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, SongHistory } from '@prisma/client';
+import { SearchHistory, SongHistory } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { SearchHistoryDto } from './dto/SearchHistoryDto';
 import { SongHistoryDto } from './dto/SongHistoryDto';
 
 @Injectable()
@@ -28,6 +29,28 @@ export class HistoryService {
 
 	async getHistory(playerId: number, { skip, take }: { skip?: number, take?: number }): Promise<SongHistory[]> {
 		return this.prisma.songHistory.findMany({
+			where: { user: { id: playerId } },
+			skip,
+			take,
+		})
+	}
+
+	async createSearchHistoryRecord({ userID, query, type }: SearchHistoryDto): Promise<SearchHistory> {
+		return this.prisma.searchHistory.create({
+			data: {
+				query,
+				type,
+				user: {
+					connect: {
+						id: userID,
+					},
+				},
+			}
+		});
+	}
+
+	async getSearchHistory(playerId: number, { skip, take }: { skip?: number, take?: number }): Promise<SearchHistory[]> {
+		return this.prisma.searchHistory.findMany({
 			where: { user: { id: playerId } },
 			skip,
 			take,

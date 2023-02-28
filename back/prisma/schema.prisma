@@ -16,6 +16,15 @@ model User {
     email         String
     LessonHistory LessonHistory[]
     SongHistory   SongHistory[]
+    searchHistory SearchHistory[]
+}
+
+model SearchHistory {
+    id     Int    @id @default(autoincrement())
+    query  String
+    type   String
+    userId Int?
+    user   User?  @relation(fields: [userId], references: [id])
 }
 
 model Song {
