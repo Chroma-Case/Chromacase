@@ -20,15 +20,10 @@ import { UserSettings } from '@prisma/client';
 export class SettingsController {
 	constructor(private readonly settingsService: SettingsService) {}
 
-	// @Post(':id')
-	// create(@Param('id') id: number,): Promise<Setting>{
-	// 	return this.settingsService.createUserSetting(id);
-	// }
-
 	@Get(':userid')
 	@ApiNotFoundResponse()
 	async findOne(@Param('userid') id: number): Promise<Setting> {
-		const result = await this.settingsService.setting({ userId: +id });
+		const result = await this.settingsService.getUserSetting({ userId: +id });
 		if (!result) throw new NotFoundException();
 		return result;
 	}
@@ -38,14 +33,9 @@ export class SettingsController {
 		@Param('userid') id: string,
 		@Body() settingUserDto: UpdateSettingDto,
 	): Promise<Setting> {
-		return this.settingsService.updateUser({
+		return this.settingsService.updateUserSettings({
 			where: { userId: +id },
 			data: settingUserDto,
 		});
 	}
-
-	// @Delete(':userid')
-	// remove(@Param('userid') id: string): Promise<Setting> {
-	// 	return this.settingsService.deleteUser({ userId: +id });
-	// }
 }

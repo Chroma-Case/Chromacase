@@ -8,7 +8,7 @@ import { CreateSettingDto } from './dto/create-setting.dto';
 export class SettingsService {
 	constructor(private prisma: PrismaService) {}
 
-	async setting(
+	async getUserSetting(
 		settingWhereUniqueInput: Prisma.UserSettingsWhereUniqueInput,
 	): Promise<UserSettings | null> {
 		return this.prisma.userSettings.findUnique({
@@ -28,7 +28,7 @@ export class SettingsService {
 		})
 	}
 
-	async updateUser(params: {
+	async updateUserSettings(params: {
 		where: Prisma.UserSettingsWhereUniqueInput;
 		data: Prisma.UserSettingsUpdateInput;
 	}): Promise<UserSettings> {
@@ -39,7 +39,7 @@ export class SettingsService {
 		});
 	}
 
-	async deleteUser(where: Prisma.UserSettingsWhereUniqueInput): Promise<UserSettings> {
+	async deleteUserSettings(where: Prisma.UserSettingsWhereUniqueInput): Promise<UserSettings> {
 		return this.prisma.userSettings.delete({
 			where,
 		});
