@@ -25,27 +25,27 @@ export class SettingsController {
 	// 	return this.settingsService.createUserSetting(id);
 	// }
 
-	@Get(':id')
+	@Get(':userid')
 	@ApiNotFoundResponse()
-	async findOne(@Param('id') id: number): Promise<Setting> {
-		const result = await this.settingsService.setting({ id: +id });
+	async findOne(@Param('userid') id: number): Promise<Setting> {
+		const result = await this.settingsService.setting({ userId: +id });
 		if (!result) throw new NotFoundException();
 		return result;
 	}
 
-	@Patch(':id')
+	@Patch(':userid')
 	update(
-		@Param('id') id: string,
+		@Param('userid') id: string,
 		@Body() settingUserDto: UpdateSettingDto,
 	): Promise<Setting> {
 		return this.settingsService.updateUser({
-			where: { id: +id },
+			where: { userId: +id },
 			data: settingUserDto,
 		});
 	}
 
-	@Delete(':id')
-	remove(@Param('id') id: string): Promise<Setting> {
-		return this.settingsService.deleteUser({ id: +id });
-	}
+	// @Delete(':userid')
+	// remove(@Param('userid') id: string): Promise<Setting> {
+	// 	return this.settingsService.deleteUser({ userId: +id });
+	// }
 }
