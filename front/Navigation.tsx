@@ -23,14 +23,14 @@ export const protectedRoutes = <>
 	<Stack.Screen name="Home" component={HomeView} options={{ title: translate('welcome') }} />
 	<Stack.Screen name="Settings" component={SetttingsNavigator} options={{ title: 'Settings' }} />
 	<Stack.Screen name="Song" component={SongLobbyView} options={{ title: translate('play') }} />
-	<Stack.Screen name="Play" component={() => PlayView({ songId: 1 })} options={{ title: translate('play') }} />
+	<Stack.Screen name="Play" component={PlayView} options={{ title: translate('play') }} />
 	<Stack.Screen name="Score" component={ScoreView} options={{ title: translate('score') }} />
 	<Stack.Screen name="Search" component={SearchView} options={{ title: translate('search') }} />
 	<Stack.Screen name="User" component={ProfileView} options={{ title: translate('user') }} />
 </>;
 
 export const publicRoutes = <React.Fragment>
-	<Stack.Screen name="Login" component={AuthenticationView} options={{ title: translate('signinBtn')}} />
+	<Stack.Screen name="Login" component={AuthenticationView} options={{ title: translate('signInBtn')}} />
 </React.Fragment>;
 
 export const Router = () => {

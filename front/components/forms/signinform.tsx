@@ -58,6 +58,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 							isRequired
 							type="text"
 							placeholder="Username"
+							autoComplete="username"
 							value={formData.username.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -80,7 +81,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						<Input
 							isRequired
 							type="password"
-							placeholder="password"
+							autoComplete="password"
 							value={formData.password.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -97,7 +98,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 						>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
-						<TextButton translate={{ translationKey: 'login' }}
+						<TextButton translate={{ translationKey: 'signInBtn' }}
 							style={{ marginTop: 10 }}
 							isLoading={submittingForm}
 							isDisabled={

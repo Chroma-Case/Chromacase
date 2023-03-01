@@ -25,10 +25,10 @@ const SongCard = (props: SongCardProps) => {
 				alt={[props.songTitle, props.artistName].join('-')}
 			/>
 			<VStack padding={3}>
-				<Text bold fontSize='md'>
+				<Text isTruncated bold fontSize='md' noOfLines={2} height={50}>
 					{songTitle}
 				</Text>
-				<Text>
+				<Text isTruncated >
 					{artistName}
 				</Text>
 			</VStack>

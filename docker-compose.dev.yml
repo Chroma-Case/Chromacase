@@ -39,3 +39,15 @@ services:
       retries: 5
     ports:
       - "5432:5432"
+  front:
+      build: 
+        context: ./front
+        dockerfile: Dockerfile.dev
+      ports:
+        - "19006:19006"
+      volumes:
+        - ./front:/app
+      depends_on:
+        - "back"
+      env_file:
+        - .env

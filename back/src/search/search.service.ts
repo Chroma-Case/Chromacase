@@ -1,20 +1,18 @@
-import {
-	DefaultValuePipe,
-	Injectable,
-	ParseIntPipe,
-	Query,
-	Req,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Album, Artist, Prisma, Song } from '@prisma/client';
+import { HistoryService } from 'src/history/history.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SearchService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService, private history: HistoryService) { }
 
 	async songByTitle(
 		songWhereUniqueInput: Prisma.SongWhereUniqueInput,
+		userID: number
 	): Promise<Song | null> {
+		if (songWhereUniqueInput.name)
+			await this.history.createSearchHistoryRecord({ query: songWhereUniqueInput.name, userID, type: "song" });
 		return this.prisma.song.findUnique({
 			where: songWhereUniqueInput,
 		});
@@ -53,7 +51,8 @@ export class SearchService {
 		});
 	}
 
-	async guessSong(word: string): Promise<Song[]> {
+	async guessSong(word: string, userID: number): Promise<Song[]> {
+		await this.history.createSearchHistoryRecord({ query: word, type: "song", userID });
 		return this.prisma.song.findMany({
 			where: {
 				name: { contains: word },
@@ -61,7 +60,8 @@ export class SearchService {
 		});
 	}
 
-	async guessArtist(word: string): Promise<Artist[]> {
+	async guessArtist(word: string, userID: number): Promise<Artist[]> {
+		await this.history.createSearchHistoryRecord({ query: word, type: "artist", userID });
 		return this.prisma.artist.findMany({
 			where: {
 				name: { contains: word },
@@ -69,7 +69,8 @@ export class SearchService {
 		});
 	}
 
-	async guessAlbum(word: string): Promise<Album[]> {
+	async guessAlbum(word: string, userID: number): Promise<Album[]> {
+		await this.history.createSearchHistoryRecord({ query: word, type: "album", userID });
 		return this.prisma.album.findMany({
 			where: {
 				name: { contains: word },

@@ -13,6 +13,8 @@ import { GenreModule } from './genre/genre.module';
 import { ArtistModule } from './artist/artist.module';
 import { AlbumModule } from './album/album.module';
 import { SearchModule } from './search/search.module';
+import { HistoryModule } from './history/history.module';
+
 @Module({
 	imports: [
 		UsersModule,
@@ -25,6 +27,7 @@ import { SearchModule } from './search/search.module';
 		AlbumModule,
 		SearchModule,
 		SettingsModule,
+		HistoryModule,
 	],
 	controllers: [AppController],
 	providers: [AppService, PrismaService, ArtistService],

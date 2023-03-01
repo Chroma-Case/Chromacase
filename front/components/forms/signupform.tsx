@@ -51,12 +51,12 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 		password: string()
 			.min(4, translate("passwordTooShort"))
 			.max(100, translate("passwordTooLong"))
-			.matches(
-				/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$-_%\^&\*])(?=.{8,})/,
-				translate(
-					"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
-				)
-			)
+			// .matches(
+			// 	/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$-_%\^&\*])(?=.{8,})/,
+			// 	translate(
+			// 		"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
+			// 	)
+			// )
 			.required("Password is required"),
 	};
 	const toast = useToast();
@@ -81,6 +81,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							isRequired
 							type="text"
 							placeholder="Katerina"
+							autoComplete="username-new"
 							value={formData.username.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -104,6 +105,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 							isRequired
 							type="text"
 							placeholder="lucy@er.com"
+							autoComplete="email"
 							value={formData.email.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -126,7 +128,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						<Input
 							isRequired
 							type="password"
-							placeholder="password"
+							autoComplete="password-new"
 							value={formData.password.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -149,7 +151,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						<Input
 							isRequired
 							type="password"
-							placeholder="password"
+							autoComplete="password-new"
 							value={formData.repeatPassword.value}
 							onChangeText={(t) => {
 								let error: null | string = null;
@@ -172,7 +174,7 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 						>
 							{formData.repeatPassword.error}
 						</FormControl.ErrorMessage>
-						<TextButton translate={{ translationKey: 'signUp' }}
+						<TextButton translate={{ translationKey: 'signUpBtn' }}
 							style={{ marginTop: 10 }}
 							isLoading={submittingForm}
 							isDisabled={

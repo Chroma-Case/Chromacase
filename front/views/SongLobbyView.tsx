@@ -35,12 +35,12 @@ const SongLobbyView = () => {
 		<Box style={{ padding: 30, flexDirection: 'column' }}>
 			<Box style={{ flexDirection: 'row', height: '30%'}}>
 				<Box style={{ flex: 3 }}>
-					<Image source={{ uri: songQuery.data!.cover }} style={{ height: '100%', width: undefined, resizeMode: 'contain' }}/>
+					<Image source={{ uri: songQuery.data!.cover }} alt={songQuery.data?.name} style={{ height: '100%', width: undefined, resizeMode: 'contain', aspectRatio: 1 }}/>
 				</Box>
 				<Box style={{ flex: 0.5 }}/>
 				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
 					<Box flex={1}>
-						<Text bold fontSize='lg'>{songQuery.data!.title}</Text>
+						<Text bold isTruncated numberOfLines={2} fontSize='lg'>{songQuery.data!.name}</Text>
 						<Text>
 							<Translate translationKey='level'
 								format={(level) => `${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
@@ -81,7 +81,7 @@ const SongLobbyView = () => {
 				{ !chaptersQuery.isLoading && 
 					<VStack flex={1} space={4} padding="4" divider={<Divider />}>
 					{ chaptersQuery.data!.map((chapter) =>
-						<Box flexGrow={1} flexDirection='row' justifyContent="space-between">
+						<Box key={chapter.id} flexGrow={1} flexDirection='row' justifyContent="space-between">
 							<Text>{chapter.name}</Text>
 							<Text>
 								{`${translate('level')} ${chapter.difficulty} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}

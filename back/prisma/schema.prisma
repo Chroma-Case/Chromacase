@@ -15,7 +15,9 @@ model User {
     password        String
     email           String
     LessonHistory   LessonHistory[]
-    settings    UserSettings?
+    SongHistory     SongHistory[]
+    searchHistory   SearchHistory[]
+    settings        UserSettings?
 }
 
 model UserSettings {
@@ -31,18 +33,38 @@ model UserSettings {
     Recommendations       Boolean @default(true)
 }
 
+model SearchHistory {
+    id     Int    @id @default(autoincrement())
+    query  String
+    type   String
+    userId Int?
+    user   User?  @relation(fields: [userId], references: [id])
+}
+
 model Song {
-    id           Int     @id @default(autoincrement())
-    name         String  @unique
+    id           Int           @id @default(autoincrement())
+    name         String        @unique
     midiPath     String
     musicXmlPath String
     artistId     Int?
-    artist       Artist? @relation(fields: [artistId], references: [id])
+    artist       Artist?       @relation(fields: [artistId], references: [id])
     albumId      Int?
-    album        Album?  @relation(fields: [albumId], references: [id])
+    album        Album?        @relation(fields: [albumId], references: [id])
     genreId      Int?
-    genre        Genre?  @relation(fields: [genreId], references: [id])
+    genre        Genre?        @relation(fields: [genreId], references: [id])
     difficulties Json
+    SongHistory  SongHistory[]
+}
+
+model SongHistory {
+    song         Song @relation(fields: [songID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    songID       Int
+    user         User @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    userID       Int
+    score        Int
+    difficulties Json
+
+    @@id([songID, userID])
 }
 
 model Genre {
@@ -56,16 +78,16 @@ model Artist {
     id   Int    @id @default(autoincrement())
     name String @unique
 
-    Song Song[]
+    Song  Song[]
     Album Album[]
 }
 
 model Album {
-    id   Int    @id @default(autoincrement())
-    name String @unique
-    artistId     Int?
-    artist       Artist? @relation(fields: [artistId], references: [id])
-    Song Song[]
+    id       Int     @id @default(autoincrement())
+    name     String  @unique
+    artistId Int?
+    artist   Artist? @relation(fields: [artistId], references: [id])
+    Song     Song[]
 }
 
 model Lesson {

@@ -5,7 +5,8 @@ import { Heading, VStack } from 'native-base';
 
 type SongCardGrid = {
 	songs: Parameters<typeof SongCard>[0][];
-	maxItemPerRow?: number,
+	maxItemsPerRow?: number,
+	itemDimension?: number,
 	heading?: JSX.Element,
 }
 
@@ -13,11 +14,12 @@ const SongCardGrid = (props: SongCardGrid) => {
 	return <VStack>
 		<Heading>{props.heading}</Heading>
 		<FlatGrid
-			maxItemsPerRow={props.maxItemPerRow ?? 5}
-			additionalRowStyle={{ justifyContent: 'space-between' }}
+			maxItemsPerRow={props.maxItemsPerRow}
+			itemDimension={props.itemDimension ?? (props.maxItemsPerRow ? undefined : 150)}
+			additionalRowStyle={{ justifyContent: 'flex-start' }}
 			data={props.songs}
 			renderItem={({ item }) => <SongCard {...item} /> }
-			spacing={20}
+			spacing={10}
 		/>
 	</VStack>
 }
