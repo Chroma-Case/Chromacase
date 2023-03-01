@@ -43,7 +43,7 @@ model Song {
 }
 
 model SongHistory {
-    song         Song @relation(fields: [songID], references: [id])
+    song         Song @relation(fields: [songID], references: [id], onDelete: Cascade, onUpdate: Cascade)
     songID       Int
     user         User @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
     userID       Int
