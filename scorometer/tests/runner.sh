@@ -31,6 +31,5 @@ else
   echo "=============== DIFF ================="
   diff --side-by-side /tmp/scorometer_res $1/output
   echo "======================================"
-  e
 fi;
 
