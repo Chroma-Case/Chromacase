@@ -3,6 +3,7 @@ from chroma_case.Partition import Partition
 from chroma_case.Key import Key
 import sys
 import select
+import traceback
 import os
 import itertools
 import requests
@@ -213,8 +214,9 @@ def main():
 		sc = Scorometer(mode, song_path)
 		score, difficulties = sc.gameLoop()
 		sendScore(score, difficulties, song_id, user_id)
-	except Exception as error:
-		send({ "error": error })
+	except Exception:
+		send({ "error": traceback.format_exc() })
+
 
 if __name__ == "__main__":
 	main()
