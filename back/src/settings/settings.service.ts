@@ -16,10 +16,15 @@ export class SettingsService {
 		});
 	}
 
-	async createUserSetting(userId: number, data: Prisma.UserSettingsUncheckedCreateInput): Promise<UserSettings> {
-		data.userId = userId;
+	async createUserSetting(userId: number): Promise<UserSettings> {
 		return this.prisma.userSettings.create({
-			data,
+			data: {
+				user: {
+					connect: {
+						id: userId,
+					}
+				}
+			}
 		})
 	}
 

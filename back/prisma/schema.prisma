@@ -10,18 +10,18 @@ datasource db {
 }
 
 model User {
-    id            Int             @id @default(autoincrement())
-    username      String          @unique
-    password      String
-    email         String
-    LessonHistory LessonHistory[]
-    userSettings UserSettings[]
+    id              Int             @id @default(autoincrement())
+    username        String          @unique
+    password        String
+    email           String
+    LessonHistory   LessonHistory[]
+    settings    UserSettings?
 }
 
 model UserSettings {
     id                    Int @id @default(autoincrement())
     user                  User @relation(fields: [userId], references: [id])
-    userId                Int
+    userId                Int @unique
     pushNotification      Boolean @default(true)
     emailNotification     Boolean @default(true)
     trainingNotification  Boolean @default(true)
