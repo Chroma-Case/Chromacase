@@ -1,31 +1,9 @@
 *** Settings ***
 Documentation       Tests of the /auth route.
 ...                 Ensures that the user can authenticate on kyoo.
+
 Resource            ../rest.resource
-
-
-*** Keywords ***
-Login
-    [Documentation]    Shortcut to login with the given username for future requests
-    [Arguments]    ${username}
-    &{res}=    POST    /auth/login    {"username": "${username}", "password": "password-${username}"}
-    Output
-    Integer    response status    200
-    String    response body access_token
-    Set Headers    {"Authorization": "Bearer ${res.body.access_token}"}
-
-Register
-    [Documentation]    Shortcut to register with the given username for future requests
-    [Arguments]    ${username}
-    &{res}=    POST
-    ...    /auth/register
-    ...    {"username": "${username}", "password": "password-${username}", "email": "${username}@chromacase.moe"}
-    Output
-    Integer    response status    201
-
-Logout
-    [Documentation]    Logout the current user, only the local client is affected.
-    Set Headers    {"Authorization": ""}
+Resource            ./auth.resource
 
 
 *** Test Cases ***
@@ -43,7 +21,7 @@ Bad Account
 RegisterAndLogin
     [Documentation]    Create a new user and login in it
     Register    user-1
-    Login       user-1
+    Login    user-1
     [Teardown]    DELETE    /auth/me
 
 Register Duplicates
@@ -53,13 +31,13 @@ Register Duplicates
     POST    /auth/register    {"username": "user-duplicate", "password": "pass", "email": "mail@kyoo.moe"}
     Output
     Integer    response status    400
-    Login        user-duplicate
+    Login    user-duplicate
     [Teardown]    DELETE    /auth/me
 
 Delete Account
     [Documentation]    Check if a user can delete it's account
     Register    I-should-be-deleted
-    Login       I-should-be-deleted
+    Login    I-should-be-deleted
     DELETE    /auth/me
     Output
     Integer    response status    200
@@ -67,7 +45,7 @@ Delete Account
 Login
     [Documentation]    Create a new user and login in it
     Register    login-user
-    Login       login-user
+    Login    login-user
     ${res}=    GET    /auth/me
     Output
     Integer    response status    200

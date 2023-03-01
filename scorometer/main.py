@@ -133,7 +133,7 @@ class Scorometer():
 
 	def getTimingScore(self, key: Key, to_play: Key):
 		tempo_percent = abs((key.duration / to_play.duration) - 1)
-		if tempo_percent < .3 : 
+		if tempo_percent < .3:
 			timingScore = "perfect"
 		elif tempo_percent < .5:
 			timingScore = f"great"
@@ -161,9 +161,6 @@ class Scorometer():
 		if obj["type"] == "pause":
 			pass
 
-	def sendEnd(self, overall, difficulties):
-		send({"overallScore": overall, "score": difficulties})
-
 	def sendScore(self, id, timingScore, timingInformation):
 		send({"id": id, "timingScore": timingScore, "timingInformation": timingInformation})
 
@@ -177,7 +174,7 @@ class Scorometer():
 				self.handleMessage(line.rstrip())
 			else:
 				pass
-		self.sendEnd(self.score, {})
+		return self.score, {}
 
 def handleStartMessage(start_message):
 	if "type" not in start_message.keys():
@@ -188,19 +185,34 @@ def handleStartMessage(start_message):
 		raise Exception("id of song not specified in start message")
 	if "mode" not in start_message.keys():
 		raise Exception("mode of song not specified in start message")
+	if "user_id" not in start_message.keys():
+		raise Exception("user_id not specified in start message")
 	mode = PRACTICE if start_message["mode"] == "practice" else NORMAL
 	# TODO get song path from the API
 	song_id = start_message["id"]
+	# TODO: use something secure here but I don't find sending a jwt something elegant.
+	user_id = start_message["user_id"]
 	song_path = requests.get(f"http://back:3000/song/{song_id}").json()["midiPath"]
-	return mode, song_path
+	return mode, song_path, song_id, user_id
+
+
+def sendScore(score, difficulties, song_id, user_id):
+	send({"overallScore": score, "score": difficulties})
+	requests.post(f"http://back:3000/history", json={
+		"songID": song_id,
+		"userID": user_id,
+		"score": score,
+		"difficulties": difficulties,
+	})
 
 
 def main():
 	try:
 		start_message = json.loads(input())
-		mode, song_path = handleStartMessage(start_message)
+		mode, song_path, song_id, user_id = handleStartMessage(start_message)
 		sc = Scorometer(mode, song_path)
-		sc.gameLoop()
+		score, difficulties = sc.gameLoop()
+		sendScore(score, difficulties, song_id, user_id)
 	except Exception as error:
 		send({ "error": error })
 

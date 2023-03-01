@@ -2,39 +2,35 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
-	DefaultValuePipe,
 	Get,
 	HttpCode,
-	HttpStatus,
 	InternalServerErrorException,
 	NotFoundException,
 	Param,
 	ParseIntPipe,
 	Post,
-	Query,
-	Req,
+	Request,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Song } from '@prisma/client';
-import { SongService } from 'src/song/song.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { SearchSongDto } from './dto/search-song.dto';
 import { SearchService } from './search.service';
 
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-	constructor(
-		private readonly searchService: SearchService,
-		private readonly songService: SongService,
-	) {}
+	constructor(private readonly searchService: SearchService) { }
 
 	@ApiOperation({
 		summary: 'Get a song details by song name',
 		description: 'Get a song details by song name',
 	})
 	@Get('song/:name')
-	async findByName(@Param('name') name: string): Promise<Song | null> {
-		const ret = await this.searchService.songByTitle({ name });
+	@UseGuards(JwtAuthGuard)
+	async findByName(@Request() req: any, @Param('name') name: string): Promise<Song | null> {
+		const ret = await this.searchService.songByTitle({ name }, req.user?.id);
 		if (!ret) throw new NotFoundException();
 		return ret;
 	}
@@ -113,20 +109,22 @@ export class SearchController {
 		example: 'Yoko Shimomura',
 	})
 	@ApiParam({ name: 'type', type: 'string', required: true, example: 'artist' })
+	@UseGuards(JwtAuthGuard)
 	async guess(
+		@Request() req: any,
 		@Param() params: { type: string; word: string },
 	): Promise<any[] | null> {
 		try {
 			let ret: any[];
 			switch (params.type) {
 				case 'artist':
-					ret = await this.searchService.guessArtist(params.word);
+					ret = await this.searchService.guessArtist(params.word, req.user?.id);
 					break;
 				case 'album':
-					ret = await this.searchService.guessAlbum(params.word);
+					ret = await this.searchService.guessAlbum(params.word, req.user?.id);
 					break;
 				case 'song':
-					ret = await this.searchService.guessSong(params.word);
+					ret = await this.searchService.guessSong(params.word, req.user?.id);
 					break;
 				default:
 					throw new BadRequestException();

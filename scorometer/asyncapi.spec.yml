@@ -17,9 +17,15 @@ channels:
             type:
               type: "string"
               enum: ["start"]
-            name:
+            id:
+              type: "number"
+              description: "The id of the song"
+            mode:
               type: "string"
-              description: "The name of the song"
+              enum: ["practice", "normal"]
+            user_id:
+              type: "number"
+              description: "The ID of the user playing"
       operationId: "startSong"
   /midi:
     publish:
