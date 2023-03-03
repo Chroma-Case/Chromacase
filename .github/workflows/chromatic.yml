@@ -1,9 +1,14 @@
-name: 'Chromatic'
-on: push
+name: Chromatic
+
+on:
+  workflow_call:
 
 jobs:
+
   deployment:
     runs-on: ubuntu-latest
+    environment: Staging
+
     steps:
       - uses: actions/checkout@v1
 
