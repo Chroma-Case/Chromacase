@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  deployment:
+  Chromatic:
     runs-on: ubuntu-latest
     environment: Staging
 
