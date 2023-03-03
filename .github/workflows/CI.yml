@@ -29,14 +29,14 @@ jobs:
 ## Test Backend ##
 
   Test_Back:
-    needs: [ Test_Build_Back, Test_Build_App ]
+    needs: [ Test_Build_Back]
     uses: ./.github/workflows/test_back.yml
     secrets: inherit
 
 ## Test App ##
 
   Test_App:
-    needs: [ Test_Build_Back, Test_Build_App ]
+    needs: [ Test_Build_App ]
     uses: ./.github/workflows/chromatic.yml
     secrets: inherit
 
