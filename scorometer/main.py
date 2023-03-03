@@ -11,6 +11,9 @@ import operator
 import json
 from mido import MidiFile
 
+BACK_URL = os.environ.get('BACK_URL') or "http://back:3000"
+MUSICS_FOLDER = os.environ.get('MUSICS_FOLDER') or "/musics/"
+
 RATIO = float(sys.argv[2] if len(sys.argv) > 2 else 1)
 OCTAVE = 5
 OCTAVE_AMOUNT_KEYS = 12
@@ -193,13 +196,13 @@ def handleStartMessage(start_message):
 	song_id = start_message["id"]
 	# TODO: use something secure here but I don't find sending a jwt something elegant.
 	user_id = start_message["user_id"]
-	song_path = requests.get(f"http://back:3000/song/{song_id}").json()["midiPath"]
+	song_path = requests.get(f"{BACK_URL}/song/{song_id}").json()["midiPath"];song_path = song_path.replace("/musics/", MUSICS_FOLDER)
 	return mode, song_path, song_id, user_id
 
 
 def sendScore(score, difficulties, song_id, user_id):
 	send({"overallScore": score, "score": difficulties})
-	requests.post(f"http://back:3000/history", json={
+	requests.post(f"{BACK_URL}/history", json={
 		"songID": song_id,
 		"userID": user_id,
 		"score": score,
