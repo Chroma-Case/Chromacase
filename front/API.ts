@@ -300,7 +300,9 @@ export default class API {
 	 * @param query the string used to find the songs
 	 */
 	public static async searchSongs(query: string): Promise<Song[]> {
-		return Promise.all([1, 5, 2].map(API.getSong));
+		return API.fetch({
+			route: `/search/guess/song/${query}`
+		});
 	}
 
 	/**

@@ -84,7 +84,7 @@ const HomeView = () => {
 							<Box flex="2" padding={5}>
 								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
 									<TextButton
-										translate={{ translationKey: 'search' }}
+										translate={{ translationKey: 'searchBtn' }}
 										colorScheme='secondary' size="sm"
 										onPress={() => navigation.navigate('Search')}
 									/>
