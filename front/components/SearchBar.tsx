@@ -12,6 +12,7 @@ import {
 } from "native-base";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
+import useColorScheme from "../hooks/colorScheme";
 
 export enum SuggestionType {
 	TEXT,
@@ -57,20 +58,19 @@ const IllustratedSuggestion = ({
 	imageSrc,
 	onPress,
 }: IllustratedSuggestionProps) => {
+	const colorScheme = useColorScheme();
 	return (
 		<Pressable
 			onPress={onPress}
 			margin={2}
 			padding={2}
-			bg={"white"}
-			_hover={{
-				bg: "primary.200",
-			}}
-			_pressed={{
-				bg: "primary.300",
-			}}
-		>
-			<HStack alignItems="center" space={4}>
+		>{({ isHovered, isPressed }) => (
+			<HStack alignItems="center" space={4}
+				bg={colorScheme == 'dark'
+					? (isHovered || isPressed) ? 'gray.800' : undefined
+					: (isHovered || isPressed) ? 'primary.100' : undefined
+				}
+			>
 				<Square size={"sm"}>
 					<Image
 						source={{ uri: imageSrc }}
@@ -86,31 +86,30 @@ const IllustratedSuggestion = ({
 					</Text>
 				</VStack>
 			</HStack>
-		</Pressable>
+		)}</Pressable>
 	);
 };
 
 const TextSuggestion = ({ text, onPress }: SuggestionProps) => {
+	const colorScheme = useColorScheme();
 	return (
 		<Pressable
 			onPress={onPress}
 			margin={2}
 			padding={2}
-			bg={"white"}
-			_hover={{
-				bg: "primary.200",
-			}}
-			_pressed={{
-				bg: "primary.300",
-			}}
-		>
-			<Row alignItems="center" space={4}>
+		>{({ isHovered, isPressed }) => (
+			<Row alignItems="center" space={4}
+				bg={colorScheme == 'dark'
+					? (isHovered || isPressed) ? 'gray.800' : undefined
+					: (isHovered || isPressed) ? 'primary.100' : undefined
+				}
+			>
 				<Square size={"sm"}>
 					<Icon size={"md"} as={Ionicons} name="search" />
 				</Square>
 				<Text fontSize="md">{text}</Text>
 			</Row>
-		</Pressable>
+		)}</Pressable>
 	);
 };
 
