@@ -49,3 +49,24 @@ jobs:
     secrets: inherit
 
 
+##############################################################################
+#                        ADD NEW TASKS IN THE CI                             #
+#                                                                            #
+#                                                                            #
+# ON this file                                                               #
+# ADD name: NAME_OF_YOUR_TASK                                                #
+# ADD need option if you want to wait for a previous task to be completed    #
+# ADD uses: ./.github/workflows/NAME_OF_YOUR_FILE.yml                        #
+# ADD secrets: inherit if you need to use your secrets                       #
+#                                                                            #
+# ON your file                                                               #
+# ADD name: NAME_OF_YOUR_TASK                                                #
+# ADD on: worflow_call:                                                      #
+# ADD jobs:                                                                  #
+# ADD NAME_OF_YOUR_JOB:                                                      #
+# ADD runs-on: ubuntu-latest                                                 #
+# ADD if: Specify conditions for when to run a job                           #
+# ADD environment: Staging or Production                                     #
+# ... Add your steps                                                         #
+#                                                                            #
+##############################################################################
