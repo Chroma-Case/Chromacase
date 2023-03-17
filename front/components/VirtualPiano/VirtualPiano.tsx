@@ -1,30 +1,19 @@
 import { Row, Box } from "native-base";
 import React, { useState, useEffect } from "react";
 import Octave from "./Octave";
-
-export type Note = "C" | "D" | "E" | "F" | "G" | "A" | "B";
-export type Accidental = "#" | "b" | "##" | "bb";
-
-export type NoteValue = {
-	note: Note;
-	accidental?: Accidental;
-	octave?: number;
-};
-
-export type NoteNameBehavior = "always" | "onpress" | "onhighlight" | "never";
-export type KeyPressStyle = "subtle" | "vivid";
+import { Note, PianoKey, NoteNameBehavior, KeyPressStyle, octaveKeys } from "../../models/Piano";
 
 type VirtualPianoProps = Parameters<typeof Row>[0] & {
-	onNoteDown: (note: Note) => void;
-	onNoteUp: (note: Note) => void;
+	onNoteDown: (note: PianoKey) => void;
+	onNoteUp: (note: PianoKey) => void;
 	startOctave: number;
-	startNote: Note;
+	startNote: PianoKey;
 	endOctave: number;
-	endNote: Note;
+	endNote: PianoKey;
 	showNoteNames: NoteNameBehavior; // default "onpress"
-	highlightedNotes: Array<NoteValue | string>;
+	highlightedNotes: Array<PianoKey | string>;
 	highlightColor: string;
-	specialHighlightedNotes: Array<NoteValue | string>;
+	specialHighlightedNotes: Array<PianoKey | string>;
 	specialHighlightColor: string;
 	showOctaveNumbers: boolean;
 	keyPressStyle: KeyPressStyle;
@@ -47,19 +36,11 @@ const VirtualPiano = ({
     keyPressStyle,
     vividKeyPressColor,
 }: VirtualPianoProps) => {
-	const notesList: Array<Note> = ["C", "D", "E", "F", "G", "A", "B"];
-    const nbOctaves = endOctave - startOctave;
-	const nbWhiteKeys =
-		notesList.length * (endOctave - startOctave) -
-		notesList.indexOf(startNote) -
-		(notesList.length - notesList.indexOf(endNote) + 1);
     const octaveList = [];
 
     for (let octaveNum = startOctave; octaveNum <= endOctave; octaveNum++) {
         octaveList.push(octaveNum);
     };
-
-
 
 	return (
 		<Row>
@@ -68,8 +49,8 @@ const VirtualPiano = ({
                     <Octave
                         key={octaveNum}
                         number={octaveNum}
-                        startNote={octaveNum == startOctave ? startNote : notesList[0]}
-                        endNote={octaveNum == endOctave ? endNote : notesList[notesList.length - 1]}
+                        startNote={octaveNum == startOctave ? startNote : octaveKeys[0]}
+                        endNote={octaveNum == endOctave ? endNote : octaveKeys[octaveKeys.length - 1]}
                         onNoteDown={onNoteDown}
                         onNoteUp={onNoteUp}
                     />
@@ -87,9 +68,9 @@ VirtualPiano.defaultProps = {
         console.log("Note up: " + n);
     },
 	startOctave: 2,
-	startNote: "C",
+	startNote: new PianoKey("C"),
 	endOctave: 6,
-	endNote: "C",
+	endNote: new PianoKey("C"),
 	showNoteNames: "onpress",
 	highlightedNotes: [],
 	highlightColor: "red",
