@@ -2,16 +2,18 @@ import React from 'react';
 import SongCard from './SongCard';
 import { FlatGrid } from 'react-native-super-grid';
 import { Heading, VStack } from 'native-base';
+import { RequireExactlyOne } from 'type-fest';
 
 type SongCardGrid = {
 	songs: Parameters<typeof SongCard>[0][];
-	maxItemsPerRow?: number,
-	itemDimension?: number,
 	heading?: JSX.Element,
-}
+} & RequireExactlyOne<{
+	maxItemsPerRow: number,
+	itemDimension: number,
+}>
 
 const SongCardGrid = (props: SongCardGrid) => {
-	return <VStack>
+	return <VStack space={5}>
 		<Heading>{props.heading}</Heading>
 		<FlatGrid
 			maxItemsPerRow={props.maxItemsPerRow}
