@@ -5,18 +5,14 @@ import {
 	octaveKeys,
 	Accidental,
 } from "../../models/Piano";
-import { Box, Row, Pressable } from "native-base";
+import { Box, Row, Pressable, ZStack } from "native-base";
 
 const notesList: Array<Note> = ["C", "D", "E", "F", "G", "A", "B"];
 const accidentalsList: Array<Accidental> = ["#", "b", "##", "bb"];
 
-const getKeyIndex = (k: PianoKey, keys: PianoKey[]) => {
+const getKeyIndex = (n: Note, keys: PianoKey[]) => {
 	for (let i = 0; i < keys.length; i++) {
-		if (
-			keys[i]?.note === k.note &&
-			((keys[i]?.accidental && keys[i]?.accidental === k.accidental) ||
-				(!keys[i]?.accidental && !k.accidental))
-		) {
+		if (keys[i]?.note === n) {
 			return i;
 		}
 	}
@@ -25,8 +21,8 @@ const getKeyIndex = (k: PianoKey, keys: PianoKey[]) => {
 
 type OctaveProps = {
 	number: number;
-	startNote: PianoKey;
-	endNote: PianoKey;
+	startNote: Note;
+	endNote: Note;
 	onNoteDown: (note: PianoKey) => void;
 	onNoteUp: (note: PianoKey) => void;
 };
@@ -46,28 +42,58 @@ const Octave = ({
 	const endNoteIndex = getKeyIndex(endNote, oK);
 	const keys = oK.slice(startNoteIndex, endNoteIndex + 1);
 
+	const whiteKeys = octaveKeys.filter((k) => k?.accidental === undefined);
+	const blackKeys = octaveKeys.filter((k) => k?.accidental !== undefined);
+
 	return (
-		<Row>
-			{keys.map((key, i) => {
-				return (
-					<Pressable
-						onPressIn={() => onNoteDown(key)}
-						onPressOut={() => onNoteUp(key)}
-					>
-						<Box
-							key={i}
-							bg="white"
-							w="50px"
-							h="200px"
-							borderWidth="1px"
-							borderColor="black"
+		<Box width={"350px"} height={"200px"}>
+		<ZStack>
+			<Row>
+				{whiteKeys.map((key, i) => {
+					return (
+						<Pressable
+							onPressIn={() => onNoteDown(key)}
+							onPressOut={() => onNoteUp(key)}
 						>
-							{key.toString()}
-						</Box>
-					</Pressable>
-				);
-			})}
-		</Row>
+							<Box
+								key={i}
+								bg="white"
+								w="50px"
+								h="200px"
+								borderWidth="1px"
+								borderColor="black"
+							>
+								{key.toString()}
+							</Box>
+						</Pressable>
+					);
+				})}
+			</Row>
+			<Row>
+				{blackKeys.map((key, i) => {
+					return (
+						<Pressable
+							onPressIn={() => onNoteDown(key)}
+							onPressOut={() => onNoteUp(key)}
+						>
+							<Box
+								key={i}
+								bg="black"
+								w="25px"
+								h="100px"
+								borderWidth="1px"
+								borderColor="black"
+								marginLeft="12.5px"
+							>
+								{key.toString()}
+							</Box>
+						</Pressable>
+					);
+				})}
+				;
+			</Row>
+		</ZStack>
+		</Box>
 	);
 };
 
