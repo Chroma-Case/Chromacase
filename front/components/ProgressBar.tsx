@@ -1,6 +1,6 @@
 import React from "react";
 import { translate } from "../i18n/i18n";
-import { Box, useBreakpointValue, Text, VStack, Progress } from 'native-base';
+import { Box, useBreakpointValue, Text, VStack, Progress, Stack, AspectRatio } from 'native-base';
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, Image } from "native-base";
 import Card from "../components/Card";
@@ -12,27 +12,23 @@ const ProgressBar = ({ xp }: { xp: number}) => {
 	const progessValue = 100 * xp / nextLevelThreshold;
 	
 	const nav = useNavigation();
-	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
 
 	return (
-		<Card w="90%" maxW='500' style={{flexDirection}}
-			onPress={() => nav.navigate('User')}
-		>
-			<Box w="20%" paddingRight={2} paddingLeft={2} paddingY={2}>
-				<Image borderRadius={100} source={{
-      				uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
-    			}} alt="Profile picture" size="sm"
-				/>
-			</Box>
-			<Box w='80%' paddingY={4}>
-				<VStack alignItems={'center'}>
+		<Card w="100%" onPress={() => nav.navigate('User')} >
+			<Stack padding={4} space={2} direction="row">
+				<AspectRatio ratio={1}>
+					<Image position="relative" borderRadius={100} source={{
+						uri: "https://wallpaperaccess.com/full/317501.jpg" // TODO : put the actual profile pic
+					}} alt="Profile picture" zIndex={0}/>
+				</AspectRatio>
+				<VStack alignItems={'center'} flexGrow={1} space={2}>
 					<Text>{`${translate('level')} ${level}`}</Text>
 					<Box w="100%">
 						<Progress value={progessValue} mx="4" />
 					</Box>
 					<Text>{xp} / {nextLevelThreshold} {translate('levelProgress')}</Text>
 				</VStack>
-			</Box>
+			</Stack>
 		</Card>
 	);
 }
