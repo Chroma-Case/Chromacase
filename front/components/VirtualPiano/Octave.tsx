@@ -1,12 +1,34 @@
-import { Note } from "./VirtualPiano";
+import {
+	Note,
+	PianoKey,
+	NoteNameBehavior,
+	octaveKeys,
+	Accidental,
+} from "../../models/Piano";
 import { Box, Row, Pressable } from "native-base";
+
+const notesList: Array<Note> = ["C", "D", "E", "F", "G", "A", "B"];
+const accidentalsList: Array<Accidental> = ["#", "b", "##", "bb"];
+
+const getKeyIndex = (k: PianoKey, keys: PianoKey[]) => {
+	for (let i = 0; i < keys.length; i++) {
+		if (
+			keys[i]?.note === k.note &&
+			((keys[i]?.accidental && keys[i]?.accidental === k.accidental) ||
+				(!keys[i]?.accidental && !k.accidental))
+		) {
+			return i;
+		}
+	}
+	return -1;
+};
 
 type OctaveProps = {
 	number: number;
-	startNote: Note;
-	endNote: Note;
-	onNoteDown: (note: Note) => void;
-	onNoteUp: (note: Note) => void;
+	startNote: PianoKey;
+	endNote: PianoKey;
+	onNoteDown: (note: PianoKey) => void;
+	onNoteUp: (note: PianoKey) => void;
 };
 
 const Octave = ({
@@ -16,28 +38,31 @@ const Octave = ({
 	onNoteDown,
 	onNoteUp,
 }: OctaveProps) => {
-	const notesList: Array<Note> = ["C", "D", "E", "F", "G", "A", "B"];
-	const startNoteIndex = notesList.indexOf(startNote);
-	const endNoteIndex = notesList.indexOf(endNote);
-	const whiteKeys = notesList.slice(startNoteIndex, endNoteIndex + 1);
+	const oK: PianoKey[] = octaveKeys.map((k) => {
+		return { ...k, number: number };
+	});
+
+	const startNoteIndex = getKeyIndex(startNote, oK);
+	const endNoteIndex = getKeyIndex(endNote, oK);
+	const keys = oK.slice(startNoteIndex, endNoteIndex + 1);
 
 	return (
 		<Row>
-			{whiteKeys.map((note) => {
+			{keys.map((key, i) => {
 				return (
 					<Pressable
-						onPressIn={() => onNoteDown(note + number)}
-						onPressOut={() => onNoteUp(note + number)}
+						onPressIn={() => onNoteDown(key)}
+						onPressOut={() => onNoteUp(key)}
 					>
 						<Box
-							key={note}
+							key={i}
 							bg="white"
 							w="50px"
 							h="200px"
 							borderWidth="1px"
 							borderColor="black"
 						>
-							{note}
+							{key.toString()}
 						</Box>
 					</Pressable>
 				);
