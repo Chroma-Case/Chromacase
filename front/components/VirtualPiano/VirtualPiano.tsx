@@ -7,9 +7,9 @@ type VirtualPianoProps = Parameters<typeof Row>[0] & {
 	onNoteDown: (note: PianoKey) => void;
 	onNoteUp: (note: PianoKey) => void;
 	startOctave: number;
-	startNote: PianoKey;
+	startNote: Note;
 	endOctave: number;
-	endNote: PianoKey;
+	endNote: Note;
 	showNoteNames: NoteNameBehavior; // default "onpress"
 	highlightedNotes: Array<PianoKey | string>;
 	highlightColor: string;
@@ -36,6 +36,7 @@ const VirtualPiano = ({
     keyPressStyle,
     vividKeyPressColor,
 }: VirtualPianoProps) => {
+    const notesList: Array<Note> = ["C", "D", "E", "F", "G", "A", "B"];
     const octaveList = [];
 
     for (let octaveNum = startOctave; octaveNum <= endOctave; octaveNum++) {
@@ -49,8 +50,8 @@ const VirtualPiano = ({
                     <Octave
                         key={octaveNum}
                         number={octaveNum}
-                        startNote={octaveNum == startOctave ? startNote : octaveKeys[0]}
-                        endNote={octaveNum == endOctave ? endNote : octaveKeys[octaveKeys.length - 1]}
+                        startNote={octaveNum == startOctave ? startNote : notesList[0]}
+                        endNote={octaveNum == endOctave ? endNote : notesList[notesList.length - 1]}
                         onNoteDown={onNoteDown}
                         onNoteUp={onNoteUp}
                     />
@@ -68,9 +69,9 @@ VirtualPiano.defaultProps = {
         console.log("Note up: " + n);
     },
 	startOctave: 2,
-	startNote: new PianoKey("C"),
+	startNote: "C",
 	endOctave: 6,
-	endNote: new PianoKey("C"),
+	endNote: "C",
 	showNoteNames: "onpress",
 	highlightedNotes: [],
 	highlightColor: "red",
