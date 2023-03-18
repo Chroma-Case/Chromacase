@@ -5,7 +5,7 @@ import {
 	octaveKeys,
 	Accidental,
 } from "../../models/Piano";
-import { Box, Row, Pressable, ZStack } from "native-base";
+import { Box, Row, Pressable, ZStack, Text } from "native-base";
 
 const notesList: Array<Note> = ["C", "D", "E", "F", "G", "A", "B"];
 const accidentalsList: Array<Accidental> = ["#", "b", "##", "bb"];
@@ -35,15 +35,20 @@ const Octave = ({
 	onNoteUp,
 }: OctaveProps) => {
 	const oK: PianoKey[] = octaveKeys.map((k) => {
-		return { ...k, number: number };
+		return new PianoKey(k.note, k.accidental, number);
 	});
 
 	const startNoteIndex = getKeyIndex(startNote, oK);
 	const endNoteIndex = getKeyIndex(endNote, oK);
 	const keys = oK.slice(startNoteIndex, endNoteIndex + 1);
 
-	const whiteKeys = octaveKeys.filter((k) => k?.accidental === undefined);
-	const blackKeys = octaveKeys.filter((k) => k?.accidental !== undefined);
+	const whiteKeys = keys.filter((k) => k?.accidental === undefined);
+	const blackKeys = keys.filter((k) => k?.accidental !== undefined);
+
+	const whiteKeyWidthExpr = '50px';
+	const whiteKeyHeightExpr = '200px';
+	const blackKeyWidthExpr = '25px';
+	const blackKeyHeightExpr = '100px';
 
 	return (
 		<Box width={"350px"} height={"200px"}>
@@ -52,18 +57,22 @@ const Octave = ({
 				{whiteKeys.map((key, i) => {
 					return (
 						<Pressable
+							key={i}
 							onPressIn={() => onNoteDown(key)}
 							onPressOut={() => onNoteUp(key)}
 						>
 							<Box
-								key={i}
 								bg="white"
 								w="50px"
 								h="200px"
 								borderWidth="1px"
 								borderColor="black"
+								justifyContent="flex-end"
+								alignItems="center"
 							>
-								{key.toString()}
+								<Text fontSize="xl">
+									{key.note}
+								</Text>
 							</Box>
 						</Pressable>
 					);
@@ -73,24 +82,32 @@ const Octave = ({
 				{blackKeys.map((key, i) => {
 					return (
 						<Pressable
+							key={i}
 							onPressIn={() => onNoteDown(key)}
 							onPressOut={() => onNoteUp(key)}
 						>
 							<Box
-								key={i}
 								bg="black"
 								w="25px"
-								h="100px"
+								h="120px"
 								borderWidth="1px"
 								borderColor="black"
-								marginLeft="12.5px"
+								color="white"
+								style={{
+									position: "absolute",
+									left: `${(i + ((i > 1) as unknown as number)) * 50 + (50 - (25 / 2))}px`,
+									top: "0px",
+									justifyContent: "flex-end",
+									alignItems: "center",
+								}}
 							>
-								{key.toString()}
+								<Text fontSize="xs" color="white">
+									{key.note + key.accidental}
+								</Text>
 							</Box>
 						</Pressable>
 					);
 				})}
-				;
 			</Row>
 		</ZStack>
 		</Box>
