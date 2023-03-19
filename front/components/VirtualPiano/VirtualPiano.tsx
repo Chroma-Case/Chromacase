@@ -36,7 +36,15 @@ const VirtualPiano = ({
     keyPressStyle,
     vividKeyPressColor,
 }: VirtualPianoProps) => {
-    const notesList: Array<Note> = ["C", "D", "E", "F", "G", "A", "B"];
+    const notesList: Array<Note> = [
+        Note.C,
+        Note.D,
+        Note.E,
+        Note.F,
+        Note.G,
+        Note.A,
+        Note.B,
+    ];
     const octaveList = [];
 
     for (let octaveNum = startOctave; octaveNum <= endOctave; octaveNum++) {
@@ -73,9 +81,9 @@ VirtualPiano.defaultProps = {
         console.log("Note up: " + n);
     },
 	startOctave: 2,
-	startNote: "C",
+	startNote: Note.C,
 	endOctave: 2,
-	endNote: "B",
+	endNote: Note.B,
 	showNoteNames: "onhover",
 	highlightedNotes: [],
 	highlightColor: "red",
