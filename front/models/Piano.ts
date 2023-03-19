@@ -46,7 +46,7 @@ export class PianoKey {
 
 export const strToKey = (str: string): PianoKey => {
 	let note: Note;
-	switch (str[0]) {
+	switch (str.substring(0, 2)) {
 		case "C":
 			note = Note.C;
 			break;

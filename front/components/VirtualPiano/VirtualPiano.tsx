@@ -7,6 +7,8 @@ import {
 	NoteNameBehavior,
 	KeyPressStyle,
 	keyToStr,
+    strToKey,
+    HighlightedKey,
 } from "../../models/Piano";
 
 type VirtualPianoProps = Parameters<typeof Row>[0] & {
@@ -17,10 +19,8 @@ type VirtualPianoProps = Parameters<typeof Row>[0] & {
 	endOctave: number;
 	endNote: Note;
 	showNoteNames: NoteNameBehavior; // default "onpress"
-	highlightedNotes: Array<PianoKey | string>;
+	highlightedNotes: Array<HighlightedKey>;
 	highlightColor: string;
-	specialHighlightedNotes: Array<PianoKey | string>;
-	specialHighlightColor: string;
 	showOctaveNumbers: boolean;
 	keyPressStyle: KeyPressStyle;
 	vividKeyPressColor: string;
@@ -36,8 +36,6 @@ const VirtualPiano = ({
 	showNoteNames,
 	highlightedNotes,
 	highlightColor,
-	specialHighlightedNotes,
-	specialHighlightColor,
 	showOctaveNumbers,
 	keyPressStyle,
 	vividKeyPressColor,
@@ -94,10 +92,8 @@ VirtualPiano.defaultProps = {
 	endOctave: 2,
 	endNote: Note.B,
 	showNoteNames: NoteNameBehavior.onpress,
-	highlightedNotes: [{ key: Note.D }, { key: Note.G, bgColor: "blue" }],
+	highlightedNotes: [{ key: strToKey("D") }, { key: strToKey("A#"), bgColor: "#00FF00" }],
 	highlightColor: "red",
-	specialHighlightedNotes: [Note.D, Note.G],
-	specialHighlightColor: "blue",
 	showOctaveNumbers: true,
 	keyPressStyle: "subtle",
 	vividKeyPressColor: "red",
