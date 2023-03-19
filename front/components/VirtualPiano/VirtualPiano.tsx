@@ -48,8 +48,11 @@ const VirtualPiano = ({
             {octaveList.map((octaveNum) => {
                 return (
                     <Octave
+                        width={"350px"}
+                        height={"200px"}
                         key={octaveNum}
                         number={octaveNum}
+                        showNoteNames={showNoteNames}
                         startNote={octaveNum == startOctave ? startNote : notesList[0]}
                         endNote={octaveNum == endOctave ? endNote : notesList[notesList.length - 1]}
                         onNoteDown={onNoteDown}
@@ -70,9 +73,9 @@ VirtualPiano.defaultProps = {
     },
 	startOctave: 2,
 	startNote: "C",
-	endOctave: 6,
-	endNote: "C",
-	showNoteNames: "onpress",
+	endOctave: 2,
+	endNote: "B",
+	showNoteNames: "onhover",
 	highlightedNotes: [],
 	highlightColor: "red",
 	specialHighlightedNotes: [],

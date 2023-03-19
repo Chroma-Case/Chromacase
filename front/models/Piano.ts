@@ -3,7 +3,7 @@
 export type Note = "C" | "D" | "E" | "F" | "G" | "A" | "B";
 export type Accidental = "#" | "b" | "##" | "bb";
 
-export type NoteNameBehavior = "always" | "onpress" | "onhighlight" | "never";
+export type NoteNameBehavior = "always" | "onpress" | "onhighlight" | "onhover" | "never";
 export type KeyPressStyle = "subtle" | "vivid";
 
 export class PianoKey {

@@ -19,21 +19,37 @@ const getKeyIndex = (n: Note, keys: PianoKey[]) => {
 	return -1;
 };
 
-type OctaveProps = {
+const isNoteVisible = (
+	showNoteNamesPolicy: NoteNameBehavior,
+	isPressed: boolean,
+	isHovered: boolean,
+	isHighlighted: boolean
+) => {
+	if (showNoteNamesPolicy === "always") return true;
+	if (showNoteNamesPolicy === "never") return false;
+
+	if (showNoteNamesPolicy === "onpress") {
+		return isPressed;
+	} else if (showNoteNamesPolicy === "onhover") {
+		return isHovered;
+	} else if (showNoteNamesPolicy === "onhighlight") {
+		return isHighlighted;
+	}
+	return false;
+};
+
+type OctaveProps = Parameters<typeof Box>[0] & {
 	number: number;
 	startNote: Note;
 	endNote: Note;
+	showNoteNames: NoteNameBehavior;
 	onNoteDown: (note: PianoKey) => void;
 	onNoteUp: (note: PianoKey) => void;
 };
 
-const Octave = ({
-	number,
-	startNote,
-	endNote,
-	onNoteDown,
-	onNoteUp,
-}: OctaveProps) => {
+const Octave = (props: OctaveProps) => {
+	const { number, startNote, endNote, showNoteNames, onNoteDown, onNoteUp } =
+		props;
 	const oK: PianoKey[] = octaveKeys.map((k) => {
 		return new PianoKey(k.note, k.accidental, number);
 	});
@@ -45,38 +61,41 @@ const Octave = ({
 	const whiteKeys = keys.filter((k) => k?.accidental === undefined);
 	const blackKeys = keys.filter((k) => k?.accidental !== undefined);
 
-	const whiteKeyWidthExpr = "50px";
-	const whiteKeyHeightExpr = "200px";
-	const blackKeyWidthExpr = "25px";
-	const blackKeyHeightExpr = "100px";
+	const whiteKeyWidthExpr = "calc(100% / 7)";
+	const whiteKeyHeightExpr = "100%";
+	const blackKeyWidthExpr = "calc(100% / 13)";
+	const blackKeyHeightExpr = "calc(100% / 1.5)";
 
 	return (
-		<Box width={"350px"} height={"200px"}>
-			<ZStack>
-				<Row>
-					{whiteKeys.map((key, i) => {
-						return (
-							<Pressable
-								key={i}
-								onPressIn={() => onNoteDown(key)}
-								onPressOut={() => onNoteUp(key)}
-							>
-								{({ isHovered, isPressed }) => (
-									<Box
-										bg={
-											isHovered
-												? isPressed
-													? "gray.300"
-													: "gray.100"
-												: "white"
-										}
-										w="50px"
-										h="200px"
-										borderWidth="1px"
-										borderColor="black"
-										justifyContent="flex-end"
-										alignItems="center"
-									>
+		<Box {...props}>
+			<Row height={"100%"} width={"100%"}>
+				{whiteKeys.map((key, i) => {
+					return (
+						<Pressable
+							width={whiteKeyWidthExpr}
+							height={whiteKeyHeightExpr}
+							key={i}
+							onPressIn={() => onNoteDown(key)}
+							onPressOut={() => onNoteUp(key)}
+						>
+							{({ isHovered, isPressed }) => (
+								<Box
+									bg={
+										isHovered ? (isPressed ? "gray.300" : "gray.100") : "white"
+									}
+									w="100%"
+									h="100%"
+									borderWidth="1px"
+									borderColor="black"
+									justifyContent="flex-end"
+									alignItems="center"
+								>
+									{isNoteVisible(
+										showNoteNames,
+										isPressed,
+										isHovered,
+										false
+									) && (
 										<Text
 											style={{
 												userSelect: "none",
@@ -88,38 +107,49 @@ const Octave = ({
 										>
 											{key.note}
 										</Text>
-									</Box>
-								)}
-							</Pressable>
-						);
-					})}
-				</Row>
-				<Row>
-					{blackKeys.map((key, i) => {
-						return (
-							<Pressable
-								key={i}
-								onPressIn={() => onNoteDown(key)}
-								onPressOut={() => onNoteUp(key)}
-							>
-								{({ isHovered, isPressed }) => (
-									<Box
-										bg={isHovered ? (isPressed ? "gray.700" : "gray.800") : "black"}
-										w="25px"
-										h="120px"
-										borderWidth="1px"
-										borderColor="black"
-										color="white"
-										style={{
-											position: "absolute",
-											left: `${
-												(i + ((i > 1) as unknown as number)) * 50 + (50 - 25 / 2)
-											}px`,
-											top: "0px",
-											justifyContent: "flex-end",
-											alignItems: "center",
-										}}
-									>
+									)}
+								</Box>
+							)}
+						</Pressable>
+					);
+				})}
+				{blackKeys.map((key, i) => {
+					return (
+						<Pressable
+							key={i}
+							onPressIn={() => onNoteDown(key)}
+							onPressOut={() => onNoteUp(key)}
+							width={blackKeyWidthExpr}
+							height={blackKeyHeightExpr}
+							style={{
+								position: "absolute",
+								left: `calc(calc(${whiteKeyWidthExpr} * ${
+									i + ((i > 1) as unknown as number) + 1
+								}) - calc(${blackKeyWidthExpr} / 2))`,
+								top: "0px",
+							}}
+						>
+							{({ isHovered, isPressed }) => (
+								<Box
+									bg={
+										isHovered ? (isPressed ? "gray.700" : "gray.800") : "black"
+									}
+									w="100%"
+									h="100%"
+									borderWidth="1px"
+									borderColor="black"
+									color="white"
+									style={{
+										justifyContent: "flex-end",
+										alignItems: "center",
+									}}
+								>
+									{isNoteVisible(
+										showNoteNames,
+										isPressed,
+										isHovered,
+										false
+									) && (
 										<Text
 											style={{
 												userSelect: "none",
@@ -132,13 +162,13 @@ const Octave = ({
 										>
 											{key.note + key.accidental}
 										</Text>
-									</Box>
-								)}
-							</Pressable>
-						);
-					})}
-				</Row>
-			</ZStack>
+									)}
+								</Box>
+							)}
+						</Pressable>
+					);
+				})}
+			</Row>
 		</Box>
 	);
 };
