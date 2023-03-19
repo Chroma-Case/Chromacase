@@ -104,6 +104,7 @@ const Octave = (props: OctaveProps) => {
 						<PianoKeyComp
 							key={i} 
 							pianoKey={key}
+							showNoteName={showNoteNames}
 							bg={isHighlighted ? highlightColor :whiteKeyBg}
 							bgPressed={isHighlighted ? highlightColor : whiteKeyBgPressed}
 							bgHovered={isHighlighted ? highlightColor : whiteKeyBgHovered}
@@ -129,6 +130,7 @@ const Octave = (props: OctaveProps) => {
 						<PianoKeyComp
 							key={i}
 							pianoKey={key}
+							showNoteName={showNoteNames}
 							bg={isHighlighted ? highlightColor : blackKeyBg}
 							bgPressed={isHighlighted ? highlightColor : blackKeyBgPressed}
 							bgHovered={isHighlighted ? highlightColor : blackKeyBgHovered}

@@ -14,7 +14,7 @@ import {
 type PianoKeyProps = {
 	key?: Key;
 	pianoKey: PianoKey;
-	showNoteNames: NoteNameBehavior;
+	showNoteName: NoteNameBehavior;
 	bg: string;
 	bgPressed: string;
 	bgHovered: string;
@@ -43,7 +43,7 @@ const isNoteVisible = (
 const PianoKeyComp = ({
 	key,
 	pianoKey,
-	showNoteNames,
+	showNoteName,
 	bg,
 	bgPressed,
 	bgHovered,
@@ -85,7 +85,7 @@ const PianoKeyComp = ({
 					justifyContent="flex-end"
 					alignItems="center"
 				>
-					{isNoteVisible(showNoteNames, isPressed, isHovered) && (
+					{isNoteVisible(showNoteName, isPressed, isHovered) && (
 						<Text {...textProps}>{keyToStr(pianoKey, false)}</Text>
 					)}
 				</Box>
