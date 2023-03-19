@@ -78,7 +78,7 @@ export const strToKey = (str: string): PianoKey => {
     return new PianoKey(note, accidental, octave);
 };
 
-export const keyToStr = (key: PianoKey): string => {
+export const keyToStr = (key: PianoKey, showOctave: boolean = true): string => {
     let s = "";
     switch (key.note) {
         case Note.C: s += "C"; break;
@@ -89,15 +89,12 @@ export const keyToStr = (key: PianoKey): string => {
         case Note.A: s += "A"; break;
         case Note.B: s += "B"; break;
     }
-    if (key.accidental) {
+    if (key.accidental !== undefined) {
         switch (key.accidental) {
-            case Accidental["#"]: s += "#"; break;
-            case Accidental["b"]: s += "b"; break;
-            case Accidental["##"]: s += "x"; break;
-            case Accidental["bb"]: s += "n"; break;
+            default: s += "#"; break;
         }
     }
-    if (key.octave) {
+    if (showOctave && key.octave) {
         s += key.octave;
     }
     return s;

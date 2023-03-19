@@ -1,7 +1,7 @@
 import { Row, Box } from "native-base";
 import React, { useState, useEffect } from "react";
 import Octave from "./Octave";
-import { Note, PianoKey, NoteNameBehavior, KeyPressStyle, octaveKeys } from "../../models/Piano";
+import { Note, PianoKey, NoteNameBehavior, KeyPressStyle, keyToStr } from "../../models/Piano";
 
 type VirtualPianoProps = Parameters<typeof Row>[0] & {
 	onNoteDown: (note: PianoKey) => void;
@@ -75,10 +75,10 @@ const VirtualPiano = ({
 
 VirtualPiano.defaultProps = {
     onNoteDown: (n) => {
-        console.log("Note down: " + n);
+        console.log("Note down: " + keyToStr(n));
     },
     onNoteUp: (n) => {
-        console.log("Note up: " + n);
+        console.log("Note up: " + keyToStr(n));
     },
 	startOctave: 2,
 	startNote: Note.C,
