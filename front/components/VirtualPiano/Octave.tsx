@@ -43,12 +43,13 @@ type OctaveProps = Parameters<typeof Box>[0] & {
 	startNote: Note;
 	endNote: Note;
 	showNoteNames: NoteNameBehavior;
+	showOctaveNumber: boolean;
 	onNoteDown: (note: PianoKey) => void;
 	onNoteUp: (note: PianoKey) => void;
 };
 
 const Octave = (props: OctaveProps) => {
-	const { number, startNote, endNote, showNoteNames, onNoteDown, onNoteUp } =
+	const { number, startNote, endNote, showNoteNames, showOctaveNumber, onNoteDown, onNoteUp } =
 		props;
 	const oK: PianoKey[] = octaveKeys.map((k) => {
 		return new PianoKey(k.note, k.accidental, number);
@@ -169,6 +170,24 @@ const Octave = (props: OctaveProps) => {
 					);
 				})}
 			</Row>
+			{showOctaveNumber && (
+				<Text
+					style={{
+						userSelect: "none",
+						WebkitUserSelect: "none",
+						MozUserSelect: "none",
+						msUserSelect: "none",
+					}}
+					fontSize="2xs"
+					color="black"
+					position="absolute"
+					bottom="0px"
+					left="2px"
+					m="2px"
+				>
+					{number}
+				</Text>
+			)}
 		</Box>
 	);
 };
