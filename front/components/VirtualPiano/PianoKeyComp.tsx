@@ -6,8 +6,6 @@ import {
 	PianoKey,
 	NoteNameBehavior,
 	octaveKeys,
-	Accidental,
-	HighlightedKey,
 	keyToStr,
 } from "../../models/Piano";
 

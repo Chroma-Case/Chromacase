@@ -3,7 +3,7 @@ import {
 	PianoKey,
 	NoteNameBehavior,
 	octaveKeys,
-	Accidental,
+	isAccidental,
 	HighlightedKey,
 } from "../../models/Piano";
 import { Box, Row, Pressable, Text } from "native-base";
@@ -74,15 +74,15 @@ const Octave = (props: OctaveProps) => {
 		onNoteUp,
 	} = props;
 	const oK: PianoKey[] = octaveKeys.map((k) => {
-		return new PianoKey(k.note, k.accidental, number);
+		return new PianoKey(k.note, number);
 	});
 
 	const startNoteIndex = getKeyIndex(startNote, oK);
 	const endNoteIndex = getKeyIndex(endNote, oK);
 	const keys = oK.slice(startNoteIndex, endNoteIndex + 1);
 
-	const whiteKeys = keys.filter((k) => k?.accidental === undefined);
-	const blackKeys = keys.filter((k) => k?.accidental !== undefined);
+	const whiteKeys = keys.filter((k) => !isAccidental(k));
+	const blackKeys = keys.filter(isAccidental);
 
 	const whiteKeyWidthExpr = "calc(100% / 7)";
 	const whiteKeyHeightExpr = "100%";
@@ -94,18 +94,17 @@ const Octave = (props: OctaveProps) => {
 			<Row height={"100%"} width={"100%"}>
 				{whiteKeys.map((key, i) => {
 					const highlightedKey = highlightedNotes.find(
-						(h) =>
-							h.key.note === key.note && h.key.accidental === key.accidental
+						(h) => h.key.note === key.note
 					);
 					const isHighlighted = highlightedKey !== undefined;
 					const highlightColor =
 						highlightedKey?.bgColor ?? defaultHighlightColor;
 					return (
 						<PianoKeyComp
-							key={i} 
+							key={i}
 							pianoKey={key}
 							showNoteName={showNoteNames}
-							bg={isHighlighted ? highlightColor :whiteKeyBg}
+							bg={isHighlighted ? highlightColor : whiteKeyBg}
 							bgPressed={isHighlighted ? highlightColor : whiteKeyBgPressed}
 							bgHovered={isHighlighted ? highlightColor : whiteKeyBgHovered}
 							onKeyDown={() => onNoteDown(key)}
@@ -114,14 +113,12 @@ const Octave = (props: OctaveProps) => {
 								width: whiteKeyWidthExpr,
 								height: whiteKeyHeightExpr,
 							}}
-
 						/>
 					);
 				})}
 				{blackKeys.map((key, i) => {
 					const highlightedKey = highlightedNotes.find(
-						(h) =>
-							h.key.note === key.note && h.key.accidental === key.accidental
+						(h) => h.key.note === key.note
 					);
 					const isHighlighted = highlightedKey !== undefined;
 					const highlightColor =
