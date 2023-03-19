@@ -86,7 +86,7 @@ const PianoKeyComp = ({
 					alignItems="center"
 				>
 					{isNoteVisible(showNoteNames, isPressed, isHovered) && (
-						<Text {...textProps}>{keyToStr(pianoKey)}</Text>
+						<Text {...textProps}>{keyToStr(pianoKey, false)}</Text>
 					)}
 				</Box>
 			)}
