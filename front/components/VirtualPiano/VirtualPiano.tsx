@@ -53,6 +53,7 @@ const VirtualPiano = ({
                         key={octaveNum}
                         number={octaveNum}
                         showNoteNames={showNoteNames}
+                        showOctaveNumber={showOctaveNumbers}
                         startNote={octaveNum == startOctave ? startNote : notesList[0]}
                         endNote={octaveNum == endOctave ? endNote : notesList[notesList.length - 1]}
                         onNoteDown={onNoteDown}
