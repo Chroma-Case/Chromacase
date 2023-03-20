@@ -7,8 +7,8 @@ import {
 	NoteNameBehavior,
 	KeyPressStyle,
 	keyToStr,
-    strToKey,
-    HighlightedKey,
+	strToKey,
+	HighlightedKey,
 } from "../../models/Piano";
 
 type VirtualPianoProps = Parameters<typeof Row>[0] & {
@@ -20,10 +20,7 @@ type VirtualPianoProps = Parameters<typeof Row>[0] & {
 	endNote: Note;
 	showNoteNames: NoteNameBehavior; // default "onpress"
 	highlightedNotes: Array<HighlightedKey>;
-	highlightColor: string;
 	showOctaveNumbers: boolean;
-	keyPressStyle: KeyPressStyle;
-	vividKeyPressColor: string;
 };
 
 const VirtualPiano = ({
@@ -35,10 +32,7 @@ const VirtualPiano = ({
 	endNote,
 	showNoteNames,
 	highlightedNotes,
-	highlightColor,
 	showOctaveNumbers,
-	keyPressStyle,
-	vividKeyPressColor,
 }: VirtualPianoProps) => {
 	const notesList: Array<Note> = [
 		Note.C,
@@ -66,7 +60,9 @@ const VirtualPiano = ({
 						number={octaveNum}
 						showNoteNames={showNoteNames}
 						showOctaveNumber={showOctaveNumbers}
-						highlightedNotes={highlightedNotes}
+						highlightedNotes={highlightedNotes.filter(
+							(n) => n.key.octave ? n.key.octave == octaveNum : true
+						)}
 						startNote={octaveNum == startOctave ? startNote : notesList[0]}
 						endNote={
 							octaveNum == endOctave ? endNote : notesList[notesList.length - 1]
@@ -89,14 +85,14 @@ VirtualPiano.defaultProps = {
 	},
 	startOctave: 2,
 	startNote: Note.C,
-	endOctave: 2,
-	endNote: Note.B,
+	endOctave: 6,
+	endNote: Note.C,
 	showNoteNames: NoteNameBehavior.onpress,
-	highlightedNotes: [{ key: strToKey("D") }, { key: strToKey("A#"), bgColor: "#00FF00" }],
-	highlightColor: "red",
+	highlightedNotes: [
+		{ key: strToKey("D3") },
+		{ key: strToKey("A#"), bgColor: "#00FF00" },
+	],
 	showOctaveNumbers: true,
-	keyPressStyle: "subtle",
-	vividKeyPressColor: "red",
 };
 
 export default VirtualPiano;

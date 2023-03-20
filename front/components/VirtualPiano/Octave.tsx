@@ -99,10 +99,8 @@ const Octave = (props: OctaveProps) => {
 					const isHighlighted = highlightedKey !== undefined;
 					const highlightColor =
 						highlightedKey?.bgColor ?? defaultHighlightColor;
-					console.log(key, highlightedNotes, highlightedKey, isHighlighted, highlightColor);
 					return (
 						<PianoKeyComp
-							key={i}
 							pianoKey={key}
 							showNoteName={showNoteNames}
 							bg={isHighlighted ? highlightColor : whiteKeyBg}
@@ -126,7 +124,6 @@ const Octave = (props: OctaveProps) => {
 						highlightedKey?.bgColor ?? defaultHighlightColor;
 					return (
 						<PianoKeyComp
-							key={i}
 							pianoKey={key}
 							showNoteName={showNoteNames}
 							bg={isHighlighted ? highlightColor : blackKeyBg}
