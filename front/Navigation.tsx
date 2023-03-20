@@ -16,7 +16,6 @@ import { Center } from 'native-base';
 import LoadingComponent from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
-import VirtualPiano from './components/VirtualPiano/VirtualPiano';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,8 +40,6 @@ export const Router = () => {
 		refetchOnWindowFocus: false
 	});
 	const colorScheme = useColorScheme();
-
-	return <VirtualPiano />
 
 	return (
 		<NavigationContainer theme={colorScheme == 'light'

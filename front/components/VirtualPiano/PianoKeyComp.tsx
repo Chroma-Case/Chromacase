@@ -1,5 +1,4 @@
 import { Box, Pressable, Text } from "native-base";
-import { Key } from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import {
 	Note,
