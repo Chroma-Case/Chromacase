@@ -1,6 +1,7 @@
 import { Row, Box } from "native-base";
 import React, { useState, useEffect } from "react";
 import Octave from "./Octave";
+import { StyleProp, ViewStyle } from "react-native";
 import {
 	Note,
 	PianoKey,
@@ -21,6 +22,7 @@ type VirtualPianoProps = Parameters<typeof Row>[0] & {
 	showNoteNames: NoteNameBehavior; // default "onpress"
 	highlightedNotes: Array<HighlightedKey>;
 	showOctaveNumbers: boolean;
+	style: StyleProp<ViewStyle>;
 };
 
 const VirtualPiano = ({
@@ -33,6 +35,7 @@ const VirtualPiano = ({
 	showNoteNames,
 	highlightedNotes,
 	showOctaveNumbers,
+	style,
 }: VirtualPianoProps) => {
 	const notesList: Array<Note> = [
 		Note.C,
@@ -49,19 +52,20 @@ const VirtualPiano = ({
 		octaveList.push(octaveNum);
 	}
 
+    const octaveWidthExpr = `calc(100% / ${octaveList.length})`;
+
 	return (
-		<Row>
+		<Row style={style}>
 			{octaveList.map((octaveNum) => {
 				return (
 					<Octave
-						width={"350px"}
-						height={"200px"}
+						style={{ width: octaveWidthExpr, height: "100%" }}
 						key={octaveNum}
 						number={octaveNum}
 						showNoteNames={showNoteNames}
 						showOctaveNumber={showOctaveNumbers}
-						highlightedNotes={highlightedNotes.filter(
-							(n) => n.key.octave ? n.key.octave == octaveNum : true
+						highlightedNotes={highlightedNotes.filter((n) =>
+							n.key.octave ? n.key.octave == octaveNum : true
 						)}
 						startNote={octaveNum == startOctave ? startNote : notesList[0]}
 						endNote={
@@ -77,22 +81,16 @@ const VirtualPiano = ({
 };
 
 VirtualPiano.defaultProps = {
-	onNoteDown: (n) => {
-		console.log("Note down: " + keyToStr(n));
-	},
-	onNoteUp: (n) => {
-		console.log("Note up: " + keyToStr(n));
-	},
+	onNoteDown: (_n: PianoKey) => {},
+	onNoteUp: (_n: PianoKey) => {},
 	startOctave: 2,
 	startNote: Note.C,
 	endOctave: 6,
 	endNote: Note.C,
 	showNoteNames: NoteNameBehavior.onpress,
-	highlightedNotes: [
-		{ key: strToKey("D3") },
-		{ key: strToKey("A#"), bgColor: "#00FF00" },
-	],
+	highlightedNotes: [],
 	showOctaveNumbers: true,
+    style: {},
 };
 
 export default VirtualPiano;

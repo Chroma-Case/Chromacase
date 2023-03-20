@@ -3,7 +3,7 @@ import { SafeAreaView, Platform } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
 import IconButton from '../components/IconButton';
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
@@ -13,6 +13,8 @@ import { useStopwatch } from 'react-timer-hook';
 import SlideView from '../components/PartitionVisualizer/SlideView';
 import MidiPlayer from 'midi-player-js';
 import SoundFont from 'soundfont-player';
+import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
+import { strToKey, keyToStr, Note } from '../models/Piano';
 
 type PlayViewProps = {
 	songId: number
@@ -40,6 +42,7 @@ const PlayView = () => {
 	const timer = useStopwatch({ autoStart: false });
 	const [paused, setPause] = useState<boolean>(true);
 	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
+	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	
 	const partitionRessources = useQuery(["partition", songId], () =>
 		API.getPartitionRessources(songId)
@@ -153,6 +156,41 @@ const PlayView = () => {
 			<View style={{ flexGrow: 1 }}>
 				<SlideView sources={partitionRessources.data} speed={200} startAt={0} />
 			</View>
+			
+			{isVirtualPianoVisible && <Column
+				style={{
+					display: 'flex',
+					justifyContent: "flex-end",
+					alignItems: "center",
+					height: '20%',
+					width: '100%',
+				}}
+			>
+				<VirtualPiano
+					onNoteDown={(note: any) => {
+						console.log("On note down", keyToStr(note));
+					}}
+					onNoteUp={(note: any) => {
+						console.log("On note up", keyToStr(note));
+					}}
+					showOctaveNumbers={true}
+					startNote={Note.C}
+					endNote={Note.B}
+					startOctave={2}
+					endOctave={5}
+					style={{
+						width: '80%',
+						height: '100%',
+					}}
+					highlightedNotes={
+						[
+							{ key: strToKey("D3") },
+							{ key: strToKey("A#"), bgColor: "#00FF00" },
+						]
+					}
+
+				/>
+			</Column>}
 			<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5 }}>
 				<Row justifyContent='space-between' style={{ flexGrow: 1, alignItems: 'center' }} >
 					<Column space={2} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -174,6 +212,12 @@ const PlayView = () => {
 							} else {
 								onPause();
 							}
+						}}/>
+						<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
+							as: MaterialCommunityIcons
+							, name: isVirtualPianoVisible ? "piano-off" : "piano"
+						}} onPress={() => {
+							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
 						<Text>{timer.minutes}:{timer.seconds.toString().padStart(2, '0')}</Text>
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
