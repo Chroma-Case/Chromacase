@@ -156,7 +156,7 @@ const PlayView = () => {
 			<View style={{ flexGrow: 1 }}>
 				<SlideView sources={partitionRessources.data} speed={200} startAt={0} />
 			</View>
-			
+
 			{isVirtualPianoVisible && <Column
 				style={{
 					display: 'flex',
