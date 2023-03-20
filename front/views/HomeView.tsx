@@ -47,7 +47,6 @@ const HomeView = () => {
 			<VStack flex={{ lg: 2 }} space={5}>
 				<SongCardGrid
 					heading={<Translate translationKey='goNextStep'/>}
-					itemDimension={screenSize == 'small' ? 200 : 120}
 					songs={nextStepQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 						.map((song) => ({
 							albumCover: song.cover,
@@ -67,7 +66,6 @@ const HomeView = () => {
 					<Box flex={{ md: 1 }}>
 						<SongCardGrid
 							heading={<Translate translationKey='recentlyPlayed'/>}
-							itemDimension={screenSize == 'small' ? 200 : 120}
 							songs={playHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 								.map((song) => ({
 									albumCover: song.cover,
@@ -94,7 +92,6 @@ const HomeView = () => {
 				</HStack>
 				<Box style={{ width: '100%' }}>
 					<SongCardGrid
-						itemDimension={screenSize == 'small' ? 200 : 120}
 						heading={<Translate translationKey='lastSearched'/>}
 						songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 							.map((song) => ({
