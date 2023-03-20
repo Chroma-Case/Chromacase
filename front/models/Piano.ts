@@ -46,15 +46,21 @@ export class PianoKey {
 
 export const strToKey = (str: string): PianoKey => {
 	let note: Note;
-	switch (str.substring(0, 2)) {
+	const isSimpleNote = str[1]! >= "0" && str[1]! <= "9";
+	// later we need to support different annotations
+
+	switch (isSimpleNote ? str[0] : str.substring(0, 2)) {
+		case "E":
+			note = Note.E;
+			break;
+		case "B":
+			note = Note.B;
+			break;
 		case "C":
 			note = Note.C;
 			break;
 		case "D":
 			note = Note.D;
-			break;
-		case "E":
-			note = Note.E;
 			break;
 		case "F":
 			note = Note.F;
@@ -64,9 +70,6 @@ export const strToKey = (str: string): PianoKey => {
 			break;
 		case "A":
 			note = Note.A;
-			break;
-		case "B":
-			note = Note.B;
 			break;
 		case "C#":
 			note = Note["C#"];
@@ -86,10 +89,10 @@ export const strToKey = (str: string): PianoKey => {
 		default:
 			throw new Error("Invalid note name");
 	}
-	if (str.length < 3) {
+	if ((isSimpleNote && !str[1]) || (!isSimpleNote && str.length < 3)) {
 		return new PianoKey(note);
 	}
-	const octave = parseInt(str[2] as unknown as string);
+	const octave = parseInt(str.substring(isSimpleNote ? 1 : 2));
 	return new PianoKey(note, octave);
 };
 

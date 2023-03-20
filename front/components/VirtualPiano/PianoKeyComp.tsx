@@ -10,7 +10,6 @@ import {
 } from "../../models/Piano";
 
 type PianoKeyProps = {
-	key?: Key;
 	pianoKey: PianoKey;
 	showNoteName: NoteNameBehavior;
 	bg: string;
@@ -39,7 +38,6 @@ const isNoteVisible = (
 };
 
 const PianoKeyComp = ({
-	key,
 	pianoKey,
 	showNoteName,
 	bg,
@@ -64,7 +62,6 @@ const PianoKeyComp = ({
 	const textProps = { ...textDefaultProps, ...text };
 	return (
 		<Pressable
-			key={key}
 			onPressIn={onKeyDown}
 			onPressOut={onKeyUp}
 			style={style}
