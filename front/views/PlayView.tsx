@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, Text, Platform } from 'react-native';
+import { SafeAreaView, Platform } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {  Box, Center, Column, IconButton, Progress, Row, View, useToast } from 'native-base';
+import {  Box, Center, Column, IconButton, Progress, Text, Row, View, useToast } from 'native-base';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, useQueryClient } from 'react-query';
