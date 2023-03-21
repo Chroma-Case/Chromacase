@@ -58,7 +58,7 @@ const ScoreView = (/*{ songId }, { songId: number }*/) => {
 			}))}
 		/>
 		<Row space={3} style={{ width: '100%', justifyContent: 'center' }}>
-			<TextButton backgroundColor='gray.300'
+			<TextButton colorScheme='gray'
 				translate={{ translationKey: 'backBtn' }}
 				onPress={() => navigation.navigate('Home')}
 			/>
