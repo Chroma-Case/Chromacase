@@ -196,7 +196,12 @@ def handleStartMessage(start_message):
 	song_id = start_message["id"]
 	# TODO: use something secure here but I don't find sending a jwt something elegant.
 	user_id = start_message["user_id"]
-	song_path = requests.get(f"{BACK_URL}/song/{song_id}").json()["midiPath"];song_path = song_path.replace("/musics/", MUSICS_FOLDER)
+	try:
+	    song_path = requests.get(f"{BACK_URL}/song/{song_id}").json()["midiPath"];song_path = song_path.replace("/musics/", MUSICS_FOLDER)
+	except Exception:
+	    fatal("invalid song id")
+	    send({"error": "Invalid song id"})
+	    exit()
 	return mode, song_path, song_id, user_id
 
 
