@@ -35,7 +35,8 @@ else
   cat $1/output
   echo "======================================"
   echo "=============== DIFF ================="
-  RET=$(diff --side-by-side -q /tmp/scorometer_res $1/output)
+  diff --side-by-side -q /tmp/scorometer_res $1/output
+  RET=$?
   echo "======================================"
   exit $RET
 fi;
