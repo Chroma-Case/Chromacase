@@ -9,6 +9,7 @@ import {
 	BadRequestException,
 	HttpCode,
 	Put,
+	InternalServerErrorException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -54,7 +55,6 @@ export class AuthController {
 	}
 
 	@HttpCode(200)
-	@UseGuards(LocalAuthGuard)
 	@Post('guest')
 	async guest(): Promise<JwtToken> {
 		try {
@@ -70,8 +70,10 @@ export class AuthController {
 	@ApiOkResponse({ description: 'Successfully logged in', type: User })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me')
-	getProfile(@Request() req: any): User {
-		return req.user;
+	async getProfile(@Request() req: any): Promise<User> {
+		const user = await this.usersService.user({ id: req.user.id });
+		if (!user) throw new InternalServerErrorException();
+		return user;
 	}
 
 	@UseGuards(JwtAuthGuard)
