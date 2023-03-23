@@ -6,9 +6,22 @@ import { SongHistoryDto } from './dto/SongHistoryDto';
 
 @Injectable()
 export class HistoryService {
-	constructor(private prisma: PrismaService) { }
+	constructor(private prisma: PrismaService) {}
 
-	async createSongHistoryRecord({ songID, userID, score, difficulties }: SongHistoryDto): Promise<SongHistory> {
+	async createSongHistoryRecord({
+		songID,
+		userID,
+		score,
+		difficulties,
+	}: SongHistoryDto): Promise<SongHistory> {
+		await this.prisma.user.update({
+			where: { id: userID },
+			data: {
+				partyPlayed: {
+					increment: 1,
+				},
+			},
+		});
 		return this.prisma.songHistory.create({
 			data: {
 				score,
@@ -23,19 +36,26 @@ export class HistoryService {
 						id: userID,
 					},
 				},
-			}
+			},
 		});
 	}
 
-	async getHistory(playerId: number, { skip, take }: { skip?: number, take?: number }): Promise<SongHistory[]> {
+	async getHistory(
+		playerId: number,
+		{ skip, take }: { skip?: number; take?: number },
+	): Promise<SongHistory[]> {
 		return this.prisma.songHistory.findMany({
 			where: { user: { id: playerId } },
 			skip,
 			take,
-		})
+		});
 	}
 
-	async createSearchHistoryRecord({ userID, query, type }: SearchHistoryDto): Promise<SearchHistory> {
+	async createSearchHistoryRecord({
+		userID,
+		query,
+		type,
+	}: SearchHistoryDto): Promise<SearchHistory> {
 		return this.prisma.searchHistory.create({
 			data: {
 				query,
@@ -45,15 +65,18 @@ export class HistoryService {
 						id: userID,
 					},
 				},
-			}
+			},
 		});
 	}
 
-	async getSearchHistory(playerId: number, { skip, take }: { skip?: number, take?: number }): Promise<SearchHistory[]> {
+	async getSearchHistory(
+		playerId: number,
+		{ skip, take }: { skip?: number; take?: number },
+	): Promise<SearchHistory[]> {
 		return this.prisma.searchHistory.findMany({
 			where: { user: { id: playerId } },
 			skip,
 			take,
-		})
+		});
 	}
 }
