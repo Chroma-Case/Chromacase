@@ -6,7 +6,9 @@ export class User {
 	@ApiProperty()
 	username: string;
 	@ApiProperty()
-	password: string;
-	@ApiProperty()
 	email: string;
+	@ApiProperty()
+	isGuest: boolean;
+	@ApiProperty()
+	partyPlayed: number;
 }
