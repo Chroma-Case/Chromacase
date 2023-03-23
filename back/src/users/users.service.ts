@@ -56,6 +56,10 @@ export class UsersService {
 		data: Prisma.UserUpdateInput;
 	}): Promise<User> {
 		const { where, data } = params;
+		if (typeof data.password === 'string')
+			data.password = await bcrypt.hash(data.password, 8);
+		else if (data.password && data.password.set)
+			data.password = await bcrypt.hash(data.password.set, 8);
 		return this.prisma.user.update({
 			data,
 			where,
