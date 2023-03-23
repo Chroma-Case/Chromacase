@@ -3,14 +3,12 @@ import {
 	Get,
 	Post,
 	Body,
-	Patch,
 	Param,
 	Delete,
 	NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/models/user';
 
@@ -35,17 +33,6 @@ export class UsersController {
 		const ret = await this.usersService.user({ id: +id });
 		if (!ret) throw new NotFoundException();
 		return ret;
-	}
-
-	@Patch(':id')
-	update(
-		@Param('id') id: string,
-		@Body() updateUserDto: UpdateUserDto,
-	): Promise<User> {
-		return this.usersService.updateUser({
-			where: { id: +id },
-			data: updateUserDto,
-		});
 	}
 
 	@Delete(':id')
