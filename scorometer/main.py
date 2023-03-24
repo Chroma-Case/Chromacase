@@ -178,6 +178,9 @@ class Scorometer():
 				self.handleMessage(line.rstrip())
 			else:
 				pass
+		for i in self.partition.notes:
+		    if i.done == False:
+		        self.score -= 50
 		return self.score, {}
 
 def handleStartMessage(start_message):
