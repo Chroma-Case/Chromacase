@@ -22,8 +22,8 @@ router.addHandler('SONG', async ({ request, page }) => {
   //   const artist = 'a';
   const artist = await page.locator('body > div.js-page.react-container > div > section > aside > div:nth-child(5) > div > section > h3:nth-child(2) > a').first().textContent()
   //const genre = 'b';
-  const genre = await page.locator('body > div.js-page.react-container > div > section > aside > div:nth-child(6) > div > table > tbody > tr:nth-child(5) > td > div > a').first().textContent()
-  console.log("new song", title, artist, genre)
+  const genres = await page.locator('body > div.js-page.react-container > div > section > aside > div:nth-child(6) > div > table > tbody > tr:nth-child(5) > td > div > a').allTextContents()
+  console.log("new song", title, artist, genres)
   await page.locator('aside div div section button[name="download"]').click()
   await page.waitForSelector('section.b_r17 button');
   console.log("downloading Mxl")
@@ -55,9 +55,9 @@ router.addHandler('SONG', async ({ request, page }) => {
 [Metadata]
 Name=${title}
 Artist=${artist}
-Genre=${genre}
+Genre=${genres}
 Album=
-	
+
 [Difficulties]
 TwoHands=0
 Rhythm=0
@@ -76,5 +76,5 @@ Precision=0
   console.log("done downloading")
 
   console.log("sleeping for 10k seconds")
-  await sleep(10_000_000);
+  //await sleep(10_000_000);
 });
