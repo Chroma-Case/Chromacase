@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {  Box, Center, Column, IconButton, Progress, Text, Row, View, useToast } from 'native-base';
+import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
+import IconButton from '../components/IconButton';
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import { useQuery, useQueryClient } from 'react-query';
@@ -162,14 +163,12 @@ const PlayView = () => {
 						<Text style={{ fontWeight: '700' }}>Rolling in the Deep</Text>
 					</Center>
 					<Row style={{ flex: 1, height: '100%', justifyContent: 'space-evenly', alignItems: 'center'  }}>
-						<IconButton size='sm' colorScheme='secondary' variant='solid'  _icon={{
-							as: Ionicons,
-							name: "play-back"
-						}}/>
-						<IconButton size='sm' variant='solid' _icon={{
-							as: Ionicons,
-							name: paused ? "play" : "pause"
-						}} onPress={() => { 
+						<IconButton size='sm' colorScheme='secondary' variant='solid' icon={
+							<Icon as={Ionicons} name={"play-back"}/>
+						}/>
+						<IconButton size='sm' variant='solid' icon={
+							<Icon as={Ionicons} name={paused ? "play" : "pause"}/>
+						} onPress={() => { 
 							if (paused) {
 								onResume();
 							} else {
@@ -177,10 +176,9 @@ const PlayView = () => {
 							}
 						}}/>
 						<Text>{timer.minutes}:{timer.seconds.toString().padStart(2, '0')}</Text>
-						<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
-							as: Ionicons,
-							name: "stop"
-						}} onPress={() => {
+						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
+							<Icon as={Ionicons} name="stop"/>
+						} onPress={() => {
 							onEnd();
 							navigation.navigate('Score')
 						}}/>
