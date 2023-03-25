@@ -15,22 +15,22 @@ const SongCard = (props: SongCardProps) => {
 	return (
 		<Card
 			shadow={3}
-			flexDirection='column'
-			alignContent='space-around'
 			onPress={() => navigation.navigate('Song', { songId })}
 		>
-			<Image
-				style={{ zIndex: 0, aspectRatio: 1, margin: 5, borderRadius: CardBorderRadius}}
-				source={{ uri: albumCover }}
-				alt={[props.songTitle, props.artistName].join('-')}
-			/>
-			<VStack padding={3}>
-				<Text isTruncated bold fontSize='md' noOfLines={2} height={50}>
-					{songTitle}
-				</Text>
-				<Text isTruncated >
-					{artistName}
-				</Text>
+			<VStack m={1.5} space={3}>
+				<Image
+					style={{ zIndex: 0, aspectRatio: 1, borderRadius: CardBorderRadius}}
+					source={{ uri: albumCover }}
+					alt={[props.songTitle, props.artistName].join('-')}
+				/>
+				<VStack>
+					<Text isTruncated bold fontSize='md' noOfLines={2} height={50}>
+						{songTitle}
+					</Text>
+					<Text isTruncated >
+						{artistName}
+					</Text>
+				</VStack>
 			</VStack>
 		</Card>
 	)

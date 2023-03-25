@@ -8,6 +8,7 @@ import {
 	Button,
 	Icon,
 } from "native-base";
+import IconButton from "../IconButton";
 import { MotiView, useDynamicAnimation } from "moti";
 import { abs, Easing } from "react-native-reanimated";
 import React from "react";
@@ -97,8 +98,8 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 				</MotiView>
 			</Box>
 			<Button.Group margin={3}>
-				<Button
-					leftIcon={<Icon as={FontAwesome5} name="play" size="sm" />}
+				<IconButton
+					icon={<Icon as={FontAwesome5} name="play" size="sm" />}
 					onPress={() => {
 						animation.animateTo({
 							translateX: range(-totalWidth, 0, stepSize)
@@ -112,20 +113,20 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 						});
 					}}
 				/>
-				<Button
-					leftIcon={<Icon as={FontAwesome5} name="pause" size="sm" />}
+				<IconButton
+					icon={<Icon as={FontAwesome5} name="pause" size="sm" />}
 					onPress={() => {
 						animation.animateTo({});
 					}}
 				/>
-				<Button
-					leftIcon={
+				<IconButton
+					icon={
 						<Icon as={MaterialCommunityIcons} name="rewind-10" size="sm" />
 					}
 					onPress={() => jumpAt(-200, false)}
 				/>
-				<Button
-					leftIcon={
+				<IconButton
+					icon={
 						<Icon
 							as={MaterialCommunityIcons}
 							name="fast-forward-10"
@@ -134,8 +135,8 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 					}
 					onPress={() => jumpAt(200, false)}
 				/>
-				<Button
-					leftIcon={<Icon as={FontAwesome5} name="stop" size="sm" />}
+				<IconButton
+					icon={<Icon as={FontAwesome5} name="stop" size="sm" />}
 					onPress={() => {
 						stepCount = 0;
 						animation.animateTo({
