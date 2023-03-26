@@ -39,11 +39,27 @@ export class UsersService {
 		});
 	}
 
+	async createGuest(): Promise<User> {
+		return this.prisma.user.create({
+			data: {
+				username: 'Guest',
+				isGuest: true,
+				// Not realyl clean but better than a separate table or breaking the api by adding nulls.
+				email: '',
+				password: '',
+			},
+		});
+	}
+
 	async updateUser(params: {
 		where: Prisma.UserWhereUniqueInput;
 		data: Prisma.UserUpdateInput;
 	}): Promise<User> {
 		const { where, data } = params;
+		if (typeof data.password === 'string')
+			data.password = await bcrypt.hash(data.password, 8);
+		else if (data.password && data.password.set)
+			data.password = await bcrypt.hash(data.password.set, 8);
 		return this.prisma.user.update({
 			data,
 			where,

@@ -2,7 +2,7 @@ import React from "react";
 import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import LoadingComponent from "../components/Loading";
-import { Box, ScrollView, Flex, useBreakpointValue, Text, VStack, Button, Heading } from 'native-base';
+import { Center, Box, ScrollView, Flex, useBreakpointValue, Stack, Heading, Container, VStack, HStack } from 'native-base';
 import { useNavigation } from "@react-navigation/native";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
@@ -13,7 +13,6 @@ import TextButton from "../components/TextButton";
 const HomeView = () => {
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: "big"});
-	const flexDirection = useBreakpointValue({ base: 'column', xl: "row"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const playHistoryQuery = useQuery(['history', 'play'], () => API.getUserPlayHistory());
 	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory());
@@ -22,28 +21,79 @@ const HomeView = () => {
 	const artistsQueries = useQueries((playHistoryQuery.data?.concat(searchHistoryQuery.data ?? []).concat(nextStepQuery.data ?? []) ?? []).map((song) => (
 		{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
 	)));
+
 	if (!userQuery.data || !skillsQuery.data || !searchHistoryQuery.data || !playHistoryQuery.data) {
-		return <Box style={{ flexGrow: 1, justifyContent: 'center' }}>
+		return <Center style={{ flexGrow: 1 }}>
 			<LoadingComponent/>
-		</Box>
+		</Center>
 	}
-	return <ScrollView>
-		<Box style={{ display: 'flex', padding: 30 }}>
-			<Box textAlign={ screenSize == 'small' ? 'center' : undefined } style={{ flexDirection, justifyContent: 'center', display: 'flex' }}>
-				<Text fontSize="xl" flex={screenSize == 'small' ? 1 : 2}>
-					<Translate translationKey="welcome" format={(welcome) => `${welcome} ${userQuery.data.name}!`}/>
-				</Text>
+	return <ScrollView p={10}>
+		<Flex>
+			<Stack space={4}
+				display={{ base: 'block', md: 'flex' }}
+				direction={{ base: 'column', md: 'row' }}
+				textAlign={{ base: 'center', md: 'inherit' }}
+				justifyContent="space-evenly"
+			>
+				<Translate fontSize="xl" flex={2}
+					translationKey="welcome" format={(welcome) => `${welcome} ${userQuery.data.name}!`}
+				/>
 				<Box flex={1}>
 					<ProgressBar xp={userQuery.data.xp}/>
 				</Box>
-			</Box>
-
-			<Box paddingY={5} style={{ flexDirection }}>
-				<Box flex={2}>
+			</Stack>
+		</Flex>
+		<Stack direction={{ base: 'column', lg: 'row' }} height="100%" space={5} paddingTop={5}>
+			<VStack flex={{ lg: 2 }} space={5}>
+				<SongCardGrid
+					heading={<Translate translationKey='goNextStep'/>}
+					songs={nextStepQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+						.map((song) => ({
+							albumCover: song.cover,
+							songTitle: song.name,
+							songId: song.id,
+							artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+						})) ?? []
+					}
+				/>
+				<Stack direction={{ base: 'column', lg: 'row' }}>
+					<Box flex={{ md: 1 }}>
+						<Heading><Translate translationKey='mySkillsToImprove'/></Heading>
+						<Box padding={5}>
+							<CompetenciesTable {...skillsQuery.data}/>
+						</Box>
+					</Box>
+					<Box flex={{ md: 1 }}>
+						<SongCardGrid
+							heading={<Translate translationKey='recentlyPlayed'/>}
+							songs={playHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+								.map((song) => ({
+									albumCover: song.cover,
+									songTitle: song.name,
+									songId: song.id,
+									artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+								})) ?? []
+							}
+						/>
+					</Box>	
+				</Stack>
+			</VStack>
+			<VStack flex={{ lg: 1 }} height={{ lg: '100%' }}  alignItems="center">
+				<HStack width="100%" justifyContent="space-evenly" p={5} space={5}>
+					<TextButton
+						translate={{ translationKey: 'searchBtn' }}
+						colorScheme='secondary' size="sm"
+						onPress={() => navigation.navigate('Search')}
+					/>
+					<TextButton translate={{ translationKey: 'settingsBtn' }}
+						colorScheme='gray'  size="sm"
+						onPress={() => navigation.navigate('Settings')} 
+					/>
+				</HStack>
+				<Box style={{ width: '100%' }}>
 					<SongCardGrid
-						heading={<Translate translationKey='goNextStep'/>}
-						itemDimension={screenSize == 'small' ? 250 : 200}
-						songs={nextStepQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+						heading={<Translate translationKey='lastSearched'/>}
+						songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 							.map((song) => ({
 								albumCover: song.cover,
 								songTitle: song.name,
@@ -52,65 +102,10 @@ const HomeView = () => {
 							})) ?? []
 						}
 					/>
-
-					<Flex style={{ flexDirection }}>
-						<Box flex={1} paddingY={5}>
-							<Heading><Translate translationKey='mySkillsToImprove'/></Heading>
-							<Box padding={5}>
-								<CompetenciesTable {...skillsQuery.data}/>
-							</Box>
-						</Box>
-
-						<Box flex={1} padding={5}>
-							<SongCardGrid
-								heading={<Translate translationKey='recentlyPlayed'/>}
-								itemDimension={screenSize == 'small' ? 200 : 170}
-								songs={playHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
-									.map((song) => ({
-										albumCover: song.cover,
-										songTitle: song.name,
-										songId: song.id,
-										artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
-									})) ?? []
-								}
-							/>
-						</Box>						
-					</Flex>
 				</Box>
+			</VStack>
+		</Stack>
 
-				<VStack padding={5} flex={1} space={10}>
-						<Box style={{flexDirection: 'row'}}>
-							
-							<Box flex="2" padding={5}>
-								<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-									<TextButton
-										translate={{ translationKey: 'search' }}
-										colorScheme='secondary' size="sm"
-										onPress={() => navigation.navigate('Search')}
-									/>
-								</Box>
-								<SongCardGrid
-									itemDimension={screenSize == 'small' ? 150 : 120}
-									heading={<Translate translationKey='lastSearched'/>}
-									songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
-										.map((song) => ({
-											albumCover: song.cover,
-											songTitle: song.name,
-											songId: song.id,
-											artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
-										})) ?? []
-									}
-								/>
-							</Box>
-						</Box>
-						<Box style={{ flexDirection: 'row', justifyContent:'center' }}>
-							<TextButton translate={{ translationKey: 'settingsBtn' }}
-								size="sm" onPress={() => navigation.navigate('Settings')} 
-							/>
-						</Box>
-				</VStack>
-			</Box>
-		</Box>
 	</ScrollView>
 	
 }
