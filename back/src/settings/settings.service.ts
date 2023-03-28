@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, UserSettings } from '@prisma/client';
-import { Setting } from 'src/models/setting';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateSettingDto } from './dto/create-setting.dto';
 
 @Injectable()
 export class SettingsService {

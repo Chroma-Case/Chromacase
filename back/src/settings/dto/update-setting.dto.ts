@@ -8,11 +8,13 @@ export class UpdateSettingDto {
 	@ApiProperty()
 	trainingNotification?: boolean;
 	@ApiProperty()
-	newsongNotification?: boolean;
+	newSongNotification: boolean;
 	@ApiProperty()
-	dataCollection?: boolean;
+	recommendations: boolean;
 	@ApiProperty()
-	CustomAdds?: boolean;
+	weeklyReport: boolean;
 	@ApiProperty()
-	Recommendations?: boolean;
+	leaderBoard: boolean;
+	@ApiProperty()
+	showActivity: boolean;
 }

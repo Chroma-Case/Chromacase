@@ -12,6 +12,7 @@ import { SettingsService } from 'src/settings/settings.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/models/user';
+import { resolve } from 'path';
 
 @ApiTags('users')
 @Controller('users')
@@ -22,8 +23,19 @@ export class UsersController {
 	create(@Body() createUserDto: CreateUserDto): Promise<User> {
 		return this.usersService.createUser(createUserDto).then((user) => {
 			this.settingsService.createUserSetting(user.id);
+			return user;
 		}).catch((e) => e);
 	}
+
+	// @Post()
+	// create(@Body() createUserDto: CreateUserDto): Promise<User> {
+	// 	const ret = await this.usersService.createUser(createUserDto);
+	// }
+
+	// @Post()
+	// create(@Body() createUserDto: CreateUserDto): Promise<User> {
+	// 	return this.usersService.createUser(createUserDto);
+	// }
 
 	@Get()
 	findAll(): Promise<User[]> {
@@ -40,8 +52,6 @@ export class UsersController {
 
 	@Delete(':id')
 	remove(@Param('id') id: string): Promise<User> {
-		return this.settingsService.deleteUserSettings({userId: +id}).then(() => {
-			this.usersService.deleteUser({ id: +id });
-		}).catch((e) => e);
+		return this.usersService.deleteUser({ id: +id });
 	}
 }

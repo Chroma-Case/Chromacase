@@ -1,17 +1,14 @@
 import {
 	Controller,
 	Get,
-	Post,
 	Patch,
 	Body,
 	NotFoundException,
 	Param,
-	Delete
 } from '@nestjs/common';
 import { SettingsService } from './settings.service';
 import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
 import { Setting } from 'src/models/setting';
-import { CreateSettingDto } from './dto/create-setting.dto';
 import { UpdateSettingDto } from './dto/update-setting.dto';
 import { UserSettings } from '@prisma/client';
 
