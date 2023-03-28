@@ -27,16 +27,6 @@ export class UsersController {
 		}).catch((e) => e);
 	}
 
-	// @Post()
-	// create(@Body() createUserDto: CreateUserDto): Promise<User> {
-	// 	const ret = await this.usersService.createUser(createUserDto);
-	// }
-
-	// @Post()
-	// create(@Body() createUserDto: CreateUserDto): Promise<User> {
-	// 	return this.usersService.createUser(createUserDto);
-	// }
-
 	@Get()
 	findAll(): Promise<User[]> {
 		return this.usersService.users({});
