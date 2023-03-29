@@ -213,10 +213,10 @@ const PlayView = () => {
 								onPause();
 							}
 						}}/>
-						<IconButton size='sm' colorScheme='coolGray' variant='solid' _icon={{
-							as: MaterialCommunityIcons
-							, name: isVirtualPianoVisible ? "piano-off" : "piano"
-						}} onPress={() => {
+						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
+							<Icon as={MaterialCommunityIcons}
+							 name={ isVirtualPianoVisible ? "piano-off" : "piano"} />
+						} onPress={() => {
 							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
 						<Text>{timer.minutes}:{timer.seconds.toString().padStart(2, '0')}</Text>
