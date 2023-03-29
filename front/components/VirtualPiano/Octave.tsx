@@ -6,36 +6,8 @@ import {
 	isAccidental,
 	HighlightedKey,
 } from "../../models/Piano";
-import { Box, Row, Pressable, Text } from "native-base";
+import { Box, Row, Text } from "native-base";
 import PianoKeyComp from "./PianoKeyComp";
-
-const getKeyIndex = (n: Note, keys: PianoKey[]) => {
-	for (let i = 0; i < keys.length; i++) {
-		if (keys[i]?.note === n) {
-			return i;
-		}
-	}
-	return -1;
-};
-
-const isNoteVisible = (
-	showNoteNamesPolicy: NoteNameBehavior,
-	isPressed: boolean,
-	isHovered: boolean,
-	isHighlighted: boolean
-) => {
-	if (showNoteNamesPolicy === NoteNameBehavior.always) return true;
-	if (showNoteNamesPolicy === NoteNameBehavior.never) return false;
-
-	if (showNoteNamesPolicy === NoteNameBehavior.onpress) {
-		return isPressed;
-	} else if (showNoteNamesPolicy === NoteNameBehavior.onhover) {
-		return isHovered;
-	} else if (showNoteNamesPolicy === NoteNameBehavior.onhighlight) {
-		return isHighlighted;
-	}
-	return false;
-};
 
 type OctaveProps = Parameters<typeof Box>[0] & {
 	number: number;
@@ -77,8 +49,9 @@ const Octave = (props: OctaveProps) => {
 		return new PianoKey(k.note, number);
 	});
 
-	const startNoteIndex = getKeyIndex(startNote, oK);
-	const endNoteIndex = getKeyIndex(endNote, oK);
+	const notesArray = oK.map((k) => k.note);
+	const startNoteIndex = notesArray.indexOf(startNote);
+	const endNoteIndex = notesArray.indexOf(endNote);
 	const keys = oK.slice(startNoteIndex, endNoteIndex + 1);
 
 	const whiteKeys = keys.filter((k) => !isAccidental(k));

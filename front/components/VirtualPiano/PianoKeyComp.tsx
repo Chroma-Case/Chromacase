@@ -1,7 +1,6 @@
 import { Box, Pressable, Text } from "native-base";
 import { StyleProp, ViewStyle } from "react-native";
 import {
-	Note,
 	PianoKey,
 	NoteNameBehavior,
 	octaveKeys,
