@@ -10,6 +10,8 @@ import {
 	HttpCode,
 	Put,
 	InternalServerErrorException,
+	Patch,
+	NotFoundException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -28,6 +30,9 @@ import { User } from '../models/user';
 import { JwtToken } from './models/jwt';
 import { LoginDto } from './dto/login.dto';
 import { Profile } from './dto/profile.dto';
+import { Setting } from 'src/models/setting';
+import { UpdateSettingDto } from 'src/settings/dto/update-setting.dto';
+import { SettingsService } from 'src/settings/settings.service';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -35,12 +40,15 @@ export class AuthController {
 	constructor(
 		private authService: AuthService,
 		private usersService: UsersService,
+		private settingsService: SettingsService,
 	) {}
 
 	@Post('register')
 	async register(@Body() registerDto: RegisterDto): Promise<void> {
 		try {
-			await this.usersService.createUser(registerDto);
+			await this.usersService.createUser(registerDto).then((user) => {
+				this.settingsService.createUserSetting(user.id);
+			});
 		} catch {
 			throw new BadRequestException();
 		}
@@ -108,5 +116,30 @@ export class AuthController {
 	@Delete('me')
 	deleteSelf(@Request() req: any): Promise<User> {
 		return this.usersService.deleteUser({ id: req.user.id });
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({description: 'Successfully edited settings', type: Setting})
+	@ApiUnauthorizedResponse({description: 'Invalid token'})
+	@Patch('me/settings')
+	udpateSettings(
+		@Request() req: any,
+		@Body() settingUserDto: UpdateSettingDto): Promise<Setting> {
+		return this.settingsService.updateUserSettings({
+			where: { userId: +req.user.id},
+			data: settingUserDto,
+		});
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({description: 'Successfully edited settings', type: Setting})
+	@ApiUnauthorizedResponse({description: 'Invalid token'})
+	@Get('me/settings')
+	async getSettings(@Request() req: any): Promise<Setting> {
+		const result = await this.settingsService.getUserSetting({ userId: +req.user.id });
+		if (!result) throw new NotFoundException();
+		return result;
 	}
 }

@@ -10,7 +10,6 @@ import { SettingsService } from './settings.service';
 import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
 import { Setting } from 'src/models/setting';
 import { UpdateSettingDto } from './dto/update-setting.dto';
-import { UserSettings } from '@prisma/client';
 
 @ApiTags('settings')
 @Controller('settings')
