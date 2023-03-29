@@ -203,7 +203,7 @@ export const fr: typeof en = {
 	goodNotesInARow: 'Bonnes notes à la suite',
 	songsToGetBetter: 'Recommendations',
 	goodNotes: 'bonnes notes',
-	changepasswdBtn: 'Changer le mot de pass',
+	changepasswdBtn: 'Changer le mot de passe',
 	changeemailBtn: 'Changer l\'email',
 	googleacctBtn: 'Compte Google',
 	forgottenPassword: 'Mot de passe oublié',
