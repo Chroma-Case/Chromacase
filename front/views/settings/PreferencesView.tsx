@@ -1,5 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { Center, Button, Text, Switch, Slider, Select, Heading } from "native-base";
 import { useLanguage } from "../../state/LanguageSlice";
 import i18n, { AvailableLanguages, DefaultLanguage, translate } from "../../i18n/i18n";
