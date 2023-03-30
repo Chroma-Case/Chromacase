@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleProp, ViewStyle, StyleSheet } from "react-native";
-import { View, Text, Pressable, Box, Row, Icon } from "native-base";
+import { View, Text, Pressable, Box, Row, Icon, Button } from "native-base";
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,
@@ -12,6 +12,7 @@ import {
 	TabRouterOptions,
 	useNavigationBuilder,
 } from "@react-navigation/native";
+import TextButton from "../TextButton";
 
 // Props accepted by the view
 type TabNavigationConfig = {
@@ -76,76 +77,62 @@ function TabNavigator({
 							display: "flex",
 							flexDirection: "column",
 							justifyContent: "flex-start",
-							width: "300px",
+                            borderRightWidth: 1,
+                            borderRightColor: "lightgray",
 						},
 						tabBarStyle,
 					]}
 				>
-					{state.routes.map((route) => (
-						<Pressable
-							key={route.key}
-							onPress={() => {
-								const event = navigation.emit({
-									type: "tabPress",
-									target: route.key,
-									canPreventDefault: true,
-									data: {
-										isAlreadyFocused:
-											route.key === state.routes[state.index]?.key,
-									},
-								});
+					{state.routes.map((route) => {
+						const isSelected = route.key === state.routes[state.index]?.key;
+						const { options } = descriptors[route.key];
 
-								if (!event.defaultPrevented) {
-									navigation.dispatch({
-										...CommonActions.navigate(route),
-										target: state.key,
+						return (
+							<Button
+								variant={"ghost"}
+								key={route.key}
+								onPress={() => {
+									const event = navigation.emit({
+										type: "tabPress",
+										target: route.key,
+										canPreventDefault: true,
+										data: {
+											isAlreadyFocused: isSelected,
+										},
 									});
-								}
-							}}
-							style={{ flex: 1 }}
-						>
-							{({ isHovered, isPressed }) => (
-								<Box
-									style={{
-										flex: 1,
-										justifyContent: "center",
-										alignItems: "center",
-                                        flexDirection: "row",
-									}}
-									bgColor={(() => {
-										let colorLevel = 0;
-										if (isHovered) {
-											colorLevel += 100;
-										}
-										if (route.key === state.routes[state.index]?.key) {
-											colorLevel += 300;
-										}
-										if (isPressed) {
-											colorLevel += 200;
-										}
 
-										if (colorLevel <= 0) {
-											return "transparent";
-										}
-										return `primary.${colorLevel}`;
-									})()}
-								>
-									{descriptors[route.key]?.options.iconProvider &&
-										descriptors[route.key]?.options.iconName && (
-											<Icon
-												as={descriptors[route.key]?.options.iconProvider}
-												name={descriptors[route.key]?.options.iconName}
-												size="lg"
-												color="white"
-											/>
-										)}
-									<Text>
-										{descriptors[route.key]?.options.title || route.name}
+									if (!event.defaultPrevented) {
+										navigation.dispatch({
+											...CommonActions.navigate(route),
+											target: state.key,
+										});
+									}
+								}}
+								bgColor={isSelected ? "primary.300" : undefined}
+								style={{
+                                    justifyContent: "flex-start",
+									padding: "10px",
+									height: "50px",
+									width: "250px",
+								}}
+							>
+								<Row style={{ alignItems: "center" }}>
+									{options.iconProvider && options.iconName && (
+										<Icon
+											as={options.iconProvider}
+											name={options.iconName}
+											size="xl"
+											color="black"
+                                            margin={2}
+										/>
+									)}
+									<Text fontSize="lg" isTruncated w="100%">
+										{options.title || route.name}
 									</Text>
-								</Box>
-							)}
-						</Pressable>
-					))}
+								</Row>
+							</Button>
+						);
+					})}
 				</View>
 				<View style={[{ flex: 1, width: "700px" }, contentStyle]}>
 					{state.routes.map((route, i) => {
