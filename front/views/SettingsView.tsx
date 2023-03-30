@@ -10,6 +10,7 @@ import { SettingsState, updateSettings } from '../state/SettingsSlice';
 import { AvailableLanguages, translate, Translate } from "../i18n/i18n";
 import TextButton from '../components/TextButton';
 import createTabRowNavigator from '../components/navigators/TabRowNavigator';
+import { FontAwesome } from '@expo/vector-icons';
 
 import API from '../API';
 
@@ -258,7 +259,7 @@ const TabRow = createTabRowNavigator();
 const SetttingsNavigator = () => {
     return (
         <TabRow.Navigator initialRouteName='Main'>
-            <TabRow.Screen name='Main' component={MainView} />
+            <TabRow.Screen name='Main' component={MainView} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
             <TabRow.Screen name='Preferences' component={PreferencesView} />
             <TabRow.Screen name='Notifications' component={NotificationsView} />
             <TabRow.Screen name='Privacy' component={PrivacyView} />
