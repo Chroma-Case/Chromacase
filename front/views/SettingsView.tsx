@@ -168,9 +168,9 @@ const NotificationsView = ({navigation}) => {
             <Heading style={{ textAlign: "center" }}>
                 <Translate translationKey='notifBtn'/>
             </Heading>
-            <Button style={{ margin: 10}} onPress={() => navigation.navigate('Main')} >
-                <Translate translationKey='backBtn'/>
-            </Button>
+            <TextButton style={{ margin: 10}} onPress={() => navigation.navigate('Main')} translate = {{
+                translationKey: 'backBtn'
+            }} />
             <View style={{margin: 20}} >
                 <Text style={{ textAlign: "center" }}>Push notifications</Text>
                 <Switch value={settings.enablePushNotifications} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
