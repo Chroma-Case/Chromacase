@@ -257,7 +257,7 @@ const TabRow = createTabRowNavigator();
 
 const SetttingsNavigator = () => {
     return (
-        <TabRow.Navigator initialRouteName='Main' screenOptions={{headerShown: false}}>
+        <TabRow.Navigator initialRouteName='Main'>
             <TabRow.Screen name='Main' component={MainView} />
             <TabRow.Screen name='Preferences' component={PreferencesView} />
             <TabRow.Screen name='Notifications' component={NotificationsView} />

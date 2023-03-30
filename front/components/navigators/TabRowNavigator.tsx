@@ -1,13 +1,6 @@
 import * as React from "react";
-import {
-	View,
-	Text,
-	Pressable,
-	StyleProp,
-	ViewStyle,
-	StyleSheet,
-} from "react-native";
-import { Box } from "native-base";
+import { StyleProp, ViewStyle, StyleSheet } from "react-native";
+import { View, Text, Pressable, Box, Row } from "native-base";
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,
@@ -74,50 +67,72 @@ function TabNavigator({
 
 	return (
 		<NavigationContent>
-            <Box style={{ display: "flex", flexDirection: "row" }}>
-			<View style={[{ flexDirection: "column", width: "300px" }, tabBarStyle]}>
-				{state.routes.map((route) => (
-					<Pressable
-						key={route.key}
-						onPress={() => {
-							const event = navigation.emit({
-								type: "tabPress",
-								target: route.key,
-								canPreventDefault: true,
-								data: {
-									isAlreadyFocused: route.key === state.routes[state.index].key,
-								},
-							});
-
-							if (!event.defaultPrevented) {
-								navigation.dispatch({
-									...CommonActions.navigate(route),
-									target: state.key,
-								});
-							}
-						}}
-						style={{ flex: 1 }}
-					>
-						<Text>{descriptors[route.key].options.title || route.name}</Text>
-					</Pressable>
-				))}
-			</View>
-			<View style={[{ flex: 1, width: "700px" }, contentStyle]}>
-				{state.routes.map((route, i) => {
-					return (
-						<View
+			<Row height={"900px"}>
+				<View
+					style={[{ flexDirection: "column", width: "300px" }, tabBarStyle]}
+				>
+					{state.routes.map((route) => (
+						<Pressable
 							key={route.key}
-							style={[
-								StyleSheet.absoluteFill,
-								{ display: i === state.index ? "flex" : "none" },
-							]}
+							onPress={() => {
+								const event = navigation.emit({
+									type: "tabPress",
+									target: route.key,
+									canPreventDefault: true,
+									data: {
+										isAlreadyFocused:
+											route.key === state.routes[state.index].key,
+									},
+								});
+
+								if (!event.defaultPrevented) {
+									navigation.dispatch({
+										...CommonActions.navigate(route),
+										target: state.key,
+									});
+								}
+							}}
+							style={{ flex: 1 }}
 						>
-							{descriptors[route.key].render()}
-						</View>
-					);
-				})}
-			</View>
-            </Box>
+							{({ isHovered, isPressed }) => (
+                                <Box bgColor={(() => {
+                                    let colorLevel = 0;
+                                    if (isHovered) {
+                                        colorLevel += 100;
+                                    }
+                                    if (route.key === state.routes[state.index].key) {
+                                        colorLevel += 300;
+                                    }
+                                    if (isPressed) {
+                                        colorLevel += 200;
+                                    }
+
+                                    if (colorLevel <= 0) {
+                                        return "transparent";
+                                    }
+                                    return `primary.${colorLevel}`;
+                                })()}>
+                                    <Text>
+                                        {descriptors[route.key].options.title || route.name}
+                                    </Text>
+                                </Box>
+							)}
+						</Pressable>
+					))}
+				</View>
+				<View style={[{ flex: 1, width: "700px" }, contentStyle]}>
+					{state.routes.map((route, i) => {
+						return (
+							<View
+								key={route.key}
+								style={[{ display: i === state.index ? "flex" : "none" }]}
+							>
+								{descriptors[route.key].render()}
+							</View>
+						);
+					})}
+				</View>
+			</Row>
 		</NavigationContent>
 	);
 }
