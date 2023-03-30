@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleProp, ViewStyle, StyleSheet } from "react-native";
-import { View, Text, Pressable, Box, Row } from "native-base";
+import { View, Text, Pressable, Box, Row, Icon } from "native-base";
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,
@@ -22,6 +22,8 @@ type TabNavigationConfig = {
 // Supported screen options
 type TabNavigationOptions = {
 	title?: string;
+	iconProvider?: any;
+	iconName?: string;
 };
 
 // Map of event name and the type of data (in event.data)
@@ -69,7 +71,15 @@ function TabNavigator({
 		<NavigationContent>
 			<Row height={"900px"}>
 				<View
-					style={[{ flexDirection: "column", width: "300px" }, tabBarStyle]}
+					style={[
+						{
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "flex-start",
+							width: "300px",
+						},
+						tabBarStyle,
+					]}
 				>
 					{state.routes.map((route) => (
 						<Pressable
@@ -81,7 +91,7 @@ function TabNavigator({
 									canPreventDefault: true,
 									data: {
 										isAlreadyFocused:
-											route.key === state.routes[state.index].key,
+											route.key === state.routes[state.index]?.key,
 									},
 								});
 
@@ -95,27 +105,44 @@ function TabNavigator({
 							style={{ flex: 1 }}
 						>
 							{({ isHovered, isPressed }) => (
-                                <Box bgColor={(() => {
-                                    let colorLevel = 0;
-                                    if (isHovered) {
-                                        colorLevel += 100;
-                                    }
-                                    if (route.key === state.routes[state.index].key) {
-                                        colorLevel += 300;
-                                    }
-                                    if (isPressed) {
-                                        colorLevel += 200;
-                                    }
+								<Box
+									style={{
+										flex: 1,
+										justifyContent: "center",
+										alignItems: "center",
+                                        flexDirection: "row",
+									}}
+									bgColor={(() => {
+										let colorLevel = 0;
+										if (isHovered) {
+											colorLevel += 100;
+										}
+										if (route.key === state.routes[state.index]?.key) {
+											colorLevel += 300;
+										}
+										if (isPressed) {
+											colorLevel += 200;
+										}
 
-                                    if (colorLevel <= 0) {
-                                        return "transparent";
-                                    }
-                                    return `primary.${colorLevel}`;
-                                })()}>
-                                    <Text>
-                                        {descriptors[route.key].options.title || route.name}
-                                    </Text>
-                                </Box>
+										if (colorLevel <= 0) {
+											return "transparent";
+										}
+										return `primary.${colorLevel}`;
+									})()}
+								>
+									{descriptors[route.key]?.options.iconProvider &&
+										descriptors[route.key]?.options.iconName && (
+											<Icon
+												as={descriptors[route.key]?.options.iconProvider}
+												name={descriptors[route.key]?.options.iconName}
+												size="lg"
+												color="white"
+											/>
+										)}
+									<Text>
+										{descriptors[route.key]?.options.title || route.name}
+									</Text>
+								</Box>
 							)}
 						</Pressable>
 					))}
@@ -127,7 +154,7 @@ function TabNavigator({
 								key={route.key}
 								style={[{ display: i === state.index ? "flex" : "none" }]}
 							>
-								{descriptors[route.key].render()}
+								{descriptors[route.key]?.render()}
 							</View>
 						);
 					})}
