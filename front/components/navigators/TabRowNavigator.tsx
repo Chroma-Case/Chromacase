@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleProp, ViewStyle, StyleSheet } from "react-native";
-import { View, Text, Pressable, Box, Row, Icon, Button } from "native-base";
+import { View, Text, Pressable, Box, Row, Icon, Button, ScrollView } from "native-base";
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,
@@ -79,6 +79,7 @@ function TabNavigator({
 							justifyContent: "flex-start",
                             borderRightWidth: 1,
                             borderRightColor: "lightgray",
+                            overflow: "scroll",
 						},
 						tabBarStyle,
 					]}
