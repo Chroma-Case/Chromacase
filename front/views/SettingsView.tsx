@@ -266,6 +266,20 @@ const SetttingsNavigator = () => {
             <TabRow.Screen name='ChangePassword' component={ChangePasswordView} />
             <TabRow.Screen name='ChangeEmail' component={ChangeEmailView} />
             <TabRow.Screen name='GoogleAccount' component={GoogleAccountView} />
+            <TabRow.Screen name='2Main' component={MainView} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
+            <TabRow.Screen name='2Preferences' component={PreferencesView} />
+            <TabRow.Screen name='2Notifications' component={NotificationsView} />
+            <TabRow.Screen name='2Privacy' component={PrivacyView} />
+            <TabRow.Screen name='2ChangePassword' component={ChangePasswordView} />
+            <TabRow.Screen name='2ChangeEmail' component={ChangeEmailView} />
+            <TabRow.Screen name='2GoogleAccount' component={GoogleAccountView} />
+            <TabRow.Screen name='3Main' component={MainView} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
+            <TabRow.Screen name='3Preferences' component={PreferencesView} />
+            <TabRow.Screen name='3Notifications' component={NotificationsView} />
+            <TabRow.Screen name='3Privacy' component={PrivacyView} />
+            <TabRow.Screen name='3ChangePassword' component={ChangePasswordView} />
+            <TabRow.Screen name='3ChangeEmail' component={ChangeEmailView} />
+            <TabRow.Screen name='3GoogleAccount' component={GoogleAccountView} />
         </TabRow.Navigator>
     )
 }
