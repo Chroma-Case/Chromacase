@@ -64,46 +64,6 @@ const baseAPIUrl =
 
 export default class API {
 
-	/**
-	 * 
-	 * @param url 
-	 * @returns 
-	 */
-	public static async getRequest(url: string) {
-		console.log('Fetching on', url)
-		const res = await fetch(url, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			}
-		})
-		const data = await res.json()
-		if (data.error)
-			throw data.message;
-		return data;
-	}
-
-	/**
-	 * 
-	 * @param url 
-	 * @param body 
-	 * @returns 
-	 */
-	public static async postRequest(url: string, body: {}) {
-		console.log('Fetching on', url)
-		const res = await fetch(url, {
-			method: 'PATCH',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(body)
-		})
-		const data = await res.json()
-		if (data.error)
-			throw data.message;
-		return data;
-	}
-
 	public static async fetch(params: FetchParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
@@ -171,26 +131,6 @@ export default class API {
 			username: registrationInput.username,
 			password: registrationInput.password,
 		});
-	}
-	/**
-	 * 
-	 * @param url 
-	 * @param body 
-	 * @returns 
-	 */
-	public static async patchRequest(url: string, body: {}) {
-		console.log('Fetching on', url)
-		const res = await fetch(url, {
-			method: 'PATCH',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(body)
-		})
-		const data = await res.json()
-		if (data.error)
-			throw data.message;
-		return data;
 	}
 
 	/***
@@ -479,44 +419,35 @@ export default class API {
 		];
 	}
 
-	/**
-	 * 
-	 * @param dataKey
-	 * @param value
-	 * @description update user's account credentials. Either email or password, you choose via the datakey param
-	 * @returns new user's credentials
-	 */
-
-	static async updateUserCredentials(dataKey: 'password' | 'email', oldValue: string, newValue: string): Promise<string> {
-		return new Promise<string>((resolve, reject) => {
-			setTimeout(() => {
-				try {
-					if (dataKey == 'email') {
-						this.getRequest('http://localhost:3000/users/24').then((res) => {
-							console.log(oldValue, newValue);
-							if (res.email === oldValue) {
-								this.patchRequest('http://localhost:3000/users/24', {'email': newValue}).finally(() => {
-									return resolve('email successfully changed');
-								});
-							} else return reject("wrong email");
-						});
-					} else if (dataKey == 'password') {
-						API.fetch({route: '/auth/me'}).then((res) => {
-							API.fetch({
-								route: '/auth/me',
-								method: 'PATCH',
-								body: {'password': newValue}}).then(() => {
-									return resolve('password successfully changed');
-								}).catch((err) => {
-									return reject('something went wrong: unable to update the password');
-								});
-						});
-					}
-				} catch (error) {
-					return reject("something went wrong: unable to update the " + dataKey);
-				}
-				
-			}, 1000);
+	public static async updateUserEmail(oldEmail: string, newEmail: string): Promise<User> {
+		const rep = await API.fetch({
+			route: "/auth/me",
+			method: "PUT",
+			body: {
+				oldEmail: oldEmail,
+				email: newEmail,
+			},
 		});
+
+		if (rep.error) {
+			throw new Error(rep.error);
+		}
+		return rep;
 	}
+
+	public static async updateUserPassword(oldPassword: string, newPassword: string): Promise<User> {
+		const rep = await API.fetch({
+			route: "/auth/me",
+			method: "PUT",
+			body: {
+				oldPassword: oldPassword,
+				password: newPassword,
+			},
+		});
+
+		if (rep.error) {
+			throw new Error(rep.error);
+		}
+		return rep;
+	};
 }
