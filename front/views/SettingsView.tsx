@@ -9,6 +9,7 @@ import { useLanguage } from "../state/LanguageSlice";
 import { SettingsState, updateSettings } from '../state/SettingsSlice';
 import { AvailableLanguages, translate, Translate } from "../i18n/i18n";
 import TextButton from '../components/TextButton';
+import createTabRowNavigator from '../components/navigators/TabRowNavigator';
 
 import API from '../API';
 
@@ -239,7 +240,6 @@ export const ChangeEmailView = ({navigation}) => {
     return (
         <Center style={{ flex: 1}}>
             <Button onPress={() => navigation.navigate('Main')}>Back</Button>
-            <ChangeEmailView></ChangeEmailView>
         </Center>
     )
 }
@@ -253,17 +253,19 @@ export const GoogleAccountView = ({navigation}) => {
     )
 }
 
+const TabRow = createTabRowNavigator(); 
+
 const SetttingsNavigator = () => {
     return (
-        <SettingsStack.Navigator initialRouteName='Main' screenOptions={{headerShown: false}}>
-            <SettingsStack.Screen name='Main' component={MainView} />
-            <SettingsStack.Screen name='Preferences' component={PreferencesView} />
-            <SettingsStack.Screen name='Notifications' component={NotificationsView} />
-            <SettingsStack.Screen name='Privacy' component={PrivacyView} />
-            <SettingsStack.Screen name='ChangePassword' component={ChangePasswordView} />
-            <SettingsStack.Screen name='ChangeEmail' component={ChangeEmailView} />
-            <SettingsStack.Screen name='GoogleAccount' component={GoogleAccountView} />
-        </SettingsStack.Navigator>
+        <TabRow.Navigator initialRouteName='Main' screenOptions={{headerShown: false}}>
+            <TabRow.Screen name='Main' component={MainView} />
+            <TabRow.Screen name='Preferences' component={PreferencesView} />
+            <TabRow.Screen name='Notifications' component={NotificationsView} />
+            <TabRow.Screen name='Privacy' component={PrivacyView} />
+            <TabRow.Screen name='ChangePassword' component={ChangePasswordView} />
+            <TabRow.Screen name='ChangeEmail' component={ChangeEmailView} />
+            <TabRow.Screen name='GoogleAccount' component={GoogleAccountView} />
+        </TabRow.Navigator>
     )
 }
 
