@@ -1,6 +1,16 @@
 import * as React from "react";
 import { StyleProp, ViewStyle, StyleSheet } from "react-native";
-import { View, Text, Pressable, Box, Row, Icon, Button, ScrollView } from "native-base";
+import { Ionicons } from "@expo/vector-icons";
+import {
+	View,
+	Text,
+	Pressable,
+	Box,
+	Row,
+	Icon,
+	Button,
+	useBreakpointValue,
+} from "native-base";
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,
@@ -12,7 +22,7 @@ import {
 	TabRouterOptions,
 	useNavigationBuilder,
 } from "@react-navigation/native";
-import TextButton from "../TextButton";
+import IconButton from "../IconButton";
 
 // Props accepted by the view
 type TabNavigationConfig = {
@@ -68,85 +78,111 @@ function TabNavigator({
 			initialRouteName,
 		});
 
+	const screenSize = useBreakpointValue({ base: "small", md: "big" });
+	const [isPanelView, setIsPanelView] = React.useState(false);
+	const isMobileView = screenSize == "small";
+
 	return (
 		<NavigationContent>
 			<Row height={"900px"}>
-				<View
-					style={[
-						{
-							display: "flex",
-							flexDirection: "column",
-							justifyContent: "flex-start",
-                            borderRightWidth: 1,
-                            borderRightColor: "lightgray",
-                            overflow: "scroll",
-						},
-						tabBarStyle,
-					]}
-				>
-					{state.routes.map((route) => {
-						const isSelected = route.key === state.routes[state.index]?.key;
-						const { options } = descriptors[route.key];
+				{(!isMobileView || isPanelView) && (
+					<View
+						style={[
+							{
+								display: "flex",
+								flexDirection: "column",
+								justifyContent: "flex-start",
+								borderRightWidth: 1,
+								borderRightColor: "lightgray",
+								overflow: "scroll",
+								width: isMobileView ? "100%" : undefined,
+							},
+							tabBarStyle,
+						]}
+					>
+						{state.routes.map((route) => {
+							const isSelected = route.key === state.routes[state.index]?.key;
+							const { options } = descriptors[route.key];
 
-						return (
-							<Button
-								variant={"ghost"}
-								key={route.key}
-								onPress={() => {
-									const event = navigation.emit({
-										type: "tabPress",
-										target: route.key,
-										canPreventDefault: true,
-										data: {
-											isAlreadyFocused: isSelected,
-										},
-									});
-
-									if (!event.defaultPrevented) {
-										navigation.dispatch({
-											...CommonActions.navigate(route),
-											target: state.key,
+							return (
+								<Button
+									variant={"ghost"}
+									key={route.key}
+									onPress={() => {
+										const event = navigation.emit({
+											type: "tabPress",
+											target: route.key,
+											canPreventDefault: true,
+											data: {
+												isAlreadyFocused: isSelected,
+											},
 										});
+
+										if (!event.defaultPrevented) {
+											navigation.dispatch({
+												...CommonActions.navigate(route),
+												target: state.key,
+											});
+										}
+										if (isMobileView) {
+											setIsPanelView(false);
+										}
+									}}
+									bgColor={isSelected ? "primary.300" : undefined}
+									style={{
+										justifyContent: "flex-start",
+										padding: "10px",
+										height: "50px",
+										width: "250px",
+									}}
+									leftIcon={
+										options.iconProvider && options.iconName ? (
+											<Icon
+												as={options.iconProvider}
+												name={options.iconName}
+												size="xl"
+												color="black"
+											/>
+										) : undefined
 									}
-								}}
-								bgColor={isSelected ? "primary.300" : undefined}
-								style={{
-                                    justifyContent: "flex-start",
-									padding: "10px",
-									height: "50px",
-									width: "250px",
-								}}
-							>
-								<Row style={{ alignItems: "center" }}>
-									{options.iconProvider && options.iconName && (
-										<Icon
-											as={options.iconProvider}
-											name={options.iconName}
-											size="xl"
-											color="black"
-                                            margin={2}
-										/>
-									)}
+								>
 									<Text fontSize="lg" isTruncated w="100%">
 										{options.title || route.name}
 									</Text>
-								</Row>
-							</Button>
-						);
-					})}
-				</View>
-				<View style={[{ flex: 1, width: "700px" }, contentStyle]}>
-					{state.routes.map((route, i) => {
-						return (
-							<View
-								key={route.key}
-								style={[{ display: i === state.index ? "flex" : "none" }]}
-							>
-								{descriptors[route.key]?.render()}
-							</View>
-						);
-					})}
-				</View>
+								</Button>
+							);
+						})}
+					</View>
+				)}
+				{(!isMobileView || !isPanelView) && (
+					<View
+						style={[
+							{ flex: 1, width: isMobileView ? "100%" : "700px" },
+							contentStyle,
+						]}
+					>
+						{isMobileView && (
+							<Button
+								style={{
+									position: "absolute",
+									top: "10px",
+									left: "10px",
+									zIndex: 100,
+								}}
+								onPress={() => setIsPanelView(true)}
+								leftIcon={
+									<Icon
+										as={Ionicons}
+										name="arrow-back"
+										size="xl"
+										color="black"
+									/>
+								}
+							/>
+						)}
+						{descriptors[state.routes[state.index]?.key]?.render()}
+					</View>
+				)}
 			</Row>
 		</NavigationContent>
 	);
