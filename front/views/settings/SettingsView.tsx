@@ -15,8 +15,8 @@ const SettingsStack = createNativeStackNavigator();
 
 const handleChangeEmail = async (oldEmail: string, newEmail: string): Promise<string> => {
     try {
-        let response = await API.updateUserCredentials("email", oldEmail, newEmail);
-        return response as string;
+        let response = await API.updateUserEmail(oldEmail, newEmail);
+        return response.email;
     } catch (error) {
         return ("error: " + error);
     }
@@ -24,8 +24,8 @@ const handleChangeEmail = async (oldEmail: string, newEmail: string): Promise<st
 
 const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
     try {
-        let response = await API.updateUserCredentials("password", oldPassword, newPassword);
-        return response as string;
+        let response = await API.updateUserPassword(oldPassword, newPassword);
+        return response.email;
     } catch (error) {
         return ("error: " + error);
     }
