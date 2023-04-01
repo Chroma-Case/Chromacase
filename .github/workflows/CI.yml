@@ -96,6 +96,11 @@ jobs:
           docker-compose ps -a
           wget --retry-connrefused http://localhost:3000 # /healthcheck
 
+      - name: Run scorometer tests
+        run: |
+          pip install -r scorometer/requirements.txt
+          cd scorometer/tests && ./runner.sh perfect_play
+
       - name: Run robot tests
         run: |
           pip install -r back/test/robot/requirements.txt
@@ -121,11 +126,6 @@ jobs:
           report_path: out/
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
           only_summary: true
-
-      - name: Run scorometer tests
-        run: |
-          pip install -r scorometer/requirements.txt
-          cd scorometer/tests && ./runner.sh perfect_play
 
       - name: Remove .env && stop the service
         run: docker-compose down && rm .env
