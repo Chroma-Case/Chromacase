@@ -37,6 +37,7 @@ const PlayView = () => {
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
 	const song = useQuery(['song', songId], () => API.getSong(songId));
+	const userProfile = useQuery(['user'], () => API.getUserInfo());
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
 	const timer = useStopwatch({ autoStart: false });
@@ -85,8 +86,10 @@ const PlayView = () => {
 		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
 			webSocket.current!.send(JSON.stringify({
-				type: "start",
-				name: "clair-de-lune" /*song.data.id*/,
+				"type":"start",
+				"id": song.data!.id,
+				"mode": "normal",
+				"user_id": userProfile.data!.id
 			}));
 		};
 		webSocket.current.onmessage = (message) => {
@@ -95,7 +98,7 @@ const PlayView = () => {
 				if (data.type == 'end') {
 					navigation.navigate('Score');
 				} else if (data.song_launched == undefined) {
-					toast.show({ description: data, placement: 'top', colorScheme: 'secondary' });
+					toast.show({ description: data.timingInformation, placement: 'top', colorScheme: 'secondary' });
 				}
 			} catch {
 
@@ -110,9 +113,9 @@ const PlayView = () => {
 				const keyCode = message.data[1];
 				webSocket.current?.send(JSON.stringify({
 					type: keyIsPressed ? "note_on" : "note_off",
-					node: keyCode,
-					intensity: null,
-					time: Date.now()
+					note: keyCode,
+					id: song.data!.id,
+					time: timer.seconds
 				}))
 			}
 			inputIndex++;
@@ -136,17 +139,22 @@ const PlayView = () => {
 	}
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-		navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
 			clearInterval(timer);
 			onEnd();
 		}
-	}, [])
+	}, []);
+	useEffect(() => {
+		if (song.data && userProfile.data) {
+			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+		}
+
+	}, [song.data, userProfile.data]);
 	const score = 20;
 
-	if (!song.data || !partitionRessources.data) {
+	if (!song.data || !partitionRessources.data || !userProfile.data) {
 		return <Center style={{ flexGrow: 1 }}>
 			<LoadingComponent/>
 		</Center>
