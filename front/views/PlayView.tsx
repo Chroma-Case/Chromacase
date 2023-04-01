@@ -9,7 +9,6 @@ import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
 import LoadingComponent from '../components/Loading';
 import Constants from 'expo-constants';
-import { useStopwatch } from 'react-timer-hook';
 import SlideView from '../components/PartitionVisualizer/SlideView';
 import MidiPlayer from 'midi-player-js';
 import SoundFont from 'soundfont-player';
@@ -40,8 +39,8 @@ const PlayView = () => {
 	const userProfile = useQuery(['user'], () => API.getUserInfo());
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
-	const timer = useStopwatch({ autoStart: false });
 	const [paused, setPause] = useState<boolean>(true);
+  	const [time, setTime] = useState(0);
 	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	
@@ -50,23 +49,21 @@ const PlayView = () => {
 	);
 
 	const onPause = () => {
-		timer.pause();
 		midiPlayer?.pause();
 		setPause(true);
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: true,
-			time: Date.now()
+			time: time
 		}));
 	}
 	const onResume = () => {
 		setPause(false);
 		midiPlayer?.play();
-		timer.start();
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: false,
-			time: Date.now()
+			time: time
 		}));
 	}
 	const onEnd = () => {
@@ -115,7 +112,7 @@ const PlayView = () => {
 					type: keyIsPressed ? "note_on" : "note_off",
 					note: keyCode,
 					id: song.data!.id,
-					time: timer.seconds
+					time: time
 				}))
 			}
 			inputIndex++;
@@ -126,7 +123,6 @@ const PlayView = () => {
 		]).then(([midiFile, audioController]) => {
 			const player = new MidiPlayer.Player((event) => {
 				if (event['noteName']) {
-					console.log(event);
 					audioController.play(event['noteName']);
 				}
 			});
@@ -138,11 +134,24 @@ const PlayView = () => {
 		toast.show({ description: `Failed to get MIDI access` });
 	}
 	useEffect(() => {
+		let interval: NodeJS.Timer | undefined = undefined;
+	  
+		if (!paused) {
+		  interval = setInterval(() => {
+			setTime((time) => time + 10);
+		  }, 1);
+		} else {
+		  clearInterval(interval);
+		}
+		return () => {
+		  clearInterval(interval);
+		};
+	}, [paused]);
+	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
-			clearInterval(timer);
 			onEnd();
 		}
 	}, []);
@@ -227,7 +236,7 @@ const PlayView = () => {
 						} onPress={() => {
 							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
-						<Text>{timer.minutes}:{timer.seconds.toString().padStart(2, '0')}</Text>
+						<Text>{Math.floor(time / 60000)}:{((time % 60000) / 100).toFixed(0).toString().padStart(2, '0')}</Text>
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
