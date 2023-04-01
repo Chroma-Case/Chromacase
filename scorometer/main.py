@@ -27,7 +27,8 @@ def send(o):
 	print(json.dumps(o), flush=True)
 
 def log(level, message):
-	send({"type": "log", "level": level, "message": message})
+	o = {"type": "log", "level": level, "message": message}
+	print(json.dumps(o), flush=True, file=sys.stderr)
 
 def debug(message):
 	log("DEBUG", message)
