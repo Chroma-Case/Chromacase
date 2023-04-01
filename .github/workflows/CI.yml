@@ -99,7 +99,7 @@ jobs:
       - name: Run scorometer tests
         run: |
           pip install -r scorometer/requirements.txt
-          cd scorometer/tests && ./runner.sh perfect_play
+          cd scorometer/tests && ./runner.sh
 
       - name: Run robot tests
         run: |
