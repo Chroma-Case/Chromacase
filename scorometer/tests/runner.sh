@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 EMPTY_DB=$(curl localhost:3000/song/1 -s | jq '.statusCode == 404')
 if [[ $EMPTY_DB == "true" ]]; then
