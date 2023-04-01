@@ -106,7 +106,7 @@ jobs:
           name: results
           path: out
 
-      - name: Write results to Pull Request and Summarry
+      - name: Write results to Pull Request and Summary
         if: always() && github.event_name == 'pull_request'
         uses: joonvena/robotframework-reporter-action@v2.1
         with:
@@ -114,13 +114,18 @@ jobs:
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
           only_summary: false
 
-      - name: Write results to Summarry
+      - name: Write results to Summary
         if: always() && github.event_name != 'pull_request'
         uses: joonvena/robotframework-reporter-action@v2.1
         with:
           report_path: out/
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
           only_summary: true
+
+      - name: Run scorometer tests
+        run: |
+          pip install -r scorometer/requirements.txt
+          cd scorometer/tests && ./runner.sh
 
       - name: Remove .env && stop the service
         run: docker-compose down && rm .env
