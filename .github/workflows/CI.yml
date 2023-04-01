@@ -125,7 +125,7 @@ jobs:
       - name: Run scorometer tests
         run: |
           pip install -r scorometer/requirements.txt
-          cd scorometer/tests && ./runner.sh
+          cd scorometer/tests && ./runner.sh perfect_play
 
       - name: Remove .env && stop the service
         run: docker-compose down && rm .env
