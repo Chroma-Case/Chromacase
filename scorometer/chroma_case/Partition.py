@@ -1,8 +1,8 @@
 from .Key import Key
 
-class Partition:
 
-	def __init__(self, name:str, notes:list[Key]) -> None:
+class Partition:
+	def __init__(self, name: str, notes: list[Key]) -> None:
 
 		self.__name = name
 		self.notes = notes
@@ -12,4 +12,3 @@ class Partition:
 		for i in self.notes:
 			r += f"{i.__repr__()}\n"
 		return r
-

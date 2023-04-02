@@ -96,6 +96,11 @@ jobs:
           docker-compose ps -a
           wget --retry-connrefused http://localhost:3000 # /healthcheck
 
+      - name: Run scorometer tests
+        run: |
+          pip install -r scorometer/requirements.txt
+          cd scorometer/tests && ./runner.sh
+
       - name: Run robot tests
         run: |
           pip install -r back/test/robot/requirements.txt
@@ -106,7 +111,7 @@ jobs:
           name: results
           path: out
 
-      - name: Write results to Pull Request and Summarry
+      - name: Write results to Pull Request and Summary
         if: always() && github.event_name == 'pull_request'
         uses: joonvena/robotframework-reporter-action@v2.1
         with:
@@ -114,7 +119,7 @@ jobs:
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
           only_summary: false
 
-      - name: Write results to Summarry
+      - name: Write results to Summary
         if: always() && github.event_name != 'pull_request'
         uses: joonvena/robotframework-reporter-action@v2.1
         with:
