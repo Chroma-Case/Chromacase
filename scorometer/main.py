@@ -175,7 +175,7 @@ class Scorometer:
         )
         if to_play is None:
             self.score -= 50
-            logging.debug("Invalid key.")
+            logging.info("Invalid key.")
         else:
             timingScore, timingInformation = self.getTiming(key, to_play)
             self.score += (
@@ -208,7 +208,7 @@ class Scorometer:
             None,
         )
         if keys_to_play is None:
-            logging.warning("Key sent but there is no keys to play")
+            logging.info("Key sent but there is no keys to play")
             self.score -= 50
             return
         to_play = next(
@@ -216,7 +216,7 @@ class Scorometer:
         )
         if to_play is None:
             self.score -= 50
-            logging.debug("Invalid key.")
+            logging.info("Invalid key.")
         else:
             timingScore, _ = self.getTiming(key, to_play)
             self.score += (

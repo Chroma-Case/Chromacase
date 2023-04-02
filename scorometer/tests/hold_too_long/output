@@ -8,4 +8,4 @@
 {"id": 8, "timingScore": "good", "timingInformation": "perfect"}
 {"id": 9, "timingScore": "good", "timingInformation": "perfect"}
 {"id": 10, "timingScore": "good", "timingInformation": "perfect"}
-{"overallScore": 500, "score": {}}
+{"overallScore": 500, "score": {"missed": 0, "good": 0, "great": 0, "perfect": 0, "maxScore": 1000}}
