@@ -1,4 +1,4 @@
-{"type":"start", "id": 1, "mode": "normal", "user_id": 1}
+{"type":"start", "id": 1, "mode": "normal", "bearer": ""}
 {"type": "note_on", "id": 1, "time": 3750, "note": 68}
 {"type": "note_off", "id": 1, "time": 3990, "note": 68}
 {"type": "note_on", "id": 2, "time": 4000, "note": 67}
@@ -19,5 +19,5 @@
 {"type": "note_off", "id": 9, "time": 7240, "note": 62}
 {"type": "note_on", "id": 10, "time": 7000, "note": 60}
 {"type": "note_off", "id": 10, "time": 7490, "note": 60}
-{}
+{"type": "end"}
 
