@@ -10,7 +10,7 @@ TESTS_SUCCESS=0
 TESTS_FAILED=0
 
 function test {
-  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /dev/null
+  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   TESTS_DONE=$((TESTS_DONE + 1))
   if ! diff $1/output /tmp/scorometer_res &>/dev/null; then
     echo "$t failed, do runner.sh $t for more info"
@@ -27,7 +27,7 @@ then
   done
   exit $TESTS_FAILED
 else
-  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /dev/null
+  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   echo "=========== CURRENT OUTPUT ==========="
   cat /tmp/scorometer_res
   echo "======================================"
