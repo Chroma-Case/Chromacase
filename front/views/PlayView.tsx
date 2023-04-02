@@ -14,6 +14,8 @@ import MidiPlayer from 'midi-player-js';
 import SoundFont from 'soundfont-player';
 import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
+import { useSelector } from 'react-redux';
+import { RootState } from '../state/Store';
 
 type PlayViewProps = {
 	songId: number
@@ -33,10 +35,10 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 
 const PlayView = () => {
 	const songId = 1;
+	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
 	const song = useQuery(['song', songId], () => API.getSong(songId));
-	const userProfile = useQuery(['user'], () => API.getUserInfo());
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
@@ -67,6 +69,9 @@ const PlayView = () => {
 		}));
 	}
 	const onEnd = () => {
+		webSocket.current?.send(JSON.stringify({
+			type: "end"
+		}));
 		webSocket.current?.close();
 		midiPlayer?.pause();
 	}
@@ -83,22 +88,23 @@ const PlayView = () => {
 		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
 			webSocket.current!.send(JSON.stringify({
-				"type":"start",
-				"id": song.data!.id,
-				"mode": "normal",
-				"user_id": userProfile.data!.id
+				type: "start",
+				id: song.data!.id,
+				mode: "normal",
+				bearer: accessToken
 			}));
 		};
 		webSocket.current.onmessage = (message) => {
+			console.log(data);
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
 					navigation.navigate('Score');
-				} else if (data.song_launched == undefined) {
+				} else {
 					toast.show({ description: data.timingInformation, placement: 'top', colorScheme: 'secondary' });
 				}
-			} catch {
-
+			} catch (e) {
+				console.log(e);
 			}
 		}
 		inputs.forEach((input) => {
@@ -156,14 +162,14 @@ const PlayView = () => {
 		}
 	}, []);
 	useEffect(() => {
-		if (song.data && userProfile.data) {
+		if (song.data) {
 			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 		}
 
-	}, [song.data, userProfile.data]);
+	}, [song.data]);
 	const score = 20;
 
-	if (!song.data || !partitionRessources.data || !userProfile.data) {
+	if (!song.data || !partitionRessources.data) {
 		return <Center style={{ flexGrow: 1 }}>
 			<LoadingComponent/>
 		</Center>
