@@ -1,2 +1,4 @@
 mido
 requests
+black-with-tabs
+validated-dc
