@@ -268,7 +268,7 @@ class Scorometer:
         match message:
             case InvalidMessage(error):
                 logging.warning(f"Invalid message {line} with error: {error}")
-                send({"error": "Invalid message sent"})
+                send({"error": f"Invalid message {line} with error: {error}"})
             case NoteOnMessage():
                 if self.mode == NORMAL:
                     self.handleNoteOn(message)
