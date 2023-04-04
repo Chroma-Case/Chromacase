@@ -107,6 +107,9 @@ export const en = {
 	changeEmail: 'Change email',
 	oldEmail: 'Old email',
 	newEmail: 'New email',
+
+	passwordUpdated: 'Password updated',
+	emailUpdated: 'Email updated',
 };
 
 export const fr: typeof en = {
@@ -141,7 +144,7 @@ export const fr: typeof en = {
 	mostPlayedSong: 'Chanson la plus jouée : ',
 	goodNotesPlayed: 'Bonnes notes jouées : ',
 	longestCombo: 'Combo le plus long : ',
-	favoriteGenre: 'Genre favorit : ',
+	favoriteGenre: 'Genre favori : ',
 
 	// Difficulty settings
 	diffBtn: 'Difficulté',
@@ -214,6 +217,9 @@ export const fr: typeof en = {
 	errAlrdExst: "Utilisateur existe déjà",
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
+
+	passwordUpdated: 'Mot de passe mis à jour',
+	emailUpdated: 'Email mis à jour',
 };
 
 export const sp: typeof en = {
@@ -320,9 +326,12 @@ export const sp: typeof en = {
 	errAlrdExst: "Ya existe",
 	errIncrrct: "credenciales incorrectas",
 
-	changePassword: 'Change password',
-	oldPassword: 'Old password',
-	newPassword: 'New password',
-	confirmNewPassword: 'Confirm new password',
-	submitBtn: 'Submit',
+	changePassword: 'Cambio de contraseña',
+	oldPassword: 'Contraseña anterior',
+	newPassword: 'Nueva contraseña',
+	confirmNewPassword: 'Confirmar nueva contraseña',
+	submitBtn: 'Enviar',
+
+	passwordUpdated: 'Contraseña actualizada',
+	emailUpdated: 'Email actualizado',
 };
