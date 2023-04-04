@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { Center, Button, Text, Switch, Slider, Select, Heading } from "native-base";
+import { Center, Button, Text, Switch, Slider, Select, Heading, Box } from "native-base";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { unsetAccessToken } from '../state/UserSlice';
 import { useDispatch } from "react-redux";
@@ -258,7 +258,10 @@ const TabRow = createTabRowNavigator();
 
 const SetttingsNavigator = () => {
     return (
-        <TabRow.Navigator initialRouteName='Main'>
+        <TabRow.Navigator initialRouteName='InternalDefault'>
+            {/* I'm doing this to be able to land on the summary of settings when clicking on settings and directly to the
+            wanted settings page if needed so I need to do special work with the 0 index */}
+            <TabRow.Screen name='InternalDefault' component={Box} />
             <TabRow.Screen name='Main' component={MainView} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
             <TabRow.Screen name='Preferences' component={PreferencesView} />
             <TabRow.Screen name='Notifications' component={NotificationsView} />
