@@ -419,12 +419,11 @@ export default class API {
 		];
 	}
 
-	public static async updateUserEmail(oldEmail: string, newEmail: string): Promise<User> {
+	public static async updateUserEmail(newEmail: string): Promise<User> {
 		const rep = await API.fetch({
 			route: "/auth/me",
 			method: "PUT",
 			body: {
-				oldEmail: oldEmail,
 				email: newEmail,
 			},
 		});
