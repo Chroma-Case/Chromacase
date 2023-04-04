@@ -24,6 +24,10 @@ import {
 } from "@react-navigation/native";
 import IconButton from "../IconButton";
 
+const TabRowNavigatorInitialComponentName = "TabIndex";
+
+export {TabRowNavigatorInitialComponentName};
+
 // Props accepted by the view
 type TabNavigationConfig = {
 	tabBarStyle: StyleProp<ViewStyle>;
@@ -82,6 +86,27 @@ function TabNavigator({
 	const [isPanelView, setIsPanelView] = React.useState(false);
 	const isMobileView = screenSize == "small";
 
+	React.useEffect(() => {
+		if (state.index === 0) {
+			if (isMobileView) {
+				setIsPanelView(true);
+			} else {
+				navigation.reset(
+					{
+						...state,
+						index: 1,
+					}
+				);
+			}
+		}
+	}, [state.index]);
+
+	React.useEffect(() => {
+		navigation.setOptions({
+			headerShown: !isMobileView || isPanelView,
+		});
+	}, [isMobileView, isPanelView]);
+
 	return (
 		<NavigationContent>
 			<Row height={"900px"}>
@@ -95,12 +120,15 @@ function TabNavigator({
 								borderRightWidth: 1,
 								borderRightColor: "lightgray",
 								overflow: "scroll",
-								width: isMobileView ? "100%" : undefined,
+								width: isMobileView ? "100%" : "clamp(200px, 20%, 300px)",
 							},
 							tabBarStyle,
 						]}
 					>
-						{state.routes.map((route) => {
+						{state.routes.map((route, idx) => {
+							if (idx === 0) {
+								return null;
+							}
 							const isSelected = route.key === state.routes[state.index]?.key;
 							const { options } = descriptors[route.key];
 
@@ -128,12 +156,12 @@ function TabNavigator({
 											setIsPanelView(false);
 										}
 									}}
-									bgColor={isSelected ? "primary.300" : undefined}
+									bgColor={isSelected && (!isMobileView || !isPanelView) ? "primary.300" : undefined}
 									style={{
 										justifyContent: "flex-start",
 										padding: "10px",
 										height: "50px",
-										width: "250px",
+										width: "100%",
 									}}
 									leftIcon={
 										options.iconProvider && options.iconName ? (
@@ -141,7 +169,7 @@ function TabNavigator({
 												as={options.iconProvider}
 												name={options.iconName}
 												size="xl"
-												color="black"
+												borderRadius="full"
 											/>
 										) : undefined
 									}
@@ -176,6 +204,7 @@ function TabNavigator({
 										name="arrow-back"
 										size="xl"
 										color="black"
+										borderRadius="full"
 									/>
 								}
 							/>
