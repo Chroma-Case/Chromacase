@@ -169,7 +169,6 @@ function TabNavigator({
 												as={options.iconProvider}
 												name={options.iconName}
 												size="xl"
-												borderRadius="full"
 											/>
 										) : undefined
 									}

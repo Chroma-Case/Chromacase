@@ -110,6 +110,15 @@ export const en = {
 
 	passwordUpdated: 'Password updated',
 	emailUpdated: 'Email updated',
+
+	SettingsCategoryProfile: 'Profile',
+	SettingsCategoryPreferences: 'Preferences',
+	SettingsCategoryNotifications: 'Notifications',
+	SettingsCategoryPrivacy: 'Privacy',
+	SettingsCategorySecurity: 'Security',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
 };
 
 export const fr: typeof en = {
@@ -220,6 +229,15 @@ export const fr: typeof en = {
 
 	passwordUpdated: 'Mot de passe mis à jour',
 	emailUpdated: 'Email mis à jour',
+
+	SettingsCategoryProfile: 'Profil',
+	SettingsCategoryPreferences: 'Préférences',
+	SettingsCategoryNotifications: 'Notifications',
+	SettingsCategoryPrivacy: 'Confidentialité',
+	SettingsCategorySecurity: 'Sécurité',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
 };
 
 export const sp: typeof en = {
@@ -334,4 +352,12 @@ export const sp: typeof en = {
 
 	passwordUpdated: 'Contraseña actualizada',
 	emailUpdated: 'Email actualizado',
+
+	SettingsCategoryProfile: 'Perfil',
+	SettingsCategoryPreferences: 'Preferencias',
+	SettingsCategoryNotifications: 'Notificaciones',
+	SettingsCategoryPrivacy: 'Privacidad',
+	SettingsCategorySecurity: 'Seguridad',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
 };
