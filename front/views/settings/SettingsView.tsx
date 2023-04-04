@@ -10,7 +10,7 @@ import { SettingsState, updateSettings } from '../../state/SettingsSlice';
 import { AvailableLanguages, translate, Translate } from "../../i18n/i18n";
 import TextButton from '../../components/TextButton';
 import createTabRowNavigator from '../../components/navigators/TabRowNavigator';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ProfileSettings from './SettingsProfileView';
@@ -246,6 +246,14 @@ export const GoogleAccountView = ({navigation}) => {
 	)
 }
 
+export const PianoSettingsView = ({navigation}) => {
+	return (
+		<Center style={{ flex: 1}}>
+			<Text>Global settings for the virtual piano</Text>
+		</Center>
+	)
+}
+
 const TabRow = createTabRowNavigator(); 
 
 const SetttingsNavigator = () => {
@@ -254,13 +262,46 @@ const SetttingsNavigator = () => {
 			{/* I'm doing this to be able to land on the summary of settings when clicking on settings and directly to the
 			wanted settings page if needed so I need to do special work with the 0 index */}
 			<TabRow.Screen name='InternalDefault' component={Box} />
-			<TabRow.Screen name='Profile' component={ProfileSettings} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
-			<TabRow.Screen name='Preferences' component={PreferencesView} />
-			<TabRow.Screen name='Notifications' component={NotificationsView} />
-			<TabRow.Screen name='Privacy' component={PrivacyView} />
-			<TabRow.Screen name='ChangePassword' component={ChangePasswordView} />
-			<TabRow.Screen name='ChangeEmail' component={ChangeEmailView} />
-			<TabRow.Screen name='GoogleAccount' component={GoogleAccountView} />
+			<TabRow.Screen name='Profile' component={ProfileSettings} options={{ 
+				title: translate('SettingsCategoryProfile'),
+				iconProvider: FontAwesome5,
+				iconName: "user"
+			}} />
+			<TabRow.Screen name='Preferences' component={PreferencesView} options={{
+				title: translate('SettingsCategoryPreferences'),
+				iconProvider: FontAwesome5,
+				iconName: "music"
+			}} />
+			<TabRow.Screen name='Notifications' component={NotificationsView} options={{
+				title: translate('SettingsCategoryNotifications'),
+				iconProvider: FontAwesome5,
+				iconName: "bell"
+			}}/>
+			<TabRow.Screen name='Privacy' component={PrivacyView} options={{
+				title: translate('SettingsCategoryPrivacy'),
+				iconProvider: FontAwesome5,
+				iconName: "lock"
+			}} />
+			<TabRow.Screen name='ChangePassword' component={ChangePasswordView} options={{
+				title: translate('SettingsCategorySecurity'),
+				iconProvider: FontAwesome5,
+				iconName: "key"
+			}}/>
+			<TabRow.Screen name='ChangeEmail' component={ChangeEmailView} options={{
+				title: translate('SettingsCategoryEmail'),
+				iconProvider: FontAwesome5,
+				iconName: "envelope"
+			}} />
+			<TabRow.Screen name='GoogleAccount' component={GoogleAccountView} options={{
+				title: translate('SettingsCategoryGoogle'),
+				iconProvider: FontAwesome5,
+				iconName: "google"
+			}} />
+			<TabRow.Screen name='PianoSettings' component={PianoSettingsView} options={{
+				title: translate('SettingsCategoryPiano'),
+				iconProvider: MaterialCommunityIcons,
+				iconName: "piano"
+			}} />
 		</TabRow.Navigator>
 	)
 }
