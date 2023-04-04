@@ -13,6 +13,7 @@ import createTabRowNavigator from '../../components/navigators/TabRowNavigator';
 import { FontAwesome } from '@expo/vector-icons';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
+import ProfileSettings from './SettingsProfileView';
 
 import API, { APIError } from '../../API';
 
@@ -22,7 +23,7 @@ const SettingsStack = createNativeStackNavigator();
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	try {
 		let response = await API.updateUserEmail(newEmail);
-		return translate('emailChanged');
+		return translate('emailUpdated');
 	} catch (e) {
 		throw e;
 	}
@@ -31,7 +32,7 @@ const handleChangeEmail = async (newEmail: string): Promise<string> => {
 const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
 	try {
 		let response = await API.updateUserPassword(oldPassword, newPassword);
-		return translate('passwordChanged');
+		return translate('passwordUpdated');
 	} catch (e) {
 		throw e;
 	}
@@ -253,27 +254,13 @@ const SetttingsNavigator = () => {
 			{/* I'm doing this to be able to land on the summary of settings when clicking on settings and directly to the
 			wanted settings page if needed so I need to do special work with the 0 index */}
 			<TabRow.Screen name='InternalDefault' component={Box} />
-			<TabRow.Screen name='Main' component={MainView} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
+			<TabRow.Screen name='Profile' component={ProfileSettings} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
 			<TabRow.Screen name='Preferences' component={PreferencesView} />
 			<TabRow.Screen name='Notifications' component={NotificationsView} />
 			<TabRow.Screen name='Privacy' component={PrivacyView} />
 			<TabRow.Screen name='ChangePassword' component={ChangePasswordView} />
 			<TabRow.Screen name='ChangeEmail' component={ChangeEmailView} />
 			<TabRow.Screen name='GoogleAccount' component={GoogleAccountView} />
-			<TabRow.Screen name='2Main' component={MainView} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
-			<TabRow.Screen name='2Preferences' component={PreferencesView} />
-			<TabRow.Screen name='2Notifications' component={NotificationsView} />
-			<TabRow.Screen name='2Privacy' component={PrivacyView} />
-			<TabRow.Screen name='2ChangePassword' component={ChangePasswordView} />
-			<TabRow.Screen name='2ChangeEmail' component={ChangeEmailView} />
-			<TabRow.Screen name='2GoogleAccount' component={GoogleAccountView} />
-			<TabRow.Screen name='3Main' component={MainView} options={{ title: "Profil", iconProvider: FontAwesome, iconName: "user" }} />
-			<TabRow.Screen name='3Preferences' component={PreferencesView} />
-			<TabRow.Screen name='3Notifications' component={NotificationsView} />
-			<TabRow.Screen name='3Privacy' component={PrivacyView} />
-			<TabRow.Screen name='3ChangePassword' component={ChangePasswordView} />
-			<TabRow.Screen name='3ChangeEmail' component={ChangeEmailView} />
-			<TabRow.Screen name='3GoogleAccount' component={GoogleAccountView} />
 		</TabRow.Navigator>
 	)
 }

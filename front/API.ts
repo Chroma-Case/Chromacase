@@ -154,7 +154,9 @@ export default class API {
 			email: user.email as string,
 			xp: 0,
 			premium: false,
-			metrics: {},
+			metrics: {
+				partyPlayed: user.partyPlayed as number,
+			},
 			settings: {
 				preferences: {
 					deviceId: 1,
