@@ -109,7 +109,7 @@ function TabNavigator({
 
 	return (
 		<NavigationContent>
-			<Row height={"900px"}>
+			<Row height={"100%"}>
 				{(!isMobileView || isPanelView) && (
 					<View
 						style={[
