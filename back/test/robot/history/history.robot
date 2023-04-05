@@ -37,6 +37,40 @@ Create and get an history record
     [Teardown]    Run Keywords    DELETE    /users/${userID}
     ...    AND    DELETE    /song/${song.body.id}
 
+Create and get a duplicated history record
+    [Documentation]    Create an history item
+    &{song}=    POST
+    ...    /song
+    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl"}
+    Output
+    ${userID}=    RegisterLogin    wowuser
+
+    &{history}=    POST
+    ...    /history
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {} }
+    Output
+    Integer    response status    201
+
+    &{history2}=    POST
+    ...    /history
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 65, "difficulties": {} }
+    Output
+    Integer    response status    201
+
+    &{res}=    GET    /history
+    Output
+    Integer    response status    200
+    Array    response body
+    Integer    $[0].userID    ${userID}
+    Integer    $[0].songID    ${song.body.id}
+    Integer    $[0].score    55
+    Integer    $[1].userID    ${userID}
+    Integer    $[1].songID    ${song.body.id}
+    Integer    $[1].score    65
+
+    [Teardown]    Run Keywords    DELETE    /users/${userID}
+    ...    AND    DELETE    /song/${song.body.id}
+
 Create and get a search history record
     [Documentation]    Create a search history item
     ${userID}=    RegisterLogin    historyqueryuser
