@@ -5,6 +5,7 @@ import UserSettings from "./UserSettings";
 interface User extends Model {
 	name: string;
 	email: string;
+	isGuest: boolean;
 	xp: number;
 	premium: boolean;
 	metrics: Metrics;

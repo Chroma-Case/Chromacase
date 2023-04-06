@@ -127,10 +127,22 @@ export default class API {
 			body: registrationInput,
 			method: "POST",
 		});
+		// In the Future we should move autheticate out of this function 
+		// and maybe create a new function to create and login in one go
 		return API.authenticate({
 			username: registrationInput.username,
 			password: registrationInput.password,
 		});
+	}
+
+	public static async createAndGetGuestAccount(): Promise<AccessToken> {
+		let response = await API.fetch({
+			route: "/auth/guest",
+			method: "POST",
+		});
+		if (!response.ok) throw new APIError("Error while creating guest account", response.status, "guestAccountCreationError");
+		if (!response.access_token) throw new APIError("No access token", response.status);
+		return response.access_token;
 	}
 
 	/***

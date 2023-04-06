@@ -6,6 +6,7 @@ import { RootState, useSelector } from './state/Store';
 import { translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
 import AuthenticationView from './views/AuthenticationView';
+import StartPageView from './views/StartPageView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/settings/SettingsView';
@@ -29,6 +30,7 @@ const protectedRoutes = () => ({
 }) as const;
 
 const publicRoutes = () => ({
+	Start: { component: StartPageView, options: { title: translate('welcome') } },
 	Login: { component: AuthenticationView, options: { title: translate('signInBtn') } },
 }) as const;
 
