@@ -8,6 +8,10 @@ import {
 	Button,
 	Pressable,
 	useBreakpointValue,
+	Image,
+	Center,
+	Row,
+	Heading,
 } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Card from "../components/Card";
@@ -17,13 +21,34 @@ const imgLogin =
 	"https://imgs.search.brave.com/xX-jA3Rspi-ptSFABle5hpVNdOyKDHdVYNr320buGyQ/rs:fit:1200:800:1/g:ce/aHR0cDovL3d3dy5z/dHJhdGVnaWMtYnVy/ZWF1LmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAxNC8wNy9B/TVgtMTBSQ1ItMTAw/LVNCSS1EUy5qcGc";
 const imgGuest =
 	"https://imgs.search.brave.com/BzxPphCCWbF_Vm0KhenmxH61M3Vm3_HhxWO0s_rw4Nk/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9pLnJl/ZGQuaXQvYW9waWtp/dXFrOTV6LmpwZw";
-
+const imgRegister =
+	"https://media.discordapp.net/attachments/717080637038788731/1093674574027182141/image.png";
 const StartPageView = () => {
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	return (
 		<View>
-			<Text>StartPage</Text>
+			<Center>
+				<Row
+					style={{
+						alignItems: "center",
+						justifyContent: "center",
+					}}
+				>
+					<Image
+						source={{
+							uri: "https://chromacase.studio/wp-content/uploads/2023/03/cropped-cropped-splashLogo-280x300.png",
+						}}
+						style={{
+							width: "100px",
+							height: "100px",
+						}}
+					/>
+					<Heading fontSize={screenSize === "small" ? "3xl" : "6xl"}>
+						Chromacase
+					</Heading>
+				</Row>
+			</Center>
 			<Stack
 				direction={screenSize === "small" ? "column" : "row"}
 				style={{
@@ -63,6 +88,22 @@ const StartPageView = () => {
 					}}
 				/>
 			</Stack>
+			<Center>
+				<BigActionButton
+					title="Register"
+					image={imgRegister}
+					subtitle="Create an account to save your progress"
+					iconProvider={FontAwesome5}
+					iconName="user-plus"
+					onPress={() => {
+						console.log("register");
+					}}
+					style={{
+						height: "150px",
+						width: "clamp(150px, 50%, 600px)",
+					}}
+				/>
+			</Center>
 		</View>
 	);
 };
