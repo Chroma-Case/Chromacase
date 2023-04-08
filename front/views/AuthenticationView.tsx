@@ -32,9 +32,10 @@ const handleSignup = async (username: string, password: string, email: string, a
 	}
 };
 
-const AuthenticationView = () => {
+const AuthenticationView = ({ route, navigation }: any) => {
 	const dispatch = useDispatch();
-	const [mode, setMode] = React.useState("signin" as "signin" | "signup");
+	const isSignup = route.params?.isSignup ?? false;
+	const [mode, setMode] = React.useState((isSignup ? "signup" : "signin") as "signin" | "signup");
 
 	return (
 		<Center style={{ flex: 1 }}>
