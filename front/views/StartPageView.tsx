@@ -29,12 +29,16 @@ const StartPageView = () => {
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isSmallScreen = screenSize === "small";
 	return (
-		<View>
+		<View style={{
+			width: "100%",
+			height: "100%",
+		}}>
 			<Center>
 				<Row
 					style={{
 						alignItems: "center",
 						justifyContent: "center",
+						marginTop: 20,
 					}}
 				>
 					<Icon
@@ -67,9 +71,7 @@ const StartPageView = () => {
 					image={imgLogin}
 					iconName="user"
 					iconProvider={FontAwesome5}
-					onPress={() => {
-						console.log("login");
-					}}
+					onPress={() => navigation.navigate("Login")}
 					style={{
 						width: isSmallScreen ? "90%" : "clamp(100px, 33.3%, 600px)",
 						height: "300px",
@@ -82,9 +84,7 @@ const StartPageView = () => {
 					image={imgGuest}
 					iconName="user-clock"
 					iconProvider={FontAwesome5}
-					onPress={() => {
-						console.log("guest");
-					}}
+					onPress={() => navigation.navigate("Guest")}
 					style={{
 						width: isSmallScreen ? "90%" : "clamp(100px, 33.3%, 600px)",
 						height: "300px",
@@ -99,9 +99,7 @@ const StartPageView = () => {
 					subtitle="Create an account to save your progress"
 					iconProvider={FontAwesome5}
 					iconName="user-plus"
-					onPress={() => {
-						console.log("register");
-					}}
+					onPress={() => navigation.navigate("Login")}
 					style={{
 						height: "150px",
 						width: isSmallScreen ? "90%" : "clamp(150px, 50%, 600px)",
