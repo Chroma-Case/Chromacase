@@ -30,7 +30,7 @@ const protectedRoutes = () => ({
 }) as const;
 
 const publicRoutes = () => ({
-	Start: { component: StartPageView, options: { title: translate('welcome'), headerShown: false } },
+	Start: { component: StartPageView, options: { title: "Chromacase", headerShown: false } },
 	Login: { component: AuthenticationView, options: { title: translate('signInBtn') } },
 }) as const;
 

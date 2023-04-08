@@ -6,16 +6,17 @@ import {
 	Stack,
 	Box,
 	Button,
-	Pressable,
+	AspectRatio,
+	Column,
 	useBreakpointValue,
 	Image,
+	Link,
 	Center,
 	Row,
 	Heading,
 	Icon,
 } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
-import Card from "../components/Card";
 import BigActionButton from "../components/BigActionButton";
 
 const imgLogin =
@@ -24,15 +25,24 @@ const imgGuest =
 	"https://imgs.search.brave.com/BzxPphCCWbF_Vm0KhenmxH61M3Vm3_HhxWO0s_rw4Nk/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9pLnJl/ZGQuaXQvYW9waWtp/dXFrOTV6LmpwZw";
 const imgRegister =
 	"https://media.discordapp.net/attachments/717080637038788731/1093674574027182141/image.png";
+
+const imgBanner =
+	"https://chromacase.studio/wp-content/uploads/2023/03/music-sheet-music-color-2462438.jpg";
+
+const imgLogo =
+	"https://chromacase.studio/wp-content/uploads/2023/03/cropped-cropped-splashLogo-280x300.png";
+
 const StartPageView = () => {
-	const navigation = useNavigation();
+	const navigate = useNavigation();
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isSmallScreen = screenSize === "small";
 	return (
-		<View style={{
-			width: "100%",
-			height: "100%",
-		}}>
+		<View
+			style={{
+				width: "100%",
+				height: "100%",
+			}}
+		>
 			<Center>
 				<Row
 					style={{
@@ -46,15 +56,13 @@ const StartPageView = () => {
 							<Image
 								alt="Chromacase logo"
 								source={{
-									uri: "https://chromacase.studio/wp-content/uploads/2023/03/cropped-cropped-splashLogo-280x300.png",
+									uri: imgLogo,
 								}}
 							/>
 						}
 						size={isSmallScreen ? "5xl" : "6xl"}
 					/>
-					<Heading fontSize={isSmallScreen ? "3xl" : "5xl"}>
-						Chromacase
-					</Heading>
+					<Heading fontSize={isSmallScreen ? "3xl" : "5xl"}>Chromacase</Heading>
 				</Row>
 			</Center>
 			<Stack
@@ -71,7 +79,7 @@ const StartPageView = () => {
 					image={imgLogin}
 					iconName="user"
 					iconProvider={FontAwesome5}
-					onPress={() => navigation.navigate("Login")}
+					onPress={() => navigation.navigate("Login", { isSignup: false })}
 					style={{
 						width: isSmallScreen ? "90%" : "clamp(100px, 33.3%, 600px)",
 						height: "300px",
@@ -99,13 +107,95 @@ const StartPageView = () => {
 					subtitle="Create an account to save your progress"
 					iconProvider={FontAwesome5}
 					iconName="user-plus"
-					onPress={() => navigation.navigate("Login")}
+					onPress={() => navigation.navigate("Login", { isSignup: true })}
 					style={{
 						height: "150px",
 						width: isSmallScreen ? "90%" : "clamp(150px, 50%, 600px)",
 					}}
 				/>
 			</Center>
+			<Column
+				style={{
+					width: "100%",
+					marginTop: 40,
+					display: "flex",
+					alignItems: "center",
+				}}
+			>
+				<Box
+					style={{
+						maxWidth: "90%",
+					}}
+				>
+					<Heading fontSize="4xl" style={{ textAlign: "center" }}>
+						What is Chromacase?
+					</Heading>
+					<Text fontSize={"xl"}>
+						Chromacase is a free and open source project that aims to provide a
+						complete learning experience for anyone willing to learn piano.
+					</Text>
+				</Box>
+
+				<Box
+					style={{
+						width: "90%",
+						marginTop: 20,
+					}}
+				>
+					<Box
+						style={{
+							width: "100%",
+							height: "100%",
+							display: "flex",
+							alignItems: "center",
+						}}
+					>
+						<Link
+							href="https://chromacase.studio"
+							isExternal
+							style={{
+								width: "clamp(200px, 100%, 700px)",
+								position: "relative",
+								overflow: "hidden",
+								borderRadius: 10,
+							}}
+						>
+							<AspectRatio
+								ratio={40 / 9}
+								style={{ width: "100%" }}
+							>
+								<Image
+									alt="Chromacase Banner"
+									source={{ uri: imgBanner }}
+									resizeMode="cover"
+								/>
+							</AspectRatio>
+							<Box
+								style={{
+									position: "absolute",
+									top: 0,
+									left: 0,
+									width: "100%",
+									height: "100%",
+									backgroundColor: "rgba(0,0,0,0.5)",
+								}}
+							></Box>
+							<Heading
+								fontSize="2xl"
+								style={{
+									textAlign: "center",
+									position: "absolute",
+									top: "40%",
+									left: 20,
+									color: "white",
+								}}
+							>
+								Click here for more infos
+							</Heading>
+						</Link>
+					</Box>
+				</Box>
+			</Column>
 		</View>
 	);
 };
