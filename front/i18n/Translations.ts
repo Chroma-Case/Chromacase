@@ -92,6 +92,17 @@ export const en = {
 	errAlrdExst: 'Already exist',
 	errIncrrct: 'Incorrect Credentials',
 
+	// Playback messages
+	missed: 'Missed note',
+	perfect: 'Perfect',
+	great: 'Great',
+	good: 'Good',
+	wrong: 'Wrong',
+	short: 'A little too short',
+	long: 'A little too long',
+	tooLong: 'Too Long',
+	tooShort: 'Too Short'
+
 };
 
 export const fr: typeof en = {
@@ -185,6 +196,17 @@ export const fr: typeof en = {
 	errAlrdExst: "Utilisateur existe déjà",
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
+
+	// Playback messages
+	missed: 'Raté',
+	perfect: 'Parfait',
+	great: 'Super',
+	good: 'Bien',
+	wrong: 'Oups',
+	short: 'Un peu court',
+	long: 'Un peu long',
+	tooLong: 'Trop long',
+	tooShort: 'Trop court'
 };
 
 export const sp: typeof en = {
@@ -279,5 +301,16 @@ export const sp: typeof en = {
 	//errors
 	unknownError: 'Error desconocido',
 	errAlrdExst: "Ya existe",
-	errIncrrct: "credenciales incorrectas"
+	errIncrrct: "credenciales incorrectas",
+
+	// Playback messages
+	missed: 'Te perdiste una nota',
+	perfect: 'Perfecto',
+	great: 'Excelente',
+	good: 'Bueno',
+	wrong: 'Equivocado',
+	short: 'Un poco demasiado corto',
+	long: 'Un poco demasiado largo',
+	tooLong: 'Demasiado largo',
+	tooShort: 'Demasiado corto'
 };

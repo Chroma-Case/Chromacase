@@ -16,6 +16,8 @@ import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
+import { translate } from '../i18n/i18n';
+import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 
 type PlayViewProps = {
 	songId: number
@@ -95,14 +97,43 @@ const PlayView = () => {
 			}));
 		};
 		webSocket.current.onmessage = (message) => {
-			console.log(data);
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
 					navigation.navigate('Score');
-				} else {
-					toast.show({ description: data.timingInformation, placement: 'top', colorScheme: 'secondary' });
+					return;
 				}
+
+				let formattedMessage = '';
+				let messageColor: ColorSchemeType | undefined;
+
+				if (data.type == 'miss') {
+					formattedMessage = translate('missed');
+					messageColor = 'black';
+				} else if (data.type == 'timing' || data.type == 'duration') {
+					formattedMessage = translate(data[data.type]);
+					switch (data[data.type]) {
+						case 'perfect':
+							messageColor = 'fuchsia';
+							break;
+						case 'great':
+							messageColor = 'green';
+							break;
+						case 'short':
+						case 'long':
+						case 'good':
+							messageColor = 'lightBlue';
+							break;
+						case 'too short':
+						case 'too long':
+						case 'wrong':
+							messageColor = 'grey';
+							break;
+						default:
+							break;
+					}
+				} 
+				toast.show({ description: formattedMessage, placement: 'top', colorScheme: messageColor ?? 'secondary' });
 			} catch (e) {
 				console.log(e);
 			}
