@@ -5,7 +5,7 @@ import {
 	Text,
 	Stack,
 	Box,
-	Button,
+	useToast,
 	AspectRatio,
 	Column,
 	useBreakpointValue,
@@ -18,6 +18,18 @@ import {
 } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 import BigActionButton from "../components/BigActionButton";
+import API, { APIError } from "../API";
+import { setAccessToken } from "../state/UserSlice";
+import { useDispatch } from "../state/Store";
+import { translate } from "../i18n/i18n";
+
+const handleGuestLogin = async (
+	apiSetter: (accessToken: string) => void
+): Promise<string> => {
+	const apiAccess = await API.createAndGetGuestAccount();
+	apiSetter(apiAccess);
+	return translate("loggedIn");
+};
 
 const imgLogin =
 	"https://imgs.search.brave.com/xX-jA3Rspi-ptSFABle5hpVNdOyKDHdVYNr320buGyQ/rs:fit:1200:800:1/g:ce/aHR0cDovL3d3dy5z/dHJhdGVnaWMtYnVy/ZWF1LmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAxNC8wNy9B/TVgtMTBSQ1ItMTAw/LVNCSS1EUy5qcGc";
@@ -36,6 +48,9 @@ const StartPageView = () => {
 	const navigate = useNavigation();
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isSmallScreen = screenSize === "small";
+	const dispatch = useDispatch();
+	const toast = useToast();
+
 	return (
 		<View
 			style={{
@@ -92,7 +107,19 @@ const StartPageView = () => {
 					image={imgGuest}
 					iconName="user-clock"
 					iconProvider={FontAwesome5}
-					onPress={() => navigation.navigate("Guest")}
+					onPress={() => {
+						try {
+							handleGuestLogin((accessToken: string) => {
+								dispatch(setAccessToken(accessToken));
+							});
+						} catch (error) {
+							if (error instanceof APIError) {
+								toast.show({ description: translate(error.userMessage) });
+								return;
+							}
+							toast.show({ description: error as string });
+						}
+					}}
 					style={{
 						width: isSmallScreen ? "90%" : "clamp(100px, 33.3%, 600px)",
 						height: "300px",
@@ -160,10 +187,7 @@ const StartPageView = () => {
 								borderRadius: 10,
 							}}
 						>
-							<AspectRatio
-								ratio={40 / 9}
-								style={{ width: "100%" }}
-							>
+							<AspectRatio ratio={40 / 9} style={{ width: "100%" }}>
 								<Image
 									alt="Chromacase Banner"
 									source={{ uri: imgBanner }}
