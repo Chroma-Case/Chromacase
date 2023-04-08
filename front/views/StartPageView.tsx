@@ -12,6 +12,7 @@ import {
 	Center,
 	Row,
 	Heading,
+	Icon,
 } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 import Card from "../components/Card";
@@ -26,6 +27,7 @@ const imgRegister =
 const StartPageView = () => {
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
+	const isSmallScreen = screenSize === "small";
 	return (
 		<View>
 			<Center>
@@ -35,16 +37,18 @@ const StartPageView = () => {
 						justifyContent: "center",
 					}}
 				>
-					<Image
-						source={{
-							uri: "https://chromacase.studio/wp-content/uploads/2023/03/cropped-cropped-splashLogo-280x300.png",
-						}}
-						style={{
-							width: "100px",
-							height: "100px",
-						}}
+					<Icon
+						as={
+							<Image
+								alt="Chromacase logo"
+								source={{
+									uri: "https://chromacase.studio/wp-content/uploads/2023/03/cropped-cropped-splashLogo-280x300.png",
+								}}
+							/>
+						}
+						size={isSmallScreen ? "5xl" : "6xl"}
 					/>
-					<Heading fontSize={screenSize === "small" ? "3xl" : "6xl"}>
+					<Heading fontSize={isSmallScreen ? "3xl" : "5xl"}>
 						Chromacase
 					</Heading>
 				</Row>
@@ -67,7 +71,7 @@ const StartPageView = () => {
 						console.log("login");
 					}}
 					style={{
-						width: "clamp(100px, 33.3%, 400px)",
+						width: isSmallScreen ? "90%" : "clamp(100px, 33.3%, 600px)",
 						height: "300px",
 						margin: "clamp(10px, 2%, 50px)",
 					}}
@@ -82,7 +86,7 @@ const StartPageView = () => {
 						console.log("guest");
 					}}
 					style={{
-						width: "clamp(100px, 33.3%, 400px)",
+						width: isSmallScreen ? "90%" : "clamp(100px, 33.3%, 600px)",
 						height: "300px",
 						margin: "clamp(10px, 2%, 50px)",
 					}}
@@ -100,7 +104,7 @@ const StartPageView = () => {
 					}}
 					style={{
 						height: "150px",
-						width: "clamp(150px, 50%, 600px)",
+						width: isSmallScreen ? "90%" : "clamp(150px, 50%, 600px)",
 					}}
 				/>
 			</Center>
