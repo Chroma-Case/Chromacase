@@ -3,6 +3,7 @@ import {
 	Box,
 	Center,
 	Heading,
+	View,
 	Image,
 	Text,
 	Pressable,
@@ -11,7 +12,6 @@ import {
 	Row,
 	PresenceTransition,
 } from "native-base";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { StyleProp, ViewStyle } from "react-native";
 
 type BigActionButtonProps = {
@@ -24,8 +24,6 @@ type BigActionButtonProps = {
 	onPress: () => void;
 };
 
-// a button with a picture in the background a title and a subtitle
-// on hover the picture is zoomed in and the title and subtitle are displayed
 const BigActionButton = ({
 	title,
 	subtitle,
@@ -36,6 +34,7 @@ const BigActionButton = ({
 	onPress,
 }: BigActionButtonProps) => {
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
+
 	return (
 		<Pressable onPress={onPress} style={style}>
 			{({ isHovered, isPressed }) => {
@@ -69,22 +68,21 @@ const BigActionButton = ({
 									width: "100%",
 									height: "100%",
 									resizeMode: "cover",
-									borderRadius: 10,
 								}}
 							/>
 						</PresenceTransition>
 						<PresenceTransition
 							style={{
-								height: "30%",
+								height: "100%",
 							}}
 							visible={isHovered}
 							initial={{
 								translateY: -40,
-                                opacity: 0.8,
+								opacity: 0.8,
 							}}
 							animate={{
 								translateY: -85,
-                                opacity: 1,
+								opacity: 1,
 							}}
 						>
 							<Box
@@ -97,29 +95,21 @@ const BigActionButton = ({
 									padding: "10px",
 								}}
 							>
-								<PresenceTransition
-									visible={isHovered}
-									initial={{
-										scale: 1,
-									}}
-									animate={{
-										scale: 1.2,
-										translateX: 40,
-									}}
-								>
-									<Row>
-										<Icon
-											as={iconProvider}
-											name={iconName}
-											size={screenSize === "small" ? "sm" : "md"}
-											color="black"
-											marginRight="10px"
-										/>
-										<Heading fontSize={screenSize === "small" ? "md" : "xl"} isTruncated>
-											{title}
-										</Heading>
-									</Row>
-								</PresenceTransition>
+								<Row>
+									<Icon
+										as={iconProvider}
+										name={iconName}
+										size={screenSize === "small" ? "sm" : "md"}
+										color="black"
+										marginRight="10px"
+									/>
+									<Heading
+										fontSize={screenSize === "small" ? "md" : "xl"}
+										isTruncated
+									>
+										{title}
+									</Heading>
+								</Row>
 								{isHovered && (
 									<PresenceTransition
 										visible={isHovered}
@@ -132,7 +122,11 @@ const BigActionButton = ({
 											translateY: 0,
 										}}
 									>
-										<Text fontSize={screenSize === "small" ? "sm" : "md"} isTruncated noOfLines={2}>
+										<Text
+											fontSize={screenSize === "small" ? "sm" : "md"}
+											isTruncated
+											noOfLines={2}
+										>
 											{subtitle}
 										</Text>
 									</PresenceTransition>
