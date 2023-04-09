@@ -59,19 +59,15 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				paddingTop: 40,
 			}}
 		>
-			<Column style={{
-				width: "100%",
-				alignItems: "center",
-			}}>
+			<Column
+				style={{
+					width: "100%",
+					alignItems: "center",
+				}}
+			>
 				<Center>
 					<Avatar size="2xl" source={{ uri: user.data.avatar }}>
 						{getInitials(user.name)}
-						<Avatar.Badge bg="gray.300" size={35}>
-							<IconButton
-								size={"sm"}
-								icon={<Icon as={FontAwesome5} name="edit" />}
-							/>
-						</Avatar.Badge>
 					</Avatar>
 				</Center>
 				<ElementList
@@ -84,57 +80,74 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "text",
 							title: "Username",
-							text: user.name,
+							data: {
+								text: user.name,
+							},
 						},
 						{
 							type: "text",
 							title: "Email",
-							text: user.email,
+							data: {
+								text: user.email,
+							},
 						},
 						{
 							type: "text",
 							title: "ID",
-							text: user.id,
+							data: {
+								text: user.id,
+							},
 						},
 						{
 							type: "text",
 							title: "Party played",
-							text: user.data.partyPlayed,
+							data: {
+								text: user.data.partyPlayed,
+							},
 						},
 						{
 							type: "text",
 							title: "XP",
-							text: user.data.xp,
+							data: {
+								text: user.data.xp,
+							},
 						},
 						{
 							type: "text",
 							title: "Date de création",
-							text: user.data.createdAt,
+							data: {
+								text: user.data.createdAt,
+							},
 						},
 						{
 							type: "toggle",
 							title: "Notifications",
-							onToggle: (value) => {
-								console.log(value);
-								setToggle(value);
+							data: {
+								value: toggle,
+								onToggle: () => {
+									console.log("toggle", toggle);
+									setToggle(!toggle);
+								},
 							},
-							toggleValue: toggle,
 						},
 						{
 							type: "dropdown",
 							title: "Langue",
-							options: [
-								{
-									label: "Français",
-									value: "fr",
-								},
-								{
-									label: "English",
-									value: "en",
-								},
-							],
-							onSelect: (value) => console.log(value),
-						}
+							data: {
+								value: "fr",
+								options: [
+									{
+										label: "Français",
+										value: "fr",
+									},
+									{
+										label: "English",
+										value: "en",
+									},
+								],
+								onSelect: (value) => console.log(value),
+							},
+						},
 					]}
 				/>
 			</Column>
