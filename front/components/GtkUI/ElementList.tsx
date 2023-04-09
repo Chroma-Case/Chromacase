@@ -1,7 +1,22 @@
 import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
+import IconButton from "../IconButton";
+import { Ionicons } from "@expo/vector-icons";
 
-import { Box, Center, Column, Row, Text, Divider, Switch } from "native-base";
+import {
+	Box,
+	Center,
+	Button,
+	Column,
+	Row,
+	Icon,
+	Text,
+	Divider,
+	Switch,
+	Popover,
+	useBreakpointValue,
+	Select,
+} from "native-base";
 
 type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown";
 
@@ -27,7 +42,7 @@ type ElementDropdownProps = {
 	defaultValue?: string;
 };
 
-const getElementTextNode = ({ text, type }: ElementTextProps) => {
+const getElementTextNode = ({ text }: ElementTextProps) => {
 	return (
 		<Text
 			style={{
@@ -59,7 +74,18 @@ const getElementDropdownNode = ({
 	value,
 	defaultValue,
 }: ElementDropdownProps) => {
-	return <Text>Dropdown</Text>;
+	return (
+		<Select
+			selectedValue={value}
+			onValueChange={onSelect}
+			defaultValue={defaultValue}
+			variant="filled"
+		>
+			{options.map((option) => (
+				<Select.Item label={option.label} value={option.value} />
+			))}
+		</Select>
+	);
 };
 
 type ElementProps = {
@@ -67,6 +93,7 @@ type ElementProps = {
 	icon?: React.ReactNode;
 	type?: ElementType | "custom";
 	helperText?: string;
+	description?: string;
 	disabled?: boolean;
 	onPress?: () => void;
 	// node is only used if type is "custom"
@@ -79,11 +106,14 @@ const Element = ({
 	icon,
 	type,
 	helperText,
+	description,
 	disabled,
 	onPress,
 	node,
 	data,
 }: ElementProps) => {
+	const screenSize = useBreakpointValue({ base: "small", md: "big" });
+	const isSmallScreen = screenSize === "small";
 	return (
 		<Row
 			style={{
@@ -99,20 +129,51 @@ const Element = ({
 				<Text>{title}</Text>
 			</Box>
 			<Box>
-				{(() => {
-					switch (type) {
-						case "text":
-							return getElementTextNode(data as ElementTextProps);
-						case "toggle":
-							return getElementToggleNode(data as ElementToggleProps);
-						case "dropdown":
-							return getElementDropdownNode(data as ElementDropdownProps);
-						case "custom":
-							return node;
-						default:
-							return <Text>Unknown type</Text>;
-					}
-				})()}
+				<Row
+					style={{
+						alignItems: "center",
+					}}
+				>
+					{helperText && (
+						<Popover
+							trigger={(triggerProps) => (
+								<Button
+									{...triggerProps}
+									color="gray.500"
+									leftIcon={
+										<Icon
+											as={Ionicons}
+											size={"md"}
+											name="help-circle-outline"
+										/>
+									}
+									variant="ghost"
+								/>
+							)}
+						>
+							<Popover.Content accessibilityLabel={`Additionnal information for ${title}`} style={{
+								maxWidth: isSmallScreen ? "90vw" : "20vw",
+							}}>
+								<Popover.Arrow />
+								<Popover.Body>{helperText}</Popover.Body>
+							</Popover.Content>
+						</Popover>
+					)}
+					{(() => {
+						switch (type) {
+							case "text":
+								return getElementTextNode(data as ElementTextProps);
+							case "toggle":
+								return getElementToggleNode(data as ElementToggleProps);
+							case "dropdown":
+								return getElementDropdownNode(data as ElementDropdownProps);
+							case "custom":
+								return node;
+							default:
+								return <Text>Unknown type</Text>;
+						}
+					})()}
+				</Row>
 			</Box>
 		</Row>
 	);

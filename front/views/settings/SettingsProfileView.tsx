@@ -36,6 +36,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const dispatch = useDispatch();
 	const [toggle, setToggle] = useState(false);
+	const [selectValue, setSelectValue] = useState("fr");
 
 	useEffect(() => {
 		API.getUserInfo().then((user) => {
@@ -74,7 +75,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 					style={{
 						marginTop: 20,
 						width: "90%",
-						maxWidth: 1000,
+						maxWidth: 850,
 					}}
 					elements={[
 						{
@@ -87,6 +88,9 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "text",
 							title: "Email",
+							onPress: () => {
+								console.log("Go to email settings");
+							},
 							data: {
 								text: user.email,
 							},
@@ -108,6 +112,8 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "text",
 							title: "XP",
+							description:
+								"XP is the experience points you get by playing games",
 							data: {
 								text: user.data.xp,
 							},
@@ -115,6 +121,8 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "text",
 							title: "Date de création",
+							helperText:
+								"La date de création est actuellement arbitraire car le serveur ne retourne pas cette information",
 							data: {
 								text: user.data.createdAt,
 							},
@@ -134,7 +142,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							type: "dropdown",
 							title: "Langue",
 							data: {
-								value: "fr",
+								value: selectValue,
 								options: [
 									{
 										label: "Français",
@@ -145,7 +153,10 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 										value: "en",
 									},
 								],
-								onSelect: (value) => console.log(value),
+								onSelect: (value) => {
+									console.log("select", value);
+									setSelectValue(value);
+								},
 							},
 						},
 					]}
