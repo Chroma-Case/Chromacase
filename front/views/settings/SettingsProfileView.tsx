@@ -98,6 +98,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "text",
 							title: "ID",
+							helperText: "This is your unique ID, be proud of it!",
 							data: {
 								text: user.id,
 							},
