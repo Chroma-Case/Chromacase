@@ -35,6 +35,7 @@ const getInitials = (name: string) => {
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const dispatch = useDispatch();
+	const [toggle, setToggle] = useState(false);
 
 	useEffect(() => {
 		API.getUserInfo().then((user) => {
@@ -110,6 +111,30 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							title: "Date de création",
 							text: user.data.createdAt,
 						},
+						{
+							type: "toggle",
+							title: "Notifications",
+							onToggle: (value) => {
+								console.log(value);
+								setToggle(value);
+							},
+							toggleValue: toggle,
+						},
+						{
+							type: "dropdown",
+							title: "Langue",
+							options: [
+								{
+									label: "Français",
+									value: "fr",
+								},
+								{
+									label: "English",
+									value: "en",
+								},
+							],
+							onSelect: (value) => console.log(value),
+						}
 					]}
 				/>
 			</Column>
