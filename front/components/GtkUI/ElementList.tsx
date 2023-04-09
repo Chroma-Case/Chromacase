@@ -124,9 +124,23 @@ const Element = ({
 				alignItems: "center",
 			}}
 		>
-			<Box>
+			<Box style={{
+				flexGrow: 1,
+			}}>
 				{icon}
-				<Text>{title}</Text>
+				<Column>
+				<Text isTruncated maxW={"95%"} >{title}</Text>
+				{description && (
+					<Text isTruncated maxW={"90%"}
+						style={{
+							opacity: 0.6,
+							fontSize: 12,
+						}}
+					>
+						{description}
+					</Text>
+				)}
+				</Column>
 			</Box>
 			<Box>
 				<Row
