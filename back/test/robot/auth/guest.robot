@@ -23,6 +23,36 @@ LoginAsGuest
 
     [Teardown]    DELETE    /auth/me
 
+TwoGuests
+    [Documentation]    Login as a guest
+    &{res}=    POST    /auth/guest
+    Output
+    Integer    response status    200
+    String    response body access_token
+    Set Headers    {"Authorization": "Bearer ${res.body.access_token}"}
+
+    GET    /auth/me
+    Output
+    Integer    response status    200
+    Boolean    response body isGuest    true
+    Integer    response body partyPlayed    0
+
+    &{res2}=    POST    /auth/guest
+    Output
+    Integer    response status    200
+    String    response body access_token
+    Set Headers    {"Authorization": "Bearer ${res2.body.access_token}"}
+
+    GET    /auth/me
+    Output
+    Integer    response status    200
+    Boolean    response body isGuest    true
+    Integer    response body partyPlayed    0
+
+    [Teardown]    Run Keywords    DELETE    /auth/me
+    ...    AND    Set Headers    {"Authorization": "Bearer ${res.body.access_token}"}
+    ...    AND    DELETE    /auth/me
+
 GuestToNormal
     [Documentation]    Login as a guest and convert to a normal account
     &{res}=    POST    /auth/guest
@@ -36,7 +66,7 @@ GuestToNormal
     Integer    response status    200
     Boolean    response body isGuest    true
 
-    ${res}=    PUT    /auth/me  { "username": "toto", "password": "toto", "email": "a@b.c"}
+    ${res}=    PUT    /auth/me    { "username": "toto", "password": "toto", "email": "a@b.c"}
     Output
     Integer    response status    200
     String    response body username    "toto"
