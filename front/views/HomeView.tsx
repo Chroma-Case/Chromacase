@@ -40,7 +40,7 @@ const HomeView = () => {
 					translationKey="welcome" format={(welcome) => `${welcome} ${userQuery.data.name}!`}
 				/>
 				<Box flex={1}>
-					<ProgressBar xp={userQuery.data.xp}/>
+					<ProgressBar xp={userQuery.data.data.xp}/>
 				</Box>
 			</Stack>
 		</Flex>
