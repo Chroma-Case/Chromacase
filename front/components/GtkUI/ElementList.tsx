@@ -10,39 +10,56 @@ type DropdownOption = {
 	value: string;
 };
 
-const getElementTypeNode = (
-	type: ElementType,
-	text?: string,
-	options?: DropdownOption[],
-	onToggle?: (value: boolean) => void,
-	toggleValue?: boolean,
-	defaultToggleValue?: boolean,
-	onSelect?: (value: string) => void
-): React.ReactNode => {
-	switch (type) {
-		case "text":
-			return (
-				<Text
-					style={{
-						opacity: 0.6,
-					}}
-				>
-					{text}
-				</Text>
-			);
-		case "toggle":
-			return (
-				<Switch
-					onToggle={onToggle}
-					isChecked={toggleValue ?? false}
-					defaultIsChecked={defaultToggleValue}
-				/>
-			);
-		case "dropdown":
-			return <Text>Dropdown</Text>;
-		default:
-			return <Text>Default</Text>;
-	}
+type ElementTextProps = {
+	text: string;
+};
+
+type ElementToggleProps = {
+	onToggle: (value: boolean) => void;
+	value: boolean;
+	defaultValue?: boolean;
+};
+
+type ElementDropdownProps = {
+	options: DropdownOption[];
+	onSelect: (value: string) => void;
+	value: string;
+	defaultValue?: string;
+};
+
+const getElementTextNode = ({ text, type }: ElementTextProps) => {
+	return (
+		<Text
+			style={{
+				opacity: 0.6,
+			}}
+		>
+			{text}
+		</Text>
+	);
+};
+
+const getElementToggleNode = ({
+	onToggle,
+	value,
+	defaultValue,
+}: ElementToggleProps) => {
+	return (
+		<Switch
+			onToggle={onToggle}
+			isChecked={value ?? false}
+			defaultIsChecked={defaultValue}
+		/>
+	);
+};
+
+const getElementDropdownNode = ({
+	options,
+	onSelect,
+	value,
+	defaultValue,
+}: ElementDropdownProps) => {
+	return <Text>Dropdown</Text>;
 };
 
 type ElementProps = {
@@ -54,12 +71,7 @@ type ElementProps = {
 	onPress?: () => void;
 	// node is only used if type is "custom"
 	node?: React.ReactNode;
-	onToggle?: (value: boolean) => void;
-	toggleValue?: boolean;
-	defaultToggleValue?: boolean;
-	text?: string;
-	options?: DropdownOption[];
-	onSelect?: (value: string) => void;
+	data?: ElementTextProps | ElementToggleProps | ElementDropdownProps;
 };
 
 const Element = ({
@@ -70,12 +82,7 @@ const Element = ({
 	disabled,
 	onPress,
 	node,
-	onToggle,
-	toggleValue,
-	defaultToggleValue,
-	text,
-	options,
-	onSelect,
+	data,
 }: ElementProps) => {
 	return (
 		<Row
@@ -92,17 +99,20 @@ const Element = ({
 				<Text>{title}</Text>
 			</Box>
 			<Box>
-				{type === "custom"
-					? node
-					: getElementTypeNode(
-							type ?? "default",
-							text,
-							options,
-							onToggle,
-							toggleValue,
-							defaultToggleValue,
-							onSelect
-					  )}
+				{(() => {
+					switch (type) {
+						case "text":
+							return getElementTextNode(data as ElementTextProps);
+						case "toggle":
+							return getElementToggleNode(data as ElementToggleProps);
+						case "dropdown":
+							return getElementDropdownNode(data as ElementDropdownProps);
+						case "custom":
+							return node;
+						default:
+							return <Text>Unknown type</Text>;
+					}
+				})()}
 			</Box>
 		</Row>
 	);
