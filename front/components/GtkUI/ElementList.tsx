@@ -14,7 +14,7 @@ const getElementTypeNode = (
 	switch (type) {
 		case "text":
 			return <Text style={{
-				color: "rgba(0, 0, 0, 0.6)",
+				opacity: 0.6,
 			}}>{text}</Text>;
 		case "toggle":
 			return <Text>Toggle</Text>;
@@ -78,13 +78,15 @@ type ElementListProps = {
 };
 
 const ElementList = ({ elements, style }: ElementListProps) => {
+
+	const elementStyle = {
+		borderRadius: 10,
+		boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.4)",
+	};
+
 	return (
 		<Column
-			style={{
-				borderRadius: 10,
-				boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.4)",
-				...style,
-			}}
+			style={[style, elementStyle]}
 		>
 			{(() => {
 				const elementsWithDividers = [];
