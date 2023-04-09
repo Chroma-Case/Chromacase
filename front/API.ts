@@ -140,7 +140,6 @@ export default class API {
 			route: "/auth/guest",
 			method: "POST",
 		});
-		if (!response.ok) throw new APIError("Error while creating guest account", response.status, "guestAccountCreationError");
 		if (!response.access_token) throw new APIError("No access token", response.status);
 		return response.access_token;
 	}
