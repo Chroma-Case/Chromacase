@@ -163,6 +163,7 @@ export default class API {
 			data: {
 				partyPlayed: user.partyPlayed as number,
 				xp: 0,
+				createdAt: "9 avril 2023",
 				avatar:
 					"https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn",
 			},
