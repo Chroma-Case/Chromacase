@@ -1,23 +1,43 @@
 import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 
-import { Box, Center, Column, Row, Text, Divider } from "native-base";
+import { Box, Center, Column, Row, Text, Divider, Switch } from "native-base";
 
 type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown";
+
+type DropdownOption = {
+	label: string;
+	value: string;
+};
 
 const getElementTypeNode = (
 	type: ElementType,
 	text?: string,
-	dropdownItems?: string[],
-	onToggle?: (value: boolean) => void
+	options?: DropdownOption[],
+	onToggle?: (value: boolean) => void,
+	toggleValue?: boolean,
+	defaultToggleValue?: boolean,
+	onSelect?: (value: string) => void
 ): React.ReactNode => {
 	switch (type) {
 		case "text":
-			return <Text style={{
-				opacity: 0.6,
-			}}>{text}</Text>;
+			return (
+				<Text
+					style={{
+						opacity: 0.6,
+					}}
+				>
+					{text}
+				</Text>
+			);
 		case "toggle":
-			return <Text>Toggle</Text>;
+			return (
+				<Switch
+					onToggle={onToggle}
+					isChecked={toggleValue ?? false}
+					defaultIsChecked={defaultToggleValue}
+				/>
+			);
 		case "dropdown":
 			return <Text>Dropdown</Text>;
 		default:
@@ -35,7 +55,11 @@ type ElementProps = {
 	// node is only used if type is "custom"
 	node?: React.ReactNode;
 	onToggle?: (value: boolean) => void;
+	toggleValue?: boolean;
+	defaultToggleValue?: boolean;
 	text?: string;
+	options?: DropdownOption[];
+	onSelect?: (value: string) => void;
 };
 
 const Element = ({
@@ -47,7 +71,11 @@ const Element = ({
 	onPress,
 	node,
 	onToggle,
+	toggleValue,
+	defaultToggleValue,
 	text,
+	options,
+	onSelect,
 }: ElementProps) => {
 	return (
 		<Row
@@ -66,7 +94,15 @@ const Element = ({
 			<Box>
 				{type === "custom"
 					? node
-					: getElementTypeNode(type ?? "default", text, undefined, onToggle)}
+					: getElementTypeNode(
+							type ?? "default",
+							text,
+							options,
+							onToggle,
+							toggleValue,
+							defaultToggleValue,
+							onSelect
+					  )}
 			</Box>
 		</Row>
 	);
@@ -78,16 +114,13 @@ type ElementListProps = {
 };
 
 const ElementList = ({ elements, style }: ElementListProps) => {
-
 	const elementStyle = {
 		borderRadius: 10,
 		boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.4)",
 	};
 
 	return (
-		<Column
-			style={[style, elementStyle]}
-		>
+		<Column style={[style, elementStyle]}>
 			{(() => {
 				const elementsWithDividers = [];
 				for (let i = 0; i < elements.length; i++) {
