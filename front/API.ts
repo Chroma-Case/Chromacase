@@ -33,9 +33,9 @@ export class APIError extends Error {
 	constructor(
 		message: string,
 		public status: number,
-		// Set the message to the correct error this is a placeholder 
+		// Set the message to the correct error this is a placeholder
 		// when the error is only used internally (middleman)
-		public userMessage : keyof typeof en = "unknownError"
+		public userMessage: keyof typeof en = "unknownError"
 	) {
 		super(message);
 	}
@@ -54,7 +54,8 @@ const dummyIllustrations = [
 	"https://upload.wikimedia.org/wikipedia/en/b/ba/David_Guetta_2U.jpg",
 ];
 
-const getDummyIllustration = () => dummyIllustrations[Math.floor(Math.random() * dummyIllustrations.length)];
+const getDummyIllustration = () =>
+	dummyIllustrations[Math.floor(Math.random() * dummyIllustrations.length)];
 
 // we will need the same thing for the scorometer API url
 const baseAPIUrl =
@@ -63,7 +64,6 @@ const baseAPIUrl =
 		: Constants.manifest?.extra?.apiUrl;
 
 export default class API {
-
 	public static async fetch(params: FetchParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
@@ -110,7 +110,8 @@ export default class API {
 			.catch((e) => {
 				if (!(e instanceof APIError)) throw e;
 
-				if (e.status == 401) throw new APIError("invalidCredentials", 401, "invalidCredentials");
+				if (e.status == 401)
+					throw new APIError("invalidCredentials", 401, "invalidCredentials");
 				throw e;
 			});
 	}
@@ -127,7 +128,7 @@ export default class API {
 			body: registrationInput,
 			method: "POST",
 		});
-		// In the Future we should move autheticate out of this function 
+		// In the Future we should move autheticate out of this function
 		// and maybe create a new function to create and login in one go
 		return API.authenticate({
 			username: registrationInput.username,
@@ -140,7 +141,8 @@ export default class API {
 			route: "/auth/guest",
 			method: "POST",
 		});
-		if (!response.access_token) throw new APIError("No access token", response.status);
+		if (!response.access_token)
+			throw new APIError("No access token", response.status);
 		return response.access_token;
 	}
 
@@ -148,14 +150,8 @@ export default class API {
 	 * Retrieve information of the currently authentified user
 	 */
 	public static async getUserInfo(): Promise<User> {
-		let me = await API.fetch({
-			route: "/auth/me",
-		});
-
-		// /auth/me only returns username and id (it needs to be changed)
-
 		let user = await API.fetch({
-			route: `/users/${me.id}`,
+			route: "/auth/me",
 		});
 
 		// this a dummy settings object, we will need to fetch the real one from the API
@@ -163,10 +159,12 @@ export default class API {
 			id: user.id as number,
 			name: (user.username ?? user.name) as string,
 			email: user.email as string,
-			xp: 0,
 			premium: false,
-			metrics: {
+			data: {
 				partyPlayed: user.partyPlayed as number,
+				xp: 0,
+				avatar:
+					"https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn",
 			},
 			settings: {
 				preferences: {
@@ -217,16 +215,19 @@ export default class API {
 		});
 
 		// this is a dummy illustration, we will need to fetch the real one from the API
-		return songs.data.map((song: any) => ({
-			id: song.id as number,
-			name: song.name as string,
-			artistId: song.artistId as number,
-			albumId: song.albumId as number,
-			genreId: song.genreId as number,
-			details: song.difficulties,
-			cover: getDummyIllustration(),
-			metrics: {},
-		} as Song));
+		return songs.data.map(
+			(song: any) =>
+				({
+					id: song.id as number,
+					name: song.name as string,
+					artistId: song.artistId as number,
+					albumId: song.albumId as number,
+					genreId: song.genreId as number,
+					details: song.difficulties,
+					cover: getDummyIllustration(),
+					metrics: {},
+				} as Song)
+		);
 	}
 
 	/**
@@ -247,7 +248,6 @@ export default class API {
 			genreId: song.genreId as number,
 			details: song.difficulties,
 			cover: getDummyIllustration(),
-			metrics: {},
 		} as Song;
 	}
 	/**
@@ -316,7 +316,7 @@ export default class API {
 	 */
 	public static async searchSongs(query: string): Promise<Song[]> {
 		return API.fetch({
-			route: `/search/guess/song/${query}`
+			route: `/search/guess/song/${query}`,
 		});
 	}
 
@@ -340,7 +340,10 @@ export default class API {
 	 */
 	public static async getSearchHistory(): Promise<Song[]> {
 		const queryClient = new QueryClient();
-		let songs = await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
+		let songs = await queryClient.fetchQuery(
+			["API", "allsongs"],
+			API.getAllSongs
+		);
 		const shuffled = [...songs].sort(() => 0.5 - Math.random());
 
 		return shuffled.slice(0, 2);
@@ -359,7 +362,10 @@ export default class API {
 	 */
 	public static async getUserPlayHistory(): Promise<Song[]> {
 		const queryClient = new QueryClient();
-		let songs = await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
+		let songs = await queryClient.fetchQuery(
+			["API", "allsongs"],
+			API.getAllSongs
+		);
 		const shuffled = [...songs].sort(() => 0.5 - Math.random());
 
 		return shuffled.slice(0, 3);
@@ -447,7 +453,10 @@ export default class API {
 		return rep;
 	}
 
-	public static async updateUserPassword(oldPassword: string, newPassword: string): Promise<User> {
+	public static async updateUserPassword(
+		oldPassword: string,
+		newPassword: string
+	): Promise<User> {
 		const rep = await API.fetch({
 			route: "/auth/me",
 			method: "PUT",
@@ -461,5 +470,5 @@ export default class API {
 			throw new Error(rep.error);
 		}
 		return rep;
-	};
+	}
 }
