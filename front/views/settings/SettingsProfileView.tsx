@@ -15,12 +15,14 @@ import {
 	Center,
 	Heading,
 	Avatar,
+	Popover,
 } from "native-base";
 import { FontAwesome5 } from "@expo/vector-icons";
 import User from "../../models/User";
 import TextButton from "../../components/TextButton";
 import LoadingComponent from "../../components/Loading";
 import ElementList from "../../components/GtkUI/ElementList";
+import { translate } from "../../i18n/i18n";
 
 const getInitials = (name: string) => {
 	const names = name.split(" ");
@@ -92,7 +94,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 								console.log("Go to email settings");
 							},
 							data: {
-								text: user.email,
+								text: user.email || "Aucun email associé",
 							},
 						},
 						{
@@ -164,12 +166,56 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				/>
 			</Column>
 
-			<TextButton
-				onPress={() => dispatch(unsetAccessToken())}
-				translate={{
-					translationKey: "signOutBtn",
-				}}
-			/>
+			<Box mt={10}>
+				{!user.isGuest && (
+					<TextButton
+						onPress={() => dispatch(unsetAccessToken())}
+						translate={{
+							translationKey: "signOutBtn",
+						}}
+					/>
+				)}
+				{user.isGuest && (
+					<Popover
+						trigger={(triggerProps) => (
+							<Button {...triggerProps}>{translate("signOutBtn")}</Button>
+						)}
+					>
+						<Popover.Content>
+							<Popover.Arrow />
+							<Popover.Body>
+								<Heading size="md" mb={2}>
+									Attention
+								</Heading>
+								<Text>
+									Vous êtes connecté avec un compte invité temporaire, si vous
+									vous déconnectez, vous perdrez vos données.
+								</Text>
+								<Text>
+									Vous pouvez sauvegarder votre progression en transférant votre
+									compte invité vers un compte classique.
+								</Text>
+								<Button.Group variant="ghost" space={2}>
+									<Button
+										onPress={() => dispatch(unsetAccessToken())}
+										colorScheme="red"
+									>
+										Déconnexion
+									</Button>
+									<Button
+										onPress={() => {
+											navigation.navigate("SignUp");
+										}}
+										colorScheme="green"
+									>
+										Créer un compte
+									</Button>
+								</Button.Group>
+							</Popover.Body>
+						</Popover.Content>
+					</Popover>
+				)}
+			</Box>
 		</Flex>
 	);
 };
