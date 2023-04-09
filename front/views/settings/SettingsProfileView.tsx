@@ -35,7 +35,7 @@ const getInitials = (name: string) => {
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
 	const [user, setUser] = useState<User | null>(null);
 	const dispatch = useDispatch();
-	const [toggle, setToggle] = useState(false);
+	const [toggle, setToggle] = useState(true);
 	const [selectValue, setSelectValue] = useState("fr");
 
 	useEffect(() => {

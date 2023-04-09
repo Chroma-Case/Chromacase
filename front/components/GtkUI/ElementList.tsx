@@ -42,11 +42,11 @@ type ElementDropdownProps = {
 	defaultValue?: string;
 };
 
-const getElementTextNode = ({ text }: ElementTextProps) => {
+const getElementTextNode = ({ text }: ElementTextProps, disabled: boolean) => {
 	return (
 		<Text
 			style={{
-				opacity: 0.6,
+				opacity: disabled ? 0.4 : 0.6,
 			}}
 		>
 			{text}
@@ -54,32 +54,31 @@ const getElementTextNode = ({ text }: ElementTextProps) => {
 	);
 };
 
-const getElementToggleNode = ({
-	onToggle,
-	value,
-	defaultValue,
-}: ElementToggleProps) => {
+const getElementToggleNode = (
+	{ onToggle, value, defaultValue }: ElementToggleProps,
+	disabled: boolean
+) => {
 	return (
 		<Switch
 			onToggle={onToggle}
 			isChecked={value ?? false}
 			defaultIsChecked={defaultValue}
+			disabled={disabled}
 		/>
 	);
 };
 
-const getElementDropdownNode = ({
-	options,
-	onSelect,
-	value,
-	defaultValue,
-}: ElementDropdownProps) => {
+const getElementDropdownNode = (
+	{ options, onSelect, value, defaultValue }: ElementDropdownProps,
+	disabled: boolean
+) => {
 	return (
 		<Select
 			selectedValue={value}
 			onValueChange={onSelect}
 			defaultValue={defaultValue}
 			variant="filled"
+			isDisabled={disabled}
 		>
 			{options.map((option) => (
 				<Select.Item label={option.label} value={option.value} />
@@ -124,22 +123,29 @@ const Element = ({
 				alignItems: "center",
 			}}
 		>
-			<Box style={{
-				flexGrow: 1,
-			}}>
+			<Box
+				style={{
+					flexGrow: 1,
+					opacity: disabled ? 0.6 : 1,
+				}}
+			>
 				{icon}
 				<Column>
-				<Text isTruncated maxW={"95%"} >{title}</Text>
-				{description && (
-					<Text isTruncated maxW={"90%"}
-						style={{
-							opacity: 0.6,
-							fontSize: 12,
-						}}
-					>
-						{description}
+					<Text isTruncated maxW={"95%"}>
+						{title}
 					</Text>
-				)}
+					{description && (
+						<Text
+							isTruncated
+							maxW={"90%"}
+							style={{
+								opacity: 0.6,
+								fontSize: 12,
+							}}
+						>
+							{description}
+						</Text>
+					)}
 				</Column>
 			</Box>
 			<Box>
@@ -165,9 +171,12 @@ const Element = ({
 								/>
 							)}
 						>
-							<Popover.Content accessibilityLabel={`Additionnal information for ${title}`} style={{
-								maxWidth: isSmallScreen ? "90vw" : "20vw",
-							}}>
+							<Popover.Content
+								accessibilityLabel={`Additionnal information for ${title}`}
+								style={{
+									maxWidth: isSmallScreen ? "90vw" : "20vw",
+								}}
+							>
 								<Popover.Arrow />
 								<Popover.Body>{helperText}</Popover.Body>
 							</Popover.Content>
@@ -176,11 +185,20 @@ const Element = ({
 					{(() => {
 						switch (type) {
 							case "text":
-								return getElementTextNode(data as ElementTextProps);
+								return getElementTextNode(
+									data as ElementTextProps,
+									disabled ?? false
+								);
 							case "toggle":
-								return getElementToggleNode(data as ElementToggleProps);
+								return getElementToggleNode(
+									data as ElementToggleProps,
+									disabled ?? false
+								);
 							case "dropdown":
-								return getElementDropdownNode(data as ElementDropdownProps);
+								return getElementDropdownNode(
+									data as ElementDropdownProps,
+									disabled ?? false
+								);
 							case "custom":
 								return node;
 							default:
