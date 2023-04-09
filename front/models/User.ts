@@ -1,4 +1,4 @@
-import Metrics from "./Metrics";
+import UserData from "./UserData";
 import Model from "./Model";
 import UserSettings from "./UserSettings";
 
@@ -6,9 +6,8 @@ interface User extends Model {
 	name: string;
 	email: string;
 	isGuest: boolean;
-	xp: number;
 	premium: boolean;
-	metrics: Metrics;
+	data: UserData;
 	settings: UserSettings;
 }
 

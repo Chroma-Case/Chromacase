@@ -3,9 +3,33 @@ import { useDispatch } from "react-redux";
 import { unsetAccessToken } from "../../state/UserSlice";
 
 import React, { useEffect, useState } from "react";
-import { Column, Text, Button, Icon, Box, Center, Heading } from "native-base";
+import {
+	Column,
+	Text,
+	Button,
+	Icon,
+	Box,
+	IconButton,
+	Flex,
+	Row,
+	Center,
+	Heading,
+	Avatar,
+} from "native-base";
+import { FontAwesome5 } from "@expo/vector-icons";
 import User from "../../models/User";
 import TextButton from "../../components/TextButton";
+import LoadingComponent from "../../components/Loading";
+
+const getInitials = (name: string) => {
+	const names = name.split(" ");
+	if (names.length === 1) return names[0]?.charAt(0);
+	let initials = [];
+	for (let i = 0; i < names.length; i++) {
+		initials.push(names[i]?.charAt(0));
+	}
+	return initials.join("");
+};
 
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
 	const [user, setUser] = useState<User | null>(null);
@@ -17,25 +41,65 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 		});
 	}, []);
 
+	if (!user) {
+		return (
+			<Center style={{ flex: 1 }}>
+				<LoadingComponent />
+			</Center>
+		);
+	}
+
 	return (
-		<Center style={{ flex: 1}}>
-			{user && (
-				<Column>
-					<Heading>Profile Settings</Heading>
+		<Flex
+			style={{
+				flex: 1,
+				alignItems: "center",
+				paddingTop: 40,
+			}}
+		>
+			<Column>
+				<Center>
+					<Avatar size="2xl" source={{ uri: user.data.avatar }}>
+						{getInitials(user.name)}
+						<Avatar.Badge bg="gray.300" size={35}>
+							<IconButton size={"sm"} icon={<Icon as={FontAwesome5} name="edit" />} />
+						</Avatar.Badge>
+					</Avatar>
+				</Center>
+				<Row
+					style={{
+						paddingTop: 20,
+						alignItems: "center",
+					}}
+				>
+					<Heading>{user.name}</Heading>
+					<Button
+						ml={2}
+						size="sm"
+						leftIcon={<Icon as={FontAwesome5} name="edit" size="sm" />}
+						variant="ghost"
+						colorScheme="primary"
+						style={{
+							borderRadius: 10,
+						}}
+					></Button>
+				</Row>
 
-					<Text>Username: {user.name}</Text>
-					<Text>ID: {user.id}</Text>
-					<Text>Email: {user.email}</Text>
-					<Text>Party played: {user.metrics.partyPlayed}</Text>
+				<Text>Username: {user.name}</Text>
+				<Text>ID: {user.id}</Text>
+				<Text>Email: {user.email}</Text>
+				<Text>Party played: {user.data.partyPlayed}</Text>
 
-					<Text>XP: {user.xp}</Text>
-				</Column>
-			)}
+				<Text>XP: {user.data.xp}</Text>
+			</Column>
 
-			<TextButton onPress={() => dispatch(unsetAccessToken())} translate={{
-                translationKey: "signOutBtn",
-            }} />
-		</Center>
+			<TextButton
+				onPress={() => dispatch(unsetAccessToken())}
+				translate={{
+					translationKey: "signOutBtn",
+				}}
+			/>
+		</Flex>
 	);
 };
 
