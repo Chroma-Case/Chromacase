@@ -20,6 +20,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import User from "../../models/User";
 import TextButton from "../../components/TextButton";
 import LoadingComponent from "../../components/Loading";
+import ElementList from "../../components/GtkUI/ElementList";
 
 const getInitials = (name: string) => {
 	const names = name.split(" ");
@@ -62,7 +63,10 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 					<Avatar size="2xl" source={{ uri: user.data.avatar }}>
 						{getInitials(user.name)}
 						<Avatar.Badge bg="gray.300" size={35}>
-							<IconButton size={"sm"} icon={<Icon as={FontAwesome5} name="edit" />} />
+							<IconButton
+								size={"sm"}
+								icon={<Icon as={FontAwesome5} name="edit" />}
+							/>
 						</Avatar.Badge>
 					</Avatar>
 				</Center>
@@ -91,6 +95,31 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				<Text>Party played: {user.data.partyPlayed}</Text>
 
 				<Text>XP: {user.data.xp}</Text>
+
+				<ElementList
+					elements={[
+						{
+							title: "Username",
+							node: <Text>{user.name}</Text>,
+						},
+						{
+							title: "ID",
+							node: <Text>{user.id}</Text>,
+						},
+						{
+							title: "Email",
+							node: <Text>{user.email}</Text>,
+						},
+						{
+							title: "Party played",
+							node: <Text>{user.data.partyPlayed}</Text>,
+						},
+						{
+							title: "XP",
+							node: <Text>{user.data.xp}</Text>,
+						},
+					]}
+				/>
 			</Column>
 
 			<TextButton
