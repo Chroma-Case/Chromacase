@@ -58,7 +58,10 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				paddingTop: 40,
 			}}
 		>
-			<Column>
+			<Column style={{
+				width: "100%",
+				alignItems: "center",
+			}}>
 				<Center>
 					<Avatar size="2xl" source={{ uri: user.data.avatar }}>
 						{getInitials(user.name)}
@@ -70,25 +73,12 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						</Avatar.Badge>
 					</Avatar>
 				</Center>
-				<Row
-					style={{
-						paddingTop: 20,
-						alignItems: "center",
-					}}
-				>
-					<Heading>{user.name}</Heading>
-					<Button
-						ml={2}
-						size="sm"
-						leftIcon={<Icon as={FontAwesome5} name="edit" size="sm" />}
-						variant="ghost"
-						colorScheme="primary"
-						style={{
-							borderRadius: 10,
-						}}
-					></Button>
-				</Row>
 				<ElementList
+					style={{
+						marginTop: 20,
+						width: "90%",
+						maxWidth: 1000,
+					}}
 					elements={[
 						{
 							type: "text",
@@ -119,7 +109,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							type: "text",
 							title: "Date de création",
 							text: user.data.createdAt,
-						}
+						},
 					]}
 				/>
 			</Column>
