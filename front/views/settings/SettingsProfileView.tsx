@@ -88,36 +88,38 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						}}
 					></Button>
 				</Row>
-
-				<Text>Username: {user.name}</Text>
-				<Text>ID: {user.id}</Text>
-				<Text>Email: {user.email}</Text>
-				<Text>Party played: {user.data.partyPlayed}</Text>
-
-				<Text>XP: {user.data.xp}</Text>
-
 				<ElementList
 					elements={[
 						{
+							type: "text",
 							title: "Username",
-							node: <Text>{user.name}</Text>,
+							text: user.name,
 						},
 						{
-							title: "ID",
-							node: <Text>{user.id}</Text>,
-						},
-						{
+							type: "text",
 							title: "Email",
-							node: <Text>{user.email}</Text>,
+							text: user.email,
 						},
 						{
+							type: "text",
+							title: "ID",
+							text: user.id,
+						},
+						{
+							type: "text",
 							title: "Party played",
-							node: <Text>{user.data.partyPlayed}</Text>,
+							text: user.data.partyPlayed,
 						},
 						{
+							type: "text",
 							title: "XP",
-							node: <Text>{user.data.xp}</Text>,
+							text: user.data.xp,
 						},
+						{
+							type: "text",
+							title: "Date de création",
+							text: user.data.createdAt,
+						}
 					]}
 				/>
 			</Column>

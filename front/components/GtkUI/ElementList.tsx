@@ -3,16 +3,52 @@ import { StyleProp, ViewStyle } from "react-native";
 
 import { Box, Center, Column, Row, Text, Divider } from "native-base";
 
+type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown";
+
+const getElementTypeNode = (
+	type: ElementType,
+	text?: string,
+	dropdownItems?: string[],
+	onToggle?: (value: boolean) => void
+): React.ReactNode => {
+	switch (type) {
+		case "text":
+			return <Text style={{
+				color: "rgba(0, 0, 0, 0.6)",
+			}}>{text}</Text>;
+		case "toggle":
+			return <Text>Toggle</Text>;
+		case "dropdown":
+			return <Text>Dropdown</Text>;
+		default:
+			return <Text>Default</Text>;
+	}
+};
+
 type ElementProps = {
 	title: string;
 	icon?: React.ReactNode;
+	type?: ElementType | "custom";
+	helperText?: string;
 	disabled?: boolean;
 	onPress?: () => void;
 	// node is only used if type is "custom"
 	node?: React.ReactNode;
+	onToggle?: (value: boolean) => void;
+	text?: string;
 };
 
-const Element = ({ title, icon, disabled, onPress, node }: ElementProps) => {
+const Element = ({
+	title,
+	icon,
+	type,
+	helperText,
+	disabled,
+	onPress,
+	node,
+	onToggle,
+	text,
+}: ElementProps) => {
 	return (
 		<Row
 			style={{
@@ -27,7 +63,11 @@ const Element = ({ title, icon, disabled, onPress, node }: ElementProps) => {
 				{icon}
 				<Text>{title}</Text>
 			</Box>
-			<Box>{node}</Box>
+			<Box>
+				{type === "custom"
+					? node
+					: getElementTypeNode(type ?? "default", text, undefined, onToggle)}
+			</Box>
 		</Row>
 	);
 };
