@@ -160,6 +160,7 @@ export default class API {
 			name: (user.username ?? user.name) as string,
 			email: user.email as string,
 			premium: false,
+			isGuest: user.isGuest as boolean,
 			data: {
 				partyPlayed: user.partyPlayed as number,
 				xp: 0,
