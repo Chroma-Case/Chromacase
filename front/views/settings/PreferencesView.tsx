@@ -184,6 +184,15 @@ const PreferencesView = ({ navigation }) => {
 							],
 						},
 					},
+				]}
+			/>
+			<ElementList
+				style={{
+					marginTop: 20,
+					width: "90%",
+					maxWidth: 850,
+				}}
+				elements={[
 					{
 						type: "toggle",
 						title: "Color blind mode",
@@ -194,6 +203,15 @@ const PreferencesView = ({ navigation }) => {
 							},
 						},
 					},
+				]}
+			/>
+			<ElementList
+				style={{
+					marginTop: 20,
+					width: "90%",
+					maxWidth: 850,
+				}}
+				elements={[
 					{
 						type: "range",
 						title: "Mic volume",
