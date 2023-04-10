@@ -16,9 +16,11 @@ import {
 	getElementDropdownNode,
 	getElementTextNode,
 	getElementToggleNode,
+	getElementRangeNode,
 	ElementDropdownProps,
 	ElementTextProps,
 	ElementToggleProps,
+	ElementRangeProps
 } from "./ElementTypes";
 
 type RawElementProps = {
@@ -117,6 +119,12 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 								return getElementDropdownNode(
 									data as ElementDropdownProps,
 									disabled ?? false
+								);
+							case "range":
+								return getElementRangeNode(
+									data as ElementRangeProps,
+									disabled ?? false,
+									title
 								);
 							case "custom":
 								return data as React.ReactNode;
