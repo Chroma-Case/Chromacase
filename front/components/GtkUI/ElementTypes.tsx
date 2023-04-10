@@ -109,8 +109,11 @@ export const getElementRangeNode = (
 ) => {
     return (
         <Slider
-            value={value}
-            defaultValue={defaultValue}
+            // this is a hot fix for now but ideally this input should be managed
+            // by the value prop and not the defaultValue prop but it requires the
+            // caller to manage the state of the continuous value which is not ideal
+            defaultValue={value}
+            // defaultValue={defaultValue}
             minValue={min}
             maxValue={max}
             step={step}
