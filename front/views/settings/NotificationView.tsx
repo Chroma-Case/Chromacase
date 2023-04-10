@@ -34,7 +34,7 @@ const NotificationsView = ({ navigation }) => {
 			<ElementList
 				style={{
 					marginTop: 20,
-					width: "100%",
+					width: "90%",
 					maxWidth: 850,
 				}}
 				elements={[
