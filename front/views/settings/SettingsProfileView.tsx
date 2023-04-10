@@ -85,6 +85,9 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							title: "Username",
 							data: {
 								text: user.name,
+								onPress: () => {
+									console.log("Go to username settings");
+								},
 							},
 						},
 						{
@@ -97,6 +100,16 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 								},
 							},
 						},
+					]}
+				/>
+
+				<ElementList
+					style={{
+						marginTop: 20,
+						width: "90%",
+						maxWidth: 850,
+					}}
+					elements={[
 						{
 							type: "text",
 							title: "ID",
