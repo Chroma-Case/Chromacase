@@ -26,7 +26,7 @@ export type ElementDropdownProps = {
 };
 
 export type ElementRangeProps = {
-    onValueChange: (value: number) => void;
+    onChange: (value: number) => void;
     value: number;
     defaultValue?: number;
     min: number;
@@ -103,7 +103,7 @@ export const getElementDropdownNode = (
 };
 
 export const getElementRangeNode = (
-    { onValueChange, value, defaultValue, min, max, step }: ElementRangeProps,
+    { onChange, value, defaultValue, min, max, step }: ElementRangeProps,
     disabled: boolean,
     title: string,
 ) => {
@@ -115,7 +115,7 @@ export const getElementRangeNode = (
             maxValue={max}
             step={step}
             isDisabled={disabled}
-            onChangeEnd={onValueChange}
+            onChangeEnd={onChange}
             accessibilityLabel={`Slider for ${title}`}
         >
             <Slider.Track>
