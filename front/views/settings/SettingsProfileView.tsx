@@ -96,7 +96,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							data: {
 								text: user.email || "Aucun email associé",
 								onPress: () => {
-									console.log("Go to email settings");
+									navigation.navigate("ChangeEmail");
 								},
 							},
 						},
