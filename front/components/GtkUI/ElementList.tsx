@@ -1,30 +1,25 @@
 import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
-import IconButton from "../IconButton";
-import { Ionicons } from "@expo/vector-icons";
-import { RawElement } from "./RawElement";
 import { Element } from "./Element";
 
 import {
+	ElementTextProps,
+	ElementToggleProps,
+	ElementDropdownProps,
+	ElementRangeProps,
+	ElementType,
+} from "./ElementTypes";
+
+import {
 	Box,
-	Center,
-	Button,
 	Column,
-	Row,
-	Icon,
-	Text,
 	Divider,
-	Switch,
-	Popover,
-	Pressable,
-	useBreakpointValue,
-	Select,
 } from "native-base";
 
 export type ElementProps = {
 	title: string;
 	icon?: React.ReactNode;
-	type?: ElementType | "custom";
+	type?: ElementType;
 	helperText?: string;
 	description?: string;
 	disabled?: boolean;
@@ -32,6 +27,7 @@ export type ElementProps = {
 		| ElementTextProps
 		| ElementToggleProps
 		| ElementDropdownProps
+		| ElementRangeProps
 		| React.ReactNode;
 };
 

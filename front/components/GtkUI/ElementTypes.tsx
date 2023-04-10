@@ -1,6 +1,6 @@
-import { Select, Switch, Text, Icon, Row } from "native-base";
+import { Select, Switch, Text, Icon, Row, Slider } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
-export type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown";
+export type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown" | "range";
 
 export type DropdownOption = {
 	label: string;
@@ -24,6 +24,15 @@ export type ElementDropdownProps = {
 	value: string;
 	defaultValue?: string;
 };
+
+export type ElementRangeProps = {
+    onValueChange: (value: number) => void;
+    value: number;
+    defaultValue?: number;
+    min: number;
+    max: number;
+    step?: number;
+}
 
 export const getElementTextNode = (
 	{ text, onPress }: ElementTextProps,
@@ -92,3 +101,27 @@ export const getElementDropdownNode = (
 		</Select>
 	);
 };
+
+export const getElementRangeNode = (
+    { onValueChange, value, defaultValue, min, max, step }: ElementRangeProps,
+    disabled: boolean,
+    title: string,
+) => {
+    return (
+        <Slider
+            value={value}
+            defaultValue={defaultValue}
+            minValue={min}
+            maxValue={max}
+            step={step}
+            isDisabled={disabled}
+            onChangeEnd={onValueChange}
+            accessibilityLabel={`Slider for ${title}`}
+        >
+            <Slider.Track>
+                <Slider.FilledTrack />
+            </Slider.Track>
+            <Slider.Thumb />
+        </Slider>
+    )
+}
