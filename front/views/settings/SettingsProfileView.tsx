@@ -82,16 +82,6 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 					elements={[
 						{
 							type: "text",
-							title: "Username",
-							data: {
-								text: user.name,
-								onPress: () => {
-									console.log("Go to username settings");
-								},
-							},
-						},
-						{
-							type: "text",
 							title: "Email",
 							data: {
 								text: user.email || "Aucun email associé",
@@ -110,6 +100,13 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						maxWidth: 850,
 					}}
 					elements={[
+						{
+							type: "text",
+							title: "Username",
+							data: {
+								text: user.name,
+							},
+						},
 						{
 							type: "text",
 							title: "ID",
@@ -141,39 +138,6 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 								"La date de création est actuellement arbitraire car le serveur ne retourne pas cette information",
 							data: {
 								text: user.data.createdAt,
-							},
-						},
-						{
-							type: "toggle",
-							title: "Notifications",
-							disabled: true,
-							data: {
-								value: toggle,
-								onToggle: () => {
-									console.log("toggle", toggle);
-									setToggle(!toggle);
-								},
-							},
-						},
-						{
-							type: "dropdown",
-							title: "Langue",
-							data: {
-								value: selectValue,
-								options: [
-									{
-										label: "Français",
-										value: "fr",
-									},
-									{
-										label: "English",
-										value: "en",
-									},
-								],
-								onSelect: (value) => {
-									console.log("select", value);
-									setSelectValue(value);
-								},
 							},
 						},
 					]}
