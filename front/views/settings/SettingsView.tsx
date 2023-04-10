@@ -14,6 +14,7 @@ import { FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ProfileSettings from './SettingsProfileView';
+import NotificationsView from './NotificationView';
 
 import API, { APIError } from '../../API';
 
@@ -153,43 +154,6 @@ export const PreferencesView = ({navigation}) => {
 					<Select.Item label='Mic_1' value='1'/>
 					<Select.Item label='Mic_2' value='2'/>
 				</Select>
-			</View>
-		</Center>
-	)
-}
-
-const NotificationsView = ({navigation}) => {
-	const dispatch = useDispatch();
-	const settings: SettingsState = useSelector((state: RootState) => state.settings);
-	return (
-		<Center style={{ flex: 1, justifyContent: 'center' }}>
-
-			<Heading style={{ textAlign: "center" }}>
-				<Translate translationKey='notifBtn'/>
-			</Heading>
-			<View style={{margin: 20}} >
-				<Text style={{ textAlign: "center" }}>Push notifications</Text>
-				<Switch value={settings.enablePushNotifications} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-					onValueChange={(value) => { dispatch(updateSettings({ enablePushNotifications: value })) }}
-				/>
-			</View>
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>Email notifications</Text>
-				<Switch value={settings.enableMailNotifications} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-					onValueChange={(value) => { dispatch(updateSettings({ enableMailNotifications: value })) }}
-				/>
-			</View>
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>Training reminder</Text>
-				<Switch value={settings.enableLessongsReminders} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-					onValueChange={(value) => { dispatch(updateSettings({ enableLessongsReminders: value })) }}
-				/>
-			</View>
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>New songs</Text>
-				<Switch value={settings.enableReleaseAlerts} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"
-					onValueChange={(value) => { dispatch(updateSettings({ enableReleaseAlerts: value })) }}
-				/>
 			</View>
 		</Center>
 	)
