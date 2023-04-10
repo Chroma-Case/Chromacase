@@ -62,7 +62,7 @@ export const getElementToggleNode = (
 ) => {
 	return (
 		<Switch
-			onToggle={() => onToggle()}
+            // the callback is called by the Pressable component wrapping the entire row
 			isChecked={value ?? false}
 			defaultIsChecked={defaultValue}
 			disabled={disabled}
