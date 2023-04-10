@@ -81,7 +81,11 @@ const getElementDropdownNode = (
 			isDisabled={disabled}
 		>
 			{options.map((option) => (
-				<Select.Item label={option.label} value={option.value} />
+				<Select.Item
+					key={option.label}
+					label={option.label}
+					value={option.value}
+				/>
 			))}
 		</Select>
 	);
@@ -95,9 +99,11 @@ type ElementProps = {
 	description?: string;
 	disabled?: boolean;
 	onPress?: () => void;
-	// node is only used if type is "custom"
-	node?: React.ReactNode;
-	data?: ElementTextProps | ElementToggleProps | ElementDropdownProps;
+	data?:
+		| ElementTextProps
+		| ElementToggleProps
+		| ElementDropdownProps
+		| React.ReactNode;
 };
 
 const Element = ({
@@ -200,7 +206,7 @@ const Element = ({
 									disabled ?? false
 								);
 							case "custom":
-								return node;
+								return data as React.ReactNode;
 							default:
 								return <Text>Unknown type</Text>;
 						}
@@ -227,9 +233,15 @@ const ElementList = ({ elements, style }: ElementListProps) => {
 			{(() => {
 				const elementsWithDividers = [];
 				for (let i = 0; i < elements.length; i++) {
-					elementsWithDividers.push(<Element {...elements[i]} />);
+					elementsWithDividers.push(
+						<Box key={elements[i]?.title}>
+							<Element {...elements[i]} />
+						</Box>
+					);
 					if (i < elements.length - 1) {
-						elementsWithDividers.push(<Divider />);
+						elementsWithDividers.push(
+							<Divider key={elements[i]?.title + "Divider"} />
+						);
 					}
 				}
 				return elementsWithDividers;
