@@ -140,6 +140,55 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 								text: user.data.createdAt,
 							},
 						},
+						{
+							type: "text",
+							title: "Compte Premium",
+							data: {
+								text: user.premium ? "Oui" : "Non",
+							},
+						}
+					]}
+				/>
+				<Heading fontSize="20" mt="7">
+					Fonctionnalités premium
+				</Heading>
+				<ElementList
+					style={{
+						marginTop: 10,
+						width: "90%",
+						maxWidth: 850,
+					}}
+					elements={[
+						{
+							type: "toggle",
+							title: "Piano Magique",
+							description: "Fait apparaître de la lumière sur le piano pendant les parties",
+							helperText: "Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité",
+							disabled: true,
+							data: {
+								value: false,
+								onToggle: () => {},
+							},
+						},
+						{
+							type: "dropdown",
+							title: "Thème de piano",
+							disabled: true,
+							data: {
+								value: "default",
+								onValueChange: () => {},
+								options: [
+									{
+										label: "Default",
+										value: "default",
+									},
+									{
+										label: "Catpuccino",
+										value: "catpuccino",
+									},
+								],
+							},
+						},
 					]}
 				/>
 			</Column>
