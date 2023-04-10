@@ -1,5 +1,5 @@
-import { Select, Switch, Text } from "native-base";
-
+import { Select, Switch, Text, Icon, Row } from "native-base";
+import { MaterialIcons } from "@expo/vector-icons";
 export type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown";
 
 export type DropdownOption = {
@@ -26,17 +26,33 @@ export type ElementDropdownProps = {
 };
 
 export const getElementTextNode = (
-	{ text }: ElementTextProps,
+	{ text, onPress }: ElementTextProps,
 	disabled: boolean
 ) => {
 	return (
-		<Text
+		<Row
 			style={{
-				opacity: disabled ? 0.4 : 0.6,
+				alignItems: "center",
 			}}
 		>
-			{text}
-		</Text>
+			<Text
+				style={{
+					opacity: disabled ? 0.4 : 0.6,
+				}}
+			>
+				{text}
+			</Text>
+			{onPress && (
+				<Icon
+					as={MaterialIcons}
+					name="keyboard-arrow-right"
+					size="xl"
+					style={{
+						opacity: disabled ? 0.4 : 0.6,
+					}}
+				/>
+			)}
+		</Row>
 	);
 };
 
