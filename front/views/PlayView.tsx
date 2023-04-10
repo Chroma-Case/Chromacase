@@ -18,6 +18,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
+import { useStopwatch } from "react-use-precision-timer";
+import { setTimeout } from 'timers/promises';
 
 type PlayViewProps = {
 	songId: number
@@ -44,16 +46,17 @@ const PlayView = () => {
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
-  	const [time, setTime] = useState(0);
+	const stopwatch = useStopwatch();
 	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
-	
+	const [time, setTime] = useState(0);
 	const partitionRessources = useQuery(["partition", songId], () =>
 		API.getPartitionRessources(songId)
 	);
 
 	const onPause = () => {
 		midiPlayer?.pause();
+		stopwatch.pause();
 		setPause(true);
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
@@ -62,6 +65,11 @@ const PlayView = () => {
 		}));
 	}
 	const onResume = () => {
+		if (stopwatch.isStarted()) {
+			stopwatch.resume();
+		} else {
+			stopwatch.start();
+		}
 		setPause(false);
 		midiPlayer?.play();
 		webSocket.current?.send(JSON.stringify({
@@ -74,6 +82,7 @@ const PlayView = () => {
 		webSocket.current?.send(JSON.stringify({
 			type: "end"
 		}));
+		stopwatch.stop();
 		webSocket.current?.close();
 		midiPlayer?.pause();
 	}
@@ -100,7 +109,7 @@ const PlayView = () => {
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
-					navigation.navigate('Score');
+					navigation.navigate('Score', { songId: song.data.id });
 					return;
 				}
 
@@ -170,26 +179,15 @@ const PlayView = () => {
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
 	}
-	useEffect(() => {
-		let interval: NodeJS.Timer | undefined = undefined;
-	  
-		if (!paused) {
-		  interval = setInterval(() => {
-			setTime((time) => time + 10);
-		  }, 1);
-		} else {
-		  clearInterval(interval);
-		}
-		return () => {
-		  clearInterval(interval);
-		};
-	}, [paused]);
+
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
+		let interval = setInterval(() => setTime(() => stopwatch.getElapsedRunningTime()), 1);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
 			onEnd();
+			clearInterval(interval);
 		}
 	}, []);
 	useEffect(() => {
@@ -273,12 +271,12 @@ const PlayView = () => {
 						} onPress={() => {
 							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
-						<Text>{Math.floor(time / 60000)}:{((time % 60000) / 100).toFixed(0).toString().padStart(2, '0')}</Text>
+						<Text>{Math.floor(time / 60000)}:{Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}</Text>
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
 							onEnd();
-							navigation.navigate('Score')
+							navigation.navigate('Score', { songId: song.data.id });
 						}}/>
 					</Row>
 				</Row>
