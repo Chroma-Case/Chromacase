@@ -15,6 +15,7 @@ import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ProfileSettings from './SettingsProfileView';
 import NotificationsView from './NotificationView';
+import PrivacyView from './PrivacyView';
 
 import API, { APIError } from '../../API';
 
@@ -154,31 +155,6 @@ export const PreferencesView = ({navigation}) => {
 					<Select.Item label='Mic_1' value='1'/>
 					<Select.Item label='Mic_2' value='2'/>
 				</Select>
-			</View>
-		</Center>
-	)
-}
-
-export const PrivacyView = ({navigation}) => {
-	return (
-		<Center style={{ flex: 1}}>
-			<Heading style={{ textAlign: "center" }}>
-				<Translate translationKey='privBtn'/>
-			</Heading>
-
-			<View style={{margin: 20}} >
-				<Text style={{ textAlign: "center" }}>Data Collection</Text>
-				<Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
-			</View>
-
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>Custom Adds</Text>
-				<Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
-			</View>
-
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>Recommendations</Text>
-				<Switch style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
 			</View>
 		</Center>
 	)
