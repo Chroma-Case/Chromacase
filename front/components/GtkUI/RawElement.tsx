@@ -21,10 +21,14 @@ import {
 	ElementToggleProps,
 } from "./ElementTypes";
 
-export const RawElement = (
-	{ title, icon, type, helperText, description, disabled, data }: ElementProps,
-	isHovered: boolean
-) => {
+type RawElementProps = {
+	element: ElementProps;
+	isHovered?: boolean;
+};
+
+export const RawElement = ({ element, isHovered }: RawElementProps) => {
+	const { title, icon, type, helperText, description, disabled, data } =
+		element;
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isSmallScreen = screenSize === "small";
 	return (
@@ -35,6 +39,7 @@ export const RawElement = (
 				padding: 15,
 				justifyContent: "space-between",
 				alignItems: "center",
+				backgroundColor: isHovered ? "#f5f5f5" : undefined,
 			}}
 		>
 			<Box

@@ -1,8 +1,4 @@
-import {
-    Select,
-    Switch,
-    Text,
-} from "native-base";
+import { Select, Switch, Text } from "native-base";
 
 export type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown";
 
@@ -17,7 +13,7 @@ export type ElementTextProps = {
 };
 
 export type ElementToggleProps = {
-	onToggle: (value: boolean) => void;
+	onToggle: () => void;
 	value: boolean;
 	defaultValue?: boolean;
 };
@@ -29,7 +25,10 @@ export type ElementDropdownProps = {
 	defaultValue?: string;
 };
 
-export const getElementTextNode = ({ text }: ElementTextProps, disabled: boolean) => {
+export const getElementTextNode = (
+	{ text }: ElementTextProps,
+	disabled: boolean
+) => {
 	return (
 		<Text
 			style={{
@@ -47,7 +46,7 @@ export const getElementToggleNode = (
 ) => {
 	return (
 		<Switch
-			onToggle={onToggle}
+			onToggle={() => onToggle()}
 			isChecked={value ?? false}
 			defaultIsChecked={defaultValue}
 			disabled={disabled}
