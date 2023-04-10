@@ -117,6 +117,7 @@ export const getElementRangeNode = (
             isDisabled={disabled}
             onChangeEnd={onChange}
             accessibilityLabel={`Slider for ${title}`}
+            width="200"
         >
             <Slider.Track>
                 <Slider.FilledTrack />
