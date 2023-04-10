@@ -4,12 +4,27 @@ import { RawElement } from "./RawElement";
 import { Pressable } from "native-base";
 
 export const Element = (props: ElementProps) => {
-	if (props.type === "text" && props.data?.onPress) {
+	let actionFunction = null as null | Function;
+
+	switch (props.type) {
+		case "text":
+			actionFunction = props.data?.onPress;
+			break;
+		case "toggle":
+			actionFunction = props.data?.onToggle;
+			break;
+		default:
+			break;
+	}
+
+	if (actionFunction) {
 		return (
-			<Pressable onPress={props.data.onPress}>
-				<RawElement {...props} />
+			<Pressable onPress={actionFunction}>
+				{({ isHovered }) => {
+					return <RawElement element={props} isHovered={isHovered} />;
+				}}
 			</Pressable>
 		);
 	}
-	return <RawElement {...props} />;
+	return <RawElement element={props} />;
 };
