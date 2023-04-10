@@ -133,6 +133,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "toggle",
 							title: "Notifications",
+							disabled: true,
 							data: {
 								value: toggle,
 								onToggle: () => {

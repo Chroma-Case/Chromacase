@@ -17,7 +17,7 @@ export const Element = (props: ElementProps) => {
 			break;
 	}
 
-	if (actionFunction) {
+	if (!props?.disabled && actionFunction) {
 		return (
 			<Pressable onPress={actionFunction}>
 				{({ isHovered }) => {
