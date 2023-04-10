@@ -1,7 +1,8 @@
-interface LessonHistory {
-	songId: number;
-	userId: number;
+interface SongHistory {
+	songID: number;
+	userID: number;
 	score: number;
+	difficulties: JSON;
 }
 
-export default LessonHistory;
+export default SongHistory;
