@@ -82,9 +82,9 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 					elements={[
 						{
 							type: "text",
-							title: "Email",
+							title: translate("email"),
 							data: {
-								text: user.email || "Aucun email associé",
+								text: user.email || translate("NoAssociatedEmail"),
 								onPress: () => {
 									navigation.navigate("ChangeEmail");
 								},
@@ -102,7 +102,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 					elements={[
 						{
 							type: "text",
-							title: "Username",
+							title: translate("username"),
 							data: {
 								text: user.name,
 							},
@@ -117,7 +117,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						},
 						{
 							type: "text",
-							title: "Party played",
+							title: translate("nbGamesPlayed"),
 							data: {
 								text: user.data.partyPlayed,
 							},
@@ -126,14 +126,14 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							type: "text",
 							title: "XP",
 							description:
-								"XP is the experience points you get by playing games",
+								translate("XPDescription"),
 							data: {
 								text: user.data.xp,
 							},
 						},
 						{
 							type: "text",
-							title: "Date de création",
+							title: translate("userCreatedAt"),
 							helperText:
 								"La date de création est actuellement arbitraire car le serveur ne retourne pas cette information",
 							data: {
@@ -142,9 +142,9 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						},
 						{
 							type: "text",
-							title: "Compte Premium",
+							title: translate("premiumAccount"),
 							data: {
-								text: user.premium ? "Oui" : "Non",
+								text: translate(user.premium ? "yes" : "no"),
 							},
 						}
 					]}
