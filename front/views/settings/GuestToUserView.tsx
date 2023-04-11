@@ -22,15 +22,17 @@ const handleSubmit = async (
 const GuestToUserView = () => {
 	return (
 		<Center flex={1} justifyContent={"center"}>
-			<Heading>{translate("signUp")}</Heading>
-			<Text mt={5} mb={10}>
-				{translate("transformGuestToUserExplanations")}
-			</Text>
-			<SignUpForm
-				onSubmit={(username, password, email) =>
-					handleSubmit(username, password, email)
-				}
-			/>
+			<Center width="90%" justifyContent={"center"}>
+				<Heading>{translate("signUp")}</Heading>
+				<Text mt={5} mb={10}>
+					{translate("transformGuestToUserExplanations")}
+				</Text>
+				<SignUpForm
+					onSubmit={(username, password, email) =>
+						handleSubmit(username, password, email)
+					}
+				/>
+			</Center>
 		</Center>
 	);
 };
