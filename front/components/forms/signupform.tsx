@@ -21,7 +21,7 @@ interface SignupFormProps {
 	) => Promise<string>;
 }
 
-const LoginForm = ({ onSubmit }: SignupFormProps) => {
+const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 	const [formData, setFormData] = React.useState({
 		username: {
 			value: "",
@@ -210,4 +210,4 @@ const LoginForm = ({ onSubmit }: SignupFormProps) => {
 	);
 };
 
-export default LoginForm;
+export default SignUpForm;
