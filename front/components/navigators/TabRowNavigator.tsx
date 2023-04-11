@@ -169,6 +169,7 @@ function TabNavigator({
 												as={options.iconProvider}
 												name={options.iconName}
 												size="xl"
+												mr="2"
 											/>
 										) : undefined
 									}
