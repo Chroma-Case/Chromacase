@@ -170,7 +170,7 @@ export default class API {
 			premium: false,
 			isGuest: user.isGuest as boolean,
 			data: {
-				partyPlayed: user.partyPlayed as number,
+				gamesPlayed: user.partyPlayed as number,
 				xp: 0,
 				createdAt: "9 avril 2023",
 				avatar:

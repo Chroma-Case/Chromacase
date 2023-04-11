@@ -119,7 +119,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							type: "text",
 							title: translate("nbGamesPlayed"),
 							data: {
-								text: user.data.partyPlayed,
+								text: user.data.gamesPlayed,
 							},
 						},
 						{
