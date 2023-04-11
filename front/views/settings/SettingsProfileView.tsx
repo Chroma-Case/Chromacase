@@ -125,8 +125,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "text",
 							title: "XP",
-							description:
-								translate("XPDescription"),
+							description: translate("XPDescription"),
 							data: {
 								text: user.data.xp,
 							},
@@ -146,7 +145,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							data: {
 								text: translate(user.premium ? "yes" : "no"),
 							},
-						}
+						},
 					]}
 				/>
 				<Heading fontSize="20" mt="7">
@@ -162,8 +161,10 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						{
 							type: "toggle",
 							title: "Piano Magique",
-							description: "Fait apparaître de la lumière sur le piano pendant les parties",
-							helperText: "Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité",
+							description:
+								"Fait apparaître de la lumière sur le piano pendant les parties",
+							helperText:
+								"Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité",
 							disabled: true,
 							data: {
 								value: false,
@@ -212,22 +213,19 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							<Popover.Arrow />
 							<Popover.Body>
 								<Heading size="md" mb={2}>
-									Attention
+									{translate("Attention")}
 								</Heading>
 								<Text>
-									Vous êtes connecté avec un compte invité temporaire, si vous
-									vous déconnectez, vous perdrez vos données.
-								</Text>
-								<Text>
-									Vous pouvez sauvegarder votre progression en transférant votre
-									compte invité vers un compte classique.
+									{translate(
+										"YouAreCurrentlyConnectedWithAGuestAccountWarning"
+									)}
 								</Text>
 								<Button.Group variant="ghost" space={2}>
 									<Button
 										onPress={() => dispatch(unsetAccessToken())}
 										colorScheme="red"
 									>
-										Déconnexion
+										{translate("signOutBtn")}
 									</Button>
 									<Button
 										onPress={() => {
@@ -235,7 +233,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 										}}
 										colorScheme="green"
 									>
-										Créer un compte
+										{translate("signUpBtn")}
 									</Button>
 								</Button.Group>
 							</Popover.Body>

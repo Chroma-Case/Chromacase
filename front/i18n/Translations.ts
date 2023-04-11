@@ -146,7 +146,8 @@ export const en = {
 	yes: 'Yes',
 	no: 'No',
 
-
+	Attention: 'Attention',
+	YouAreCurrentlyConnectedWithAGuestAccountWarning: "You are currently connected with a guest account. Disconneting will result in your data being lost. If you want to save your progress, you need to create an account.",
 };
 
 export const fr: typeof en = {
@@ -293,6 +294,8 @@ export const fr: typeof en = {
 	yes: 'Oui',
 	no: 'Non',
 
+	Attention: 'Attention',
+	YouAreCurrentlyConnectedWithAGuestAccountWarning: 'Vous êtes actuellement connecté en tant qu\'invité. La déconnexion résultera en une perte de données. Vous pouvez créer un compte pour sauvegarder vos données.',
 };
 
 export const sp: typeof en = {
@@ -442,4 +445,7 @@ export const sp: typeof en = {
 	premiumAccount: 'Cuenta premium',
 	yes: 'Sí',
 	no: 'No',
+
+	Attention: 'Atención',
+	YouAreCurrentlyConnectedWithAGuestAccountWarning: 'Actualmente estás conectado como invitado. La desconexión resultará en la pérdida de datos. Puedes crear una cuenta para guardar tus datos.',
 };
