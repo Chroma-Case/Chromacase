@@ -146,6 +146,14 @@ export default class API {
 		return response.access_token;
 	}
 
+	public static async transformGuestToUser(registrationInput: RegistrationInput): Promise<void> {
+		await API.fetch({
+			route: "/auth/me",
+			body: registrationInput,
+			method: "PUT",
+		});
+	}
+
 	/***
 	 * Retrieve information of the currently authentified user
 	 */
