@@ -20,7 +20,7 @@ import {
 	ElementDropdownProps,
 	ElementTextProps,
 	ElementToggleProps,
-	ElementRangeProps
+	ElementRangeProps,
 } from "./ElementTypes";
 
 type RawElementProps = {
@@ -40,6 +40,7 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 				height: 45,
 				padding: 15,
 				justifyContent: "space-between",
+				alignContent: "stretch",
 				alignItems: "center",
 				backgroundColor: isHovered ? "#f5f5f5" : undefined,
 			}}
@@ -47,18 +48,19 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 			<Box
 				style={{
 					flexGrow: 1,
+					flexShrink: 100,
 					opacity: disabled ? 0.6 : 1,
 				}}
 			>
 				{icon}
-				<Column>
-					<Text isTruncated maxW={"95%"}>
+				<Column maxW={"90%"}>
+					<Text isTruncated maxW={"100%"}>
 						{title}
 					</Text>
 					{description && (
 						<Text
 							isTruncated
-							maxW={"90%"}
+							maxW={"100%"}
 							style={{
 								opacity: 0.6,
 								fontSize: 12,
@@ -69,10 +71,16 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 					)}
 				</Column>
 			</Box>
-			<Box>
+			<Box
+				style={{
+					flexGrow: 0,
+					flexShrink: 0,
+				}}
+			>
 				<Row
 					style={{
 						alignItems: "center",
+						marginRight: 3,
 					}}
 				>
 					{helperText && (
