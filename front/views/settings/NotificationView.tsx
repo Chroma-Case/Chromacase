@@ -40,7 +40,7 @@ const NotificationsView = ({ navigation }) => {
 				elements={[
 					{
 						type: "toggle",
-						title: "Push notifications",
+						title: translate("SettingsNotificationsPushNotifications"),
 						data: {
 							value: pushNotifications,
 							onToggle: () => {
@@ -55,7 +55,7 @@ const NotificationsView = ({ navigation }) => {
 					},
 					{
 						type: "toggle",
-						title: "Email notifications",
+						title: translate("SettingsNotificationsEmailNotifications"),
 						data: {
 							value: emailNotifications,
 							onToggle: () => {
@@ -70,7 +70,7 @@ const NotificationsView = ({ navigation }) => {
 					},
 					{
 						type: "toggle",
-						title: "Training reminder",
+						title: translate("SettingsNotificationsTrainingReminder"),
 						data: {
 							value: trainingReminder,
 							onToggle: () => {
@@ -85,7 +85,7 @@ const NotificationsView = ({ navigation }) => {
 					},
 					{
 						type: "toggle",
-						title: "New songs",
+						title: translate("SettingsNotificationsReleaseAlert"),
 						data: {
 							value: releaseAlert,
 							onToggle: () => {

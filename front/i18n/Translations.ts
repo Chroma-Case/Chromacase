@@ -119,6 +119,25 @@ export const en = {
 	SettingsCategoryEmail: 'Email',
 	SettingsCategoryGoogle: 'Google',
 	SettingsCategoryPiano: 'Piano',
+	SettingsCategoryGuest: 'Guest',
+
+	transformGuestToUserExplanations: 'You can transform your guest account to a user account by providing a username and a password. You will then be able to save your progress and access your profile.',
+	SettingsNotificationsPushNotifications: 'Push',
+	SettingsNotificationsEmailNotifications: 'Email',
+	SettingsNotificationsTrainingReminder: 'Training reminder',
+	SettingsNotificationsReleaseAlert: 'Release alert',
+
+	dataCollection: 'Data collection',
+	customAds: 'Custom ads',
+	recommendations: 'Recommendations',
+
+	SettingsPreferencesTheme: 'Theme',
+	SettingsPreferencesLanguage: 'Language',
+	SettingsPreferencesDifficulty: 'Difficulty',
+	SettingsPreferencesColorblindMode: 'Colorblind mode',
+	SettingsPreferencesMicVolume: 'Mic volume',
+	SettingsPreferencesDevice: 'Device',
+
 };
 
 export const fr: typeof en = {
@@ -238,6 +257,25 @@ export const fr: typeof en = {
 	SettingsCategoryEmail: 'Email',
 	SettingsCategoryGoogle: 'Google',
 	SettingsCategoryPiano: 'Piano',
+
+	transformGuestToUserExplanations: 'Vous êtes actuellement connecté en tant qu\'invité. Vous pouvez créer un compte pour sauvegarder vos données et profiter de toutes les fonctionnalités de Chromacase.',
+	SettingsCategoryGuest: 'Invité',
+	SettingsNotificationsEmailNotifications: 'Email',
+	SettingsNotificationsPushNotifications: 'Notifications push',
+	SettingsNotificationsReleaseAlert: 'Alertes de nouvelles Sorties',
+	SettingsNotificationsTrainingReminder: 'Rappel d\'entrainement',
+	
+	SettingsPreferencesColorblindMode: 'Mode daltonien',
+	SettingsPreferencesDevice: 'Appareil',
+	SettingsPreferencesDifficulty: 'Difficulté',
+	SettingsPreferencesLanguage: 'Langue',
+	SettingsPreferencesTheme: 'Thème',
+	SettingsPreferencesMicVolume: 'Volume du micro',
+
+	dataCollection: 'Collecte de données',
+	recommendations: 'Recommandations',
+	customAds: 'Publicités personnalisées',
+
 };
 
 export const sp: typeof en = {
@@ -360,4 +398,22 @@ export const sp: typeof en = {
 	SettingsCategorySecurity: 'Seguridad',
 	SettingsCategoryEmail: 'Email',
 	SettingsCategoryGoogle: 'Google',
+
+	transformGuestToUserExplanations: 'Actualmente estás conectado como invitado. Puedes crear una cuenta para guardar tus datos y disfrutar de todas las funciones de Chromacase.',
+	SettingsCategoryGuest: 'Invitado',
+	SettingsNotificationsEmailNotifications: 'Email',
+	SettingsNotificationsPushNotifications: 'Notificaciones push',
+	SettingsNotificationsReleaseAlert: 'Alertas de nuevas Sorties',
+	SettingsNotificationsTrainingReminder: 'Recordatorio de entrenamiento',
+	
+	SettingsPreferencesColorblindMode: 'Modo daltoniano',
+	SettingsPreferencesDevice: 'Dispositivo',
+	SettingsPreferencesDifficulty: 'Dificultad',
+	SettingsPreferencesLanguage: 'Idioma',
+	SettingsPreferencesTheme: 'Tema',
+	SettingsPreferencesMicVolume: 'Volumen del micrófono',
+
+	dataCollection: 'Recopilación de datos',
+	recommendations: 'Recomendaciones',
+	customAds: 'Anuncios personalizados',
 };

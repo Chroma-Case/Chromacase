@@ -43,7 +43,7 @@ const PreferencesView = ({ navigation }) => {
 				elements={[
 					{
 						type: "dropdown",
-						title: "Theme",
+						title: translate("SettingsPreferencesTheme"),
 						data: {
 							value: settings.colorScheme,
 							defaultValue: "system",
@@ -61,7 +61,7 @@ const PreferencesView = ({ navigation }) => {
 					},
 					{
 						type: "dropdown",
-						title: "Language",
+						title: translate("SettingsPreferencesLanguage"),
 						data: {
 							value: language,
 							defaultValue: DefaultLanguage,
@@ -71,14 +71,13 @@ const PreferencesView = ({ navigation }) => {
 							options: [
 								{ label: "Français", value: "fr" },
 								{ label: "English", value: "en" },
-								{ label: "Italiano", value: "it" },
 								{ label: "Espanol", value: "sp" },
 							],
 						},
 					},
 					{
 						type: "dropdown",
-						title: "Difficulty",
+						title: translate("SettingsPreferencesDifficulty"),
 						data: {
 							value: settings.preferedLevel,
 							defaultValue: "medium",
@@ -103,7 +102,7 @@ const PreferencesView = ({ navigation }) => {
 				elements={[
 					{
 						type: "toggle",
-						title: "Color blind mode",
+						title: translate("SettingsPreferencesColorblindMode"),
 						data: {
 							value: settings.colorBlind,
 							onToggle: () => {
@@ -122,7 +121,7 @@ const PreferencesView = ({ navigation }) => {
 				elements={[
 					{
 						type: "range",
-						title: "Mic volume",
+						title: translate("SettingsPreferencesMicVolume"),
 						data: {
 							value: settings.micLevel,
 							min: 0,
@@ -135,7 +134,7 @@ const PreferencesView = ({ navigation }) => {
 					},
 					{
 						type: "dropdown",
-						title: "Device",
+						title: translate("SettingsPreferencesDevice"),
 						data: {
 							value: settings.preferedInputName || "0",
 							defaultValue: "0",

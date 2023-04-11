@@ -231,7 +231,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 									</Button>
 									<Button
 										onPress={() => {
-											navigation.navigate("SignUp");
+											navigation.navigate("GuestToUser");
 										}}
 										colorScheme="green"
 									>
