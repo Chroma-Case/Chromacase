@@ -1,5 +1,5 @@
 interface UserData {
-    partyPlayed: number;
+    gamesPlayed: number;
     xp: number;
     avatar: string | undefined;
     createdAt: string;
