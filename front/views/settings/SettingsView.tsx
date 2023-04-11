@@ -17,8 +17,10 @@ import ProfileSettings from './SettingsProfileView';
 import NotificationsView from './NotificationView';
 import PrivacyView from './PrivacyView';
 import PreferencesView from './PreferencesView';
+import GuestToUserView from './GuestToUserView';
 
 import API, { APIError } from '../../API';
+import User from '../../models/User';
 
 
 const SettingsStack = createNativeStackNavigator();
@@ -114,11 +116,26 @@ export const PianoSettingsView = ({navigation}) => {
 const TabRow = createTabRowNavigator(); 
 
 const SetttingsNavigator = () => {
+	const [user, setUser] = React.useState<null | User>(null);
+
+	React.useEffect(() => {
+		API.getUserInfo().then((user) => {
+			setUser(user);
+		});
+	}, []);
+
 	return (
 		<TabRow.Navigator initialRouteName='InternalDefault'>
 			{/* I'm doing this to be able to land on the summary of settings when clicking on settings and directly to the
 			wanted settings page if needed so I need to do special work with the 0 index */}
 			<TabRow.Screen name='InternalDefault' component={Box} />
+			{user && user.isGuest &&
+				<TabRow.Screen name='GuestToUser' component={GuestToUserView} options={{
+					title: translate('SettingsCategoryGuest'),
+					iconProvider: FontAwesome5,
+					iconName: "user-clock"
+				}} />
+			}
 			<TabRow.Screen name='Profile' component={ProfileSettings} options={{ 
 				title: translate('SettingsCategoryProfile'),
 				iconProvider: FontAwesome5,
