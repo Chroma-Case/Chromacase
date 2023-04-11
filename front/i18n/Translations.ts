@@ -138,6 +138,15 @@ export const en = {
 	SettingsPreferencesMicVolume: 'Mic volume',
 	SettingsPreferencesDevice: 'Device',
 
+	NoAssociatedEmail: 'No associated email',
+	nbGamesPlayed: 'Games played',
+	XPDescription: 'XP is a measure of your progress. You earn XP by playing songs and completing challenges.',
+	userCreatedAt: 'Creation date',
+	premiumAccount: "Premium account",
+	yes: 'Yes',
+	no: 'No',
+
+
 };
 
 export const fr: typeof en = {
@@ -276,6 +285,14 @@ export const fr: typeof en = {
 	recommendations: 'Recommandations',
 	customAds: 'Publicités personnalisées',
 
+	NoAssociatedEmail: 'Aucun email associé',
+	nbGamesPlayed: 'Parties jouées',
+	XPDescription: 'L\'XP est gagnée en jouant des chansons. Plus vous jouez, plus vous gagnez d\'XP. Plus vous avez d\'XP, plus vous montez de niveau.',
+	userCreatedAt: 'Compte créé le',
+	premiumAccount: 'Compte premium',
+	yes: 'Oui',
+	no: 'Non',
+
 };
 
 export const sp: typeof en = {
@@ -398,6 +415,7 @@ export const sp: typeof en = {
 	SettingsCategorySecurity: 'Seguridad',
 	SettingsCategoryEmail: 'Email',
 	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
 
 	transformGuestToUserExplanations: 'Actualmente estás conectado como invitado. Puedes crear una cuenta para guardar tus datos y disfrutar de todas las funciones de Chromacase.',
 	SettingsCategoryGuest: 'Invitado',
@@ -416,4 +434,12 @@ export const sp: typeof en = {
 	dataCollection: 'Recopilación de datos',
 	recommendations: 'Recomendaciones',
 	customAds: 'Anuncios personalizados',
+
+	NoAssociatedEmail: 'No hay correo electrónico asociado',
+	nbGamesPlayed: 'Partidos jugados',
+	XPDescription: 'XP se gana jugando canciones. Cuanto más juegas, más XP ganas. Cuanto más XP tienes, más subes de nivel.',
+	userCreatedAt: 'Cuenta creada el',
+	premiumAccount: 'Cuenta premium',
+	yes: 'Sí',
+	no: 'No',
 };
