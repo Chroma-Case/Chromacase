@@ -65,12 +65,8 @@ export class AuthController {
 	@HttpCode(200)
 	@Post('guest')
 	async guest(): Promise<JwtToken> {
-		try {
-			const user = await this.usersService.createGuest();
-			return this.authService.login(user);
-		} catch {
-			throw new BadRequestException();
-		}
+		const user = await this.usersService.createGuest();
+		return this.authService.login(user);
 	}
 
 	@UseGuards(JwtAuthGuard)

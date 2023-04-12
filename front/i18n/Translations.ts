@@ -5,7 +5,12 @@ export const en = {
 	signInBtn: 'Sign in',
 	signUpBtn: 'Sign up',
 	changeLanguageBtn: 'Change language',
+	search: 'Search',
+	login: 'Login',
+	signUp: 'Sign up',
+	signIn: 'Sign in',
 	searchBtn: 'Search',
+	play: 'Play',
 	playBtn: 'Play',
 	playAgain: 'Play Again',
 	songPageBtn: 'Go to song page',
@@ -92,6 +97,28 @@ export const en = {
 	errAlrdExst: 'Already exist',
 	errIncrrct: 'Incorrect Credentials',
 
+
+	changePassword: 'Change password',
+	oldPassword: 'Old password',
+	newPassword: 'New password',
+	confirmNewPassword: 'Confirm new password',
+	submitBtn: 'Submit',
+
+	changeEmail: 'Change email',
+	oldEmail: 'Old email',
+	newEmail: 'New email',
+
+	passwordUpdated: 'Password updated',
+	emailUpdated: 'Email updated',
+
+	SettingsCategoryProfile: 'Profile',
+	SettingsCategoryPreferences: 'Preferences',
+	SettingsCategoryNotifications: 'Notifications',
+	SettingsCategoryPrivacy: 'Privacy',
+	SettingsCategorySecurity: 'Security',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
 };
 
 export const fr: typeof en = {
@@ -110,15 +137,14 @@ export const fr: typeof en = {
 	lastScore: 'Dernier Score',
 	langBtn: 'Langage',
 	backBtn: 'Retour',
-	settingsBtn: 'Réglages',
 	prefBtn: 'Préférences',
 	notifBtn: 'Notifications',
 	privBtn: 'Confidentialité',
-	goNextStep: 'Prochaine Etape',
-	mySkillsToImprove: 'Mes Skills',
-	recentlyPlayed: 'Joués récemment',
-	lastSearched: 'Dernières recherches',
-	levelProgress: 'Niveau',
+
+	play: 'Jouer',
+	changeEmail: 'Changer d\'email',
+	newEmail: 'Nouvel email',
+	oldEmail: 'Ancien email',
 
 	// profile page
 	user: 'Profil',
@@ -127,7 +153,7 @@ export const fr: typeof en = {
 	mostPlayedSong: 'Chanson la plus jouée : ',
 	goodNotesPlayed: 'Bonnes notes jouées : ',
 	longestCombo: 'Combo le plus long : ',
-	favoriteGenre: 'Genre favorit : ',
+	favoriteGenre: 'Genre favori : ',
 
 	// Difficulty settings
 	diffBtn: 'Difficulté',
@@ -139,7 +165,21 @@ export const fr: typeof en = {
 	dark: 'Foncé',
 	system: 'Système',
 	light: 'Clair',
+	settingsBtn: "Réglages",
+	goNextStep: "Prochaine Etape",
+	mySkillsToImprove: "Mes Skills",
+	recentlyPlayed: "Joués récemment",
+	search: "Rechercher",
+	lastSearched: "Dernières recherches",
+	levelProgress: "Niveau",
+	login: 'Se connecter',
+	signUp: "S'inscrire",
+	signIn: "Se connecter",
 
+	oldPassword: 'Ancien mot de passe',
+	newPassword: 'Nouveau mot de passe',
+	confirmNewPassword: 'Confirmer le nouveau mot de passe',
+	submitBtn: 'Soumettre',
 	// competencies
 	pedalsCompetency: 'Pédales',
 	rightHandCompetency: 'Main droite',
@@ -170,11 +210,12 @@ export const fr: typeof en = {
 	email: 'Email',
 	repeatPassword: 'Confirmer',
 	score: 'Score',
+	changePassword: 'Modification du mot de passe',
 	precisionScore: 'Précision',
 	goodNotesInARow: 'Bonnes notes à la suite',
 	songsToGetBetter: 'Recommendations',
 	goodNotes: 'bonnes notes',
-	changepasswdBtn: 'Changer le mot de pass',
+	changepasswdBtn: 'Changer le mot de passe',
 	changeemailBtn: 'Changer l\'email',
 	googleacctBtn: 'Compte Google',
 	forgottenPassword: 'Mot de passe oublié',
@@ -185,10 +226,21 @@ export const fr: typeof en = {
 	errAlrdExst: "Utilisateur existe déjà",
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
+
+	passwordUpdated: 'Mot de passe mis à jour',
+	emailUpdated: 'Email mis à jour',
+
+	SettingsCategoryProfile: 'Profil',
+	SettingsCategoryPreferences: 'Préférences',
+	SettingsCategoryNotifications: 'Notifications',
+	SettingsCategoryPrivacy: 'Confidentialité',
+	SettingsCategorySecurity: 'Sécurité',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
 };
 
 export const sp: typeof en = {
-	welcome: 'Benvenido a Chromacase',
 	welcomeMessage: 'Benvenido',
 	signOutBtn: 'Desconectarse',
 	signInBtn: 'Connectarse',
@@ -196,6 +248,14 @@ export const sp: typeof en = {
 	changeemailBtn: 'Cambiar e-mail',
 	googleacctBtn: 'Cuenta Google',
 	goodNotes: 'buenas notas',
+
+	search: 'Buscar',
+	login: 'Iniciar sesión',
+	signUp: 'Registrarse',
+	signIn: 'Iniciar sesión',
+	changeEmail: 'Cambiar el correo electrónico',
+	newEmail: 'Nuevo correo electrónico',
+	oldEmail: 'Correo electrónico anterior',
 
 	// competencies
 	changeLanguageBtn: 'Cambiar el idioma',
@@ -208,9 +268,6 @@ export const sp: typeof en = {
 	chapters: 'Capítulos',
 	bestScore: 'Mejor puntuación',
 	lastScore: 'Ùltima puntuación',
-	langBtn: 'idioma',
-	backBtn: 'Volver',
-	settingsBtn: 'Ajustes',
 	prefBtn: 'Preferencias',
 	notifBtn: 'Notificaciones',
 	privBtn: 'Privacidad',
@@ -218,6 +275,12 @@ export const sp: typeof en = {
 	mySkillsToImprove: 'Mis habilidades para mejorar',
 	recentlyPlayed: 'Recientemente jugado',
 	lastSearched: 'Ultimas búsquedas',
+
+	welcome: 'Benvenido a Chromacase',
+	langBtn: 'Langua',
+	backBtn: 'Volver',
+	settingsBtn: 'Ajustes',
+	play: 'Jugar',
 
 	// profile page
 	user: 'Perfil',
@@ -279,5 +342,22 @@ export const sp: typeof en = {
 	//errors
 	unknownError: 'Error desconocido',
 	errAlrdExst: "Ya existe",
-	errIncrrct: "credenciales incorrectas"
+	errIncrrct: "credenciales incorrectas",
+
+	changePassword: 'Cambio de contraseña',
+	oldPassword: 'Contraseña anterior',
+	newPassword: 'Nueva contraseña',
+	confirmNewPassword: 'Confirmar nueva contraseña',
+	submitBtn: 'Enviar',
+
+	passwordUpdated: 'Contraseña actualizada',
+	emailUpdated: 'Email actualizado',
+
+	SettingsCategoryProfile: 'Perfil',
+	SettingsCategoryPreferences: 'Preferencias',
+	SettingsCategoryNotifications: 'Notificaciones',
+	SettingsCategoryPrivacy: 'Privacidad',
+	SettingsCategorySecurity: 'Seguridad',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
 };

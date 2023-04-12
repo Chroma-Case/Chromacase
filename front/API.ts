@@ -14,12 +14,13 @@ import { useQuery, QueryClient } from "react-query";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
+
 export type AccessToken = string;
 
 type FetchParams = {
 	route: string;
 	body?: Object;
-	method?: "GET" | "POST" | "DELETE";
+	method?: "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
 	// If true, No JSON parsing is done, the raw response's content is returned
 	raw?: true;
 };
@@ -62,7 +63,8 @@ const baseAPIUrl =
 		: Constants.manifest?.extra?.apiUrl;
 
 export default class API {
-	private static async fetch(params: FetchParams) {
+
+	public static async fetch(params: FetchParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
 			"Content-Type": "application/json",
@@ -152,7 +154,9 @@ export default class API {
 			email: user.email as string,
 			xp: 0,
 			premium: false,
-			metrics: {},
+			metrics: {
+				partyPlayed: user.partyPlayed as number,
+			},
 			settings: {
 				preferences: {
 					deviceId: 1,
@@ -416,4 +420,35 @@ export default class API {
 			],
 		];
 	}
+
+	public static async updateUserEmail(newEmail: string): Promise<User> {
+		const rep = await API.fetch({
+			route: "/auth/me",
+			method: "PUT",
+			body: {
+				email: newEmail,
+			},
+		});
+
+		if (rep.error) {
+			throw new Error(rep.error);
+		}
+		return rep;
+	}
+
+	public static async updateUserPassword(oldPassword: string, newPassword: string): Promise<User> {
+		const rep = await API.fetch({
+			route: "/auth/me",
+			method: "PUT",
+			body: {
+				oldPassword: oldPassword,
+				password: newPassword,
+			},
+		});
+
+		if (rep.error) {
+			throw new Error(rep.error);
+		}
+		return rep;
+	};
 }

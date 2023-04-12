@@ -7,7 +7,7 @@ import SongLobbyView from './views/SongLobbyView';
 import AuthenticationView from './views/AuthenticationView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
-import SetttingsNavigator from './views/SettingsView';
+import SetttingsNavigator from './views/settings/SettingsView';
 import { useQuery } from 'react-query';
 import API from './API';
 import PlayView from './views/PlayView';

@@ -12,3 +12,4 @@ log.html
 .expo
 node_modules/
 ./front/coverage
+.venv

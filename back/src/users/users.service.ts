@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -42,7 +43,7 @@ export class UsersService {
 	async createGuest(): Promise<User> {
 		return this.prisma.user.create({
 			data: {
-				username: 'Guest',
+				username: `Guest ${randomUUID()}`,
 				isGuest: true,
 				// Not realyl clean but better than a separate table or breaking the api by adding nulls.
 				email: '',
