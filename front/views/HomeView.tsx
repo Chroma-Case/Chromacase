@@ -9,6 +9,7 @@ import CompetenciesTable from '../components/CompetenciesTable'
 import ProgressBar from "../components/ProgressBar";
 import Translate from "../components/Translate";
 import TextButton from "../components/TextButton";
+import Song from "../models/Song";
 
 const HomeView = () => {
 	const navigation = useNavigation();
@@ -18,9 +19,20 @@ const HomeView = () => {
 	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory());
 	const skillsQuery = useQuery(['skills'], () => API.getUserSkills());
 	const nextStepQuery = useQuery(['user', 'recommendations'], () => API.getUserRecommendations());
-	const artistsQueries = useQueries((playHistoryQuery.data?.concat(searchHistoryQuery.data ?? []).concat(nextStepQuery.data ?? []) ?? []).map((song) => (
-		{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
-	)));
+	const songHistory = useQueries(
+		playHistoryQuery.data?.map(({ songID }) => ({
+			queryKey: ['song', songID],
+			queryFn: () => API.getSong(songID)
+		})) ?? []
+	);
+	const artistsQueries = useQueries((songHistory
+		.map((entry) => entry.data)
+		.concat(nextStepQuery.data ?? [])
+		.filter((s): s is Song => s !== undefined))
+		.map((song) => (
+			{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
+		))
+	);
 
 	if (!userQuery.data || !skillsQuery.data || !searchHistoryQuery.data || !playHistoryQuery.data) {
 		return <Center style={{ flexGrow: 1 }}>
@@ -66,7 +78,11 @@ const HomeView = () => {
 					<Box flex={{ md: 1 }}>
 						<SongCardGrid
 							heading={<Translate translationKey='recentlyPlayed'/>}
-							songs={playHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
+							songs={songHistory
+								.filter((songQuery) => songQuery.data)
+								.map(({ data }) => data)
+								.filter((song, i, array) => array.map((s) => s.id).findIndex((id) => id == song.id) == i)
+								.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 								.map((song) => ({
 									albumCover: song.cover,
 									songTitle: song.name,
