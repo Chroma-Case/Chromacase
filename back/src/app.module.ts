@@ -7,13 +7,11 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { SongModule } from './song/song.module';
 import { LessonModule } from './lesson/lesson.module';
-import { ArtistController } from './artist/artist.controller';
+import { SettingsModule } from './settings/settings.module';
 import { ArtistService } from './artist/artist.service';
 import { GenreModule } from './genre/genre.module';
 import { ArtistModule } from './artist/artist.module';
 import { AlbumModule } from './album/album.module';
-import { SearchController } from './search/search.controller';
-import { SearchService } from './search/search.service';
 import { SearchModule } from './search/search.module';
 import { HistoryModule } from './history/history.module';
 
@@ -28,6 +26,7 @@ import { HistoryModule } from './history/history.module';
 		ArtistModule,
 		AlbumModule,
 		SearchModule,
+		SettingsModule,
 		HistoryModule,
 	],
 	controllers: [AppController],

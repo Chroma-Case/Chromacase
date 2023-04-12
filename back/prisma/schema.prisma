@@ -10,15 +10,30 @@ datasource db {
 }
 
 model User {
-    id            Int             @id @default(autoincrement())
-    username      String          @unique
-    password      String
-    email         String
-    isGuest       Boolean         @default(false)
-    partyPlayed   Int             @default(0)
-    LessonHistory LessonHistory[]
-    SongHistory   SongHistory[]
-    searchHistory SearchHistory[]
+    id              Int             @id @default(autoincrement())
+    username        String          @unique
+    password        String
+    email           String
+    isGuest         Boolean         @default(false)
+    partyPlayed     Int             @default(0)
+    LessonHistory   LessonHistory[]
+    SongHistory     SongHistory[]
+    searchHistory   SearchHistory[]
+    settings        UserSettings?
+}
+
+model UserSettings {
+    id                    Int @id @default(autoincrement())
+    user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId                Int @unique
+    pushNotification      Boolean @default(true)
+    emailNotification     Boolean @default(true)
+    trainingNotification  Boolean @default(true)
+    newSongNotification   Boolean @default(true)
+    recommendations       Boolean @default(true)
+    weeklyReport          Boolean @default(true)
+    leaderBoard           Boolean @default(true)
+    showActivity          Boolean @default(true)
 }
 
 model SearchHistory {
