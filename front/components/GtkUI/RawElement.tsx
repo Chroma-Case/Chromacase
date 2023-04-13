@@ -10,6 +10,7 @@ import {
 	Text,
 	useBreakpointValue,
 } from "native-base";
+import useColorScheme from "../../hooks/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
 import { ElementProps } from "./ElementList";
 import {
@@ -31,6 +32,8 @@ type RawElementProps = {
 export const RawElement = ({ element, isHovered }: RawElementProps) => {
 	const { title, icon, type, helperText, description, disabled, data } =
 		element;
+	const colorScheme = useColorScheme();
+	const isDark = colorScheme === "dark";
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isSmallScreen = screenSize === "small";
 	return (
@@ -42,13 +45,17 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 				justifyContent: "space-between",
 				alignContent: "stretch",
 				alignItems: "center",
-				backgroundColor: isHovered ? "#f5f5f5" : undefined,
+				backgroundColor: isHovered
+					? isDark
+						? "rgba(255, 255, 255, 0.1)"
+						: "rgba(0, 0, 0, 0.05)"
+					: undefined,
 			}}
 		>
 			<Box
 				style={{
 					flexGrow: 1,
-					flexShrink: 100,
+					flexShrink: 1,
 					opacity: disabled ? 0.6 : 1,
 				}}
 			>

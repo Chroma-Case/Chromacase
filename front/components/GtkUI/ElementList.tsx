@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import { Element } from "./Element";
+import useColorScheme from "../../hooks/colorScheme";
 
 import {
 	ElementTextProps,
@@ -37,9 +38,11 @@ type ElementListProps = {
 };
 
 const ElementList = ({ elements, style }: ElementListProps) => {
+	const colorScheme = useColorScheme();
+	const isDark = colorScheme === "dark";
 	const elementStyle = {
 		borderRadius: 10,
-		boxShadow: "0px 0px 3px 0px rgba(0,0,0,0.4)",
+		boxShadow: isDark ?  "0px 0px 3px 0px rgba(255,255,255,0.6)" : "0px 0px 3px 0px rgba(0,0,0,0.4)",
 		overflow: "hidden",
 	};
 
