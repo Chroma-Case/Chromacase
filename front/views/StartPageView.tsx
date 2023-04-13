@@ -32,11 +32,11 @@ const handleGuestLogin = async (
 };
 
 const imgLogin =
-	"https://imgs.search.brave.com/xX-jA3Rspi-ptSFABle5hpVNdOyKDHdVYNr320buGyQ/rs:fit:1200:800:1/g:ce/aHR0cDovL3d3dy5z/dHJhdGVnaWMtYnVy/ZWF1LmNvbS93cC1j/b250ZW50L3VwbG9h/ZHMvMjAxNC8wNy9B/TVgtMTBSQ1ItMTAw/LVNCSS1EUy5qcGc";
+	"https://media.discordapp.net/attachments/717080637038788731/1095980610981478470/Octopus_a_moder_style_image_of_a_musician_showing_a_member_card_c0b9072c-d834-40d5-bc83-796501e1382c.png?width=657&height=657";
 const imgGuest =
-	"https://imgs.search.brave.com/BzxPphCCWbF_Vm0KhenmxH61M3Vm3_HhxWO0s_rw4Nk/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly9pLnJl/ZGQuaXQvYW9waWtp/dXFrOTV6LmpwZw";
+	"https://media.discordapp.net/attachments/717080637038788731/1095996800835539014/Chromacase_guest_2.png?width=865&height=657";
 const imgRegister =
-	"https://media.discordapp.net/attachments/717080637038788731/1093674574027182141/image.png";
+	"https://media.discordapp.net/attachments/717080637038788731/1095991220267929641/chromacase_register.png?width=1440&height=511";
 
 const imgBanner =
 	"https://chromacase.studio/wp-content/uploads/2023/03/music-sheet-music-color-2462438.jpg";
