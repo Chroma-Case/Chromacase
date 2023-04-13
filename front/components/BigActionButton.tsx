@@ -13,6 +13,7 @@ import {
 	PresenceTransition,
 } from "native-base";
 import { StyleProp, ViewStyle } from "react-native";
+import useColorScheme from "../hooks/colorScheme";
 
 type BigActionButtonProps = {
 	title: string;
@@ -34,6 +35,8 @@ const BigActionButton = ({
 	onPress,
 }: BigActionButtonProps) => {
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
+	const colorScheme = useColorScheme();
+	const isDark = colorScheme === "dark";
 
 	return (
 		<Pressable onPress={onPress} style={style}>
@@ -91,7 +94,7 @@ const BigActionButton = ({
 									left: "0",
 									width: "100%",
 									height: "100%",
-									backgroundColor: "white",
+									backgroundColor: isDark ? "black" : "white",
 									padding: "10px",
 								}}
 							>
@@ -100,7 +103,7 @@ const BigActionButton = ({
 										as={iconProvider}
 										name={iconName}
 										size={screenSize === "small" ? "sm" : "md"}
-										color="black"
+										color={isDark ? "white" : "black"}
 										marginRight="10px"
 									/>
 									<Heading
