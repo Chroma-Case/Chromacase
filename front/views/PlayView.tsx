@@ -4,7 +4,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
 import LoadingComponent from '../components/Loading';
@@ -19,10 +19,10 @@ import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from "react-use-precision-timer";
-import { setTimeout } from 'timers/promises';
 
 type PlayViewProps = {
-	songId: number
+	songId: number,
+	type: 'practice' | 'normal'
 }
 
 
@@ -39,6 +39,9 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 
 const PlayView = () => {
 	const songId = 1;
+	const type = 'normal';
+	const route = useRoute();
+	// const { songId, type }: PlayViewProps = route.params as any;
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
@@ -101,7 +104,7 @@ const PlayView = () => {
 			webSocket.current!.send(JSON.stringify({
 				type: "start",
 				id: song.data!.id,
-				mode: "normal",
+				mode: type,
 				bearer: accessToken
 			}));
 		};
