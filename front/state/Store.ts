@@ -1,24 +1,29 @@
 import userReducer from '../state/UserSlice';
 import settingsReduder from './SettingsSlice';
-import { configureStore } from '@reduxjs/toolkit';
+import { StateFromReducersMapObject, configureStore } from '@reduxjs/toolkit';
 import languageReducer from './LanguageSlice';
 import { TypedUseSelectorHook, useDispatch as reduxDispatch, useSelector as reduxSelector } from 'react-redux'
 import { persistStore, persistCombineReducers, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from "redux-persist";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CurriedGetDefaultMiddleware } from '@reduxjs/toolkit/dist/getDefaultMiddleware';
+import { PersistPartial } from 'redux-persist/es/persistReducer';
 
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage
 }
+const reducers = {
+	user: userReducer,
+	language: languageReducer,
+	settings: settingsReduder
+}
+
+type State = StateFromReducersMapObject<typeof reducers>;
 
 let store = configureStore({
-	reducer: persistCombineReducers(persistConfig, {
-		user: userReducer,
-		language: languageReducer,
-		settings: settingsReduder
-	}),
-	middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
+	reducer: persistCombineReducers(persistConfig, reducers),
+	middleware: (getDefaultMiddleware: CurriedGetDefaultMiddleware<State & PersistPartial>) =>
+	getDefaultMiddleware({
     	serializableCheck: {
     		ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     	},
