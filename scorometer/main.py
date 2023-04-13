@@ -6,6 +6,7 @@ import operator
 import os
 import select
 import sys
+from typing import TypedDict
 
 import requests
 from chroma_case.Key import Key
@@ -33,6 +34,15 @@ NORMAL = 0
 PRACTICE = 1
 
 
+class ScoroInfo(TypedDict):
+	max_score: int
+	score: int
+	missed: int
+	perfect: int
+	great: int
+	good: int
+
+
 def send(o):
 	print(json.dumps(o), flush=True)
 
@@ -52,6 +62,18 @@ class Scorometer:
 		self.good: int = 0
 		self.wrong_ids = []
 		self.difficulties = {}
+		self.info: ScoroInfo = {
+			"max_score": len(self.partition.notes) * 100,
+			"score": 0,
+			"missed": 0,
+			"perfect": 0,
+			"great": 0,
+			"good": 0,
+		}
+
+	def send(self, obj):
+		obj.info = self.info
+		send(obj)
 
 	def getPartition(self, midiFile: str):
 		notes = []
@@ -106,12 +128,12 @@ class Scorometer:
 		if to_play:
 			perf = self.getTimingScore(key, to_play)
 			logging.debug({"note_on": f"{perf} on {message.note}"})
-			send({"type": "timing", "id": message.id, "timing": perf})
+			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
 			self.score -= 50
 			self.wrong_ids += [message.id]
 			logging.debug({"note_on": f"wrong key {message.note}"})
-			send({"type": "timing", "id": message.id, "timing": "wrong"})
+			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
 
 	def handleNoteOff(self, message: NoteOffMessage):
 		logging.debug({"note_off": message.note})
@@ -121,7 +143,7 @@ class Scorometer:
 		self.keys_down.remove((message.note, down_since))
 		if message.id in self.wrong_ids:
 			logging.debug({"note_off": f"wrong key {message.note}"})
-			send({"type": "duration", "id": message.id, "duration": "wrong"})
+			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
 			return
 		key = Key(
 			key=message.note, start=down_since, duration=(message.time - down_since)
@@ -145,7 +167,7 @@ class Scorometer:
 			)
 			to_play.done = True
 			logging.debug({"note_off": f"{perf} on {message.note}"})
-			send({"type": "duration", "id": message.id, "duration": perf})
+			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
 			logging.warning("note_off: no key to play but it was not a wrong note_on")
 
@@ -161,7 +183,7 @@ class Scorometer:
 			None,
 		)
 		if keys_to_play is None:
-			send({"type": "error", "error": "no keys should be played"})
+			self.send({"type": "error", "error": "no keys should be played"})
 			return
 		to_play = next(
 			(i for i in keys_to_play if i.key == key.key and i.done is not True), None
@@ -169,11 +191,11 @@ class Scorometer:
 		if to_play:
 			perf = "practice"
 			logging.debug({"note_on": f"{perf} on {message.note}"})
-			send({"type": "timing", "id": message.id, "timing": perf})
+			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
 			self.wrong_ids += [message.id]
 			logging.debug({"note_on": f"wrong key {message.note}"})
-			send({"type": "timing", "id": message.id, "timing": "wrong"})
+			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
 
 	def handleNoteOffPractice(self, message: NoteOffMessage):
 		logging.debug({"note_off": message.note})
@@ -183,7 +205,7 @@ class Scorometer:
 		self.keys_down.remove((message.note, down_since))
 		if message.id in self.wrong_ids:
 			logging.debug({"note_off": f"wrong key {message.note}"})
-			send({"type": "duration", "id": message.id, "duration": "wrong"})
+			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
 			return
 		key = Key(
 			key=message.note, start=down_since, duration=(message.time - down_since)
@@ -195,7 +217,8 @@ class Scorometer:
 		if keys_to_play is None:
 			logging.info("Invalid key.")
 			self.score -= 50
-			self.sendScore(message.id, "wrong key", "wrong key")
+			# TODO: I dont think this if is right
+			# self.sendScore(message.id, "wrong key", "wrong key")
 			return
 		to_play = next(
 			(i for i in keys_to_play if i.key == key.key and i.done is not True), None
@@ -204,9 +227,9 @@ class Scorometer:
 			perf = "practice"
 			to_play.done = True
 			logging.debug({"note_off": f"{perf} on {message.note}"})
-			send({"type": "duration", "id": message.id, "duration": perf})
+			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
-			send({"type": "duration", "id": message.id, "duration": "wrong"})
+			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
 
 	def getDurationScore(self, key: Key, to_play: Key):
 		tempo_percent = abs((key.duration / to_play.duration) - 1)
@@ -244,7 +267,7 @@ class Scorometer:
 		match message:
 			case InvalidMessage(error):
 				logging.warning(f"Invalid message {line} with error: {error}")
-				send({"error": f"Invalid message {line} with error: {error}"})
+				self.send({"error": f"Invalid message {line} with error: {error}"})
 			case NoteOnMessage():
 				if self.mode == NORMAL:
 					self.handleNoteOn(message)
@@ -263,15 +286,6 @@ class Scorometer:
 				logging.warning(
 					f"Expected note_on note_off or pause message but got {message.type} instead"
 				)
-
-	def sendScore(self, id, timingScore, timingInformation):
-		send(
-			{
-				"id": id,
-				"timingScore": timingScore,
-				"timingInformation": timingInformation,
-			}
-		)
 
 	def gameLoop(self):
 		while True:
