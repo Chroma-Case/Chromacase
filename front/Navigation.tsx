@@ -1,4 +1,4 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationProp, useNavigation as navigationHook } from "@react-navigation/native";
 import React from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -47,9 +47,18 @@ type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
 
 const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never }>();
 
-const routesToScreens = (routes: Record<string, Route>) => Object.entries(routes)
+const RouteToScreen = (component: Route['component']) => (props: NativeStackScreenProps<AppRouteParams>) =>
+	<>
+		{component(props.route.params)}
+	</>
+
+const routesToScreens = (routes: Record<keyof AppRouteParams, Route>) => Object.entries(routes)
 	.map(([name, route]) => (
-		<Stack.Screen name={name as any} {...route}/>
+		<Stack.Screen
+			name={name as keyof AppRouteParams}
+			options={route.options}
+			component={RouteToScreen(route.component)}
+		/>
 	))
 
 export const Router = () => {
