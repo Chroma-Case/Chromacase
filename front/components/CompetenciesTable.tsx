@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation } from "../Navigation";
 import { HStack, VStack, Text, Progress } from "native-base";
 import { translate } from "../i18n/i18n";
 import Card from './Card';

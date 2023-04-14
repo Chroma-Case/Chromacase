@@ -1,4 +1,3 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
 import { useQuery } from 'react-query';
 import LoadingComponent from "../components/Loading";
@@ -8,16 +7,15 @@ import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
 import API from "../API";
 import TextButton from "../components/TextButton";
+import { useNavigation } from "../Navigation";
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
 	songId: number;
 }
 
-const SongLobbyView = () => {
-	const route = useRoute();
+const SongLobbyView = (props: SongLobbyProps) => {
 	const navigation = useNavigation();
-	const props: SongLobbyProps = route.params as any;
 	const songQuery = useQuery(['song', props.songId], () => API.getSong(props.songId));
 	const chaptersQuery = useQuery(['song', props.songId, 'chapters'], () => API.getSongChapters(props.songId));
 	const scoresQuery = useQuery(['song', props.songId, 'scores'], () => API.getSongHistory(props.songId));
@@ -47,7 +45,7 @@ const SongLobbyView = () => {
 							/>
 						</Text>
 						<TextButton translate={{ translationKey: 'playBtn' }} width='auto'
-							onPress={() => navigation.navigate('Play', { songId: songQuery.data?.id })}
+							onPress={() => navigation.navigate('Play', { songId: songQuery.data!.id })}
 							rightIcon={<Icon as={Ionicons} name="play-outline"/>}
 						/>
 					</Box>

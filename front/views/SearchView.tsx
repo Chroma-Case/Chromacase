@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box } from "native-base";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "../Navigation";
 import SearchBarSuggestions from "../components/SearchBarSuggestions";
 import { useQueries, useQuery } from "react-query";
 import { SuggestionType } from "../components/SearchBar";
