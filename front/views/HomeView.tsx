@@ -3,7 +3,8 @@ import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import LoadingComponent from "../components/Loading";
 import { Center, Box, ScrollView, Flex, useBreakpointValue, Stack, Heading, Container, VStack, HStack } from 'native-base';
-import { useNavigation } from "@react-navigation/native";
+
+import { useNavigation } from "../Navigation";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
 import ProgressBar from "../components/ProgressBar";

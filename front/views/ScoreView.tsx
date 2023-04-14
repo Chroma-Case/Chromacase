@@ -1,14 +1,14 @@
 import { Card, Column, Image, Row, Text, useTheme, ScrollView, Center, VStack } from "native-base"
 import Translate from "../components/Translate";
 import SongCardGrid from "../components/SongCardGrid";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "../Navigation";
 import { CardBorderRadius } from "../components/Card";
 import TextButton from "../components/TextButton";
 import API from '../API';
 import { useQuery } from "react-query";
 import LoadingComponent from "../components/Loading";
 
-const ScoreView = (/*{ songId }, { songId: number }*/) => {
+const ScoreView = ({ songId }: { songId: number }) => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	// const songQuery = useQuery(['song', props.songId], () => API.getSong(props.songId));

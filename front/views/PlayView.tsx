@@ -4,7 +4,8 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation } from '@react-navigation/native';
+
+import { useNavigation } from "../Navigation";
 import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
 import LoadingComponent from '../components/Loading';
@@ -32,8 +33,7 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	}
 }
 
-const PlayView = () => {
-	const songId = 1;
+const PlayView = ({ songId }: PlayViewProps) => {
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
 	const song = useQuery(['song', songId], () => API.getSong(songId));

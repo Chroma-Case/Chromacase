@@ -1,7 +1,7 @@
 import React from "react";
 import Card, { CardBorderRadius } from './Card';
 import { VStack, Text, Image, Pressable } from 'native-base';
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation } from "../Navigation";
 type SongCardProps = {
 	albumCover: string;
 	songTitle: string;
