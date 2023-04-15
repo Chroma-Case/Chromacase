@@ -18,6 +18,7 @@ import NotificationsView from './NotificationView';
 import PrivacyView from './PrivacyView';
 import PreferencesView from './PreferencesView';
 import GuestToUserView from './GuestToUserView';
+import { useQuery } from 'react-query';
 
 import API, { APIError } from '../../API';
 import User from '../../models/User';
@@ -116,13 +117,20 @@ export const PianoSettingsView = ({navigation}) => {
 const TabRow = createTabRowNavigator(); 
 
 const SetttingsNavigator = () => {
-	const [user, setUser] = React.useState<null | User>(null);
+	const userQuery = useQuery(["appSettings", 'user'], API.getUserInfo);
+	const user = userQuery.data;
 
-	React.useEffect(() => {
-		API.getUserInfo().then((user) => {
-			setUser(user);
-		});
-	}, []);
+	if (userQuery.isError) {
+		user.isGuest = false;
+	}
+
+	if (userQuery.isLoading) {
+		return (
+			<Center style={{ flex: 1}}>
+				<Text>Loading...</Text>
+			</Center>
+		)
+	}
 
 	return (
 		<TabRow.Navigator initialRouteName='InternalDefault'>
