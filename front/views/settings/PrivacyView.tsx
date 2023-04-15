@@ -1,13 +1,17 @@
 import React from "react";
-import { View } from "react-native";
-import { Center, Button, Text, Switch, Heading } from "native-base";
+import { Center, Heading } from "native-base";
 import { translate } from "../../i18n/i18n";
 import ElementList from "../../components/GtkUI/ElementList";
+import { useDispatch } from "react-redux";
+import { RootState, useSelector } from "../../state/Store";
+import { SettingsState, updateSettings } from "../../state/SettingsSlice";
 
-const PrivacyView = ({ navigation }) => {
-	const [dataCollection, setDataCollection] = React.useState(false);
-	const [customAds, setCustomAds] = React.useState(false);
-	const [recommendations, setRecommendations] = React.useState(false);
+const PrivacyView = () => {
+	const dispatch = useDispatch();
+	const settings: SettingsState = useSelector(
+		(state: RootState) => state.settings.settings as SettingsState
+	);
+
 	return (
 		<Center style={{ flex: 1 }}>
 			<Heading style={{ textAlign: "center" }}>{translate("privBtn")}</Heading>
@@ -23,24 +27,31 @@ const PrivacyView = ({ navigation }) => {
 						type: "toggle",
 						title: translate("dataCollection"),
 						data: {
-							value: dataCollection,
-							onToggle: () => setDataCollection(!dataCollection),
+							value: settings.dataCollection,
+							onToggle: () =>
+								dispatch(
+									updateSettings({ dataCollection: !settings.dataCollection })
+								),
 						},
 					},
 					{
 						type: "toggle",
 						title: translate("customAds"),
 						data: {
-							value: customAds,
-							onToggle: () => setCustomAds(!customAds),
+							value: settings.customAds,
+							onToggle: () =>
+								dispatch(updateSettings({ customAds: !settings.customAds })),
 						},
 					},
 					{
 						type: "toggle",
 						title: translate("recommendations"),
 						data: {
-							value: recommendations,
-							onToggle: () => setRecommendations(!recommendations),
+							value: settings.recommandations,
+							onToggle: () =>
+								dispatch(
+									updateSettings({ recommandations: !settings.recommandations })
+								),
 						},
 					},
 				]}
