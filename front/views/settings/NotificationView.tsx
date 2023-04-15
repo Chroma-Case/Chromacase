@@ -1,29 +1,15 @@
 import React from "react";
-import { View } from "react-native";
-import { Center, Button, Text, Switch, Heading } from "native-base";
+import { Center, Heading } from "native-base";
 import { translate, Translate } from "../../i18n/i18n";
 import { useDispatch } from "react-redux";
 import { RootState, useSelector } from "../../state/Store";
-import { useLanguage } from "../../state/LanguageSlice";
 import { SettingsState, updateSettings } from "../../state/SettingsSlice";
 import ElementList from "../../components/GtkUI/ElementList";
 
 const NotificationsView = ({ navigation }) => {
 	const dispatch = useDispatch();
-	let settings: SettingsState = useSelector(
-		(state: RootState) => state.settings
-	);
-	const [pushNotifications, setPushNotifications] = React.useState(
-		settings.enablePushNotifications
-	);
-	const [emailNotifications, setEmailNotifications] = React.useState(
-		settings.enableMailNotifications
-	);
-	const [trainingReminder, setTrainingReminder] = React.useState(
-		settings.enableLessongsReminders
-	);
-	const [releaseAlert, setReleaseAlert] = React.useState(
-		settings.enableReleaseAlerts
+	const settings: SettingsState = useSelector(
+		(state: RootState) => state.settings.settings as SettingsState
 	);
 
 	return (
@@ -42,14 +28,13 @@ const NotificationsView = ({ navigation }) => {
 						type: "toggle",
 						title: translate("SettingsNotificationsPushNotifications"),
 						data: {
-							value: pushNotifications,
+							value: settings.enablePushNotifications,
 							onToggle: () => {
 								dispatch(
 									updateSettings({
 										enablePushNotifications: !settings.enablePushNotifications,
 									})
 								);
-								setPushNotifications(!pushNotifications);
 							},
 						},
 					},
@@ -57,14 +42,13 @@ const NotificationsView = ({ navigation }) => {
 						type: "toggle",
 						title: translate("SettingsNotificationsEmailNotifications"),
 						data: {
-							value: emailNotifications,
+							value: settings.enableMailNotifications,
 							onToggle: () => {
 								dispatch(
 									updateSettings({
 										enableMailNotifications: !settings.enableMailNotifications,
 									})
 								);
-								setEmailNotifications(!emailNotifications);
 							},
 						},
 					},
@@ -72,14 +56,13 @@ const NotificationsView = ({ navigation }) => {
 						type: "toggle",
 						title: translate("SettingsNotificationsTrainingReminder"),
 						data: {
-							value: trainingReminder,
+							value: settings.enableLessongsReminders,
 							onToggle: () => {
 								dispatch(
 									updateSettings({
 										enableLessongsReminders: !settings.enableLessongsReminders,
 									})
 								);
-								setTrainingReminder(!trainingReminder);
 							},
 						},
 					},
@@ -87,14 +70,13 @@ const NotificationsView = ({ navigation }) => {
 						type: "toggle",
 						title: translate("SettingsNotificationsReleaseAlert"),
 						data: {
-							value: releaseAlert,
+							value: settings.enableReleaseAlerts,
 							onToggle: () => {
 								dispatch(
 									updateSettings({
 										enableReleaseAlerts: !settings.enableReleaseAlerts,
 									})
 								);
-								setReleaseAlert(!releaseAlert);
 							},
 						},
 					},
