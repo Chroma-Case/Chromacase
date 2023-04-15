@@ -4,7 +4,6 @@ import json
 import logging
 import operator
 import os
-import select
 import sys
 from typing import TypedDict
 
@@ -55,11 +54,6 @@ class Scorometer:
 		self.mode: int = mode
 		self.song_id: int = song_id
 		self.user_id: int = user_id
-		self.score: int = 0
-		self.missed: int = 0
-		self.perfect: int = 0
-		self.great: int = 0
-		self.good: int = 0
 		self.wrong_ids = []
 		self.difficulties = {}
 		self.info: ScoroInfo = {
@@ -130,7 +124,7 @@ class Scorometer:
 			logging.debug({"note_on": f"{perf} on {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
-			self.score -= 50
+			self.info["score"] -= 50
 			self.wrong_ids += [message.id]
 			logging.debug({"note_on": f"wrong key {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
@@ -158,7 +152,7 @@ class Scorometer:
 		)
 		if to_play:
 			perf = self.getDurationScore(key, to_play)
-			self.score += (
+			self.info["score"] += (
 				100
 				if perf == "perfect"
 				else 75
@@ -216,7 +210,7 @@ class Scorometer:
 		)
 		if keys_to_play is None:
 			logging.info("Invalid key.")
-			self.score -= 50
+			self.info["score"] -= 50
 			# TODO: I dont think this if is right
 			# self.sendScore(message.id, "wrong key", "wrong key")
 			return
@@ -296,16 +290,16 @@ class Scorometer:
 	def endGame(self):
 		for i in self.partition.notes:
 			if i.done is False:
-				self.score -= 50
-				self.missed += 1
+				self.info["score"] -= 50
+				self.info["missed"] += 1
 		send(
 			{
-				"overallScore": self.score,
+				"overallScore": self.info["score"],
 				"score": {
-					"missed": self.missed,
-					"good": self.good,
-					"great": self.great,
-					"perfect": self.perfect,
+					"missed": self.info["missed"],
+					"good": self.info["good"],
+					"great": self.info["great"],
+					"perfect": self.info["perfect"],
 					"maxScore": len(self.partition.notes) * 100,
 				},
 			}
@@ -316,7 +310,7 @@ class Scorometer:
 				json={
 					"songID": self.song_id,
 					"userID": self.user_id,
-					"score": self.score,
+					"score": self.info["score"],
 					"difficulties": self.difficulties,
 				},
 			)
