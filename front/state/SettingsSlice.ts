@@ -9,7 +9,10 @@ export type SettingsState = {
 	preferedLevel: 'easy' | 'medium' | 'hard',
 	colorBlind: boolean,
 	micLevel: number,
-	preferedInputName?: string
+	preferedInputName?: string,
+	dataCollection: boolean,
+	customAds: boolean,
+	recommandations: boolean,
 }
 
 export const settingsSlice = createSlice({
@@ -23,7 +26,10 @@ export const settingsSlice = createSlice({
 			preferedLevel: 'easy',
 			colorBlind: false,
 			micLevel: 50,
-			colorScheme: "system"
+			colorScheme: "system",
+			dataCollection: true,
+			customAds: true,
+			recommandations: true,
 		},
 	},
 	reducers: {

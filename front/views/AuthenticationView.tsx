@@ -36,6 +36,7 @@ const handleSignup = async (username: string, password: string, email: string, a
 const AuthenticationView = () => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
+	console.log(navigation.getState());
 	const params = navigation.getState().routes.find((route) => {
 		// this is not ideal way to check if we are on login page
 		return route.name === "Login";
