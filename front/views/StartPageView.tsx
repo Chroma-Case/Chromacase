@@ -45,7 +45,7 @@ const imgLogo =
 	"https://chromacase.studio/wp-content/uploads/2023/03/cropped-cropped-splashLogo-280x300.png";
 
 const StartPageView = () => {
-	const navigate = useNavigation();
+	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isSmallScreen = screenSize === "small";
 	const dispatch = useDispatch();
