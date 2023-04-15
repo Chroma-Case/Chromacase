@@ -1,23 +1,12 @@
 interface UserSettings {
-    preferences: {
-        deviceId: number,
-        micVolume: number,
-        theme: 'light' | 'dark' | 'system',
-        lang: 'fr' | 'en' | 'sp',
-        difficulty: 'beg' | 'inter' | 'pro',
-        colorBlind: boolean
-    },
-    notifications: {
-        pushNotif: boolean,
-        emailNotif: boolean,
-        trainNotif: boolean,
-        newSongNotif: boolean
-    },
-    privacy: {
-        dataCollection: boolean,
-        customAd: boolean,
-        recommendation: boolean
-    }
+    pushNotification: boolean,
+    emailNotification: boolean,
+    trainingNotification: boolean,
+    newSongNotification: boolean,
+    recommendations: boolean,
+    weeklyReport: boolean,
+    leaderBoard: boolean,
+    showActivity: boolean,
 }
 
 export default UserSettings

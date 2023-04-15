@@ -42,6 +42,17 @@ export const en = {
 	longestCombo: 'Longest combo : ',
 	favoriteGenre: 'Favorite genre : ',
 
+	//privcay settings
+	showAct: 'Show Activity',
+	appearLdrBrd: 'Appear on the leader board',
+	recommdtns: 'Recommendations',
+
+	//notifications settings
+	pushNotif: 'Push notifications',
+	emailNotif: 'Email notifications',
+	trainNotif: 'Training reminder',
+	newSongNotif: 'New songs',
+
 	// Difficulty settings
 	diffBtn: 'Difficulty',
 	easy: 'Beginner',

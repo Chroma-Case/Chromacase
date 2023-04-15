@@ -11,6 +11,7 @@ import store from "./state/Store";
 import { Platform } from "react-native";
 import { en } from "./i18n/Translations";
 import { useQuery, QueryClient } from "react-query";
+import UserSettings from "./models/UserSettings";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -57,10 +58,12 @@ const dummyIllustrations = [
 const getDummyIllustration = () => dummyIllustrations[Math.floor(Math.random() * dummyIllustrations.length)];
 
 // we will need the same thing for the scorometer API url
-const baseAPIUrl =
-	process.env.NODE_ENV != "development" && Platform.OS === "web"
-		? "/api"
-		: Constants.manifest?.extra?.apiUrl;
+// const baseAPIUrl =
+// 	process.env.NODE_ENV != "development" && Platform.OS === "web"
+// 		? "/api"
+// 		: Constants.manifest?.extra?.apiUrl;
+
+const baseAPIUrl = 'http://localhost:3000';
 
 export default class API {
 
@@ -157,27 +160,27 @@ export default class API {
 			metrics: {
 				partyPlayed: user.partyPlayed as number,
 			},
-			settings: {
-				preferences: {
-					deviceId: 1,
-					micVolume: 10,
-					theme: "system",
-					lang: "fr",
-					difficulty: "beg",
-					colorBlind: false,
-				},
-				notifications: {
-					pushNotif: false,
-					emailNotif: false,
-					trainNotif: false,
-					newSongNotif: false,
-				},
-				privacy: {
-					dataCollection: true,
-					customAd: true,
-					recommendation: true,
-				},
-			},
+			// settings: {
+			// 	preferences: {
+			// 		deviceId: 1,
+			// 		micVolume: 10,
+			// 		theme: "system",
+			// 		lang: "fr",
+			// 		difficulty: "beg",
+			// 		colorBlind: false,
+			// 	},
+			// 	notifications: {
+			// 		pushNotif: false,
+			// 		emailNotif: false,
+			// 		trainNotif: false,
+			// 		newSongNotif: false,
+			// 	},
+			// 	privacy: {
+			// 		dataCollection: true,
+			// 		customAd: true,
+			// 		recommendation: true,
+			// 	},
+			// },
 		} as User;
 	}
 
@@ -190,6 +193,19 @@ export default class API {
 			arpegeCompetency: Math.random() * 100,
 			chordsCompetency: Math.random() * 100,
 		};
+	}
+
+	public static async getUserSettings(): Promise<UserSettings> {
+		return {
+			emailNotification: true,
+			leaderBoard: true,
+			newSongNotification: true,
+			pushNotification: true,
+			recommendations: true,
+			showActivity: true,
+			trainingNotification: true,
+			weeklyReport: true,
+		} as UserSettings;
 	}
 
 	/**
