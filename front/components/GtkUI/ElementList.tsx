@@ -48,22 +48,14 @@ const ElementList = ({ elements, style }: ElementListProps) => {
 
 	return (
 		<Column style={[style, elementStyle]}>
-			{(() => {
-				const elementsWithDividers = [];
-				for (let i = 0; i < elements.length; i++) {
-					elementsWithDividers.push(
-						<Box key={elements[i]?.title}>
-							<Element {...elements[i]} />
-						</Box>
-					);
-					if (i < elements.length - 1) {
-						elementsWithDividers.push(
-							<Divider key={elements[i]?.title + "Divider"} />
-						);
+			{elements.map((element, index, __) => (
+				<Box key={element.title}>
+					<Element {...element} />
+					{ index < elements.length - 1 &&
+						<Divider />
 					}
-				}
-				return elementsWithDividers;
-			})()}
+				</Box>
+			))}
 		</Column>
 	);
 };

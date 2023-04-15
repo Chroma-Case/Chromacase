@@ -1,6 +1,12 @@
 import { Select, Switch, Text, Icon, Row, Slider } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
-export type ElementType = "custom" | "default" | "text" | "toggle" | "dropdown" | "range";
+export type ElementType =
+	| "custom"
+	| "default"
+	| "text"
+	| "toggle"
+	| "dropdown"
+	| "range";
 
 export type DropdownOption = {
 	label: string;
@@ -26,13 +32,13 @@ export type ElementDropdownProps = {
 };
 
 export type ElementRangeProps = {
-    onChange: (value: number) => void;
-    value: number;
-    defaultValue?: number;
-    min: number;
-    max: number;
-    step?: number;
-}
+	onChange: (value: number) => void;
+	value: number;
+	defaultValue?: number;
+	min: number;
+	max: number;
+	step?: number;
+};
 
 export const getElementTextNode = (
 	{ text, onPress }: ElementTextProps,
@@ -71,7 +77,7 @@ export const getElementToggleNode = (
 ) => {
 	return (
 		<Switch
-            // the callback is called by the Pressable component wrapping the entire row
+			// the callback is called by the Pressable component wrapping the entire row
 			isChecked={value ?? false}
 			defaultIsChecked={defaultValue}
 			disabled={disabled}
@@ -103,29 +109,29 @@ export const getElementDropdownNode = (
 };
 
 export const getElementRangeNode = (
-    { onChange, value, defaultValue, min, max, step }: ElementRangeProps,
-    disabled: boolean,
-    title: string,
+	{ onChange, value, defaultValue, min, max, step }: ElementRangeProps,
+	disabled: boolean,
+	title: string
 ) => {
-    return (
-        <Slider
-            // this is a hot fix for now but ideally this input should be managed
-            // by the value prop and not the defaultValue prop but it requires the
-            // caller to manage the state of the continuous value which is not ideal
-            defaultValue={value}
-            // defaultValue={defaultValue}
-            minValue={min}
-            maxValue={max}
-            step={step}
-            isDisabled={disabled}
-            onChangeEnd={onChange}
-            accessibilityLabel={`Slider for ${title}`}
-            width="200"
-        >
-            <Slider.Track>
-                <Slider.FilledTrack />
-            </Slider.Track>
-            <Slider.Thumb />
-        </Slider>
-    )
-}
+	return (
+		<Slider
+			// this is a hot fix for now but ideally this input should be managed
+			// by the value prop and not the defaultValue prop but it requires the
+			// caller to manage the state of the continuous value which is not ideal
+			defaultValue={value}
+			// defaultValue={defaultValue}
+			minValue={min}
+			maxValue={max}
+			step={step}
+			isDisabled={disabled}
+			onChangeEnd={onChange}
+			accessibilityLabel={`Slider for ${title}`}
+			width="200"
+		>
+			<Slider.Track>
+				<Slider.FilledTrack />
+			</Slider.Track>
+			<Slider.Thumb />
+		</Slider>
+	);
+};

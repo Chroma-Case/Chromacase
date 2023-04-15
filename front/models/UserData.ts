@@ -2,7 +2,7 @@ interface UserData {
     gamesPlayed: number;
     xp: number;
     avatar: string | undefined;
-    createdAt: string;
+    createdAt: Date;
 }
 
 export default UserData;

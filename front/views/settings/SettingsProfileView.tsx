@@ -23,30 +23,26 @@ import TextButton from "../../components/TextButton";
 import LoadingComponent from "../../components/Loading";
 import ElementList from "../../components/GtkUI/ElementList";
 import { translate } from "../../i18n/i18n";
+import { useQuery } from "react-query";
 
 const getInitials = (name: string) => {
-	const names = name.split(" ");
-	if (names.length === 1) return names[0]?.charAt(0);
-	let initials = [];
-	for (let i = 0; i < names.length; i++) {
-		initials.push(names[i]?.charAt(0));
-	}
-	return initials.join("");
+	return name.split(" ").map((n) => n[0]).join("");
 };
 
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
-	const [user, setUser] = useState<User | null>(null);
+	const userQuery = useQuery(["appSettings", "user"], API.getUserInfo);
 	const dispatch = useDispatch();
-	const [toggle, setToggle] = useState(true);
-	const [selectValue, setSelectValue] = useState("fr");
+	const user = userQuery.data;
 
-	useEffect(() => {
-		API.getUserInfo().then((user) => {
-			setUser(user);
-		});
-	}, []);
+	if (userQuery.isError) {
+		return (
+			<Center style={{ flex: 1 }}>
+				<Text>{translate("errorLoadingUser")}</Text>
+			</Center>
+		);
+	}
 
-	if (!user) {
+	if (!userQuery || userQuery.isLoading || !userQuery.data) {
 		return (
 			<Center style={{ flex: 1 }}>
 				<LoadingComponent />
@@ -136,7 +132,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							helperText:
 								"La date de création est actuellement arbitraire car le serveur ne retourne pas cette information",
 							data: {
-								text: user.data.createdAt,
+								text: user.data.createdAt.toLocaleDateString(),
 							},
 						},
 						{
