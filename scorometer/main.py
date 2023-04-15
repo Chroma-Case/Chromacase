@@ -66,7 +66,7 @@ class Scorometer:
 		}
 
 	def send(self, obj):
-		obj.info = self.info
+		obj["info"] = self.info
 		send(obj)
 
 	def getPartition(self, midiFile: str):
