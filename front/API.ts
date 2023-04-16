@@ -63,7 +63,7 @@ const getDummyIllustration = () => dummyIllustrations[Math.floor(Math.random() *
 // 		? "/api"
 // 		: Constants.manifest?.extra?.apiUrl;
 
-const baseAPIUrl = 'http://localhost:3000';
+const baseAPIUrl = 'http://192.168.100.160:3000';
 
 export default class API {
 

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View } from 'react-native';
-import { Center, Button, Text, Switch, Heading } from "native-base";
+import { Center, Text, Switch, Heading, VStack, Box } from "native-base";
 import { translate } from "../../i18n/i18n";
 import { useIsFocused } from "@react-navigation/native";
 import API from "../../API";
-import { updateSettings } from "../../state/SettingsSlice";
 import UserSettings from "../../models/UserSettings";
+import TextButton from "../../components/TextButton";
 
 
 const NotificationsView = ({navigation}: any) => {
@@ -53,31 +52,34 @@ const NotificationsView = ({navigation}: any) => {
 	};
 
 	return (
-		<Center style={{ flex: 1, justifyContent: 'center' }}>
+		<VStack>
+			<Heading my={5} style={{ textAlign: "center" }}>{ translate('notifBtn')}</Heading>
 
-			<Heading style={{ textAlign: "center" }}>{ translate('notifBtn')}</Heading>
-			<Button variant='outline' style={{ margin: 10}} onPress={() => navigation.navigate('Settings')} >{ translate('backBtn') }</Button>
+			<Center style={{ flex: 1, alignContent: 'space-between'}}>
+				<VStack width={'100%'} style={{maxWidth: 800}}>
+					<Box my={1} bgColor={"gray.200"} py={5} px={2} style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between' }} >
+						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('pushNotif') }</Text>
+						<Switch  value={pushNotif} colorScheme="primary" onValueChange={updatePushNotif}/>
+					</Box>
 
-			<View style={{margin: 20}} >
-				<Text style={{ textAlign: "center" }}>{ translate('pushNotif') }</Text>
-				<Switch value={pushNotif} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary" onValueChange={updatePushNotif}/>
-			</View>
+					<Box my={1} bgColor={"gray.200"} py={5} px={2} style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between' }}>
+						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('emailNotif') }</Text>
+						<Switch value={emailNotif} colorScheme="primary" onValueChange={updateEmailNotif}/>
+					</Box>
 
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>{ translate('emailNotif') }</Text>
-				<Switch value={emailNotif} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary" onValueChange={updateEmailNotif}/>
-			</View>
+					<Box my={1} bgColor={"gray.200"} py={5} px={2} style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between' }}>
+						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('trainNotif') }</Text>
+						<Switch value={trainNotif} colorScheme="primary" onValueChange={updateTrainNotif}/>
+					</Box>
 
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>{ translate('trainNotif') }</Text>
-				<Switch value={trainNotif} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary" onValueChange={updateTrainNotif}/>
-			</View>
-
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>{ translate('newSongNotif') }</Text>
-				<Switch value={newSongNotif} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary" onValueChange={updateNewSongNotif}/>
-			</View>
-		</Center>
+					<Box my={1} bgColor={"gray.200"} py={5} px={2} style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between' }}>
+						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('newSongNotif') }</Text>
+						<Switch value={newSongNotif} colorScheme="primary" onValueChange={updateNewSongNotif}/>
+					</Box>
+					<TextButton alignSelf={"center"} translate={{ translationKey: 'backBtn' }} onPress={() => navigation.navigate('Settings')}/>
+				</VStack>
+			</Center>
+		</VStack>
 	)
 }
 

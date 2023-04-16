@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View } from 'react-native';
-import { Center, Button, Text, Switch, Heading } from "native-base";
+import { Center, Text, Switch, Heading, VStack, Box } from "native-base";
 import { translate } from "../../i18n/i18n";
 import { useIsFocused } from "@react-navigation/native";
 import API from "../../API";
+import UserSettings from "../../models/UserSettings";
+import TextButton from "../../components/TextButton";
+
 
 const PrivacyView = ({navigation}: any) => {
 	const isFocused = useIsFocused();
+	const [data, setData] = useState<UserSettings>(Object);
 	let [showAct, setShowAct] = useState(false);
 	let [appearLdrBrd, setAppearLdrBrd] = useState(false);
 	let [recommdtns, setRecommdtns] = useState(false);
@@ -21,27 +24,48 @@ const PrivacyView = ({navigation}: any) => {
 		}
 	}, [isFocused]);
 
+	const updateShowAct = async () => {
+		data.showActivity = !showAct;
+		setShowAct(data.showActivity);
+		await API.updateUserSettings(data);
+	};
+
+	const updateAppearLdrBrd = async () => {
+		data.leaderBoard = !appearLdrBrd;
+		setAppearLdrBrd(data.leaderBoard);
+		await API.updateUserSettings(data);
+	};
+
+	const updateRecommdtns = async () => {
+		data.recommendations = !recommdtns;
+		setRecommdtns(data.recommendations);
+		await API.updateUserSettings(data);
+	};
+
 	return (
-		<Center style={{ flex: 1}}>
-			<Heading style={{ textAlign: "center" }}>{ translate('privBtn')}</Heading>
+		<VStack>
+			<Heading my={5} style={{ textAlign: "center" }}>{ translate('privBtn')}</Heading>
 
-			<Button variant='outline' onPress={() => navigation.navigate('Settings')} style={{ margin: 10 }}>{ translate('backBtn') }</Button>
+			<Center style={{ flex: 1, alignContent: 'space-between'}}>
+				<VStack width={'100%'} style={{maxWidth: 800}}>
+					<Box my={1} bgColor={"gray.200"} py={5} px={2} style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between' }}>
+						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('showAct') }</Text>
+						<Switch value={showAct} colorScheme="primary" onValueChange={updateShowAct}/>
+					</Box>
 
-			<View style={{margin: 20}} >
-				<Text style={{ textAlign: "center" }}>{ translate('showAct') }</Text>
-				<Switch value={showAct} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
-			</View>
+					<Box my={1} bgColor={"gray.200"} py={5} px={2} style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between' }}>
+						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('appearLdrBrd') }</Text>
+						<Switch value={appearLdrBrd}  colorScheme="primary" onValueChange={updateAppearLdrBrd}/>
+					</Box>
 
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>{ translate('appearLdrBrd') }</Text>
-				<Switch value={appearLdrBrd} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
-			</View>
-
-			<View style={{margin: 20}}>
-				<Text style={{ textAlign: "center" }}>{ translate('recommdtns') }</Text>
-				<Switch value={recommdtns} style={{ alignSelf: 'center', margin: 10 }} colorScheme="primary"/>
-			</View>
-		</Center>
+					<Box my={1} bgColor={"gray.200"} py={5} px={2} style={{ flex: 3, flexDirection: 'row', justifyContent: 'space-between' }}>
+						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('recommdtns') }</Text>
+						<Switch value={recommdtns}  colorScheme="primary" onValueChange={updateRecommdtns}/>
+					</Box>
+					<TextButton alignSelf={"center"} translate={{ translationKey: 'backBtn' }} onPress={() => navigation.navigate('Settings')}/>
+				</VStack>
+			</Center>
+		</VStack>
 	)
 }
 
