@@ -53,6 +53,7 @@ const PlayView = () => {
 	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	const [time, setTime] = useState(0);
+	const [score, setScore] = useState(0); // Between 0 and 100
 	const partitionRessources = useQuery(["partition", songId], () =>
 		API.getPartitionRessources(songId)
 	);
@@ -114,6 +115,13 @@ const PlayView = () => {
 				if (data.type == 'end') {
 					navigation.navigate('Score', { songId: song.data.id });
 					return;
+				}
+				const points = data.info.score;
+				const maxPoints = data.info.maxScore;
+				if (points < 0) {
+					setScore(0);
+				} else {
+					setScore(Math.floor(point / maxPoints) * 100);
 				}
 
 				let formattedMessage = '';
@@ -199,7 +207,6 @@ const PlayView = () => {
 		}
 
 	}, [song.data]);
-	const score = 20;
 
 	if (!song.data || !partitionRessources.data) {
 		return <Center style={{ flexGrow: 1 }}>

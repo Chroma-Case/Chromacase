@@ -43,6 +43,9 @@ services:
     build: 
       context: ./front
       dockerfile: Dockerfile.dev
+    environment:
+      - SCOROMETER_URL=http://scorometer:6543/
+      - NGINX_PORT=80
     ports:
       - "19006:19006"
     volumes:
