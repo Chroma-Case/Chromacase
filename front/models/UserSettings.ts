@@ -1,4 +1,4 @@
-interface UserSettings {
+export default interface UserSettings {
     pushNotification: boolean,
     emailNotification: boolean,
     trainingNotification: boolean,
@@ -8,5 +8,3 @@ interface UserSettings {
     leaderBoard: boolean,
     showActivity: boolean,
 }
-
-export default UserSettings

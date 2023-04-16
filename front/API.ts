@@ -195,17 +195,22 @@ export default class API {
 		};
 	}
 
+	/**
+	 * Retrieve logged user's settings
+	 * @returns UserSettings
+	 */
 	public static async getUserSettings(): Promise<UserSettings> {
-		return {
-			emailNotification: true,
-			leaderBoard: true,
-			newSongNotification: true,
-			pushNotification: true,
-			recommendations: true,
-			showActivity: true,
-			trainingNotification: true,
-			weeklyReport: true,
-		} as UserSettings;
+		return await API.fetch({
+			route: '/auth/me/settings',
+			method: "GET",
+		}) as UserSettings;
+	}
+
+	public static async updateUserSettings(key: string, value: string): Promise<UserSettings> {
+		return await API.fetch({
+			route: `/auth/me/settings${key}=${value}`,
+			method: "PATCH",
+		}) as UserSettings;
 	}
 
 	/**

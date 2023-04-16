@@ -16,15 +16,10 @@ const PrivacyView = ({navigation}: any) => {
 			API.getUserSettings().then((data) => {
 				setShowAct(data.showActivity);
 				setAppearLdrBrd(data.leaderBoard);
+				setRecommdtns(data.recommendations);
 			})
 		}
 	}, [isFocused]);
-
-	// const changeShowPresence = async () => {
-    //     data.show_presence = !showPresence;
-    //     setShowPresence(data.show_presence);
-    //     await api.patchRequest('https://oauth.reddit.com/api/v1/prefs', data);
-    // }
 
 	return (
 		<Center style={{ flex: 1}}>
