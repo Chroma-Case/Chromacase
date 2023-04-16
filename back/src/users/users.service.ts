@@ -1,3 +1,5 @@
+// users/users.service.ts
+
 import { Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -53,6 +55,22 @@ export class UsersService {
 	async deleteUser(where: Prisma.UserWhereUniqueInput): Promise<User> {
 		return this.prisma.user.delete({
 			where,
+		});
+	}
+
+	async findOrCreate(user: any): Promise<User> {
+		const existingUser = await this.prisma.user.findUnique({
+			where: { email: user.email },
+		});
+		if (existingUser) {
+			return existingUser;
+		}
+		return this.prisma.user.create({
+			data: {
+				email: user.email,
+				username: `${user.firstName} ${user.lastName}`,
+				password: '',
+			},
 		});
 	}
 }
