@@ -206,10 +206,18 @@ export default class API {
 		}) as UserSettings;
 	}
 
-	public static async updateUserSettings(key: string, value: string): Promise<UserSettings> {
+	public static async updateUserSetting(key: string, value: string): Promise<UserSettings> {
 		return await API.fetch({
 			route: `/auth/me/settings${key}=${value}`,
 			method: "PATCH",
+		}) as UserSettings;
+	}
+
+	public static async updateUserSettings(data: UserSettings): Promise<UserSettings> {
+		return await API.fetch({
+			route: `/auth/me/settings`,
+			method: "PATCH",
+			body: data,
 		}) as UserSettings;
 	}
 
