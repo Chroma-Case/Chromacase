@@ -7,7 +7,7 @@ import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
 import SignupForm from "../components/forms/signupform";
 import TextButton from "../components/TextButton";
-import { useNavigation } from "../Navigation";
+import { RouteProps } from "../Navigation";
 
 const hanldeSignin = async (username: string, password: string, apiSetter: (accessToken: string) => void): Promise<string> => {
 	try {
@@ -33,15 +33,12 @@ const handleSignup = async (username: string, password: string, email: string, a
 	}
 };
 
-const AuthenticationView = () => {
-	const navigation = useNavigation();
+type AuthenticationViewProps = {
+	isSignup: boolean;
+}
+
+const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) => {
 	const dispatch = useDispatch();
-	console.log(navigation.getState());
-	const params = navigation.getState().routes.find((route) => {
-		// this is not ideal way to check if we are on login page
-		return route.name === "Login";
-	}).params ?? {};
-	const isSignup = params?.isSignup ?? false;
 	const [mode, setMode] = React.useState<"signin" | "signup">(isSignup ? "signup" : "signin");
 
 	return (

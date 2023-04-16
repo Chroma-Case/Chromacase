@@ -14,7 +14,7 @@ interface SongLobbyProps {
 	songId: number;
 }
 
-const SongLobbyView = (props: SongLobbyProps) => {
+const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	const navigation = useNavigation();
 	const songQuery = useQuery(['song', props.songId], () => API.getSong(props.songId));
 	const chaptersQuery = useQuery(['song', props.songId, 'chapters'], () => API.getSongChapters(props.songId));

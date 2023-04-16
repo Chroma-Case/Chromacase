@@ -1,5 +1,5 @@
 import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationProp, useNavigation as navigationHook } from "@react-navigation/native";
+import { NavigationProp, ParamListBase, useNavigation as navigationHook } from "@react-navigation/native";
 import React from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
@@ -19,6 +19,7 @@ import LoadingComponent from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
 
+
 const protectedRoutes = () => ({
 	Home: { component: HomeView, options: { title: translate('welcome') } },
 	Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
@@ -34,13 +35,15 @@ const publicRoutes = () => ({
 	Login: { component: AuthenticationView, options: { title: translate('signInBtn') } },
 }) as const;
 
-type Route<Args extends any[] = any[]> = {
-	component: (...args: Args) => JSX.Element,
+type Route<Props = any> = {
+	component: (arg: RouteProps<Props>) => JSX.Element | (() => JSX.Element),
 	options: any
 }
 
+type OmitOrUndefined<T, K extends string> = T extends undefined ? T : Omit<T, K>
+
 type RouteParams<Routes extends Record<string, Route>> = {
-	[RouteName in keyof Routes]: Parameters<Routes[RouteName]['component']>[0];
+	[RouteName in keyof Routes]: OmitOrUndefined<Parameters<Routes[RouteName]['component']>[0], keyof NativeStackScreenProps<{}>>;
 }
 
 type PrivateRoutesParams = RouteParams<ReturnType<typeof protectedRoutes>>;
@@ -49,12 +52,12 @@ type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
 
 const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never }>();
 
-const RouteToScreen = (component: Route['component']) => (props: NativeStackScreenProps<AppRouteParams>) =>
+const RouteToScreen = <T extends {}, >(component: Route<T>['component']) => (props: NativeStackScreenProps<T & ParamListBase>) =>
 	<>
-		{component(props.route.params)}
+		{component({ ...props.route.params, route: props.route } as Parameters<Route<T>['component']>[0])}
 	</>
 
-const routesToScreens = (routes: Record<keyof AppRouteParams, Route>) => Object.entries(routes)
+const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) => Object.entries(routes)
 	.map(([name, route]) => (
 		<Stack.Screen
 			name={name as keyof AppRouteParams}
@@ -91,5 +94,8 @@ export const Router = () => {
 		</NavigationContainer>
 	);
 }
+
+export type RouteProps<T> = T & Pick<NativeStackScreenProps<T & ParamListBase>, 'route'>;
+
 
 export const useNavigation = () => navigationHook<NavigationProp<AppRouteParams>>();
