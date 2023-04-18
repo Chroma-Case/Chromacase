@@ -55,7 +55,6 @@ export const PreferencesView = ({navigation}: any) => {
 							}}>
 							<Select.Item label='Français' value='fr'/>
 							<Select.Item label='English' value='en'/>
-							<Select.Item label='Italiano' value='it'/>
 							<Select.Item label='Espanol' value='sp'/>
 						</Select>
 					</Box>
