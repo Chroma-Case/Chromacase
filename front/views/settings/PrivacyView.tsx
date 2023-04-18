@@ -4,7 +4,6 @@ import { translate } from "../../i18n/i18n";
 import { useIsFocused } from "@react-navigation/native";
 import API from "../../API";
 import UserSettings from "../../models/UserSettings";
-import TextButton from "../../components/TextButton";
 
 
 const PrivacyView = ({navigation}: any) => {
@@ -62,7 +61,6 @@ const PrivacyView = ({navigation}: any) => {
 						<Text fontWeight={'bold'} style={{ textAlign: "center" }}>{ translate('recommdtns') }</Text>
 						<Switch value={recommdtns}  colorScheme="primary" onValueChange={updateRecommdtns}/>
 					</Box>
-					<TextButton alignSelf={"center"} translate={{ translationKey: 'backBtn' }} onPress={() => navigation.navigate('Settings')}/>
 				</VStack>
 			</Center>
 		</VStack>

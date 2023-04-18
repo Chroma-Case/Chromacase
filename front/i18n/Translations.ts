@@ -166,6 +166,17 @@ export const fr: typeof en = {
 	longestCombo: 'Combo le plus long : ',
 	favoriteGenre: 'Genre favori : ',
 
+	//privcay settings
+	showAct: 'Apparaître comme connecté',
+	appearLdrBrd: 'Prendre part au classement',
+	recommdtns: 'Recommandations',
+
+	//notifications settings
+	pushNotif: 'Notifications push',
+	emailNotif: 'Notifications par email',
+	trainNotif: 'Rappel d\'entrainement',
+	newSongNotif: 'Alerte nouveaux titres',
+
 	// Difficulty settings
 	diffBtn: 'Difficulté',
 	easy: 'Débutant',
@@ -302,6 +313,17 @@ export const sp: typeof en = {
 	longestCombo: 'combo más largo : ',
 	favoriteGenre: 'genero favorito : ',
 
+	//privcay settings
+	showAct: 'aparecer conectado',
+	appearLdrBrd: 'participar en la clasificación',
+	recommdtns: 'Recomendaciones',
+
+	//notifications settings
+	pushNotif: 'Notificaciones push',
+	emailNotif: 'Notificaciónes de Correo Electrónico',
+	trainNotif: 'recordatorio de entrenamiento',
+	newSongNotif: 'Alerta de nuevas canciones',
+
 	// Difficulty settings
 	diffBtn: 'Dificultad',
 	easy: 'Principiante',
@@ -371,4 +393,5 @@ export const sp: typeof en = {
 	SettingsCategorySecurity: 'Seguridad',
 	SettingsCategoryEmail: 'Email',
 	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
 };
