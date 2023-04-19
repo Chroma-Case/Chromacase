@@ -2,7 +2,7 @@ import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { Box, Image, Heading, HStack, Card, Button, Spacer, Text } from 'native-base';
 import Translate from '../components/Translate';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "../Navigation";
 import TextButton from '../components/TextButton';
 
 const UserMedals = () => {
@@ -89,7 +89,7 @@ const ProfileView = () => {
         <PlayerStats/>
         <Box w="10%" paddingY={10} paddingLeft={5} paddingRight={50} zIndex={1}>
             <TextButton
-                onPress={() => navigation.navigate('Settings')}
+                onPress={() => navigation.navigate('Settings', {screen: 'Profile'})}
                 style={{margin: 10}}
                 translate={{ translationKey: 'settingsBtn' }}
             />

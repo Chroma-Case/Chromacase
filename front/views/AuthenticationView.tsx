@@ -7,6 +7,7 @@ import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
 import SignupForm from "../components/forms/signupform";
 import TextButton from "../components/TextButton";
+import { RouteProps } from "../Navigation";
 
 const hanldeSignin = async (username: string, password: string, apiSetter: (accessToken: string) => void): Promise<string> => {
 	try {
@@ -32,9 +33,13 @@ const handleSignup = async (username: string, password: string, email: string, a
 	}
 };
 
-const AuthenticationView = () => {
+type AuthenticationViewProps = {
+	isSignup: boolean;
+}
+
+const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) => {
 	const dispatch = useDispatch();
-	const [mode, setMode] = React.useState("signin" as "signin" | "signup");
+	const [mode, setMode] = React.useState<"signin" | "signup">(isSignup ? "signup" : "signin");
 
 	return (
 		<Center style={{ flex: 1 }}>

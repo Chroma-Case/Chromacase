@@ -5,7 +5,12 @@ export const en = {
 	signInBtn: 'Sign in',
 	signUpBtn: 'Sign up',
 	changeLanguageBtn: 'Change language',
+	search: 'Search',
+	login: 'Login',
+	signUp: 'Sign up',
+	signIn: 'Sign in',
 	searchBtn: 'Search',
+	play: 'Play',
 	playBtn: 'Play',
 	practiceBtn: 'Practice',
 	playAgain: 'Play Again',
@@ -102,8 +107,59 @@ export const en = {
 	short: 'A little too short',
 	long: 'A little too long',
 	tooLong: 'Too Long',
-	tooShort: 'Too Short'
+	tooShort: 'Too Short',
 
+
+	changePassword: 'Change password',
+	oldPassword: 'Old password',
+	newPassword: 'New password',
+	confirmNewPassword: 'Confirm new password',
+	submitBtn: 'Submit',
+
+	changeEmail: 'Change email',
+	oldEmail: 'Old email',
+	newEmail: 'New email',
+
+	passwordUpdated: 'Password updated',
+	emailUpdated: 'Email updated',
+
+	SettingsCategoryProfile: 'Profile',
+	SettingsCategoryPreferences: 'Preferences',
+	SettingsCategoryNotifications: 'Notifications',
+	SettingsCategoryPrivacy: 'Privacy',
+	SettingsCategorySecurity: 'Security',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
+	SettingsCategoryGuest: 'Guest',
+
+	transformGuestToUserExplanations: 'You can transform your guest account to a user account by providing a username and a password. You will then be able to save your progress and access your profile.',
+	SettingsNotificationsPushNotifications: 'Push',
+	SettingsNotificationsEmailNotifications: 'Email',
+	SettingsNotificationsTrainingReminder: 'Training reminder',
+	SettingsNotificationsReleaseAlert: 'Release alert',
+
+	dataCollection: 'Data collection',
+	customAds: 'Custom ads',
+	recommendations: 'Recommendations',
+
+	SettingsPreferencesTheme: 'Theme',
+	SettingsPreferencesLanguage: 'Language',
+	SettingsPreferencesDifficulty: 'Difficulty',
+	SettingsPreferencesColorblindMode: 'Colorblind mode',
+	SettingsPreferencesMicVolume: 'Mic volume',
+	SettingsPreferencesDevice: 'Device',
+
+	NoAssociatedEmail: 'No associated email',
+	nbGamesPlayed: 'Games played',
+	XPDescription: 'XP is a measure of your progress. You earn XP by playing songs and completing challenges.',
+	userCreatedAt: 'Creation date',
+	premiumAccount: "Premium account",
+	yes: 'Yes',
+	no: 'No',
+
+	Attention: 'Attention',
+	YouAreCurrentlyConnectedWithAGuestAccountWarning: "You are currently connected with a guest account. Disconneting will result in your data being lost. If you want to save your progress, you need to create an account.",
 };
 
 export const fr: typeof en = {
@@ -123,15 +179,14 @@ export const fr: typeof en = {
 	lastScore: 'Dernier Score',
 	langBtn: 'Langage',
 	backBtn: 'Retour',
-	settingsBtn: 'Réglages',
 	prefBtn: 'Préférences',
 	notifBtn: 'Notifications',
 	privBtn: 'Confidentialité',
-	goNextStep: 'Prochaine Etape',
-	mySkillsToImprove: 'Mes Skills',
-	recentlyPlayed: 'Joués récemment',
-	lastSearched: 'Dernières recherches',
-	levelProgress: 'Niveau',
+
+	play: 'Jouer',
+	changeEmail: 'Changer d\'email',
+	newEmail: 'Nouvel email',
+	oldEmail: 'Ancien email',
 
 	// profile page
 	user: 'Profil',
@@ -140,7 +195,7 @@ export const fr: typeof en = {
 	mostPlayedSong: 'Chanson la plus jouée : ',
 	goodNotesPlayed: 'Bonnes notes jouées : ',
 	longestCombo: 'Combo le plus long : ',
-	favoriteGenre: 'Genre favorit : ',
+	favoriteGenre: 'Genre favori : ',
 
 	// Difficulty settings
 	diffBtn: 'Difficulté',
@@ -152,7 +207,21 @@ export const fr: typeof en = {
 	dark: 'Foncé',
 	system: 'Système',
 	light: 'Clair',
+	settingsBtn: "Réglages",
+	goNextStep: "Prochaine Etape",
+	mySkillsToImprove: "Mes Skills",
+	recentlyPlayed: "Joués récemment",
+	search: "Rechercher",
+	lastSearched: "Dernières recherches",
+	levelProgress: "Niveau",
+	login: 'Se connecter',
+	signUp: "S'inscrire",
+	signIn: "Se connecter",
 
+	oldPassword: 'Ancien mot de passe',
+	newPassword: 'Nouveau mot de passe',
+	confirmNewPassword: 'Confirmer le nouveau mot de passe',
+	submitBtn: 'Soumettre',
 	// competencies
 	pedalsCompetency: 'Pédales',
 	rightHandCompetency: 'Main droite',
@@ -183,11 +252,12 @@ export const fr: typeof en = {
 	email: 'Email',
 	repeatPassword: 'Confirmer',
 	score: 'Score',
+	changePassword: 'Modification du mot de passe',
 	precisionScore: 'Précision',
 	goodNotesInARow: 'Bonnes notes à la suite',
 	songsToGetBetter: 'Recommendations',
 	goodNotes: 'bonnes notes',
-	changepasswdBtn: 'Changer le mot de pass',
+	changepasswdBtn: 'Changer le mot de passe',
 	changeemailBtn: 'Changer l\'email',
 	googleacctBtn: 'Compte Google',
 	forgottenPassword: 'Mot de passe oublié',
@@ -208,11 +278,50 @@ export const fr: typeof en = {
 	short: 'Un peu court',
 	long: 'Un peu long',
 	tooLong: 'Trop long',
-	tooShort: 'Trop court'
+	tooShort: 'Trop court',
+	passwordUpdated: 'Mot de passe mis à jour',
+	emailUpdated: 'Email mis à jour',
+
+	SettingsCategoryProfile: 'Profil',
+	SettingsCategoryPreferences: 'Préférences',
+	SettingsCategoryNotifications: 'Notifications',
+	SettingsCategoryPrivacy: 'Confidentialité',
+	SettingsCategorySecurity: 'Sécurité',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
+
+	transformGuestToUserExplanations: 'Vous êtes actuellement connecté en tant qu\'invité. Vous pouvez créer un compte pour sauvegarder vos données et profiter de toutes les fonctionnalités de Chromacase.',
+	SettingsCategoryGuest: 'Invité',
+	SettingsNotificationsEmailNotifications: 'Email',
+	SettingsNotificationsPushNotifications: 'Notifications push',
+	SettingsNotificationsReleaseAlert: 'Alertes de nouvelles Sorties',
+	SettingsNotificationsTrainingReminder: 'Rappel d\'entrainement',
+	
+	SettingsPreferencesColorblindMode: 'Mode daltonien',
+	SettingsPreferencesDevice: 'Appareil',
+	SettingsPreferencesDifficulty: 'Difficulté',
+	SettingsPreferencesLanguage: 'Langue',
+	SettingsPreferencesTheme: 'Thème',
+	SettingsPreferencesMicVolume: 'Volume du micro',
+
+	dataCollection: 'Collecte de données',
+	recommendations: 'Recommandations',
+	customAds: 'Publicités personnalisées',
+
+	NoAssociatedEmail: 'Aucun email associé',
+	nbGamesPlayed: 'Parties jouées',
+	XPDescription: 'L\'XP est gagnée en jouant des chansons. Plus vous jouez, plus vous gagnez d\'XP. Plus vous avez d\'XP, plus vous montez de niveau.',
+	userCreatedAt: 'Compte créé le',
+	premiumAccount: 'Compte premium',
+	yes: 'Oui',
+	no: 'Non',
+
+	Attention: 'Attention',
+	YouAreCurrentlyConnectedWithAGuestAccountWarning: 'Vous êtes actuellement connecté en tant qu\'invité. La déconnexion résultera en une perte de données. Vous pouvez créer un compte pour sauvegarder vos données.',
 };
 
 export const sp: typeof en = {
-	welcome: 'Benvenido a Chromacase',
 	welcomeMessage: 'Benvenido',
 	signOutBtn: 'Desconectarse',
 	signInBtn: 'Connectarse',
@@ -220,6 +329,14 @@ export const sp: typeof en = {
 	changeemailBtn: 'Cambiar e-mail',
 	googleacctBtn: 'Cuenta Google',
 	goodNotes: 'buenas notas',
+
+	search: 'Buscar',
+	login: 'Iniciar sesión',
+	signUp: 'Registrarse',
+	signIn: 'Iniciar sesión',
+	changeEmail: 'Cambiar el correo electrónico',
+	newEmail: 'Nuevo correo electrónico',
+	oldEmail: 'Correo electrónico anterior',
 
 	// competencies
 	changeLanguageBtn: 'Cambiar el idioma',
@@ -233,9 +350,6 @@ export const sp: typeof en = {
 	chapters: 'Capítulos',
 	bestScore: 'Mejor puntuación',
 	lastScore: 'Ùltima puntuación',
-	langBtn: 'idioma',
-	backBtn: 'Volver',
-	settingsBtn: 'Ajustes',
 	prefBtn: 'Preferencias',
 	notifBtn: 'Notificaciones',
 	privBtn: 'Privacidad',
@@ -243,6 +357,12 @@ export const sp: typeof en = {
 	mySkillsToImprove: 'Mis habilidades para mejorar',
 	recentlyPlayed: 'Recientemente jugado',
 	lastSearched: 'Ultimas búsquedas',
+
+	welcome: 'Benvenido a Chromacase',
+	langBtn: 'Langua',
+	backBtn: 'Volver',
+	settingsBtn: 'Ajustes',
+	play: 'Jugar',
 
 	// profile page
 	user: 'Perfil',
@@ -315,5 +435,51 @@ export const sp: typeof en = {
 	short: 'Un poco demasiado corto',
 	long: 'Un poco demasiado largo',
 	tooLong: 'Demasiado largo',
-	tooShort: 'Demasiado corto'
+	tooShort: 'Demasiado corto',
+	changePassword: 'Cambio de contraseña',
+	oldPassword: 'Contraseña anterior',
+	newPassword: 'Nueva contraseña',
+	confirmNewPassword: 'Confirmar nueva contraseña',
+	submitBtn: 'Enviar',
+
+	passwordUpdated: 'Contraseña actualizada',
+	emailUpdated: 'Email actualizado',
+
+	SettingsCategoryProfile: 'Perfil',
+	SettingsCategoryPreferences: 'Preferencias',
+	SettingsCategoryNotifications: 'Notificaciones',
+	SettingsCategoryPrivacy: 'Privacidad',
+	SettingsCategorySecurity: 'Seguridad',
+	SettingsCategoryEmail: 'Email',
+	SettingsCategoryGoogle: 'Google',
+	SettingsCategoryPiano: 'Piano',
+
+	transformGuestToUserExplanations: 'Actualmente estás conectado como invitado. Puedes crear una cuenta para guardar tus datos y disfrutar de todas las funciones de Chromacase.',
+	SettingsCategoryGuest: 'Invitado',
+	SettingsNotificationsEmailNotifications: 'Email',
+	SettingsNotificationsPushNotifications: 'Notificaciones push',
+	SettingsNotificationsReleaseAlert: 'Alertas de nuevas Sorties',
+	SettingsNotificationsTrainingReminder: 'Recordatorio de entrenamiento',
+	
+	SettingsPreferencesColorblindMode: 'Modo daltoniano',
+	SettingsPreferencesDevice: 'Dispositivo',
+	SettingsPreferencesDifficulty: 'Dificultad',
+	SettingsPreferencesLanguage: 'Idioma',
+	SettingsPreferencesTheme: 'Tema',
+	SettingsPreferencesMicVolume: 'Volumen del micrófono',
+
+	dataCollection: 'Recopilación de datos',
+	recommendations: 'Recomendaciones',
+	customAds: 'Anuncios personalizados',
+
+	NoAssociatedEmail: 'No hay correo electrónico asociado',
+	nbGamesPlayed: 'Partidos jugados',
+	XPDescription: 'XP se gana jugando canciones. Cuanto más juegas, más XP ganas. Cuanto más XP tienes, más subes de nivel.',
+	userCreatedAt: 'Cuenta creada el',
+	premiumAccount: 'Cuenta premium',
+	yes: 'Sí',
+	no: 'No',
+
+	Attention: 'Atención',
+	YouAreCurrentlyConnectedWithAGuestAccountWarning: 'Actualmente estás conectado como invitado. La desconexión resultará en la pérdida de datos. Puedes crear una cuenta para guardar tus datos.',
 };

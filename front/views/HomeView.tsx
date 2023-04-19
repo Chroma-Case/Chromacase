@@ -3,7 +3,8 @@ import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import LoadingComponent from "../components/Loading";
 import { Center, Box, ScrollView, Flex, useBreakpointValue, Stack, Heading, Container, VStack, HStack } from 'native-base';
-import { useNavigation } from "@react-navigation/native";
+
+import { useNavigation } from "../Navigation";
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable'
 import ProgressBar from "../components/ProgressBar";
@@ -51,7 +52,7 @@ const HomeView = () => {
 					translationKey="welcome" format={(welcome) => `${welcome} ${userQuery.data.name}!`}
 				/>
 				<Box flex={1}>
-					<ProgressBar xp={userQuery.data.xp}/>
+					<ProgressBar xp={userQuery.data.data.xp}/>
 				</Box>
 			</Stack>
 		</Flex>

@@ -1,21 +1,21 @@
 import { Card, Column, Image, Row, Text, useTheme, ScrollView, Center, VStack } from "native-base"
 import Translate from "../components/Translate";
 import SongCardGrid from "../components/SongCardGrid";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProps, useNavigation } from "../Navigation";
 import { CardBorderRadius } from "../components/Card";
 import TextButton from "../components/TextButton";
 import API from '../API';
 import { useQuery } from "react-query";
 import LoadingComponent from "../components/Loading";
 
-const ScoreView = () => {
+type ScoreViewProps = { songId: number }
+
+const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 	const theme = useTheme();
-	const route = useRoute();
 	const navigation = useNavigation();
-	const { songId }: { songId: number } = route.params as any;
 	const songQuery = useQuery(['song', songId], () => API.getSong(songId));
 	const artistQuery = useQuery(['song', songId],
-		() => API.getArtist(songQuery.data!.artistId),
+		() => API.getArtist(songQuery.data!.artistId!),
 		{ enabled: songQuery.data != undefined }
 	);
 	const songScoreQuery = useQuery(["score", songId], () => API.getUserPlayHistory()
@@ -28,7 +28,6 @@ const ScoreView = () => {
 			<LoadingComponent/>
 		</Center>;
 	}
-	console.log(songScoreQuery.data);
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
 		<VStack width={{ base: '100%', lg: '50%' }} textAlign='center'>
 			<Text bold fontSize='lg'>{songQuery.data.name}</Text>

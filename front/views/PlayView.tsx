@@ -4,7 +4,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, RouteProps } from "../Navigation";
 import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
 import LoadingComponent from '../components/Loading';
@@ -37,11 +37,7 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	}
 }
 
-const PlayView = () => {
-	const songId = 1;
-	const type = 'normal';
-	const route = useRoute();
-	// const { songId, type }: PlayViewProps = route.params as any;
+const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
@@ -113,7 +109,7 @@ const PlayView = () => {
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
-					navigation.navigate('Score', { songId: song.data.id });
+					navigation.navigate('Score', { songId: song.data!.id });
 					return;
 				}
 				const points = data.info.score;
@@ -121,7 +117,7 @@ const PlayView = () => {
 				if (points < 0) {
 					setScore(0);
 				} else {
-					setScore(Math.floor(point / maxPoints) * 100);
+					setScore(Math.floor(points / maxPoints) * 100);
 				}
 
 				let formattedMessage = '';
