@@ -114,11 +114,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				}
 				const points = data.info.score;
 				const maxPoints = data.info.maxScore;
-				if (points < 0) {
-					setScore(0);
-				} else {
-					setScore(Math.floor(points / maxPoints) * 100);
-				}
+
+				setScore(Math.floor(Math.max(points, 0) / maxPoints) * 100);
 
 				let formattedMessage = '';
 				let messageColor: ColorSchemeType | undefined;
