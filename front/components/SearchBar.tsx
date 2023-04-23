@@ -1,149 +1,146 @@
-import {
-	Input,
-	Column,
-	Row,
-	Text,
-	Pressable,
-	HStack,
-	VStack,
-	Image,
-	Icon,
-	Square,
-} from "native-base";
-import React from "react";
-import { Ionicons } from "@expo/vector-icons";
-import useColorScheme from "../hooks/colorScheme";
+import React, { useState } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { HStack, Icon, Input, VStack, Button, ScrollView, Box, Menu } from "native-base";
 
-export enum SuggestionType {
-	TEXT,
-	ILLUSTRATED,
+export type SearchBarFilter = {
+	name: string; //mandatory determines the label of the filter
+	componentType: 'retrieved-list' | 'provided-list' | 'search-list'; //mandatory determines the type of selection of filter
+	options?: any; //depends on the component type
+	type: 'artist' | 'date' | 'genre' | 'album' | 'fav'; //mandatory
+	icon?: string; //not mandatory, obsolete
+	searchCallBack: any;
 }
 
-export type SuggestionList = {
-	type: SuggestionType;
-	data: SuggestionProps | IllustratedSuggestionProps;
-}[];
-
-export interface SearchBarProps {
-	onTextChange: (text: string) => void;
-	onTextSubmit: (text: string) => void;
-	suggestions: SuggestionList;
-}
-export interface IllustratedSuggestionProps {
-	text: string;
-	subtext: string;
-	imageSrc: string;
-	onPress: () => void;
+type RawSearchBarProps = {
+	placeHolder: string;
+	filters: SearchBarFilter[];
 }
 
-export interface SuggestionProps {
-	text: string;
-	onPress: () => void;
+type SearchBarProps = {
+	filters: SearchBarFilter[] //mandatory
+	placeHolder: string; //mandatory
+	variant?: string; //default primary
+	compact?: boolean; //default false
+	onChangeFilter: any;
+	onChangeText: any;
 }
 
-// debounce function
-const debounce = (func: any, delay: number) => {
-	let inDebounce: any;
-	return function (this: any) {
-		const context = this;
-		const args = arguments;
-		clearTimeout(inDebounce);
-		inDebounce = setTimeout(() => func.apply(context, args), delay);
-	};
-};
+const ProvidedFilterComponent = (props: SearchBarFilter) => {
+	const [shouldOverlapWithTrigger] = React.useState(false);
+	const [value, setValue] = React.useState(undefined);
 
-const IllustratedSuggestion = ({
-	text,
-	subtext,
-	imageSrc,
-	onPress,
-}: IllustratedSuggestionProps) => {
-	const colorScheme = useColorScheme();
 	return (
-		<Pressable
-			onPress={onPress}
-			margin={2}
-			padding={2}
-		>{({ isHovered, isPressed }) => (
-			<HStack alignItems="center" space={4}
-				bg={colorScheme == 'dark'
-					? (isHovered || isPressed) ? 'gray.800' : undefined
-					: (isHovered || isPressed) ? 'primary.100' : undefined
-				}
-			>
-				<Square size={"sm"}>
-					<Image
-						source={{ uri: imageSrc }}
-						alt="Alternate Text"
-						size="xs"
-						rounded="lg"
-					/>
-				</Square>
-				<VStack alignItems="flex-start">
-					<Text fontSize="md">{text}</Text>
-					<Text fontSize="sm" color="gray.500">
-						{subtext}
-					</Text>
-				</VStack>
+		<Menu backgroundColor={'gray.300'} maxHeight={250} mt={1} w="160" shouldOverlapWithTrigger={shouldOverlapWithTrigger}
+			placement={'bottom left'} trigger={triggerProps => {
+				return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={value ? 'primary' : 'gray'} {...triggerProps} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="keyboard-arrow-down" />}/>} >
+					{value ? value : props.name}
+				</Button>;
+			}}>
+			<Menu.Item onPress={() => setValue(undefined)} key="all">All</Menu.Item>
+			{props.options.map((comp: any, index: any) => (
+				<Menu.Item onPress={() => setValue(comp)} key={index}>{comp}</Menu.Item>
+			))}
+		</Menu>
+	);
+}
+
+const RetrievedFilterComponent = (props: SearchBarFilter) => {
+	const [shouldOverlapWithTrigger] = React.useState(false);
+	const [value, setValue] = React.useState(undefined);
+
+	return (
+		<Menu backgroundColor={'gray.300'} maxHeight={250} mt={1} w="160" shouldOverlapWithTrigger={shouldOverlapWithTrigger}
+			placement={'bottom left'} trigger={triggerProps => {
+				return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={value ? 'primary' : 'gray'} {...triggerProps} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="keyboard-arrow-down" />}/>} >
+					{value ? value : props.name}
+				</Button>;
+			}}>
+			<Menu.Item onPress={() => setValue(undefined)} key="all">All</Menu.Item>
+			{props.options.map((comp: any, index: any) => (
+				<Menu.Item onPress={() => setValue(comp)} key={index}>{comp}</Menu.Item>
+			))}
+		</Menu>
+	);
+}
+
+const SearchFilterComponent = (props: SearchBarFilter) => {
+	const [shouldOverlapWithTrigger] = React.useState(false);
+	const [value, setValue] = React.useState('');
+	const [search, setSearch] = React.useState([] as any[]);
+
+	return (
+		<Menu backgroundColor={'gray.300'} maxHeight={250} mt={1} minHeight={100} maxW="160" shouldOverlapWithTrigger={shouldOverlapWithTrigger} // @ts-ignore
+			placement={'bottom left'} trigger={triggerProps => {
+				return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={value ? 'primary' : 'gray'} {...triggerProps} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="keyboard-arrow-down" />}/>}>
+							{value ? value : props.name}
+						</Button>;
+			}}>
+				<Input onChangeText={(text) => props.searchCallBack(text, (truc) => setSearch(truc))} mx={5} variant={"underlined"} placeholder={'Filter by ' + props.name}/>
+				<Menu.Item onPress={() => setValue('')} key="all">All</Menu.Item>
+				{search.map((comp: any, index) => (
+					<Menu.Item key={index} onPress={() => setValue(comp.name)} >{comp.name}</Menu.Item>
+				))}
+		</Menu>
+	);
+}
+
+const componentSelector = (comp: SearchBarFilter) => {
+	if (comp.componentType === "provided-list") {
+		return <ProvidedFilterComponent componentType={comp.componentType}
+			name={comp.name}
+			type={comp.type}
+			options={comp.options}
+			icon={comp.icon}
+			searchCallBack={comp.searchCallBack}/>;
+	} else if (comp.componentType === "retrieved-list") {
+		// return <RetrievedFilterComponent componentType={comp.componentType}
+		// 	name={comp.name}
+		// 	type={comp.type}
+		// 	options={comp.options}
+		// 	icon={comp.icon}
+		// 	searchCallBack={comp.searchCallBack}/>;
+		return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={"warning"} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="access-time" />}/>}>
+					Comming soon
+				</Button>;
+	} else if (comp.componentType === "search-list") {
+		return <SearchFilterComponent componentType={comp.componentType}
+			name={comp.name}
+			type={comp.type}
+			options={comp.options}
+			icon={comp.icon}
+			searchCallBack={comp.searchCallBack}/>;
+	} else {
+		return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={"warning"} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="access-time" />}/>}>
+					Comming soon
+				</Button>;
+	}
+}
+
+const RawSearchBar = (props: RawSearchBarProps) => {
+
+	return (
+		<VStack w="100%" alignSelf="center" backgroundColor={'white'}>
+			<VStack>
+			<Input onChangeText={} variant={"underlined"} placeholder={props.placeHolder} width="100%" borderRadius="4" py="3" px="1" fontSize="14" InputLeftElement={<Icon m="2" ml="3" size="6" color="gray.400" as={<MaterialIcons name="search" />} />} />
+			<HStack>
+				<ScrollView horizontal={true}>
+					{props.filters.map((comp: SearchBarFilter, index) => (
+						<Box key={index}>
+							{componentSelector(comp)}
+						</Box>
+					))}
+				</ScrollView>
 			</HStack>
-		)}</Pressable>
-	);
-};
 
-const TextSuggestion = ({ text, onPress }: SuggestionProps) => {
-	const colorScheme = useColorScheme();
+			</VStack>
+		</VStack>
+	);
+}
+
+const SearchBar = (props: SearchBarProps) => {
 	return (
-		<Pressable
-			onPress={onPress}
-			margin={2}
-			padding={2}
-		>{({ isHovered, isPressed }) => (
-			<Row alignItems="center" space={4}
-				bg={colorScheme == 'dark'
-					? (isHovered || isPressed) ? 'gray.800' : undefined
-					: (isHovered || isPressed) ? 'primary.100' : undefined
-				}
-			>
-				<Square size={"sm"}>
-					<Icon size={"md"} as={Ionicons} name="search" />
-				</Square>
-				<Text fontSize="md">{text}</Text>
-			</Row>
-		)}</Pressable>
+		<RawSearchBar filters={props.filters} placeHolder={props.placeHolder}/>
 	);
-};
+}
 
-// render the suggestions based on the type
-const SuggestionRenderer = (suggestions: SuggestionList) => {
-	const suggestionRenderers = {
-		[SuggestionType.TEXT]: TextSuggestion,
-		[SuggestionType.ILLUSTRATED]: IllustratedSuggestion,
-	};
-	return suggestions.map((suggestion, index) => {
-		const SuggestionComponent = suggestionRenderers[suggestion.type];
-		return <SuggestionComponent {...suggestion.data} key={index} />;
-	});
-};
-
-const SearchBar = ({
-	onTextChange,
-	onTextSubmit,
-	suggestions,
-}: SearchBarProps) => {
-	const debouncedOnTextChange = React.useRef(
-		debounce((t: string) => onTextChange(t), 70)
-	).current;
-	return (
-		<>
-			<Input
-				placeholder="Search"
-				type="text"
-				onChangeText={debouncedOnTextChange}
-				onSubmitEditing={(event) => onTextSubmit(event.nativeEvent.text)}
-			/>
-			<Column>{SuggestionRenderer(suggestions)}</Column>
-		</>
-	);
-};
-
-export default SearchBar;
+export default SearchBar

@@ -1,7 +1,9 @@
 import Artist from "./models/Artist";
+import Album from "./models/Album";
 import AuthToken from "./models/AuthToken";
 import Chapter from "./models/Chapter";
 import Lesson from "./models/Lesson";
+import Genre from "./models/Genre";
 import LessonHistory from "./models/LessonHistory";
 import Song from "./models/Song";
 import SongHistory from "./models/SongHistory";
@@ -58,10 +60,12 @@ const getDummyIllustration = () =>
 	dummyIllustrations[Math.floor(Math.random() * dummyIllustrations.length)];
 
 // we will need the same thing for the scorometer API url
-const baseAPIUrl =
-	process.env.NODE_ENV != "development" && Platform.OS === "web"
-		? "/api"
-		: Constants.manifest?.extra?.apiUrl;
+// const baseAPIUrl =
+// 	process.env.NODE_ENV != "development" && Platform.OS === "web"
+// 		? "/api"
+// 		: Constants.manifest?.extra?.apiUrl;
+
+const baseAPIUrl = 'http://localhost:3000'
 
 export default class API {
 	public static async fetch(params: FetchParams) {
@@ -328,6 +332,84 @@ export default class API {
 		return API.fetch({
 			route: `/search/guess/song/${query}`,
 		});
+	}
+
+	/**
+	 * Search artists by name
+	 * @param query the string used to find the artists
+	 */
+	public static async searchArtists(query?: string): Promise<Artist[]> {
+		return [
+				{
+					id: 1,
+					name: "Abba",
+				},
+				{
+					id: 2,
+					name: "Yoko Shimomura",
+				},
+				{
+					id: 3,
+					name: "Koji Kondo",
+				},
+				{
+					id: 4,
+					name: "Daft Punk",
+				},
+		] as Artist[];
+	}
+
+	/**
+	 * Search Album by name
+	 * @param query the string used to find the album
+	 */
+	public static async searchAlbum(query?: string): Promise<Album[]> {
+		return [
+				{
+					id: 1,
+					name: "Super Trooper",
+				},
+				{
+					id: 2,
+					name: "Kingdom Heart 365/2 OST",
+				},
+				{
+					id: 3,
+					name: "The Legend Of Zelda Ocarina Of Time OST",
+				},
+				{
+					id: 4,
+					name: "Random Access Memories",
+				},
+		] as Album[];
+	}
+
+	/**
+	 * Retrieve music genres
+	 */
+	public static async retrieveGenres(): Promise<Genre[]> {
+		return [
+			{
+				id: 1,
+				name: "Classic",
+			},
+			{
+				id: 2,
+				name: "Rock",
+			},
+			{
+				id: 3,
+				name: "Pop",
+			},
+			{
+				id: 4,
+				name: "Disco",
+			},
+			{
+				id: 5,
+				name: "Disco",
+			},
+		]
 	}
 
 	/**
