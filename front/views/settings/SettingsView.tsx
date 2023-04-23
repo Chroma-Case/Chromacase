@@ -1,16 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Center, Button, Text, Switch, Slider, Select, Heading, Box } from "native-base";
+import { Center, Button, Text, Heading, Box } from "native-base";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { unsetAccessToken } from '../../state/UserSlice';
 import { useDispatch } from "react-redux";
-import { RootState, useSelector } from '../../state/Store';
-import { useLanguage } from "../../state/LanguageSlice";
-import { SettingsState, updateSettings } from '../../state/SettingsSlice';
-import { AvailableLanguages, translate, Translate } from "../../i18n/i18n";
-import TextButton from '../../components/TextButton';
+import { translate, Translate } from "../../i18n/i18n";
 import createTabRowNavigator from '../../components/navigators/TabRowNavigator';
-import { FontAwesome, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ProfileSettings from './SettingsProfileView';
@@ -19,9 +14,7 @@ import PrivacyView from './PrivacyView';
 import PreferencesView from './PreferencesView';
 import GuestToUserView from './GuestToUserView';
 import { useQuery } from 'react-query';
-
-import API, { APIError } from '../../API';
-import User from '../../models/User';
+import API from '../../API';
 
 
 const SettingsStack = createNativeStackNavigator();
@@ -117,7 +110,7 @@ export const PianoSettingsView = ({navigation}) => {
 const TabRow = createTabRowNavigator(); 
 
 const SetttingsNavigator = () => {
-	const userQuery = useQuery(["appSettings", 'user'], API.getUserInfo);
+	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const user = userQuery.data;
 
 	if (userQuery.isError) {

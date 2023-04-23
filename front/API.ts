@@ -10,7 +10,9 @@ import Constants from "expo-constants";
 import store from "./state/Store";
 import { Platform } from "react-native";
 import { en } from "./i18n/Translations";
-import { useQuery, QueryClient } from "react-query";
+import { QueryClient } from "react-query";
+import UserSettings from "./models/UserSettings";
+import { PartialDeep } from "type-fest";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -175,29 +177,46 @@ export default class API {
 				createdAt: new Date("2023-04-09T00:00:00.000Z"),
 				avatar:
 					"https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn",
-			},
-			settings: {
-				preferences: {
-					deviceId: 1,
-					micVolume: 10,
-					theme: "system",
-					lang: "fr",
-					difficulty: "beg",
-					colorBlind: false,
-				},
-				notifications: {
-					pushNotif: false,
-					emailNotif: false,
-					trainNotif: false,
-					newSongNotif: false,
-				},
-				privacy: {
-					dataCollection: true,
-					customAd: true,
-					recommendation: true,
-				},
-			},
+			}
 		} as User;
+	}
+
+	public static async getUserSettings(): Promise<UserSettings> {
+		const settings = await API.fetch({
+			route: "/auth/me/settings",
+		});
+
+		// this a dummy settings object, we will need to fetch the real one from the API
+		return {
+			notifications: {
+				pushNotif: settings.pushNotification,
+				emailNotif: settings.emailNotification,
+				trainNotif: settings.trainingNotification,
+				newSongNotif: settings.newSongNotification
+			},
+			recommendations: settings.recommendations,
+			weeklyReport: settings.weeklyReport,
+			leaderBoard: settings.leaderBoard,
+			showActivity: settings.showActivity
+		};
+	}
+
+	public static async updateUserSettings(settings: PartialDeep<UserSettings>): Promise<void> {
+		const dto = {
+			pushNotification: settings.notifications?.pushNotif,
+			emailNotification: settings.notifications?.emailNotif,
+			trainingNotification: settings.notifications?.trainNotif,
+			newSongNotification: settings.notifications?.newSongNotif,
+			recommendations: settings.recommendations,
+			weeklyReport: settings.weeklyReport,
+			leaderBoard: settings.leaderBoard,
+			showActivity: settings.showActivity,
+		}
+		return API.fetch({
+			method: 'PATCH',
+			route: '/auth/me/settings',
+			body: dto
+		});
 	}
 
 	public static async getUserSkills() {
