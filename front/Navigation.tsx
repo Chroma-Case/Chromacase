@@ -14,8 +14,7 @@ import { useQuery } from 'react-query';
 import API from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
-import { Center } from 'native-base';
-import LoadingComponent from './components/Loading';
+import { LoadingView } from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
 
@@ -81,11 +80,7 @@ export const Router = () => {
 		}>
 			<Stack.Navigator>
 				{ userProfile.isLoading && !userProfile.data ?
-					<Stack.Screen name="Loading" component={() =>
-						<Center style={{ flexGrow: 1 }}>
-							<LoadingComponent/>
-						</Center>
-					}/>
+					<Stack.Screen name="Loading" component={RouteToScreen(LoadingView)}/>
 					: routesToScreens(userProfile.isSuccess && accessToken
 						? protectedRoutes()
 						: publicRoutes())

@@ -6,7 +6,7 @@ import { CardBorderRadius } from "../components/Card";
 import TextButton from "../components/TextButton";
 import API from '../API';
 import { useQuery } from "react-query";
-import LoadingComponent from "../components/Loading";
+import { LoadingView } from "../components/Loading";
 
 type ScoreViewProps = { songId: number }
 
@@ -19,9 +19,7 @@ const ScoreView = ({ songId }: RouteProps<ScoreViewProps>) => {
 	const recommendations = useQuery(['song', 'recommendations'], () => API.getUserRecommendations());
 
 	if (!recommendations.data) {
-		return <Center style={{ flexGrow: 1 }}>
-			<LoadingComponent/>
-		</Center>;
+		return <LoadingView/>;
 	}
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
 		<VStack width={{ base: '100%', lg: '50%' }} textAlign='center'>

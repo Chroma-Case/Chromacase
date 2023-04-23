@@ -1,7 +1,7 @@
 import React from "react";
 import { useQueries, useQuery } from "react-query";
 import API from "../API";
-import LoadingComponent from "../components/Loading";
+import { LoadingView } from "../components/Loading";
 import { Center, Box, ScrollView, Flex, useBreakpointValue, Stack, Heading, Container, VStack, HStack } from 'native-base';
 
 import { useNavigation } from "../Navigation";
@@ -24,9 +24,7 @@ const HomeView = () => {
 	)));
 
 	if (!userQuery.data || !skillsQuery.data || !searchHistoryQuery.data || !playHistoryQuery.data) {
-		return <Center style={{ flexGrow: 1 }}>
-			<LoadingComponent/>
-		</Center>
+		return <LoadingView/>
 	}
 	return <ScrollView p={10}>
 		<Flex>
