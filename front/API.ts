@@ -186,7 +186,6 @@ export default class API {
 			route: "/auth/me/settings",
 		});
 
-		// this a dummy settings object, we will need to fetch the real one from the API
 		return {
 			notifications: {
 				pushNotif: settings.pushNotification,
