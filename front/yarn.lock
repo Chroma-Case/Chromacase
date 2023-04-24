@@ -14939,6 +14939,11 @@ react-shallow-renderer@^16.13.1, react-shallow-renderer@^16.15.0:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0 || ^18.0.0"
 
+react-sub-unsub@^2.1.6:
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/react-sub-unsub/-/react-sub-unsub-2.1.11.tgz#173d0803e1d7b29611cb29d95f47ed7798e93642"
+  integrity sha512-FNKy0uD5wSieRE+l5RXaS0bUu6cR8XAXLDwOJnvSDGBMHcWVb1dod8ZkXYjPKtKR74tjYCEpMWcEAWCOoWNXxQ==
+
 react-test-renderer@17.0.2, react-test-renderer@~17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-17.0.2.tgz#4cd4ae5ef1ad5670fc0ef776e8cc7e1231d9866c"
@@ -14953,6 +14958,13 @@ react-timer-hook@^3.0.5:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/react-timer-hook/-/react-timer-hook-3.0.5.tgz#a8d930f99b180cd88da245965a26a17df3e7457b"
   integrity sha512-n+98SdmYvui2ne3KyWb3Ldu4k0NYQa3g/VzW6VEIfZJ8GAk/jJsIY700M8Nd2vNSTj05c7wKyQfJBqZ0x7zfiA==
+
+react-use-precision-timer@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-use-precision-timer/-/react-use-precision-timer-3.3.1.tgz#8e49b6f58d507647925bf633a673a7cb0b2b924d"
+  integrity sha512-PUCpFp48ftKoV2C+hz57mbqzqojE/Ol169Lyk2fFEIapsOH6tKIis8vZwmloedRe916qmJCOkXp+h9IB6QJY+A==
+  dependencies:
+    react-sub-unsub "^2.1.6"
 
 react@18.1.0:
   version "18.1.0"

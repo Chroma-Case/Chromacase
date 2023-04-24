@@ -1,4 +1,4 @@
-import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
+import { Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon, Stack } from "native-base";
 import { useQuery } from 'react-query';
 import LoadingComponent from "../components/Loading";
 import React, { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
 import API from "../API";
 import TextButton from "../components/TextButton";
-import { useNavigation } from "../Navigation";
+import { useNavigation, RouteProps } from "../Navigation";
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -37,7 +37,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 				</Box>
 				<Box style={{ flex: 0.5 }}/>
 				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
-					<Box flex={1}>
+					<Stack flex={1} space={3}>
 						<Text bold isTruncated numberOfLines={2} fontSize='lg'>{songQuery.data!.name}</Text>
 						<Text>
 							<Translate translationKey='level'
@@ -45,10 +45,15 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 							/>
 						</Text>
 						<TextButton translate={{ translationKey: 'playBtn' }} width='auto'
-							onPress={() => navigation.navigate('Play', { songId: songQuery.data!.id })}
+							onPress={() => navigation.navigate('Play', { songId: songQuery.data!.id, type: 'normal' })}
 							rightIcon={<Icon as={Ionicons} name="play-outline"/>}
 						/>
-					</Box>
+						<TextButton translate={{ translationKey: 'practiceBtn' }} width='auto'
+							onPress={() => navigation.navigate('Play', { songId: songQuery.data!.id, type: 'practice' })}
+							rightIcon={<Icon as={Ionicons} name="play-outline"/>}
+							colorScheme='secondary'
+						/>
+					</Stack>
 				</Box>
 			</Box>
 			<Box style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>

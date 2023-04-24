@@ -10,7 +10,7 @@ import Constants from "expo-constants";
 import store from "./state/Store";
 import { Platform } from "react-native";
 import { en } from "./i18n/Translations";
-import { useQuery, QueryClient } from "react-query";
+import { QueryClient } from "react-query";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -370,15 +370,10 @@ export default class API {
 	/**
 	 * Retrieve the authenticated user's play history
 	 */
-	public static async getUserPlayHistory(): Promise<Song[]> {
-		const queryClient = new QueryClient();
-		let songs = await queryClient.fetchQuery(
-			["API", "allsongs"],
-			API.getAllSongs
-		);
-		const shuffled = [...songs].sort(() => 0.5 - Math.random());
-
-		return shuffled.slice(0, 3);
+	public static async getUserPlayHistory(): Promise<SongHistory[]> {
+		return this.fetch({
+			route: '/history'
+		});
 	}
 
 	/**

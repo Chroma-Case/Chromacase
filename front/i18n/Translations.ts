@@ -12,6 +12,7 @@ export const en = {
 	searchBtn: 'Search',
 	play: 'Play',
 	playBtn: 'Play',
+	practiceBtn: 'Practice',
 	playAgain: 'Play Again',
 	songPageBtn: 'Go to song page',
 	level: 'Level',
@@ -97,6 +98,17 @@ export const en = {
 	errAlrdExst: 'Already exist',
 	errIncrrct: 'Incorrect Credentials',
 
+	// Playback messages
+	missed: 'Missed note',
+	perfect: 'Perfect',
+	great: 'Great',
+	good: 'Good',
+	wrong: 'Wrong',
+	short: 'A little too short',
+	long: 'A little too long',
+	tooLong: 'Too Long',
+	tooShort: 'Too Short',
+
 
 	changePassword: 'Change password',
 	oldPassword: 'Old password',
@@ -158,6 +170,7 @@ export const fr: typeof en = {
 	changeLanguageBtn: 'Changer la langue',
 	searchBtn: 'Rechercher',
 	playBtn: 'Jouer',
+	practiceBtn: 'S\'entrainer',
 	playAgain: 'Rejouer',
 	songPageBtn: 'Aller sur la page de la chanson',
 	level: 'Niveau',
@@ -256,6 +269,16 @@ export const fr: typeof en = {
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
 
+	// Playback messages
+	missed: 'Raté',
+	perfect: 'Parfait',
+	great: 'Super',
+	good: 'Bien',
+	wrong: 'Oups',
+	short: 'Un peu court',
+	long: 'Un peu long',
+	tooLong: 'Trop long',
+	tooShort: 'Trop court',
 	passwordUpdated: 'Mot de passe mis à jour',
 	emailUpdated: 'Email mis à jour',
 
@@ -319,6 +342,7 @@ export const sp: typeof en = {
 	changeLanguageBtn: 'Cambiar el idioma',
 	searchBtn: 'Buscar',
 	playBtn: 'reproducir',
+	practiceBtn: 'Práctica',
 	playAgain: 'Repetición',
 	precisionScore: 'Précision',
 	songPageBtn: 'canción',
@@ -402,6 +426,16 @@ export const sp: typeof en = {
 	errAlrdExst: "Ya existe",
 	errIncrrct: "credenciales incorrectas",
 
+	// Playback messages
+	missed: 'Te perdiste una nota',
+	perfect: 'Perfecto',
+	great: 'Excelente',
+	good: 'Bueno',
+	wrong: 'Equivocado',
+	short: 'Un poco demasiado corto',
+	long: 'Un poco demasiado largo',
+	tooLong: 'Demasiado largo',
+	tooShort: 'Demasiado corto',
 	changePassword: 'Cambio de contraseña',
 	oldPassword: 'Contraseña anterior',
 	newPassword: 'Nueva contraseña',
