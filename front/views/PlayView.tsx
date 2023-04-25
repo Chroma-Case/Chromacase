@@ -4,21 +4,25 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-
-import { useNavigation } from "../Navigation";
+import { useNavigation, RouteProps } from "../Navigation";
 import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import { useStopwatch } from 'react-timer-hook';
 import SlideView from '../components/PartitionVisualizer/SlideView';
 import MidiPlayer from 'midi-player-js';
 import SoundFont from 'soundfont-player';
 import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
+import { useSelector } from 'react-redux';
+import { RootState } from '../state/Store';
+import { translate } from '../i18n/i18n';
+import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
+import { useStopwatch } from "react-use-precision-timer";
 
 type PlayViewProps = {
-	songId: number
+	songId: number,
+	type: 'practice' | 'normal'
 }
 
 
@@ -33,42 +37,52 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	}
 }
 
-const PlayView = ({ songId }: RouteProps<PlayViewProps>) => {
+const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
+	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const queryClient = useQueryClient();
 	const song = useQuery(['song', songId], () => API.getSong(songId));
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
-	const timer = useStopwatch({ autoStart: false });
 	const [paused, setPause] = useState<boolean>(true);
+	const stopwatch = useStopwatch();
 	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
-	
+	const [time, setTime] = useState(0);
+	const [score, setScore] = useState(0); // Between 0 and 100
 	const partitionRessources = useQuery(["partition", songId], () =>
 		API.getPartitionRessources(songId)
 	);
 
 	const onPause = () => {
-		timer.pause();
 		midiPlayer?.pause();
+		stopwatch.pause();
 		setPause(true);
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: true,
-			time: Date.now()
+			time: time
 		}));
 	}
 	const onResume = () => {
+		if (stopwatch.isStarted()) {
+			stopwatch.resume();
+		} else {
+			stopwatch.start();
+		}
 		setPause(false);
 		midiPlayer?.play();
-		timer.start();
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: false,
-			time: Date.now()
+			time: time
 		}));
 	}
 	const onEnd = () => {
+		webSocket.current?.send(JSON.stringify({
+			type: "end"
+		}));
+		stopwatch.stop();
 		webSocket.current?.close();
 		midiPlayer?.pause();
 	}
@@ -86,19 +100,55 @@ const PlayView = ({ songId }: RouteProps<PlayViewProps>) => {
 		webSocket.current.onopen = () => {
 			webSocket.current!.send(JSON.stringify({
 				type: "start",
-				name: "clair-de-lune" /*song.data.id*/,
+				id: song.data!.id,
+				mode: type,
+				bearer: accessToken
 			}));
 		};
 		webSocket.current.onmessage = (message) => {
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
-					navigation.navigate('Score');
-				} else if (data.song_launched == undefined) {
-					toast.show({ description: data, placement: 'top', colorScheme: 'secondary' });
+					navigation.navigate('Score', { songId: song.data!.id });
+					return;
 				}
-			} catch {
+				const points = data.info.score;
+				const maxPoints = data.info.maxScore;
 
+				setScore(Math.floor(Math.max(points, 0) / maxPoints) * 100);
+
+				let formattedMessage = '';
+				let messageColor: ColorSchemeType | undefined;
+
+				if (data.type == 'miss') {
+					formattedMessage = translate('missed');
+					messageColor = 'black';
+				} else if (data.type == 'timing' || data.type == 'duration') {
+					formattedMessage = translate(data[data.type]);
+					switch (data[data.type]) {
+						case 'perfect':
+							messageColor = 'fuchsia';
+							break;
+						case 'great':
+							messageColor = 'green';
+							break;
+						case 'short':
+						case 'long':
+						case 'good':
+							messageColor = 'lightBlue';
+							break;
+						case 'too short':
+						case 'too long':
+						case 'wrong':
+							messageColor = 'grey';
+							break;
+						default:
+							break;
+					}
+				} 
+				toast.show({ description: formattedMessage, placement: 'top', colorScheme: messageColor ?? 'secondary' });
+			} catch (e) {
+				console.log(e);
 			}
 		}
 		inputs.forEach((input) => {
@@ -110,9 +160,9 @@ const PlayView = ({ songId }: RouteProps<PlayViewProps>) => {
 				const keyCode = message.data[1];
 				webSocket.current?.send(JSON.stringify({
 					type: keyIsPressed ? "note_on" : "note_off",
-					node: keyCode,
-					intensity: null,
-					time: Date.now()
+					note: keyCode,
+					id: song.data!.id,
+					time: time
 				}))
 			}
 			inputIndex++;
@@ -123,7 +173,6 @@ const PlayView = ({ songId }: RouteProps<PlayViewProps>) => {
 		]).then(([midiFile, audioController]) => {
 			const player = new MidiPlayer.Player((event) => {
 				if (event['noteName']) {
-					console.log(event);
 					audioController.play(event['noteName']);
 				}
 			});
@@ -134,17 +183,23 @@ const PlayView = ({ songId }: RouteProps<PlayViewProps>) => {
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
 	}
+
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-		navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+		let interval = setInterval(() => setTime(() => stopwatch.getElapsedRunningTime()), 1);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
-			clearInterval(timer);
 			onEnd();
+			clearInterval(interval);
 		}
-	}, [])
-	const score = 20;
+	}, []);
+	useEffect(() => {
+		if (song.data) {
+			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+		}
+
+	}, [song.data]);
 
 	if (!song.data || !partitionRessources.data) {
 		return <LoadingView/>;
@@ -217,12 +272,12 @@ const PlayView = ({ songId }: RouteProps<PlayViewProps>) => {
 						} onPress={() => {
 							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
-						<Text>{timer.minutes}:{timer.seconds.toString().padStart(2, '0')}</Text>
+						<Text>{Math.floor(time / 60000)}:{Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}</Text>
 						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
 							onEnd();
-							navigation.navigate('Score')
+							navigation.navigate('Score', { songId: song.data.id });
 						}}/>
 					</Row>
 				</Row>

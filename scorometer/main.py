@@ -4,16 +4,22 @@ import json
 import logging
 import operator
 import os
-import select
 import sys
-from dataclasses import dataclass
-from typing import Literal, Tuple
+from typing import TypedDict
 
 import requests
 from chroma_case.Key import Key
+from chroma_case.Message import (
+	EndMessage,
+	InvalidMessage,
+	NoteOffMessage,
+	NoteOnMessage,
+	PauseMessage,
+	StartMessage,
+	getMessage,
+)
 from chroma_case.Partition import Partition
 from mido import MidiFile
-from validated_dc import ValidatedDC, get_errors, is_valid
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
 MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/musics/"
@@ -27,77 +33,13 @@ NORMAL = 0
 PRACTICE = 1
 
 
-@dataclass
-class InvalidMessage:
-	message: str
-
-
-@dataclass
-class StartMessage(ValidatedDC):
-	id: int
-	bearer: str
-	mode: Literal["normal", "practice"]
-	type: Literal["start"] = "start"
-
-
-@dataclass
-class EndMessage(ValidatedDC):
-	type: Literal["end"] = "end"
-
-
-@dataclass
-class NoteOnMessage(ValidatedDC):
-	time: int
-	note: int
-	id: int
-	type: Literal["note_on"] = "note_on"
-
-
-@dataclass
-class NoteOffMessage(ValidatedDC):
-	time: int
-	note: int
-	id: int
-	type: Literal["note_off"] = "note_off"
-
-
-@dataclass
-class PauseMessage(ValidatedDC):
-	paused: bool
-	time: int
-	type: Literal["pause"] = "pause"
-
-
-message_map = {
-	"start": StartMessage,
-	"end": EndMessage,
-	"note_on": NoteOnMessage,
-	"note_off": NoteOffMessage,
-	"pause": PauseMessage,
-}
-
-
-def getMessage() -> (
-	Tuple[
-		StartMessage
-		| EndMessage
-		| NoteOnMessage
-		| NoteOffMessage
-		| PauseMessage
-		| InvalidMessage,
-		str,
-	]
-):
-	try:
-		msg = input()
-		obj = json.loads(msg)
-		res = message_map[obj["type"]](**obj)
-		if is_valid(res):
-			return res, msg
-		else:
-			return InvalidMessage(str(get_errors(res))), msg
-	except Exception as e:
-		return InvalidMessage(str(e)), ""
+class ScoroInfo(TypedDict):
+	max_score: int
+	score: int
+	missed: int
+	perfect: int
+	great: int
+	good: int
 
 
 def send(o):
@@ -105,30 +47,29 @@ def send(o):
 
 
 class Scorometer:
-	def __init__(self, mode, midiFile, song_id, user_id) -> None:
-		self.partition = self.getPartition(midiFile)
+	def __init__(self, mode: int, midiFile: str, song_id: int, user_id: int) -> None:
+		self.partition: Partition = self.getPartition(midiFile)
+		self.practice_partition: list[list[Key]] = self.getPracticePartition(mode)
 		self.keys_down = []
-		self.mode = mode
-		self.song_id = song_id
-		self.user_id = user_id
-		self.score = 0
-		self.missed = 0
-		self.perfect = 0
-		self.great = 0
-		self.good = 0
+		self.mode: int = mode
+		self.song_id: int = song_id
+		self.user_id: int = user_id
+		self.wrong_ids = []
 		self.difficulties = {}
-		if mode == PRACTICE:
-			get_start = operator.attrgetter("start")
-			self.practice_partition = [
-				list(g)
-				for _, g in itertools.groupby(
-					sorted(self.partition.notes, key=get_start), get_start
-				)
-			]
-		else:
-			self.practice_partition: list[list[Key]] = []
+		self.info: ScoroInfo = {
+			"max_score": len(self.partition.notes) * 100,
+			"score": 0,
+			"missed": 0,
+			"perfect": 0,
+			"great": 0,
+			"good": 0,
+		}
 
-	def getPartition(self, midiFile):
+	def send(self, obj):
+		obj["info"] = self.info
+		send(obj)
+
+	def getPartition(self, midiFile: str):
 		notes = []
 		s = 3500
 		notes_on = {}
@@ -150,21 +91,26 @@ class Scorometer:
 				notes_on[d["note"]] = s  # 500
 		return Partition(midiFile, notes)
 
-	def handleNoteOn(self, message: NoteOnMessage):
-		_key = message.note
-		timestamp = message.time
-		is_down = any(x[0] == _key for x in self.keys_down)
-		if not is_down:
-			self.keys_down.append((_key, timestamp))
-			logging.debug({"note": _key})
+	def getPracticePartition(self, mode: int) -> list[list[Key]]:
+		get_start = operator.attrgetter("start")
+		return (
+			[
+				list(g)
+				for _, g in itertools.groupby(
+					sorted(self.partition.notes, key=get_start), get_start
+				)
+			]
+			if mode == PRACTICE
+			else []
+		)
 
-	def handleNoteOff(self, message: NoteOffMessage):
-		_key = message.note
-		timestamp = message.time
-		down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
-		self.keys_down.remove((_key, down_since))
-		key = Key(_key, down_since, (timestamp - down_since))
-		# debug({key: key})
+	def handleNoteOn(self, message: NoteOnMessage):
+		is_down = any(x[0] == message.note for x in self.keys_down)
+		logging.debug({"note_on": message.note})
+		if is_down:
+			return
+		self.keys_down.append((message.note, message.time))
+		key = Key(key=message.note, start=message.time, duration=0)
 		to_play = next(
 			(
 				i
@@ -173,82 +119,129 @@ class Scorometer:
 			),
 			None,
 		)
-		if to_play is None:
-			self.score -= 50
-			logging.info("Invalid key.")
+		if to_play:
+			perf = self.getTimingScore(key, to_play)
+			logging.debug({"note_on": f"{perf} on {message.note}"})
+			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
-			timingScore, timingInformation = self.getTiming(key, to_play)
-			self.score += (
+			self.info["score"] -= 50
+			self.wrong_ids += [message.id]
+			logging.debug({"note_on": f"wrong key {message.note}"})
+			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
+
+	def handleNoteOff(self, message: NoteOffMessage):
+		logging.debug({"note_off": message.note})
+		down_since = next(
+			since for (h_key, since) in self.keys_down if h_key == message.note
+		)
+		self.keys_down.remove((message.note, down_since))
+		if message.id in self.wrong_ids:
+			logging.debug({"note_off": f"wrong key {message.note}"})
+			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
+			return
+		key = Key(
+			key=message.note, start=down_since, duration=(message.time - down_since)
+		)
+		to_play = next(
+			(
+				i
+				for i in self.partition.notes
+				if i.key == key.key and self.is_timing_close(key, i) and i.done is False
+			),
+			None,
+		)
+		if to_play:
+			perf = self.getDurationScore(key, to_play)
+			self.info["score"] += (
 				100
-				if timingScore == "perfect"
+				if perf == "perfect"
 				else 75
-				if timingScore == "great"
+				if perf == "short" or perf == "long"
 				else 50
 			)
 			to_play.done = True
-			self.sendScore(message.id, timingScore, timingInformation)
+			logging.debug({"note_off": f"{perf} on {message.note}"})
+			self.send({"type": "duration", "id": message.id, "duration": perf})
+		else:
+			logging.warning("note_off: no key to play but it was not a wrong note_on")
 
 	def handleNoteOnPractice(self, message: NoteOnMessage):
-		_key = message.note
-		timestamp = message.time
-		is_down = any(x[0] == _key for x in self.keys_down)
-		if not is_down:
-			self.keys_down.append((_key, timestamp))
-			logging.debug({"note": _key})
-
-	def handleNoteOffPractice(self, message: NoteOffMessage):
-		_key = message.note
-		timestamp = message.time
-		# is_down = any(x[0] == _key for x in self.keys_down)
-		down_since = next(since for (h_key, since) in self.keys_down if h_key == _key)
-		self.keys_down.remove((_key, down_since))
-		key = Key(_key, down_since, (timestamp - down_since))
+		is_down = any(x[0] == message.note for x in self.keys_down)
+		logging.debug({"note_on": message.note})
+		if is_down:
+			return
+		self.keys_down.append((message.note, message.time))
+		key = Key(key=message.note, start=message.time, duration=0)
 		keys_to_play = next(
 			(i for i in self.practice_partition if any(x.done is not True for x in i)),
 			None,
 		)
 		if keys_to_play is None:
-			logging.info("Key sent but there is no keys to play")
-			self.score -= 50
+			self.send({"type": "error", "error": "no keys should be played"})
 			return
 		to_play = next(
 			(i for i in keys_to_play if i.key == key.key and i.done is not True), None
 		)
-		if to_play is None:
-			self.score -= 50
-			logging.info("Invalid key.")
+		if to_play:
+			perf = "practice"
+			logging.debug({"note_on": f"{perf} on {message.note}"})
+			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
-			timingScore, _ = self.getTiming(key, to_play)
-			self.score += (
-				100
-				if timingScore == "perfect"
-				else 75
-				if timingScore == "great"
-				else 50
-			)
+			self.wrong_ids += [message.id]
+			logging.debug({"note_on": f"wrong key {message.note}"})
+			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
+
+	def handleNoteOffPractice(self, message: NoteOffMessage):
+		logging.debug({"note_off": message.note})
+		down_since = next(
+			since for (h_key, since) in self.keys_down if h_key == message.note
+		)
+		self.keys_down.remove((message.note, down_since))
+		if message.id in self.wrong_ids:
+			logging.debug({"note_off": f"wrong key {message.note}"})
+			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
+			return
+		key = Key(
+			key=message.note, start=down_since, duration=(message.time - down_since)
+		)
+		keys_to_play = next(
+			(i for i in self.practice_partition if any(x.done is not True for x in i)),
+			None,
+		)
+		if keys_to_play is None:
+			logging.info("Invalid key.")
+			self.info["score"] -= 50
+			# TODO: I dont think this if is right
+			# self.sendScore(message.id, "wrong key", "wrong key")
+			return
+		to_play = next(
+			(i for i in keys_to_play if i.key == key.key and i.done is not True), None
+		)
+		if to_play:
+			perf = "practice"
 			to_play.done = True
-			self.sendScore(message.id, timingScore, "practice")
+			logging.debug({"note_off": f"{perf} on {message.note}"})
+			self.send({"type": "duration", "id": message.id, "duration": perf})
+		else:
+			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
 
-	def getTiming(self, key: Key, to_play: Key):
-		return self.getTimingScore(key, to_play), self.getTimingInfo(key, to_play)
-
-	def getTimingScore(self, key: Key, to_play: Key):
+	def getDurationScore(self, key: Key, to_play: Key):
 		tempo_percent = abs((key.duration / to_play.duration) - 1)
 		if tempo_percent < 0.3:
 			timingScore = "perfect"
 		elif tempo_percent < 0.5:
-			timingScore = "great"
+			timingScore = "short" if key.duration < to_play.duration else "long"
 		else:
-			timingScore = "good"
+			timingScore = "too short" if key.duration < to_play.duration else "too long"
 		return timingScore
 
-	def getTimingInfo(self, key: Key, to_play: Key):
+	def getTimingScore(self, key: Key, to_play: Key):
 		return (
 			"perfect"
-			if abs(key.start - to_play.start) < 200
-			else "fast"
-			if key.start < to_play.start
-			else "late"
+			if abs(key.start - to_play.start) < 100
+			else "great"
+			if (key.start < to_play.start) < 300
+			else "good"
 		)
 
 	# is it in the 500 ms range
@@ -268,7 +261,7 @@ class Scorometer:
 		match message:
 			case InvalidMessage(error):
 				logging.warning(f"Invalid message {line} with error: {error}")
-				send({"error": f"Invalid message {line} with error: {error}"})
+				self.send({"error": f"Invalid message {line} with error: {error}"})
 			case NoteOnMessage():
 				if self.mode == NORMAL:
 					self.handleNoteOn(message)
@@ -288,43 +281,25 @@ class Scorometer:
 					f"Expected note_on note_off or pause message but got {message.type} instead"
 				)
 
-	def sendScore(self, id, timingScore, timingInformation):
-		send(
-			{
-				"id": id,
-				"timingScore": timingScore,
-				"timingInformation": timingInformation,
-			}
-		)
-
 	def gameLoop(self):
 		while True:
-			if select.select(
-				[
-					sys.stdin,
-				],
-				[],
-				[],
-				0.0,
-			)[0]:
-				message, line = getMessage()
-				logging.info(f"handling message {line}")
-				self.handleMessage(message, line)
-			else:
-				pass
+			message, line = getMessage()
+			logging.debug(f"handling message {line}")
+			self.handleMessage(message, line)
 
 	def endGame(self):
 		for i in self.partition.notes:
 			if i.done is False:
-				self.score -= 50
+				self.info["score"] -= 50
+				self.info["missed"] += 1
 		send(
 			{
-				"overallScore": self.score,
+				"overallScore": self.info["score"],
 				"score": {
-					"missed": self.missed,
-					"good": self.good,
-					"great": self.great,
-					"perfect": self.perfect,
+					"missed": self.info["missed"],
+					"good": self.info["good"],
+					"great": self.info["great"],
+					"perfect": self.info["perfect"],
 					"maxScore": len(self.partition.notes) * 100,
 				},
 			}
@@ -335,7 +310,7 @@ class Scorometer:
 				json={
 					"songID": self.song_id,
 					"userID": self.user_id,
-					"score": self.score,
+					"score": self.info["score"],
 					"difficulties": self.difficulties,
 				},
 			)
