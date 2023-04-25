@@ -96,7 +96,8 @@ export const en = {
 	unknownError: 'Unknown error',
 	errAlrdExst: 'Already exist',
 	errIncrrct: 'Incorrect Credentials',
-
+	userProfileFetchError: 'An error occured while fetching your profile',
+	tryAgain: 'Try Again',
 
 	changePassword: 'Change password',
 	oldPassword: 'Old password',
@@ -255,6 +256,8 @@ export const fr: typeof en = {
 	errAlrdExst: "Utilisateur existe déjà",
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
+	userProfileFetchError: 'Une erreur est survenue lors de la récupération du profil',
+	tryAgain: 'Réessayer',
 
 	passwordUpdated: 'Mot de passe mis à jour',
 	emailUpdated: 'Email mis à jour',
@@ -401,7 +404,9 @@ export const sp: typeof en = {
 	unknownError: 'Error desconocido',
 	errAlrdExst: "Ya existe",
 	errIncrrct: "credenciales incorrectas",
-
+	userProfileFetchError: 'Ocurrió un error al obtener su perfil',
+	tryAgain: 'intentar otra vez',
+	
 	changePassword: 'Cambio de contraseña',
 	oldPassword: 'Contraseña anterior',
 	newPassword: 'Nueva contraseña',
