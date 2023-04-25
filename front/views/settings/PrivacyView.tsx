@@ -4,14 +4,18 @@ import { translate } from "../../i18n/i18n";
 import ElementList from "../../components/GtkUI/ElementList";
 import { useDispatch } from "react-redux";
 import { RootState, useSelector } from "../../state/Store";
-import { SettingsState, updateSettings } from "../../state/SettingsSlice";
+import { updateSettings } from "../../state/SettingsSlice";
+import useUserSettings from "../../hooks/userSettings";
+import { LoadingView } from "../../components/Loading";
 
 const PrivacyView = () => {
 	const dispatch = useDispatch();
-	const settings: SettingsState = useSelector(
-		(state: RootState) => state.settings.settings as SettingsState
-	);
+	const settings = useSelector((state: RootState) => state.settings.local);
+	const { settings: userSettings, updateSettings: updateUserSettings } = useUserSettings();
 
+	if (!userSettings.data) {
+		return <LoadingView/>;
+	}
 	return (
 		<Center style={{ flex: 1 }}>
 			<Heading style={{ textAlign: "center" }}>{translate("privBtn")}</Heading>
@@ -47,11 +51,9 @@ const PrivacyView = () => {
 						type: "toggle",
 						title: translate("recommendations"),
 						data: {
-							value: settings.recommandations,
+							value: userSettings.data.recommendations,
 							onToggle: () =>
-								dispatch(
-									updateSettings({ recommandations: !settings.recommandations })
-								),
+								updateUserSettings({ recommendations: !userSettings.data.recommendations })
 						},
 					},
 				]}

@@ -1,9 +1,9 @@
 import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationProp, ParamListBase, useNavigation as navigationHook } from "@react-navigation/native";
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
-import { translate } from './i18n/i18n';
+import { Translate, translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
 import AuthenticationView from './views/AuthenticationView';
 import StartPageView from './views/StartPageView';
@@ -14,10 +14,10 @@ import { useQuery } from 'react-query';
 import API from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
-import { Center } from 'native-base';
-import LoadingComponent from './components/Loading';
+import { LoadingView } from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
+import { Button, Center, VStack } from 'native-base';
 
 
 const protectedRoutes = () => ({
@@ -33,6 +33,7 @@ const protectedRoutes = () => ({
 const publicRoutes = () => ({
 	Start: { component: StartPageView, options: { title: "Chromacase", headerShown: false } },
 	Login: { component: AuthenticationView, options: { title: translate('signInBtn') } },
+	Oops: { component: ProfileErrorView, options: { title: 'Oops', headerShown: false } },
 }) as const;
 
 type Route<Props = any> = {
@@ -66,6 +67,16 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 		/>
 	))
 
+const ProfileErrorView = (props: { onTryAgain: () => any }) => {
+	return <Center style={{ flexGrow: 1 }}>
+		<VStack space={3}>
+			<Translate translationKey='userProfileFetchError'/>
+			<Button onPress={props.onTryAgain}><Translate translationKey='tryAgain'/></Button>
+
+		</VStack>
+	</Center>
+}
+
 export const Router = () => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const userProfile = useQuery(['user', 'me', accessToken], () => API.getUserInfo(), {
@@ -74,21 +85,25 @@ export const Router = () => {
 	});
 	const colorScheme = useColorScheme();
 
+	useEffect(() => {
+		if (accessToken) {
+			userProfile.refetch();
+		}
+	}, [accessToken]);
+
 	return (
 		<NavigationContainer theme={colorScheme == 'light'
 			? DefaultTheme
 			: DarkTheme
 		}>
 			<Stack.Navigator>
-				{ userProfile.isLoading && !userProfile.data ?
-					<Stack.Screen name="Loading" component={() =>
-						<Center style={{ flexGrow: 1 }}>
-							<LoadingComponent/>
-						</Center>
-					}/>
-					: routesToScreens(userProfile.isSuccess && accessToken
-						? protectedRoutes()
-						: publicRoutes())
+				{ userProfile.isError && accessToken && !userProfile.isLoading
+					? <Stack.Screen name="Oops" component={RouteToScreen(() => <ProfileErrorView onTryAgain={() => userProfile.refetch()}/>)}/>
+					: userProfile.isLoading && !userProfile.data ?
+						<Stack.Screen name="Loading" component={RouteToScreen(LoadingView)}/>
+						: routesToScreens(userProfile.isSuccess && accessToken
+							? protectedRoutes()
+							: publicRoutes())
 				}
 			</Stack.Navigator>
 		</NavigationContainer>

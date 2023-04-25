@@ -1,13 +1,13 @@
 import { Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon, Stack } from "native-base";
 import { useQuery } from 'react-query';
-import LoadingComponent from "../components/Loading";
+import LoadingComponent, { LoadingView } from "../components/Loading";
 import React, { useEffect, useState } from "react";
 import { Translate, translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
 import API from "../API";
 import TextButton from "../components/TextButton";
-import { useNavigation, RouteProps } from "../Navigation";
+import { RouteProps, useNavigation } from "../Navigation";
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -26,9 +26,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	}, [chaptersOpen]);
 	useEffect(() => {}, [songQuery.isLoading]);
 	if (songQuery.isLoading || scoresQuery.isLoading)
-		return <Center style={{ flexGrow: 1 }}>
-			<LoadingComponent/>
-		</Center>
+		return <LoadingView/>;
 	return (
 		<Box style={{ padding: 30, flexDirection: 'column' }}>
 			<Box style={{ flexDirection: 'row', height: '30%'}}>

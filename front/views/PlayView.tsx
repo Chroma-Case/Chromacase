@@ -7,7 +7,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useNavigation, RouteProps } from "../Navigation";
 import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
-import LoadingComponent from '../components/Loading';
+import { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
 import SlideView from '../components/PartitionVisualizer/SlideView';
 import MidiPlayer from 'midi-player-js';
@@ -202,9 +202,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}, [song.data]);
 
 	if (!song.data || !partitionRessources.data) {
-		return <Center style={{ flexGrow: 1 }}>
-			<LoadingComponent/>
-		</Center>
+		return <LoadingView/>;
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>

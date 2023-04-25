@@ -97,6 +97,8 @@ export const en = {
 	unknownError: 'Unknown error',
 	errAlrdExst: 'Already exist',
 	errIncrrct: 'Incorrect Credentials',
+	userProfileFetchError: 'An error occured while fetching your profile',
+	tryAgain: 'Try Again',
 
 	// Playback messages
 	missed: 'Missed note',
@@ -268,6 +270,8 @@ export const fr: typeof en = {
 	errAlrdExst: "Utilisateur existe déjà",
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
+	userProfileFetchError: 'Une erreur est survenue lors de la récupération du profil',
+	tryAgain: 'Réessayer',
 
 	// Playback messages
 	missed: 'Raté',
@@ -425,6 +429,9 @@ export const sp: typeof en = {
 	unknownError: 'Error desconocido',
 	errAlrdExst: "Ya existe",
 	errIncrrct: "credenciales incorrectas",
+	userProfileFetchError: 'Ocurrió un error al obtener su perfil',
+	tryAgain: 'intentar otra vez',
+	
 
 	// Playback messages
 	missed: 'Te perdiste una nota',
