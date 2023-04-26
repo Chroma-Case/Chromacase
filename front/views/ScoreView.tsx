@@ -25,7 +25,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 
 	if (!recommendations.data || !songScoreQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
 		return <LoadingView/>;
-
+	}
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
 		<VStack width={{ base: '100%', lg: '50%' }} textAlign='center'>
 			<Text bold fontSize='lg'>{songQuery.data.name}</Text>
