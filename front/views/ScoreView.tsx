@@ -18,13 +18,16 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 		() => API.getArtist(songQuery.data!.artistId!),
 		{ enabled: songQuery.data != undefined }
 	);
-	const songScoreQuery = useQuery(["score", songId], () => API.getUserPlayHistory()
-		.then((history) => history.find((h) => h.songID == songId )!));
+	const songHistoryQuery = useQuery(["song", "history"], () => API.getUserPlayHistory());
 	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
 	const recommendations = useQuery(['song', 'recommendations'], () => API.getUserRecommendations());
 
-	if (!recommendations.data || !songScoreQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
+	if (!recommendations.data || !songHistoryQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
 		return <LoadingView/>;
+	}
+	const songScore = songHistoryQuery.data.find((history) => history.songID == songId);
+	if (!songScore) {
+		return <Center><Translate translationKey="unknownError"/></Center>;
 	}
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
 		<VStack width={{ base: '100%', lg: '50%' }} textAlign='center'>
@@ -54,7 +57,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 						<Row style={{ alignItems: 'center' }}>
 							<Translate translationKey='score' format={(t) => t + ' : '}/>
 							<Text bold fontSize='xl'>
-								{songScoreQuery.data.score + "pts"}
+								{songScore.score + "pts"}
 							</Text>
 						</Row>
 					</Column>
