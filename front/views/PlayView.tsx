@@ -4,12 +4,11 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, RouteProps } from "../Navigation";
+import { RouteProps, useNavigation } from "../Navigation";
 import { useQuery, useQueryClient } from 'react-query';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import SlideView from '../components/PartitionVisualizer/SlideView';
 import MidiPlayer from 'midi-player-js';
 import SoundFont from 'soundfont-player';
 import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
@@ -19,6 +18,7 @@ import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from "react-use-precision-timer";
+import PartitionView from '../components/PartitionView';
 
 type PlayViewProps = {
 	songId: number,
@@ -49,9 +49,11 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	const [time, setTime] = useState(0);
+	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
-	const partitionRessources = useQuery(["partition", songId], () =>
-		API.getPartitionRessources(songId)
+	const musixml = useQuery(["musixml", songId], () =>
+		API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
+		{ staleTime: Infinity }
 	);
 
 	const onPause = () => {
@@ -178,7 +180,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			});
 			player.loadArrayBuffer(midiFile);
 			setMidiPlayer(player);
-		});
+		}).catch((e) => console.log(e));
 	}
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
@@ -186,7 +188,9 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-		let interval = setInterval(() => setTime(() => stopwatch.getElapsedRunningTime()), 1);
+		let interval = setInterval(() => {
+			setTime(() => stopwatch.getElapsedRunningTime())
+		}, 1);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
@@ -195,19 +199,18 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, []);
 	useEffect(() => {
-		if (song.data) {
+		if (song.data && !webSocket.current) {
 			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 		}
-
 	}, [song.data]);
 
-	if (!song.data || !partitionRessources.data) {
+	if (!song.data || !musixml.data) {
 		return <LoadingView/>;
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
-			<View style={{ flexGrow: 1 }}>
-				<SlideView sources={partitionRessources.data} speed={200} startAt={0} />
+			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
+				<PartitionView file={musixml.data} onPartitionReady={() => setPartitionRendered(true)} timestamp={time}/>
 			</View>
 
 			{isVirtualPianoVisible && <Column
@@ -244,14 +247,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 				/>
 			</Column>}
-			<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5 }}>
+			<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5, display: !partitionRendered ? 'none' : undefined }}>
 				<Row justifyContent='space-between' style={{ flexGrow: 1, alignItems: 'center' }} >
 					<Column space={2} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 						<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
 						<Progress value={score} style={{ width: '90%' }}/>
 					</Column>
 					<Center style={{ flex: 1, alignItems: 'center' }}>
-						<Text style={{ fontWeight: '700' }}>Rolling in the Deep</Text>
+						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
 					</Center>
 					<Row style={{ flex: 1, height: '100%', justifyContent: 'space-evenly', alignItems: 'center'  }}>
 						<IconButton size='sm' colorScheme='secondary' variant='solid' icon={
