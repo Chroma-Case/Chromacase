@@ -282,7 +282,7 @@ export default class API {
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMidi(songId: number): Promise<any> {
+	public static async getSongMidi(songId: number): Promise<ArrayBuffer> {
 		return API.fetch({
 			route: `/song/${songId}/midi`,
 			raw: true,
@@ -293,7 +293,7 @@ export default class API {
 	 * Retrive a song's musicXML partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMusicXML(songId: number): Promise<any> {
+	public static async getSongMusicXML(songId: number): Promise<ArrayBuffer> {
 		return API.fetch({
 			route: `/song/${songId}/musicXml`,
 			raw: true,
