@@ -18,6 +18,9 @@ import { LoadingView } from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
 import { Button, Center, VStack } from 'native-base';
+import { useDispatch } from 'react-redux';
+import { unsetAccessToken } from './state/UserSlice';
+import TextButton from './components/TextButton';
 
 
 const protectedRoutes = () => ({
@@ -59,8 +62,9 @@ const RouteToScreen = <T extends {}, >(component: Route<T>['component']) => (pro
 	</>
 
 const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) => Object.entries(routes)
-	.map(([name, route]) => (
+	.map(([name, route], routeIndex) => (
 		<Stack.Screen
+			key={'route-' + routeIndex}
 			name={name as keyof AppRouteParams}
 			options={route.options}
 			component={RouteToScreen(route.component)}
@@ -68,11 +72,15 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 	))
 
 const ProfileErrorView = (props: { onTryAgain: () => any }) => {
+	const dispatch = useDispatch();
 	return <Center style={{ flexGrow: 1 }}>
 		<VStack space={3}>
 			<Translate translationKey='userProfileFetchError'/>
 			<Button onPress={props.onTryAgain}><Translate translationKey='tryAgain'/></Button>
-
+			<TextButton onPress={() => dispatch(unsetAccessToken())}
+				colorScheme="error" variant='outline'
+				translate={{ translationKey: 'signOutBtn' }}
+			/>
 		</VStack>
 	</Center>
 }
