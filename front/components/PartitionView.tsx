@@ -43,7 +43,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	
 	// Re-render manually (otherwise done by 'autoResize' option), to fix disappearing cursor
 	useEffect(() => {
-		if (osmd) {
+		if (osmd && osmd.IsReadyToRender()) {
 			osmd.render();
 			osmd.cursor.show();
 		}
@@ -57,7 +57,8 @@ const PartitionView = (props: PartitionViewProps) => {
 		const currentTimestamp = new Fraction(props.timestamp, 1000, undefined, true);
 		let previousCursorPosition = -1;
 		let currentCursorPosition = osmd.cursor.cursorElement.offsetLeft;
-		while(osmd.cursor.NotesUnderCursor().at(0)!.getAbsoluteTimestamp().lt(currentTimestamp) && !osmd.cursor.iterator.EndReached) {
+		while(osmd.cursor.NotesUnderCursor().at(0)?.getAbsoluteTimestamp().lt(currentTimestamp) && !osmd.cursor.iterator.EndReached) {
+			// console.log(osmd.cursor.NotesUnderCursor().at(0)!.getAbsoluteTimestamp(), osmd.cursor.NotesUnderCursor().at(0)!.Length);
 			previousCursorPosition = currentCursorPosition;
 			osmd.cursor.next();
 			osmd.cursor.show();
