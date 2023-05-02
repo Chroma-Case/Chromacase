@@ -19,6 +19,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	const colorScheme = useColorScheme();
 	const [currentWindowIndex, setCurrentWindowIndex] = useState(0);
 	const dimensions = useWindowDimensions();
+	const OSMD_DIV_ID = 'osmd-div';
 	const options = {
 		darkMode: colorScheme == 'dark',
 		drawComposer: false,
@@ -34,7 +35,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	}
 
 	useEffect(() => {
-		const _osmd = new OSMD('TROLOLOLOLOL', options);
+		const _osmd = new OSMD(OSMD_DIV_ID, options);
 		_osmd.load(props.file)
 			.then(() => {
 				_osmd.render();
@@ -85,7 +86,7 @@ const PartitionView = (props: PartitionViewProps) => {
 		}
 	}, [props.timestamp]);
 
-	return (<div id="TROLOLOLOLOL" />);
+	return (<div id={OSMD_DIV_ID} />);
 }
 
 export default PartitionView;
