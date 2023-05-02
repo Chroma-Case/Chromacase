@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { CursorType, Fraction, OpenSheetMusicDisplay as OSMD } from 'opensheetmusicdisplay';
 import useColorScheme from '../hooks/colorScheme';
+import { useWindowDimensions } from 'react-native';
 
 type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
@@ -17,6 +18,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	const [osmd, setOsmd] = useState<OSMD>();
 	const colorScheme = useColorScheme();
 	const [currentWindowIndex, setCurrentWindowIndex] = useState(0);
+	const dimensions = useWindowDimensions();
 	const options = {
 		darkMode: colorScheme == 'dark',
 		drawComposer: false,
@@ -28,7 +30,7 @@ const PartitionView = (props: PartitionViewProps) => {
 		drawFromMeasureNumber: 1,
 		drawUpToMeasureNumber: WINDOW_SIZE,
 		stretchLastSystemLine: true,
-		autoResize: true,
+		autoResize: false,
 	}
 
 	useEffect(() => {
@@ -37,11 +39,19 @@ const PartitionView = (props: PartitionViewProps) => {
 			.then(() => {
 				_osmd.render();
 				props.onPartitionReady();
-				_osmd.cursor.show();			
+				_osmd.cursor.show();
+				console.log(_osmd.Sheet.DefaultStartTempoInBpm)		
 			});
 		setOsmd(_osmd);
 	}, []);
 	
+	// Re-render manually (otherwise done by 'autoResize' option), to fix disappearing cursor
+	useEffect(() => {
+		if (osmd) {
+			osmd.render();
+			osmd.cursor.show();
+		}
+	}, [dimensions])
 
 
 	useEffect(() => {
