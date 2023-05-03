@@ -5,12 +5,10 @@ import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { RouteProps, useNavigation } from "../Navigation";
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import MidiPlayer from 'midi-player-js';
-import SoundFont from 'soundfont-player';
 import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
@@ -40,13 +38,11 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
-	const queryClient = useQueryClient();
 	const song = useQuery(['song', songId], () => API.getSong(songId));
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
-	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
@@ -57,7 +53,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	);
 
 	const onPause = () => {
-		midiPlayer?.pause();
 		stopwatch.pause();
 		setPause(true);
 		webSocket.current?.send(JSON.stringify({
@@ -73,7 +68,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			stopwatch.start();
 		}
 		setPause(false);
-		midiPlayer?.play();
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: false,
@@ -86,7 +80,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}));
 		stopwatch.stop();
 		webSocket.current?.close();
-		midiPlayer?.pause();
 	}
 
 	const onMIDISuccess = (access) => {
@@ -169,18 +162,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			}
 			inputIndex++;
 		});
-		Promise.all([
-			queryClient.fetchQuery(['song', songId, 'midi'], () => API.getSongMidi(songId)),
-			SoundFont.instrument(new AudioContext(), 'electric_piano_1'),
-		]).then(([midiFile, audioController]) => {
-			const player = new MidiPlayer.Player((event) => {
-				if (event['noteName']) {
-					audioController.play(event['noteName']);
-				}
-			});
-			player.loadArrayBuffer(midiFile);
-			setMidiPlayer(player);
-		}).catch((e) => console.log(e));
 	}
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });

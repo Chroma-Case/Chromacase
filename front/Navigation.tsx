@@ -24,9 +24,9 @@ import TextButton from './components/TextButton';
 
 
 const protectedRoutes = () => ({
-	Play: { component: PlayView, options: { title: translate('play') } },
 	Home: { component: HomeView, options: { title: translate('welcome') } },
 	Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
+	Play: { component: PlayView, options: { title: translate('play') } },
 	Song: { component: SongLobbyView, options: { title: translate('play') } },
 	Score: { component: ScoreView, options: { title: translate('score') } },
 	Search: { component: SearchView, options: { title: translate('search') } },
