@@ -7,7 +7,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { RouteProps, useNavigation } from "../Navigation";
 import { useQuery } from 'react-query';
 import API from '../API';
-import { LoadingView } from '../components/Loading';
+import LoadingComponent, { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
 import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
@@ -180,10 +180,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, []);
 	useEffect(() => {
-		if (song.data && !webSocket.current) {
+		if (song.data && !webSocket.current && partitionRendered) {
 			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 		}
-	}, [song.data]);
+	}, [song.data, partitionRendered]);
 
 	if (!song.data || !musixml.data) {
 		return <LoadingView/>;
@@ -192,6 +192,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
 				<PartitionView file={musixml.data} onPartitionReady={() => setPartitionRendered(true)} timestamp={time}/>
+				{ !partitionRendered && <LoadingComponent/> }
 			</View>
 
 			{isVirtualPianoVisible && <Column
