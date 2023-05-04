@@ -60,7 +60,8 @@ const PartitionView = (props: PartitionViewProps) => {
 				setSoundPlayer(player);
 				_osmd.render();
 				// Ty https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL77C12-L77C63
-				setWholeNoteLength(Math.round((60 / _osmd.Sheet.getExpressionsStartTempoInBPM()) * 4000))
+				const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
+				setWholeNoteLength(Math.round((60 / bpm) * 4000))
 				props.onPartitionReady();
 				_osmd.cursor.show();
 			});
