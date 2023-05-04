@@ -331,11 +331,9 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
-		return [67, 4578, 2, 9990].map((value) => ({
-			songId: songId,
-			userId: 1,
-			score: value,
-		}));
+		return API.fetch({
+			route: `/history`,
+		}).then((data: SongHistory[]) => data.filter((entry) => entry.songID == songId))
 	}
 
 	/**
