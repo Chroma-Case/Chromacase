@@ -5,7 +5,7 @@ import { RouteProps, useNavigation } from "../Navigation";
 import { CardBorderRadius } from "../components/Card";
 import TextButton from "../components/TextButton";
 import API from '../API';
-import { useQuery } from "react-query";
+import { useQueries, useQuery } from "react-query";
 import { LoadingView } from "../components/Loading";
 
 type ScoreViewProps = { songId: number }
@@ -22,8 +22,14 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 		.then((history) => history.find((h) => h.songID == songId )!));
 	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
 	const recommendations = useQuery(['song', 'recommendations'], () => API.getUserRecommendations());
-
-	if (!recommendations.data || !songScoreQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
+	const artistRecommendations = useQueries(recommendations.data
+		?.filter(({ artistId }) => artistId !== null)
+		.map((song) => ({
+			queryKey: ['artist', song.artistId],
+			queryFn: () => API.getArtist(song.artistId!)
+		})) ?? []
+	)
+	if (!recommendations.data || artistRecommendations.find(({ data }) => !data) || !songScoreQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
 		return <LoadingView/>;
 	}
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
@@ -68,7 +74,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 				songs={recommendations.data.map((i) => ({
 					albumCover: i.cover,
 					songTitle: i.name ,
-					artistName: "Artist",
+					artistName: artistRecommendations.find(({ data }) => data?.id == i.artistId)?.data?.name ?? "",
 					songId: i.id
 				}))}
 			/>
