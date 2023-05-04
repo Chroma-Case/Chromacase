@@ -10,6 +10,7 @@ type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
 	file: string;
 	onPartitionReady: () => void;
+	onEndReached: () => void;
 	// Timestamp of the play session, in milisecond 
 	timestamp: number;
 }
@@ -80,10 +81,14 @@ const PartitionView = (props: PartitionViewProps) => {
 		}
 		let previousCursorPosition = -1;
 		let currentCursorPosition = osmd.cursor.cursorElement.offsetLeft;
-		while(timestampToMs(osmd.cursor.NotesUnderCursor().at(0)!.getAbsoluteTimestamp()) < props.timestamp && !osmd.cursor.iterator.EndReached) {
+		while(!osmd.cursor.iterator.EndReached && timestampToMs(osmd.cursor.NotesUnderCursor().at(0)?.getAbsoluteTimestamp() ?? new Fraction(-1)) < props.timestamp) {
 			previousCursorPosition = currentCursorPosition;
 			osmd.cursor.next();
 			osmd.cursor.show();
+			if (osmd.cursor.iterator.EndReached) {
+				osmd.cursor.hide(); // Lousy fix for https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/issues/1338
+				props.onEndReached();
+			}
 			// Shamelessly stolen from https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL223C7-L224C1
 			osmd.cursor.NotesUnderCursor()
 				.filter((note) => note.isRest() == false)
