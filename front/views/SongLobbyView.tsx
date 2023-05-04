@@ -59,13 +59,13 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					<Text bold fontSize='lg'>
 						<Translate translationKey='bestScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
+					<Text>{scoresQuery.data!.sort()[0]?.score ?? 0}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize='lg'>
 						<Translate translationKey='lastScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
+					<Text>{scoresQuery.data!.slice(-1)[0]?.score ?? 0}</Text>
 				</Box>
 			</Box>
 			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}
