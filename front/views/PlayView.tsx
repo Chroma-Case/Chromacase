@@ -38,7 +38,7 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
-	const song = useQuery(['song', songId], () => API.getSong(songId));
+	const song = useQuery(['song', songId], () => API.getSong(songId), { staleTime: Infinity });
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
@@ -180,6 +180,11 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, []);
 	useEffect(() => {
+		// Song.data is updated on navigation.navigate (do not know why)
+		// Hotfix to prevent midi setup process from reruning on game end
+		if (navigation.getState().routes.at(-1)?.name != route.name) {
+			return;
+		}
 		if (song.data && !webSocket.current && partitionRendered) {
 			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 		}
@@ -191,7 +196,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				<PartitionView file={musixml.data} onPartitionReady={() => setPartitionRendered(true)} timestamp={time}/>
+				<PartitionView file={musixml.data}
+					onPartitionReady={() => setPartitionRendered(true)}
+					timestamp={time}
+					onEndReached={() => {
+						onEnd();
+						navigation.navigate('Score', { songId: song.data.id });
+					}}
+				/>
 				{ !partitionRendered && <LoadingComponent/> }
 			</View>
 
