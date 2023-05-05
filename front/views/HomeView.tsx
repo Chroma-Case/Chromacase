@@ -135,7 +135,7 @@ const HomeView = () => {
 							searchHistoryQuery.data?.length === 0 && <Text><Translate translationKey='noRecentSearches'/></Text>
 						}
 						{
-							searchHistoryQuery.data?.slice(0, 5).map((search) => (
+							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].reverse().slice(0, 5).map((query) => (
 								<Button
 									leftIcon={
 										<FontAwesome5 name="search" size={16} />
@@ -143,15 +143,15 @@ const HomeView = () => {
 									style={{
 										margin: 2,
 									}}
-									key={ search.id }
+									key={ query }
 									variant="solid"
 									size="xs"
 									colorScheme="primary"
-									onPress={() => navigation.navigate('Search', { query: search.query })}
+									onPress={() => navigation.navigate('Search', { query: query })}
 								>
-								<Text fontSize={"xs"} isTruncated maxW={"150px"}>
-									{ search.query}
-								</Text>
+									<Text fontSize={"xs"} isTruncated maxW={"150px"}>
+										{ query}
+									</Text>
 								</Button>
 							))
 						}
