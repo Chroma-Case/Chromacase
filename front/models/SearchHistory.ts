@@ -1,7 +1,7 @@
 interface SearchHistory {
-    query: string;
-    userID: number;
-    id: number;
+	query: string;
+	userID: number;
+	id: number;
 }
 
 export default SearchHistory;
