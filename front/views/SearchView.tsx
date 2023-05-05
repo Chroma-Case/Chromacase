@@ -102,7 +102,6 @@ const SearchView = ({navigation}: any) => {
 	// const artistsQueries = useQueries(searchQuery.data?.map((song) => (
 	// 	{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
 	// )) ??[]);
-	const [list, setList] = React.useState([] as Song[])
 
 	return (
 		<Stack>
@@ -118,12 +117,7 @@ const SearchView = ({navigation}: any) => {
 					}
 				})) ?? []}
 			/> */}
-			<SearchBar filters={filters} placeHolder={translate('searchBtn')} onChangeText={}/>
-			<List>
-				{list.map((comp: Song, index) => (
-					<List.Item key={index}>{comp.name}</List.Item>
-				))}
-			</List>
+			<SearchBar/>
 			</Stack>
 	);
 };

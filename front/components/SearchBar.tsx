@@ -1,145 +1,334 @@
+import {
+	HStack,
+	Icon,
+	Input,
+	VStack,
+	Button,
+	Stack,
+	Center,
+	Divider,
+	Heading,
+	Text,
+	List,
+	Pressable,
+	View,
+	Box,
+	Row,
+	useTheme,
+	ScrollView,
+	Card,
+	Image} from "native-base";
 import React, { useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { HStack, Icon, Input, VStack, Button, ScrollView, Box, Menu } from "native-base";
+import { translate } from "../i18n/i18n";
+import SongCardGrid from "./SongCardGrid";
+// import Card from "./Card";
+import { useColorScheme } from "react-native";
+import { SettingsState } from '../state/SettingsSlice';
+import { RootState } from '../state/Store';
+import { useSelector } from "react-redux";
 
-export type SearchBarFilter = {
-	name: string; //mandatory determines the label of the filter
-	componentType: 'retrieved-list' | 'provided-list' | 'search-list'; //mandatory determines the type of selection of filter
-	options?: any; //depends on the component type
-	type: 'artist' | 'date' | 'genre' | 'album' | 'fav'; //mandatory
-	icon?: string; //not mandatory, obsolete
-	searchCallBack: any;
-}
 
-type RawSearchBarProps = {
-	placeHolder: string;
-	filters: SearchBarFilter[];
-}
+type Filter = "artist" | "song" | "genre" | "all";
 
 type SearchBarProps = {
-	filters: SearchBarFilter[] //mandatory
-	placeHolder: string; //mandatory
-	variant?: string; //default primary
-	compact?: boolean; //default false
-	onChangeFilter: any;
-	onChangeText: any;
+	getSuggestions?: any;
+	onChangeText?: any;
 }
 
-const ProvidedFilterComponent = (props: SearchBarFilter) => {
-	const [shouldOverlapWithTrigger] = React.useState(false);
-	const [value, setValue] = React.useState(undefined);
+const songSuggestions = [
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Sous Le Vent",
+		artistName: "Céline Dion",
+		songId: 0
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Alo Aleky",
+		artistName: "Mohammed Saeed",
+		songId: 1
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Deux Arabesques",
+		artistName: "Clause Debussy",
+		songId: 2
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/1107685.jpg",
+		songTitle: "Do I Wanna Know",
+		artistName: "Arctic Monkeys",
+		songId: 3
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/1702441.jpg",
+		songTitle: "Rocket Man",
+		artistName: "Elton John",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/1695791.jpg",
+		songTitle: "Whatever It Takes",
+		artistName: "Imagin Dragons",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Bad Day",
+		artistName: "Daniel Powter",
+		songId: 3
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Lambé An Dro",
+		artistName: "Matmatah",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Too Precious",
+		artistName: "The Stranglers",
+		songId: 0
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "I'm A Believer",
+		artistName: "Smash Mouth",
+		songId: 1
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Waltz no2 4th Mvmt",
+		artistName: "Dimitri Shostakovich",
+		songId: 2
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/2424293.jpg",
+		songTitle: "Battle Theme",
+		artistName: "Nobuo Uematsu",
+		songId: 3
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/325001.jpg",
+		songTitle: "Kingdom Hearts",
+		artistName: "Yoko Shimomura",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/961364.jpg",
+		songTitle: "Sanctuary",
+		artistName: "Utada",
+		songId: 3
+	},
+]
 
+const searchHistory = [
+	{
+		albumCover: "https://wallpaperaccess.com/full/1885275.jpg",
+		songTitle: "Sidi Mansour",
+		artistName: "Saber Rebai",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/1487834.jpg",
+		songTitle: "Chariots Of Fire",
+		artistName: "Vangelis",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/1427348.jpg",
+		songTitle: "Californicatio",
+		artistName: "Red Hot Chili Peppers",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/2324317.jpg",
+		songTitle: "Stay\'in Alive",
+		artistName: "Bee Gees",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/8949375.jpg",
+		songTitle: "Peaches",
+		artistName: "Jack Black",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Down Under",
+		artistName: "Men At Work",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
+		songTitle: "Legend",
+		artistName: "Tevvez",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/8949375.jpg",
+		songTitle: "Peaches",
+		artistName: "Jack Black",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/1487834.jpg",
+		songTitle: "Chariots Of Fire",
+		artistName: "Vangelis",
+		songId: 4
+	},
+	{
+		albumCover: "https://wallpaperaccess.com/full/1487834.jpg",
+		songTitle: "Chariots Of Fire",
+		artistName: "Vangelis",
+		songId: 4
+	},
+]
+
+const HomeSearchComponent = () => {
 	return (
-		<Menu backgroundColor={'gray.300'} maxHeight={250} mt={1} w="160" shouldOverlapWithTrigger={shouldOverlapWithTrigger}
-			placement={'bottom left'} trigger={triggerProps => {
-				return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={value ? 'primary' : 'gray'} {...triggerProps} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="keyboard-arrow-down" />}/>} >
-					{value ? value : props.name}
-				</Button>;
-			}}>
-			<Menu.Item onPress={() => setValue(undefined)} key="all">All</Menu.Item>
-			{props.options.map((comp: any, index: any) => (
-				<Menu.Item onPress={() => setValue(comp)} key={index}>{comp}</Menu.Item>
-			))}
-		</Menu>
-	);
-}
-
-const RetrievedFilterComponent = (props: SearchBarFilter) => {
-	const [shouldOverlapWithTrigger] = React.useState(false);
-	const [value, setValue] = React.useState(undefined);
-
-	return (
-		<Menu backgroundColor={'gray.300'} maxHeight={250} mt={1} w="160" shouldOverlapWithTrigger={shouldOverlapWithTrigger}
-			placement={'bottom left'} trigger={triggerProps => {
-				return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={value ? 'primary' : 'gray'} {...triggerProps} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="keyboard-arrow-down" />}/>} >
-					{value ? value : props.name}
-				</Button>;
-			}}>
-			<Menu.Item onPress={() => setValue(undefined)} key="all">All</Menu.Item>
-			{props.options.map((comp: any, index: any) => (
-				<Menu.Item onPress={() => setValue(comp)} key={index}>{comp}</Menu.Item>
-			))}
-		</Menu>
-	);
-}
-
-const SearchFilterComponent = (props: SearchBarFilter) => {
-	const [shouldOverlapWithTrigger] = React.useState(false);
-	const [value, setValue] = React.useState('');
-	const [search, setSearch] = React.useState([] as any[]);
-
-	return (
-		<Menu backgroundColor={'gray.300'} maxHeight={250} mt={1} minHeight={100} maxW="160" shouldOverlapWithTrigger={shouldOverlapWithTrigger} // @ts-ignore
-			placement={'bottom left'} trigger={triggerProps => {
-				return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={value ? 'primary' : 'gray'} {...triggerProps} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="keyboard-arrow-down" />}/>}>
-							{value ? value : props.name}
-						</Button>;
-			}}>
-				<Input onChangeText={(text) => props.searchCallBack(text, (truc) => setSearch(truc))} mx={5} variant={"underlined"} placeholder={'Filter by ' + props.name}/>
-				<Menu.Item onPress={() => setValue('')} key="all">All</Menu.Item>
-				{search.map((comp: any, index) => (
-					<Menu.Item key={index} onPress={() => setValue(comp.name)} >{comp.name}</Menu.Item>
-				))}
-		</Menu>
-	);
-}
-
-const componentSelector = (comp: SearchBarFilter) => {
-	if (comp.componentType === "provided-list") {
-		return <ProvidedFilterComponent componentType={comp.componentType}
-			name={comp.name}
-			type={comp.type}
-			options={comp.options}
-			icon={comp.icon}
-			searchCallBack={comp.searchCallBack}/>;
-	} else if (comp.componentType === "retrieved-list") {
-		// return <RetrievedFilterComponent componentType={comp.componentType}
-		// 	name={comp.name}
-		// 	type={comp.type}
-		// 	options={comp.options}
-		// 	icon={comp.icon}
-		// 	searchCallBack={comp.searchCallBack}/>;
-		return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={"warning"} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="access-time" />}/>}>
-					Comming soon
-				</Button>;
-	} else if (comp.componentType === "search-list") {
-		return <SearchFilterComponent componentType={comp.componentType}
-			name={comp.name}
-			type={comp.type}
-			options={comp.options}
-			icon={comp.icon}
-			searchCallBack={comp.searchCallBack}/>;
-	} else {
-		return <Button m={3} py={1} alignSelf="center" variant={"solid"} colorScheme={"warning"} endIcon={<Icon size="6" color="gray.400" as={<MaterialIcons name="access-time" />}/>}>
-					Comming soon
-				</Button>;
-	}
-}
-
-const RawSearchBar = (props: RawSearchBarProps) => {
-
-	return (
-		<VStack w="100%" alignSelf="center" backgroundColor={'white'}>
-			<VStack>
-			<Input onChangeText={} variant={"underlined"} placeholder={props.placeHolder} width="100%" borderRadius="4" py="3" px="1" fontSize="14" InputLeftElement={<Icon m="2" ml="3" size="6" color="gray.400" as={<MaterialIcons name="search" />} />} />
-			<HStack>
-				<ScrollView horizontal={true}>
-					{props.filters.map((comp: SearchBarFilter, index) => (
-						<Box key={index}>
-							{componentSelector(comp)}
-						</Box>
-					))}
-				</ScrollView>
-			</HStack>
-
-			</VStack>
+		<VStack mt="5" style={{overflow: 'hidden'}}>
+			<Card shadow={3} mb={5}>
+				<Heading margin={5}>History</Heading>
+				<SongCardGrid songs={searchHistory}/>
+			</Card>
+			<Card shadow={3} mt={5} mb={5}>
+				<Heading margin={5}>Suggestions</Heading>
+				<SongCardGrid songs={songSuggestions}/>
+			</Card>
 		</VStack>
 	);
 }
 
-const SearchBar = (props: SearchBarProps) => {
+const RowCustom = (props: Parameters<typeof Box>[0] & { onPress: () => void }) => {
+	const colorScheme: SettingsState['colorScheme'] = useSelector((state: RootState) => state.settings.settings.colorScheme);
+	const systemColorMode = useColorScheme();
+
+	return <Pressable onPress={props.onPress}>
+		{({ isHovered, isPressed }) => (
+		<Box {...props} style={{ ...(props.style ?? {}) }}
+			py={5}
+			my={1}
+			bg={(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
+				? (isHovered || isPressed) ? 'gray.800' : undefined
+				: (isHovered || isPressed) ? 'coolGray.200' : undefined
+			}
+		>
+			{ props.children }
+		</Box>
+		)}
+	</Pressable>
+	
+}
+
+
+const SongRow = (props: any) => {
 	return (
-		<RawSearchBar filters={props.filters} placeHolder={props.placeHolder}/>
+		<RowCustom>
+			<HStack px={2} space={5}>
+				<Image
+					pl={10}
+					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5}}
+					source={{ uri: props.imageUrl }}
+					alt={[props.songTitle, props.artistName].join('-')} />
+				<HStack style={{display: 'flex', alignItems: 'center'}} space={6}>
+					<Text pl={10} bold fontSize='md'>{props.songTitle}</Text>
+					<Text fontSize={"sm"}>{props.artistName}</Text>
+				</HStack>
+			</HStack>
+		</RowCustom>
+	)
+}
+
+const SongsSearchComponent = (props: any) => {
+	return (
+		<Box mt={3} borderRadius={'md'} maxWidth={props.maxW}>
+			<ScrollView>
+				{songSuggestions.map((comp, index) => (
+					<SongRow
+					key={index}
+					imageUrl={comp.albumCover}
+					artistName={comp.artistName}
+					songTitle={comp.songTitle}
+					/>
+					))}
+			</ScrollView>
+		</Box>
+	);
+}
+
+const ArtistSearchComponent = (props: any) => {
+	return (
+		<Box>
+			<SongCardGrid songs={searchHistory}/>
+		</Box>
+	);
+}
+
+const GenreSearchComponent = (props: any) => {
+	return (
+		<Box>
+			<SongCardGrid songs={searchHistory}/>
+		</Box>
+	);
+}
+
+const AllComponent = () => {
+	return (
+		<HStack>
+			<VStack width={'50%'}>
+				<Heading>Artists</Heading>
+				<ArtistSearchComponent/>
+				<Heading>Genres & Moods</Heading>
+				<GenreSearchComponent/>
+			</VStack>
+				<Heading>Songs</Heading>
+				<SongsSearchComponent maxW='50%' />
+		</HStack>
+	);
+}
+
+const SearchResultComponent = (props: any) => {
+	switch (props.filter) {
+		case "all": 
+			return (<AllComponent/>);
+		case "song":
+			return (<SongsSearchComponent/>);
+		case "artist":
+			return (<ArtistSearchComponent/>);
+		case "genre":
+			return (<Text>Coming soon genre</Text>);
+		default:
+			return (<Text>Something very bad happened</Text>);
+	}
+}
+
+const SearchBar = (props: SearchBarProps) => {
+	const [filter, setFilter] = React.useState("all" as Filter);
+	const [textSearch, setTextSearch] = React.useState("");
+
+	return (
+		<VStack m={5}>
+			<HStack >
+				<Input onChangeText={(text) => setTextSearch(text)} variant={"rounded"} rounded={"full"} placeholder={translate('searchBtn')} width={'50%'} py="3" px="1" fontSize="14" InputLeftElement={<Icon m="2" ml="3" size="6" color="gray.400" as={<MaterialIcons name="search" />} />} />
+				<ScrollView horizontal={true} style={{marginLeft: 5}}>
+					<Button rounded={'full'} onPress={() => setFilter('all')} mx={5} minW={20} variant={filter === 'all' ? 'solid' : 'outline'}>
+						All
+					</Button>
+					<Button rounded={'full'} onPress={() => setFilter('artist')} mx={5} minW={20} variant={filter === 'artist' ? 'solid' : 'outline'}>
+						Artists
+					</Button>
+					<Button rounded={'full'} onPress={() => setFilter('song')} mx={5} minW={20} variant={filter === 'song' ? 'solid' : 'outline'}>
+						Song
+					</Button>
+					<Button rounded={'full'} onPress={() => setFilter('genre')} mx={5} minW={20} variant={filter === 'genre' ? 'solid' : 'outline'}>
+						Genre
+					</Button>
+				</ScrollView>
+			</HStack>
+			{textSearch === '' ? <HomeSearchComponent/> : <SearchResultComponent filter={filter} />}
+		</VStack>
 	);
 }
 
