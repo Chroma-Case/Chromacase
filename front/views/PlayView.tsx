@@ -208,7 +208,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
 			<View style={{ flexGrow: 1 }}>
-				{/* <SlideView sources={partitionRessources.data} speed={200} startAt={0} /> */}
+				<SlideView sources={partitionRessources.data} speed={200} startAt={0} />
 			</View>
 
 			{isVirtualPianoVisible && <Column
