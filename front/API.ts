@@ -13,6 +13,7 @@ import { en } from "./i18n/Translations";
 import { QueryClient } from "react-query";
 import UserSettings from "./models/UserSettings";
 import { PartialDeep } from "type-fest";
+import SearchHistory from "./models/SearchHistory";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -332,9 +333,10 @@ export default class API {
 	 */
 	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
 		return [67, 4578, 2, 9990].map((value) => ({
-			songId: songId,
-			userId: 1,
+			songID: songId,
+			userID: 1,
 			score: value,
+			difficulties: {}
 		}));
 	}
 
@@ -366,15 +368,16 @@ export default class API {
 	 * Retrieve the authenticated user's search history
 	 * @param lessonId the id to find the lesson
 	 */
-	public static async getSearchHistory(): Promise<Song[]> {
-		const queryClient = new QueryClient();
-		let songs = await queryClient.fetchQuery(
-			["API", "allsongs"],
-			API.getAllSongs
-		);
-		const shuffled = [...songs].sort(() => 0.5 - Math.random());
+	public static async getSearchHistory(): Promise<SearchHistory[]> {
+		let tmp = await this.fetch({
+			route: "/history/search",
+		});
 
-		return shuffled.slice(0, 2);
+		return tmp.map((value: any) => ({
+			query: value.query,
+			userID: value.userId,
+			id: value.id,
+		}));
 	}
 
 	/**
