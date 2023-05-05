@@ -3,6 +3,7 @@ import { NavigationProp, ParamListBase, useNavigation as navigationHook } from "
 import React, { useEffect } from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
+import { useDispatch } from 'react-redux';
 import { Translate, translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
 import AuthenticationView from './views/AuthenticationView';
@@ -18,6 +19,7 @@ import { LoadingView } from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
 import { Button, Center, VStack } from 'native-base';
+import { unsetAccessToken } from './state/UserSlice';
 
 
 const protectedRoutes = () => ({
@@ -78,10 +80,16 @@ const ProfileErrorView = (props: { onTryAgain: () => any }) => {
 }
 
 export const Router = () => {
+	const dispatch = useDispatch();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const userProfile = useQuery(['user', 'me', accessToken], () => API.getUserInfo(), {
 		retry: 1,
-		refetchOnWindowFocus: false
+		refetchOnWindowFocus: false,
+		onError: (err) => {
+			if (err.status === 401) {
+				dispatch(unsetAccessToken());
+			}
+		},
 	});
 	const colorScheme = useColorScheme();
 
