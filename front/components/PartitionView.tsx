@@ -62,9 +62,11 @@ const PartitionView = (props: PartitionViewProps) => {
 				const midiNumber = note.halfTone - fixedKey * 12;
 				let duration = getActualNoteLength(note);
 				const gain = note.ParentVoiceEntry.ParentVoice.Volume;
-				console.log('Expecting ' + midiNumber);
 				soundPlayer!.play(midiNumber, audioContext.currentTime, { duration, gain })
 			});
+	}
+	const getShortedNoteUnderCursor = () => {
+		return osmd.cursor.NotesUnderCursor().sort((n1, n2) => n1.Length.CompareTo(n2.Length)).at(0);
 	}
 
 	useEffect(() => {
@@ -106,9 +108,11 @@ const PartitionView = (props: PartitionViewProps) => {
 		}
 		let previousCursorPosition = -1;
 		let currentCursorPosition = osmd.cursor.cursorElement.offsetLeft;
-		while(!osmd.cursor.iterator.EndReached &&
-			timestampToMs(osmd.cursor.NotesUnderCursor().at(0)?.getAbsoluteTimestamp() ?? new Fraction(-1)) +
-			timestampToMs(osmd.cursor.NotesUnderCursor().at(0)?.Length ?? new Fraction(-1)) < props.timestamp
+		let shortestNote = getShortedNoteUnderCursor();
+		while(!osmd.cursor.iterator.EndReached && (shortestNote?.isRest
+			? timestampToMs(shortestNote?.getAbsoluteTimestamp() ?? new Fraction(-1)) +
+				timestampToMs(shortestNote?.Length ?? new Fraction(-1)) < props.timestamp
+			: timestampToMs(shortestNote?.getAbsoluteTimestamp() ?? new Fraction(-1)) < props.timestamp)
 		) {
 			previousCursorPosition = currentCursorPosition;
 			osmd.cursor.next();
@@ -121,6 +125,7 @@ const PartitionView = (props: PartitionViewProps) => {
 				playNotesUnderCursor();
 				currentCursorPosition = osmd.cursor.cursorElement.offsetLeft;
 				document.getElementById(OSMD_DIV_ID).scrollBy(currentCursorPosition - previousCursorPosition, 0)
+				shortestNote = getShortedNoteUnderCursor();
 			}
 		}
 	}, [props.timestamp]);

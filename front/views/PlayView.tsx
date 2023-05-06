@@ -154,7 +154,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			input.onmidimessage = (message) => {
 				const keyIsPressed = message.data[2] == 100;
 				const keyCode = message.data[1];
-				console.log(`${keyIsPressed ? 'Pressing' : 'Releasing'} ` + keyCode);
 				webSocket.current?.send(JSON.stringify({
 					type: keyIsPressed ? "note_on" : "note_off",
 					note: keyCode,
