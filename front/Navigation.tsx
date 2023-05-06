@@ -24,11 +24,11 @@ import TextButton from './components/TextButton';
 
 
 const protectedRoutes = () => ({
-	Home: { component: HomeView, options: { title: translate('welcome') } },
+	Home: { component: HomeView, options: { title: translate('welcome'), headerLeft: null } },
 	Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
 	Play: { component: PlayView, options: { title: translate('play') } },
 	Song: { component: SongLobbyView, options: { title: translate('play') } },
-	Score: { component: ScoreView, options: { title: translate('score') } },
+	Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null } },
 	Search: { component: SearchView, options: { title: translate('search') } },
 	User: { component: ProfileView, options: { title: translate('user') } },
 }) as const;

@@ -51,6 +51,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
 		{ staleTime: Infinity }
 	);
+	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -89,7 +90,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
 		}
-		toast.show({ description: `MIDI ready!`, placement: 'top' });
+		setMidiKeyboardFound(true);
 		let inputIndex = 0;
 		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
@@ -251,9 +252,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
 					</Center>
 					<Row style={{ flex: 1, height: '100%', justifyContent: 'space-evenly', alignItems: 'center'  }}>
-						<IconButton size='sm' colorScheme='secondary' variant='solid' icon={
-							<Icon as={Ionicons} name={"play-back"}/>
-						}/>
+					{midiKeyboardFound && <>
 						<IconButton size='sm' variant='solid' icon={
 							<Icon as={Ionicons} name={paused ? "play" : "pause"}/>
 						} onPress={() => { 
@@ -270,12 +269,13 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
 						<Text>{Math.floor(time / 60000)}:{Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}</Text>
-						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
+						<IconButton size='sm' colorScheme='coolGray' variant='solid' opacity={time ?? 1} disabled={time == 0} icon={
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
 							onEnd();
 							navigation.navigate('Score', { songId: song.data.id });
 						}}/>
+					</>}
 					</Row>
 				</Row>
 			</Box>

@@ -68,13 +68,13 @@ const HomeView = () => {
 					}
 				/>
 				<Stack direction={{ base: 'column', lg: 'row' }}>
-					<Box flex={{ md: 1 }}>
+					<Box flex={{ lg: 1 }}>
 						<Heading><Translate translationKey='mySkillsToImprove'/></Heading>
 						<Box padding={5}>
 							<CompetenciesTable {...skillsQuery.data}/>
 						</Box>
 					</Box>
-					<Box flex={{ md: 1 }}>
+					<Box flex={{ lg: 1 }}>
 						<SongCardGrid
 							heading={<Translate translationKey='recentlyPlayed'/>}
 							songs={songHistory
