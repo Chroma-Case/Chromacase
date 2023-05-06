@@ -369,7 +369,7 @@ export default class API {
 	 * @param lessonId the id to find the lesson
 	 */
 	public static async getSearchHistory(): Promise<SearchHistory[]> {
-		let tmp = await this.fetch({
+		const tmp = await this.fetch({
 			route: "/history/search",
 		});
 
