@@ -132,7 +132,7 @@ const HomeView = () => {
 						flexWrap: 'wrap',
 					}}>
 						{
-							searchHistoryQuery.data?.length === 0 && <Text><Translate translationKey='noRecentSearches'/></Text>
+							searchHistoryQuery.data?.length === 0 && <Translate translationKey='noRecentSearches'/>
 						}
 						{
 							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].reverse().slice(0, 5).map((query) => (
@@ -150,7 +150,7 @@ const HomeView = () => {
 									onPress={() => navigation.navigate('Search', { query: query })}
 								>
 									<Text fontSize={"xs"} isTruncated maxW={"150px"}>
-										{ query}
+										{ query }
 									</Text>
 								</Button>
 							))
