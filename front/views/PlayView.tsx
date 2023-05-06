@@ -109,7 +109,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					return;
 				}
 				const points = data.info.score;
-				const maxPoints = data.info.maxScore;
+				const maxPoints = data.info.maxScore || 1;
 
 				setScore(Math.floor(Math.max(points, 0) / maxPoints) * 100);
 
@@ -154,6 +154,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			input.onmidimessage = (message) => {
 				const keyIsPressed = message.data[2] == 100;
 				const keyCode = message.data[1];
+				console.log(`${keyIsPressed ? 'Pressing' : 'Releasing'} ` + keyCode);
 				webSocket.current?.send(JSON.stringify({
 					type: keyIsPressed ? "note_on" : "note_off",
 					note: keyCode,
@@ -171,7 +172,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		let interval = setInterval(() => {
-			setTime(() => stopwatch.getElapsedRunningTime())
+			setTime(() => stopwatch.getElapsedRunningTime() - 3000) // Countdown
 		}, 1);
 
 		return () => {
@@ -199,7 +200,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
 				<PartitionView file={musixml.data}
 					onPartitionReady={() => setPartitionRendered(true)}
-					timestamp={time}
+					timestamp={Math.max(0, time)}
 					onEndReached={() => {
 						onEnd();
 						navigation.navigate('Score', { songId: song.data.id });
@@ -268,8 +269,15 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						} onPress={() => {
 							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
-						<Text>{Math.floor(time / 60000)}:{Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}</Text>
-						<IconButton size='sm' colorScheme='coolGray' variant='solid' opacity={time ?? 1} disabled={time == 0} icon={
+						<Text>
+						{ time < 0
+							? paused
+								? '0:00'
+								: Math.floor((time % 60000) / 1000).toFixed(0).toString()
+							: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}`
+						}
+						</Text>
+						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
 							onEnd();
