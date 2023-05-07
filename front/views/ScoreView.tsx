@@ -34,7 +34,13 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 	}
 	const songScore = songHistoryQuery.data.find((history) => history.songID == songId);
 	if (!songScore) {
-		return <Center><Translate translationKey="unknownError"/></Center>;
+		return <Center>
+			<Translate translationKey="unknownError"/>
+			<TextButton 
+				translate={{ translationKey: 'backBtn' }}
+				onPress={() => navigation.navigate('Home')}
+			/>
+		</Center>;
 	}
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
 		<VStack width={{ base: '100%', lg: '50%' }} textAlign='center'>
