@@ -2,17 +2,34 @@ import React from "react";
 import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import { LoadingView } from "../components/Loading";
-import { Center, Box, ScrollView, Flex, useBreakpointValue, Stack, Heading, Container, VStack, HStack } from 'native-base';
+import {
+	Center,
+	Box,
+	ScrollView,
+	Flex,
+	useBreakpointValue,
+	Stack,
+	Heading,
+	Container,
+	VStack,
+	HStack,
+	Column,
+	Button,
+	Text,
+	useTheme
+} from "native-base";
 
 import { useNavigation } from "../Navigation";
-import SongCardGrid from '../components/SongCardGrid';
-import CompetenciesTable from '../components/CompetenciesTable'
+import SongCardGrid from "../components/SongCardGrid";
+import CompetenciesTable from "../components/CompetenciesTable";
 import ProgressBar from "../components/ProgressBar";
 import Translate from "../components/Translate";
 import TextButton from "../components/TextButton";
 import Song from "../models/Song";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const HomeView = () => {
+	const theme = useTheme();
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: "big"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
@@ -106,17 +123,39 @@ const HomeView = () => {
 					/>
 				</HStack>
 				<Box style={{ width: '100%' }}>
-					<SongCardGrid
-						heading={<Translate translationKey='lastSearched'/>}
-						songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
-							.map((song) => ({
-								albumCover: song.cover,
-								songTitle: song.name,
-								songId: song.id,
-								artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
-							})) ?? []
+					<Heading><Translate translationKey='recentSearches'/></Heading>
+					<Flex padding={3} style={{
+						width: '100%',
+						alignItems: 'flex-start',
+						alignContent: 'flex-start',
+						flexDirection: 'row',
+						flexWrap: 'wrap',
+					}}>
+						{
+							searchHistoryQuery.data?.length === 0 && <Translate translationKey='noRecentSearches'/>
 						}
-					/>
+						{
+							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].reverse().slice(0, 5).map((query) => (
+								<Button
+									leftIcon={
+										<FontAwesome5 name="search" size={16} />
+									}
+									style={{
+										margin: 2,
+									}}
+									key={ query }
+									variant="solid"
+									size="xs"
+									colorScheme="primary"
+									onPress={() => navigation.navigate('Search', { query: query })}
+								>
+									<Text fontSize={"xs"} isTruncated maxW={"150px"}>
+										{ query }
+									</Text>
+								</Button>
+							))
+						}
+					</Flex>
 				</Box>
 			</VStack>
 		</Stack>
