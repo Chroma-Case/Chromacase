@@ -20,13 +20,14 @@ import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
 import { Button, Center, VStack } from 'native-base';
 import { unsetAccessToken } from './state/UserSlice';
+import TextButton from './components/TextButton';
 
 
 const protectedRoutes = () => ({
 	Home: { component: HomeView, options: { title: translate('welcome'), headerLeft: null } },
+	Play: { component: PlayView, options: { title: translate('play') } },
 	Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
 	Song: { component: SongLobbyView, options: { title: translate('play') } },
-	Play: { component: PlayView, options: { title: translate('play') } },
 	Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null } },
 	Search: { component: SearchView, options: { title: translate('search') } },
 	User: { component: ProfileView, options: { title: translate('user') } },
@@ -61,8 +62,9 @@ const RouteToScreen = <T extends {}, >(component: Route<T>['component']) => (pro
 	</>
 
 const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) => Object.entries(routes)
-	.map(([name, route]) => (
+	.map(([name, route], routeIndex) => (
 		<Stack.Screen
+			key={'route-' + routeIndex}
 			name={name as keyof AppRouteParams}
 			options={route.options}
 			component={RouteToScreen(route.component)}
@@ -70,11 +72,15 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 	))
 
 const ProfileErrorView = (props: { onTryAgain: () => any }) => {
+	const dispatch = useDispatch();
 	return <Center style={{ flexGrow: 1 }}>
 		<VStack space={3}>
 			<Translate translationKey='userProfileFetchError'/>
 			<Button onPress={props.onTryAgain}><Translate translationKey='tryAgain'/></Button>
-
+			<TextButton onPress={() => dispatch(unsetAccessToken())}
+				colorScheme="error" variant='outline'
+				translate={{ translationKey: 'signOutBtn' }}
+			/>
 		</VStack>
 	</Center>
 }

@@ -283,7 +283,7 @@ export default class API {
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMidi(songId: number): Promise<any> {
+	public static async getSongMidi(songId: number): Promise<ArrayBuffer> {
 		return API.fetch({
 			route: `/song/${songId}/midi`,
 			raw: true,
@@ -294,7 +294,7 @@ export default class API {
 	 * Retrive a song's musicXML partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMusicXML(songId: number): Promise<any> {
+	public static async getSongMusicXML(songId: number): Promise<ArrayBuffer> {
 		return API.fetch({
 			route: `/song/${songId}/musicXml`,
 			raw: true,
@@ -332,12 +332,9 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
-		return [67, 4578, 2, 9990].map((value) => ({
-			songID: songId,
-			userID: 1,
-			score: value,
-			difficulties: {}
-		}));
+		return API.fetch({
+			route: `/history`,
+		}).then((data: SongHistory[]) => data.filter((entry) => entry.songID == songId))
 	}
 
 	/**

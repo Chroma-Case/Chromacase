@@ -4,14 +4,11 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useNavigation, RouteProps } from "../Navigation";
-import { useQuery, useQueryClient } from 'react-query';
+import { RouteProps, useNavigation } from "../Navigation";
+import { useQuery } from 'react-query';
 import API from '../API';
-import { LoadingView } from '../components/Loading';
+import LoadingComponent, { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import SlideView from '../components/PartitionVisualizer/SlideView';
-import MidiPlayer from 'midi-player-js';
-import SoundFont from 'soundfont-player';
 import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
@@ -19,6 +16,7 @@ import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from "react-use-precision-timer";
+import PartitionView from '../components/PartitionView';
 
 type PlayViewProps = {
 	songId: number,
@@ -40,23 +38,22 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
-	const queryClient = useQueryClient();
-	const song = useQuery(['song', songId], () => API.getSong(songId));
+	const song = useQuery(['song', songId], () => API.getSong(songId), { staleTime: Infinity });
 	const toast = useToast();
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
-	const [midiPlayer, setMidiPlayer] = useState<MidiPlayer.Player>();
 	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	const [time, setTime] = useState(0);
+	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
-	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
-	const partitionRessources = useQuery(["partition", songId], () =>
-		API.getPartitionRessources(songId)
+	const musixml = useQuery(["musixml", songId], () =>
+		API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
+		{ staleTime: Infinity }
 	);
+	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 
 	const onPause = () => {
-		midiPlayer?.pause();
 		stopwatch.pause();
 		setPause(true);
 		webSocket.current?.send(JSON.stringify({
@@ -72,7 +69,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			stopwatch.start();
 		}
 		setPause(false);
-		midiPlayer?.play();
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: false,
@@ -85,7 +81,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}));
 		stopwatch.stop();
 		webSocket.current?.close();
-		midiPlayer?.pause();
 	}
 
 	const onMIDISuccess = (access) => {
@@ -114,7 +109,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					return;
 				}
 				const points = data.info.score;
-				const maxPoints = data.info.maxScore;
+				const maxPoints = data.info.maxScore || 1;
 
 				setScore(Math.floor(Math.max(points, 0) / maxPoints) * 100);
 
@@ -168,18 +163,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			}
 			inputIndex++;
 		});
-		Promise.all([
-			queryClient.fetchQuery(['song', songId, 'midi'], () => API.getSongMidi(songId)),
-			SoundFont.instrument(new AudioContext(), 'electric_piano_1'),
-		]).then(([midiFile, audioController]) => {
-			const player = new MidiPlayer.Player((event) => {
-				if (event['noteName']) {
-					audioController.play(event['noteName']);
-				}
-			});
-			player.loadArrayBuffer(midiFile);
-			setMidiPlayer(player);
-		});
 	}
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
@@ -187,7 +170,9 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-		let interval = setInterval(() => setTime(() => stopwatch.getElapsedRunningTime()), 1);
+		let interval = setInterval(() => {
+			setTime(() => stopwatch.getElapsedRunningTime() - 3000) // Countdown
+		}, 1);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
@@ -196,19 +181,31 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, []);
 	useEffect(() => {
-		if (song.data) {
+		// Song.data is updated on navigation.navigate (do not know why)
+		// Hotfix to prevent midi setup process from reruning on game end
+		if (navigation.getState().routes.at(-1)?.name != route.name) {
+			return;
+		}
+		if (song.data && !webSocket.current && partitionRendered) {
 			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 		}
+	}, [song.data, partitionRendered]);
 
-	}, [song.data]);
-
-	if (!song.data || !partitionRessources.data) {
+	if (!song.data || !musixml.data) {
 		return <LoadingView/>;
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
-			<View style={{ flexGrow: 1 }}>
-				<SlideView sources={partitionRessources.data} speed={200} startAt={0} />
+			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
+				<PartitionView file={musixml.data}
+					onPartitionReady={() => setPartitionRendered(true)}
+					timestamp={Math.max(0, time)}
+					onEndReached={() => {
+						onEnd();
+						navigation.navigate('Score', { songId: song.data.id });
+					}}
+				/>
+				{ !partitionRendered && <LoadingComponent/> }
 			</View>
 
 			{isVirtualPianoVisible && <Column
@@ -245,14 +242,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 				/>
 			</Column>}
-			<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5 }}>
+			<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5, display: !partitionRendered ? 'none' : undefined }}>
 				<Row justifyContent='space-between' style={{ flexGrow: 1, alignItems: 'center' }} >
 					<Column space={2} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 						<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
 						<Progress value={score} style={{ width: '90%' }}/>
 					</Column>
 					<Center style={{ flex: 1, alignItems: 'center' }}>
-						<Text style={{ fontWeight: '700' }}>Rolling in the Deep</Text>
+						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
 					</Center>
 					<Row style={{ flex: 1, height: '100%', justifyContent: 'space-evenly', alignItems: 'center'  }}>
 					{midiKeyboardFound && <>
@@ -271,8 +268,15 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						} onPress={() => {
 							setVirtualPianoVisible(!isVirtualPianoVisible);
 						}}/>
-						<Text>{Math.floor(time / 60000)}:{Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}</Text>
-						<IconButton size='sm' colorScheme='coolGray' variant='solid' opacity={time ?? 1} disabled={time == 0} icon={
+						<Text>
+						{ time < 0
+							? paused
+								? '0:00'
+								: Math.floor((time % 60000) / 1000).toFixed(0).toString()
+							: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}`
+						}
+						</Text>
+						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
 							onEnd();
