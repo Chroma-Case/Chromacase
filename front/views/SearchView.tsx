@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, List, Stack } from "native-base";
 import SearchBar from "../components/SearchBar";
 import { translate } from "../i18n/i18n";
-import { SearchBarFilter } from "../components/SearchBar";
-import Song from "../models/Song";
 import Album from "../models/Album";
 import Artist from "../models/Artist";
 import API from "../API";
 import Genre from "../models/Genre";
+import { useMutation } from 'react-query';
+import { useQuery } from 'react-query';
+import { SearchResultComponent } from "../components/SearchResult";
+import LoadingComponent from "../components/Loading";
+import { string } from "yup";
+import { Alert } from "react-native";
 
 const handleSearchArtist = async (text: string, dataSetter: (data: Artist[]) => void): Promise<string> => {
 	try {
@@ -39,59 +43,49 @@ const handleSearchAlbum = async (text: string, dataSetter: (data: Album[]) => vo
 	}
 }
 
-// const handleTextChange = async (text: string, list: any[], listSetter: (list: any[]) => void): Promise<string> => {
-// 	try {
-// 		if (list.) {
+interface SearchContextType {
+	searchData: any[];
+	updateSearchData: (newData: any[]) => void;
+	filter: "artist" | "song" | "genre" | "all";
+	updateFilter: (newData: "artist" | "song" | "genre" | "all") => void;
+	stringQuery: string;
+	updateStringQuery: (newData: string) => void;
+	songData: any[] | undefined;
+	// dispatch: React.Dispatch<SearchAction>;
+}
 
-// 		} else {
-
-// 		}
-// 		return 'success';
-// 	} catch (error) {
-// 		return translate('unknownError') + ': ' + error;
-// 	}
-// }
-
-export const filters: SearchBarFilter[] = [
-	{
-		name: 'All',
-		type: 'fav',
-		componentType: 'provided-list',
-		icon: 'favorite',
-		options: ['Favorites'],
-		searchCallBack: handleSearchArtist,
-	},
-	{
-		name: 'Genre',
-		type: 'genre',
-		componentType: 'retrieved-list',
-		icon: 'music-note',
-		searchCallBack: handleRetrieveGenres,
-	},
-	{
-		name: 'Year',
-		type: 'date',
-		componentType: 'provided-list',
-		options: ['After 2000','90\'s', '80\'s', '70\'s', '60\'s', '50\'s', '40\'s', '30\'s', '20\'s', '10\'s', 'Before 1900'],
-		searchCallBack: undefined,
-	},
-	{
-		name: 'Artist',
-		type: 'artist',
-		componentType: "search-list",
-		icon: 'people',
-		searchCallBack: handleSearchArtist,
-	},
-	{
-		name: "Album",
-		type: "album",
-		componentType: 'search-list',
-		icon: 'album',
-		searchCallBack: handleSearchAlbum,
-	},
-];
+export const SearchContext = React.createContext<SearchContextType>({
+	searchData: [],
+	updateSearchData: () => {},
+	filter: "all",
+	updateFilter: () => {},
+	stringQuery: "",
+	updateStringQuery: () => {},
+	songData: [],
+	// dispatch: () => {},
+})
 
 const SearchView = ({navigation}: any) => {
+	const [searchData, setSearchData] = useState<any[]>([]);
+	const [filter, setFilter] = useState<any>('all');
+	const [stringQuery, setStringQuery] = useState<string>('');
+	const { isLoading: isLoadingSong, data: songData, error: songError } = useQuery(
+		['song', stringQuery],
+		() => API.searchSongs(stringQuery),
+		{ enabled: !!stringQuery }
+	);
+
+	const updateSearchData = (newData: any[]) => {
+		setSearchData(newData);
+	};
+
+	const updateFilter = (newData: any) => {
+		setFilter(newData);
+	}
+
+	const updateStringQuery = (newData: any) => {
+		setStringQuery(newData);
+	}
 	// const [query, setQuery] = useState<string>();
 	// const navigation = useNavigation();
 	// const searchQuery = useQuery(
@@ -104,20 +98,19 @@ const SearchView = ({navigation}: any) => {
 	// )) ??[]);
 
 	return (
-		<Stack>
-			{/* <SearchBarSuggestions
-				onTextSubmit={setQuery}
-				suggestions={searchQuery.data?.map((searchResult) => ({
-					type: SuggestionType.ILLUSTRATED,
-					data: {
-						text: searchResult.name,
-						subtext: artistsQueries.find((artistQuery) => artistQuery.data?.id == searchResult.artistId)?.data?.name ?? "",
-						imageSrc: searchResult.cover,
-						onPress: () => navigation.navigate("Song", { songId: searchResult.id })
-					}
-				})) ?? []}
-			/> */}
-			<SearchBar/>
+			<Stack>
+				<SearchContext.Provider value={{
+						searchData,
+						filter,
+						stringQuery,
+						songData,
+						updateFilter,
+						updateSearchData,
+						updateStringQuery,
+						}}>
+					<SearchBar/>
+					<SearchResultComponent/>
+				</SearchContext.Provider>
 			</Stack>
 	);
 };
