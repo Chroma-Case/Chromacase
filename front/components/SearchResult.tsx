@@ -8,9 +8,7 @@ import {
 	ScrollView,
 	Card,
 	Image,
-    Flex,
-    Container,
-    View} from "native-base";
+	Flex} from "native-base";
 import React, { useEffect, useState } from "react";
 import SongCardGrid from "./SongCardGrid";
 import { useColorScheme } from "react-native";
@@ -184,11 +182,11 @@ const HomeSearchComponent = () => {
 	);
 }
 
-const RowCustom = (props: Parameters<typeof Box>[0] & { onPress: () => void }) => {
+const RowCustom = (props: Parameters<typeof Box>[0]) => {
 	const colorScheme: SettingsState['colorScheme'] = useSelector((state: RootState) => state.settings.settings.colorScheme);
 	const systemColorMode = useColorScheme();
 
-	return <Pressable onPress={props.onPress}>
+	return <Pressable>
 		{({ isHovered, isPressed }) => (
 		<Box {...props} style={{ ...(props.style ?? {}) }}
 			py={5}
@@ -202,9 +200,7 @@ const RowCustom = (props: Parameters<typeof Box>[0] & { onPress: () => void }) =
 		</Box>
 		)}
 	</Pressable>
-	
 }
-
 
 const SongRow = (props: any) => {
 	return (
@@ -221,21 +217,27 @@ const SongRow = (props: any) => {
 				</HStack>
 			</HStack>
 		</RowCustom>
-	)
+	);
 }
 
 const SongsSearchComponent = (props: any) => {
+	const {songData} = React.useContext(SearchContext);
+
 	return (
 		<Box>
 			<ScrollView>
-				{songSuggestions.map((comp, index) => (
-					<SongRow
-					key={index}
-					imageUrl={comp.albumCover}
-					artistName={comp.artistName}
-					songTitle={comp.songTitle}
-					/>
-					))}
+				{songData?.length ? (
+					songData.map((comp, index) => (
+						<SongRow
+							key={index}
+							imageUrl={comp.albumCover}
+							artistName={comp.artistName}
+							songTitle={comp.songTitle}
+						/>
+					))
+				) : (
+					<Text>No results found</Text>
+				)}
 			</ScrollView>
 		</Box>
 	);
@@ -258,66 +260,65 @@ const GenreSearchComponent = (props: any) => {
 }
 
 const AllComponent = () => {
-    return (
-        <Box>
-          <Text fontSize="xl" fontWeight="bold" mt={4}>
-            Artists
-          </Text>
-          <ArtistSearchComponent />
-          <Text fontSize="xl" fontWeight="bold" mt={4}>
-            Genres & Moods
-          </Text>
-          <GenreSearchComponent />
-          <Text fontSize="xl" fontWeight="bold" mt={4}>
-            Songs
-          </Text>
-          <Flex flexWrap="wrap" direction={['column', 'row']} justifyContent={['flex-start', 'space-between']} mt={4}>
-            <SongsSearchComponent w={['100%', '48%']} />
-          </Flex>
-        </Box>
-      );
+	return (
+		<Box>
+			<Text fontSize="xl" fontWeight="bold" mt={4}>
+				Artists
+			</Text>
+			<ArtistSearchComponent />
+			<Text fontSize="xl" fontWeight="bold" mt={4}>
+				Genres & Moods
+			</Text>
+			<GenreSearchComponent />
+			<Text fontSize="xl" fontWeight="bold" mt={4}>
+				Songs
+			</Text>
+			<Flex flexWrap="wrap" direction={['column', 'row']} justifyContent={['flex-start', 'space-between']} mt={4}>
+				<SongsSearchComponent w={['100%', '48%']} />
+			</Flex>
+		</Box>
+	);
 }
 
 const FilterSwitch = () => {
-    const { filter } = React.useContext(SearchContext);
-    const [currentFilter, setCurrentFilter] = React.useState(filter);
+	const { filter } = React.useContext(SearchContext);
+	const [currentFilter, setCurrentFilter] = React.useState(filter);
 
-    React.useEffect(() => {
-        setCurrentFilter(filter);
-    }, [filter]);
+	React.useEffect(() => {
+		setCurrentFilter(filter);
+	}, [filter]);
 
-    switch (currentFilter) {
-        case "all":
-            return <AllComponent />;
-        case "song":
-            return <SongsSearchComponent />;
-        case "artist":
-            return <ArtistSearchComponent />;
-        case "genre":
-            return <Text>Coming soon genre</Text>;
-        default:
-            return <Text>Something very bad happened: {currentFilter}</Text>;
-    }
+	switch (currentFilter) {
+		case "all":
+			return <AllComponent />;
+		case "song":
+			return <SongsSearchComponent />;
+		case "artist":
+			return <ArtistSearchComponent />;
+		case "genre":
+			return <Text>Coming soon genre</Text>;
+		default:
+			return <Text>Something very bad happened: {currentFilter}</Text>;
+	}
 };
 
 export const SearchResultComponent = (props: any) => {
-    const [searchString, setSearchString] = useState<string>("");
-    const {stringQuery, updateStringQuery} = React.useContext(SearchContext);
-    const [shouldOutput, setShouldOutput] = useState<boolean>(true);
-    
-    useEffect(() => {
-        if (stringQuery.trim().length > 0) {
-            setShouldOutput(true);
-        } else if (stringQuery === "") {
-            setShouldOutput(false);
-        }
-    }, [stringQuery]);
-    
-    // Render your component using the shouldOutput state
-    return shouldOutput ? (
-        <FilterSwitch/>
-    ) : (
-        <HomeSearchComponent/>
-    );
-    
+	const [searchString, setSearchString] = useState<string>("");
+	const {stringQuery, updateStringQuery} = React.useContext(SearchContext);
+	const [shouldOutput, setShouldOutput] = useState<boolean>(true);
+	
+	useEffect(() => {
+		if (stringQuery.trim().length > 0) {
+			setShouldOutput(true);
+		} else if (stringQuery === "") {
+			setShouldOutput(false);
+		}
+	}, [stringQuery]);
+	
+	// Render your component using the shouldOutput state
+	return shouldOutput ? (
+		<FilterSwitch/>
+	) : (
+		<HomeSearchComponent/>
+	);
 };

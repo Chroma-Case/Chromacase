@@ -10,5 +10,5 @@ export class SearchHistoryDto {
 	query: string;
 
 	@ApiProperty()
-	type: "song" | "artist" | "album";
+	type: "song" | "artist" | "album" | "genre";
 }

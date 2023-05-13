@@ -50,7 +50,7 @@ interface SearchContextType {
 	updateFilter: (newData: "artist" | "song" | "genre" | "all") => void;
 	stringQuery: string;
 	updateStringQuery: (newData: string) => void;
-	songData: any[] | undefined;
+	songData: any[];
 	// dispatch: React.Dispatch<SearchAction>;
 }
 
