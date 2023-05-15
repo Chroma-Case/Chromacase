@@ -1,5 +1,5 @@
-import { PlaywrightCrawler, Dataset } from 'crawlee';
-import { router } from './routes.js';
+import { PlaywrightCrawler, Dataset } from "crawlee";
+import { router } from "./routes.js";
 // PlaywrightCrawler crawls the web using a headless
 // browser controlled by the Playwright library.
 const crawler = new PlaywrightCrawler({
@@ -16,4 +16,6 @@ const crawler = new PlaywrightCrawler({
 });
 
 // Add first URL to the queue and start the crawl.
-await crawler.run(['https://musescore.com/sheetmusic?license=to_modify_commercially%2Cto_use_commercially&recording_type=public-domain']);
+await crawler.run([
+  "https://musescore.com/sheetmusic?complexity=1&instrument=2&license=to_modify_commercially%2Cto_use_commercially&recording_type=public-domain",
+]);
