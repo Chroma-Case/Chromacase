@@ -7,42 +7,9 @@ import Artist from "../models/Artist";
 import Song from "../models/Song";
 import Genre from "../models/Genre";
 import API from "../API";
-import { useMutation } from 'react-query';
 import { useQuery } from 'react-query';
 import { SearchResultComponent } from "../components/SearchResult";
-import LoadingComponent from "../components/Loading";
-import { string } from "yup";
-import { Alert } from "react-native";
 
-// const handleSearchArtist = async (text: string, dataSetter: (data: Artist[]) => void): Promise<string> => {
-// 	try {
-// 		const foundArtists: Artist[] = await API.searchArtists(text);
-// 		dataSetter(foundArtists)
-// 		return 'success';
-// 	} catch (error) {
-// 		return translate('unknownError') + ': ' + error;
-// 	}
-// }
-
-// const handleRetrieveGenres = async (dataSetter: (data: Artist[]) => void): Promise<string> => {
-// 	try {
-// 		const retrievedGenres: Genre[] = await API.retrieveGenres();
-// 		dataSetter(retrievedGenres)
-// 		return 'success';
-// 	} catch (error) {
-// 		return translate('unknownError') + ': ' + error;
-// 	}
-// }
-
-// const handleSearchAlbum = async (text: string, dataSetter: (data: Album[]) => void): Promise<string> => {
-// 	try {
-// 		const foundAlbums: Album[] = await API.searchAlbum(text);
-// 		dataSetter(foundAlbums)
-// 		return 'success';
-// 	} catch (error) {
-// 		return translate('unknownError') + ': ' + error;
-// 	}
-// }
 
 interface SearchContextType {
 	filter: "artist" | "song" | "genre" | "all";
@@ -93,7 +60,7 @@ const SearchView = ({navigation}: any) => {
 		setFilter(newData);
 	}
 
-	const updateStringQuery = (newData: any) => {
+	const updateStringQuery = (newData: string) => {
 		setStringQuery(newData);
 	}
 	// const [query, setQuery] = useState<string>();

@@ -3,30 +3,30 @@ import Card, { CardBorderRadius } from './Card';
 import { VStack, Text, Image, Pressable, Box, Icon } from 'native-base';
 import { useNavigation } from "../Navigation";
 import { useTheme } from "native-base";
+import { Ionicons } from "@expo/vector-icons";
 type GenreCardProps = {
-	image?: string;
+	icon?: string;
 	name?: string;
 }
 
 const GenreCard = (props: GenreCardProps) => {
-	const { image, name } = props;
+	const { icon, name } = props;
 	const navigation = useNavigation();
 	const theme = useTheme();
 
 	return (
-		<Card
-		shadow={3}
-		// onPress={() => navigation.navigate('Genre', { genreName: name })}
-		>
-			<VStack m={1.5} space={3}>
+		<Card shadow={3}>
+			<VStack m={1.5} space={3} alignItems="center"> {/* Set alignItems="center" to center the items horizontally */}
 				<Box
-					bg={theme.colors.primary[500]}
-					w={64}
-					h={64}
+					bg={theme.colors.primary[400]}
+					w={20}
+					h={20}
 					borderRadius="full"
-					alignSelf="center"
+					display="flex" /* Add display="flex" to enable flexbox layout */
+					alignItems="center" /* Center the icon vertically */
+					justifyContent="center" /* Center the icon horizontally */
 				>
-					<Icon name="music" color="white" size={32} />
+					<Icon size={"md"} as={Ionicons} name="musical-notes-outline" />
 				</Box>
 				<VStack>
 					<Text isTruncated bold fontSize="md" noOfLines={2} height={50}>

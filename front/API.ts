@@ -397,18 +397,18 @@ export default class API {
 	 * @param lessonId the id to find the lesson
 	 */
 	public static async getSearchHistory(skip: number, take: number): Promise<Song[]> {
-		// const queryClient = new QueryClient();
-		// let songs = await queryClient.fetchQuery(
-		// 	["API", "allsongs"],
-		// 	API.getAllSongs
-		// );
-		// const shuffled = [...songs].sort(() => 0.5 - Math.random());
+		const queryClient = new QueryClient();
+		let songs = await queryClient.fetchQuery(
+			["API", "allsongs"],
+			API.getAllSongs
+		);
+		const shuffled = [...songs].sort(() => 0.5 - Math.random());
 
-		// return shuffled.slice(0, 2);
-		return API.fetch({
-			route: `/history/search?skip=${skip}&take=${take}`,
-			method: "GET",
-		})
+		return shuffled.slice(0, 2);
+		// return API.fetch({
+		// 	route: `/history/search?skip=${skip}&take=${take}`,
+		// 	method: "GET",
+		// })
 	}
 
 	/**

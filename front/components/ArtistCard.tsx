@@ -1,6 +1,6 @@
 import React from "react";
 import Card, { CardBorderRadius } from './Card';
-import { VStack, Text, Image, Pressable } from 'native-base';
+import { VStack, Text, Image } from 'native-base';
 import { useNavigation } from "../Navigation";
 type ArtistCardProps = {
 	image?: string;
@@ -20,7 +20,7 @@ const ArtistCard = (props: ArtistCardProps) => {
 			<VStack m={1.5} space={3}>
 				<Image
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: CardBorderRadius }}
-					source={{ uri: image }}
+					source={{ uri: image ?? 'https://picsum.photos/200' }}
 					alt={name}
 				/>
 				<VStack>

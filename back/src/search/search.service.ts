@@ -11,7 +11,7 @@ export class SearchService {
 		await this.history.createSearchHistoryRecord({ query: query, type: 'song', userID });
 		return this.prisma.song.findMany({
 			where: {
-				name: { contains: query },
+				name: { contains: query, mode: 'insensitive' },
 			},
 		});
 	}
@@ -20,7 +20,7 @@ export class SearchService {
 		await this.history.createSearchHistoryRecord({ query: query, type: 'genre', userID });
 		return this.prisma.genre.findMany({
 			where: {
-				name: { contains: query },
+				name: { contains: query, mode: 'insensitive' },
 			},
 		});
 	}
@@ -29,7 +29,7 @@ export class SearchService {
 		await this.history.createSearchHistoryRecord({ query: query, type: 'artist', userID });
 		return this.prisma.artist.findMany({
 			where: {
-				name: { contains: query },
+				name: { contains: query, mode: 'insensitive' },
 			},
 		});
 	}
