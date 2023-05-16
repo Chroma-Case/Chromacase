@@ -330,7 +330,7 @@ export default class API {
 	 */
 	public static async searchSongs(query: string): Promise<Song[]> {
 		return API.fetch({
-			route: `/search/guess/song/${query}`,
+			route: `/search/songs/${query}`,
 		});
 	}
 
@@ -339,24 +339,9 @@ export default class API {
 	 * @param query the string used to find the artists
 	 */
 	public static async searchArtists(query?: string): Promise<Artist[]> {
-		return [
-				{
-					id: 1,
-					name: "Abba",
-				},
-				{
-					id: 2,
-					name: "Yoko Shimomura",
-				},
-				{
-					id: 3,
-					name: "Koji Kondo",
-				},
-				{
-					id: 4,
-					name: "Daft Punk",
-				},
-		] as Artist[];
+		return API.fetch({
+			route: `/search/artists/${query}`,
+		});
 	}
 
 	/**
@@ -387,29 +372,10 @@ export default class API {
 	/**
 	 * Retrieve music genres
 	 */
-	public static async retrieveGenres(): Promise<Genre[]> {
-		return [
-			{
-				id: 1,
-				name: "Classic",
-			},
-			{
-				id: 2,
-				name: "Rock",
-			},
-			{
-				id: 3,
-				name: "Pop",
-			},
-			{
-				id: 4,
-				name: "Disco",
-			},
-			{
-				id: 5,
-				name: "Disco",
-			},
-		]
+	public static async searchGenres(query?: string): Promise<Genre[]> {
+		return API.fetch({
+			route: `/search/genres/${query}`,
+		});
 	}
 
 	/**
@@ -430,7 +396,25 @@ export default class API {
 	 * Retrieve the authenticated user's search history
 	 * @param lessonId the id to find the lesson
 	 */
-	public static async getSearchHistory(): Promise<Song[]> {
+	public static async getSearchHistory(skip: number, take: number): Promise<Song[]> {
+		// const queryClient = new QueryClient();
+		// let songs = await queryClient.fetchQuery(
+		// 	["API", "allsongs"],
+		// 	API.getAllSongs
+		// );
+		// const shuffled = [...songs].sort(() => 0.5 - Math.random());
+
+		// return shuffled.slice(0, 2);
+		return API.fetch({
+			route: `/history/search?skip=${skip}&take=${take}`,
+			method: "GET",
+		})
+	}
+
+	/**
+	 * Retrieve the suggestions for the user
+	 */
+	public static async getSongSuggestions(): Promise<Song[]> {
 		const queryClient = new QueryClient();
 		let songs = await queryClient.fetchQuery(
 			["API", "allsongs"],

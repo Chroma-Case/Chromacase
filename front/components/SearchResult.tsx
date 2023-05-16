@@ -16,171 +16,39 @@ import { SettingsState } from '../state/SettingsSlice';
 import { RootState } from '../state/Store';
 import { useSelector } from "react-redux";
 import { SearchContext } from "../views/SearchView";
+import { FlatGrid } from 'react-native-super-grid';
+import { CardBorderRadius } from "./Card";
+import { useNavigation } from "@react-navigation/native";
+import { useQuery } from "react-query";
+import API from "../API";
+import LoadingComponent from "./Loading";
+import ArtistCard from "./ArtistCard";
+import GenreCard from "./GenreCard";
 
-const songSuggestions = [
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Sous Le Vent",
-		artistName: "Céline Dion",
-		songId: 0
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Alo Aleky",
-		artistName: "Mohammed Saeed",
-		songId: 1
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Deux Arabesques",
-		artistName: "Clause Debussy",
-		songId: 2
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/1107685.jpg",
-		songTitle: "Do I Wanna Know",
-		artistName: "Arctic Monkeys",
-		songId: 3
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/1702441.jpg",
-		songTitle: "Rocket Man",
-		artistName: "Elton John",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/1695791.jpg",
-		songTitle: "Whatever It Takes",
-		artistName: "Imagin Dragons",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Bad Day",
-		artistName: "Daniel Powter",
-		songId: 3
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Lambé An Dro",
-		artistName: "Matmatah",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Too Precious",
-		artistName: "The Stranglers",
-		songId: 0
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "I'm A Believer",
-		artistName: "Smash Mouth",
-		songId: 1
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Waltz no2 4th Mvmt",
-		artistName: "Dimitri Shostakovich",
-		songId: 2
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/2424293.jpg",
-		songTitle: "Battle Theme",
-		artistName: "Nobuo Uematsu",
-		songId: 3
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/325001.jpg",
-		songTitle: "Kingdom Hearts",
-		artistName: "Yoko Shimomura",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/961364.jpg",
-		songTitle: "Sanctuary",
-		artistName: "Utada",
-		songId: 3
-	},
-]
+type CardGridCustomProps<T> = {
+	content: T[];
+	heading?: JSX.Element;
+	maxItemsPerRow?: number;
+	style?: Parameters<typeof FlatGrid>[0]['additionalRowStyle'];
+	cardComponent: React.ComponentType<T>;
+};
 
-const searchHistory = [
-	{
-		albumCover: "https://wallpaperaccess.com/full/1885275.jpg",
-		songTitle: "Sidi Mansour",
-		artistName: "Saber Rebai",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/1487834.jpg",
-		songTitle: "Chariots Of Fire",
-		artistName: "Vangelis",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/1427348.jpg",
-		songTitle: "Californicatio",
-		artistName: "Red Hot Chili Peppers",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/2324317.jpg",
-		songTitle: "Stay\'in Alive",
-		artistName: "Bee Gees",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/8949375.jpg",
-		songTitle: "Peaches",
-		artistName: "Jack Black",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Down Under",
-		artistName: "Men At Work",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/317501.jpg",
-		songTitle: "Legend",
-		artistName: "Tevvez",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/8949375.jpg",
-		songTitle: "Peaches",
-		artistName: "Jack Black",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/1487834.jpg",
-		songTitle: "Chariots Of Fire",
-		artistName: "Vangelis",
-		songId: 4
-	},
-	{
-		albumCover: "https://wallpaperaccess.com/full/1487834.jpg",
-		songTitle: "Chariots Of Fire",
-		artistName: "Vangelis",
-		songId: 4
-	},
-]
+const CardGridCustom = <T extends Record<string, any>>(props: CardGridCustomProps<T>) => {
+	const { content, heading, maxItemsPerRow, style, cardComponent: CardComponent } = props;
 
-const HomeSearchComponent = () => {
 	return (
-		<VStack mt="5" style={{overflow: 'hidden'}}>
-			<Card shadow={3} mb={5}>
-				<Heading margin={5}>History</Heading>
-				<SongCardGrid songs={searchHistory}/>
-			</Card>
-			<Card shadow={3} mt={5} mb={5}>
-				<Heading margin={5}>Suggestions</Heading>
-				<SongCardGrid songs={songSuggestions}/>
-			</Card>
+		<VStack space={5}>
+			{heading && <Heading>{heading}</Heading>}
+			<FlatGrid
+				maxItemsPerRow={maxItemsPerRow}
+				additionalRowStyle={style ?? { justifyContent: 'flex-start' }}
+				data={content}
+				renderItem={({ item }) => <CardComponent {...item} />}
+				spacing={10}
+			/>
 		</VStack>
 	);
-}
+};
 
 const RowCustom = (props: Parameters<typeof Box>[0]) => {
 	const colorScheme: SettingsState['colorScheme'] = useSelector((state: RootState) => state.settings.settings.colorScheme);
@@ -208,9 +76,10 @@ const SongRow = (props: any) => {
 			<HStack px={2} space={5}>
 				<Image
 					pl={10}
-					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5}}
-					source={{ uri: props.imageUrl }}
-					alt={[props.songTitle, props.artistName].join('-')} />
+					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
+					source={{ uri: props.imageUrl ?? 'https://picsum.photos/200' }}
+					alt={[props.songTitle, props.artistName].join('-')}
+				/>
 				<HStack style={{display: 'flex', alignItems: 'center'}} space={6}>
 					<Text pl={10} bold fontSize='md'>{props.songTitle}</Text>
 					<Text fontSize={"sm"}>{props.artistName}</Text>
@@ -230,9 +99,9 @@ const SongsSearchComponent = (props: any) => {
 					songData.map((comp, index) => (
 						<SongRow
 							key={index}
-							imageUrl={comp.albumCover}
-							artistName={comp.artistName}
-							songTitle={comp.songTitle}
+							imageUrl={comp.cover}
+							artistName={comp.artistId}
+							songTitle={comp.name}
 						/>
 					))
 				) : (
@@ -243,18 +112,49 @@ const SongsSearchComponent = (props: any) => {
 	);
 }
 
+const HomeSearchComponent = () => {
+	const {isLoading: isLoadingHistory, data: historyData, error: historyError} = useQuery(
+			'history',
+			() => API.getSearchHistory(0, 10),
+			{ enabled: true },
+		);
+
+	const {isLoading: isLoadingSuggestions, data: suggestionsData, error: suggestionsError} = useQuery(
+			'suggestions',
+			() => API.getSongSuggestions(),
+			{ enabled: true },
+		);
+
+	return (
+		<VStack mt="5" style={{overflow: 'hidden'}}>
+			<Card shadow={3} mb={5}>
+				<Heading margin={5}>History</Heading>
+				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData}/> }
+			</Card>
+			<Card shadow={3} mt={5} mb={5}>
+				<Heading margin={5}>Suggestions</Heading>
+				{ isLoadingSuggestions ? <LoadingComponent/> : <CardGridCustom content={suggestionsData}/> }
+			</Card>
+		</VStack>
+	);
+}
+
 const ArtistSearchComponent = (props: any) => {
+	const {artistData} = React.useContext(SearchContext);
+
 	return (
 		<Box>
-			<SongCardGrid songs={searchHistory}/>
+			<CardGridCustom content={artistData} cardComponent={ArtistCard}/>
 		</Box>
 	);
 }
 
 const GenreSearchComponent = (props: any) => {
+	const {genreData} = React.useContext(SearchContext);
+
 	return (
 		<Box>
-			<SongCardGrid songs={searchHistory}/>
+			<CardGridCustom content={genreData} cardComponent={GenreCard}/>
 		</Box>
 	);
 }
@@ -314,8 +214,7 @@ export const SearchResultComponent = (props: any) => {
 			setShouldOutput(false);
 		}
 	}, [stringQuery]);
-	
-	// Render your component using the shouldOutput state
+
 	return shouldOutput ? (
 		<FilterSwitch/>
 	) : (
