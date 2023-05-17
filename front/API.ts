@@ -406,29 +406,14 @@ export default class API {
 
 		return shuffled.slice(0, 2);
 		// return API.fetch({
-		// 	route: `/history/search?skip=${skip}&take=${take}`,
-		// 	method: "GET",
+		// 	route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
 		// })
-	}
-
-	/**
-	 * Retrieve the suggestions for the user
-	 */
-	public static async getSongSuggestions(): Promise<Song[]> {
-		const queryClient = new QueryClient();
-		let songs = await queryClient.fetchQuery(
-			["API", "allsongs"],
-			API.getAllSongs
-		);
-		const shuffled = [...songs].sort(() => 0.5 - Math.random());
-
-		return shuffled.slice(0, 2);
 	}
 
 	/**
 	 * Retrieve the authenticated user's recommendations
 	 */
-	public static async getUserRecommendations(): Promise<Song[]> {
+	public static async getSongSuggestions(): Promise<Song[]> {
 		const queryClient = new QueryClient();
 		return await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
 	}

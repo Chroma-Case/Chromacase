@@ -15,7 +15,7 @@ const ArtistCard = (props: ArtistCardProps) => {
 	return (
 		<Card
 			shadow={3}
-			// onPress={() => navigation.navigate('Artist', { artistId: id })}
+			onPress={() => navigation.navigate('Artist', { artistId: id })}
 		>
 			<VStack m={1.5} space={3}>
 				<Image

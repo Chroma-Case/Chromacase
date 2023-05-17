@@ -33,6 +33,12 @@ export const en = {
 	levelProgress: 'good notes',
 	score: 'Score',
 
+	//search
+	allFilter: 'All',
+	artistFilter: 'Artists',
+	songsFilter: 'Songs',
+	genreFilter: 'Genres',
+
 	// profile page
 	user: 'Profile',
 	medals: 'Medals',
@@ -96,6 +102,7 @@ export const en = {
 	unknownError: 'Unknown error',
 	errAlrdExst: 'Already exist',
 	errIncrrct: 'Incorrect Credentials',
+	errNoResults: 'No Results Found',
 
 
 	changePassword: 'Change password',
@@ -184,6 +191,12 @@ export const fr: typeof en = {
 	longestCombo: 'Combo le plus long : ',
 	favoriteGenre: 'Genre favori : ',
 
+	//search
+	allFilter: 'Tout',
+	artistFilter: 'Artistes',
+	songsFilter: 'Morceaux',
+	genreFilter: 'Genres',
+
 	// Difficulty settings
 	diffBtn: 'Difficulté',
 	easy: 'Débutant',
@@ -255,6 +268,7 @@ export const fr: typeof en = {
 	errAlrdExst: "Utilisateur existe déjà",
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
+	errNoResults: 'Aucun resultat',
 
 	passwordUpdated: 'Mot de passe mis à jour',
 	emailUpdated: 'Email mis à jour',
@@ -349,6 +363,12 @@ export const sp: typeof en = {
 	longestCombo: 'combo más largo : ',
 	favoriteGenre: 'genero favorito : ',
 
+	//search
+	allFilter: 'Todos',
+	artistFilter: 'Artistas',
+	songsFilter: 'canciones',
+	genreFilter: 'géneros',
+
 	// Difficulty settings
 	diffBtn: 'Dificultad',
 	easy: 'Principiante',
@@ -401,6 +421,8 @@ export const sp: typeof en = {
 	unknownError: 'Error desconocido',
 	errAlrdExst: "Ya existe",
 	errIncrrct: "credenciales incorrectas",
+	errNoResults: 'No se han encontrado resultados',
+
 
 	changePassword: 'Cambio de contraseña',
 	oldPassword: 'Contraseña anterior',

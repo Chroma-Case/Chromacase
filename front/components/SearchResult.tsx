@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
 	HStack,
 	VStack,
@@ -5,25 +6,27 @@ import {
 	Text,
 	Pressable,
 	Box,
-	ScrollView,
 	Card,
 	Image,
 	Flex,
 	useBreakpointValue,
-	Column} from "native-base";
-import React, { useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
+	Column,
+	ScrollView} from "native-base";
+import { SafeAreaView, useColorScheme } from "react-native";
 import { SettingsState } from '../state/SettingsSlice';
 import { RootState } from '../state/Store';
 import { useSelector } from "react-redux";
 import { SearchContext } from "../views/SearchView";
 import { FlatGrid } from 'react-native-super-grid';
 import { useQuery } from "react-query";
+import { translate } from "../i18n/i18n";
+import { useNavigation } from "@react-navigation/native";
 import API from "../API";
 import LoadingComponent from "./Loading";
 import ArtistCard from "./ArtistCard";
 import GenreCard from "./GenreCard";
 import SongCard from "./SongCard";
+import TextButton from "./TextButton";
 
 type CardGridCustomProps<T> = {
 	content: T[];
@@ -57,7 +60,7 @@ const RowCustom = (props: Parameters<typeof Box>[0]) => {
 	return <Pressable>
 		{({ isHovered, isPressed }) => (
 		<Box {...props} style={{ ...(props.style ?? {}) }}
-			py={5}
+			py={3}
 			my={1}
 			bg={(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
 				? (isHovered || isPressed) ? 'gray.800' : undefined
@@ -71,20 +74,27 @@ const RowCustom = (props: Parameters<typeof Box>[0]) => {
 }
 
 const SongRow = (props: any) => {
+	const navigation = useNavigation();
+
 	return (
 		<RowCustom>
-			<HStack px={2} space={5}>
-				<Image
-					pl={10}
-					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-					source={{ uri: props.imageUrl ?? 'https://picsum.photos/200' }}
-					alt={[props.songTitle, props.artistName].join('-')}
-				/>
-				<HStack style={{display: 'flex', alignItems: 'center'}} space={6}>
-					<Text pl={10} bold fontSize='md'>{props.songTitle}</Text>
-					<Text fontSize={"sm"}>{props.artistName}</Text>
+				<HStack px={2} space={5}>
+					<Image
+						pl={10}
+						style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
+						source={{ uri: props.imageUrl ?? 'https://picsum.photos/200' }}
+						alt={[props.songTitle, props.artistName].join('-')}
+					/>
+					<HStack style={{display: 'flex', alignItems: 'center'}} space={6}>
+						<Text pl={10} bold fontSize='md'>{props.songTitle}</Text>
+						<Text fontSize={"sm"}>{props.artistName}</Text>
+					</HStack>
+					<TextButton
+						translate={{ translationKey: 'playBtn' }}
+						colorScheme='primary' variant={"outline"} size='sm'
+						onPress={() => navigation.navigate('Song', { undefined })}
+					/>
 				</HStack>
-			</HStack>
 		</RowCustom>
 	);
 }
@@ -105,11 +115,11 @@ const HomeSearchComponent = () => {
 	return (
 		<VStack mt="5" style={{overflow: 'hidden'}}>
 			<Card shadow={3} mb={5}>
-				<Heading margin={5}>History</Heading>
+				<Heading margin={5}>{translate('lastSearched')}</Heading>
 				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData} cardComponent={SongCard}/> }
 			</Card>
 			<Card shadow={3} mt={5} mb={5}>
-				<Heading margin={5}>Suggestions</Heading>
+				<Heading margin={5}>{translate('songsToGetBetter')}</Heading>
 				{ isLoadingSuggestions ? <LoadingComponent/> : <CardGridCustom content={suggestionsData} cardComponent={SongCard}/> }
 			</Card>
 		</VStack>
@@ -120,13 +130,12 @@ const SongsSearchComponent = (props: any) => {
 	const {songData} = React.useContext(SearchContext);
 
 	return (
-		<Box>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				Songs
-			</Text>
 			<ScrollView>
+				<Text fontSize="xl" fontWeight="bold" mt={4}>
+					{translate('songsFilter')}
+				</Text>
 				{songData?.length ? (
-					songData.map((comp, index) => (
+					songData.slice(0, props.maxRows).map((comp, index) => (
 						<SongRow
 							key={index}
 							imageUrl={comp.cover}
@@ -135,10 +144,9 @@ const SongsSearchComponent = (props: any) => {
 						/>
 					))
 				) : (
-					<Text>No results found</Text>
+					<Text>{translate('errNoResults')}</Text>
 				)}
 			</ScrollView>
-		</Box>
 	);
 }
 
@@ -148,9 +156,11 @@ const ArtistSearchComponent = (props: any) => {
 	return (
 		<Box>
 			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				Artists
+				{translate('artistFilter')}
 			</Text>
-			{ artistData?.length ? <CardGridCustom content={artistData} cardComponent={ArtistCard}/> : <Text>No results found</Text> }
+			{ artistData?.length
+			? <CardGridCustom content={!props?.maxItems ? artistData : artistData.slice(0, props.maxItems)} cardComponent={ArtistCard} />
+			: <Text>{translate('errNoResults')}</Text> }
 		</Box>
 	);
 }
@@ -161,9 +171,11 @@ const GenreSearchComponent = (props: any) => {
 	return (
 		<Box>
 			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				Genres & Moods
+				{translate('genreFilter')}
 			</Text>
-			{ genreData?.length ? <CardGridCustom content={genreData} cardComponent={GenreCard}/> : <Text>No results found</Text> }
+			{ genreData?.length
+			? <CardGridCustom content={!props?.maxItems ? genreData : genreData.slice(0, props.maxItems)} cardComponent={GenreCard}/>
+			: <Text>{translate('errNoResults')}</Text> }
 		</Box>
 	);
 }
@@ -173,21 +185,21 @@ const AllComponent = () => {
 	const isMobileView = screenSize == "small";
 
 	return (
-		<Box>
+		<SafeAreaView>
 			<Flex flexWrap="wrap" direction={isMobileView ? 'column' : 'row'} justifyContent={['flex-start']} mt={4}>
 				<Column w={isMobileView ? '100%' : '50%'}>
 					<Box minH={isMobileView ? 100 : 200}>
-						<ArtistSearchComponent />
+						<ArtistSearchComponent maxItems={6}/>
 					</Box>
 					<Box minH={isMobileView ? 100 : 200}>
-						<GenreSearchComponent />
+						<GenreSearchComponent maxItems={6}/>
 					</Box>
 				</Column>
 				<Box w={isMobileView ? '100%' : '50%'}>
-					<SongsSearchComponent/>
+					<SongsSearchComponent maxRows={9}/>
 				</Box>
 			</Flex>
-		</Box>
+		</SafeAreaView>
 	);
 }
 

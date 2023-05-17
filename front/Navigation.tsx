@@ -18,6 +18,7 @@ import { Center } from 'native-base';
 import LoadingComponent from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
+import ArtistDetailsView from './views/ArtistDetailsView';
 
 
 const protectedRoutes = () => ({
@@ -25,6 +26,7 @@ const protectedRoutes = () => ({
 	Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
 	Song: { component: SongLobbyView, options: { title: translate('play') } },
 	Play: { component: PlayView, options: { title: translate('play') } },
+	Artist: { component: ArtistDetailsView, options: { title: translate('artist') } },
 	Score: { component: ScoreView, options: { title: translate('score') } },
 	Search: { component: SearchView, options: { title: translate('search') } },
 	User: { component: ProfileView, options: { title: translate('user') } },

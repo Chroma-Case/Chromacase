@@ -1,14 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Box, List, Stack } from "native-base";
+import React, { useState } from "react";
+import { Stack } from "native-base";
 import SearchBar from "../components/SearchBar";
-import { translate } from "../i18n/i18n";
-import Album from "../models/Album";
 import Artist from "../models/Artist";
 import Song from "../models/Song";
 import Genre from "../models/Genre";
 import API from "../API";
 import { useQuery } from 'react-query';
 import { SearchResultComponent } from "../components/SearchResult";
+import { SafeAreaView, SafeAreaViewBase } from "react-native";
 
 
 interface SearchContextType {
@@ -40,6 +39,7 @@ export const SearchContext = React.createContext<SearchContextType>({
 const SearchView = ({navigation}: any) => {
 	const [filter, setFilter] = useState<any>('all');
 	const [stringQuery, setStringQuery] = useState<string>('');
+
 	const { isLoading: isLoadingSong, data: songData, error: songError } = useQuery(
 		['song', stringQuery],
 		() => API.searchSongs(stringQuery),
@@ -57,25 +57,17 @@ const SearchView = ({navigation}: any) => {
 	);
 
 	const updateFilter = (newData: any) => {
+		// called when the filter is changed
 		setFilter(newData);
 	}
 
 	const updateStringQuery = (newData: string) => {
+		// called when the stringQuery is updated
 		setStringQuery(newData);
 	}
-	// const [query, setQuery] = useState<string>();
-	// const navigation = useNavigation();
-	// const searchQuery = useQuery(
-	// 	['search', query],
-	// 	() => API.searchSongs(query!),
-	// 	{ enabled: query != undefined }
-	// );
-	// const artistsQueries = useQueries(searchQuery.data?.map((song) => (
-	// 	{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
-	// )) ??[]);
 
 	return (
-			<Stack>
+			<SafeAreaView>
 				<SearchContext.Provider value={{
 						filter,
 						stringQuery,
@@ -91,7 +83,7 @@ const SearchView = ({navigation}: any) => {
 					<SearchBar/>
 					<SearchResultComponent/>
 				</SearchContext.Provider>
-			</Stack>
+			</SafeAreaView>
 	);
 };
 

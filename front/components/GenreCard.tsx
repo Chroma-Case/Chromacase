@@ -16,15 +16,15 @@ const GenreCard = (props: GenreCardProps) => {
 
 	return (
 		<Card shadow={3}>
-			<VStack m={1.5} space={3} alignItems="center"> {/* Set alignItems="center" to center the items horizontally */}
+			<VStack m={1.5} space={3} alignItems="center">
 				<Box
 					bg={theme.colors.primary[400]}
 					w={20}
 					h={20}
 					borderRadius="full"
-					display="flex" /* Add display="flex" to enable flexbox layout */
-					alignItems="center" /* Center the icon vertically */
-					justifyContent="center" /* Center the icon horizontally */
+					display="flex"
+					alignItems="center"
+					justifyContent="center"
 				>
 					<Icon size={"md"} as={Ionicons} name="musical-notes-outline" />
 				</Box>

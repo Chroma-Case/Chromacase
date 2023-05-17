@@ -1,11 +1,8 @@
 import {
-	HStack,
 	Icon,
 	Input,
-	VStack,
 	Button,
-	Flex,
-	Box} from "native-base";
+	Flex} from "native-base";
 import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { translate } from "../i18n/i18n";
@@ -32,22 +29,22 @@ const SearchBar = (props: SearchBarProps) => {
 
 	const filters: FilterButton[] = [
 		{
-			name: 'All',
+			name: translate('allFilter'),
 			callback: () => updateFilter('all'),
 			id: 'all'
 		},
 		{
-			name: 'Artist',
+			name: translate('artistFilter'),
 			callback: () => updateFilter('artist'),
 			id: 'artist',
 		},
 		{
-			name: 'Song',
+			name: translate('songsFilter'),
 			callback: () => updateFilter('song'),
 			id: 'song',
 		},
 		{
-			name: 'Genre',
+			name: translate('genreFilter'),
 			callback: () => updateFilter('genre'),
 			id: 'genre',
 		},
@@ -59,7 +56,7 @@ const SearchBar = (props: SearchBarProps) => {
 				onChangeText={(text) => debouncedUpdateStringQuery(text)}
 				variant={"rounded"}
 				rounded={"full"}
-				placeholder={translate('searchBtn')}
+				placeholder={translate('search')}
 				width={['100%', '50%']} //responsive array syntax with native-base
 				py={2}
 				px={2}
