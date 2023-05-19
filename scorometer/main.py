@@ -21,6 +21,10 @@ from chroma_case.Message import (
 from chroma_case.Partition import Partition
 from mido import MidiFile
 
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
+
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
 MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/musics/"
 
@@ -50,6 +54,7 @@ class Scorometer:
 	def __init__(self, mode: int, midiFile: str, song_id: int, user_id: int) -> None:
 		self.partition: Partition = self.getPartition(midiFile)
 		self.practice_partition: list[list[Key]] = self.getPracticePartition(mode)
+		logging.debug({"partition": self.partition.notes})
 		self.keys_down = []
 		self.mode: int = mode
 		self.song_id: int = song_id
@@ -76,15 +81,16 @@ class Scorometer:
 		prev_note_on = {}
 		for msg in MidiFile(midiFile):
 			d = msg.dict()
+			#print(msg)
 			s += d["time"] * 1000 * RATIO
-
-			if d["type"] == "note_on":
+			if "velocity" not in d: continue
+			if d["type"] == "note_on" and d["velocity"] != 0:
 				prev_note_on[d["note"]] = 0
 				if d["note"] in notes_on:
 					prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
 				notes_on[d["note"]] = s  # 0
 
-			if d["type"] == "note_off":
+			if d["type"] == "note_off" or d["velocity"] == 0:
 				duration = s - notes_on[d["note"]]
 				note_start = notes_on[d["note"]]
 				notes.append(Key(d["note"], note_start, duration - 10))
