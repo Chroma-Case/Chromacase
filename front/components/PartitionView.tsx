@@ -60,6 +60,7 @@ const PartitionView = (props: PartitionViewProps) => {
 				// Put your hands together for https://github.com/jimutt/osmd-audio-player/blob/master/src/internals/noteHelpers.ts
 				const fixedKey = note.ParentVoiceEntry.ParentVoice.Parent.SubInstruments.at(0)?.fixedKey ?? 0;
 				const midiNumber = note.halfTone - fixedKey * 12;
+				// console.log('Expecting midi ' + midiNumber);
 				let duration = getActualNoteLength(note);
 				const gain = note.ParentVoiceEntry.ParentVoice.Volume;
 				soundPlayer!.play(midiNumber, audioContext.currentTime, { duration, gain })

@@ -51,6 +51,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
 		{ staleTime: Infinity }
 	);
+	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 
 	const onPause = () => {
@@ -59,7 +60,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: true,
-			time: time
+			time: getElapsedTime()
 		}));
 	}
 	const onResume = () => {
@@ -72,7 +73,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: false,
-			time: time
+			time: getElapsedTime()
 		}));
 	}
 	const onEnd = () => {
@@ -154,11 +155,12 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			input.onmidimessage = (message) => {
 				const keyIsPressed = message.data[2] == 100;
 				const keyCode = message.data[1];
+				// console.log('Playing midi ' + keyCode + ' at time ' + getElapsedTime());
 				webSocket.current?.send(JSON.stringify({
 					type: keyIsPressed ? "note_on" : "note_off",
 					note: keyCode,
 					id: song.data!.id,
-					time: time
+					time: getElapsedTime()
 				}))
 			}
 			inputIndex++;
@@ -171,7 +173,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		let interval = setInterval(() => {
-			setTime(() => stopwatch.getElapsedRunningTime() - 3000) // Countdown
+			setTime(() => getElapsedTime()) // Countdown
 		}, 1);
 
 		return () => {
