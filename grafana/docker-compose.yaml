@@ -1,71 +1,43 @@
----
-version: "3"
-
-networks:
-  loki:
+version: "3.4"
 
 services:
-  loki:
-    image: grafana/loki:2.8.2
+  my-nginx-service:
+    image: nginx
+    container_name: my-nginx-service
     ports:
-      - 3101:3100
-    volumes:
-      - ./loki-config.yaml:/etc/loki/config.yaml
-    depends_on:
-      - minio
-    healthcheck:
-      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  minio:
-    image: minio/minio
-    entrypoint:
-      - sh
-      - -euc
-      - |
-        mkdir -p /data/loki-data && \
-        mkdir -p /data/loki-ruler && \
-        minio server /data
+      - 8000:80
     environment:
-      - MINIO_ROOT_USER=loki
-      - MINIO_ROOT_PASSWORD=supersecret
-      - MINIO_PROMETHEUS_AUTH_TYPE=public
-      - MINIO_UPDATE=off
-    ports:
-      - 9000
-    volumes:
-      - ./.data/minio:/data
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
-      interval: 15s
-      timeout: 20s
-      retries: 5
-    networks:
-      - loki
-
-  grafana:
-    image: grafana/grafana:latest
-    environment:
-      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
-    volumes:
-     - ./datasource.yml:/etc/grafana/provisioning/datasources/ds.yml
-    ports:
-      - "3000:3000"
-    healthcheck:
-      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  flog:
-    image: mingrammer/flog
-    command: -f json -d 1s -l
+      - FOO=bar
     logging:
       driver: loki
       options:
-        loki-url: http://localhost:3100/loki/api/v1/push
-        loki-external-labels: job=dockerlogs,owner=ruan,environment=development
+        loki-url: http://loki:3100/loki/api/v1/push
+        loki-external-labels: job=dockerlogs,environment=development
+
+  grafana:
+    image: grafana/grafana:7.2.2
+    container_name: grafana
+    volumes:
+    - ./datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    ports:
+    - "3000:3000"
+
+  loki:
+   image: grafana/loki:2.8.2
+   container_name: loki
+   volumes:
+     - ./loki.yaml:/etc/config/loki.yaml
+   entrypoint:
+     - /usr/bin/loki
+     - -config.file=/etc/config/loki.yaml
+   ports:
+     - "3100:3100"
+
+  logger-app:
+    image: mingrammer/flog
+    container_name: logger
+    logging:
+      driver: loki
+      options:
+        loki-url: http://loki:3100/loki/api/v1/push
+        loki-external-labels: job=dockerlogs,environment=development
