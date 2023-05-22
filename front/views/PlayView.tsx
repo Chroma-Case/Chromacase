@@ -119,9 +119,9 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					return;
 				}
 				const points = data.info.score;
-				const maxPoints = data.info.maxScore || 1;
+				const maxPoints = data.info.max_score || 1;
 
-				setScore(Math.floor(Math.max(points, 0) / maxPoints) * 100);
+				setScore(Math.floor(Math.max(points, 0) * 100 / maxPoints));
 
 				let formattedMessage = '';
 				let messageColor: ColorSchemeType | undefined;
@@ -163,9 +163,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			}
 			input.onmidimessage = (message) => {
 				const { command, channel, note, velocity } = parseMidiMessage(message);
-				console.log(command, channel, note, velocity);
-				const keyIsPressed = command == 9;
-				console.log(keyIsPressed);
+				const keyIsPressed = command == 9;;
 				const keyCode = message.data[1];
 				// console.log('Playing midi ' + keyCode + ' at time ' + getElapsedTime());
 				webSocket.current?.send(
