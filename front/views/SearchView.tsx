@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Stack } from "native-base";
 import SearchBar from "../components/SearchBar";
 import Artist from "../models/Artist";
 import Song from "../models/Song";
@@ -7,7 +6,7 @@ import Genre from "../models/Genre";
 import API from "../API";
 import { useQuery } from 'react-query';
 import { SearchResultComponent } from "../components/SearchResult";
-import { SafeAreaView, SafeAreaViewBase } from "react-native";
+import { SafeAreaView} from "react-native";
 
 
 interface SearchContextType {
@@ -48,18 +47,19 @@ const SearchView = ({navigation}: any) => {
 		}
 	};
 
-
-	const { isLoading: isLoadingSong, data: songData, error: songError } = useQuery(
+	const { isLoading: isLoadingSong, data: songData = []} = useQuery(
 		['song', stringQuery],
 		() => API.searchSongs(stringQuery),
 		{ enabled: !!stringQuery, onSuccess: handleSuccess }
 	);
-	const { isLoading: isLoadingArtist, data: artistData, error: artistError } = useQuery(
+
+	const { isLoading: isLoadingArtist, data: artistData = []} = useQuery(
 		['artist', stringQuery],
 		() => API.searchArtists(stringQuery),
 		{ enabled: !!stringQuery, onSuccess: handleSuccess}
 	);
-	const { isLoading: isLoadingGenre, data: genreData, error: genreError } = useQuery(
+	
+	const { isLoading: isLoadingGenre, data: genreData = []} = useQuery(
 		['genre', stringQuery],
 		() => API.searchGenres(stringQuery),
 		{ enabled: !!stringQuery, onSuccess: handleSuccess }

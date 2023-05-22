@@ -101,13 +101,13 @@ const SongRow = (props: any) => {
 }
 
 const HomeSearchComponent = () => {
-	const {isLoading: isLoadingHistory, data: historyData, error: historyError} = useQuery(
+	const {isLoading: isLoadingHistory, data: historyData = []} = useQuery(
 			'history',
 			() => API.getSearchHistory(0, 12),
 			{ enabled: true },
 		);
 
-	const {isLoading: isLoadingSuggestions, data: suggestionsData, error: suggestionsError} = useQuery(
+	const {isLoading: isLoadingSuggestions, data: suggestionsData = []} = useQuery(
 			'suggestions',
 			() => API.getSongSuggestions(),
 			{ enabled: true },
