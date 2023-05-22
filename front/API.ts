@@ -396,18 +396,28 @@ export default class API {
 	 * Retrieve the authenticated user's search history
 	 * @param lessonId the id to find the lesson
 	 */
-	public static async getSearchHistory(skip: number, take: number): Promise<Song[]> {
+	public static async getSearchHistory(skip: number, take: number): Promise<any[]> {
 		const queryClient = new QueryClient();
-		let songs = await queryClient.fetchQuery(
+		await queryClient.prefetchQuery(
 			["API", "allsongs"],
-			API.getAllSongs
+			() => API.fetch({ route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}` })
 		);
-		const shuffled = [...songs].sort(() => 0.5 - Math.random());
+		const songs = queryClient.getQueryData<Song[]>(["API", "allsongs"]);
 
-		return shuffled.slice(0, 2);
-		// return API.fetch({
-		// 	route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
-		// })
+		if (songs) return songs;
+		else return [];
+	}
+
+	public static async createSearchHistoryEntry(query: string, type: string, timestamp: number): Promise<void> {
+		return await API.fetch({
+			route: `/history/search`,
+			method: "POST",
+			body: {
+				query: query,
+				type: type,
+				timestamp: timestamp,
+			},
+		})
 	}
 
 	/**

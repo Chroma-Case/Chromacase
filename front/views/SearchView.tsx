@@ -64,6 +64,7 @@ const SearchView = ({navigation}: any) => {
 	const updateStringQuery = (newData: string) => {
 		// called when the stringQuery is updated
 		setStringQuery(newData);
+		API.createSearchHistoryEntry(newData, "song", 0o0000001);
 	}
 
 	return (

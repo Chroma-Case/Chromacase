@@ -16,9 +16,9 @@ const HomeView = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: "big"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const playHistoryQuery = useQuery(['history', 'play'], () => API.getUserPlayHistory());
-	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory());
+	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory(0, 10));
 	const skillsQuery = useQuery(['skills'], () => API.getUserSkills());
-	const nextStepQuery = useQuery(['user', 'recommendations'], () => API.getUserRecommendations());
+	const nextStepQuery = useQuery(['user', 'recommendations'], () => API.getSongSuggestions());
 	const artistsQueries = useQueries((playHistoryQuery.data?.concat(searchHistoryQuery.data ?? []).concat(nextStepQuery.data ?? []) ?? []).map((song) => (
 		{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
 	)));
@@ -96,10 +96,10 @@ const HomeView = () => {
 						heading={<Translate translationKey='lastSearched'/>}
 						songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 							.map((song) => ({
-								albumCover: song.cover,
-								songTitle: song.name,
-								songId: song.id,
-								artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
+								albumCover: song?.cover,
+								songTitle: song?.name,
+								songId: song?.id,
+								// artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
 							})) ?? []
 						}
 					/>

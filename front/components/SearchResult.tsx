@@ -27,6 +27,7 @@ import ArtistCard from "./ArtistCard";
 import GenreCard from "./GenreCard";
 import SongCard from "./SongCard";
 import TextButton from "./TextButton";
+import SearchHistoryCard from "./HistoryCard";
 
 type CardGridCustomProps<T> = {
 	content: T[];
@@ -102,7 +103,7 @@ const SongRow = (props: any) => {
 const HomeSearchComponent = () => {
 	const {isLoading: isLoadingHistory, data: historyData, error: historyError} = useQuery(
 			'history',
-			() => API.getSearchHistory(0, 10),
+			() => API.getSearchHistory(0, 12),
 			{ enabled: true },
 		);
 
@@ -116,7 +117,7 @@ const HomeSearchComponent = () => {
 		<VStack mt="5" style={{overflow: 'hidden'}}>
 			<Card shadow={3} mb={5}>
 				<Heading margin={5}>{translate('lastSearched')}</Heading>
-				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData} cardComponent={SongCard}/> }
+				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData} cardComponent={SearchHistoryCard}/> }
 			</Card>
 			<Card shadow={3} mt={5} mb={5}>
 				<Heading margin={5}>{translate('songsToGetBetter')}</Heading>

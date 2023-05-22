@@ -16,7 +16,7 @@ const ScoreView = ({ songId }: RouteProps<ScoreViewProps>) => {
 	// const songQuery = useQuery(['song', props.songId], () => API.getSong(props.songId));
 	// const songScoreQuery = useQuery(['song', props.songId, 'score', 'latest'], () => API.getLastSongPerformanceScore(props.songId));
 	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
-	const recommendations = useQuery(['song', 'recommendations'], () => API.getUserRecommendations());
+	const recommendations = useQuery(['song', 'recommendations'], () => API.getSongSuggestions());
 
 	if (!recommendations.data) {
 		return <Center style={{ flexGrow: 1 }}>
@@ -64,10 +64,10 @@ const ScoreView = ({ songId }: RouteProps<ScoreViewProps>) => {
 					<Translate translationKey="songsToGetBetter"/>
 				</Text>}
 				songs={recommendations.data.map((i) => ({
-					albumCover: i.cover,
-					songTitle: i.name ,
+					albumCover: i?.cover,
+					songTitle: i?.name ,
 					artistName: "Artist",
-					songId: i.id
+					songId: i?.id
 				}))}
 			/>
 			<Row space={3} style={{ width: '100%', justifyContent: 'center' }}>

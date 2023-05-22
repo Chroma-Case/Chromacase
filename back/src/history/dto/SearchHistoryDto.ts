@@ -3,11 +3,12 @@ import { IsNumber } from "class-validator";
 
 export class SearchHistoryDto {
 	@ApiProperty()
-	@IsNumber()
-	userID: number;
 
 	@ApiProperty()
 	query: string;
+
+	@ApiProperty()
+	timestamp: number;
 
 	@ApiProperty()
 	type: "song" | "artist" | "album" | "genre";

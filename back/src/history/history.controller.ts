@@ -4,6 +4,7 @@ import { SearchHistory, SongHistory } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { SongHistoryDto } from './dto/SongHistoryDto';
 import { HistoryService } from './history.service';
+import { SearchHistoryDto } from './dto/SearchHistoryDto';
 
 @Controller('history')
 @ApiTags("history")
@@ -29,7 +30,7 @@ export class HistoryController {
 	async getSearchHistory(
 		@Request() req: any,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
+		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,// 
 	): Promise<SearchHistory[]> {
 		return this.historyService.getSearchHistory(req.user.id, { skip, take });
 	}
@@ -39,4 +40,15 @@ export class HistoryController {
 	async create(@Body() record: SongHistoryDto): Promise<SongHistory> {
 		return this.historyService.createSongHistoryRecord(record);
 	}
+
+	@Post("search")
+	@HttpCode(201)
+	@UseGuards(JwtAuthGuard)
+	@ApiUnauthorizedResponse({description: "Invalid token"})
+	async createSearchHistory(
+		@Request() req: any,
+		@Body() record: SearchHistoryDto
+		): Promise<void> {
+			await this.historyService.createSearchHistoryRecord(req.user.id, { query: record.query, type: record.type, timestamp: record.timestamp });
+		}
 }

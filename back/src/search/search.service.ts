@@ -8,7 +8,7 @@ export class SearchService {
 	constructor(private prisma: PrismaService, private history: HistoryService) { }
 
 	async songByGuess(query: string, userID: number): Promise<Song[]> {
-		await this.history.createSearchHistoryRecord({ query: query, type: 'song', userID });
+		// await this.history.createSearchHistoryRecord({ query: query, type: 'song', userID });
 		return this.prisma.song.findMany({
 			where: {
 				name: { contains: query, mode: 'insensitive' },
@@ -17,7 +17,7 @@ export class SearchService {
 	}
 
 	async genreByGuess(query: string, userID: number): Promise<Genre[]> {
-		await this.history.createSearchHistoryRecord({ query: query, type: 'genre', userID });
+		// await this.history.createSearchHistoryRecord({ query: query, type: 'genre', userID });
 		return this.prisma.genre.findMany({
 			where: {
 				name: { contains: query, mode: 'insensitive' },
@@ -26,7 +26,7 @@ export class SearchService {
 	}
 
 	async artistByGuess(query: string, userID: number): Promise<Artist[]> {
-		await this.history.createSearchHistoryRecord({ query: query, type: 'artist', userID });
+		// await this.history.createSearchHistoryRecord({ query: query, type: 'artist', userID });
 		return this.prisma.artist.findMany({
 			where: {
 				name: { contains: query, mode: 'insensitive' },
