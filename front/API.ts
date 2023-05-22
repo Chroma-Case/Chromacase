@@ -408,6 +408,13 @@ export default class API {
 		else return [];
 	}
 
+	/**
+	 * Posts a new entry in the user's search history
+	 * @param query is the query itself
+	 * @param type the type of object searched
+	 * @param timestamp the date it's been issued
+	 * @returns nothing
+	 */
 	public static async createSearchHistoryEntry(query: string, type: string, timestamp: number): Promise<void> {
 		return await API.fetch({
 			route: `/history/search`,
@@ -422,6 +429,7 @@ export default class API {
 
 	/**
 	 * Retrieve the authenticated user's recommendations
+	 * @returns an array of songs
 	 */
 	public static async getSongSuggestions(): Promise<Song[]> {
 		const queryClient = new QueryClient();
@@ -430,6 +438,7 @@ export default class API {
 
 	/**
 	 * Retrieve the authenticated user's play history
+	 * * @returns an array of songs
 	 */
 	public static async getUserPlayHistory(): Promise<Song[]> {
 		const queryClient = new QueryClient();

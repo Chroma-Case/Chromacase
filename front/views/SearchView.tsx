@@ -37,23 +37,32 @@ export const SearchContext = React.createContext<SearchContextType>({
 })
 
 const SearchView = ({navigation}: any) => {
+	let isRequestSucceeded = false;
 	const [filter, setFilter] = useState<any>('all');
 	const [stringQuery, setStringQuery] = useState<string>('');
+
+	const handleSuccess = () => {
+		if (!isRequestSucceeded) {
+			API.createSearchHistoryEntry(stringQuery, "song", Date.now());
+			isRequestSucceeded = true;
+		}
+	};
+
 
 	const { isLoading: isLoadingSong, data: songData, error: songError } = useQuery(
 		['song', stringQuery],
 		() => API.searchSongs(stringQuery),
-		{ enabled: !!stringQuery }
+		{ enabled: !!stringQuery, onSuccess: handleSuccess }
 	);
 	const { isLoading: isLoadingArtist, data: artistData, error: artistError } = useQuery(
 		['artist', stringQuery],
 		() => API.searchArtists(stringQuery),
-		{ enabled: !!stringQuery }
+		{ enabled: !!stringQuery, onSuccess: handleSuccess}
 	);
 	const { isLoading: isLoadingGenre, data: genreData, error: genreError } = useQuery(
 		['genre', stringQuery],
 		() => API.searchGenres(stringQuery),
-		{ enabled: !!stringQuery }
+		{ enabled: !!stringQuery, onSuccess: handleSuccess }
 	);
 
 	const updateFilter = (newData: any) => {
@@ -64,7 +73,7 @@ const SearchView = ({navigation}: any) => {
 	const updateStringQuery = (newData: string) => {
 		// called when the stringQuery is updated
 		setStringQuery(newData);
-		API.createSearchHistoryEntry(newData, "song", 0o0000001);
+		isRequestSucceeded = false;
 	}
 
 	return (

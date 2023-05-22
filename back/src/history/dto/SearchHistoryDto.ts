@@ -3,8 +3,6 @@ import { IsNumber } from "class-validator";
 
 export class SearchHistoryDto {
 	@ApiProperty()
-
-	@ApiProperty()
 	query: string;
 
 	@ApiProperty()
