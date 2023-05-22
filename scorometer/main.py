@@ -76,7 +76,8 @@ class Scorometer:
 
 	def getPartition(self, midiFile: str):
 		notes = []
-		s = 3500
+		s = 3000
+		s = 0
 		notes_on = {}
 		prev_note_on = {}
 		for msg in MidiFile(midiFile):

@@ -35,6 +35,15 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	}
 }
 
+function parseMidiMessage(message) {
+	return {
+		command: message.data[0] >> 4,
+		channel: message.data[0] & 0xf,
+		note: message.data[1],
+		velocity: message.data[2] / 127,
+	};
+}
+
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -153,16 +162,21 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				return;
 			}
 			input.onmidimessage = (message) => {
-				const keyIsPressed = message.data[2] == 100;
+				const { command, channel, note, velocity } = parseMidiMessage(message);
+				console.log(command, channel, note, velocity);
+				const keyIsPressed = command == 9;
+				console.log(keyIsPressed);
 				const keyCode = message.data[1];
 				// console.log('Playing midi ' + keyCode + ' at time ' + getElapsedTime());
-				webSocket.current?.send(JSON.stringify({
-					type: keyIsPressed ? "note_on" : "note_off",
-					note: keyCode,
-					id: song.data!.id,
-					time: getElapsedTime()
-				}))
-			}
+				webSocket.current?.send(
+					JSON.stringify({
+						type: keyIsPressed ? "note_on" : "note_off",
+						note: keyCode,
+						id: song.data!.id,
+						time: getElapsedTime(),
+					})
+				);
+			};
 			inputIndex++;
 		});
 	}
