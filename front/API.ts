@@ -333,7 +333,7 @@ export default class API {
 	 */
 	public static async getSongHistory(songId: number): Promise<{best: number, history: SongHistory[]}> {
 		return API.fetch({
-			route: `/song${songId}/history`,
+			route: `/song/${songId}/history`,
 		});
 	}
 
