@@ -89,13 +89,11 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current?.send(JSON.stringify({
 			type: "end"
 		}));
-		stopwatch.stop();
-		webSocket.current?.close();
 	}
 
 	const onMIDISuccess = (access) => {
 		const inputs = access.inputs;
-		
+
 		if (inputs.size < 2) {
 			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
@@ -115,7 +113,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
-					navigation.navigate('Score', { songId: song.data!.id });
+					navigation.navigate('Score', { songId: song.data!.id, ...data });
 					return;
 				}
 				const points = data.info.score;
@@ -151,7 +149,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						default:
 							break;
 					}
-				} 
+				}
 				toast.show({ description: formattedMessage, placement: 'top', colorScheme: messageColor ?? 'secondary' });
 			} catch (e) {
 				console.log(e);
@@ -216,7 +214,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					timestamp={Math.max(0, time)}
 					onEndReached={() => {
 						onEnd();
-						navigation.navigate('Score', { songId: song.data.id });
 					}}
 				/>
 				{ !partitionRendered && <LoadingComponent/> }
@@ -269,7 +266,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					{midiKeyboardFound && <>
 						<IconButton size='sm' variant='solid' icon={
 							<Icon as={Ionicons} name={paused ? "play" : "pause"}/>
-						} onPress={() => { 
+						} onPress={() => {
 							if (paused) {
 								onResume();
 							} else {
@@ -294,7 +291,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
 							onEnd();
-							navigation.navigate('Score', { songId: song.data.id });
 						}}/>
 					</>}
 					</Row>

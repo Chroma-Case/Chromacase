@@ -8,19 +8,27 @@ import API from '../API';
 import { useQueries, useQuery } from "react-query";
 import { LoadingView } from "../components/Loading";
 
-type ScoreViewProps = { songId: number }
+type ScoreViewProps = {
+	songId: number
+	overallScore: number,
+	score: {
+		missed: number,
+		good: number,
+		great: number,
+		perfect: number,
+		maxScore: number,
+	}
+}
 
-const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
-	const theme = useTheme();
+const ScoreView = ({ songId, overallScore, score }: RouteProps<ScoreViewProps>) => {
 	const navigation = useNavigation();
 	const songQuery = useQuery(['song', songId], () => API.getSong(songId));
 	const artistQuery = useQuery(['song', songId, "artist"],
 		() => API.getArtist(songQuery.data!.artistId!),
 		{ enabled: songQuery.data != undefined }
 	);
-	const songHistoryQuery = useQuery(["song", "history"], () => API.getUserPlayHistory());
 	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
-	const recommendations = useQuery(['song', songId, 'recommendations'], () => API.getUserRecommendations());
+	const recommendations = useQuery(['song', 'recommendations'], () => API.getUserRecommendations());
 	const artistRecommendations = useQueries(recommendations.data
 		?.filter(({ artistId }) => artistId !== null)
 		.map((song) => ({
@@ -32,8 +40,8 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 	if (!recommendations.data || artistRecommendations.find(({ data }) => !data) || !songHistoryQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
 		return <LoadingView/>;
 	}
-	const songScore = songHistoryQuery.data.find((history) => history.songID == songId);
-	if (!songScore) {
+	// I think we don't need that anymore but /shrug
+	if (!overallScore) {
 		return <Center>
 			<Translate translationKey="unknownError"/>
 			<TextButton
@@ -70,7 +78,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 						<Row style={{ alignItems: 'center' }}>
 							<Translate translationKey='score' format={(t) => t + ' : '}/>
 							<Text bold fontSize='xl'>
-								{songScore.score + "pts"}
+								{overallScore + "pts"}
 							</Text>
 						</Row>
 					</Column>

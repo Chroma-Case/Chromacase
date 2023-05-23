@@ -282,6 +282,7 @@ class Scorometer:
 				self.info["missed"] += 1
 		send(
 			{
+				"type": "end",
 				"overallScore": self.info["score"],
 				"score": {
 					"missed": self.info["missed"],
