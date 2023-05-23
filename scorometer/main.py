@@ -19,6 +19,7 @@ from chroma_case.Message import (
 	getMessage,
 )
 from chroma_case.Partition import Partition
+from .song_check import getPartition
 from mido import MidiFile
 
 
@@ -52,7 +53,7 @@ def send(o):
 
 class Scorometer:
 	def __init__(self, mode: int, midiFile: str, song_id: int, user_id: int) -> None:
-		self.partition: Partition = self.getPartition(midiFile)
+		self.partition: Partition = getPartition(midiFile)
 		self.practice_partition: list[list[Key]] = self.getPracticePartition(mode)
 		logging.debug({"partition": self.partition.notes})
 		self.keys_down = []
