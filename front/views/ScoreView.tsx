@@ -14,13 +14,13 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 	const theme = useTheme();
 	const navigation = useNavigation();
 	const songQuery = useQuery(['song', songId], () => API.getSong(songId));
-	const artistQuery = useQuery(['song', songId],
+	const artistQuery = useQuery(['song', songId, "artist"],
 		() => API.getArtist(songQuery.data!.artistId!),
 		{ enabled: songQuery.data != undefined }
 	);
 	const songHistoryQuery = useQuery(["song", "history"], () => API.getUserPlayHistory());
 	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
-	const recommendations = useQuery(['song', 'recommendations'], () => API.getUserRecommendations());
+	const recommendations = useQuery(['song', songId, 'recommendations'], () => API.getUserRecommendations());
 	const artistRecommendations = useQueries(recommendations.data
 		?.filter(({ artistId }) => artistId !== null)
 		.map((song) => ({
@@ -36,7 +36,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 	if (!songScore) {
 		return <Center>
 			<Translate translationKey="unknownError"/>
-			<TextButton 
+			<TextButton
 				translate={{ translationKey: 'backBtn' }}
 				onPress={() => navigation.navigate('Home')}
 			/>
@@ -57,7 +57,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 					<Column style={{ justifyContent: 'space-evenly', flexGrow: 1 }}>
 						{/*<Row style={{ alignItems: 'center' }}>
 							<Text bold fontSize='xl'>
-								
+
 							</Text>
 							<Translate translationKey='goodNotes' format={(t) => ' ' + t}/>
 						</Row>
