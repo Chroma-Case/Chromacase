@@ -61,12 +61,10 @@ const getDummyIllustration = () =>
 	dummyIllustrations[Math.floor(Math.random() * dummyIllustrations.length)];
 
 // we will need the same thing for the scorometer API url
-// const baseAPIUrl =
-// 	process.env.NODE_ENV != "development" && Platform.OS === "web"
-// 		? "/api"
-// 		: Constants.manifest?.extra?.apiUrl;
-
-const baseAPIUrl = 'http://localhost:3000'
+const baseAPIUrl =
+	process.env.NODE_ENV != "development" && Platform.OS === "web"
+		? "/api"
+		: Constants.manifest?.extra?.apiUrl;
 
 export default class API {
 	public static async fetch(params: FetchParams) {
