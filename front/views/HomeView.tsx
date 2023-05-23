@@ -3,6 +3,7 @@ import { useQueries, useQuery } from "react-query";
 import API from "../API";
 import LoadingComponent from "../components/Loading";
 import { Center, Box, ScrollView, Flex, useBreakpointValue, Stack, Heading, Container, VStack, HStack } from 'native-base';
+import CardGridCustom from "../components/CardGridCustom";
 
 import { useNavigation } from "../Navigation";
 import SongCardGrid from '../components/SongCardGrid';
@@ -10,6 +11,7 @@ import CompetenciesTable from '../components/CompetenciesTable'
 import ProgressBar from "../components/ProgressBar";
 import Translate from "../components/Translate";
 import TextButton from "../components/TextButton";
+import SearchHistoryCard from "../components/HistoryCard";
 
 const HomeView = () => {
 	const navigation = useNavigation();
@@ -92,16 +94,10 @@ const HomeView = () => {
 					/>
 				</HStack>
 				<Box style={{ width: '100%' }}>
-					<SongCardGrid
+					<CardGridCustom
+						content={searchHistoryQuery.data}
+						cardComponent={SearchHistoryCard}
 						heading={<Translate translationKey='lastSearched'/>}
-						songs={searchHistoryQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
-							.map((song) => ({
-								albumCover: song?.cover,
-								songTitle: song?.name,
-								songId: song?.id,
-								// artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
-							})) ?? []
-						}
 					/>
 				</Box>
 			</VStack>

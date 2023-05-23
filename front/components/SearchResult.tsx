@@ -17,7 +17,6 @@ import { SettingsState } from '../state/SettingsSlice';
 import { RootState } from '../state/Store';
 import { useSelector } from "react-redux";
 import { SearchContext } from "../views/SearchView";
-import { FlatGrid } from 'react-native-super-grid';
 import { useQuery } from "react-query";
 import { translate } from "../i18n/i18n";
 import { useNavigation } from "@react-navigation/native";
@@ -26,33 +25,10 @@ import LoadingComponent from "./Loading";
 import ArtistCard from "./ArtistCard";
 import GenreCard from "./GenreCard";
 import SongCard from "./SongCard";
+import CardGridCustom from "./CardGridCustom";
 import TextButton from "./TextButton";
 import SearchHistoryCard from "./HistoryCard";
-
-type CardGridCustomProps<T> = {
-	content: T[];
-	heading?: JSX.Element;
-	maxItemsPerRow?: number;
-	style?: Parameters<typeof FlatGrid>[0]['additionalRowStyle'];
-	cardComponent: React.ComponentType<T>;
-};
-
-const CardGridCustom = <T extends Record<string, any>>(props: CardGridCustomProps<T>) => {
-	const { content, heading, maxItemsPerRow, style, cardComponent: CardComponent } = props;
-
-	return (
-		<VStack space={5}>
-			{heading && <Heading>{heading}</Heading>}
-			<FlatGrid
-				maxItemsPerRow={maxItemsPerRow}
-				additionalRowStyle={style ?? { justifyContent: 'flex-start' }}
-				data={content}
-				renderItem={({ item }) => <CardComponent {...item} />}
-				spacing={10}
-			/>
-		</VStack>
-	);
-};
+import Song from "../models/Song";
 
 const RowCustom = (props: Parameters<typeof Box>[0]) => {
 	const colorScheme: SettingsState['colorScheme'] = useSelector((state: RootState) => state.settings.settings.colorScheme);
@@ -74,7 +50,7 @@ const RowCustom = (props: Parameters<typeof Box>[0]) => {
 	</Pressable>
 }
 
-const SongRow = (props: any) => {
+const SongRow = (props: Song) => {
 	const navigation = useNavigation();
 
 	return (
@@ -83,17 +59,17 @@ const SongRow = (props: any) => {
 					<Image
 						pl={10}
 						style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-						source={{ uri: props.imageUrl ?? 'https://picsum.photos/200' }}
-						alt={[props.songTitle, props.artistName].join('-')}
+						source={{ uri: props.cover ?? 'https://picsum.photos/200' }}
+						alt={props.name}
 					/>
 					<HStack style={{display: 'flex', alignItems: 'center'}} space={6}>
-						<Text pl={10} bold fontSize='md'>{props.songTitle}</Text>
-						<Text fontSize={"sm"}>{props.artistName}</Text>
+						<Text pl={10} bold fontSize='md'>{props.name}</Text>
+						<Text fontSize={"sm"}>{props.artistId ?? 'artist'}</Text>
 					</HStack>
 					<TextButton
 						translate={{ translationKey: 'playBtn' }}
 						colorScheme='primary' variant={"outline"} size='sm'
-						onPress={() => navigation.navigate('Song', { undefined })}
+						onPress={() => navigation.navigate('Song', { songId: props.id })}
 					/>
 				</HStack>
 		</RowCustom>
@@ -139,9 +115,13 @@ const SongsSearchComponent = (props: any) => {
 					songData.slice(0, props.maxRows).map((comp, index) => (
 						<SongRow
 							key={index}
-							imageUrl={comp.cover}
-							artistName={comp.artistId}
-							songTitle={comp.name}
+							name={comp.name}
+							albumId={comp.albumId}
+							artistId={comp.artistId}
+							cover={comp.cover}
+							details={comp.details}
+							genreId={comp.genreId}
+							id={comp.id}
 						/>
 					))
 				) : (

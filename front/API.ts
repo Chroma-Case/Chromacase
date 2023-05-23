@@ -13,6 +13,7 @@ import store from "./state/Store";
 import { Platform } from "react-native";
 import { en } from "./i18n/Translations";
 import { useQuery, QueryClient } from "react-query";
+import SearchHistory from "./models/SearchHistory";
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -394,18 +395,15 @@ export default class API {
 
 	/**
 	 * Retrieve the authenticated user's search history
-	 * @param lessonId the id to find the lesson
+	 * @param skip number of entries skipped before returning
+	 * @param take how much do we take to return
+	 * @returns Returns an array of history entries (temporary type any)
 	 */
-	public static async getSearchHistory(skip: number, take: number): Promise<any[]> {
-		const queryClient = new QueryClient();
-		await queryClient.prefetchQuery(
-			["API", "allsongs"],
-			() => API.fetch({ route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}` })
-		);
-		const songs = queryClient.getQueryData<Song[]>(["API", "allsongs"]);
-
-		if (songs) return songs;
-		else return [];
+	public static async getSearchHistory(skip: number, take: number): Promise<SearchHistory[]> {
+		return await API.fetch({
+			route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
+			method: "GET",
+		})
 	}
 
 	/**

@@ -9,7 +9,7 @@ import { translate } from "../i18n/i18n";
 import { SearchContext } from "../views/SearchView";
 import { debounce } from 'lodash';
 
-type Filter = "artist" | "song" | "genre" | "all";
+export type Filter = "artist" | "song" | "genre" | "all";
 
 type SearchBarProps = {
 	onChangeText?: any;
@@ -89,4 +89,4 @@ const SearchBar = (props: SearchBarProps) => {
 	);
 }
 
-export default SearchBar
+export default SearchBar;

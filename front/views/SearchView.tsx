@@ -7,7 +7,7 @@ import API from "../API";
 import { useQuery } from 'react-query';
 import { SearchResultComponent } from "../components/SearchResult";
 import { SafeAreaView} from "react-native";
-
+import { Filter } from "../components/SearchBar";
 
 interface SearchContextType {
 	filter: "artist" | "song" | "genre" | "all";
@@ -37,7 +37,7 @@ export const SearchContext = React.createContext<SearchContextType>({
 
 const SearchView = ({navigation}: any) => {
 	let isRequestSucceeded = false;
-	const [filter, setFilter] = useState<any>('all');
+	const [filter, setFilter] = useState<Filter>('all');
 	const [stringQuery, setStringQuery] = useState<string>('');
 
 	const handleSuccess = () => {
@@ -65,7 +65,7 @@ const SearchView = ({navigation}: any) => {
 		{ enabled: !!stringQuery, onSuccess: handleSuccess }
 	);
 
-	const updateFilter = (newData: any) => {
+	const updateFilter = (newData: Filter) => {
 		// called when the filter is changed
 		setFilter(newData);
 	}
