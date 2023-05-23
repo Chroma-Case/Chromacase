@@ -132,7 +132,7 @@ Get the history of a single song
     Integer    $history[1].userID    ${userID}
     Integer    $history[1].songID    ${song.body.id}
     Integer    $history[1].score    55
-    Integer    $best    0
+    Integer    $best    65
 
     [Teardown]    Run Keywords    DELETE    /users/${userID}
     ...    AND    DELETE    /song/${song.body.id}

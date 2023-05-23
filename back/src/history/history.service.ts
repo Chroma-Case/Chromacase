@@ -65,7 +65,7 @@ export class HistoryService {
 		});
 
 		return {
-			best: 0,
+			best: Math.max(...history.map((x) => x.score)),
 			history,
 		};
 	}
