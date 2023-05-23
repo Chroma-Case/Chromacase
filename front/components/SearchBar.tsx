@@ -24,8 +24,19 @@ type FilterButton = {
 const SearchBar = (props: SearchBarProps) => {
 	const {filter, updateFilter} = React.useContext(SearchContext);
 	const {stringQuery, updateStringQuery} = React.useContext(SearchContext);
+	const [barText, updateBarText] = React.useState('');
 
-	const debouncedUpdateStringQuery = debounce(updateStringQuery, 400);
+	const debouncedUpdateStringQuery = debounce(updateStringQuery, 500);
+
+	const handleClearQuery = () => {
+		updateStringQuery('');
+		updateBarText('');
+	};
+
+	const handleChangeText = (text: string) => {
+		debouncedUpdateStringQuery(text);
+		updateBarText(text);
+	}
 
 	const filters: FilterButton[] = [
 		{
@@ -53,8 +64,9 @@ const SearchBar = (props: SearchBarProps) => {
 	return (
 		<Flex m={3} flexDirection={["column", "row"]}>
 			<Input
-				onChangeText={(text) => debouncedUpdateStringQuery(text)}
+				onChangeText={(text) => handleChangeText(text)}
 				variant={"rounded"}
+				value={barText}
 				rounded={"full"}
 				placeholder={translate('search')}
 				width={['100%', '50%']} //responsive array syntax with native-base
@@ -70,7 +82,16 @@ const SearchBar = (props: SearchBarProps) => {
 					as={<MaterialIcons name="search" />}
 				/>
 				}
+				InputRightElement={<Icon
+					m={[1, 2]}
+					mr={[2, 3]}
+					size={['4', '6']}
+					color="gray.400"
+					onPress={handleClearQuery}
+					as={<MaterialIcons name="close" />}
+				/>}
 			/>
+
 			<Flex flexDirection={'row'} >
 				{filters.map((btn) => (
 					<Button

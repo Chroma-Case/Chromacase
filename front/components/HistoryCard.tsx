@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, VStack, Text } from 'native-base';
+import { VStack, Text } from 'native-base';
+import Card from './Card';
 
 type SearchHistoryCardProps = {
 	query: string;
@@ -7,26 +8,27 @@ type SearchHistoryCardProps = {
 	timestamp?: string;
 };
 
-const SearchHistoryCard = (props: SearchHistoryCardProps) => {
-	const { query, type, timestamp } = props;
+const SearchHistoryCard = (props: SearchHistoryCardProps & { onPress: (query: string) => void }) => {
+	const { query, type, timestamp, onPress } = props;
+
+	const handlePress = () => {
+		if (onPress) {
+			onPress(query);
+		}
+	};
+
 	return (
-		<Box
-			bg="gray.100"
-			p={4}
-			rounded="md"
-			shadow={2}
-			height={40}
-		>
-			<VStack space={2}>
+		<Card shadow={2} onPress={handlePress} >
+			<VStack m={1.5} space={3}>
 				<Text fontSize="lg" fontWeight="bold">
-					{query ?? "quey"}
+					{query ?? "query"}
 				</Text>
 				<Text fontSize="lg" fontWeight="semibold">
 					{type ?? "type"}
 				</Text>
 				<Text color="gray.500">{timestamp ?? "timestamp"}</Text>
 			</VStack>
-		</Box>
+		</Card>
 	);
 };
 

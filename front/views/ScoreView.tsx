@@ -7,6 +7,8 @@ import TextButton from "../components/TextButton";
 import API from '../API';
 import { useQuery } from "react-query";
 import LoadingComponent from "../components/Loading";
+import CardGridCustom from "../components/CardGridCustom";
+import SongCard from "../components/SongCard";
 
 type ScoreViewProps = { songId: number }
 
@@ -58,17 +60,18 @@ const ScoreView = ({ songId }: RouteProps<ScoreViewProps>) => {
 					{/* Precision */}
 				</Card>
 			</Row>
-			<SongCardGrid
+			<CardGridCustom
 				style={{ justifyContent: "space-evenly" }}
+				content={recommendations.data.map((data) => ({
+					albumCover: data?.cover,
+					songTitle: data?.name,
+					artistName: "Artist",
+					songId: data?.id,
+				}))}
+				cardComponent={SongCard}
 				heading={<Text fontSize='sm'>
 					<Translate translationKey="songsToGetBetter"/>
 				</Text>}
-				songs={recommendations.data.map((i) => ({
-					albumCover: i?.cover,
-					songTitle: i?.name ,
-					artistName: "Artist",
-					songId: i?.id
-				}))}
 			/>
 			<Row space={3} style={{ width: '100%', justifyContent: 'center' }}>
 				<TextButton colorScheme='gray'

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	HStack,
 	VStack,
@@ -77,6 +77,7 @@ const SongRow = (props: Song) => {
 }
 
 const HomeSearchComponent = () => {
+	const {stringQuery, updateStringQuery} = React.useContext(SearchContext);
 	const {isLoading: isLoadingHistory, data: historyData = []} = useQuery(
 			'history',
 			() => API.getSearchHistory(0, 12),
@@ -93,7 +94,7 @@ const HomeSearchComponent = () => {
 		<VStack mt="5" style={{overflow: 'hidden'}}>
 			<Card shadow={3} mb={5}>
 				<Heading margin={5}>{translate('lastSearched')}</Heading>
-				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData} cardComponent={SearchHistoryCard}/> }
+				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData} onPress={(query) => {updateStringQuery(query)}} cardComponent={SearchHistoryCard}/> }
 			</Card>
 			<Card shadow={3} mt={5} mb={5}>
 				<Heading margin={5}>{translate('songsToGetBetter')}</Heading>

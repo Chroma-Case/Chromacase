@@ -9,10 +9,11 @@ type CardGridCustomProps<T> = {
 	maxItemsPerRow?: number;
 	style?: Parameters<typeof FlatGrid>[0]['additionalRowStyle'];
 	cardComponent: React.ComponentType<T>;
+	onPress?: () => void;
 };
 
 const CardGridCustom = <T extends Record<string, any>>(props: CardGridCustomProps<T>) => {
-	const { content, heading, maxItemsPerRow, style, cardComponent: CardComponent } = props;
+	const { content, heading, maxItemsPerRow, style, cardComponent: CardComponent, onPress } = props;
 
 	return (
 		<VStack space={5}>
@@ -21,7 +22,7 @@ const CardGridCustom = <T extends Record<string, any>>(props: CardGridCustomProp
 				maxItemsPerRow={maxItemsPerRow}
 				additionalRowStyle={style ?? { justifyContent: 'flex-start' }}
 				data={content}
-				renderItem={({ item }) => <CardComponent {...item} />}
+				renderItem={({ item }) => <CardComponent {...item} onPress={onPress && onPress} />}
 				spacing={10}
 			/>
 		</VStack>
