@@ -19,7 +19,7 @@ from chroma_case.Message import (
 	getMessage,
 )
 from chroma_case.Partition import Partition
-from .song_check import getPartition
+from chroma_case.song_check import getPartition
 from mido import MidiFile
 
 
