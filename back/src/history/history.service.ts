@@ -52,6 +52,24 @@ export class HistoryService {
 		});
 	}
 
+	async getForSong({
+		playerId,
+		songId,
+	}: {
+		playerId: number;
+		songId: number;
+	}): Promise<{ best: number; history: SongHistory[] }> {
+		const history = await this.prisma.songHistory.findMany({
+			where: { user: { id: playerId }, song: { id: songId } },
+			orderBy: { playDate: 'asc' },
+		});
+
+		return {
+			best: 0,
+			history,
+		};
+	}
+
 	async createSearchHistoryRecord({
 		userID,
 		query,
