@@ -41,6 +41,7 @@ PRACTICE = 1
 class ScoroInfo(TypedDict):
 	max_score: int
 	score: int
+	wrong: int
 	missed: int
 	perfect: int
 	great: int
@@ -65,6 +66,7 @@ class Scorometer:
 		self.info: ScoroInfo = {
 			"max_score": len(self.partition.notes) * 100,
 			"score": 0,
+			"wrong": 0,
 			"missed": 0,
 			"perfect": 0,
 			"great": 0,
@@ -105,10 +107,12 @@ class Scorometer:
 		)
 		if to_play:
 			perf = self.getTimingScore(key, to_play)
+			self.info[perf] += 1
 			logging.debug({"note_on": f"{perf} on {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
 			self.info["score"] -= 50
+			self.info["missed"] += 1
 			self.wrong_ids += [message.id]
 			logging.debug({"note_on": f"wrong key {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
@@ -143,7 +147,6 @@ class Scorometer:
 				if perf == "short" or perf == "long"
 				else 50
 			)
-			to_play.done = True
 			logging.debug({"note_off": f"{perf} on {message.note}"})
 			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
@@ -184,6 +187,7 @@ class Scorometer:
 		if message.id in self.wrong_ids:
 			logging.debug({"note_off": f"wrong key {message.note}"})
 			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
+			self.info["wrong"] += 1;
 			return
 		key = Key(
 			key=message.note, start=down_since, duration=(message.time - down_since)
@@ -295,6 +299,7 @@ class Scorometer:
 					"songID": self.song_id,
 					"userID": self.user_id,
 					"score": self.info["score"],
+					"info": self.info,
 					"difficulties": self.difficulties,
 				},
 			)

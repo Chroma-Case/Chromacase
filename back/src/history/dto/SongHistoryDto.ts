@@ -16,4 +16,7 @@ export class SongHistoryDto {
 
 	@ApiProperty()
 	difficulties: Record<string, number>
+
+	@ApiProperty()
+	info: Record<string, number>
 }
