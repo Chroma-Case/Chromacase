@@ -6,6 +6,7 @@ import {
 	DefaultValuePipe,
 	Delete,
 	Get,
+	HttpCode,
 	InternalServerErrorException,
 	NotFoundException,
 	Param,
@@ -14,19 +15,25 @@ import {
 	Query,
 	Req,
 	StreamableFile,
+	UseGuards,
 } from '@nestjs/common';
 import { Plage } from 'src/models/plage';
 import { CreateSongDto } from './dto/create-song.dto';
 import { SongService } from './song.service';
 import { Request } from 'express';
 import { Prisma, Song } from '@prisma/client';
-import { createReadStream, lstat, promises } from 'fs';
-import { ApiTags } from '@nestjs/swagger';
+import { createReadStream } from 'fs';
+import { ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { HistoryService } from 'src/history/history.service';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('song')
 @ApiTags('song')
 export class SongController {
-	constructor(private readonly songService: SongService) {}
+	constructor(
+		private readonly songService: SongService,
+		private readonly historyService: HistoryService,
+	) { }
 
 	@Get(':id/midi')
 	async getMidi(@Param('id', ParseIntPipe) id: number) {
@@ -106,5 +113,16 @@ export class SongController {
 
 		if (res === null) throw new NotFoundException('Song not found');
 		return res;
+	}
+
+	@Get(':id/history')
+	@HttpCode(200)
+	@UseGuards(JwtAuthGuard)
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	async getHistory(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
+		return this.historyService.getForSong({
+			playerId: req.user.id,
+			songId: id,
+		});
 	}
 }

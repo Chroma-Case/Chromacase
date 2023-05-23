@@ -93,3 +93,47 @@ Create and get a search history record
     String    $[1].query    "toto"
 
     [Teardown]    DELETE    /users/${userID}
+
+Get the history of a single song
+    [Documentation]    Create an history item
+    &{song}=    POST
+    ...    /song
+    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl"}
+    Output
+    &{song2}=    POST
+    ...    /song
+    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl"}
+    Output
+    ${userID}=    RegisterLogin    wowuser
+
+    &{history}=    POST
+    ...    /history
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {} }
+    Output
+    Integer    response status    201
+    &{history2}=    POST
+    ...    /history
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 65, "difficulties": {} }
+    Output
+    Integer    response status    201
+    &{history3}=    POST
+    ...    /history
+    ...    { "userID": ${userID}, "songID": ${song2.body.id}, "score": 75, "difficulties": {} }
+    Output
+    Integer    response status    201
+
+    &{res}=    GET    /song/${song.body.id}/history
+    Output
+    Integer    response status    200
+    Array    response body history
+    Integer    $history[0].userID    ${userID}
+    Integer    $history[0].songID    ${song.body.id}
+    Integer    $history[0].score    65
+    Integer    $history[1].userID    ${userID}
+    Integer    $history[1].songID    ${song.body.id}
+    Integer    $history[1].score    55
+    Integer    $best    0
+
+    [Teardown]    Run Keywords    DELETE    /users/${userID}
+    ...    AND    DELETE    /song/${song.body.id}
+    ...    AND    DELETE    /song/${song2.body.id}
