@@ -63,10 +63,10 @@ Create and get a duplicated history record
     Array    response body
     Integer    $[0].userID    ${userID}
     Integer    $[0].songID    ${song.body.id}
-    Integer    $[0].score    55
+    Integer    $[0].score    65
     Integer    $[1].userID    ${userID}
     Integer    $[1].songID    ${song.body.id}
-    Integer    $[1].score    65
+    Integer    $[1].score    55
 
     [Teardown]    Run Keywords    DELETE    /users/${userID}
     ...    AND    DELETE    /song/${song.body.id}
@@ -79,11 +79,17 @@ Create and get a search history record
     Output
     Integer    response status    404
 
+    GET    /search/song/tata
+    Output
+    Integer    response status    404
+
     &{res}=    GET    /history/search
     Output
     Integer    response status    200
     Array    response body
     String    $[0].type    "song"
-    String    $[0].query    "toto"
+    String    $[0].query    "tata"
+    String    $[1].type    "song"
+    String    $[1].query    "toto"
 
     [Teardown]    DELETE    /users/${userID}
