@@ -46,7 +46,7 @@ export class HistoryService {
 	): Promise<SongHistory[]> {
 		return this.prisma.songHistory.findMany({
 			where: { user: { id: playerId } },
-			orderBy: { playDate: 'asc' },
+			orderBy: { playDate: 'desc' },
 			skip,
 			take,
 		});
@@ -61,7 +61,7 @@ export class HistoryService {
 	}): Promise<{ best: number; history: SongHistory[] }> {
 		const history = await this.prisma.songHistory.findMany({
 			where: { user: { id: playerId }, song: { id: songId } },
-			orderBy: { playDate: 'asc' },
+			orderBy: { playDate: 'desc' },
 		});
 
 		return {
@@ -94,7 +94,7 @@ export class HistoryService {
 	): Promise<SearchHistory[]> {
 		return this.prisma.searchHistory.findMany({
 			where: { user: { id: playerId } },
-			orderBy: { searchDate: 'asc' },
+			orderBy: { searchDate: 'desc' },
 			skip,
 			take,
 		});

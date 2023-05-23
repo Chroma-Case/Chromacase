@@ -102,7 +102,7 @@ Get the history of a single song
     Output
     &{song2}=    POST
     ...    /song
-    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl"}
+    ...    {"name": "Mama mia2", "difficulties": {}, "midiPath": "/musics/Beethoven-125-42.midi", "musicXmlPath": "/musics/Beethoven-125-24.mxl"}
     Output
     ${userID}=    RegisterLogin    wowuser
 
@@ -126,13 +126,13 @@ Get the history of a single song
     Output
     Integer    response status    200
     Array    response body history
-    Integer    $history[0].userID    ${userID}
-    Integer    $history[0].songID    ${song.body.id}
-    Integer    $history[0].score    65
-    Integer    $history[1].userID    ${userID}
-    Integer    $history[1].songID    ${song.body.id}
-    Integer    $history[1].score    55
-    Integer    $best    65
+    Integer    $.history[0].userID    ${userID}
+    Integer    $.history[0].songID    ${song.body.id}
+    Integer    $.history[0].score    65
+    Integer    $.history[1].userID    ${userID}
+    Integer    $.history[1].songID    ${song.body.id}
+    Integer    $.history[1].score    55
+    Integer    $.best    65
 
     [Teardown]    Run Keywords    DELETE    /users/${userID}
     ...    AND    DELETE    /song/${song.body.id}
