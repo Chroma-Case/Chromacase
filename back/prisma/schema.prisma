@@ -10,38 +10,39 @@ datasource db {
 }
 
 model User {
-    id              Int             @id @default(autoincrement())
-    username        String          @unique
-    password        String
-    email           String
-    isGuest         Boolean         @default(false)
-    partyPlayed     Int             @default(0)
-    LessonHistory   LessonHistory[]
-    SongHistory     SongHistory[]
-    searchHistory   SearchHistory[]
-    settings        UserSettings?
+    id            Int             @id @default(autoincrement())
+    username      String          @unique
+    password      String
+    email         String
+    isGuest       Boolean         @default(false)
+    partyPlayed   Int             @default(0)
+    LessonHistory LessonHistory[]
+    SongHistory   SongHistory[]
+    searchHistory SearchHistory[]
+    settings      UserSettings?
 }
 
 model UserSettings {
-    id                    Int @id @default(autoincrement())
-    user                  User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId                Int @unique
-    pushNotification      Boolean @default(true)
-    emailNotification     Boolean @default(true)
-    trainingNotification  Boolean @default(true)
-    newSongNotification   Boolean @default(true)
-    recommendations       Boolean @default(true)
-    weeklyReport          Boolean @default(true)
-    leaderBoard           Boolean @default(true)
-    showActivity          Boolean @default(true)
+    id                   Int     @id @default(autoincrement())
+    user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId               Int     @unique
+    pushNotification     Boolean @default(true)
+    emailNotification    Boolean @default(true)
+    trainingNotification Boolean @default(true)
+    newSongNotification  Boolean @default(true)
+    recommendations      Boolean @default(true)
+    weeklyReport         Boolean @default(true)
+    leaderBoard          Boolean @default(true)
+    showActivity         Boolean @default(true)
 }
 
 model SearchHistory {
-    id     Int    @id @default(autoincrement())
-    query  String
-    type   String
-    userId Int?
-    user   User?  @relation(fields: [userId], references: [id])
+    id         Int      @id @default(autoincrement())
+    query      String
+    type       String
+    userId     Int?
+    user       User?    @relation(fields: [userId], references: [id])
+    searchDate DateTime @default(now())
 }
 
 model Song {
@@ -60,13 +61,14 @@ model Song {
 }
 
 model SongHistory {
-    id           Int  @id @default(autoincrement())
-    song         Song @relation(fields: [songID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    id           Int      @id @default(autoincrement())
+    song         Song     @relation(fields: [songID], references: [id], onDelete: Cascade, onUpdate: Cascade)
     songID       Int
-    user         User @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    user         User     @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
     userID       Int
     score        Int
     difficulties Json
+    playDate     DateTime @default(now())
 }
 
 model Genre {

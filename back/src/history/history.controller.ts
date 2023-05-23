@@ -1,4 +1,15 @@
-import { Body, Controller, DefaultValuePipe, Get, HttpCode, ParseIntPipe, Post, Query, Request, UseGuards } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	DefaultValuePipe,
+	Get,
+	HttpCode,
+	ParseIntPipe,
+	Post,
+	Query,
+	Request,
+	UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { SearchHistory, SongHistory } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -6,9 +17,9 @@ import { SongHistoryDto } from './dto/SongHistoryDto';
 import { HistoryService } from './history.service';
 
 @Controller('history')
-@ApiTags("history")
+@ApiTags('history')
 export class HistoryController {
-	constructor(private readonly historyService: HistoryService) {}
+	constructor(private readonly historyService: HistoryService) { }
 
 	@Get()
 	@HttpCode(200)
@@ -22,7 +33,7 @@ export class HistoryController {
 		return this.historyService.getHistory(req.user.id, { skip, take });
 	}
 
-	@Get("search")
+	@Get('search')
 	@HttpCode(200)
 	@UseGuards(JwtAuthGuard)
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
