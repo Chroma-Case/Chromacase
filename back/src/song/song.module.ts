@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { SongService } from './song.service';
 import { SongController } from './song.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
-import { HistoryService } from 'src/history/history.service';
+import { HistoryModule } from 'src/history/history.module';
 
 @Module({
-	imports: [PrismaModule, HistoryService],
+	imports: [PrismaModule, HistoryModule],
 	providers: [SongService],
 	controllers: [SongController],
 })
