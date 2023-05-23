@@ -208,22 +208,14 @@ const FilterSwitch = () => {
 
 export const SearchResultComponent = (props: any) => {
 	const [searchString, setSearchString] = useState<string>("");
-	const {stringQuery, updateStringQuery} = React.useContext(SearchContext);
-	const [shouldOutput, setShouldOutput] = useState<boolean>(true);
-
-	useEffect(() => {
-		if (stringQuery.trim().length > 0) {
-			setShouldOutput(true);
-		} else if (stringQuery === "") {
-			setShouldOutput(false);
-		}
-	}, [stringQuery]);
+	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
+	const shouldOutput = !!stringQuery.trim();
 
 	return shouldOutput ? (
 		<Box p={5}>
-			<FilterSwitch/>
+			<FilterSwitch />
 		</Box>
 	) : (
-		<HomeSearchComponent/>
+		<HomeSearchComponent />
 	);
 };
