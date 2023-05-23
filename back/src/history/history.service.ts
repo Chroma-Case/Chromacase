@@ -12,6 +12,7 @@ export class HistoryService {
 		songID,
 		userID,
 		score,
+		info,
 		difficulties,
 	}: SongHistoryDto): Promise<SongHistory> {
 		await this.prisma.user.update({
@@ -26,6 +27,7 @@ export class HistoryService {
 			data: {
 				score,
 				difficulties,
+				info,
 				song: {
 					connect: {
 						id: songID,

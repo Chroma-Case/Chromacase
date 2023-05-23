@@ -67,6 +67,7 @@ model SongHistory {
     user         User     @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: Cascade)
     userID       Int
     score        Int
+    info         Json
     difficulties Json
     playDate     DateTime @default(now())
 }
