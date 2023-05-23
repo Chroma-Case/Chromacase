@@ -39,7 +39,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 						<Text bold isTruncated numberOfLines={2} fontSize='lg'>{songQuery.data!.name}</Text>
 						<Text>
 							<Translate translationKey='level'
-								format={(level) => `${level} - ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
+								format={(level) => `${level}: ${ chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) / chaptersQuery.data!.length }`}
 							/>
 						</Text>
 						<TextButton translate={{ translationKey: 'playBtn' }} width='auto'
@@ -59,13 +59,13 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					<Text bold fontSize='lg'>
 						<Translate translationKey='bestScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.best ?? 0}</Text>
+					<Text>{scoresQuery.data?.best ?? 0}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize='lg'>
 						<Translate translationKey='lastScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.history[0]?.score ?? 0}</Text>
+					<Text>{scoresQuery.data?.history.at(0)?.score ?? 0}</Text>
 				</Box>
 			</Box>
 			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}
