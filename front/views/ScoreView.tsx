@@ -37,7 +37,7 @@ const ScoreView = ({ songId, overallScore, score }: RouteProps<ScoreViewProps>) 
 		})) ?? []
 	)
 
-	if (!recommendations.data || artistRecommendations.find(({ data }) => !data) || !songHistoryQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
+	if (!recommendations.data || artistRecommendations.find(({ data }) => !data) || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
 		return <LoadingView/>;
 	}
 	// I think we don't need that anymore but /shrug
