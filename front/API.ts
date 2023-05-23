@@ -331,10 +331,10 @@ export default class API {
 	 * Retrieve a song's play history
 	 * @param songId the id to find the song
 	 */
-	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
+	public static async getSongHistory(songId: number): Promise<{best: number, history: SongHistory[]}> {
 		return API.fetch({
-			route: `/history`,
-		}).then((data: SongHistory[]) => data.filter((entry) => entry.songID == songId))
+			route: `/song${songId}/history`,
+		});
 	}
 
 	/**

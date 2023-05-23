@@ -59,13 +59,13 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					<Text bold fontSize='lg'>
 						<Translate translationKey='bestScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.sort()[0]?.score ?? 0}</Text>
+					<Text>{scoresQuery.data!.best ?? 0}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize='lg'>
 						<Translate translationKey='lastScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.slice(-1)[0]?.score ?? 0}</Text>
+					<Text>{scoresQuery.data!.history[0]?.score ?? 0}</Text>
 				</Box>
 			</Box>
 			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}
@@ -79,7 +79,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 			</Box>
 			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>
 				{ chaptersQuery.isLoading && <LoadingComponent/>}
-				{ !chaptersQuery.isLoading && 
+				{ !chaptersQuery.isLoading &&
 					<VStack flex={1} space={4} padding="4" divider={<Divider />}>
 					{ chaptersQuery.data!.map((chapter) =>
 						<Box key={chapter.id} flexGrow={1} flexDirection='row' justifyContent="space-between">

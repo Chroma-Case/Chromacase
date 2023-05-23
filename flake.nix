@@ -14,6 +14,9 @@
           nodePackages."@nestjs/cli"
           nodePackages.npm
           nodejs-slim
+		  yarn
+		  python3
+		  pkg-config
         ];
         shellHook = with pkgs; ''
           export PRISMA_MIGRATION_ENGINE_BINARY="${prisma-engines}/bin/migration-engine"
