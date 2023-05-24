@@ -9,6 +9,7 @@ import { SearchResultComponent } from "../components/SearchResult";
 import { SafeAreaView } from "react-native";
 import { Filter } from "../components/SearchBar";
 import { ScrollView } from "native-base";
+import { RouteProps } from "../Navigation";
 
 interface SearchContextType {
 	filter: "artist" | "song" | "genre" | "all";
@@ -36,10 +37,14 @@ export const SearchContext = React.createContext<SearchContextType>({
 	isLoadingGenre: false,
 });
 
-const SearchView = ({ navigation }: any) => {
+type SearchViewProps = {
+	query?: string;
+};
+
+const SearchView = (props: RouteProps<SearchViewProps>) => {
 	let isRequestSucceeded = false;
 	const [filter, setFilter] = useState<Filter>("all");
-	const [stringQuery, setStringQuery] = useState<string>("");
+	const [stringQuery, setStringQuery] = useState<string>(props.query || "");
 
 	const { isLoading: isLoadingSong, data: songData = [] } = useQuery(
 		["song", stringQuery],

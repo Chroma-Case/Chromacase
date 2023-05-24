@@ -120,7 +120,7 @@ const HomeSearchComponent = () => {
 				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData.map((h) => {
 					return {
 						...h,
-						timestamp: h.timestamp?.toString() ?? 'timestamp default', // TODO change this when zoe'PR gonna give timestamps
+						timestamp: h.timestamp?.toString() ?? 'timestamp default', // TODO change this when zoe's PR gonna give timestamps
 						onPress: () => {updateStringQuery(h.query)}
 					}
 				})} cardComponent={SearchHistoryCard}/> }

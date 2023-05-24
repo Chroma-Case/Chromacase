@@ -1,8 +1,7 @@
 import React from "react";
 import Card, { CardBorderRadius } from './Card';
 import { VStack, Text, Image } from 'native-base';
-import { useNavigation } from "../Navigation";
-import API from "../API";
+
 type ArtistCardProps = {
 	image: string;
 	name: string;
