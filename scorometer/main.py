@@ -75,30 +75,6 @@ class Scorometer:
 		obj["info"] = self.info
 		send(obj)
 
-	def getPartition(self, midiFile: str):
-		notes = []
-		s = 3000
-		s = 0
-		notes_on = {}
-		prev_note_on = {}
-		for msg in MidiFile(midiFile):
-			d = msg.dict()
-			#print(msg)
-			s += d["time"] * 1000 * RATIO
-			if "velocity" not in d: continue
-			if d["type"] == "note_on" and d["velocity"] != 0:
-				prev_note_on[d["note"]] = 0
-				if d["note"] in notes_on:
-					prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
-				notes_on[d["note"]] = s  # 0
-
-			if d["type"] == "note_off" or d["velocity"] == 0:
-				duration = s - notes_on[d["note"]]
-				note_start = notes_on[d["note"]]
-				notes.append(Key(d["note"], note_start, duration - 10))
-				notes_on[d["note"]] = s  # 500
-		return Partition(midiFile, notes)
-
 	def getPracticePartition(self, mode: int) -> list[list[Key]]:
 		get_start = operator.attrgetter("start")
 		return (
