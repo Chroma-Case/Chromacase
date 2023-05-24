@@ -29,7 +29,6 @@ const protectedRoutes = () => ({
 	Play: { component: PlayView, options: { title: translate('play') } },
 	Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
 	Song: { component: SongLobbyView, options: { title: translate('play') } },
-	Play: { component: PlayView, options: { title: translate('play') } },
 	Artist: { component: ArtistDetailsView, options: { title: translate('artistFilter') } },
 	Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null } },
 	Search: { component: SearchView, options: { title: translate('search') } },

@@ -1,5 +1,6 @@
 import Model from "./Model";
 import SongDetails from "./SongDetails";
+import Artist from "./Artist";
 
 interface Song extends Model {
 	id: number;
@@ -9,6 +10,10 @@ interface Song extends Model {
 	genreId: number | null;
 	cover: string;
 	details: SongDetails;
+}
+
+export interface SongWithArtist extends Song {
+	artist: Artist;
 }
 
 export default Song;

@@ -13,9 +13,7 @@ import {
 	Column,
 	ScrollView} from "native-base";
 import { SafeAreaView, useColorScheme } from "react-native";
-import { SettingsState } from '../state/SettingsSlice';
-import { RootState } from '../state/Store';
-import { useSelector } from "react-redux";
+import { RootState, useSelector } from '../state/Store';
 import { SearchContext } from "../views/SearchView";
 import { useQuery } from "react-query";
 import { translate } from "../i18n/i18n";
@@ -28,15 +26,24 @@ import SongCard from "./SongCard";
 import CardGridCustom from "./CardGridCustom";
 import TextButton from "./TextButton";
 import SearchHistoryCard from "./HistoryCard";
-import Song from "../models/Song";
+import Song, { SongWithArtist } from "../models/Song";
+import { getSongWArtistSuggestions } from "./utils/api";
+
+const swaToSongCardProps = (song: SongWithArtist) => ({
+	songId: song.id,
+	name: song.name,
+	artistName: song.artist.name,
+	cover: song.cover ?? 'https://picsum.photos/200',
+});
 
 const RowCustom = (props: Parameters<typeof Box>[0]) => {
-	const colorScheme: SettingsState['colorScheme'] = useSelector((state: RootState) => state.settings.settings.colorScheme);
+	const settings = useSelector((state: RootState) => state.settings.local);
 	const systemColorMode = useColorScheme();
+	const colorScheme = settings.colorScheme;
 
 	return <Pressable>
 		{({ isHovered, isPressed }) => (
-		<Box {...props} style={{ ...(props.style ?? {}) }}
+		<Box {...props}
 			py={3}
 			my={1}
 			bg={(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
@@ -86,7 +93,7 @@ const HomeSearchComponent = () => {
 
 	const {isLoading: isLoadingSuggestions, data: suggestionsData = []} = useQuery(
 			'suggestions',
-			() => API.getSongSuggestions(),
+			() => getSongWArtistSuggestions(),
 			{ enabled: true },
 		);
 
@@ -94,11 +101,17 @@ const HomeSearchComponent = () => {
 		<VStack mt="5" style={{overflow: 'hidden'}}>
 			<Card shadow={3} mb={5}>
 				<Heading margin={5}>{translate('lastSearched')}</Heading>
-				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData} onPress={(query) => {updateStringQuery(query)}} cardComponent={SearchHistoryCard}/> }
+				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData.map((h) => {
+					return {
+						...h,
+						timestamp: h.timestamp.toString(),
+						onPress: () => {updateStringQuery(h.query)}
+					}
+				})} cardComponent={SearchHistoryCard}/> }
 			</Card>
 			<Card shadow={3} mt={5} mb={5}>
 				<Heading margin={5}>{translate('songsToGetBetter')}</Heading>
-				{ isLoadingSuggestions ? <LoadingComponent/> : <CardGridCustom content={suggestionsData} cardComponent={SongCard}/> }
+				{ isLoadingSuggestions ? <LoadingComponent/> : <CardGridCustom content={suggestionsData.map(swaToSongCardProps)} cardComponent={SongCard}/> }
 			</Card>
 		</VStack>
 	);

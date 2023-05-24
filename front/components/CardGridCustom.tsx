@@ -22,7 +22,7 @@ const CardGridCustom = <T extends Record<string, any>>(props: CardGridCustomProp
 				maxItemsPerRow={maxItemsPerRow}
 				additionalRowStyle={style ?? { justifyContent: 'flex-start' }}
 				data={content}
-				renderItem={({ item }) => <CardComponent {...item} onPress={onPress && onPress} />}
+				renderItem={({ item }) => <CardComponent {...item} onPress={onPress} />}
 				spacing={10}
 			/>
 		</VStack>
