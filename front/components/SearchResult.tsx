@@ -36,12 +36,12 @@ const swaToSongCardProps = (song: SongWithArtist) => ({
 	cover: song.cover ?? 'https://picsum.photos/200',
 });
 
-const RowCustom = (props: Parameters<typeof Box>[0]) => {
+const RowCustom = (props: Parameters<typeof Box>[0] & { onPress?: () => void }) => {
 	const settings = useSelector((state: RootState) => state.settings.local);
 	const systemColorMode = useColorScheme();
 	const colorScheme = settings.colorScheme;
 
-	return <Pressable>
+	return <Pressable onPress={props.onPress}>
 		{({ isHovered, isPressed }) => (
 		<Box {...props}
 			py={3}
@@ -57,8 +57,12 @@ const RowCustom = (props: Parameters<typeof Box>[0]) => {
 	</Pressable>
 }
 
-const SongRow = (props: Song) => {
-	const navigation = useNavigation();
+type SongRowProps = {
+	song: Song | SongWithArtist; // TODO: remove Song
+	onPress: () => void;
+};
+
+const SongRow = ({ song, onPress }: SongRowProps) => {
 
 	return (
 		<RowCustom width={"100%"}>
@@ -68,28 +72,32 @@ const SongRow = (props: Song) => {
 						flexGrow={0}
 						pl={10}
 						style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-						source={{ uri: props.cover ?? 'https://picsum.photos/200' }}
-						alt={props.name}
+						source={{ uri: song.cover ?? 'https://picsum.photos/200' }}
+						alt={song.name}
 					/>
 					<HStack style={{display: 'flex', flexShrink: 1, flexGrow: 1, alignItems: 'center', justifyContent: "flex-start"}} space={6}>
 						<Text style={{
 							flexShrink: 1,
-						}} isTruncated pl={10} maxW={"100%"} bold fontSize='md'>{props.name}</Text>
+						}} isTruncated pl={10} maxW={"100%"} bold fontSize='md'>{song.name}</Text>
 						<Text style={{
 							flexShrink: 0,
-						}} fontSize={"sm"}>{props.artistId ?? 'artist'}</Text>
+						}} fontSize={"sm"}>{song.artistId ?? 'artist'}</Text>
 					</HStack>
 					<TextButton
 						flexShrink={0}
 						flexGrow={0}
 						translate={{ translationKey: 'playBtn' }}
 						colorScheme='primary' variant={"outline"} size='sm'
-						onPress={() => navigation.navigate('Song', { songId: props.id })}
+						onPress={onPress}
 					/>
 				</HStack>
 		</RowCustom>
 	);
 }
+
+SongRow.defaultProps = {
+	onPress: () => {},
+};
 
 const HomeSearchComponent = () => {
 	const {stringQuery, updateStringQuery} = React.useContext(SearchContext);
@@ -127,6 +135,7 @@ const HomeSearchComponent = () => {
 
 const SongsSearchComponent = (props: any) => {
 	const {songData} = React.useContext(SearchContext);
+	const navigation = useNavigation();
 
 	return (
 			<ScrollView>
@@ -138,13 +147,11 @@ const SongsSearchComponent = (props: any) => {
 						songData.slice(0, props.maxRows).map((comp, index) => (
 							<SongRow
 								key={index}
-								name={comp.name}
-								albumId={comp.albumId}
-								artistId={comp.artistId}
-								cover={comp.cover}
-								details={comp.details}
-								genreId={comp.genreId}
-								id={comp.id}
+								song={comp}
+								onPress={() => {
+									API.createSearchHistoryEntry(comp.name, "song", Date.now());
+									navigation.navigate('Song', { songId: comp.id });
+								}}
 							/>
 						))
 					) : (
@@ -183,6 +190,7 @@ const ArtistSearchComponent = (props: any) => {
 
 const GenreSearchComponent = (props: any) => {
 	const {genreData} = React.useContext(SearchContext);
+	const navigation = useNavigation();
 
 	return (
 		<Box>
@@ -190,7 +198,16 @@ const GenreSearchComponent = (props: any) => {
 				{translate('genreFilter')}
 			</Text>
 			{ genreData?.length
-			? <CardGridCustom content={!props?.maxItems ? genreData : genreData.slice(0, props.maxItems)} cardComponent={GenreCard}/>
+			? <CardGridCustom content={genreData.slice(0, props?.maxItems ?? genreData.length).map((g) => (
+				{
+					icon: 'musical-note-sharp',
+					name: g.name,
+					onPress: () => {
+						API.createSearchHistoryEntry(g.name, "genre", Date.now());
+						navigation.navigate('Home');
+					}
+				}
+			))} cardComponent={GenreCard}/>
 			: <Text>{translate('errNoResults')}</Text> }
 		</Box>
 	);
