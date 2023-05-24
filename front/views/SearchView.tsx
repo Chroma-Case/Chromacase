@@ -4,10 +4,11 @@ import Artist from "../models/Artist";
 import Song from "../models/Song";
 import Genre from "../models/Genre";
 import API from "../API";
-import { useQuery } from 'react-query';
+import { useQuery } from "react-query";
 import { SearchResultComponent } from "../components/SearchResult";
-import { SafeAreaView} from "react-native";
+import { SafeAreaView } from "react-native";
 import { Filter } from "../components/SearchBar";
+import { ScrollView } from "native-base";
 
 interface SearchContextType {
 	filter: "artist" | "song" | "genre" | "all";
@@ -33,27 +34,27 @@ export const SearchContext = React.createContext<SearchContextType>({
 	isLoadingSong: false,
 	isLoadingArtist: false,
 	isLoadingGenre: false,
-})
+});
 
-const SearchView = ({navigation}: any) => {
+const SearchView = ({ navigation }: any) => {
 	let isRequestSucceeded = false;
-	const [filter, setFilter] = useState<Filter>('all');
-	const [stringQuery, setStringQuery] = useState<string>('');
+	const [filter, setFilter] = useState<Filter>("all");
+	const [stringQuery, setStringQuery] = useState<string>("");
 
-	const { isLoading: isLoadingSong, data: songData = []} = useQuery(
-		['song', stringQuery],
+	const { isLoading: isLoadingSong, data: songData = [] } = useQuery(
+		["song", stringQuery],
 		() => API.searchSongs(stringQuery),
 		{ enabled: !!stringQuery }
 	);
 
-	const { isLoading: isLoadingArtist, data: artistData = []} = useQuery(
-		['artist', stringQuery],
+	const { isLoading: isLoadingArtist, data: artistData = [] } = useQuery(
+		["artist", stringQuery],
 		() => API.searchArtists(stringQuery),
 		{ enabled: !!stringQuery }
 	);
-	
-	const { isLoading: isLoadingGenre, data: genreData = []} = useQuery(
-		['genre', stringQuery],
+
+	const { isLoading: isLoadingGenre, data: genreData = [] } = useQuery(
+		["genre", stringQuery],
 		() => API.searchGenres(stringQuery),
 		{ enabled: !!stringQuery }
 	);
@@ -61,17 +62,19 @@ const SearchView = ({navigation}: any) => {
 	const updateFilter = (newData: Filter) => {
 		// called when the filter is changed
 		setFilter(newData);
-	}
+	};
 
 	const updateStringQuery = (newData: string) => {
 		// called when the stringQuery is updated
 		setStringQuery(newData);
 		isRequestSucceeded = false;
-	}
+	};
 
 	return (
+		<ScrollView>
 			<SafeAreaView>
-				<SearchContext.Provider value={{
+				<SearchContext.Provider
+					value={{
 						filter,
 						stringQuery,
 						songData,
@@ -82,11 +85,13 @@ const SearchView = ({navigation}: any) => {
 						isLoadingGenre,
 						updateFilter,
 						updateStringQuery,
-						}}>
-					<SearchBar/>
-					<SearchResultComponent/>
+					}}
+				>
+					<SearchBar />
+					<SearchResultComponent />
 				</SearchContext.Provider>
 			</SafeAreaView>
+		</ScrollView>
 	);
 };
 
