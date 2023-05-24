@@ -13,6 +13,8 @@ import store from "./state/Store";
 import { Platform } from "react-native";
 import { en } from "./i18n/Translations";
 import { useQuery, QueryClient } from "react-query";
+import UserSettings from "./models/UserSettings";
+import { PartialDeep } from "type-fest";
 import SearchHistory from "./models/SearchHistory";
 
 type AuthenticationInput = { username: string; password: string };
@@ -178,29 +180,45 @@ export default class API {
 				createdAt: new Date("2023-04-09T00:00:00.000Z"),
 				avatar:
 					"https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn",
-			},
-			settings: {
-				preferences: {
-					deviceId: 1,
-					micVolume: 10,
-					theme: "system",
-					lang: "fr",
-					difficulty: "beg",
-					colorBlind: false,
-				},
-				notifications: {
-					pushNotif: false,
-					emailNotif: false,
-					trainNotif: false,
-					newSongNotif: false,
-				},
-				privacy: {
-					dataCollection: true,
-					customAd: true,
-					recommendation: true,
-				},
-			},
+			}
 		} as User;
+	}
+
+	public static async getUserSettings(): Promise<UserSettings> {
+		const settings = await API.fetch({
+			route: "/auth/me/settings",
+		});
+
+		return {
+			notifications: {
+				pushNotif: settings.pushNotification,
+				emailNotif: settings.emailNotification,
+				trainNotif: settings.trainingNotification,
+				newSongNotif: settings.newSongNotification
+			},
+			recommendations: settings.recommendations,
+			weeklyReport: settings.weeklyReport,
+			leaderBoard: settings.leaderBoard,
+			showActivity: settings.showActivity
+		};
+	}
+
+	public static async updateUserSettings(settings: PartialDeep<UserSettings>): Promise<void> {
+		const dto = {
+			pushNotification: settings.notifications?.pushNotif,
+			emailNotification: settings.notifications?.emailNotif,
+			trainingNotification: settings.notifications?.trainNotif,
+			newSongNotification: settings.notifications?.newSongNotif,
+			recommendations: settings.recommendations,
+			weeklyReport: settings.weeklyReport,
+			leaderBoard: settings.leaderBoard,
+			showActivity: settings.showActivity,
+		}
+		return API.fetch({
+			method: 'PATCH',
+			route: '/auth/me/settings',
+			body: dto
+		});
 	}
 
 	public static async getUserSkills() {
@@ -267,7 +285,7 @@ export default class API {
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMidi(songId: number): Promise<any> {
+	public static async getSongMidi(songId: number): Promise<ArrayBuffer> {
 		return API.fetch({
 			route: `/song/${songId}/midi`,
 			raw: true,
@@ -278,7 +296,7 @@ export default class API {
 	 * Retrive a song's musicXML partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMusicXML(songId: number): Promise<any> {
+	public static async getSongMusicXML(songId: number): Promise<ArrayBuffer> {
 		return API.fetch({
 			route: `/song/${songId}/musicXml`,
 			raw: true,
@@ -316,11 +334,9 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
-		return [67, 4578, 2, 9990].map((value) => ({
-			songId: songId,
-			userId: 1,
-			score: value,
-		}));
+		return API.fetch({
+			route: `/history`,
+		}).then((data: SongHistory[]) => data.filter((entry) => entry.songID == songId))
 	}
 
 	/**
@@ -397,7 +413,7 @@ export default class API {
 	 * @param take how much do we take to return
 	 * @returns Returns an array of history entries (temporary type any)
 	 */
-	public static async getSearchHistory(skip: number, take: number): Promise<SearchHistory[]> {
+	public static async getSearchHistory(skip?: number, take?: number): Promise<SearchHistory[]> {
 		return await API.fetch({
 			route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
 			method: "GET",
@@ -436,15 +452,10 @@ export default class API {
 	 * Retrieve the authenticated user's play history
 	 * * @returns an array of songs
 	 */
-	public static async getUserPlayHistory(): Promise<Song[]> {
-		const queryClient = new QueryClient();
-		let songs = await queryClient.fetchQuery(
-			["API", "allsongs"],
-			API.getAllSongs
-		);
-		const shuffled = [...songs].sort(() => 0.5 - Math.random());
-
-		return shuffled.slice(0, 3);
+	public static async getUserPlayHistory(): Promise<SongHistory[]> {
+		return this.fetch({
+			route: '/history'
+		});
 	}
 
 	/**

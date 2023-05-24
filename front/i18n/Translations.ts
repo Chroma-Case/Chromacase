@@ -12,6 +12,7 @@ export const en = {
 	searchBtn: 'Search',
 	play: 'Play',
 	playBtn: 'Play',
+	practiceBtn: 'Practice',
 	playAgain: 'Play Again',
 	songPageBtn: 'Go to song page',
 	level: 'Level',
@@ -103,6 +104,19 @@ export const en = {
 	errAlrdExst: 'Already exist',
 	errIncrrct: 'Incorrect Credentials',
 	errNoResults: 'No Results Found',
+	userProfileFetchError: 'An error occured while fetching your profile',
+	tryAgain: 'Try Again',
+
+	// Playback messages
+	missed: 'Missed note',
+	perfect: 'Perfect',
+	great: 'Great',
+	good: 'Good',
+	wrong: 'Wrong',
+	short: 'A little too short',
+	long: 'A little too long',
+	tooLong: 'Too Long',
+	tooShort: 'Too Short',
 
 
 	changePassword: 'Change password',
@@ -155,6 +169,9 @@ export const en = {
 
 	Attention: 'Attention',
 	YouAreCurrentlyConnectedWithAGuestAccountWarning: "You are currently connected with a guest account. Disconneting will result in your data being lost. If you want to save your progress, you need to create an account.",
+
+	recentSearches: 'Recent searches',
+	noRecentSearches: 'No recent searches',
 };
 
 export const fr: typeof en = {
@@ -165,6 +182,7 @@ export const fr: typeof en = {
 	changeLanguageBtn: 'Changer la langue',
 	searchBtn: 'Rechercher',
 	playBtn: 'Jouer',
+	practiceBtn: 'S\'entrainer',
 	playAgain: 'Rejouer',
 	songPageBtn: 'Aller sur la page de la chanson',
 	level: 'Niveau',
@@ -269,7 +287,19 @@ export const fr: typeof en = {
 	unknownError: 'Erreur inconnue',
 	errIncrrct: 'Identifiant incorrect',
 	errNoResults: 'Aucun resultat',
+	userProfileFetchError: 'Une erreur est survenue lors de la récupération du profil',
+	tryAgain: 'Réessayer',
 
+	// Playback messages
+	missed: 'Raté',
+	perfect: 'Parfait',
+	great: 'Super',
+	good: 'Bien',
+	wrong: 'Oups',
+	short: 'Un peu court',
+	long: 'Un peu long',
+	tooLong: 'Trop long',
+	tooShort: 'Trop court',
 	passwordUpdated: 'Mot de passe mis à jour',
 	emailUpdated: 'Email mis à jour',
 
@@ -310,6 +340,9 @@ export const fr: typeof en = {
 
 	Attention: 'Attention',
 	YouAreCurrentlyConnectedWithAGuestAccountWarning: 'Vous êtes actuellement connecté en tant qu\'invité. La déconnexion résultera en une perte de données. Vous pouvez créer un compte pour sauvegarder vos données.',
+
+	recentSearches: 'Recherches récentes',
+	noRecentSearches: 'Aucune recherche récente',
 };
 
 export const sp: typeof en = {
@@ -333,6 +366,7 @@ export const sp: typeof en = {
 	changeLanguageBtn: 'Cambiar el idioma',
 	searchBtn: 'Buscar',
 	playBtn: 'reproducir',
+	practiceBtn: 'Práctica',
 	playAgain: 'Repetición',
 	precisionScore: 'Précision',
 	songPageBtn: 'canción',
@@ -423,7 +457,20 @@ export const sp: typeof en = {
 	errIncrrct: "credenciales incorrectas",
 	errNoResults: 'No se han encontrado resultados',
 
+	userProfileFetchError: 'Ocurrió un error al obtener su perfil',
+	tryAgain: 'intentar otra vez',
+	
 
+	// Playback messages
+	missed: 'Te perdiste una nota',
+	perfect: 'Perfecto',
+	great: 'Excelente',
+	good: 'Bueno',
+	wrong: 'Equivocado',
+	short: 'Un poco demasiado corto',
+	long: 'Un poco demasiado largo',
+	tooLong: 'Demasiado largo',
+	tooShort: 'Demasiado corto',
 	changePassword: 'Cambio de contraseña',
 	oldPassword: 'Contraseña anterior',
 	newPassword: 'Nueva contraseña',
@@ -470,4 +517,7 @@ export const sp: typeof en = {
 
 	Attention: 'Atención',
 	YouAreCurrentlyConnectedWithAGuestAccountWarning: 'Actualmente estás conectado como invitado. La desconexión resultará en la pérdida de datos. Puedes crear una cuenta para guardar tus datos.',
+
+	recentSearches: 'Búsquedas recientes',
+	noRecentSearches: 'No hay búsquedas recientes',
 };

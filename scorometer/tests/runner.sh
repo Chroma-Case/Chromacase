@@ -13,7 +13,13 @@ function test {
   cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   TESTS_DONE=$((TESTS_DONE + 1))
   if ! diff $1/output /tmp/scorometer_res &>/dev/null; then
-    echo "$t failed, do runner.sh $t for more info"
+
+    echo "=========== CURRENT OUTPUT ==========="
+    cat /tmp/scorometer_res
+    echo "======================================"
+    echo "=========== EXPECTED OUTPUT =========="
+    cat $1/output
+    echo "======================================"
     TESTS_FAILED=$((TESTS_FAILED + 1))
   else
     TESTS_SUCCESS=$((TESTS_SUCCESS + 1))

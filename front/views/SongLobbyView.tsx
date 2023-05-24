@@ -1,13 +1,13 @@
-import { Button, Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon } from "native-base";
+import { Divider, Box, Center, Image, Text, VStack, PresenceTransition, Icon, Stack } from "native-base";
 import { useQuery } from 'react-query';
-import LoadingComponent from "../components/Loading";
+import LoadingComponent, { LoadingView } from "../components/Loading";
 import React, { useEffect, useState } from "react";
 import { Translate, translate } from "../i18n/i18n";
 import formatDuration from "format-duration";
 import { Ionicons } from '@expo/vector-icons';
 import API from "../API";
 import TextButton from "../components/TextButton";
-import { useNavigation } from "../Navigation";
+import { RouteProps, useNavigation } from "../Navigation";
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -26,9 +26,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	}, [chaptersOpen]);
 	useEffect(() => {}, [songQuery.isLoading]);
 	if (songQuery.isLoading || scoresQuery.isLoading)
-		return <Center style={{ flexGrow: 1 }}>
-			<LoadingComponent/>
-		</Center>
+		return <LoadingView/>;
 	return (
 		<Box style={{ padding: 30, flexDirection: 'column' }}>
 			<Box style={{ flexDirection: 'row', height: '30%'}}>
@@ -37,7 +35,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 				</Box>
 				<Box style={{ flex: 0.5 }}/>
 				<Box style={{ flex: 3, padding: 10, flexDirection: 'column', justifyContent: 'space-between' }}>
-					<Box flex={1}>
+					<Stack flex={1} space={3}>
 						<Text bold isTruncated numberOfLines={2} fontSize='lg'>{songQuery.data!.name}</Text>
 						<Text>
 							<Translate translationKey='level'
@@ -45,10 +43,15 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 							/>
 						</Text>
 						<TextButton translate={{ translationKey: 'playBtn' }} width='auto'
-							onPress={() => navigation.navigate('Play', { songId: songQuery.data!.id })}
+							onPress={() => navigation.navigate('Play', { songId: songQuery.data!.id, type: 'normal' })}
 							rightIcon={<Icon as={Ionicons} name="play-outline"/>}
 						/>
-					</Box>
+						<TextButton translate={{ translationKey: 'practiceBtn' }} width='auto'
+							onPress={() => navigation.navigate('Play', { songId: songQuery.data!.id, type: 'practice' })}
+							rightIcon={<Icon as={Ionicons} name="play-outline"/>}
+							colorScheme='secondary'
+						/>
+					</Stack>
 				</Box>
 			</Box>
 			<Box style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 30}}>
@@ -56,13 +59,13 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					<Text bold fontSize='lg'>
 						<Translate translationKey='bestScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.sort()[0]?.score}</Text>
+					<Text>{scoresQuery.data!.sort()[0]?.score ?? 0}</Text>
 				</Box>
 				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize='lg'>
 						<Translate translationKey='lastScore'/>
 					</Text>
-					<Text>{scoresQuery.data!.slice(-1)[0]!.score}</Text>
+					<Text>{scoresQuery.data!.slice(-1)[0]?.score ?? 0}</Text>
 				</Box>
 			</Box>
 			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}

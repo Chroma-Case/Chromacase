@@ -1,26 +1,20 @@
 import API from "../../API";
 import { useDispatch } from "react-redux";
 import { unsetAccessToken } from "../../state/UserSlice";
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
 	Column,
 	Text,
 	Button,
-	Icon,
 	Box,
-	IconButton,
 	Flex,
-	Row,
 	Center,
 	Heading,
 	Avatar,
 	Popover,
 } from "native-base";
-import { FontAwesome5 } from "@expo/vector-icons";
-import User from "../../models/User";
 import TextButton from "../../components/TextButton";
-import LoadingComponent from "../../components/Loading";
+import { LoadingView } from "../../components/Loading";
 import ElementList from "../../components/GtkUI/ElementList";
 import { translate } from "../../i18n/i18n";
 import { useQuery } from "react-query";
@@ -30,26 +24,13 @@ const getInitials = (name: string) => {
 };
 
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
-	const userQuery = useQuery(["appSettings", "user"], API.getUserInfo);
+	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const dispatch = useDispatch();
+
+	if (!userQuery.data || userQuery.isLoading) {
+		return <LoadingView/>
+	}
 	const user = userQuery.data;
-
-	if (userQuery.isError) {
-		return (
-			<Center style={{ flex: 1 }}>
-				<Text>{translate("errorLoadingUser")}</Text>
-			</Center>
-		);
-	}
-
-	if (!userQuery || userQuery.isLoading || !userQuery.data) {
-		return (
-			<Center style={{ flex: 1 }}>
-				<LoadingComponent />
-			</Center>
-		);
-	}
-
 	return (
 		<Flex
 			style={{
@@ -108,14 +89,14 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							title: "ID",
 							helperText: "This is your unique ID, be proud of it!",
 							data: {
-								text: user.id,
+								text: user.id.toString(),
 							},
 						},
 						{
 							type: "text",
 							title: translate("nbGamesPlayed"),
 							data: {
-								text: user.data.gamesPlayed,
+								text: user.data.gamesPlayed.toString(),
 							},
 						},
 						{
@@ -123,7 +104,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							title: "XP",
 							description: translate("XPDescription"),
 							data: {
-								text: user.data.xp,
+								text: user.data.xp.toString(),
 							},
 						},
 						{

@@ -1,40 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type SettingsState = {
-	colorScheme: "dark" | "light" | "system",
-	enablePushNotifications: boolean,
-	enableMailNotifications: boolean,
-	enableLessongsReminders: boolean,
-	enableReleaseAlerts: boolean,
-	preferedLevel: 'easy' | 'medium' | 'hard',
-	colorBlind: boolean,
-	micLevel: number,
-	preferedInputName?: string,
-	dataCollection: boolean,
-	customAds: boolean,
-	recommandations: boolean,
-}
-
 export const settingsSlice = createSlice({
 	name: 'settings',
 	initialState: {
-		settings: <SettingsState>{
-			enablePushNotifications: true,
-			enableMailNotifications: true,
-			enableLessongsReminders: true,
-			enableReleaseAlerts: true,
-			preferedLevel: 'easy',
+		local: <LocalSettings>{
+			deviceId: 0,
+			micVolume: 0,
+			colorScheme: 'system',
+			lang: 'en',
+			difficulty: 'beg',
 			colorBlind: false,
-			micLevel: 50,
-			colorScheme: "system",
-			dataCollection: true,
 			customAds: true,
-			recommandations: true,
+			dataCollection: true
 		},
 	},
 	reducers: {
-		updateSettings: (state, action: PayloadAction<Partial<SettingsState>>) => {
-			state.settings = { ...state.settings, ...action.payload }; 
+		updateSettings: (state, action: PayloadAction<Partial<LocalSettings>>) => {
+			state.local = { ...state.local, ...action.payload }; 
 		}
 	}
 });

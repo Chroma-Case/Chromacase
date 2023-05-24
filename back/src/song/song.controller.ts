@@ -20,7 +20,7 @@ import { CreateSongDto } from './dto/create-song.dto';
 import { SongService } from './song.service';
 import { Request } from 'express';
 import { Prisma, Song } from '@prisma/client';
-import { createReadStream } from 'fs';
+import { createReadStream, lstat, promises } from 'fs';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('song')
@@ -46,7 +46,7 @@ export class SongController {
 		const song = await this.songService.song({ id });
 		if (!song) throw new NotFoundException('Song not found');
 
-		const file = createReadStream(song.midiPath);
+		const file = createReadStream(song.musicXmlPath, { encoding: 'binary' });
 		return new StreamableFile(file);
 	}
 

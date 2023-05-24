@@ -1,33 +1,27 @@
 import React from "react";
-import { View } from "react-native";
 import { useDispatch } from "react-redux";
 import {
 	Center,
-	Button,
-	Text,
-	Switch,
-	Slider,
-	Select,
 	Heading,
 } from "native-base";
 import { useLanguage } from "../../state/LanguageSlice";
-import i18n, {
+import {
 	AvailableLanguages,
 	DefaultLanguage,
 	translate,
 	Translate,
 } from "../../i18n/i18n";
 import { RootState, useSelector } from "../../state/Store";
-import { SettingsState, updateSettings } from "../../state/SettingsSlice";
+import { updateSettings } from "../../state/SettingsSlice";
 import ElementList from "../../components/GtkUI/ElementList";
 
-const PreferencesView = ({ navigation }) => {
+const PreferencesView = () => {
 	const dispatch = useDispatch();
 	const language: AvailableLanguages = useSelector(
 		(state: RootState) => state.language.value
 	);
 	const settings = useSelector(
-		(state: RootState) => state.settings.settings as SettingsState
+		(state: RootState) => state.settings.local
 	);
 	return (
 		<Center style={{ flex: 1 }}>
@@ -79,15 +73,15 @@ const PreferencesView = ({ navigation }) => {
 						type: "dropdown",
 						title: translate("SettingsPreferencesDifficulty"),
 						data: {
-							value: settings.preferedLevel,
+							value: settings.difficulty,
 							defaultValue: "medium",
 							onSelect: (itemValue) => {
-								dispatch(updateSettings({ preferedLevel: itemValue as any }));
+								dispatch(updateSettings({ difficulty: itemValue as any }));
 							},
 							options: [
-								{ label: translate("easy"), value: "easy" },
-								{ label: translate("medium"), value: "medium" },
-								{ label: translate("hard"), value: "hard" },
+								{ label: translate("easy"), value: "beg" },
+								{ label: translate("medium"), value: "inter" },
+								{ label: translate("hard"), value: "pro" },
 							],
 						},
 					},
@@ -123,16 +117,16 @@ const PreferencesView = ({ navigation }) => {
 						type: "range",
 						title: translate("SettingsPreferencesMicVolume"),
 						data: {
-							value: settings.micLevel,
+							value: settings.micVolume,
 							min: 0,
 							max: 1000,
 							step: 10,
 							onChange: (value) => {
-								dispatch(updateSettings({ micLevel: value }));
+								dispatch(updateSettings({ micVolume: value }));
 							},
 						},
 					},
-					{
+					/*{
 						type: "dropdown",
 						title: translate("SettingsPreferencesDevice"),
 						data: {
@@ -147,7 +141,7 @@ const PreferencesView = ({ navigation }) => {
 								{ label: "Mic_2", value: "2" },
 							],
 						},
-					},
+					},*/
 				]}
 			/>
 		</Center>
