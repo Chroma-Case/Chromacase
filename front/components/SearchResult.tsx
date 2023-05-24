@@ -61,19 +61,27 @@ const SongRow = (props: Song) => {
 	const navigation = useNavigation();
 
 	return (
-		<RowCustom>
-				<HStack px={2} space={5}>
+		<RowCustom width={"100%"}>
+				<HStack px={2} space={5} justifyContent={"space-between"} >
 					<Image
+						flexShrink={0}
+						flexGrow={0}
 						pl={10}
 						style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
 						source={{ uri: props.cover ?? 'https://picsum.photos/200' }}
 						alt={props.name}
 					/>
-					<HStack style={{display: 'flex', alignItems: 'center'}} space={6}>
-						<Text pl={10} bold fontSize='md'>{props.name}</Text>
-						<Text fontSize={"sm"}>{props.artistId ?? 'artist'}</Text>
+					<HStack style={{display: 'flex', flexShrink: 1, flexGrow: 1, alignItems: 'center', justifyContent: "flex-start"}} space={6}>
+						<Text style={{
+							flexShrink: 1,
+						}} isTruncated pl={10} maxW={"100%"} bold fontSize='md'>{props.name}</Text>
+						<Text style={{
+							flexShrink: 0,
+						}} fontSize={"sm"}>{props.artistId ?? 'artist'}</Text>
 					</HStack>
 					<TextButton
+						flexShrink={0}
+						flexGrow={0}
 						translate={{ translationKey: 'playBtn' }}
 						colorScheme='primary' variant={"outline"} size='sm'
 						onPress={() => navigation.navigate('Song', { songId: props.id })}
@@ -125,22 +133,24 @@ const SongsSearchComponent = (props: any) => {
 				<Text fontSize="xl" fontWeight="bold" mt={4}>
 					{translate('songsFilter')}
 				</Text>
-				{songData?.length ? (
-					songData.slice(0, props.maxRows).map((comp, index) => (
-						<SongRow
-							key={index}
-							name={comp.name}
-							albumId={comp.albumId}
-							artistId={comp.artistId}
-							cover={comp.cover}
-							details={comp.details}
-							genreId={comp.genreId}
-							id={comp.id}
-						/>
-					))
-				) : (
-					<Text>{translate('errNoResults')}</Text>
-				)}
+				<Box>
+					{songData?.length ? (
+						songData.slice(0, props.maxRows).map((comp, index) => (
+							<SongRow
+								key={index}
+								name={comp.name}
+								albumId={comp.albumId}
+								artistId={comp.artistId}
+								cover={comp.cover}
+								details={comp.details}
+								genreId={comp.genreId}
+								id={comp.id}
+							/>
+						))
+					) : (
+						<Text>{translate('errNoResults')}</Text>
+					)}
+				</Box>
 			</ScrollView>
 	);
 }
