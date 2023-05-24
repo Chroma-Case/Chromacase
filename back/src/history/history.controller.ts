@@ -30,7 +30,7 @@ export class HistoryController {
 	async getSearchHistory(
 		@Request() req: any,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,// 
+		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<SearchHistory[]> {
 		return this.historyService.getSearchHistory(req.user.id, { skip, take });
 	}

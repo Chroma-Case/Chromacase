@@ -1,9 +1,10 @@
 import React from "react";
-import Card, { CardBorderRadius } from './Card';
-import { VStack, Text, Image, Pressable, Box, Icon } from 'native-base';
+import Card from './Card';
+import { VStack, Text, Box, Icon } from 'native-base';
 import { useNavigation } from "../Navigation";
 import { useTheme } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
+import API from "../API";
 type GenreCardProps = {
 	icon?: string;
 	name?: string;
@@ -14,8 +15,15 @@ const GenreCard = (props: GenreCardProps) => {
 	const navigation = useNavigation();
 	const theme = useTheme();
 
+	const handlePress = () => {
+		API.createSearchHistoryEntry(name ?? 'name', "genre", Date.now());
+	}
+
 	return (
-		<Card shadow={3}>
+		<Card
+			shadow={3}
+			onPress={handlePress}
+		>
 			<VStack m={1.5} space={3} alignItems="center">
 				<Box
 					bg={theme.colors.primary[400]}

@@ -2,6 +2,7 @@ import React from "react";
 import Card, { CardBorderRadius } from './Card';
 import { VStack, Text, Image } from 'native-base';
 import { useNavigation } from "../Navigation";
+import API from "../API";
 type ArtistCardProps = {
 	image?: string;
 	name?: string;
@@ -12,10 +13,15 @@ const ArtistCard = (props: ArtistCardProps) => {
 	const { image, name, id } = props;
 	const navigation = useNavigation();
 
+	const handlePress = () => {
+		API.createSearchHistoryEntry(name ?? 'name', "artist", Date.now());
+		navigation.navigate('Artist', { artistId: id })
+	}
+
 	return (
 		<Card
 			shadow={3}
-			onPress={() => navigation.navigate('Artist', { artistId: id })}
+			onPress={handlePress}
 		>
 			<VStack m={1.5} space={3}>
 				<Image

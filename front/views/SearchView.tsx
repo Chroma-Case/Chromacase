@@ -40,29 +40,22 @@ const SearchView = ({navigation}: any) => {
 	const [filter, setFilter] = useState<Filter>('all');
 	const [stringQuery, setStringQuery] = useState<string>('');
 
-	const handleSuccess = () => {
-		if (!isRequestSucceeded) {
-			API.createSearchHistoryEntry(stringQuery, "song", Date.now());
-			isRequestSucceeded = true;
-		}
-	};
-
 	const { isLoading: isLoadingSong, data: songData = []} = useQuery(
 		['song', stringQuery],
 		() => API.searchSongs(stringQuery),
-		{ enabled: !!stringQuery, onSuccess: handleSuccess }
+		{ enabled: !!stringQuery }
 	);
 
 	const { isLoading: isLoadingArtist, data: artistData = []} = useQuery(
 		['artist', stringQuery],
 		() => API.searchArtists(stringQuery),
-		{ enabled: !!stringQuery, onSuccess: handleSuccess}
+		{ enabled: !!stringQuery }
 	);
 	
 	const { isLoading: isLoadingGenre, data: genreData = []} = useQuery(
 		['genre', stringQuery],
 		() => API.searchGenres(stringQuery),
-		{ enabled: !!stringQuery, onSuccess: handleSuccess }
+		{ enabled: !!stringQuery }
 	);
 
 	const updateFilter = (newData: Filter) => {
