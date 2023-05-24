@@ -4,29 +4,24 @@ import { VStack, Text, Image } from 'native-base';
 import { useNavigation } from "../Navigation";
 import API from "../API";
 type ArtistCardProps = {
-	image?: string;
-	name?: string;
-	id?: number;
+	image: string;
+	name: string;
+	id: number;
+	onPress: () => void;
 }
 
 const ArtistCard = (props: ArtistCardProps) => {
 	const { image, name, id } = props;
-	const navigation = useNavigation();
-
-	const handlePress = () => {
-		API.createSearchHistoryEntry(name ?? 'name', "artist", Date.now());
-		navigation.navigate('Artist', { artistId: id })
-	}
 
 	return (
 		<Card
 			shadow={3}
-			onPress={handlePress}
+			onPress={props.onPress}
 		>
 			<VStack m={1.5} space={3}>
 				<Image
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: CardBorderRadius }}
-					source={{ uri: image ?? 'https://picsum.photos/200' }}
+					source={{ uri: image }}
 					alt={name}
 				/>
 				<VStack>
@@ -37,6 +32,13 @@ const ArtistCard = (props: ArtistCardProps) => {
 			</VStack>
 		</Card>
 	);
+}
+
+ArtistCard.defaultProps = {
+	image: 'https://picsum.photos/200',
+	name: 'Artist',
+	id: 0,
+	onPress: () => { }
 }
 
 export default ArtistCard;

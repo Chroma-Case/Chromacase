@@ -17,7 +17,6 @@ import { RootState, useSelector } from '../state/Store';
 import { SearchContext } from "../views/SearchView";
 import { useQuery } from "react-query";
 import { translate } from "../i18n/i18n";
-import { useNavigation } from "@react-navigation/native";
 import API from "../API";
 import LoadingComponent from "./Loading";
 import ArtistCard from "./ArtistCard";
@@ -28,6 +27,7 @@ import TextButton from "./TextButton";
 import SearchHistoryCard from "./HistoryCard";
 import Song, { SongWithArtist } from "../models/Song";
 import { getSongWArtistSuggestions } from "./utils/api";
+import { useNavigation } from "../Navigation";
 
 const swaToSongCardProps = (song: SongWithArtist) => ({
 	songId: song.id,
@@ -112,7 +112,7 @@ const HomeSearchComponent = () => {
 				{ isLoadingHistory ? <LoadingComponent/> : <CardGridCustom content={historyData.map((h) => {
 					return {
 						...h,
-						timestamp: h.timestamp.toString(),
+						timestamp: h.timestamp?.toString() ?? 'timestamp default', // TODO change this when zoe'PR gonna give timestamps
 						onPress: () => {updateStringQuery(h.query)}
 					}
 				})} cardComponent={SearchHistoryCard}/> }
@@ -157,6 +157,7 @@ const SongsSearchComponent = (props: any) => {
 
 const ArtistSearchComponent = (props: any) => {
 	const {artistData} = React.useContext(SearchContext);
+	const navigation = useNavigation();
 
 	return (
 		<Box>
@@ -164,7 +165,17 @@ const ArtistSearchComponent = (props: any) => {
 				{translate('artistFilter')}
 			</Text>
 			{ artistData?.length
-			? <CardGridCustom content={!props?.maxItems ? artistData : artistData.slice(0, props.maxItems)} cardComponent={ArtistCard} />
+			? <CardGridCustom content={artistData.slice(0, props?.maxItems ?? artistData.length).map((a) => (
+				{
+					image: a.picture ?? 'https://picsum.photos/200',
+					name: a.name,
+					id: a.id,
+					onPress: () => {
+						API.createSearchHistoryEntry(a.name, "artist", Date.now());
+						navigation.navigate('Artist', { artistId: a.id })
+					}
+				}
+			))} cardComponent={ArtistCard} />
 			: <Text>{translate('errNoResults')}</Text> }
 		</Box>
 	);
