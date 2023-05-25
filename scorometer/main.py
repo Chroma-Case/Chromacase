@@ -148,6 +148,7 @@ class Scorometer:
 				else 50
 			)
 			logging.debug({"note_off": f"{perf} on {message.note}"})
+			to_play.done = True
 			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
 			logging.warning("note_off: no key to play but it was not a wrong note_on")
