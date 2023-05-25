@@ -83,7 +83,7 @@ Create and get a search history record
     Output
     Integer    response status    404
 
-    POST /history/search
+    POST   /history/search
     ...    { "query": "tata", "type": "song" }
 
     &{res}=    GET    /history/search
@@ -92,7 +92,7 @@ Create and get a search history record
     Array    response body
     String    $[0].type    "song"
     String    $[0].query    "tata"
-    Integer    ${len}=    Get Length    ${res.body}
+    ${len}=   Get Length    ${res.body}
     Should Be Equal As Integers    ${len}    1
 
     [Teardown]    DELETE    /users/${userID}
