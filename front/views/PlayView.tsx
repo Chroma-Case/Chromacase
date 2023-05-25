@@ -35,6 +35,15 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	}
 }
 
+function parseMidiMessage(message) {
+	return {
+		command: message.data[0] >> 4,
+		channel: message.data[0] & 0xf,
+		note: message.data[1],
+		velocity: message.data[2] / 127,
+	};
+}
+
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -51,6 +60,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
 		{ staleTime: Infinity }
 	);
+	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 
 	const onPause = () => {
@@ -59,7 +69,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: true,
-			time: time
+			time: getElapsedTime()
 		}));
 	}
 	const onResume = () => {
@@ -72,20 +82,18 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current?.send(JSON.stringify({
 			type: "pause",
 			paused: false,
-			time: time
+			time: getElapsedTime()
 		}));
 	}
 	const onEnd = () => {
 		webSocket.current?.send(JSON.stringify({
 			type: "end"
 		}));
-		stopwatch.stop();
-		webSocket.current?.close();
 	}
 
 	const onMIDISuccess = (access) => {
 		const inputs = access.inputs;
-		
+
 		if (inputs.size < 2) {
 			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
@@ -105,13 +113,13 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
-					navigation.navigate('Score', { songId: song.data!.id });
+					navigation.navigate('Score', { songId: song.data!.id, ...data });
 					return;
 				}
 				const points = data.info.score;
-				const maxPoints = data.info.maxScore || 1;
+				const maxPoints = data.info.max_score || 1;
 
-				setScore(Math.floor(Math.max(points, 0) / maxPoints) * 100);
+				setScore(Math.floor(Math.max(points, 0) * 100 / maxPoints));
 
 				let formattedMessage = '';
 				let messageColor: ColorSchemeType | undefined;
@@ -141,7 +149,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						default:
 							break;
 					}
-				} 
+				}
 				toast.show({ description: formattedMessage, placement: 'top', colorScheme: messageColor ?? 'secondary' });
 			} catch (e) {
 				console.log(e);
@@ -152,15 +160,19 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				return;
 			}
 			input.onmidimessage = (message) => {
-				const keyIsPressed = message.data[2] == 100;
+				const { command, channel, note, velocity } = parseMidiMessage(message);
+				const keyIsPressed = command == 9;;
 				const keyCode = message.data[1];
-				webSocket.current?.send(JSON.stringify({
-					type: keyIsPressed ? "note_on" : "note_off",
-					note: keyCode,
-					id: song.data!.id,
-					time: time
-				}))
-			}
+				// console.log('Playing midi ' + keyCode + ' at time ' + getElapsedTime());
+				webSocket.current?.send(
+					JSON.stringify({
+						type: keyIsPressed ? "note_on" : "note_off",
+						note: keyCode,
+						id: song.data!.id,
+						time: getElapsedTime(),
+					})
+				);
+			};
 			inputIndex++;
 		});
 	}
@@ -171,7 +183,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		let interval = setInterval(() => {
-			setTime(() => stopwatch.getElapsedRunningTime() - 3000) // Countdown
+			setTime(() => getElapsedTime()) // Countdown
 		}, 1);
 
 		return () => {
@@ -202,7 +214,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					timestamp={Math.max(0, time)}
 					onEndReached={() => {
 						onEnd();
-						navigation.navigate('Score', { songId: song.data.id });
 					}}
 				/>
 				{ !partitionRendered && <LoadingComponent/> }
@@ -255,7 +266,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					{midiKeyboardFound && <>
 						<IconButton size='sm' variant='solid' icon={
 							<Icon as={Ionicons} name={paused ? "play" : "pause"}/>
-						} onPress={() => { 
+						} onPress={() => {
 							if (paused) {
 								onResume();
 							} else {
@@ -280,7 +291,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							<Icon as={Ionicons} name="stop"/>
 						} onPress={() => {
 							onEnd();
-							navigation.navigate('Score', { songId: song.data.id });
 						}}/>
 					</>}
 					</Row>

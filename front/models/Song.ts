@@ -5,7 +5,7 @@ import Artist from "./Artist";
 interface Song extends Model {
 	id: number;
 	name: string;
-	artistId: number | null;
+	artistId: number;
 	albumId: number | null;
 	genreId: number | null;
 	cover: string;

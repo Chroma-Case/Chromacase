@@ -333,10 +333,10 @@ export default class API {
 	 * Retrieve a song's play history
 	 * @param songId the id to find the song
 	 */
-	public static async getSongHistory(songId: number): Promise<SongHistory[]> {
+	public static async getSongHistory(songId: number): Promise<{best: number, history: SongHistory[]}> {
 		return API.fetch({
-			route: `/history`,
-		}).then((data: SongHistory[]) => data.filter((entry) => entry.songID == songId))
+			route: `/song/${songId}/history`,
+		});
 	}
 
 	/**
@@ -414,9 +414,17 @@ export default class API {
 	 * @returns Returns an array of history entries (temporary type any)
 	 */
 	public static async getSearchHistory(skip?: number, take?: number): Promise<SearchHistory[]> {
-		return await API.fetch({
+		return (await API.fetch({
 			route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
 			method: "GET",
+		})).map((e: any) => {
+			return {
+				id: e.id,
+				query: e.query,
+				type: e.type,
+				userId: e.userId,
+				timestamp: new Date(e.searchDate),
+			} as SearchHistory
 		})
 	}
 

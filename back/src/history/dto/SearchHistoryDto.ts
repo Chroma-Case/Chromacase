@@ -5,8 +5,5 @@ export class SearchHistoryDto {
 	query: string;
 
 	@ApiProperty()
-	timestamp: number;
-
-	@ApiProperty()
 	type: "song" | "artist" | "album" | "genre";
 }

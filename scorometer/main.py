@@ -19,7 +19,12 @@ from chroma_case.Message import (
 	getMessage,
 )
 from chroma_case.Partition import Partition
+from chroma_case.song_check import getPartition
 from mido import MidiFile
+
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
 MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/musics/"
@@ -36,6 +41,7 @@ PRACTICE = 1
 class ScoroInfo(TypedDict):
 	max_score: int
 	score: int
+	wrong: int
 	missed: int
 	perfect: int
 	great: int
@@ -48,8 +54,9 @@ def send(o):
 
 class Scorometer:
 	def __init__(self, mode: int, midiFile: str, song_id: int, user_id: int) -> None:
-		self.partition: Partition = self.getPartition(midiFile)
+		self.partition: Partition = getPartition(midiFile)
 		self.practice_partition: list[list[Key]] = self.getPracticePartition(mode)
+		logging.debug({"partition": self.partition.notes})
 		self.keys_down = []
 		self.mode: int = mode
 		self.song_id: int = song_id
@@ -59,6 +66,7 @@ class Scorometer:
 		self.info: ScoroInfo = {
 			"max_score": len(self.partition.notes) * 100,
 			"score": 0,
+			"wrong": 0,
 			"missed": 0,
 			"perfect": 0,
 			"great": 0,
@@ -68,28 +76,6 @@ class Scorometer:
 	def send(self, obj):
 		obj["info"] = self.info
 		send(obj)
-
-	def getPartition(self, midiFile: str):
-		notes = []
-		s = 3500
-		notes_on = {}
-		prev_note_on = {}
-		for msg in MidiFile(midiFile):
-			d = msg.dict()
-			s += d["time"] * 1000 * RATIO
-
-			if d["type"] == "note_on":
-				prev_note_on[d["note"]] = 0
-				if d["note"] in notes_on:
-					prev_note_on[d["note"]] = notes_on[d["note"]]  # 500
-				notes_on[d["note"]] = s  # 0
-
-			if d["type"] == "note_off":
-				duration = s - notes_on[d["note"]]
-				note_start = notes_on[d["note"]]
-				notes.append(Key(d["note"], note_start, duration - 10))
-				notes_on[d["note"]] = s  # 500
-		return Partition(midiFile, notes)
 
 	def getPracticePartition(self, mode: int) -> list[list[Key]]:
 		get_start = operator.attrgetter("start")
@@ -121,10 +107,12 @@ class Scorometer:
 		)
 		if to_play:
 			perf = self.getTimingScore(key, to_play)
+			self.info[perf] += 1
 			logging.debug({"note_on": f"{perf} on {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
 			self.info["score"] -= 50
+			self.info["missed"] += 1
 			self.wrong_ids += [message.id]
 			logging.debug({"note_on": f"wrong key {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
@@ -159,8 +147,8 @@ class Scorometer:
 				if perf == "short" or perf == "long"
 				else 50
 			)
-			to_play.done = True
 			logging.debug({"note_off": f"{perf} on {message.note}"})
+			to_play.done = True
 			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
 			logging.warning("note_off: no key to play but it was not a wrong note_on")
@@ -200,6 +188,7 @@ class Scorometer:
 		if message.id in self.wrong_ids:
 			logging.debug({"note_off": f"wrong key {message.note}"})
 			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
+			self.info["wrong"] += 1;
 			return
 		key = Key(
 			key=message.note, start=down_since, duration=(message.time - down_since)
@@ -294,6 +283,7 @@ class Scorometer:
 				self.info["missed"] += 1
 		send(
 			{
+				"type": "end",
 				"overallScore": self.info["score"],
 				"score": {
 					"missed": self.info["missed"],
@@ -311,6 +301,7 @@ class Scorometer:
 					"songID": self.song_id,
 					"userID": self.user_id,
 					"score": self.info["score"],
+					"info": self.info,
 					"difficulties": self.difficulties,
 				},
 			)

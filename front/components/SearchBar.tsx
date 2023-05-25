@@ -28,9 +28,11 @@ const SearchBar = (props: SearchBarProps) => {
 
 	const debouncedUpdateStringQuery = debounce(updateStringQuery, 500);
 
-	React.useEffect(() => {
-		updateBarText(stringQuery);
-	}, [stringQuery]);
+	// there's a bug due to recursive feedback that erase the text as soon as you type this is a temporary "fix"
+	// will probably be fixed by removing the React.useContext
+	// React.useEffect(() => {
+	// 	updateBarText(stringQuery);
+	// }, [stringQuery]);
 
 	const handleClearQuery = () => {
 		updateStringQuery('');

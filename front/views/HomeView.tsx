@@ -51,7 +51,7 @@ const HomeView = () => {
 		.concat(nextStepQuery.data ?? [])
 		.filter((s): s is Song => s !== undefined))
 		.map((song) => (
-			{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
+			{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.artistId) }
 		))
 	);
 
@@ -82,7 +82,7 @@ const HomeView = () => {
 						.map((song) => ({
 							cover: song.cover,
 							name: song.name,
-							id: song.id,
+							songId: song.id,
 							artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
 						})) ?? []
 					}
@@ -138,7 +138,7 @@ const HomeView = () => {
 							searchHistoryQuery.data?.length === 0 && <Translate translationKey='noRecentSearches'/>
 						}
 						{
-							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].reverse().slice(0, 5).map((query) => (
+							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].slice(0, 5).map((query) => (
 								<Button
 									leftIcon={
 										<FontAwesome5 name="search" size={16} />

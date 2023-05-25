@@ -6,12 +6,13 @@ import { SongHistoryDto } from './dto/SongHistoryDto';
 
 @Injectable()
 export class HistoryService {
-	constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService) { }
 
 	async createSongHistoryRecord({
 		songID,
 		userID,
 		score,
+		info,
 		difficulties,
 	}: SongHistoryDto): Promise<SongHistory> {
 		await this.prisma.user.update({
@@ -26,6 +27,7 @@ export class HistoryService {
 			data: {
 				score,
 				difficulties,
+				info,
 				song: {
 					connect: {
 						id: songID,
@@ -46,14 +48,33 @@ export class HistoryService {
 	): Promise<SongHistory[]> {
 		return this.prisma.songHistory.findMany({
 			where: { user: { id: playerId } },
+			orderBy: { playDate: 'desc' },
 			skip,
 			take,
 		});
 	}
 
+	async getForSong({
+		playerId,
+		songId,
+	}: {
+		playerId: number;
+		songId: number;
+	}): Promise<{ best: number; history: SongHistory[] }> {
+		const history = await this.prisma.songHistory.findMany({
+			where: { user: { id: playerId }, song: { id: songId } },
+			orderBy: { playDate: 'desc' },
+		});
+
+		return {
+			best: Math.max(...history.map((x) => x.score)),
+			history,
+		};
+	}
+
 	async createSearchHistoryRecord(
 		userID: number,
-		{ query, type, timestamp }: SearchHistoryDto
+		{ query, type }: SearchHistoryDto
 	): Promise<SearchHistory> {
 		return this.prisma.searchHistory.create({
 			data: {
@@ -74,9 +95,9 @@ export class HistoryService {
 	): Promise<SearchHistory[]> {
 		return this.prisma.searchHistory.findMany({
 			where: { user: { id: playerId } },
+			orderBy: { searchDate: 'desc' },
 			skip,
 			take,
-			orderBy: {id: 'desc'},
 		});
 	}
 }

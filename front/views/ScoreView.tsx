@@ -1,4 +1,4 @@
-import { Card, Column, Image, Row, Text, useTheme, ScrollView, Center, VStack } from "native-base"
+import { Card, Column, Image, Row, Text, ScrollView, VStack } from "native-base"
 import Translate from "../components/Translate";
 import SongCardGrid from "../components/SongCardGrid";
 import { RouteProps, useNavigation } from "../Navigation";
@@ -11,17 +11,25 @@ import SongCard from "../components/SongCard";
 import { useQueries, useQuery } from "react-query";
 import { LoadingView } from "../components/Loading";
 
-type ScoreViewProps = { songId: number }
+type ScoreViewProps = {
+	songId: number
+	overallScore: number,
+	score: {
+		missed: number,
+		good: number,
+		great: number,
+		perfect: number,
+		maxScore: number,
+	}
+}
 
-const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
-	const theme = useTheme();
+const ScoreView = ({ songId, overallScore, score }: RouteProps<ScoreViewProps>) => {
 	const navigation = useNavigation();
 	const songQuery = useQuery(['song', songId], () => API.getSong(songId));
-	const artistQuery = useQuery(['song', songId],
+	const artistQuery = useQuery(['song', songId, "artist"],
 		() => API.getArtist(songQuery.data!.artistId!),
 		{ enabled: songQuery.data != undefined }
 	);
-	const songHistoryQuery = useQuery(["song", "history"], () => API.getUserPlayHistory());
 	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
 	const recommendations = useQuery(['song', 'recommendations'], () => API.getSongSuggestions());
 	const artistRecommendations = useQueries(recommendations.data
@@ -32,19 +40,10 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 		})) ?? []
 	)
 
-	if (!recommendations.data || artistRecommendations.find(({ data }) => !data) || !songHistoryQuery.data || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
+	if (!recommendations.data || artistRecommendations.find(({ data }) => !data) || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
 		return <LoadingView/>;
 	}
-	const songScore = songHistoryQuery.data.find((history) => history.songID == songId);
-	if (!songScore) {
-		return <Center>
-			<Translate translationKey="unknownError"/>
-			<TextButton 
-				translate={{ translationKey: 'backBtn' }}
-				onPress={() => navigation.navigate('Home')}
-			/>
-		</Center>;
-	}
+
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
 		<VStack width={{ base: '100%', lg: '50%' }} textAlign='center'>
 			<Text bold fontSize='lg'>{songQuery.data.name}</Text>
@@ -60,7 +59,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 					<Column style={{ justifyContent: 'space-evenly', flexGrow: 1 }}>
 						{/*<Row style={{ alignItems: 'center' }}>
 							<Text bold fontSize='xl'>
-								
+
 							</Text>
 							<Translate translationKey='goodNotes' format={(t) => ' ' + t}/>
 						</Row>
@@ -73,7 +72,7 @@ const ScoreView = ({ songId, route }: RouteProps<ScoreViewProps>) => {
 						<Row style={{ alignItems: 'center' }}>
 							<Translate translationKey='score' format={(t) => t + ' : '}/>
 							<Text bold fontSize='xl'>
-								{songScore.score + "pts"}
+								{overallScore + "pts"}
 							</Text>
 						</Row>
 					</Column>

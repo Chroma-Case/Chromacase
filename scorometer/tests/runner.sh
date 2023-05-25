@@ -12,6 +12,9 @@ TESTS_FAILED=0
 function test {
   cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   TESTS_DONE=$((TESTS_DONE + 1))
+  if [ -n "$SCOROMETER_AUTOFIX" ]; then
+    cat /tmp/scorometer_res > $1/output
+  fi
   if ! diff $1/output /tmp/scorometer_res &>/dev/null; then
 
     echo "=========== CURRENT OUTPUT ==========="

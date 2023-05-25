@@ -3,7 +3,8 @@ import Model from "./Model";
 interface SearchHistory extends Model {
     query: string;
     type: "song" | "artist" | "album" | "genre";
-    timestamp: number;
+    userId: number;
+    timestamp: Date;
 }
 
 export default SearchHistory;
