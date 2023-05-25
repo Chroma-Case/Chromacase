@@ -22,7 +22,7 @@ Create and get an history record
 
     &{history}=    POST
     ...    /history
-    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {} }
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {}, "info": { "max_score": 0, "wrong": 0, "great": 0, "good": 0} }
     Output
     Integer    response status    201
 
@@ -47,13 +47,13 @@ Create and get a duplicated history record
 
     &{history}=    POST
     ...    /history
-    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {} }
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {}, "info": { "max_score": 0, "wrong": 0, "great": 0, "good": 0} }
     Output
     Integer    response status    201
 
     &{history2}=    POST
     ...    /history
-    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 65, "difficulties": {} }
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 65, "difficulties": {}, "info": { "max_score": 0, "wrong": 0, "great": 0, "good": 0} }
     Output
     Integer    response status    201
 
@@ -108,17 +108,17 @@ Get the history of a single song
 
     &{history}=    POST
     ...    /history
-    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {} }
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 55, "difficulties": {}, "info": { "max_score": 0, "wrong": 0, "great": 0, "good": 0} }
     Output
     Integer    response status    201
     &{history2}=    POST
     ...    /history
-    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 65, "difficulties": {} }
+    ...    { "userID": ${userID}, "songID": ${song.body.id}, "score": 65, "difficulties": {}, "info": { "max_score": 0, "wrong": 0, "great": 0, "good": 0} }
     Output
     Integer    response status    201
     &{history3}=    POST
     ...    /history
-    ...    { "userID": ${userID}, "songID": ${song2.body.id}, "score": 75, "difficulties": {} }
+    ...    { "userID": ${userID}, "songID": ${song2.body.id}, "score": 75, "difficulties": {}, "info": { "max_score": 0, "wrong": 0, "great": 0, "good": 0} }
     Output
     Integer    response status    201
 
