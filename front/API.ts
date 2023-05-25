@@ -441,8 +441,7 @@ export default class API {
 			method: "POST",
 			body: {
 				query: query,
-				type: type,
-				timestamp: timestamp,
+				type: type
 			},
 		})
 	}
