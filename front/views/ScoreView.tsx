@@ -1,4 +1,4 @@
-import { Card, Column, Image, Row, Text, useTheme, ScrollView, Center, VStack } from "native-base"
+import { Card, Column, Image, Row, Text, ScrollView, VStack } from "native-base"
 import Translate from "../components/Translate";
 import SongCardGrid from "../components/SongCardGrid";
 import { RouteProps, useNavigation } from "../Navigation";
@@ -40,16 +40,7 @@ const ScoreView = ({ songId, overallScore, score }: RouteProps<ScoreViewProps>) 
 	if (!recommendations.data || artistRecommendations.find(({ data }) => !data) || !songQuery.data || (songQuery.data.artistId && !artistQuery.data)) {
 		return <LoadingView/>;
 	}
-	// I think we don't need that anymore but /shrug
-	if (!overallScore) {
-		return <Center>
-			<Translate translationKey="unknownError"/>
-			<TextButton
-				translate={{ translationKey: 'backBtn' }}
-				onPress={() => navigation.navigate('Home')}
-			/>
-		</Center>;
-	}
+
 	return <ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
 		<VStack width={{ base: '100%', lg: '50%' }} textAlign='center'>
 			<Text bold fontSize='lg'>{songQuery.data.name}</Text>
