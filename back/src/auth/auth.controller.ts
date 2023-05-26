@@ -46,9 +46,8 @@ export class AuthController {
 	@Post('register')
 	async register(@Body() registerDto: RegisterDto): Promise<void> {
 		try {
-			await this.usersService.createUser(registerDto).then((user) => {
-				this.settingsService.createUserSetting(user.id);
-			});
+			const user = await this.usersService.createUser(registerDto)
+			await this.settingsService.createUserSetting(user.id);
 		} catch {
 			throw new BadRequestException();
 		}
@@ -66,6 +65,7 @@ export class AuthController {
 	@Post('guest')
 	async guest(): Promise<JwtToken> {
 		const user = await this.usersService.createGuest();
+		await this.settingsService.createUserSetting(user.id);
 		return this.authService.login(user);
 	}
 
