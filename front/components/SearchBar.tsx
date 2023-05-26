@@ -1,149 +1,119 @@
 import {
-	Input,
-	Column,
-	Row,
-	Text,
-	Pressable,
-	HStack,
-	VStack,
-	Image,
 	Icon,
-	Square,
-} from "native-base";
+	Input,
+	Button,
+	Flex} from "native-base";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
-import useColorScheme from "../hooks/colorScheme";
+import { MaterialIcons } from "@expo/vector-icons";
+import { translate } from "../i18n/i18n";
+import { SearchContext } from "../views/SearchView";
+import { debounce } from 'lodash';
 
-export enum SuggestionType {
-	TEXT,
-	ILLUSTRATED,
-}
+export type Filter = "artist" | "song" | "genre" | "all";
 
-export type SuggestionList = {
-	type: SuggestionType;
-	data: SuggestionProps | IllustratedSuggestionProps;
-}[];
+type SearchBarProps = {
+	onChangeText?: any;
+};
 
-export interface SearchBarProps {
-	onTextChange: (text: string) => void;
-	onTextSubmit: (text: string) => void;
-	suggestions: SuggestionList;
-}
-export interface IllustratedSuggestionProps {
-	text: string;
-	subtext: string;
-	imageSrc: string;
-	onPress: () => void;
-}
+type FilterButton = {
+	name: string;
+	callback: () => void;
+	id: Filter;
+};
 
-export interface SuggestionProps {
-	text: string;
-	onPress: () => void;
-}
+const SearchBar = (props: SearchBarProps) => {
+	const {filter, updateFilter} = React.useContext(SearchContext);
+	const {stringQuery, updateStringQuery} = React.useContext(SearchContext);
+	const [barText, updateBarText] = React.useState(stringQuery);
 
-// debounce function
-const debounce = (func: any, delay: number) => {
-	let inDebounce: any;
-	return function (this: any) {
-		const context = this;
-		const args = arguments;
-		clearTimeout(inDebounce);
-		inDebounce = setTimeout(() => func.apply(context, args), delay);
+	const debouncedUpdateStringQuery = debounce(updateStringQuery, 500);
+
+	// there's a bug due to recursive feedback that erase the text as soon as you type this is a temporary "fix"
+	// will probably be fixed by removing the React.useContext
+	// React.useEffect(() => {
+	// 	updateBarText(stringQuery);
+	// }, [stringQuery]);
+
+	const handleClearQuery = () => {
+		updateStringQuery('');
+		updateBarText('');
 	};
-};
 
-const IllustratedSuggestion = ({
-	text,
-	subtext,
-	imageSrc,
-	onPress,
-}: IllustratedSuggestionProps) => {
-	const colorScheme = useColorScheme();
+	const handleChangeText = (text: string) => {
+		debouncedUpdateStringQuery(text);
+		updateBarText(text);
+	}
+
+	const filters: FilterButton[] = [
+		{
+			name: translate('allFilter'),
+			callback: () => updateFilter('all'),
+			id: 'all'
+		},
+		{
+			name: translate('artistFilter'),
+			callback: () => updateFilter('artist'),
+			id: 'artist',
+		},
+		{
+			name: translate('songsFilter'),
+			callback: () => updateFilter('song'),
+			id: 'song',
+		},
+		{
+			name: translate('genreFilter'),
+			callback: () => updateFilter('genre'),
+			id: 'genre',
+		},
+	];
+
 	return (
-		<Pressable
-			onPress={onPress}
-			margin={2}
-			padding={2}
-		>{({ isHovered, isPressed }) => (
-			<HStack alignItems="center" space={4}
-				bg={colorScheme == 'dark'
-					? (isHovered || isPressed) ? 'gray.800' : undefined
-					: (isHovered || isPressed) ? 'primary.100' : undefined
-				}
-			>
-				<Square size={"sm"}>
-					<Image
-						source={{ uri: imageSrc }}
-						alt="Alternate Text"
-						size="xs"
-						rounded="lg"
-					/>
-				</Square>
-				<VStack alignItems="flex-start">
-					<Text fontSize="md">{text}</Text>
-					<Text fontSize="sm" color="gray.500">
-						{subtext}
-					</Text>
-				</VStack>
-			</HStack>
-		)}</Pressable>
-	);
-};
-
-const TextSuggestion = ({ text, onPress }: SuggestionProps) => {
-	const colorScheme = useColorScheme();
-	return (
-		<Pressable
-			onPress={onPress}
-			margin={2}
-			padding={2}
-		>{({ isHovered, isPressed }) => (
-			<Row alignItems="center" space={4}
-				bg={colorScheme == 'dark'
-					? (isHovered || isPressed) ? 'gray.800' : undefined
-					: (isHovered || isPressed) ? 'primary.100' : undefined
-				}
-			>
-				<Square size={"sm"}>
-					<Icon size={"md"} as={Ionicons} name="search" />
-				</Square>
-				<Text fontSize="md">{text}</Text>
-			</Row>
-		)}</Pressable>
-	);
-};
-
-// render the suggestions based on the type
-const SuggestionRenderer = (suggestions: SuggestionList) => {
-	const suggestionRenderers = {
-		[SuggestionType.TEXT]: TextSuggestion,
-		[SuggestionType.ILLUSTRATED]: IllustratedSuggestion,
-	};
-	return suggestions.map((suggestion, index) => {
-		const SuggestionComponent = suggestionRenderers[suggestion.type];
-		return <SuggestionComponent {...suggestion.data} key={index} />;
-	});
-};
-
-const SearchBar = ({
-	onTextChange,
-	onTextSubmit,
-	suggestions,
-}: SearchBarProps) => {
-	const debouncedOnTextChange = React.useRef(
-		debounce((t: string) => onTextChange(t), 70)
-	).current;
-	return (
-		<>
+		<Flex m={3} flexDirection={["column", "row"]}>
 			<Input
-				placeholder="Search"
-				type="text"
-				onChangeText={debouncedOnTextChange}
-				onSubmitEditing={(event) => onTextSubmit(event.nativeEvent.text)}
+				onChangeText={(text) => handleChangeText(text)}
+				variant={"rounded"}
+				value={barText}
+				rounded={"full"}
+				placeholder={translate('search')}
+				width={['100%', '50%']} //responsive array syntax with native-base
+				py={2}
+				px={2}
+				fontSize={'12'}
+				InputLeftElement={
+				<Icon
+					m={[1, 2]}
+					ml={[2, 3]}
+					size={['4', '6']}
+					color="gray.400"
+					as={<MaterialIcons name="search" />}
+				/>
+				}
+				InputRightElement={<Icon
+					m={[1, 2]}
+					mr={[2, 3]}
+					size={['4', '6']}
+					color="gray.400"
+					onPress={handleClearQuery}
+					as={<MaterialIcons name="close" />}
+				/>}
 			/>
-			<Column>{SuggestionRenderer(suggestions)}</Column>
-		</>
+
+			<Flex flexDirection={'row'} >
+				{filters.map((btn) => (
+					<Button
+						key={btn.name}
+						rounded={'full'}
+						onPress={btn.callback}
+						mx={[2, 5]}
+						my={[1, 0]}
+						minW={[30, 20]}
+						variant={filter === btn.id ? 'solid' : 'outline'}>
+						{btn.name}
+					</Button>
+				))}
+			</Flex>
+		</Flex>
 	);
-};
+}
 
 export default SearchBar;

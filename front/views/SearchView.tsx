@@ -1,38 +1,102 @@
 import React, { useState } from "react";
-import { Box } from "native-base";
-import { useNavigation } from "../Navigation";
-import SearchBarSuggestions from "../components/SearchBarSuggestions";
-import { useQueries, useQuery } from "react-query";
-import { SuggestionType } from "../components/SearchBar";
+import SearchBar from "../components/SearchBar";
+import Artist from "../models/Artist";
+import Song from "../models/Song";
+import Genre from "../models/Genre";
 import API from "../API";
+import { useQuery } from "react-query";
+import { SearchResultComponent } from "../components/SearchResult";
+import { SafeAreaView } from "react-native";
+import { Filter } from "../components/SearchBar";
+import { ScrollView } from "native-base";
+import { RouteProps } from "../Navigation";
 
-const SearchView = () => {
-	const [query, setQuery] = useState<string>();
-	const navigation = useNavigation();
-	const searchQuery = useQuery(
-		['search', query],
-		() => API.searchSongs(query!),
-		{ enabled: query != undefined }
+interface SearchContextType {
+	filter: "artist" | "song" | "genre" | "all";
+	updateFilter: (newData: "artist" | "song" | "genre" | "all") => void;
+	stringQuery: string;
+	updateStringQuery: (newData: string) => void;
+	songData: Song[];
+	artistData: Artist[];
+	genreData: Genre[];
+	isLoadingSong: boolean;
+	isLoadingArtist: boolean;
+	isLoadingGenre: boolean;
+}
+
+export const SearchContext = React.createContext<SearchContextType>({
+	filter: "all",
+	updateFilter: () => {},
+	stringQuery: "",
+	updateStringQuery: () => {},
+	songData: [],
+	artistData: [],
+	genreData: [],
+	isLoadingSong: false,
+	isLoadingArtist: false,
+	isLoadingGenre: false,
+});
+
+type SearchViewProps = {
+	query?: string;
+};
+
+const SearchView = (props: RouteProps<SearchViewProps>) => {
+	let isRequestSucceeded = false;
+	const [filter, setFilter] = useState<Filter>("all");
+	const [stringQuery, setStringQuery] = useState<string>(props.query || "");
+
+	const { isLoading: isLoadingSong, data: songData = [] } = useQuery(
+		["song", stringQuery],
+		() => API.searchSongs(stringQuery),
+		{ enabled: !!stringQuery }
 	);
-	const artistsQueries = useQueries(searchQuery.data?.map((song) => (
-		{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
-	)) ??[]);
+
+	const { isLoading: isLoadingArtist, data: artistData = [] } = useQuery(
+		["artist", stringQuery],
+		() => API.searchArtists(stringQuery),
+		{ enabled: !!stringQuery }
+	);
+
+	const { isLoading: isLoadingGenre, data: genreData = [] } = useQuery(
+		["genre", stringQuery],
+		() => API.searchGenres(stringQuery),
+		{ enabled: !!stringQuery }
+	);
+
+	const updateFilter = (newData: Filter) => {
+		// called when the filter is changed
+		setFilter(newData);
+	};
+
+	const updateStringQuery = (newData: string) => {
+		// called when the stringQuery is updated
+		setStringQuery(newData);
+		isRequestSucceeded = false;
+	};
 
 	return (
-		<Box style={{ padding: 10 }}>
-			<SearchBarSuggestions
-				onTextSubmit={setQuery}
-				suggestions={searchQuery.data?.map((searchResult) => ({
-					type: SuggestionType.ILLUSTRATED,
-					data: {
-						text: searchResult.name,
-						subtext: artistsQueries.find((artistQuery) => artistQuery.data?.id == searchResult.artistId)?.data?.name ?? "",
-						imageSrc: searchResult.cover,
-						onPress: () => navigation.navigate("Song", { songId: searchResult.id })
-					}
-				})) ?? []}
-			/>
-		</Box>
+		<ScrollView>
+			<SafeAreaView>
+				<SearchContext.Provider
+					value={{
+						filter,
+						stringQuery,
+						songData,
+						artistData,
+						genreData,
+						isLoadingSong,
+						isLoadingArtist,
+						isLoadingGenre,
+						updateFilter,
+						updateStringQuery,
+					}}
+				>
+					<SearchBar />
+					<SearchResultComponent />
+				</SearchContext.Provider>
+			</SafeAreaView>
+		</ScrollView>
 	);
 };
 

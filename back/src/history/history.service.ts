@@ -72,11 +72,10 @@ export class HistoryService {
 		};
 	}
 
-	async createSearchHistoryRecord({
-		userID,
-		query,
-		type,
-	}: SearchHistoryDto): Promise<SearchHistory> {
+	async createSearchHistoryRecord(
+		userID: number,
+		{ query, type }: SearchHistoryDto
+	): Promise<SearchHistory> {
 		return this.prisma.searchHistory.create({
 			data: {
 				query,

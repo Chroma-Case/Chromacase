@@ -5,6 +5,9 @@ import { RouteProps, useNavigation } from "../Navigation";
 import { CardBorderRadius } from "../components/Card";
 import TextButton from "../components/TextButton";
 import API from '../API';
+import LoadingComponent from "../components/Loading";
+import CardGridCustom from "../components/CardGridCustom";
+import SongCard from "../components/SongCard";
 import { useQueries, useQuery } from "react-query";
 import { LoadingView } from "../components/Loading";
 
@@ -28,7 +31,7 @@ const ScoreView = ({ songId, overallScore, score }: RouteProps<ScoreViewProps>) 
 		{ enabled: songQuery.data != undefined }
 	);
 	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
-	const recommendations = useQuery(['song', 'recommendations'], () => API.getUserRecommendations());
+	const recommendations = useQuery(['song', 'recommendations'], () => API.getSongSuggestions());
 	const artistRecommendations = useQueries(recommendations.data
 		?.filter(({ artistId }) => artistId !== null)
 		.map((song) => ({
@@ -75,17 +78,18 @@ const ScoreView = ({ songId, overallScore, score }: RouteProps<ScoreViewProps>) 
 					</Column>
 				</Card>
 			</Row>
-			<SongCardGrid
+			<CardGridCustom
 				style={{ justifyContent: "space-evenly" }}
+				content={recommendations.data.map((i) => ({
+					cover: i.cover,
+					name: i.name ,
+					artistName: artistRecommendations.find(({ data }) => data?.id == i.artistId)?.data?.name ?? "",
+					id: i.id
+				}))}
+				cardComponent={SongCard}
 				heading={<Text fontSize='sm'>
 					<Translate translationKey="songsToGetBetter"/>
 				</Text>}
-				songs={recommendations.data.map((i) => ({
-					albumCover: i.cover,
-					songTitle: i.name ,
-					artistName: artistRecommendations.find(({ data }) => data?.id == i.artistId)?.data?.name ?? "",
-					songId: i.id
-				}))}
 			/>
 			<Row space={3} style={{ width: '100%', justifyContent: 'center' }}>
 				<TextButton colorScheme='gray'

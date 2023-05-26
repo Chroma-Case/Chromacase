@@ -1,7 +1,9 @@
 import Artist from "./models/Artist";
+import Album from "./models/Album";
 import AuthToken from "./models/AuthToken";
 import Chapter from "./models/Chapter";
 import Lesson from "./models/Lesson";
+import Genre from "./models/Genre";
 import LessonHistory from "./models/LessonHistory";
 import Song from "./models/Song";
 import SongHistory from "./models/SongHistory";
@@ -10,7 +12,7 @@ import Constants from "expo-constants";
 import store from "./state/Store";
 import { Platform } from "react-native";
 import { en } from "./i18n/Translations";
-import { QueryClient } from "react-query";
+import { useQuery, QueryClient } from "react-query";
 import UserSettings from "./models/UserSettings";
 import { PartialDeep } from "type-fest";
 import SearchHistory from "./models/SearchHistory";
@@ -343,7 +345,51 @@ export default class API {
 	 */
 	public static async searchSongs(query: string): Promise<Song[]> {
 		return API.fetch({
-			route: `/search/guess/song/${query}`,
+			route: `/search/songs/${query}`,
+		});
+	}
+
+	/**
+	 * Search artists by name
+	 * @param query the string used to find the artists
+	 */
+	public static async searchArtists(query?: string): Promise<Artist[]> {
+		return API.fetch({
+			route: `/search/artists/${query}`,
+		});
+	}
+
+	/**
+	 * Search Album by name
+	 * @param query the string used to find the album
+	 */
+	public static async searchAlbum(query?: string): Promise<Album[]> {
+		return [
+				{
+					id: 1,
+					name: "Super Trooper",
+				},
+				{
+					id: 2,
+					name: "Kingdom Heart 365/2 OST",
+				},
+				{
+					id: 3,
+					name: "The Legend Of Zelda Ocarina Of Time OST",
+				},
+				{
+					id: 4,
+					name: "Random Access Memories",
+				},
+		] as Album[];
+	}
+
+	/**
+	 * Retrieve music genres
+	 */
+	public static async searchGenres(query?: string): Promise<Genre[]> {
+		return API.fetch({
+			route: `/search/genres/${query}`,
 		});
 	}
 
@@ -363,30 +409,55 @@ export default class API {
 
 	/**
 	 * Retrieve the authenticated user's search history
-	 * @param lessonId the id to find the lesson
+	 * @param skip number of entries skipped before returning
+	 * @param take how much do we take to return
+	 * @returns Returns an array of history entries (temporary type any)
 	 */
-	public static async getSearchHistory(): Promise<SearchHistory[]> {
-		const tmp = await this.fetch({
-			route: "/history/search",
-		});
+	public static async getSearchHistory(skip?: number, take?: number): Promise<SearchHistory[]> {
+		return (await API.fetch({
+			route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
+			method: "GET",
+		})).map((e: any) => {
+			return {
+				id: e.id,
+				query: e.query,
+				type: e.type,
+				userId: e.userId,
+				timestamp: new Date(e.searchDate),
+			} as SearchHistory
+		})
+	}
 
-		return tmp.map((value: any) => ({
-			query: value.query,
-			userID: value.userId,
-			id: value.id,
-		}));
+	/**
+	 * Posts a new entry in the user's search history
+	 * @param query is the query itself
+	 * @param type the type of object searched
+	 * @param timestamp the date it's been issued
+	 * @returns nothing
+	 */
+	public static async createSearchHistoryEntry(query: string, type: string, timestamp: number): Promise<void> {
+		return await API.fetch({
+			route: `/history/search`,
+			method: "POST",
+			body: {
+				query: query,
+				type: type
+			},
+		})
 	}
 
 	/**
 	 * Retrieve the authenticated user's recommendations
+	 * @returns an array of songs
 	 */
-	public static async getUserRecommendations(): Promise<Song[]> {
+	public static async getSongSuggestions(): Promise<Song[]> {
 		const queryClient = new QueryClient();
 		return await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
 	}
 
 	/**
 	 * Retrieve the authenticated user's play history
+	 * * @returns an array of songs
 	 */
 	public static async getUserPlayHistory(): Promise<SongHistory[]> {
 		return this.fetch({

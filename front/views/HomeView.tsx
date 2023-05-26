@@ -1,6 +1,8 @@
 import React from "react";
 import { useQueries, useQuery } from "react-query";
 import API from "../API";
+import LoadingComponent from "../components/Loading";
+import CardGridCustom from "../components/CardGridCustom";
 import { LoadingView } from "../components/Loading";
 import {
 	Center,
@@ -16,7 +18,7 @@ import {
 	Column,
 	Button,
 	Text,
-	useTheme
+	useTheme 
 } from "native-base";
 
 import { useNavigation } from "../Navigation";
@@ -25,6 +27,7 @@ import CompetenciesTable from "../components/CompetenciesTable";
 import ProgressBar from "../components/ProgressBar";
 import Translate from "../components/Translate";
 import TextButton from "../components/TextButton";
+import SearchHistoryCard from "../components/HistoryCard";
 import Song from "../models/Song";
 import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -34,9 +37,9 @@ const HomeView = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: "big"});
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const playHistoryQuery = useQuery(['history', 'play'], () => API.getUserPlayHistory());
-	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory());
+	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory(0, 10));
 	const skillsQuery = useQuery(['skills'], () => API.getUserSkills());
-	const nextStepQuery = useQuery(['user', 'recommendations'], () => API.getUserRecommendations());
+	const nextStepQuery = useQuery(['user', 'recommendations'], () => API.getSongSuggestions());
 	const songHistory = useQueries(
 		playHistoryQuery.data?.map(({ songID }) => ({
 			queryKey: ['song', songID],
@@ -48,7 +51,7 @@ const HomeView = () => {
 		.concat(nextStepQuery.data ?? [])
 		.filter((s): s is Song => s !== undefined))
 		.map((song) => (
-			{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.id) }
+			{ queryKey: ['artist', song.id], queryFn: () => API.getArtist(song.artistId) }
 		))
 	);
 
@@ -77,8 +80,8 @@ const HomeView = () => {
 					heading={<Translate translationKey='goNextStep'/>}
 					songs={nextStepQuery.data?.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 						.map((song) => ({
-							albumCover: song.cover,
-							songTitle: song.name,
+							cover: song.cover,
+							name: song.name,
 							songId: song.id,
 							artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
 						})) ?? []
@@ -100,9 +103,9 @@ const HomeView = () => {
 								.filter((song, i, array) => array.map((s) => s.id).findIndex((id) => id == song.id) == i)
 								.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 								.map((song) => ({
-									albumCover: song.cover,
-									songTitle: song.name,
-									songId: song.id,
+									cover: song.cover,
+									name: song.name,
+									id: song.id,
 									artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
 								})) ?? []
 							}
@@ -135,7 +138,7 @@ const HomeView = () => {
 							searchHistoryQuery.data?.length === 0 && <Translate translationKey='noRecentSearches'/>
 						}
 						{
-							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].reverse().slice(0, 5).map((query) => (
+							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].slice(0, 5).map((query) => (
 								<Button
 									leftIcon={
 										<FontAwesome5 name="search" size={16} />

@@ -18,6 +18,7 @@ import ScoreView from './views/ScoreView';
 import { LoadingView } from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
+import ArtistDetailsView from './views/ArtistDetailsView';
 import { Button, Center, VStack } from 'native-base';
 import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
@@ -28,6 +29,7 @@ const protectedRoutes = () => ({
 	Play: { component: PlayView, options: { title: translate('play') } },
 	Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
 	Song: { component: SongLobbyView, options: { title: translate('play') } },
+	Artist: { component: ArtistDetailsView, options: { title: translate('artistFilter') } },
 	Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null } },
 	Search: { component: SearchView, options: { title: translate('search') } },
 	User: { component: ProfileView, options: { title: translate('user') } },
