@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView, Platform } from 'react-native';
+import { SafeAreaView, Platform, Animated } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon } from 'native-base';
+import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon, HStack } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { RouteProps, useNavigation } from "../Navigation";
@@ -13,14 +13,20 @@ import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from "react-use-precision-timer";
 import PartitionView from '../components/PartitionView';
+import TextButton from '../components/TextButton';
 
 type PlayViewProps = {
 	songId: number,
 	type: 'practice' | 'normal'
+}
+
+type ScoreMessage = {
+	content: string,
+	color?: ColorSchemeType
 }
 
 
@@ -49,6 +55,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const navigation = useNavigation();
 	const song = useQuery(['song', songId], () => API.getSong(songId), { staleTime: Infinity });
 	const toast = useToast();
+	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
@@ -56,6 +63,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
+	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const musixml = useQuery(["musixml", songId], () =>
 		API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
 		{ staleTime: Infinity }
@@ -131,10 +139,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					formattedMessage = translate(data[data.type]);
 					switch (data[data.type]) {
 						case 'perfect':
-							messageColor = 'fuchsia';
+							messageColor = 'green';
 							break;
 						case 'great':
-							messageColor = 'green';
+							messageColor = 'blue';
 							break;
 						case 'short':
 						case 'long':
@@ -144,13 +152,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						case 'too short':
 						case 'too long':
 						case 'wrong':
-							messageColor = 'grey';
+							messageColor = 'trueGray';
 							break;
 						default:
 							break;
 					}
 				}
-				toast.show({ description: formattedMessage, placement: 'top', colorScheme: messageColor ?? 'secondary' });
+				setLastScoreMessage({ content: formattedMessage, color: messageColor });
+				// toast.show({ description: formattedMessage, placement: 'top', colorScheme: messageColor ?? 'secondary' });
 			} catch (e) {
 				console.log(e);
 			}
@@ -193,6 +202,16 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, []);
 	useEffect(() => {
+		if (lastScoreMessage) {
+			fadeAnim.setValue(1);
+			Animated.timing(fadeAnim, {
+				toValue: 0,
+				duration: 3000,
+				useNativeDriver: true,
+			}).start();
+		}
+	}, [lastScoreMessage]);
+	useEffect(() => {
 		// Song.data is updated on navigation.navigate (do not know why)
 		// Hotfix to prevent midi setup process from reruning on game end
 		if (navigation.getState().routes.at(-1)?.name != route.name) {
@@ -208,6 +227,15 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
+			<HStack width="100%" justifyContent="center" p={3} style={{ position: 'absolute', top: 1 }}>
+				<Animated.View style={{ opacity: fadeAnim }}>
+					<TextButton
+						disabled
+						translate={{ translationKey: lastScoreMessage?.content ?? '' }}
+						colorScheme={lastScoreMessage?.color} rounded='sm'
+					/>
+				</Animated.View>
+			</HStack>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
 				<PartitionView file={musixml.data}
 					onPartitionReady={() => setPartitionRendered(true)}
