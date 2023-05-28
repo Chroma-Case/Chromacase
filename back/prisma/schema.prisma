@@ -14,6 +14,7 @@ model User {
     username      String          @unique
     password      String
     email         String
+    googleId      String?         @unique
     LessonHistory LessonHistory[]
     SongHistory   SongHistory[]
     searchHistory SearchHistory[]
