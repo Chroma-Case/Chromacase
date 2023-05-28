@@ -22,7 +22,6 @@ import {
 	ApiBearerAuth,
 	ApiBody,
 	ApiOkResponse,
-	ApiParam,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -48,7 +47,8 @@ export class AuthController {
 		try {
 			const user = await this.usersService.createUser(registerDto)
 			await this.settingsService.createUserSetting(user.id);
-		} catch {
+		} catch(e) {
+			console.error(e);
 			throw new BadRequestException();
 		}
 	}
