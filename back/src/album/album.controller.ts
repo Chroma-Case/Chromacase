@@ -46,7 +46,11 @@ export class AlbumController {
 
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
-		return await this.albumService.deleteAlbum({ id });
+		try {
+			return await this.albumService.deleteAlbum({ id });
+		} catch {
+			throw new NotFoundException('Invalid ID');
+		}
 	}
 
 	@Get()

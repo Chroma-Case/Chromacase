@@ -93,9 +93,8 @@ export class LessonController {
 	async delete(@Param('id', ParseIntPipe) id: number): Promise<Lesson> {
 		try {
 			return await this.lessonService.delete(id);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e.toString());
+		} catch {
+			throw new NotFoundException();
 		}
 	}
 }
