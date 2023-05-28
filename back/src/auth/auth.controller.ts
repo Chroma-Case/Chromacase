@@ -25,6 +25,7 @@ import {
 import { User } from '../models/user';
 import { JwtToken } from './models/jwt';
 import { LoginDto } from './dto/login.dto';
+import { GoogleAuthGuard } from './google-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -67,5 +68,15 @@ export class AuthController {
 	@Delete('me')
 	deleteSelf(@Request() req: any): Promise<User> {
 		return this.usersService.deleteUser({ id: req.user.id });
+	}
+
+	@UseGuards(GoogleAuthGuard)
+	@Get('google')
+	async googleAuth(@Request() req: any) {}
+
+	@UseGuards(GoogleAuthGuard)
+	@Get('google/callback')
+	async googleAuthRedirect(@Request() req: any) {
+		return this.authService.login(req.user);
 	}
 }
