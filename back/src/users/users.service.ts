@@ -60,8 +60,9 @@ export class UsersService {
 
 	async findOrCreate(user: any): Promise<User> {
 		const existingUser = await this.prisma.user.findUnique({
-			where: { email: user.email },
+			where: { googleId: user.googleId },
 		});
+		//console.log(existingUser);
 		if (existingUser) {
 			return existingUser;
 		}
@@ -70,6 +71,7 @@ export class UsersService {
 				email: user.email,
 				username: `${user.firstName} ${user.lastName}`,
 				password: '',
+				googleId: user.googleId,
 			},
 		});
 	}
