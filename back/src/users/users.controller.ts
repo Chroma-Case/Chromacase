@@ -58,24 +58,4 @@ export class UsersController {
 	remove(@Param('id') id: string): Promise<User> {
 		return this.usersService.deleteUser({ id: +id });
 	}
-
-	// Google OAuth - Call this endpoint to start the OAuth flow
-	@Get('google')
-	@UseGuards(AuthGuard('google'))
-	async googleAuth() {}
-
-	// Google OAuth - Callback endpoint
-	@Get('google/callback')
-	@UseGuards(AuthGuard('google'))
-	async googleAuthCallback(@Req() req, @Res() res) {
-		try {
-			const user = req.user;
-			// Redirect to frontend with auth information
-			res.redirect(''); // TODO: Add frontend url format example : http://localhost:3000/success?user=${JSON.stringify(user)}`
-		} catch (err) {
-			// Redirect to frontend with error information
-			console.error(err);
-			res.redirect(''); // TODO: Add frontend url format example : http://localhost:3000/error?error=${err}`
-		}
-	}
 }
