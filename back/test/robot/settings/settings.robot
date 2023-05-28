@@ -14,7 +14,7 @@ Get settings
     Output
     Should Be True    ${get.body.emailNotification}
     Integer    response status    200
-    [Teardown]    DELETE    /users/${userID}
+    [Teardown]    DELETE    /auth/me
 
 Patch settingspushNotification
     ${userID}=    RegisterLogin    2na-min-faranssa-wa-2na-adrus-allu3'at-al3rabia
@@ -24,4 +24,4 @@ Patch settingspushNotification
     Output
     Should Not Be True    ${patch.body.leaderBoard}
     Integer    response status    200
-    [Teardown]    DELETE    /users/${userID}
+    [Teardown]    DELETE    /auth/me
