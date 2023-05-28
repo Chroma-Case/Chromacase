@@ -106,7 +106,11 @@ export class SongController {
 
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
-		return await this.songService.deleteSong({ id });
+		try {
+			return await this.songService.deleteSong({ id });
+		} catch {
+			throw new NotFoundException('Invalid ID');
+		}
 	}
 
 	@Get()

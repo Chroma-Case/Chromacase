@@ -41,7 +41,11 @@ export class GenreController {
 
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
-		return await this.service.delete({ id });
+		try {
+			return await this.service.delete({ id });
+		} catch {
+			throw new NotFoundException('Invalid ID');
+		}
 	}
 
 	@Get(':id/illustration')
