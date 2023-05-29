@@ -300,13 +300,16 @@ export default class API {
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
 	 */
+	public static getArtistIllustration(artistId: number): string {
+		return `${baseAPIUrl}/artist/${artistId}/illustration`;
+	}
+
+	/**
+	 * Retrive a song's midi partition
+	 * @param songId the id to find the song
+	 */
 	public static getGenreIllustration(genreId: number): string {
 		return `${baseAPIUrl}/genre/${genreId}/illustration`;
-		/*
-		return API.fetch({
-			route: `/genre/${genreId}/illustration`,
-			raw: true,
-		});*/
 	}
 
 	/**
