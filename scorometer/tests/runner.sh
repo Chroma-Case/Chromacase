@@ -2,7 +2,7 @@
 
 EMPTY_DB=$(curl localhost:3000/song/1 -s | jq '.statusCode == 404')
 if [[ $EMPTY_DB == "true" ]]; then
-  curl localhost:3000/song -X POST --data '{"name": "SCORO_TEST", "difficulties": {}, "midiPath": "/musics/SCORO_TEST/SCORO_TEST.midi", "musicXmlPath": "/musics/SCORO_TEST/SCORO_TEST.mxl"}' -H "Content-Type: application/json" &> /dev/null
+  curl localhost:3000/song -X POST --data '{"name": "SCORO_TEST", "difficulties": {}, "midiPath": "/assets/musics/SCORO_TEST/SCORO_TEST.midi", "musicXmlPath": "/assets/musics/SCORO_TEST/SCORO_TEST.mxl"}' -H "Content-Type: application/json" &> /dev/null
 fi
 
 TESTS_DONE=0
@@ -10,7 +10,7 @@ TESTS_SUCCESS=0
 TESTS_FAILED=0
 
 function test {
-  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
+  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../assets/musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   TESTS_DONE=$((TESTS_DONE + 1))
   if [ -n "$SCOROMETER_AUTOFIX" ]; then
     cat /tmp/scorometer_res > $1/output
@@ -36,7 +36,7 @@ then
   done
   exit $TESTS_FAILED
 else
-  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
+  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../assets/musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   echo "=========== CURRENT OUTPUT ==========="
   cat /tmp/scorometer_res
   echo "======================================"
