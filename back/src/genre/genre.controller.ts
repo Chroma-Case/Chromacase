@@ -6,12 +6,14 @@ import {
 	DefaultValuePipe,
 	Delete,
 	Get,
+	InternalServerErrorException,
 	NotFoundException,
 	Param,
 	ParseIntPipe,
 	Post,
 	Query,
 	Req,
+	StreamableFile,
 } from '@nestjs/common';
 import { Plage } from 'src/models/plage';
 import { CreateGenreDto } from './dto/create-genre.dto';
@@ -19,11 +21,12 @@ import { Request } from 'express';
 import { GenreService } from './genre.service';
 import { Prisma, Genre } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
+import { createReadStream } from 'fs';
 
 @Controller('genre')
 @ApiTags('genre')
 export class GenreController {
-	constructor(private readonly service: GenreService) {}
+	constructor(private readonly service: GenreService) { }
 
 	@Post()
 	async create(@Body() dto: CreateGenreDto) {
@@ -37,6 +40,20 @@ export class GenreController {
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
 		return await this.service.delete({ id });
+	}
+
+	@Get(':id/illustration')
+	async getIllustration(@Param('id', ParseIntPipe) id: number) {
+		const genre = await this.service.get({ id });
+		if (!genre) throw new NotFoundException('Genre not found');
+		const path = `/assets/genres/${genre.name}/illustration.png`;
+
+		try {
+			const file = createReadStream(path);
+			return new StreamableFile(file);
+		} catch {
+			throw new InternalServerErrorException();
+		}
 	}
 
 	@Get()
