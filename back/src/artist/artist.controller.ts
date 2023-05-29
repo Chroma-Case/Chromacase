@@ -21,7 +21,7 @@ import { Request } from 'express';
 import { ArtistService } from './artist.service';
 import { Prisma, Artist } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 
 @Controller('artist')
 @ApiTags('artist')
@@ -47,6 +47,8 @@ export class ArtistController {
 		const artist = await this.service.get({ id });
 		if (!artist) throw new NotFoundException('Artist not found');
 		const path = `/assets/artists/${artist.name}/illustration.png`;
+		if (!existsSync(path))
+			throw new NotFoundException('Illustration not found');
 
 		try {
 			const file = createReadStream(path);
