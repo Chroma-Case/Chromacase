@@ -27,7 +27,7 @@ logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
-MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/musics/"
+MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/assets/musics/"
 
 RATIO = float(sys.argv[2] if len(sys.argv) > 2 else 1)
 OCTAVE = 5
