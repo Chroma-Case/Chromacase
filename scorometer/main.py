@@ -329,7 +329,7 @@ def handleStartMessage(start_message: StartMessage):
 		r = requests.get(f"{BACK_URL}/song/{song_id}")
 		r.raise_for_status()
 		song_path = r.json()["midiPath"]
-		song_path = song_path.replace("/musics/", MUSICS_FOLDER)
+		song_path = song_path.replace("/assets/musics/", MUSICS_FOLDER)
 	except Exception as e:
 		logging.fatal("Invalid song id", exc_info=e)
 		send({"error": "Invalid song id, song does not exist"})
