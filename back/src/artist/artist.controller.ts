@@ -6,12 +6,14 @@ import {
 	DefaultValuePipe,
 	Delete,
 	Get,
+	InternalServerErrorException,
 	NotFoundException,
 	Param,
 	ParseIntPipe,
 	Post,
 	Query,
 	Req,
+	StreamableFile,
 } from '@nestjs/common';
 import { Plage } from 'src/models/plage';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -19,11 +21,12 @@ import { Request } from 'express';
 import { ArtistService } from './artist.service';
 import { Prisma, Artist } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
+import { createReadStream } from 'fs';
 
 @Controller('artist')
 @ApiTags('artist')
 export class ArtistController {
-	constructor(private readonly service: ArtistService) {}
+	constructor(private readonly service: ArtistService) { }
 
 	@Post()
 	async create(@Body() dto: CreateArtistDto) {
@@ -37,6 +40,20 @@ export class ArtistController {
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
 		return await this.service.delete({ id });
+	}
+
+	@Get(':id/illustration')
+	async getIllustration(@Param('id', ParseIntPipe) id: number) {
+		const artist = await this.service.get({ id });
+		if (!artist) throw new NotFoundException('Artist not found');
+		const path = `/assets/artists/${artist.name}/illustration.png`;
+
+		try {
+			const file = createReadStream(path);
+			return new StreamableFile(file);
+		} catch {
+			throw new InternalServerErrorException();
+		}
 	}
 
 	@Get()
