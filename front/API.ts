@@ -151,7 +151,9 @@ export default class API {
 		return response.access_token;
 	}
 
-	public static async transformGuestToUser(registrationInput: RegistrationInput): Promise<void> {
+	public static async transformGuestToUser(
+		registrationInput: RegistrationInput
+	): Promise<void> {
 		await API.fetch({
 			route: "/auth/me",
 			body: registrationInput,
@@ -180,7 +182,7 @@ export default class API {
 				createdAt: new Date("2023-04-09T00:00:00.000Z"),
 				avatar:
 					"https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn",
-			}
+			},
 		} as User;
 	}
 
@@ -194,16 +196,18 @@ export default class API {
 				pushNotif: settings.pushNotification,
 				emailNotif: settings.emailNotification,
 				trainNotif: settings.trainingNotification,
-				newSongNotif: settings.newSongNotification
+				newSongNotif: settings.newSongNotification,
 			},
 			recommendations: settings.recommendations,
 			weeklyReport: settings.weeklyReport,
 			leaderBoard: settings.leaderBoard,
-			showActivity: settings.showActivity
+			showActivity: settings.showActivity,
 		};
 	}
 
-	public static async updateUserSettings(settings: PartialDeep<UserSettings>): Promise<void> {
+	public static async updateUserSettings(
+		settings: PartialDeep<UserSettings>
+	): Promise<void> {
 		const dto = {
 			pushNotification: settings.notifications?.pushNotif,
 			emailNotification: settings.notifications?.emailNotif,
@@ -213,11 +217,11 @@ export default class API {
 			weeklyReport: settings.weeklyReport,
 			leaderBoard: settings.leaderBoard,
 			showActivity: settings.showActivity,
-		}
+		};
 		return API.fetch({
-			method: 'PATCH',
-			route: '/auth/me/settings',
-			body: dto
+			method: "PATCH",
+			route: "/auth/me/settings",
+			body: dto,
 		});
 	}
 
@@ -248,16 +252,16 @@ export default class API {
 		// this is a dummy illustration, we will need to fetch the real one from the API
 		return songs.data.map(
 			(song: any) =>
-				({
-					id: song.id as number,
-					name: song.name as string,
-					artistId: song.artistId as number,
-					albumId: song.albumId as number,
-					genreId: song.genreId as number,
-					details: song.difficulties,
-					cover: getDummyIllustration(),
-					metrics: {},
-				} as Song)
+			({
+				id: song.id as number,
+				name: song.name as string,
+				artistId: song.artistId as number,
+				albumId: song.albumId as number,
+				genreId: song.genreId as number,
+				details: song.difficulties,
+				cover: getDummyIllustration(),
+				metrics: {},
+			} as Song)
 		);
 	}
 
@@ -290,6 +294,19 @@ export default class API {
 			route: `/song/${songId}/midi`,
 			raw: true,
 		});
+	}
+
+	/**
+	 * Retrive a song's midi partition
+	 * @param songId the id to find the song
+	 */
+	public static getGenreIllustration(genreId: number): string {
+		return `${baseAPIUrl}/genre/${genreId}/illustration`;
+		/*
+		return API.fetch({
+			route: `/genre/${genreId}/illustration`,
+			raw: true,
+		});*/
 	}
 
 	/**
@@ -333,7 +350,9 @@ export default class API {
 	 * Retrieve a song's play history
 	 * @param songId the id to find the song
 	 */
-	public static async getSongHistory(songId: number): Promise<{best: number, history: SongHistory[]}> {
+	public static async getSongHistory(
+		songId: number
+	): Promise<{ best: number; history: SongHistory[] }> {
 		return API.fetch({
 			route: `/song/${songId}/history`,
 		});
@@ -365,22 +384,22 @@ export default class API {
 	 */
 	public static async searchAlbum(query?: string): Promise<Album[]> {
 		return [
-				{
-					id: 1,
-					name: "Super Trooper",
-				},
-				{
-					id: 2,
-					name: "Kingdom Heart 365/2 OST",
-				},
-				{
-					id: 3,
-					name: "The Legend Of Zelda Ocarina Of Time OST",
-				},
-				{
-					id: 4,
-					name: "Random Access Memories",
-				},
+			{
+				id: 1,
+				name: "Super Trooper",
+			},
+			{
+				id: 2,
+				name: "Kingdom Heart 365/2 OST",
+			},
+			{
+				id: 3,
+				name: "The Legend Of Zelda Ocarina Of Time OST",
+			},
+			{
+				id: 4,
+				name: "Random Access Memories",
+			},
 		] as Album[];
 	}
 
@@ -413,19 +432,24 @@ export default class API {
 	 * @param take how much do we take to return
 	 * @returns Returns an array of history entries (temporary type any)
 	 */
-	public static async getSearchHistory(skip?: number, take?: number): Promise<SearchHistory[]> {
-		return (await API.fetch({
-			route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
-			method: "GET",
-		})).map((e: any) => {
+	public static async getSearchHistory(
+		skip?: number,
+		take?: number
+	): Promise<SearchHistory[]> {
+		return (
+			await API.fetch({
+				route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
+				method: "GET",
+			})
+		).map((e: any) => {
 			return {
 				id: e.id,
 				query: e.query,
 				type: e.type,
 				userId: e.userId,
 				timestamp: new Date(e.searchDate),
-			} as SearchHistory
-		})
+			} as SearchHistory;
+		});
 	}
 
 	/**
@@ -435,15 +459,19 @@ export default class API {
 	 * @param timestamp the date it's been issued
 	 * @returns nothing
 	 */
-	public static async createSearchHistoryEntry(query: string, type: string, timestamp: number): Promise<void> {
+	public static async createSearchHistoryEntry(
+		query: string,
+		type: string,
+		timestamp: number
+	): Promise<void> {
 		return await API.fetch({
 			route: `/history/search`,
 			method: "POST",
 			body: {
 				query: query,
-				type: type
+				type: type,
 			},
-		})
+		});
 	}
 
 	/**
@@ -461,7 +489,7 @@ export default class API {
 	 */
 	public static async getUserPlayHistory(): Promise<SongHistory[]> {
 		return this.fetch({
-			route: '/history'
+			route: "/history",
 		});
 	}
 
