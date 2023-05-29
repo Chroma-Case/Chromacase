@@ -7,6 +7,8 @@ import { Center, Button, Text } from 'native-base';
 import SigninForm from "../components/forms/signinform";
 import SignupForm from "../components/forms/signupform";
 import TextButton from "../components/TextButton";
+import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
+import Constants from 'expo-constants';
 
 const hanldeSignin = async (username: string, password: string, apiSetter: (accessToken: string) => void): Promise<string> => {
 	try {
@@ -32,9 +34,34 @@ const handleSignup = async (username: string, password: string, email: string, a
 	}
 };
 
+GoogleSignin.configure({
+	webClientId: Constants.manifest?.extra?.googleClientId,
+	offlineAccess: true,
+});
+
 const AuthenticationView = () => {
 	const dispatch = useDispatch();
 	const [mode, setMode] = React.useState("signin" as "signin" | "signup");
+	const [signinInProgress, setSigninInProgress] = React.useState(false);
+
+
+	const handleGoogleSignin = React.useCallback(async () => {
+		try {
+			setSigninInProgress(true);
+			await GoogleSignin.hasPlayServices();
+			const userInfo = await GoogleSignin.signIn();
+			const apiAccess = await API.authWithGoogle({ token: userInfo.idToken });
+			dispatch(setAccessToken(apiAccess));
+			return;
+		} catch (error) {
+			console.log(error);
+			if (error instanceof APIError) return translate(error.userMessage);
+			if (error instanceof Error) return error.message;
+			return translate("unknownError");
+		} finally {
+			setSigninInProgress(false);
+		}
+	}, [dispatch]);
 
 	return (
 		<Center style={{ flex: 1 }}>
@@ -48,6 +75,13 @@ const AuthenticationView = () => {
 				translate={{ translationKey: mode === "signin" ? "signUpBtn" : "signInBtn" }}
 				variant='outline' marginTop={5} colorScheme='primary'
 				onPress={() => setMode(mode === "signin" ? "signup" : "signin")}
+			/>
+			<GoogleSigninButton
+				style={{ width: 192, height: 48, marginTop: 5 }}
+				size={GoogleSigninButton.Size.Wide}
+				color={GoogleSigninButton.Color.Dark}
+				onPress={handleGoogleSignin}
+				disabled={signinInProgress}
 			/>
 		</Center>
 	);
