@@ -48,8 +48,8 @@ def populateFile(path, midi, mxl):
 	print(f"Populating {metadata['Name']}")
 	res = requests.post(f"{url}/song", json={
 		"name": metadata["Name"],
-		"midiPath": f"/musics/{midi}",
-		"musicXmlPath": f"/musics/{mxl}",
+		"midiPath": f"/assets/musics/{midi}",
+		"musicXmlPath": f"/assets/musics/{mxl}",
 		"difficulties": difficulties,
 		"artist": artistId,
 		"album": getOrCreateAlbum(metadata["Album"], artistId),
