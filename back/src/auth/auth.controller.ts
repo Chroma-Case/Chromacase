@@ -79,4 +79,9 @@ export class AuthController {
 	async googleAuthRedirect(@Request() req: any) {
 		return this.authService.login(req.user);
 	}
+
+	@Post('google/mobile')
+	async googleMobileAuth(@Body('idToken') idToken: string) {
+		return this.authService.loginWithGoogleMobile(idToken);
+	}
 }
