@@ -100,7 +100,7 @@ Find multiples songs filtered by type
 Get midi file
     &{res}=    POST
     ...    /song
-    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Short/Short.midi", "musicXmlPath": "/musics/Short/Short.mxl"}
+    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/assets/musics/Short/Short.midi", "musicXmlPath": "/assets/musics/Short/Short.mxl"}
     Output
     Integer    response status    201
     GET    /song/${res.body.id}/midi
