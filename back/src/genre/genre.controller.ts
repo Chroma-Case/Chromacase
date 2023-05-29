@@ -21,7 +21,7 @@ import { Request } from 'express';
 import { GenreService } from './genre.service';
 import { Prisma, Genre } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 
 @Controller('genre')
 @ApiTags('genre')
@@ -47,6 +47,8 @@ export class GenreController {
 		const genre = await this.service.get({ id });
 		if (!genre) throw new NotFoundException('Genre not found');
 		const path = `/assets/genres/${genre.name}/illustration.png`;
+		if (!existsSync(path))
+			throw new NotFoundException('Illustration not found');
 
 		try {
 			const file = createReadStream(path);
