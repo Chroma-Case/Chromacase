@@ -54,6 +54,7 @@ def populateFile(path, midi, mxl):
 		"artist": artistId,
 		"album": getOrCreateAlbum(metadata["Album"], artistId),
 		"genre": getOrCreateGenre(metadata["Genre"]),
+		"illustrationPath": f"/assets/{os.path.commonpath([midi, mxl])}/illustration.png"
 	})
 	print(res.json())
 
