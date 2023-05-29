@@ -48,6 +48,20 @@ export class SongController {
 		}
 	}
 
+	@Get(':id/illustration')
+	async getIllustration(@Param('id', ParseIntPipe) id: number) {
+		const song = await this.songService.song({ id });
+		if (!song) throw new NotFoundException('Song not found');
+
+		if (song.illustrationPath === null) throw new NotFoundException();
+		try {
+			const file = createReadStream(song.illustrationPath);
+			return new StreamableFile(file);
+		} catch {
+			throw new InternalServerErrorException();
+		}
+	}
+
 	@Get(':id/musicXml')
 	async getMusicXml(@Param('id', ParseIntPipe) id: number) {
 		const song = await this.songService.song({ id });
