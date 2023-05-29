@@ -131,6 +131,38 @@ export default class API {
 		});
 	}
 
+	/**
+	 * Authentify a new user through Google
+	 */
+	public static async authWithGoogle( token: any): Promise<AccessToken> {
+		if (Platform.OS === "web") {
+			return API.fetch({
+				route: "/auth/google",
+				method: "GET",
+			})
+			.then((responseBody) => responseBody.access_token)
+			.catch((e) => {
+				if (!(e instanceof APIError)) throw e;
+
+				if (e.status == 401) throw new APIError("invalidCredentials", 401, "invalidCredentials");
+				throw e;
+			});
+		} else {
+			return API.fetch({
+				route: "/auth/google/mobile",
+				body: { token },
+				method: "POST",
+			})
+			.then((responseBody) => responseBody.access_token)
+			.catch((e) => {
+				if (!(e instanceof APIError)) throw e;
+
+				if (e.status == 401) throw new APIError("invalidCredentials", 401, "invalidCredentials");
+				throw e;
+			});
+		}
+	}
+
 	/***
 	 * Retrieve information of the currently authentified user
 	 */
@@ -186,14 +218,6 @@ export default class API {
 			arpegeCompetency: Math.random() * 100,
 			chordsCompetency: Math.random() * 100,
 		};
-	}
-
-	/**
-	 * Authentify a new user through Google
-	 */
-	public static async authWithGoogle(): Promise<AuthToken> {
-		//TODO
-		return "11111";
 	}
 
 	public static async getAllSongs(): Promise<Song[]> {
