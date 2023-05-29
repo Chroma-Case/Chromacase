@@ -82,7 +82,7 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 					flexGrow={0}
 					pl={10}
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-					source={{ uri: song.cover ?? "https://picsum.photos/200" }}
+					source={{ uri: API.getSongIllustration(song.id) }}
 					alt={song.name}
 				/>
 				<HStack

@@ -22,7 +22,7 @@ import { CreateSongDto } from './dto/create-song.dto';
 import { SongService } from './song.service';
 import { Request } from 'express';
 import { Prisma, Song } from '@prisma/client';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { HistoryService } from 'src/history/history.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -54,6 +54,9 @@ export class SongController {
 		if (!song) throw new NotFoundException('Song not found');
 
 		if (song.illustrationPath === null) throw new NotFoundException();
+		if (!existsSync(song.illustrationPath))
+			throw new NotFoundException('Illustration not found');
+
 		try {
 			const file = createReadStream(song.illustrationPath);
 			return new StreamableFile(file);
