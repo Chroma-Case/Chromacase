@@ -82,7 +82,7 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 					flexGrow={0}
 					pl={10}
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-					source={{ uri: API.getSongIllustration(song.id) }}
+					source={{ uri: song.cover }}
 					alt={song.name}
 				/>
 				<HStack
@@ -226,7 +226,7 @@ const ArtistSearchComponent = (props: any) => {
 					content={artistData
 						.slice(0, props?.maxItems ?? artistData.length)
 						.map((a) => ({
-							image: a.picture ?? "https://picsum.photos/200",
+							image: API.getArtistIllustration(a.id),
 							name: a.name,
 							id: a.id,
 							onPress: () => {
@@ -257,7 +257,7 @@ const GenreSearchComponent = (props: any) => {
 					content={genreData
 						.slice(0, props?.maxItems ?? genreData.length)
 						.map((g) => ({
-							icon: "musical-note-sharp",
+							image: API.getGenreIllustration(g.id),
 							name: g.name,
 							id: g.id,
 							onPress: () => {

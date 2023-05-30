@@ -5,14 +5,14 @@ import { useTheme } from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import API from "../API";
 type GenreCardProps = {
-	icon: string;
+	image: string;
 	name: string;
 	id: number;
 	onPress: () => void;
 };
 
 const GenreCard = (props: GenreCardProps) => {
-	const { icon, name, id } = props;
+	const { image, name, id } = props;
 	const theme = useTheme();
 
 	return (
@@ -29,7 +29,7 @@ const GenreCard = (props: GenreCardProps) => {
 				>
 					<Image
 						source={{
-							uri: API.getGenreIllustration(id),
+							uri: image,
 						}}
 						size="md"
 					/>

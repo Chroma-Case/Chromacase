@@ -7,6 +7,7 @@ type SongCardProps = {
 	cover: string;
 	name: string;
 	artistName: string;
+	songId: number;
 };
 
 const SongCard = (props: SongCardProps) => {

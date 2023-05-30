@@ -115,7 +115,7 @@ const ScoreView = ({
 						artistName:
 							artistRecommendations.find(({ data }) => data?.id == i.artistId)
 								?.data?.name ?? "",
-						id: i.id,
+						songId: i.id,
 					}))}
 					cardComponent={SongCard}
 					heading={
