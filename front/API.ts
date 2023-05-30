@@ -228,14 +228,6 @@ export default class API {
 		return "11111";
 	}
 
-	/**
-	 * Retrive a song's midi partition
-	 * @param songId the id to find the song
-	 */
-	public static getSongIllustration(songId: number): string {
-		return `${baseAPIUrl}/song/${songId}/illustration`;
-	}
-
 	public static async getAllSongs(): Promise<Song[]> {
 		let songs = await API.fetch({
 			route: "/song",
