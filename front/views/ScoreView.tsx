@@ -22,18 +22,22 @@ import { LoadingView } from "../components/Loading";
 type ScoreViewProps = {
 	songId: number;
 	overallScore: number;
+	precision: number;
 	score: {
 		missed: number;
 		good: number;
 		great: number;
 		perfect: number;
-		maxScore: number;
+		max_score: number;
+		current_streak: number;
+		max_streak: number;
 	};
 };
 
 const ScoreView = ({
 	songId,
 	overallScore,
+	precision,
 	score,
 }: RouteProps<ScoreViewProps>) => {
 	const navigation = useNavigation();
@@ -104,6 +108,50 @@ const ScoreView = ({
 									{overallScore + "pts"}
 								</Text>
 							</Row>
+							<Row style={{ alignItems: "center" }}>
+								<Translate translationKey="perfect" format={(t) => t + " : "} />
+								<Text bold fontSize="xl">
+									{score.perfect}
+								</Text>
+							</Row>
+							<Row style={{ alignItems: "center" }}>
+								<Translate translationKey="great" format={(t) => t + " : "} />
+								<Text bold fontSize="xl">
+									{score.great}
+								</Text>
+							</Row>
+							<Row style={{ alignItems: "center" }}>
+								<Translate translationKey="good" format={(t) => t + " : "} />
+								<Text bold fontSize="xl">
+									{score.good}
+								</Text>
+							</Row>
+							<Row style={{ alignItems: "center" }}>
+								<Translate translationKey="wrong" format={(t) => t + " : "} />
+								<Text bold fontSize="xl">
+									{score.wrong}
+								</Text>
+							</Row>
+
+							<Row style={{ alignItems: "center" }}>
+								<Translate translationKey="missed" format={(t) => t + " : "} />
+								<Text bold fontSize="xl">
+									{score.missed}
+								</Text>
+							</Row>
+							<Row style={{ alignItems: "center" }}>
+								<Translate translationKey="bestStreak" format={(t) => t + " : "} />
+								<Text bold fontSize="xl">
+									{score.max_streak}
+								</Text>
+							</Row>
+							<Row style={{ alignItems: "center" }}>
+								<Translate translationKey="precision" format={(t) => t + " : "} />
+								<Text bold fontSize="xl">
+									{precision + "%"}
+								</Text>
+							</Row>
+
 						</Column>
 					</Card>
 				</Row>

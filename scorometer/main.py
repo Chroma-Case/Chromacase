@@ -46,6 +46,8 @@ class ScoroInfo(TypedDict):
 	perfect: int
 	great: int
 	good: int
+	current_streak: int
+	max_streak: int
 
 
 def send(o):
@@ -71,6 +73,8 @@ class Scorometer:
 			"perfect": 0,
 			"great": 0,
 			"good": 0,
+			"current_streak": 0,
+			"max_streak": 0,
 		}
 
 	def send(self, obj):
@@ -90,6 +94,10 @@ class Scorometer:
 			else []
 		)
 
+	def incrementStreak(self):
+		self.info["current_streak"] += 1
+		self.info["max_streak"] = max(self.info["max_streak"], self.info["current_streak"])
+
 	def handleNoteOn(self, message: NoteOnMessage):
 		is_down = any(x[0] == message.note for x in self.keys_down)
 		logging.debug({"note_on": message.note})
@@ -108,11 +116,21 @@ class Scorometer:
 		if to_play:
 			perf = self.getTimingScore(key, to_play)
 			self.info[perf] += 1
+			self.info["score"] += (
+				100
+				if perf == "perfect"
+				else 75
+				if perf == "great"
+				else 50
+			)
+			to_play.done = True
+			self.incrementStreak()
 			logging.debug({"note_on": f"{perf} on {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
-			self.info["score"] -= 50
-			self.info["missed"] += 1
+			self.info["score"] -= 25
+			self.info["wrong"] += 1
+			self.info["current_streak"] = 0
 			self.wrong_ids += [message.id]
 			logging.debug({"note_on": f"wrong key {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
@@ -140,15 +158,8 @@ class Scorometer:
 		)
 		if to_play:
 			perf = self.getDurationScore(key, to_play)
-			self.info["score"] += (
-				100
-				if perf == "perfect"
-				else 75
-				if perf == "short" or perf == "long"
-				else 50
-			)
+
 			logging.debug({"note_off": f"{perf} on {message.note}"})
-			to_play.done = True
 			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
 			logging.warning("note_off: no key to play but it was not a wrong note_on")
@@ -173,10 +184,12 @@ class Scorometer:
 		if to_play:
 			perf = "practice"
 			logging.debug({"note_on": f"{perf} on {message.note}"})
+			self.incrementStreak()
 			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
 			self.wrong_ids += [message.id]
 			logging.debug({"note_on": f"wrong key {message.note}"})
+			self.info["current_streak"] = 0
 			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
 
 	def handleNoteOffPractice(self, message: NoteOffMessage):
@@ -279,19 +292,14 @@ class Scorometer:
 	def endGame(self):
 		for i in self.partition.notes:
 			if i.done is False:
-				self.info["score"] -= 50
+				self.info["score"] -= 25
 				self.info["missed"] += 1
 		send(
 			{
 				"type": "end",
 				"overallScore": self.info["score"],
-				"score": {
-					"missed": self.info["missed"],
-					"good": self.info["good"],
-					"great": self.info["great"],
-					"perfect": self.info["perfect"],
-					"maxScore": len(self.partition.notes) * 100,
-				},
+				"precision": round(((self.info["perfect"] + self.info["great"] + self.info["good"]) / len(self.partition.notes) * 100), 2),
+				"score": self.info,
 			}
 		)
 		if self.user_id != -1:
