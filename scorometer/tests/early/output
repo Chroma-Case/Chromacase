@@ -1,21 +1,21 @@
-{"type": "timing", "id": 1, "timing": "great", "info": {"max_score": 1000, "score": 0, "wrong": 0, "missed": 0, "perfect": 0, "great": 1, "good": 0}}
-{"type": "duration", "id": 1, "duration": "perfect", "info": {"max_score": 1000, "score": 100, "wrong": 0, "missed": 0, "perfect": 0, "great": 1, "good": 0}}
-{"type": "timing", "id": 2, "timing": "great", "info": {"max_score": 1000, "score": 100, "wrong": 0, "missed": 0, "perfect": 0, "great": 2, "good": 0}}
-{"type": "duration", "id": 2, "duration": "perfect", "info": {"max_score": 1000, "score": 200, "wrong": 0, "missed": 0, "perfect": 0, "great": 2, "good": 0}}
-{"type": "timing", "id": 3, "timing": "great", "info": {"max_score": 1000, "score": 200, "wrong": 0, "missed": 0, "perfect": 0, "great": 3, "good": 0}}
-{"type": "duration", "id": 3, "duration": "perfect", "info": {"max_score": 1000, "score": 300, "wrong": 0, "missed": 0, "perfect": 0, "great": 3, "good": 0}}
-{"type": "timing", "id": 4, "timing": "great", "info": {"max_score": 1000, "score": 300, "wrong": 0, "missed": 0, "perfect": 0, "great": 4, "good": 0}}
-{"type": "duration", "id": 4, "duration": "perfect", "info": {"max_score": 1000, "score": 400, "wrong": 0, "missed": 0, "perfect": 0, "great": 4, "good": 0}}
-{"type": "timing", "id": 5, "timing": "great", "info": {"max_score": 1000, "score": 400, "wrong": 0, "missed": 0, "perfect": 0, "great": 5, "good": 0}}
-{"type": "duration", "id": 5, "duration": "perfect", "info": {"max_score": 1000, "score": 500, "wrong": 0, "missed": 0, "perfect": 0, "great": 5, "good": 0}}
-{"type": "timing", "id": 6, "timing": "great", "info": {"max_score": 1000, "score": 500, "wrong": 0, "missed": 0, "perfect": 0, "great": 6, "good": 0}}
-{"type": "duration", "id": 6, "duration": "perfect", "info": {"max_score": 1000, "score": 600, "wrong": 0, "missed": 0, "perfect": 0, "great": 6, "good": 0}}
-{"type": "timing", "id": 7, "timing": "great", "info": {"max_score": 1000, "score": 600, "wrong": 0, "missed": 0, "perfect": 0, "great": 7, "good": 0}}
-{"type": "duration", "id": 7, "duration": "perfect", "info": {"max_score": 1000, "score": 700, "wrong": 0, "missed": 0, "perfect": 0, "great": 7, "good": 0}}
-{"type": "timing", "id": 8, "timing": "great", "info": {"max_score": 1000, "score": 700, "wrong": 0, "missed": 0, "perfect": 0, "great": 8, "good": 0}}
-{"type": "duration", "id": 8, "duration": "perfect", "info": {"max_score": 1000, "score": 800, "wrong": 0, "missed": 0, "perfect": 0, "great": 8, "good": 0}}
-{"type": "timing", "id": 9, "timing": "great", "info": {"max_score": 1000, "score": 800, "wrong": 0, "missed": 0, "perfect": 0, "great": 9, "good": 0}}
-{"type": "duration", "id": 9, "duration": "perfect", "info": {"max_score": 1000, "score": 900, "wrong": 0, "missed": 0, "perfect": 0, "great": 9, "good": 0}}
-{"type": "timing", "id": 10, "timing": "great", "info": {"max_score": 1000, "score": 900, "wrong": 0, "missed": 0, "perfect": 0, "great": 10, "good": 0}}
-{"type": "duration", "id": 10, "duration": "perfect", "info": {"max_score": 1000, "score": 1000, "wrong": 0, "missed": 0, "perfect": 0, "great": 10, "good": 0}}
-{"type": "end", "overallScore": 1000, "score": {"missed": 0, "good": 0, "great": 10, "perfect": 0, "maxScore": 1000}}
+{"type": "timing", "id": 1, "timing": "great", "info": {"max_score": 1000, "score": 75, "wrong": 0, "missed": 0, "perfect": 0, "great": 1, "good": 0, "current_streak": 1, "max_streak": 1}}
+{"type": "duration", "id": 1, "duration": "perfect", "info": {"max_score": 1000, "score": 75, "wrong": 0, "missed": 0, "perfect": 0, "great": 1, "good": 0, "current_streak": 1, "max_streak": 1}}
+{"type": "timing", "id": 2, "timing": "great", "info": {"max_score": 1000, "score": 150, "wrong": 0, "missed": 0, "perfect": 0, "great": 2, "good": 0, "current_streak": 2, "max_streak": 2}}
+{"type": "duration", "id": 2, "duration": "perfect", "info": {"max_score": 1000, "score": 150, "wrong": 0, "missed": 0, "perfect": 0, "great": 2, "good": 0, "current_streak": 2, "max_streak": 2}}
+{"type": "timing", "id": 3, "timing": "great", "info": {"max_score": 1000, "score": 225, "wrong": 0, "missed": 0, "perfect": 0, "great": 3, "good": 0, "current_streak": 3, "max_streak": 3}}
+{"type": "duration", "id": 3, "duration": "perfect", "info": {"max_score": 1000, "score": 225, "wrong": 0, "missed": 0, "perfect": 0, "great": 3, "good": 0, "current_streak": 3, "max_streak": 3}}
+{"type": "timing", "id": 4, "timing": "great", "info": {"max_score": 1000, "score": 300, "wrong": 0, "missed": 0, "perfect": 0, "great": 4, "good": 0, "current_streak": 4, "max_streak": 4}}
+{"type": "duration", "id": 4, "duration": "perfect", "info": {"max_score": 1000, "score": 300, "wrong": 0, "missed": 0, "perfect": 0, "great": 4, "good": 0, "current_streak": 4, "max_streak": 4}}
+{"type": "timing", "id": 5, "timing": "great", "info": {"max_score": 1000, "score": 375, "wrong": 0, "missed": 0, "perfect": 0, "great": 5, "good": 0, "current_streak": 5, "max_streak": 5}}
+{"type": "duration", "id": 5, "duration": "perfect", "info": {"max_score": 1000, "score": 375, "wrong": 0, "missed": 0, "perfect": 0, "great": 5, "good": 0, "current_streak": 5, "max_streak": 5}}
+{"type": "timing", "id": 6, "timing": "great", "info": {"max_score": 1000, "score": 450, "wrong": 0, "missed": 0, "perfect": 0, "great": 6, "good": 0, "current_streak": 6, "max_streak": 6}}
+{"type": "duration", "id": 6, "duration": "perfect", "info": {"max_score": 1000, "score": 450, "wrong": 0, "missed": 0, "perfect": 0, "great": 6, "good": 0, "current_streak": 6, "max_streak": 6}}
+{"type": "timing", "id": 7, "timing": "great", "info": {"max_score": 1000, "score": 525, "wrong": 0, "missed": 0, "perfect": 0, "great": 7, "good": 0, "current_streak": 7, "max_streak": 7}}
+{"type": "duration", "id": 7, "duration": "perfect", "info": {"max_score": 1000, "score": 525, "wrong": 0, "missed": 0, "perfect": 0, "great": 7, "good": 0, "current_streak": 7, "max_streak": 7}}
+{"type": "timing", "id": 8, "timing": "great", "info": {"max_score": 1000, "score": 600, "wrong": 0, "missed": 0, "perfect": 0, "great": 8, "good": 0, "current_streak": 8, "max_streak": 8}}
+{"type": "duration", "id": 8, "duration": "perfect", "info": {"max_score": 1000, "score": 600, "wrong": 0, "missed": 0, "perfect": 0, "great": 8, "good": 0, "current_streak": 8, "max_streak": 8}}
+{"type": "timing", "id": 9, "timing": "great", "info": {"max_score": 1000, "score": 675, "wrong": 0, "missed": 0, "perfect": 0, "great": 9, "good": 0, "current_streak": 9, "max_streak": 9}}
+{"type": "duration", "id": 9, "duration": "perfect", "info": {"max_score": 1000, "score": 675, "wrong": 0, "missed": 0, "perfect": 0, "great": 9, "good": 0, "current_streak": 9, "max_streak": 9}}
+{"type": "timing", "id": 10, "timing": "great", "info": {"max_score": 1000, "score": 750, "wrong": 0, "missed": 0, "perfect": 0, "great": 10, "good": 0, "current_streak": 10, "max_streak": 10}}
+{"type": "duration", "id": 10, "duration": "perfect", "info": {"max_score": 1000, "score": 750, "wrong": 0, "missed": 0, "perfect": 0, "great": 10, "good": 0, "current_streak": 10, "max_streak": 10}}
+{"type": "end", "overallScore": 750, "precision": 100.0, "score": {"max_score": 1000, "score": 750, "wrong": 0, "missed": 0, "perfect": 0, "great": 10, "good": 0, "current_streak": 10, "max_streak": 10}}
