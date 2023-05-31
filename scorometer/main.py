@@ -123,7 +123,6 @@ class Scorometer:
 				if perf == "great"
 				else 50
 			)
-			to_play.done = True
 			self.incrementStreak()
 			logging.debug({"note_on": f"{perf} on {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": perf})
@@ -159,6 +158,7 @@ class Scorometer:
 		if to_play:
 			perf = self.getDurationScore(key, to_play)
 
+			to_play.done = True
 			logging.debug({"note_off": f"{perf} on {message.note}"})
 			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
