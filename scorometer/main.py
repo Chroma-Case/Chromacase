@@ -298,7 +298,7 @@ class Scorometer:
 			{
 				"type": "end",
 				"overallScore": self.info["score"],
-				"precision": round(((self.info["perfect"] + self.info["great"] + self.info["good"]) / len(self.partition.notes) * 100), 2),
+				"precision": round(((self.info["perfect"] + self.info["great"] + self.info["good"]) / (len(self.partition.notes) + self.info["wrong"]) * 100), 2),
 				"score": self.info,
 			}
 		)
