@@ -98,14 +98,14 @@ const HomeView = () => {
 						<SongCardGrid
 							heading={<Translate translationKey='recentlyPlayed'/>}
 							songs={songHistory
-								.filter((songQuery) => songQuery.data)
 								.map(({ data }) => data)
+								.filter((data): data is Song => data !== undefined)
 								.filter((song, i, array) => array.map((s) => s.id).findIndex((id) => id == song.id) == i)
 								.filter((song) => artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId))
 								.map((song) => ({
 									cover: song.cover,
 									name: song.name,
-									id: song.id,
+									songId: song.id,
 									artistName: artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)!.data!.name
 								})) ?? []
 							}
