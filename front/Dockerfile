@@ -17,7 +17,7 @@ ENV API_URL=$API_URL
 ARG SCORO_URL
 ENV SCORO_URL=$SCORO_URL
 
-RUN expo build:web
+RUN yarn tsc && expo build:web
 
 # Serve the app
 FROM nginx:1.21-alpine
