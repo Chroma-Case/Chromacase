@@ -154,7 +154,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							disabled: true,
 							data: {
 								value: "default",
-								onValueChange: () => {},
+								onSelect: () => {},
 								options: [
 									{
 										label: "Default",

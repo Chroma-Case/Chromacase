@@ -231,7 +231,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				<Animated.View style={{ opacity: fadeAnim }}>
 					<TextButton
 						disabled
-						translate={{ translationKey: lastScoreMessage?.content ?? '' }}
+						label={lastScoreMessage?.content ?? ''}
 						colorScheme={lastScoreMessage?.color} rounded='sm'
 					/>
 				</Animated.View>

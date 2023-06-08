@@ -118,7 +118,7 @@ const HomeView = () => {
 					<TextButton
 						translate={{ translationKey: 'searchBtn' }}
 						colorScheme='secondary' size="sm"
-						onPress={() => navigation.navigate('Search')}
+						onPress={() => navigation.navigate('Search', {})}
 					/>
 					<TextButton translate={{ translationKey: 'settingsBtn' }}
 						colorScheme='gray'  size="sm"

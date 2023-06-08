@@ -28,6 +28,7 @@ type ScoreViewProps = {
 		good: number;
 		great: number;
 		perfect: number;
+		wrong: number;
 		max_score: number;
 		current_streak: number;
 		max_streak: number;

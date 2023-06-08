@@ -44,7 +44,7 @@ type SearchViewProps = {
 const SearchView = (props: RouteProps<SearchViewProps>) => {
 	let isRequestSucceeded = false;
 	const [filter, setFilter] = useState<Filter>("all");
-	const [stringQuery, setStringQuery] = useState<string>(props.query || "");
+	const [stringQuery, setStringQuery] = useState<string>(props?.query ?? "");
 
 	const { isLoading: isLoadingSong, data: songData = [] } = useQuery(
 		["song", stringQuery],
