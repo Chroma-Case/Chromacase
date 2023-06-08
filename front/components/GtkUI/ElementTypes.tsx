@@ -1,12 +1,19 @@
 import { Select, Switch, Text, Icon, Row, Slider } from "native-base";
 import { MaterialIcons } from "@expo/vector-icons";
-export type ElementType =
-	| "custom"
-	| "default"
-	| "text"
-	| "toggle"
-	| "dropdown"
-	| "range";
+
+export type ElementProps = {
+	title: string;
+	icon?: React.ReactNode;
+	helperText?: string;
+	description?: string;
+	disabled?: boolean;
+} & (
+	{ type: 'text', data : ElementTextProps } |
+	{ type: 'toggle', data : ElementToggleProps } |
+	{ type: 'dropdown', data : ElementDropdownProps } |
+	{ type: 'range', data : ElementRangeProps } |
+	{ type: 'custom', data : React.ReactNode } 
+);
 
 export type DropdownOption = {
 	label: string;

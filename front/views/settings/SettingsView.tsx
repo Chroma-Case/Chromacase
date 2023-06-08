@@ -37,7 +37,7 @@ const handleChangePassword = async (oldPassword: string, newPassword: string): P
 	}
 }
 
-const MainView = ({navigation}) => {
+const MainView = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	return (
@@ -73,7 +73,7 @@ const MainView = ({navigation}) => {
 	)
 }
 
-export const ChangePasswordView = ({navigation}) => {
+export const ChangePasswordView = ({ navigation }) => {
 	return (
 		<Center style={{ flex: 1}}>
 			<Heading paddingBottom={'2%'}>{translate('changePassword')}</Heading>
@@ -82,7 +82,7 @@ export const ChangePasswordView = ({navigation}) => {
 	)
 }
 
-export const ChangeEmailView = ({navigation}) => {
+export const ChangeEmailView = ({ navigation }) => {
 	return (
 		<Center style={{ flex: 1}}>
             <Heading paddingBottom={'2%'}>{translate('changeEmail')}</Heading>
@@ -91,7 +91,7 @@ export const ChangeEmailView = ({navigation}) => {
 	)
 }
 
-export const GoogleAccountView = ({navigation}) => {
+export const GoogleAccountView = ({ navigation }) => {
 	return (
 		<Center style={{ flex: 1}}>
 			<Text>GoogleAccount</Text>
@@ -99,7 +99,7 @@ export const GoogleAccountView = ({navigation}) => {
 	)
 }
 
-export const PianoSettingsView = ({navigation}) => {
+export const PianoSettingsView = ({ navigation }) => {
 	return (
 		<Center style={{ flex: 1}}>
 			<Text>Global settings for the virtual piano</Text>
@@ -111,7 +111,7 @@ const TabRow = createTabRowNavigator();
 
 const SetttingsNavigator = () => {
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
-	const user = userQuery.data;
+	const user = useMemo(() => userQuery.data, [userQuery]);
 
 	if (userQuery.isError) {
 		user.isGuest = false;

@@ -1,10 +1,11 @@
 import React from "react";
-import { ElementProps } from "./ElementList";
+import { ElementProps } from "./ElementTypes";
 import { RawElement } from "./RawElement";
-import { Pressable } from "native-base";
+import { Pressable, IPressableProps } from "native-base";
+import { ElementTextProps, ElementToggleProps } from './ElementTypes';
 
-export const Element = (props: ElementProps) => {
-	let actionFunction = null as null | Function;
+export const Element = <T extends ElementProps,>(props: T) => {
+	let actionFunction: IPressableProps['onPress'] = null;
 
 	switch (props.type) {
 		case "text":

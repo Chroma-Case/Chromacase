@@ -12,14 +12,18 @@ const cardBorder = (theme: ReturnType<typeof useTheme>) => ({
 	borderWidth: 1 
 })
 
-const Card = (props: Parameters<typeof Box>[0] & { onPress: () => void }) => {
+type CardProps = Parameters<typeof Box>[0] & {
+	onPress: () => void
+}
+
+const Card = (props: CardProps) => {
 	const theme = useTheme();
 	const colorScheme = useSelector((state: RootState) => state.settings.local.colorScheme);
 	const systemColorMode = useColorScheme();
 
 	return <Pressable onPress={props.onPress}>
 		{({ isHovered, isPressed }) => (
-		<Box {...props} style={{ ...(props.style ?? {}),  ...cardBorder(theme) }}
+		<Box {...props} style={[props.style, cardBorder(theme)]}
 			bg={(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
 				? (isHovered || isPressed) ? 'gray.800' : undefined
 				: (isHovered || isPressed) ? 'coolGray.200' : undefined
