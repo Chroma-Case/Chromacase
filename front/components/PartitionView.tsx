@@ -5,6 +5,7 @@ import { CursorType, Fraction, OpenSheetMusicDisplay as OSMD, IOSMDOptions, Note
 import useColorScheme from '../hooks/colorScheme';
 import { useWindowDimensions } from 'react-native';
 import SoundFont from 'soundfont-player';
+import { AudioContext } from 'standardized-audio-context';
 
 type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
@@ -18,7 +19,6 @@ type PartitionViewProps = {
 const PartitionView = (props: PartitionViewProps) => {
 	const [osmd, setOsmd] = useState<OSMD>();
 	const [soundPlayer, setSoundPlayer] = useState<SoundFont.Player>();
-	const AudioContext = window.AudioContext || window.webkitAudioContext || false;
 	const audioContext = new AudioContext();
 	const [wholeNoteLength, setWholeNoteLength] = useState(0); // Length of Whole note, in ms (?)
 	const colorScheme = useColorScheme();
@@ -63,11 +63,11 @@ const PartitionView = (props: PartitionViewProps) => {
 				// console.log('Expecting midi ' + midiNumber);
 				let duration = getActualNoteLength(note);
 				const gain = note.ParentVoiceEntry.ParentVoice.Volume;
-				soundPlayer!.play(midiNumber, audioContext.currentTime, { duration, gain })
+				soundPlayer!.play(midiNumber.toString(), audioContext.currentTime, { duration, gain })
 			});
 	}
 	const getShortedNoteUnderCursor = () => {
-		return osmd.cursor.NotesUnderCursor().sort((n1, n2) => n1.Length.CompareTo(n2.Length)).at(0);
+		return osmd!.cursor.NotesUnderCursor().sort((n1, n2) => n1.Length.CompareTo(n2.Length)).at(0);
 	}
 
 	useEffect(() => {
@@ -125,7 +125,7 @@ const PartitionView = (props: PartitionViewProps) => {
 				// Shamelessly stolen from https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL223C7-L224C1
 				playNotesUnderCursor();
 				currentCursorPosition = osmd.cursor.cursorElement.offsetLeft;
-				document.getElementById(OSMD_DIV_ID).scrollBy(currentCursorPosition - previousCursorPosition, 0)
+				document.getElementById(OSMD_DIV_ID)?.scrollBy(currentCursorPosition - previousCursorPosition, 0)
 				shortestNote = getShortedNoteUnderCursor();
 			}
 		}

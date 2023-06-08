@@ -83,7 +83,7 @@ const SetttingsNavigator = () => {
 	}
 
 	return (
-		<TabRow.Navigator initialRouteName='InternalDefault'>
+		<TabRow.Navigator initialRouteName='InternalDefault' contentStyle={{}} tabBarStyle={{}}>
 			{/* I'm doing this to be able to land on the summary of settings when clicking on settings and directly to the
 			wanted settings page if needed so I need to do special work with the 0 index */}
 			<TabRow.Screen name='InternalDefault' component={Box} />

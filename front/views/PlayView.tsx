@@ -18,6 +18,10 @@ import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from "react-use-precision-timer";
 import PartitionView from '../components/PartitionView';
 import TextButton from '../components/TextButton';
+import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from "@motiz88/react-native-midi";
+import * as Linking from 'expo-linking';
+import { URL } from 'url';
+import { url } from 'inspector';
 
 type PlayViewProps = {
 	songId: number,
@@ -34,19 +38,25 @@ type ScoreMessage = {
 let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
 
 if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
-	if (location.protocol === 'https:') {
-		scoroBaseApiUrl = "wss://" + location.host + "/ws";
-	} else {
-		scoroBaseApiUrl = "ws://" + location.host + "/ws";
-	}
+	
+	Linking.getInitialURL().then((url) => {
+		if (url !== null) {
+			const location = new URL(url);
+			if (location.protocol === 'https:') {
+				scoroBaseApiUrl = "wss://" + location.host + "/ws";
+			} else {
+				scoroBaseApiUrl = "ws://" + location.host + "/ws";
+			}
+		}
+	});
 }
 
-function parseMidiMessage(message) {
+function parseMidiMessage(message: MIDIMessageEvent) {
 	return {
-		command: message.data[0] >> 4,
-		channel: message.data[0] & 0xf,
-		note: message.data[1],
-		velocity: message.data[2] / 127,
+		command: message.data.at(0)! >> 4,
+		channel: message.data.at(0)! & 0xf,
+		note: message.data.at(1)!,
+		velocity: message.data.at(2)! / 127,
 	};
 }
 
@@ -99,7 +109,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}));
 	}
 
-	const onMIDISuccess = (access) => {
+	const onMIDISuccess = (access: MIDIAccess) => {
 		const inputs = access.inputs;
 
 		if (inputs.size < 2) {
@@ -159,9 +169,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					}
 				}
 				setLastScoreMessage({ content: formattedMessage, color: messageColor });
-				// toast.show({ description: formattedMessage, placement: 'top', colorScheme: messageColor ?? 'secondary' });
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 		}
 		inputs.forEach((input) => {
@@ -172,7 +181,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				const { command, channel, note, velocity } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;;
 				const keyCode = message.data[1];
-				// console.log('Playing midi ' + keyCode + ' at time ' + getElapsedTime());
 				webSocket.current?.send(
 					JSON.stringify({
 						type: keyIsPressed ? "note_on" : "note_off",
@@ -218,7 +226,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			return;
 		}
 		if (song.data && !webSocket.current && partitionRendered) {
-			navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+			requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
 		}
 	}, [song.data, partitionRendered]);
 

@@ -139,7 +139,7 @@ const HomeView = () => {
 						}
 						{
 							[...(new Set(searchHistoryQuery.data.map((x) => x.query)))].slice(0, 5).map((query) => (
-								<Button
+								<TextButton
 									leftIcon={
 										<FontAwesome5 name="search" size={16} />
 									}
@@ -150,12 +150,9 @@ const HomeView = () => {
 									variant="solid"
 									size="xs"
 									colorScheme="primary"
+									label={query}
 									onPress={() => navigation.navigate('Search', { query: query })}
-								>
-									<Text fontSize={"xs"} isTruncated maxW={"150px"}>
-										{ query }
-									</Text>
-								</Button>
+								/>
 							))
 						}
 					</Flex>
