@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Center, Button, Text, Heading, Box } from "native-base";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { unsetAccessToken } from '../../state/UserSlice';
@@ -15,9 +15,6 @@ import PreferencesView from './PreferencesView';
 import GuestToUserView from './GuestToUserView';
 import { useQuery } from 'react-query';
 import API from '../../API';
-
-
-const SettingsStack = createNativeStackNavigator();
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	try {
@@ -37,43 +34,7 @@ const handleChangePassword = async (oldPassword: string, newPassword: string): P
 	}
 }
 
-const MainView = ({ navigation }) => {
-	const dispatch = useDispatch();
-
-	return (
-		<Center style={{ flex: 1}}>
-			<Button variant='ghost' onPress={() => navigation.navigate('Preferences')}>
-				<Translate translationKey='prefBtn'/>
-			</Button>
-
-			<Button variant='ghost' onPress={() => navigation.navigate('Notifications')}>
-				<Translate translationKey='notifBtn'/>
-			</Button>
-
-			<Button variant='ghost' onPress={() => navigation.navigate('Privacy')}>
-				<Translate translationKey='privBtn'/>
-			</Button>
-
-			<Button variant='ghost' onPress={() => navigation.navigate('ChangePassword')}>
-				<Translate translationKey='changepasswdBtn'/>
-			</Button>
-
-			<Button variant='ghost' onPress={() => navigation.navigate('ChangeEmail')}>
-				<Translate translationKey='changeemailBtn'/>
-			</Button>
-
-			<Button variant='ghost' onPress={() => navigation.navigate('GoogleAccount')}>
-				<Translate translationKey='googleacctBtn'/>
-			</Button>
-
-			<Button variant='ghost' onPress={() => dispatch(unsetAccessToken())} >
-				<Translate translationKey='signOutBtn'/>
-			</Button>
-		</Center>
-	)
-}
-
-export const ChangePasswordView = ({ navigation }) => {
+export const ChangePasswordView = () => {
 	return (
 		<Center style={{ flex: 1}}>
 			<Heading paddingBottom={'2%'}>{translate('changePassword')}</Heading>
@@ -82,7 +43,7 @@ export const ChangePasswordView = ({ navigation }) => {
 	)
 }
 
-export const ChangeEmailView = ({ navigation }) => {
+export const ChangeEmailView = () => {
 	return (
 		<Center style={{ flex: 1}}>
             <Heading paddingBottom={'2%'}>{translate('changeEmail')}</Heading>
@@ -91,7 +52,7 @@ export const ChangeEmailView = ({ navigation }) => {
 	)
 }
 
-export const GoogleAccountView = ({ navigation }) => {
+export const GoogleAccountView = () => {
 	return (
 		<Center style={{ flex: 1}}>
 			<Text>GoogleAccount</Text>
@@ -99,7 +60,7 @@ export const GoogleAccountView = ({ navigation }) => {
 	)
 }
 
-export const PianoSettingsView = ({ navigation }) => {
+export const PianoSettingsView = () => {
 	return (
 		<Center style={{ flex: 1}}>
 			<Text>Global settings for the virtual piano</Text>
@@ -112,10 +73,6 @@ const TabRow = createTabRowNavigator();
 const SetttingsNavigator = () => {
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const user = useMemo(() => userQuery.data, [userQuery]);
-
-	if (userQuery.isError) {
-		user.isGuest = false;
-	}
 
 	if (userQuery.isLoading) {
 		return (

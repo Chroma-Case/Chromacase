@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import LocalSettings from "../models/LocalSettings";
 
 export const settingsSlice = createSlice({
 	name: 'settings',

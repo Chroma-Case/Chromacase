@@ -1,4 +1,4 @@
-interface LocalSettings {
+export default interface LocalSettings {
 	deviceId: number,
 	micVolume: number,
 	colorScheme: 'light' | 'dark' | 'system',
