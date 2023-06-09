@@ -130,7 +130,7 @@ function TabNavigator({
 								return null;
 							}
 							const isSelected = route.key === state.routes[state.index]?.key;
-							const { options } = descriptors[route.key];
+							const options = descriptors[route.key]?.options;
 
 							return (
 								<Button
@@ -164,7 +164,7 @@ function TabNavigator({
 										width: "100%",
 									}}
 									leftIcon={
-										options.iconProvider && options.iconName ? (
+										options?.iconProvider && options?.iconName ? (
 											<Icon
 												as={options.iconProvider}
 												name={options.iconName}
@@ -175,7 +175,7 @@ function TabNavigator({
 									}
 								>
 									<Text fontSize="lg" isTruncated w="100%">
-										{options.title || route.name}
+										{options?.title || route.name}
 									</Text>
 								</Button>
 							);
@@ -209,7 +209,7 @@ function TabNavigator({
 								}
 							/>
 						)}
-						{descriptors[state.routes[state.index]?.key]?.render()}
+						{descriptors[state.routes[state.index]!.key]?.render()}
 					</View>
 				)}
 			</Row>
