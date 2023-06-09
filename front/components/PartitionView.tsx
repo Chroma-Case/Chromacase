@@ -5,7 +5,7 @@ import { CursorType, Fraction, OpenSheetMusicDisplay as OSMD, IOSMDOptions, Note
 import useColorScheme from '../hooks/colorScheme';
 import { useWindowDimensions } from 'react-native';
 import SoundFont from 'soundfont-player';
-import { AudioContext } from 'standardized-audio-context';
+import * as SAC from 'standardized-audio-context';
 
 type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
@@ -19,7 +19,7 @@ type PartitionViewProps = {
 const PartitionView = (props: PartitionViewProps) => {
 	const [osmd, setOsmd] = useState<OSMD>();
 	const [soundPlayer, setSoundPlayer] = useState<SoundFont.Player>();
-	const audioContext = new AudioContext();
+	const audioContext = new SAC.AudioContext();
 	const [wholeNoteLength, setWholeNoteLength] = useState(0); // Length of Whole note, in ms (?)
 	const colorScheme = useColorScheme();
 	const dimensions = useWindowDimensions();
@@ -73,7 +73,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	useEffect(() => {
 		const _osmd = new OSMD(OSMD_DIV_ID, options);
 		Promise.all([
-			SoundFont.instrument(audioContext, 'electric_piano_1'),
+			SoundFont.instrument(audioContext as unknown as AudioContext, 'electric_piano_1'),
 			_osmd.load(props.file)
 		]).then(([player, __]) => {
 				setSoundPlayer(player);
