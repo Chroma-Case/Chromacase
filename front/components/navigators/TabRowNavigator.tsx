@@ -22,7 +22,7 @@ import {
 	TabRouterOptions,
 	useNavigationBuilder,
 } from "@react-navigation/native";
-import IconButton from "../IconButton";
+import { useNavigation } from "../../Navigation";
 
 const TabRowNavigatorInitialComponentName = "TabIndex";
 
@@ -69,6 +69,7 @@ function TabNavigator({
 	tabBarStyle,
 	contentStyle,
 }: Props) {
+	const navigator = useNavigation();
 	const { state, navigation, descriptors, NavigationContent } =
 		useNavigationBuilder<
 			TabNavigationState<ParamListBase>,
@@ -102,7 +103,7 @@ function TabNavigator({
 	}, [state.index]);
 
 	React.useEffect(() => {
-		navigation.setOptions({
+		navigator.setOptions({
 			headerShown: !isMobileView || isPanelView,
 		});
 	}, [isMobileView, isPanelView]);
