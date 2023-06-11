@@ -8,6 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { PersistGate } from "redux-persist/integration/react";
 import LanguageGate from "./i18n/LanguageGate";
 import ThemeProvider, { ColorSchemeProvider } from './Theme';
+import 'react-native-url-polyfill/auto';
 
 const queryClient = new QueryClient({
 	defaultOptions: {

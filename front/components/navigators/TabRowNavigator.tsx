@@ -22,7 +22,7 @@ import {
 	TabRouterOptions,
 	useNavigationBuilder,
 } from "@react-navigation/native";
-import IconButton from "../IconButton";
+import { useNavigation } from "../../Navigation";
 
 const TabRowNavigatorInitialComponentName = "TabIndex";
 
@@ -69,6 +69,7 @@ function TabNavigator({
 	tabBarStyle,
 	contentStyle,
 }: Props) {
+	const navigator = useNavigation();
 	const { state, navigation, descriptors, NavigationContent } =
 		useNavigationBuilder<
 			TabNavigationState<ParamListBase>,
@@ -102,7 +103,7 @@ function TabNavigator({
 	}, [state.index]);
 
 	React.useEffect(() => {
-		navigation.setOptions({
+		navigator.setOptions({
 			headerShown: !isMobileView || isPanelView,
 		});
 	}, [isMobileView, isPanelView]);
@@ -130,7 +131,7 @@ function TabNavigator({
 								return null;
 							}
 							const isSelected = route.key === state.routes[state.index]?.key;
-							const { options } = descriptors[route.key];
+							const options = descriptors[route.key]?.options;
 
 							return (
 								<Button
@@ -164,7 +165,7 @@ function TabNavigator({
 										width: "100%",
 									}}
 									leftIcon={
-										options.iconProvider && options.iconName ? (
+										options?.iconProvider && options?.iconName ? (
 											<Icon
 												as={options.iconProvider}
 												name={options.iconName}
@@ -175,7 +176,7 @@ function TabNavigator({
 									}
 								>
 									<Text fontSize="lg" isTruncated w="100%">
-										{options.title || route.name}
+										{options?.title || route.name}
 									</Text>
 								</Button>
 							);
@@ -209,7 +210,7 @@ function TabNavigator({
 								}
 							/>
 						)}
-						{descriptors[state.routes[state.index]?.key]?.render()}
+						{descriptors[state.routes[state.index]!.key]?.render()}
 					</View>
 				)}
 			</Row>

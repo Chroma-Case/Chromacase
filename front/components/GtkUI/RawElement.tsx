@@ -12,7 +12,7 @@ import {
 } from "native-base";
 import useColorScheme from "../../hooks/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
-import { ElementProps } from "./ElementList";
+import { ElementProps } from "./ElementTypes";
 import {
 	getElementDropdownNode,
 	getElementTextNode,
@@ -121,28 +121,15 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 					{(() => {
 						switch (type) {
 							case "text":
-								return getElementTextNode(
-									data as ElementTextProps,
-									disabled ?? false
-								);
+								return getElementTextNode(data, disabled ?? false);
 							case "toggle":
-								return getElementToggleNode(
-									data as ElementToggleProps,
-									disabled ?? false
-								);
+								return getElementToggleNode(data, disabled ?? false);
 							case "dropdown":
-								return getElementDropdownNode(
-									data as ElementDropdownProps,
-									disabled ?? false
-								);
+								return getElementDropdownNode(data, disabled ?? false);
 							case "range":
-								return getElementRangeNode(
-									data as ElementRangeProps,
-									disabled ?? false,
-									title
-								);
+								return getElementRangeNode(data, disabled ?? false, title);
 							case "custom":
-								return data as React.ReactNode;
+								return data;
 							default:
 								return <Text>Unknown type</Text>;
 						}

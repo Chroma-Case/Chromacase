@@ -123,12 +123,7 @@ const Octave = (props: OctaveProps) => {
 			</Row>
 			{showOctaveNumber && (
 				<Text
-					style={{
-						userSelect: "none",
-						WebkitUserSelect: "none",
-						MozUserSelect: "none",
-						msUserSelect: "none",
-					}}
+					selectable={false}
 					fontSize="2xs"
 					color="black"
 					position="absolute"

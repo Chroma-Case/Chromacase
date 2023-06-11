@@ -11,18 +11,14 @@ import {
 	translate,
 	Translate,
 } from "../../i18n/i18n";
-import { RootState, useSelector } from "../../state/Store";
+import {  useSelector } from "../../state/Store";
 import { updateSettings } from "../../state/SettingsSlice";
 import ElementList from "../../components/GtkUI/ElementList";
 
 const PreferencesView = () => {
 	const dispatch = useDispatch();
-	const language: AvailableLanguages = useSelector(
-		(state: RootState) => state.language.value
-	);
-	const settings = useSelector(
-		(state: RootState) => state.settings.local
-	);
+	const language = useSelector((state) => state.language.value);
+	const settings = useSelector((state) => state.settings.local);
 	return (
 		<Center style={{ flex: 1 }}>
 			<Heading style={{ textAlign: "center" }}>

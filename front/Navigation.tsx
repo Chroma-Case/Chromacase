@@ -12,7 +12,7 @@ import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/settings/SettingsView';
 import { useQuery } from 'react-query';
-import API from './API';
+import API, { APIError } from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
 import { LoadingView } from './components/Loading';
@@ -94,7 +94,7 @@ export const Router = () => {
 		retry: 1,
 		refetchOnWindowFocus: false,
 		onError: (err) => {
-			if (err.status === 401) {
+			if (err instanceof APIError && err.status === 401) {
 				dispatch(unsetAccessToken());
 			}
 		},

@@ -10,14 +10,7 @@ type PartitionVisualizerProps = {
 };
 
 const PartitionVisualizer = ({ songId }: PartitionVisualizerProps) => {
-	
-
-	if (!partitionRessources.data) {
-		return <LoadingView/>;
-	}
-	return (
-		
-	);
+	return <></>;
 };
 
 export default PartitionVisualizer;
