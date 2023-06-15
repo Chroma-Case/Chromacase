@@ -8,7 +8,9 @@ type SearchHistoryCardProps = {
 	timestamp?: string;
 };
 
-const SearchHistoryCard = (props: SearchHistoryCardProps & { onPress: (query: string) => void }) => {
+const SearchHistoryCard = (
+	props: SearchHistoryCardProps & { onPress: (query: string) => void }
+) => {
 	const { query, type, timestamp, onPress } = props;
 
 	const handlePress = () => {
@@ -18,15 +20,15 @@ const SearchHistoryCard = (props: SearchHistoryCardProps & { onPress: (query: st
 	};
 
 	return (
-		<Card shadow={2} onPress={handlePress} >
+		<Card shadow={2} onPress={handlePress}>
 			<VStack m={1.5} space={3}>
 				<Text fontSize="lg" fontWeight="bold">
-					{query ?? "query"}
+					{query ?? 'query'}
 				</Text>
 				<Text fontSize="lg" fontWeight="semibold">
-					{type ?? "type"}
+					{type ?? 'type'}
 				</Text>
-				<Text color="gray.500">{timestamp ?? "timestamp"}</Text>
+				<Text color="gray.500">{timestamp ?? 'timestamp'}</Text>
 			</VStack>
 		</Card>
 	);

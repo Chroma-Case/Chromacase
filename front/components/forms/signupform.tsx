@@ -1,42 +1,31 @@
 // a form for sign up
 
-import React from "react";
-import { Translate, translate } from "../../i18n/i18n";
-import { string } from "yup";
-import {
-	FormControl,
-	Input,
-	Stack,
-	WarningOutlineIcon,
-	Box,
-	useToast,
-} from "native-base";
-import TextButton from "../TextButton";
+import React from 'react';
+import { Translate, translate } from '../../i18n/i18n';
+import { string } from 'yup';
+import { FormControl, Input, Stack, WarningOutlineIcon, Box, useToast } from 'native-base';
+import TextButton from '../TextButton';
 
 interface SignupFormProps {
-	onSubmit: (
-		username: string,
-		password: string,
-		email: string
-	) => Promise<string>;
+	onSubmit: (username: string, password: string, email: string) => Promise<string>;
 }
 
 const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 	const [formData, setFormData] = React.useState({
 		username: {
-			value: "",
+			value: '',
 			error: null as string | null,
 		},
 		password: {
-			value: "",
+			value: '',
 			error: null as string | null,
 		},
 		repeatPassword: {
-			value: "",
+			value: '',
 			error: null as string | null,
 		},
 		email: {
-			value: "",
+			value: '',
 			error: null as string | null,
 		},
 	});
@@ -44,20 +33,20 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 
 	const validationSchemas = {
 		username: string()
-			.min(3, translate("usernameTooShort"))
-			.max(20, translate("usernameTooLong"))
-			.required("Username is required"),
-		email: string().email("Invalid email").required("Email is required"),
+			.min(3, translate('usernameTooShort'))
+			.max(20, translate('usernameTooLong'))
+			.required('Username is required'),
+		email: string().email('Invalid email').required('Email is required'),
 		password: string()
-			.min(4, translate("passwordTooShort"))
-			.max(100, translate("passwordTooLong"))
+			.min(4, translate('passwordTooShort'))
+			.max(100, translate('passwordTooLong'))
 			// .matches(
 			// 	/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$-_%\^&\*])(?=.{8,})/,
 			// 	translate(
 			// 		"Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
 			// 	)
 			// )
-			.required("Password is required"),
+			.required('Password is required'),
 	};
 	const toast = useToast();
 
@@ -75,7 +64,7 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 						}
 					>
 						<FormControl.Label>
-							<Translate translationKey='username'/>
+							<Translate translationKey="username" />
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -93,13 +82,11 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 									});
 							}}
 						/>
-						<FormControl.ErrorMessage
-							leftIcon={<WarningOutlineIcon size="xs" />}
-						>
+						<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
 							{formData.username.error}
 						</FormControl.ErrorMessage>
 						<FormControl.Label>
-							<Translate translationKey='email'/>
+							<Translate translationKey="email" />
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -117,13 +104,11 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 									});
 							}}
 						/>
-						<FormControl.ErrorMessage
-							leftIcon={<WarningOutlineIcon size="xs" />}
-						>
+						<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
 							{formData.email.error}
 						</FormControl.ErrorMessage>
 						<FormControl.Label>
-							<Translate translationKey='password'/>
+							<Translate translationKey="password" />
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -140,13 +125,11 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 									});
 							}}
 						/>
-						<FormControl.ErrorMessage
-							leftIcon={<WarningOutlineIcon size="xs" />}
-						>
+						<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
 							{formData.password.error}
 						</FormControl.ErrorMessage>
 						<FormControl.Label>
-							<Translate translationKey='repeatPassword'/>
+							<Translate translationKey="repeatPassword" />
 						</FormControl.Label>
 						<Input
 							isRequired
@@ -160,7 +143,7 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 									.catch((e) => (error = e.message))
 									.finally(() => {
 										if (!error && t !== formData.password.value) {
-											error = translate("passwordsDontMatch");
+											error = translate('passwordsDontMatch');
 										}
 										setFormData({
 											...formData,
@@ -169,12 +152,11 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 									});
 							}}
 						/>
-						<FormControl.ErrorMessage
-							leftIcon={<WarningOutlineIcon size="xs" />}
-						>
+						<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
 							{formData.repeatPassword.error}
 						</FormControl.ErrorMessage>
-						<TextButton translate={{ translationKey: 'signUpBtn' }}
+						<TextButton
+							translate={{ translationKey: 'signUpBtn' }}
 							style={{ marginTop: 10 }}
 							isLoading={submittingForm}
 							isDisabled={
@@ -182,10 +164,10 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 								formData.username.error !== null ||
 								formData.repeatPassword.error !== null ||
 								formData.email.error !== null ||
-								formData.username.value === "" ||
-								formData.password.value === "" ||
-								formData.repeatPassword.value === "" ||
-								formData.repeatPassword.value === ""
+								formData.username.value === '' ||
+								formData.password.value === '' ||
+								formData.repeatPassword.value === '' ||
+								formData.repeatPassword.value === ''
 							}
 							onPress={async () => {
 								setSubmittingForm(true);

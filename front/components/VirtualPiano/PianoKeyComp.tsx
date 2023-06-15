@@ -1,11 +1,6 @@
-import { Box, Pressable, Text } from "native-base";
-import { StyleProp, ViewStyle } from "react-native";
-import {
-	PianoKey,
-	NoteNameBehavior,
-	octaveKeys,
-	keyToStr,
-} from "../../models/Piano";
+import { Box, Pressable, Text } from 'native-base';
+import { StyleProp, ViewStyle } from 'react-native';
+import { PianoKey, NoteNameBehavior, octaveKeys, keyToStr } from '../../models/Piano';
 
 type PianoKeyProps = {
 	pianoKey: PianoKey;
@@ -48,22 +43,18 @@ const PianoKeyComp = ({
 }: PianoKeyProps) => {
 	const textDefaultProps = {
 		style: {
-			userSelect: "none",
-			WebkitUserSelect: "none",
-			MozUserSelect: "none",
-			msUserSelect: "none",
+			userSelect: 'none',
+			WebkitUserSelect: 'none',
+			MozUserSelect: 'none',
+			msUserSelect: 'none',
 		},
-		fontSize: "xl",
-		color: "black",
+		fontSize: 'xl',
+		color: 'black',
 	} as Parameters<typeof Text>[0];
 
 	const textProps = { ...textDefaultProps, ...text };
 	return (
-		<Pressable
-			onPressIn={onKeyDown}
-			onPressOut={onKeyUp}
-			style={style}
-		>
+		<Pressable onPressIn={onKeyDown} onPressOut={onKeyUp} style={style}>
 			{({ isHovered, isPressed }) => (
 				<Box
 					bg={(() => {
@@ -90,9 +81,9 @@ const PianoKeyComp = ({
 PianoKeyComp.defaultProps = {
 	key: octaveKeys[0],
 	showNoteNames: NoteNameBehavior.onhover,
-	keyBg: "white",
-	keyBgPressed: "gray.200",
-	keyBgHovered: "gray.100",
+	keyBg: 'white',
+	keyBgPressed: 'gray.200',
+	keyBgHovered: 'gray.100',
 	onKeyDown: () => {},
 	onKeyUp: () => {},
 	text: {},

@@ -5,9 +5,9 @@ import {
 	octaveKeys,
 	isAccidental,
 	HighlightedKey,
-} from "../../models/Piano";
-import { Box, Row, Text } from "native-base";
-import PianoKeyComp from "./PianoKeyComp";
+} from '../../models/Piano';
+import { Box, Row, Text } from 'native-base';
+import PianoKeyComp from './PianoKeyComp';
 
 type OctaveProps = Parameters<typeof Box>[0] & {
 	number: number;
@@ -57,21 +57,18 @@ const Octave = (props: OctaveProps) => {
 	const whiteKeys = keys.filter((k) => !isAccidental(k));
 	const blackKeys = keys.filter(isAccidental);
 
-	const whiteKeyWidthExpr = "calc(100% / 7)";
-	const whiteKeyHeightExpr = "100%";
-	const blackKeyWidthExpr = "calc(100% / 13)";
-	const blackKeyHeightExpr = "calc(100% / 1.5)";
+	const whiteKeyWidthExpr = 'calc(100% / 7)';
+	const whiteKeyHeightExpr = '100%';
+	const blackKeyWidthExpr = 'calc(100% / 13)';
+	const blackKeyHeightExpr = 'calc(100% / 1.5)';
 
 	return (
 		<Box {...props}>
-			<Row height={"100%"} width={"100%"}>
+			<Row height={'100%'} width={'100%'}>
 				{whiteKeys.map((key, i) => {
-					const highlightedKey = highlightedNotes.find(
-						(h) => h.key.note === key.note
-					);
+					const highlightedKey = highlightedNotes.find((h) => h.key.note === key.note);
 					const isHighlighted = highlightedKey !== undefined;
-					const highlightColor =
-						highlightedKey?.bgColor ?? defaultHighlightColor;
+					const highlightColor = highlightedKey?.bgColor ?? defaultHighlightColor;
 					return (
 						<PianoKeyComp
 							pianoKey={key}
@@ -89,12 +86,9 @@ const Octave = (props: OctaveProps) => {
 					);
 				})}
 				{blackKeys.map((key, i) => {
-					const highlightedKey = highlightedNotes.find(
-						(h) => h.key.note === key.note
-					);
+					const highlightedKey = highlightedNotes.find((h) => h.key.note === key.note);
 					const isHighlighted = highlightedKey !== undefined;
-					const highlightColor =
-						highlightedKey?.bgColor ?? defaultHighlightColor;
+					const highlightColor = highlightedKey?.bgColor ?? defaultHighlightColor;
 					return (
 						<PianoKeyComp
 							pianoKey={key}
@@ -107,15 +101,15 @@ const Octave = (props: OctaveProps) => {
 							style={{
 								width: blackKeyWidthExpr,
 								height: blackKeyHeightExpr,
-								position: "absolute",
+								position: 'absolute',
 								left: `calc(calc(${whiteKeyWidthExpr} * ${
 									i + ((i > 1) as unknown as number) + 1
 								}) - calc(${blackKeyWidthExpr} / 2))`,
-								top: "0px",
+								top: '0px',
 							}}
 							text={{
-								color: "white",
-								fontSize: "xs",
+								color: 'white',
+								fontSize: 'xs',
 							}}
 						/>
 					);
@@ -139,18 +133,18 @@ const Octave = (props: OctaveProps) => {
 };
 
 Octave.defaultProps = {
-	startNote: "C",
-	endNote: "B",
-	showNoteNames: "onpress",
+	startNote: 'C',
+	endNote: 'B',
+	showNoteNames: 'onpress',
 	showOctaveNumber: false,
-	whiteKeyBg: "white",
-	whiteKeyBgPressed: "gray.200",
-	whiteKeyBgHovered: "gray.100",
-	blackKeyBg: "black",
-	blackKeyBgPressed: "gray.600",
-	blackKeyBgHovered: "gray.700",
+	whiteKeyBg: 'white',
+	whiteKeyBgPressed: 'gray.200',
+	whiteKeyBgHovered: 'gray.100',
+	blackKeyBg: 'black',
+	blackKeyBgPressed: 'gray.600',
+	blackKeyBgHovered: 'gray.700',
 	highlightedNotes: [],
-	defaultHighlightColor: "#FF0000",
+	defaultHighlightColor: '#FF0000',
 	onNoteDown: () => {},
 	onNoteUp: () => {},
 };

@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatGrid } from 'react-native-super-grid';
 import { Heading, VStack } from 'native-base';
 
-
 type CardGridCustomProps<T> = {
 	content: T[];
 	heading?: JSX.Element;

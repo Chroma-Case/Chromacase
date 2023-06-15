@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
 	Box,
 	Button,
@@ -9,10 +9,10 @@ import {
 	Row,
 	Text,
 	useBreakpointValue,
-} from "native-base";
-import useColorScheme from "../../hooks/colorScheme";
-import { Ionicons } from "@expo/vector-icons";
-import { ElementProps } from "./ElementTypes";
+} from 'native-base';
+import useColorScheme from '../../hooks/colorScheme';
+import { Ionicons } from '@expo/vector-icons';
+import { ElementProps } from './ElementTypes';
 import {
 	getElementDropdownNode,
 	getElementTextNode,
@@ -22,7 +22,7 @@ import {
 	ElementTextProps,
 	ElementToggleProps,
 	ElementRangeProps,
-} from "./ElementTypes";
+} from './ElementTypes';
 
 type RawElementProps = {
 	element: ElementProps;
@@ -30,25 +30,24 @@ type RawElementProps = {
 };
 
 export const RawElement = ({ element, isHovered }: RawElementProps) => {
-	const { title, icon, type, helperText, description, disabled, data } =
-		element;
+	const { title, icon, type, helperText, description, disabled, data } = element;
 	const colorScheme = useColorScheme();
-	const isDark = colorScheme === "dark";
-	const screenSize = useBreakpointValue({ base: "small", md: "big" });
-	const isSmallScreen = screenSize === "small";
+	const isDark = colorScheme === 'dark';
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isSmallScreen = screenSize === 'small';
 	return (
 		<Row
 			style={{
-				width: "100%",
+				width: '100%',
 				height: 45,
 				padding: 15,
-				justifyContent: "space-between",
-				alignContent: "stretch",
-				alignItems: "center",
+				justifyContent: 'space-between',
+				alignContent: 'stretch',
+				alignItems: 'center',
 				backgroundColor: isHovered
 					? isDark
-						? "rgba(255, 255, 255, 0.1)"
-						: "rgba(0, 0, 0, 0.05)"
+						? 'rgba(255, 255, 255, 0.1)'
+						: 'rgba(0, 0, 0, 0.05)'
 					: undefined,
 			}}
 		>
@@ -60,14 +59,14 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 				}}
 			>
 				{icon}
-				<Column maxW={"90%"}>
-					<Text isTruncated maxW={"100%"}>
+				<Column maxW={'90%'}>
+					<Text isTruncated maxW={'100%'}>
 						{title}
 					</Text>
 					{description && (
 						<Text
 							isTruncated
-							maxW={"100%"}
+							maxW={'100%'}
 							style={{
 								opacity: 0.6,
 								fontSize: 12,
@@ -86,7 +85,7 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 			>
 				<Row
 					style={{
-						alignItems: "center",
+						alignItems: 'center',
 						marginRight: 3,
 					}}
 				>
@@ -99,7 +98,7 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 									leftIcon={
 										<Icon
 											as={Ionicons}
-											size={"md"}
+											size={'md'}
 											name="help-circle-outline"
 										/>
 									}
@@ -110,7 +109,7 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 							<Popover.Content
 								accessibilityLabel={`Additionnal information for ${title}`}
 								style={{
-									maxWidth: isSmallScreen ? "90vw" : "20vw",
+									maxWidth: isSmallScreen ? '90vw' : '20vw',
 								}}
 							>
 								<Popover.Arrow />
@@ -120,15 +119,15 @@ export const RawElement = ({ element, isHovered }: RawElementProps) => {
 					)}
 					{(() => {
 						switch (type) {
-							case "text":
+							case 'text':
 								return getElementTextNode(data, disabled ?? false);
-							case "toggle":
+							case 'toggle':
 								return getElementToggleNode(data, disabled ?? false);
-							case "dropdown":
+							case 'dropdown':
 								return getElementDropdownNode(data, disabled ?? false);
-							case "range":
+							case 'range':
 								return getElementRangeNode(data, disabled ?? false, title);
-							case "custom":
+							case 'custom':
 								return data;
 							default:
 								return <Text>Unknown type</Text>;

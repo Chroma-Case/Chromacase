@@ -1,9 +1,9 @@
-import React from "react";
-import Card from "./Card";
-import { VStack, Text, Box, Icon, Image } from "native-base";
-import { useTheme } from "native-base";
-import { Ionicons } from "@expo/vector-icons";
-import API from "../API";
+import React from 'react';
+import Card from './Card';
+import { VStack, Text, Box, Icon, Image } from 'native-base';
+import { useTheme } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
+import API from '../API';
 type GenreCardProps = {
 	image: string;
 	name: string;
@@ -45,9 +45,9 @@ const GenreCard = (props: GenreCardProps) => {
 };
 
 GenreCard.defaultProps = {
-	icon: "https://picsum.photos/200",
-	name: "Genre",
-	onPress: () => { },
+	icon: 'https://picsum.photos/200',
+	name: 'Genre',
+	onPress: () => {},
 };
 
 export default GenreCard;

@@ -45,6 +45,8 @@ jobs:
       
       - name: Type Check
         run: yarn tsc
+      - name: Check Prettier
+        run: yarn pretty:check . 
 
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7

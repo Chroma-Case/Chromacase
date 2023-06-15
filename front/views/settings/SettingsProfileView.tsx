@@ -1,26 +1,19 @@
-import API from "../../API";
-import { useDispatch } from "react-redux";
-import { unsetAccessToken } from "../../state/UserSlice";
-import React from "react";
-import {
-	Column,
-	Text,
-	Button,
-	Box,
-	Flex,
-	Center,
-	Heading,
-	Avatar,
-	Popover,
-} from "native-base";
-import TextButton from "../../components/TextButton";
-import { LoadingView } from "../../components/Loading";
-import ElementList from "../../components/GtkUI/ElementList";
-import { translate } from "../../i18n/i18n";
-import { useQuery } from "react-query";
+import API from '../../API';
+import { useDispatch } from 'react-redux';
+import { unsetAccessToken } from '../../state/UserSlice';
+import React from 'react';
+import { Column, Text, Button, Box, Flex, Center, Heading, Avatar, Popover } from 'native-base';
+import TextButton from '../../components/TextButton';
+import { LoadingView } from '../../components/Loading';
+import ElementList from '../../components/GtkUI/ElementList';
+import { translate } from '../../i18n/i18n';
+import { useQuery } from 'react-query';
 
 const getInitials = (name: string) => {
-	return name.split(" ").map((n) => n[0]).join("");
+	return name
+		.split(' ')
+		.map((n) => n[0])
+		.join('');
 };
 
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
@@ -28,21 +21,21 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 	const dispatch = useDispatch();
 
 	if (!userQuery.data || userQuery.isLoading) {
-		return <LoadingView/>
+		return <LoadingView />;
 	}
 	const user = userQuery.data;
 	return (
 		<Flex
 			style={{
 				flex: 1,
-				alignItems: "center",
+				alignItems: 'center',
 				paddingTop: 40,
 			}}
 		>
 			<Column
 				style={{
-					width: "100%",
-					alignItems: "center",
+					width: '100%',
+					alignItems: 'center',
 				}}
 			>
 				<Center>
@@ -53,17 +46,17 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				<ElementList
 					style={{
 						marginTop: 20,
-						width: "90%",
+						width: '90%',
 						maxWidth: 850,
 					}}
 					elements={[
 						{
-							type: "text",
-							title: translate("email"),
+							type: 'text',
+							title: translate('email'),
 							data: {
-								text: user.email || translate("NoAssociatedEmail"),
+								text: user.email || translate('NoAssociatedEmail'),
 								onPress: () => {
-									navigation.navigate("ChangeEmail");
+									navigation.navigate('ChangeEmail');
 								},
 							},
 						},
@@ -73,54 +66,54 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				<ElementList
 					style={{
 						marginTop: 20,
-						width: "90%",
+						width: '90%',
 						maxWidth: 850,
 					}}
 					elements={[
 						{
-							type: "text",
-							title: translate("username"),
+							type: 'text',
+							title: translate('username'),
 							data: {
 								text: user.name,
 							},
 						},
 						{
-							type: "text",
-							title: "ID",
-							helperText: "This is your unique ID, be proud of it!",
+							type: 'text',
+							title: 'ID',
+							helperText: 'This is your unique ID, be proud of it!',
 							data: {
 								text: user.id.toString(),
 							},
 						},
 						{
-							type: "text",
-							title: translate("nbGamesPlayed"),
+							type: 'text',
+							title: translate('nbGamesPlayed'),
 							data: {
 								text: user.data.gamesPlayed.toString(),
 							},
 						},
 						{
-							type: "text",
-							title: "XP",
-							description: translate("XPDescription"),
+							type: 'text',
+							title: 'XP',
+							description: translate('XPDescription'),
 							data: {
 								text: user.data.xp.toString(),
 							},
 						},
 						{
-							type: "text",
-							title: translate("userCreatedAt"),
+							type: 'text',
+							title: translate('userCreatedAt'),
 							helperText:
-								"La date de création est actuellement arbitraire car le serveur ne retourne pas cette information",
+								'La date de création est actuellement arbitraire car le serveur ne retourne pas cette information',
 							data: {
 								text: user.data.createdAt.toLocaleDateString(),
 							},
 						},
 						{
-							type: "text",
-							title: translate("premiumAccount"),
+							type: 'text',
+							title: translate('premiumAccount'),
 							data: {
-								text: translate(user.premium ? "yes" : "no"),
+								text: translate(user.premium ? 'yes' : 'no'),
 							},
 						},
 					]}
@@ -131,17 +124,17 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				<ElementList
 					style={{
 						marginTop: 10,
-						width: "90%",
+						width: '90%',
 						maxWidth: 850,
 					}}
 					elements={[
 						{
-							type: "toggle",
-							title: "Piano Magique",
+							type: 'toggle',
+							title: 'Piano Magique',
 							description:
-								"Fait apparaître de la lumière sur le piano pendant les parties",
+								'Fait apparaître de la lumière sur le piano pendant les parties',
 							helperText:
-								"Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité",
+								'Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité',
 							disabled: true,
 							data: {
 								value: false,
@@ -149,20 +142,20 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							},
 						},
 						{
-							type: "dropdown",
-							title: "Thème de piano",
+							type: 'dropdown',
+							title: 'Thème de piano',
 							disabled: true,
 							data: {
-								value: "default",
+								value: 'default',
 								onSelect: () => {},
 								options: [
 									{
-										label: "Default",
-										value: "default",
+										label: 'Default',
+										value: 'default',
 									},
 									{
-										label: "Catpuccino",
-										value: "catpuccino",
+										label: 'Catpuccino',
+										value: 'catpuccino',
 									},
 								],
 							},
@@ -176,41 +169,39 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 					<TextButton
 						onPress={() => dispatch(unsetAccessToken())}
 						translate={{
-							translationKey: "signOutBtn",
+							translationKey: 'signOutBtn',
 						}}
 					/>
 				)}
 				{user.isGuest && (
 					<Popover
 						trigger={(triggerProps) => (
-							<Button {...triggerProps}>{translate("signOutBtn")}</Button>
+							<Button {...triggerProps}>{translate('signOutBtn')}</Button>
 						)}
 					>
 						<Popover.Content>
 							<Popover.Arrow />
 							<Popover.Body>
 								<Heading size="md" mb={2}>
-									{translate("Attention")}
+									{translate('Attention')}
 								</Heading>
 								<Text>
-									{translate(
-										"YouAreCurrentlyConnectedWithAGuestAccountWarning"
-									)}
+									{translate('YouAreCurrentlyConnectedWithAGuestAccountWarning')}
 								</Text>
 								<Button.Group variant="ghost" space={2}>
 									<Button
 										onPress={() => dispatch(unsetAccessToken())}
 										colorScheme="red"
 									>
-										{translate("signOutBtn")}
+										{translate('signOutBtn')}
 									</Button>
 									<Button
 										onPress={() => {
-											navigation.navigate("GuestToUser");
+											navigation.navigate('GuestToUser');
 										}}
 										colorScheme="green"
 									>
-										{translate("signUpBtn")}
+										{translate('signUpBtn')}
 									</Button>
 								</Button.Group>
 							</Popover.Body>

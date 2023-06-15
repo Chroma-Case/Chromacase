@@ -1,19 +1,11 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import {
-	Center,
-	Heading,
-} from "native-base";
-import { useLanguage } from "../../state/LanguageSlice";
-import {
-	AvailableLanguages,
-	DefaultLanguage,
-	translate,
-	Translate,
-} from "../../i18n/i18n";
-import {  useSelector } from "../../state/Store";
-import { updateSettings } from "../../state/SettingsSlice";
-import ElementList from "../../components/GtkUI/ElementList";
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Center, Heading } from 'native-base';
+import { useLanguage } from '../../state/LanguageSlice';
+import { AvailableLanguages, DefaultLanguage, translate, Translate } from '../../i18n/i18n';
+import { useSelector } from '../../state/Store';
+import { updateSettings } from '../../state/SettingsSlice';
+import ElementList from '../../components/GtkUI/ElementList';
 
 const PreferencesView = () => {
 	const dispatch = useDispatch();
@@ -21,37 +13,35 @@ const PreferencesView = () => {
 	const settings = useSelector((state) => state.settings.local);
 	return (
 		<Center style={{ flex: 1 }}>
-			<Heading style={{ textAlign: "center" }}>
+			<Heading style={{ textAlign: 'center' }}>
 				<Translate translationKey="prefBtn" />
 			</Heading>
 			<ElementList
 				style={{
 					marginTop: 20,
-					width: "90%",
+					width: '90%',
 					maxWidth: 850,
 				}}
 				elements={[
 					{
-						type: "dropdown",
-						title: translate("SettingsPreferencesTheme"),
+						type: 'dropdown',
+						title: translate('SettingsPreferencesTheme'),
 						data: {
 							value: settings.colorScheme,
-							defaultValue: "system",
+							defaultValue: 'system',
 							onSelect: (newColorScheme) => {
-								dispatch(
-									updateSettings({ colorScheme: newColorScheme as any })
-								);
+								dispatch(updateSettings({ colorScheme: newColorScheme as any }));
 							},
 							options: [
-								{ label: translate("dark"), value: "dark" },
-								{ label: translate("light"), value: "light" },
-								{ label: translate("system"), value: "system" },
+								{ label: translate('dark'), value: 'dark' },
+								{ label: translate('light'), value: 'light' },
+								{ label: translate('system'), value: 'system' },
 							],
 						},
 					},
 					{
-						type: "dropdown",
-						title: translate("SettingsPreferencesLanguage"),
+						type: 'dropdown',
+						title: translate('SettingsPreferencesLanguage'),
 						data: {
 							value: language,
 							defaultValue: DefaultLanguage,
@@ -59,25 +49,25 @@ const PreferencesView = () => {
 								dispatch(useLanguage(itemValue as AvailableLanguages));
 							},
 							options: [
-								{ label: "Français", value: "fr" },
-								{ label: "English", value: "en" },
-								{ label: "Espanol", value: "sp" },
+								{ label: 'Français', value: 'fr' },
+								{ label: 'English', value: 'en' },
+								{ label: 'Espanol', value: 'sp' },
 							],
 						},
 					},
 					{
-						type: "dropdown",
-						title: translate("SettingsPreferencesDifficulty"),
+						type: 'dropdown',
+						title: translate('SettingsPreferencesDifficulty'),
 						data: {
 							value: settings.difficulty,
-							defaultValue: "medium",
+							defaultValue: 'medium',
 							onSelect: (itemValue) => {
 								dispatch(updateSettings({ difficulty: itemValue as any }));
 							},
 							options: [
-								{ label: translate("easy"), value: "beg" },
-								{ label: translate("medium"), value: "inter" },
-								{ label: translate("hard"), value: "pro" },
+								{ label: translate('easy'), value: 'beg' },
+								{ label: translate('medium'), value: 'inter' },
+								{ label: translate('hard'), value: 'pro' },
 							],
 						},
 					},
@@ -86,13 +76,13 @@ const PreferencesView = () => {
 			<ElementList
 				style={{
 					marginTop: 20,
-					width: "90%",
+					width: '90%',
 					maxWidth: 850,
 				}}
 				elements={[
 					{
-						type: "toggle",
-						title: translate("SettingsPreferencesColorblindMode"),
+						type: 'toggle',
+						title: translate('SettingsPreferencesColorblindMode'),
 						data: {
 							value: settings.colorBlind,
 							onToggle: () => {
@@ -105,13 +95,13 @@ const PreferencesView = () => {
 			<ElementList
 				style={{
 					marginTop: 20,
-					width: "90%",
+					width: '90%',
 					maxWidth: 850,
 				}}
 				elements={[
 					{
-						type: "range",
-						title: translate("SettingsPreferencesMicVolume"),
+						type: 'range',
+						title: translate('SettingsPreferencesMicVolume'),
 						data: {
 							value: settings.micVolume,
 							min: 0,

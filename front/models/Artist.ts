@@ -1,4 +1,4 @@
-import Model from "./Model";
+import Model from './Model';
 
 interface Artist extends Model {
 	name: string;

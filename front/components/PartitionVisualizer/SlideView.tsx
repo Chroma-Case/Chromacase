@@ -1,18 +1,9 @@
-import {
-	useTheme,
-	Box,
-	Image,
-	Row,
-	Column,
-	ZStack,
-	Button,
-	Icon,
-} from "native-base";
-import IconButton from "../IconButton";
-import { MotiView, useDynamicAnimation } from "moti";
-import { abs, Easing } from "react-native-reanimated";
-import React from "react";
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTheme, Box, Image, Row, Column, ZStack, Button, Icon } from 'native-base';
+import IconButton from '../IconButton';
+import { MotiView, useDynamicAnimation } from 'moti';
+import { abs, Easing } from 'react-native-reanimated';
+import React from 'react';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
 type ImgSlideViewProps = {
 	sources: [url: string, width: number, height: number][];
@@ -45,7 +36,7 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 		animation.animateTo({
 			translateX: -nbPixelsToSkip,
 			transition: {
-				type: "timing",
+				type: 'timing',
 				delay: 0,
 				easing: Easing.linear,
 			},
@@ -69,7 +60,7 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 
 	return (
 		<Column>
-			<Box overflow={"hidden"}>
+			<Box overflow={'hidden'}>
 				<MotiView
 					state={animation}
 					onDidAnimate={(
@@ -78,7 +69,7 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 						_maybeValue,
 						{ attemptedValue }
 					) => {
-						if (styleProp === "translateX" && didAnimationFinish) {
+						if (styleProp === 'translateX' && didAnimationFinish) {
 							stepCount++;
 						}
 					}}
@@ -102,11 +93,9 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 					icon={<Icon as={FontAwesome5} name="play" size="sm" />}
 					onPress={() => {
 						animation.animateTo({
-							translateX: range(-totalWidth, 0, stepSize)
-								.reverse()
-								.slice(stepCount),
+							translateX: range(-totalWidth, 0, stepSize).reverse().slice(stepCount),
 							transition: {
-								type: "timing",
+								type: 'timing',
 								easing: Easing.linear,
 								duration: stepDuration,
 							},
@@ -120,19 +109,11 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 					}}
 				/>
 				<IconButton
-					icon={
-						<Icon as={MaterialCommunityIcons} name="rewind-10" size="sm" />
-					}
+					icon={<Icon as={MaterialCommunityIcons} name="rewind-10" size="sm" />}
 					onPress={() => jumpAt(-200, false)}
 				/>
 				<IconButton
-					icon={
-						<Icon
-							as={MaterialCommunityIcons}
-							name="fast-forward-10"
-							size="sm"
-						/>
-					}
+					icon={<Icon as={MaterialCommunityIcons} name="fast-forward-10" size="sm" />}
 					onPress={() => jumpAt(200, false)}
 				/>
 				<IconButton

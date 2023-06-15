@@ -1,21 +1,21 @@
-import Artist from "./models/Artist";
-import Album from "./models/Album";
-import AuthToken from "./models/AuthToken";
-import Chapter from "./models/Chapter";
-import Lesson from "./models/Lesson";
-import Genre from "./models/Genre";
-import LessonHistory from "./models/LessonHistory";
-import Song from "./models/Song";
-import SongHistory from "./models/SongHistory";
-import User from "./models/User";
-import Constants from "expo-constants";
-import store from "./state/Store";
-import { Platform } from "react-native";
-import { en } from "./i18n/Translations";
-import { useQuery, QueryClient } from "react-query";
-import UserSettings from "./models/UserSettings";
-import { PartialDeep } from "type-fest";
-import SearchHistory from "./models/SearchHistory";
+import Artist from './models/Artist';
+import Album from './models/Album';
+import AuthToken from './models/AuthToken';
+import Chapter from './models/Chapter';
+import Lesson from './models/Lesson';
+import Genre from './models/Genre';
+import LessonHistory from './models/LessonHistory';
+import Song from './models/Song';
+import SongHistory from './models/SongHistory';
+import User from './models/User';
+import Constants from 'expo-constants';
+import store from './state/Store';
+import { Platform } from 'react-native';
+import { en } from './i18n/Translations';
+import { useQuery, QueryClient } from 'react-query';
+import UserSettings from './models/UserSettings';
+import { PartialDeep } from 'type-fest';
+import SearchHistory from './models/SearchHistory';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -25,7 +25,7 @@ export type AccessToken = string;
 type FetchParams = {
 	route: string;
 	body?: Object;
-	method?: "GET" | "POST" | "DELETE" | "PATCH" | "PUT";
+	method?: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 	// If true, No JSON parsing is done, the raw response's content is returned
 	raw?: true;
 };
@@ -40,7 +40,7 @@ export class APIError extends Error {
 		public status: number,
 		// Set the message to the correct error this is a placeholder
 		// when the error is only used internally (middleman)
-		public userMessage: keyof typeof en = "unknownError"
+		public userMessage: keyof typeof en = 'unknownError'
 	) {
 		super(message);
 	}
@@ -48,24 +48,22 @@ export class APIError extends Error {
 
 // we will need the same thing for the scorometer API url
 const baseAPIUrl =
-	process.env.NODE_ENV != "development" && Platform.OS === "web"
-		? "/api"
+	process.env.NODE_ENV != 'development' && Platform.OS === 'web'
+		? '/api'
 		: Constants.manifest?.extra?.apiUrl;
 
 export default class API {
 	public static async fetch(params: FetchParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
-			"Content-Type": "application/json",
+			'Content-Type': 'application/json',
 		};
 		const response = await fetch(`${baseAPIUrl}${params.route}`, {
-			headers:
-				(jwtToken && { ...header, Authorization: `Bearer ${jwtToken}` }) ||
-				header,
+			headers: (jwtToken && { ...header, Authorization: `Bearer ${jwtToken}` }) || header,
 			body: JSON.stringify(params.body),
-			method: params.method ?? "GET",
+			method: params.method ?? 'GET',
 		}).catch(() => {
-			throw new Error("Error while fetching API: " + baseAPIUrl);
+			throw new Error('Error while fetching API: ' + baseAPIUrl);
 		});
 		if (params.raw) {
 			return response.arrayBuffer();
@@ -74,15 +72,11 @@ export default class API {
 		try {
 			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
 			if (!response.ok) {
-				throw new APIError(
-					jsonResponse ?? response.statusText,
-					response.status
-				);
+				throw new APIError(jsonResponse ?? response.statusText, response.status);
 			}
 			return jsonResponse;
 		} catch (e) {
-			if (e instanceof SyntaxError)
-				throw new Error("Error while parsing Server's response");
+			if (e instanceof SyntaxError) throw new Error("Error while parsing Server's response");
 			throw e;
 		}
 	}
@@ -91,16 +85,16 @@ export default class API {
 		authenticationInput: AuthenticationInput
 	): Promise<AccessToken> {
 		return API.fetch({
-			route: "/auth/login",
+			route: '/auth/login',
 			body: authenticationInput,
-			method: "POST",
+			method: 'POST',
 		})
 			.then((responseBody) => responseBody.access_token)
 			.catch((e) => {
 				if (!(e instanceof APIError)) throw e;
 
 				if (e.status == 401)
-					throw new APIError("invalidCredentials", 401, "invalidCredentials");
+					throw new APIError('invalidCredentials', 401, 'invalidCredentials');
 				throw e;
 			});
 	}
@@ -109,13 +103,11 @@ export default class API {
 	 * @param registrationInput the credentials to create a new profile
 	 * @returns A Promise. On success, will be resolved into an instance of the API wrapper
 	 */
-	public static async createAccount(
-		registrationInput: RegistrationInput
-	): Promise<AccessToken> {
+	public static async createAccount(registrationInput: RegistrationInput): Promise<AccessToken> {
 		await API.fetch({
-			route: "/auth/register",
+			route: '/auth/register',
 			body: registrationInput,
-			method: "POST",
+			method: 'POST',
 		});
 		// In the Future we should move autheticate out of this function
 		// and maybe create a new function to create and login in one go
@@ -127,21 +119,18 @@ export default class API {
 
 	public static async createAndGetGuestAccount(): Promise<AccessToken> {
 		let response = await API.fetch({
-			route: "/auth/guest",
-			method: "POST",
+			route: '/auth/guest',
+			method: 'POST',
 		});
-		if (!response.access_token)
-			throw new APIError("No access token", response.status);
+		if (!response.access_token) throw new APIError('No access token', response.status);
 		return response.access_token;
 	}
 
-	public static async transformGuestToUser(
-		registrationInput: RegistrationInput
-	): Promise<void> {
+	public static async transformGuestToUser(registrationInput: RegistrationInput): Promise<void> {
 		await API.fetch({
-			route: "/auth/me",
+			route: '/auth/me',
 			body: registrationInput,
-			method: "PUT",
+			method: 'PUT',
 		});
 	}
 
@@ -150,7 +139,7 @@ export default class API {
 	 */
 	public static async getUserInfo(): Promise<User> {
 		let user = await API.fetch({
-			route: "/auth/me",
+			route: '/auth/me',
 		});
 
 		// this a dummy settings object, we will need to fetch the real one from the API
@@ -163,16 +152,15 @@ export default class API {
 			data: {
 				gamesPlayed: user.partyPlayed as number,
 				xp: 0,
-				createdAt: new Date("2023-04-09T00:00:00.000Z"),
-				avatar:
-					"https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn",
+				createdAt: new Date('2023-04-09T00:00:00.000Z'),
+				avatar: 'https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn',
 			},
 		} as User;
 	}
 
 	public static async getUserSettings(): Promise<UserSettings> {
 		const settings = await API.fetch({
-			route: "/auth/me/settings",
+			route: '/auth/me/settings',
 		});
 
 		return {
@@ -189,9 +177,7 @@ export default class API {
 		};
 	}
 
-	public static async updateUserSettings(
-		settings: PartialDeep<UserSettings>
-	): Promise<void> {
+	public static async updateUserSettings(settings: PartialDeep<UserSettings>): Promise<void> {
 		const dto = {
 			pushNotification: settings.notifications?.pushNotif,
 			emailNotification: settings.notifications?.emailNotif,
@@ -203,8 +189,8 @@ export default class API {
 			showActivity: settings.showActivity,
 		};
 		return API.fetch({
-			method: "PATCH",
-			route: "/auth/me/settings",
+			method: 'PATCH',
+			route: '/auth/me/settings',
 			body: dto,
 		});
 	}
@@ -225,27 +211,27 @@ export default class API {
 	 */
 	public static async authWithGoogle(): Promise<AuthToken> {
 		//TODO
-		return "11111";
+		return '11111';
 	}
 
 	public static async getAllSongs(): Promise<Song[]> {
 		let songs = await API.fetch({
-			route: "/song",
+			route: '/song',
 		});
 
 		// this is a dummy illustration, we will need to fetch the real one from the API
 		return songs.data.map(
 			(song: any) =>
-			({
-				id: song.id as number,
-				name: song.name as string,
-				artistId: song.artistId as number,
-				albumId: song.albumId as number,
-				genreId: song.genreId as number,
-				details: song.difficulties,
-				cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-				metrics: {},
-			} as Song)
+				({
+					id: song.id as number,
+					name: song.name as string,
+					artistId: song.artistId as number,
+					albumId: song.albumId as number,
+					genreId: song.genreId as number,
+					details: song.difficulties,
+					cover: `${baseAPIUrl}/song/${song.id}/illustration`,
+					metrics: {},
+				} as Song)
 		);
 	}
 
@@ -326,8 +312,8 @@ export default class API {
 			end: 100 * value,
 			songId: songId,
 			name: `Chapter ${value}`,
-			type: "chorus",
-			key_aspect: "rhythm",
+			type: 'chorus',
+			key_aspect: 'rhythm',
 			difficulty: value,
 			id: value * 10,
 		}));
@@ -373,19 +359,19 @@ export default class API {
 		return [
 			{
 				id: 1,
-				name: "Super Trooper",
+				name: 'Super Trooper',
 			},
 			{
 				id: 2,
-				name: "Kingdom Heart 365/2 OST",
+				name: 'Kingdom Heart 365/2 OST',
 			},
 			{
 				id: 3,
-				name: "The Legend Of Zelda Ocarina Of Time OST",
+				name: 'The Legend Of Zelda Ocarina Of Time OST',
 			},
 			{
 				id: 4,
-				name: "Random Access Memories",
+				name: 'Random Access Memories',
 			},
 		] as Album[];
 	}
@@ -405,10 +391,10 @@ export default class API {
 	 */
 	public static async getLesson(lessonId: number): Promise<Lesson> {
 		return {
-			title: "Song",
-			description: "A song",
+			title: 'Song',
+			description: 'A song',
 			requiredLevel: 1,
-			mainSkill: "lead-head-change",
+			mainSkill: 'lead-head-change',
 			id: lessonId,
 		};
 	}
@@ -419,14 +405,11 @@ export default class API {
 	 * @param take how much do we take to return
 	 * @returns Returns an array of history entries (temporary type any)
 	 */
-	public static async getSearchHistory(
-		skip?: number,
-		take?: number
-	): Promise<SearchHistory[]> {
+	public static async getSearchHistory(skip?: number, take?: number): Promise<SearchHistory[]> {
 		return (
 			await API.fetch({
 				route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
-				method: "GET",
+				method: 'GET',
 			})
 		).map((e: any) => {
 			return {
@@ -453,7 +436,7 @@ export default class API {
 	): Promise<void> {
 		return await API.fetch({
 			route: `/history/search`,
-			method: "POST",
+			method: 'POST',
 			body: {
 				query: query,
 				type: type,
@@ -467,7 +450,7 @@ export default class API {
 	 */
 	public static async getSongSuggestions(): Promise<Song[]> {
 		const queryClient = new QueryClient();
-		return await queryClient.fetchQuery(["API", "allsongs"], API.getAllSongs);
+		return await queryClient.fetchQuery(['API', 'allsongs'], API.getAllSongs);
 	}
 
 	/**
@@ -476,7 +459,7 @@ export default class API {
 	 */
 	public static async getUserPlayHistory(): Promise<SongHistory[]> {
 		return this.fetch({
-			route: "/history",
+			route: '/history',
 		});
 	}
 
@@ -484,9 +467,7 @@ export default class API {
 	 * Retrieve a lesson's history
 	 * @param lessonId the id to find the lesson
 	 */
-	public static async getLessonHistory(
-		lessonId: number
-	): Promise<LessonHistory[]> {
+	public static async getLessonHistory(lessonId: number): Promise<LessonHistory[]> {
 		return [
 			{
 				lessonId,
@@ -505,42 +486,42 @@ export default class API {
 	): Promise<[string, number, number][]> {
 		return [
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469560426545222/vivaldi_split_1.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469560426545222/vivaldi_split_1.png',
 				1868,
 				400,
 			],
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469560900505660/vivaldi_split_2.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469560900505660/vivaldi_split_2.png',
 				1868,
 				400,
 			],
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469561261203506/vivaldi_split_3.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469561261203506/vivaldi_split_3.png',
 				1868,
 				400,
 			],
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469561546424381/vivaldi_split_4.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469561546424381/vivaldi_split_4.png',
 				1868,
 				400,
 			],
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469562058133564/vivaldi_split_5.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469562058133564/vivaldi_split_5.png',
 				1868,
 				400,
 			],
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469562347528202/vivaldi_split_6.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469562347528202/vivaldi_split_6.png',
 				1868,
 				400,
 			],
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469562792136815/vivaldi_split_7.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469562792136815/vivaldi_split_7.png',
 				1868,
 				400,
 			],
 			[
-				"https://media.discordapp.net/attachments/717080637038788731/1067469563073142804/vivaldi_split_8.png",
+				'https://media.discordapp.net/attachments/717080637038788731/1067469563073142804/vivaldi_split_8.png',
 				1868,
 				400,
 			],
@@ -549,8 +530,8 @@ export default class API {
 
 	public static async updateUserEmail(newEmail: string): Promise<User> {
 		const rep = await API.fetch({
-			route: "/auth/me",
-			method: "PUT",
+			route: '/auth/me',
+			method: 'PUT',
 			body: {
 				email: newEmail,
 			},
@@ -567,8 +548,8 @@ export default class API {
 		newPassword: string
 	): Promise<User> {
 		const rep = await API.fetch({
-			route: "/auth/me",
-			method: "PUT",
+			route: '/auth/me',
+			method: 'PUT',
 			body: {
 				oldPassword: oldPassword,
 				password: newPassword,
