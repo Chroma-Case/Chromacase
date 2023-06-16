@@ -65,10 +65,7 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 			<Box overflow={'hidden'}>
 				<MotiView
 					state={animation}
-					onDidAnimate={(
-						styleProp,
-						didAnimationFinish,
-					) => {
+					onDidAnimate={(styleProp, didAnimationFinish) => {
 						if (styleProp === 'translateX' && didAnimationFinish) {
 							stepCount++;
 						}

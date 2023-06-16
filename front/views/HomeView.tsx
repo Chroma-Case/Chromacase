@@ -2,16 +2,7 @@ import React from 'react';
 import { useQueries, useQuery } from 'react-query';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
-import {
-	Box,
-	ScrollView,
-	Flex,
-	Stack,
-	Heading,
-	VStack,
-	HStack
-} from 'native-base';
-
+import { Box, ScrollView, Flex, Stack, Heading, VStack, HStack } from 'native-base';
 import { useNavigation } from '../Navigation';
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable';

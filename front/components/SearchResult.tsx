@@ -186,7 +186,7 @@ const HomeSearchComponent = () => {
 
 type SongsSearchComponentProps = {
 	maxRows?: number;
-}
+};
 
 const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 	const { songData } = React.useContext(SearchContext);
@@ -219,7 +219,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 
 type ItemSearchComponentProps = {
 	maxItems?: number;
-}
+};
 
 const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 	const { artistData } = React.useContext(SearchContext);

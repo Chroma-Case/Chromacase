@@ -412,21 +412,24 @@ export default class API {
 	 */
 	public static async getSearchHistory(skip?: number, take?: number): Promise<SearchHistory[]> {
 		return (
-			await API.fetch({
-				route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
-				method: 'GET',
-			})
-		// To be fixed with #168
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		).map((e: any) => {
-			return {
-				id: e.id,
-				query: e.query,
-				type: e.type,
-				userId: e.userId,
-				timestamp: new Date(e.searchDate),
-			} as SearchHistory;
-		});
+			(
+				await API.fetch({
+					route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
+					method: 'GET',
+				})
+			)
+				// To be fixed with #168
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				.map((e: any) => {
+					return {
+						id: e.id,
+						query: e.query,
+						type: e.type,
+						userId: e.userId,
+						timestamp: new Date(e.searchDate),
+					} as SearchHistory;
+				})
+		);
 	}
 
 	/**
@@ -436,10 +439,7 @@ export default class API {
 	 * @param timestamp the date it's been issued
 	 * @returns nothing
 	 */
-	public static async createSearchHistoryEntry(
-		query: string,
-		type: string
-	): Promise<void> {
+	public static async createSearchHistoryEntry(query: string, type: string): Promise<void> {
 		return await API.fetch({
 			route: `/history/search`,
 			method: 'POST',

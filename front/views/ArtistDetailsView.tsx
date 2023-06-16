@@ -8,8 +8,8 @@ import API from '../API';
 const handleFavorite = () => {};
 
 type ArtistDetailsViewProps = {
-	artistId: number
-}
+	artistId: number;
+};
 
 const ArtistDetailsView = ({ artistId }: ArtistDetailsViewProps) => {
 	const { isLoading, data: artistData } = useQuery(['artist', artistId], () =>

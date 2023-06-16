@@ -31,7 +31,11 @@ const PreferencesView = () => {
 							value: settings.colorScheme,
 							defaultValue: 'system',
 							onSelect: (newColorScheme) => {
-								dispatch(updateSettings({ colorScheme: newColorScheme as LocalSettings['colorScheme'] }));
+								dispatch(
+									updateSettings({
+										colorScheme: newColorScheme as LocalSettings['colorScheme'],
+									})
+								);
 							},
 							options: [
 								{ label: translate('dark'), value: 'dark' },
@@ -63,7 +67,11 @@ const PreferencesView = () => {
 							value: settings.difficulty,
 							defaultValue: 'medium',
 							onSelect: (itemValue) => {
-								dispatch(updateSettings({ difficulty: itemValue as LocalSettings['difficulty'] }));
+								dispatch(
+									updateSettings({
+										difficulty: itemValue as LocalSettings['difficulty'],
+									})
+								);
 							},
 							options: [
 								{ label: translate('easy'), value: 'beg' },

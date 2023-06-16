@@ -1,13 +1,4 @@
-import {
-	Divider,
-	Box,
-	Image,
-	Text,
-	VStack,
-	PresenceTransition,
-	Icon,
-	Stack,
-} from 'native-base';
+import { Divider, Box, Image, Text, VStack, PresenceTransition, Icon, Stack } from 'native-base';
 import { useQuery } from 'react-query';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import React, { useEffect, useState } from 'react';
