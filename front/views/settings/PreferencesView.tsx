@@ -6,6 +6,7 @@ import { AvailableLanguages, DefaultLanguage, translate, Translate } from '../..
 import { useSelector } from '../../state/Store';
 import { updateSettings } from '../../state/SettingsSlice';
 import ElementList from '../../components/GtkUI/ElementList';
+import LocalSettings from '../../models/LocalSettings';
 
 const PreferencesView = () => {
 	const dispatch = useDispatch();
@@ -30,9 +31,7 @@ const PreferencesView = () => {
 							value: settings.colorScheme,
 							defaultValue: 'system',
 							onSelect: (newColorScheme) => {
-								// eslint-disable-next-line @typescript-eslint/no-explicit-any
-								// We are garanteed that newColorScheme is a ColorScheme
-								dispatch(updateSettings({ colorScheme: newColorScheme as any }));
+								dispatch(updateSettings({ colorScheme: newColorScheme as LocalSettings['colorScheme'] }));
 							},
 							options: [
 								{ label: translate('dark'), value: 'dark' },
@@ -64,7 +63,7 @@ const PreferencesView = () => {
 							value: settings.difficulty,
 							defaultValue: 'medium',
 							onSelect: (itemValue) => {
-								dispatch(updateSettings({ difficulty: itemValue as any }));
+								dispatch(updateSettings({ difficulty: itemValue as LocalSettings['difficulty'] }));
 							},
 							options: [
 								{ label: translate('easy'), value: 'beg' },

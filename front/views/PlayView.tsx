@@ -291,10 +291,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					}}
 				>
 					<VirtualPiano
-						onNoteDown={(note: any) => {
+						onNoteDown={(note) => {
 							console.log('On note down', keyToStr(note));
 						}}
-						onNoteUp={(note: any) => {
+						onNoteUp={(note) => {
 							console.log('On note up', keyToStr(note));
 						}}
 						showOctaveNumbers={true}

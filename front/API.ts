@@ -221,6 +221,8 @@ export default class API {
 
 		// this is a dummy illustration, we will need to fetch the real one from the API
 		return songs.data.map(
+			// To be fixed with #168
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			(song: any) =>
 				({
 					id: song.id as number,
@@ -355,7 +357,10 @@ export default class API {
 	 * Search Album by name
 	 * @param query the string used to find the album
 	 */
-	public static async searchAlbum(query?: string): Promise<Album[]> {
+	public static async searchAlbum(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		query?: string
+	): Promise<Album[]> {
 		return [
 			{
 				id: 1,
@@ -411,6 +416,8 @@ export default class API {
 				route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
 				method: 'GET',
 			})
+		// To be fixed with #168
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		).map((e: any) => {
 			return {
 				id: e.id,
@@ -431,8 +438,7 @@ export default class API {
 	 */
 	public static async createSearchHistoryEntry(
 		query: string,
-		type: string,
-		timestamp: number
+		type: string
 	): Promise<void> {
 		return await API.fetch({
 			route: `/history/search`,

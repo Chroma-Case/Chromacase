@@ -2,7 +2,7 @@ import { RootState, useSelector } from '../state/Store';
 import i18n from './i18n';
 
 type LanguageGateProps = {
-	children: any;
+	children: JSX.Element;
 };
 
 /**

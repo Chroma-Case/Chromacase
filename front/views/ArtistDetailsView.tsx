@@ -7,7 +7,11 @@ import API from '../API';
 
 const handleFavorite = () => {};
 
-const ArtistDetailsView = ({ artistId }: any) => {
+type ArtistDetailsViewProps = {
+	artistId: number
+}
+
+const ArtistDetailsView = ({ artistId }: ArtistDetailsViewProps) => {
 	const { isLoading, data: artistData } = useQuery(['artist', artistId], () =>
 		API.getArtist(artistId)
 	);

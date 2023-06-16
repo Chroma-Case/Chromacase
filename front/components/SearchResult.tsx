@@ -204,7 +204,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 							key={index}
 							song={comp}
 							onPress={() => {
-								API.createSearchHistoryEntry(comp.name, 'song', Date.now());
+								API.createSearchHistoryEntry(comp.name, 'song');
 								navigation.navigate('Song', { songId: comp.id });
 							}}
 						/>
@@ -237,7 +237,7 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 						name: a.name,
 						id: a.id,
 						onPress: () => {
-							API.createSearchHistoryEntry(a.name, 'artist', Date.now());
+							API.createSearchHistoryEntry(a.name, 'artist');
 							navigation.navigate('Artist', { artistId: a.id });
 						},
 					}))}
@@ -266,7 +266,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 						name: g.name,
 						id: g.id,
 						onPress: () => {
-							API.createSearchHistoryEntry(g.name, 'genre', Date.now());
+							API.createSearchHistoryEntry(g.name, 'genre');
 							navigation.navigate('Home');
 						},
 					}))}

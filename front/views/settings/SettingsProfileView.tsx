@@ -16,6 +16,8 @@ const getInitials = (name: string) => {
 		.join('');
 };
 
+// Too painful to infer the settings-only, typed navigator. Gave up
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const dispatch = useDispatch();

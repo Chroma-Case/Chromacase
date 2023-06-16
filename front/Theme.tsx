@@ -78,8 +78,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ColorSchemeProvider = (props: { children: any }) => {
+const ColorSchemeProvider = (props: { children: JSX.Element }) => {
 	const colorScheme = useColorScheme();
 	const colorMode = useColorMode();
 
