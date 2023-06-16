@@ -1,10 +1,6 @@
 import React from 'react';
 
-type PartitionVisualizerProps = {
-	songId: number;
-};
-
-const PartitionVisualizer = (_props: PartitionVisualizerProps) => {
+const PartitionVisualizer = () => {
 	return <></>;
 };
 

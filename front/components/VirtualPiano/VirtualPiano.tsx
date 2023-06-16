@@ -63,8 +63,8 @@ const VirtualPiano = ({
 };
 
 VirtualPiano.defaultProps = {
-	onNoteDown: (_n: PianoKey) => {},
-	onNoteUp: (_n: PianoKey) => {},
+	onNoteDown: () => {},
+	onNoteUp: () => {},
 	startOctave: 2,
 	startNote: Note.C,
 	endOctave: 6,

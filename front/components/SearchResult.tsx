@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	HStack,
 	VStack,
@@ -184,7 +184,11 @@ const HomeSearchComponent = () => {
 	);
 };
 
-const SongsSearchComponent = (props: any) => {
+type SongsSearchComponentProps = {
+	maxRows?: number;
+}
+
+const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 	const { songData } = React.useContext(SearchContext);
 	const navigation = useNavigation();
 
@@ -213,7 +217,11 @@ const SongsSearchComponent = (props: any) => {
 	);
 };
 
-const ArtistSearchComponent = (props: any) => {
+type ItemSearchComponentProps = {
+	maxItems?: number;
+}
+
+const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 	const { artistData } = React.useContext(SearchContext);
 	const navigation = useNavigation();
 
@@ -224,7 +232,7 @@ const ArtistSearchComponent = (props: any) => {
 			</Text>
 			{artistData?.length ? (
 				<CardGridCustom
-					content={artistData.slice(0, props?.maxItems ?? artistData.length).map((a) => ({
+					content={artistData.slice(0, props.maxItems ?? artistData.length).map((a) => ({
 						image: API.getArtistIllustration(a.id),
 						name: a.name,
 						id: a.id,
@@ -242,7 +250,7 @@ const ArtistSearchComponent = (props: any) => {
 	);
 };
 
-const GenreSearchComponent = (props: any) => {
+const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 	const { genreData } = React.useContext(SearchContext);
 	const navigation = useNavigation();
 
@@ -253,7 +261,7 @@ const GenreSearchComponent = (props: any) => {
 			</Text>
 			{genreData?.length ? (
 				<CardGridCustom
-					content={genreData.slice(0, props?.maxItems ?? genreData.length).map((g) => ({
+					content={genreData.slice(0, props.maxItems ?? genreData.length).map((g) => ({
 						image: API.getGenreIllustration(g.id),
 						name: g.name,
 						id: g.id,
@@ -321,9 +329,8 @@ const FilterSwitch = () => {
 	}
 };
 
-export const SearchResultComponent = (props: any) => {
-	const [searchString, setSearchString] = useState<string>('');
-	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
+export const SearchResultComponent = () => {
+	const { stringQuery } = React.useContext(SearchContext);
 	const shouldOutput = !!stringQuery.trim();
 
 	return shouldOutput ? (

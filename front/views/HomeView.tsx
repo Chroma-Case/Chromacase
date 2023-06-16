@@ -6,12 +6,10 @@ import {
 	Box,
 	ScrollView,
 	Flex,
-	useBreakpointValue,
 	Stack,
 	Heading,
 	VStack,
-	HStack,
-	useTheme,
+	HStack
 } from 'native-base';
 
 import { useNavigation } from '../Navigation';
@@ -24,9 +22,7 @@ import Song from '../models/Song';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const HomeView = () => {
-	const theme = useTheme();
 	const navigation = useNavigation();
-	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const playHistoryQuery = useQuery(['history', 'play'], () => API.getUserPlayHistory());
 	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory(0, 10));

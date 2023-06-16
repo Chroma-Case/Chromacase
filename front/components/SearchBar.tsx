@@ -7,17 +7,13 @@ import { debounce } from 'lodash';
 
 export type Filter = 'artist' | 'song' | 'genre' | 'all';
 
-type SearchBarProps = {
-	onChangeText?: any;
-};
-
 type FilterButton = {
 	name: string;
 	callback: () => void;
 	id: Filter;
 };
 
-const SearchBar = (props: SearchBarProps) => {
+const SearchBar = () => {
 	const { filter, updateFilter } = React.useContext(SearchContext);
 	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
 	const [barText, updateBarText] = React.useState(stringQuery);

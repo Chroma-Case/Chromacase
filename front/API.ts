@@ -478,10 +478,11 @@ export default class API {
 
 	/**
 	 * Retrieve a partition images
-	 * @param songId the id of the song
+	 * @param _songId the id of the song
 	 * This API may be merged with the fetch song in the future
 	 */
 	public static async getPartitionRessources(
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		songId: number
 	): Promise<[string, number, number][]> {
 		return [

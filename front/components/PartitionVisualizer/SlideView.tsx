@@ -1,7 +1,7 @@
-import { useTheme, Box, Image, Row, Column, ZStack, Button, Icon } from 'native-base';
+import { Box, Image, Row, Column, Button, Icon } from 'native-base';
 import IconButton from '../IconButton';
 import { MotiView, useDynamicAnimation } from 'moti';
-import { abs, Easing } from 'react-native-reanimated';
+import { Easing } from 'react-native-reanimated';
 import React from 'react';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -22,6 +22,8 @@ const range = (start: number, end: number, step: number) => {
 };
 
 const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
+	// To get the width, we have to ditch the fst of the tuple
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const totalWidth = sources.reduce((acc, [_, width]) => acc + width, 0);
 	const stepSize = speed / 2;
 	const stepDuration = 1000 / 2;
@@ -66,8 +68,6 @@ const SlideView = ({ sources, speed, startAt }: ImgSlideViewProps) => {
 					onDidAnimate={(
 						styleProp,
 						didAnimationFinish,
-						_maybeValue,
-						{ attemptedValue }
 					) => {
 						if (styleProp === 'translateX' && didAnimationFinish) {
 							stepCount++;

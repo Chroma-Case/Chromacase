@@ -30,6 +30,8 @@ const PreferencesView = () => {
 							value: settings.colorScheme,
 							defaultValue: 'system',
 							onSelect: (newColorScheme) => {
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any
+								// We are garanteed that newColorScheme is a ColorScheme
 								dispatch(updateSettings({ colorScheme: newColorScheme as any }));
 							},
 							options: [

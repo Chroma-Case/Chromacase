@@ -19,6 +19,8 @@ type BigActionButtonProps = {
 	image: string;
 	style?: StyleProp<ViewStyle>;
 	iconName?: string;
+	// It is not possible to recover the type, the `Icon` parameter is `any` as well.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	iconProvider?: any;
 	onPress: () => void;
 };

@@ -71,7 +71,6 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 	const updateStringQuery = (newData: string) => {
 		// called when the stringQuery is updated
 		setStringQuery(newData);
-		isRequestSucceeded = false;
 	};
 
 	return (

@@ -65,7 +65,7 @@ const Octave = (props: OctaveProps) => {
 	return (
 		<Box {...props}>
 			<Row height={'100%'} width={'100%'}>
-				{whiteKeys.map((key, i) => {
+				{whiteKeys.map((key) => {
 					const highlightedKey = highlightedNotes.find((h) => h.key.note === key.note);
 					const isHighlighted = highlightedKey !== undefined;
 					const highlightColor = highlightedKey?.bgColor ?? defaultHighlightColor;

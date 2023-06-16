@@ -90,7 +90,7 @@ const PartitionView = (props: PartitionViewProps) => {
 		Promise.all([
 			SoundFont.instrument(audioContext as unknown as AudioContext, 'electric_piano_1'),
 			_osmd.load(props.file),
-		]).then(([player, __]) => {
+		]).then(([player]) => {
 			setSoundPlayer(player);
 			_osmd.render();
 			_osmd.cursor.hide();

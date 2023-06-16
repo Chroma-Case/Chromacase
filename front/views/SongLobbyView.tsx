@@ -1,7 +1,6 @@
 import {
 	Divider,
 	Box,
-	Center,
 	Image,
 	Text,
 	VStack,
