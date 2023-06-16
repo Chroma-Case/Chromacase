@@ -1,4 +1,4 @@
-import { NativeBaseProvider, extendTheme, useColorMode, useTheme } from 'native-base';
+import { NativeBaseProvider, extendTheme, useColorMode } from 'native-base';
 import useColorScheme from './hooks/colorScheme';
 import { useEffect } from 'react';
 
@@ -78,6 +78,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ColorSchemeProvider = (props: { children: any }) => {
 	const colorScheme = useColorScheme();
 	const colorMode = useColorMode();

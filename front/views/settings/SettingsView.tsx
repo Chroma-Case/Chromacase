@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react';
-import { Center, Button, Text, Heading, Box } from 'native-base';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { unsetAccessToken } from '../../state/UserSlice';
-import { useDispatch } from 'react-redux';
-import { translate, Translate } from '../../i18n/i18n';
+import { Center, Text, Heading, Box } from 'native-base';
+import { translate } from '../../i18n/i18n';
 import createTabRowNavigator from '../../components/navigators/TabRowNavigator';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
@@ -17,21 +14,13 @@ import { useQuery } from 'react-query';
 import API from '../../API';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
-	try {
-		let response = await API.updateUserEmail(newEmail);
-		return translate('emailUpdated');
-	} catch (e) {
-		throw e;
-	}
+	await API.updateUserEmail(newEmail);
+	return translate('emailUpdated');
 };
 
 const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
-	try {
-		let response = await API.updateUserPassword(oldPassword, newPassword);
-		return translate('passwordUpdated');
-	} catch (e) {
-		throw e;
-	}
+	await API.updateUserPassword(oldPassword, newPassword);
+	return translate('passwordUpdated');
 };
 
 export const ChangePasswordView = () => {

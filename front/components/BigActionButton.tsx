@@ -1,9 +1,7 @@
 import React from 'react';
 import {
 	Box,
-	Center,
 	Heading,
-	View,
 	Image,
 	Text,
 	Pressable,
@@ -40,7 +38,7 @@ const BigActionButton = ({
 
 	return (
 		<Pressable onPress={onPress} style={style}>
-			{({ isHovered, isPressed }) => {
+			{({ isHovered }) => {
 				return (
 					<Box
 						style={{

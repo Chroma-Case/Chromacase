@@ -1,7 +1,6 @@
 import React from 'react';
 import Card, { CardBorderRadius } from './Card';
 import { VStack, Text, Image } from 'native-base';
-import API from '../API';
 
 type ArtistCardProps = {
 	image: string;
@@ -11,7 +10,7 @@ type ArtistCardProps = {
 };
 
 const ArtistCard = (props: ArtistCardProps) => {
-	const { image, name, id } = props;
+	const { image, name } = props;
 
 	return (
 		<Card shadow={3} onPress={props.onPress}>

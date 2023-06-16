@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
 	NavigationProp,
@@ -46,9 +47,10 @@ const publicRoutes = () =>
 		Oops: { component: ProfileErrorView, options: { title: 'Oops', headerShown: false } },
 	} as const);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Route<Props = any> = {
 	component: (arg: RouteProps<Props>) => JSX.Element | (() => JSX.Element);
-	options: any;
+	options: object;
 };
 
 type OmitOrUndefined<T, K extends string> = T extends undefined ? T : Omit<T, K>;
@@ -68,6 +70,7 @@ const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never }>();
 
 const RouteToScreen =
 	<T extends {}>(component: Route<T>['component']) =>
+	// eslint-disable-next-line react/display-name
 	(props: NativeStackScreenProps<T & ParamListBase>) =>
 		(
 			<>
@@ -87,7 +90,7 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 		/>
 	));
 
-const ProfileErrorView = (props: { onTryAgain: () => any }) => {
+const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 	const dispatch = useDispatch();
 	return (
 		<Center style={{ flexGrow: 1 }}>

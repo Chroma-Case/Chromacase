@@ -1,9 +1,8 @@
 import React from 'react';
 import Card from './Card';
-import { VStack, Text, Box, Icon, Image } from 'native-base';
+import { VStack, Text, Box, Image } from 'native-base';
 import { useTheme } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
-import API from '../API';
+
 type GenreCardProps = {
 	image: string;
 	name: string;
@@ -12,7 +11,7 @@ type GenreCardProps = {
 };
 
 const GenreCard = (props: GenreCardProps) => {
-	const { image, name, id } = props;
+	const { image, name } = props;
 	const theme = useTheme();
 
 	return (

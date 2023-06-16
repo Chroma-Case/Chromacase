@@ -2,7 +2,6 @@ import React from 'react';
 import { ElementProps } from './ElementTypes';
 import { RawElement } from './RawElement';
 import { Pressable, IPressableProps } from 'native-base';
-import { ElementTextProps, ElementToggleProps } from './ElementTypes';
 
 export const Element = <T extends ElementProps>(props: T) => {
 	let actionFunction: IPressableProps['onPress'] = null;

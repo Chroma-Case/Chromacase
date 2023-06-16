@@ -12,7 +12,7 @@ import Constants from 'expo-constants';
 import store from './state/Store';
 import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
-import { useQuery, QueryClient } from 'react-query';
+import { QueryClient } from 'react-query';
 import UserSettings from './models/UserSettings';
 import { PartialDeep } from 'type-fest';
 import SearchHistory from './models/SearchHistory';
@@ -24,7 +24,7 @@ export type AccessToken = string;
 
 type FetchParams = {
 	route: string;
-	body?: Object;
+	body?: object;
 	method?: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 	// If true, No JSON parsing is done, the raw response's content is returned
 	raw?: true;
@@ -118,7 +118,7 @@ export default class API {
 	}
 
 	public static async createAndGetGuestAccount(): Promise<AccessToken> {
-		let response = await API.fetch({
+		const response = await API.fetch({
 			route: '/auth/guest',
 			method: 'POST',
 		});
@@ -138,7 +138,7 @@ export default class API {
 	 * Retrieve information of the currently authentified user
 	 */
 	public static async getUserInfo(): Promise<User> {
-		let user = await API.fetch({
+		const user = await API.fetch({
 			route: '/auth/me',
 		});
 
@@ -215,7 +215,7 @@ export default class API {
 	}
 
 	public static async getAllSongs(): Promise<Song[]> {
-		let songs = await API.fetch({
+		const songs = await API.fetch({
 			route: '/song',
 		});
 
@@ -240,7 +240,7 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static async getSong(songId: number): Promise<Song> {
-		let song = await API.fetch({
+		const song = await API.fetch({
 			route: `/song/${songId}`,
 		});
 

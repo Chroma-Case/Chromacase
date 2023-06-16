@@ -14,7 +14,8 @@
 		"node_modules/",
 		"webpack.config.js",
 		"babel.config.js",
-		"*.test.*"
+		"*.test.*",
+		"app.config.ts"
 	],
 	"rules": {
 		"react/react-in-jsx-scope": "off",

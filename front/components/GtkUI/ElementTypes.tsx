@@ -76,7 +76,7 @@ export const getElementTextNode = ({ text, onPress }: ElementTextProps, disabled
 };
 
 export const getElementToggleNode = (
-	{ onToggle, value, defaultValue }: ElementToggleProps,
+	{ value, defaultValue }: ElementToggleProps,
 	disabled: boolean
 ) => {
 	return (
@@ -109,7 +109,7 @@ export const getElementDropdownNode = (
 };
 
 export const getElementRangeNode = (
-	{ onChange, value, defaultValue, min, max, step }: ElementRangeProps,
+	{ onChange, value, min, max, step }: ElementRangeProps,
 	disabled: boolean,
 	title: string
 ) => {
