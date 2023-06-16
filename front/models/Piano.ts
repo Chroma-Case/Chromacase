@@ -96,7 +96,7 @@ export const strToKey = (str: string): PianoKey => {
 	return new PianoKey(note, octave);
 };
 
-export const keyToStr = (key: PianoKey, showOctave: boolean = true): string => {
+export const keyToStr = (key: PianoKey, showOctave = true): string => {
 	let s = '';
 	switch (key.note) {
 		case Note.C:

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { StyleProp, ViewStyle, StyleSheet } from 'react-native';
+import { StyleProp, ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, Pressable, Box, Row, Icon, Button, useBreakpointValue } from 'native-base';
+import { View, Text, Row, Icon, Button, useBreakpointValue } from 'native-base';
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,

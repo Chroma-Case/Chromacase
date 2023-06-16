@@ -70,6 +70,7 @@ const Octave = (props: OctaveProps) => {
 					const isHighlighted = highlightedKey !== undefined;
 					const highlightColor = highlightedKey?.bgColor ?? defaultHighlightColor;
 					return (
+						// eslint-disable-next-line react/jsx-key
 						<PianoKeyComp
 							pianoKey={key}
 							showNoteName={showNoteNames}
@@ -90,6 +91,7 @@ const Octave = (props: OctaveProps) => {
 					const isHighlighted = highlightedKey !== undefined;
 					const highlightColor = highlightedKey?.bgColor ?? defaultHighlightColor;
 					return (
+						// eslint-disable-next-line react/jsx-key
 						<PianoKeyComp
 							pianoKey={key}
 							showNoteName={showNoteNames}

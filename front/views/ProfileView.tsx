@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import { Box, Image, Heading, HStack, Card, Button, Spacer, Text } from 'native-base';
+import { Box, Image, Heading, HStack, Card, Text } from 'native-base';
 import Translate from '../components/Translate';
 import { useNavigation } from '../Navigation';
 import TextButton from '../components/TextButton';

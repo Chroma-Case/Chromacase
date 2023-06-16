@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
 	HStack,
 	VStack,
@@ -133,7 +133,7 @@ SongRow.defaultProps = {
 };
 
 const HomeSearchComponent = () => {
-	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
+	const { updateStringQuery } = React.useContext(SearchContext);
 	const { isLoading: isLoadingHistory, data: historyData = [] } = useQuery(
 		'history',
 		() => API.getSearchHistory(0, 12),

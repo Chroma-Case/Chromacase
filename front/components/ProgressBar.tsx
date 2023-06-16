@@ -1,8 +1,8 @@
 import React from 'react';
 import { translate } from '../i18n/i18n';
-import { Box, useBreakpointValue, Text, VStack, Progress, Stack, AspectRatio } from 'native-base';
+import { Box, Text, VStack, Progress, Stack, AspectRatio } from 'native-base';
 import { useNavigation } from '../Navigation';
-import { Pressable, Image } from 'native-base';
+import { Image } from 'native-base';
 import Card from '../components/Card';
 
 const ProgressBar = ({ xp }: { xp: number }) => {

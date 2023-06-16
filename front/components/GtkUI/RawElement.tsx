@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-	Box,
-	Button,
-	Column,
-	Divider,
-	Icon,
-	Popover,
-	Row,
-	Text,
-	useBreakpointValue,
-} from 'native-base';
+import { Box, Button, Column, Icon, Popover, Row, Text, useBreakpointValue } from 'native-base';
 import useColorScheme from '../../hooks/colorScheme';
 import { Ionicons } from '@expo/vector-icons';
 import { ElementProps } from './ElementTypes';
@@ -18,10 +8,6 @@ import {
 	getElementTextNode,
 	getElementToggleNode,
 	getElementRangeNode,
-	ElementDropdownProps,
-	ElementTextProps,
-	ElementToggleProps,
-	ElementRangeProps,
 } from './ElementTypes';
 
 type RawElementProps = {

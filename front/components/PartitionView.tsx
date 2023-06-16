@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 // Inspired from OSMD example project
 // https://github.com/opensheetmusicdisplay/react-opensheetmusicdisplay/blob/master/src/lib/OpenSheetMusicDisplay.jsx
 import React, { useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import {
 	OpenSheetMusicDisplay as OSMD,
 	IOSMDOptions,
 	Note,
-	Pitch,
 } from 'opensheetmusicdisplay';
 import useColorScheme from '../hooks/colorScheme';
 import { useWindowDimensions } from 'react-native';
@@ -70,7 +70,7 @@ const PartitionView = (props: PartitionViewProps) => {
 					note.ParentVoiceEntry.ParentVoice.Parent.SubInstruments.at(0)?.fixedKey ?? 0;
 				const midiNumber = note.halfTone - fixedKey * 12;
 				// console.log('Expecting midi ' + midiNumber);
-				let duration = getActualNoteLength(note);
+				const duration = getActualNoteLength(note);
 				const gain = note.ParentVoiceEntry.ParentVoice.Volume;
 				soundPlayer!.play(midiNumber.toString(), audioContext.currentTime, {
 					duration,

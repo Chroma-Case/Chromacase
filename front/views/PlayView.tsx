@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform, Animated } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -24,7 +25,7 @@ import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
-import { Translate, translate } from '../i18n/i18n';
+import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
 import PartitionView from '../components/PartitionView';
@@ -32,7 +33,6 @@ import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import { URL } from 'url';
-import { url } from 'inspector';
 
 type PlayViewProps = {
 	songId: number;
@@ -196,7 +196,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				return;
 			}
 			input.onmidimessage = (message) => {
-				const { command, channel, note, velocity } = parseMidiMessage(message);
+				const { command } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
 				const keyCode = message.data[1];
 				webSocket.current?.send(
@@ -217,7 +217,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-		let interval = setInterval(() => {
+		const interval = setInterval(() => {
 			setTime(() => getElapsedTime()); // Countdown
 		}, 1);
 
@@ -379,7 +379,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 													.toString()
 										: `${Math.floor(time / 60000)}:${Math.floor(
 												(time % 60000) / 1000
-										)
+										  )
 												.toFixed(0)
 												.toString()
 												.padStart(2, '0')}`}

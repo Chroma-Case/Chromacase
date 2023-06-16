@@ -1,23 +1,16 @@
 import React from 'react';
 import { useQueries, useQuery } from 'react-query';
 import API from '../API';
-import LoadingComponent from '../components/Loading';
-import CardGridCustom from '../components/CardGridCustom';
 import { LoadingView } from '../components/Loading';
 import {
-	Center,
 	Box,
 	ScrollView,
 	Flex,
 	useBreakpointValue,
 	Stack,
 	Heading,
-	Container,
 	VStack,
 	HStack,
-	Column,
-	Button,
-	Text,
 	useTheme,
 } from 'native-base';
 
@@ -27,7 +20,6 @@ import CompetenciesTable from '../components/CompetenciesTable';
 import ProgressBar from '../components/ProgressBar';
 import Translate from '../components/Translate';
 import TextButton from '../components/TextButton';
-import SearchHistoryCard from '../components/HistoryCard';
 import Song from '../models/Song';
 import { FontAwesome5 } from '@expo/vector-icons';
 

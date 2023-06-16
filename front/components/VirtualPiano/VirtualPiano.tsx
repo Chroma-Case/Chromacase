@@ -1,16 +1,8 @@
-import { Row, Box } from 'native-base';
-import React, { useState, useEffect } from 'react';
+import { Row } from 'native-base';
+import React from 'react';
 import Octave from './Octave';
 import { StyleProp, ViewStyle } from 'react-native';
-import {
-	Note,
-	PianoKey,
-	NoteNameBehavior,
-	KeyPressStyle,
-	keyToStr,
-	strToKey,
-	HighlightedKey,
-} from '../../models/Piano';
+import { Note, PianoKey, NoteNameBehavior, HighlightedKey } from '../../models/Piano';
 
 type VirtualPianoProps = Parameters<typeof Row>[0] & {
 	onNoteDown: (note: PianoKey) => void;

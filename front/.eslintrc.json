@@ -6,10 +6,7 @@
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": { "project": ["./tsconfig.json"] },
-	"plugins": [
-		"react",
-		"@typescript-eslint"
-	],
+	"plugins": ["react", "@typescript-eslint"],
 	"ignorePatterns": [
 		"node_modules/",
 		"webpack.config.js",

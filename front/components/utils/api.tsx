@@ -1,5 +1,5 @@
 import API from '../../API';
-import Song, { SongWithArtist } from '../../models/Song';
+import { SongWithArtist } from '../../models/Song';
 
 export const getSongWArtistSuggestions = async () => {
 	const nextStepQuery = await API.getSongSuggestions();

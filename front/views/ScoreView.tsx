@@ -1,11 +1,9 @@
 import { Card, Column, Image, Row, Text, ScrollView, VStack } from 'native-base';
 import Translate from '../components/Translate';
-import SongCardGrid from '../components/SongCardGrid';
 import { RouteProps, useNavigation } from '../Navigation';
 import { CardBorderRadius } from '../components/Card';
 import TextButton from '../components/TextButton';
 import API from '../API';
-import LoadingComponent from '../components/Loading';
 import CardGridCustom from '../components/CardGridCustom';
 import SongCard from '../components/SongCard';
 import { useQueries, useQuery } from 'react-query';

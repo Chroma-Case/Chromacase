@@ -1,4 +1,4 @@
-import { VStack, Text, Image, Heading, IconButton, Icon, Container } from 'native-base';
+import { VStack, Image, Heading, IconButton, Icon, Container } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
 import { useQuery } from 'react-query';
@@ -8,11 +8,9 @@ import API from '../API';
 const handleFavorite = () => {};
 
 const ArtistDetailsView = ({ artistId }: any) => {
-	const {
-		isLoading,
-		data: artistData,
-		error,
-	} = useQuery(['artist', artistId], () => API.getArtist(artistId));
+	const { isLoading, data: artistData } = useQuery(['artist', artistId], () =>
+		API.getArtist(artistId)
+	);
 
 	if (isLoading) {
 		return <LoadingComponent />;

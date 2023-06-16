@@ -33,7 +33,7 @@ const reducers = {
 
 type State = StateFromReducersMapObject<typeof reducers>;
 
-let store = configureStore({
+const store = configureStore({
 	reducer: persistCombineReducers(persistConfig, reducers),
 	middleware: (getDefaultMiddleware: CurriedGetDefaultMiddleware<State & PersistPartial>) =>
 		getDefaultMiddleware({
@@ -42,7 +42,7 @@ let store = configureStore({
 			},
 		}),
 });
-let persistor = persistStore(store);
+const persistor = persistStore(store);
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
