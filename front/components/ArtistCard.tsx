@@ -1,7 +1,6 @@
-import React from "react";
-import Card, { CardBorderRadius } from "./Card";
-import { VStack, Text, Image } from "native-base";
-import API from "../API";
+import React from 'react';
+import Card, { CardBorderRadius } from './Card';
+import { VStack, Text, Image } from 'native-base';
 
 type ArtistCardProps = {
 	image: string;
@@ -11,7 +10,7 @@ type ArtistCardProps = {
 };
 
 const ArtistCard = (props: ArtistCardProps) => {
-	const { image, name, id } = props;
+	const { image, name } = props;
 
 	return (
 		<Card shadow={3} onPress={props.onPress}>
@@ -32,10 +31,10 @@ const ArtistCard = (props: ArtistCardProps) => {
 };
 
 ArtistCard.defaultProps = {
-	image: "https://picsum.photos/200",
-	name: "Artist",
+	image: 'https://picsum.photos/200',
+	name: 'Artist',
 	id: 0,
-	onPress: () => { },
+	onPress: () => {},
 };
 
 export default ArtistCard;

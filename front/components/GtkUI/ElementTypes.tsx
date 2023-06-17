@@ -1,5 +1,5 @@
-import { Select, Switch, Text, Icon, Row, Slider } from "native-base";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Select, Switch, Text, Icon, Row, Slider } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export type ElementProps = {
 	title: string;
@@ -8,11 +8,11 @@ export type ElementProps = {
 	description?: string;
 	disabled?: boolean;
 } & (
-	{ type: 'text', data : ElementTextProps } |
-	{ type: 'toggle', data : ElementToggleProps } |
-	{ type: 'dropdown', data : ElementDropdownProps } |
-	{ type: 'range', data : ElementRangeProps } |
-	{ type: 'custom', data : React.ReactNode } 
+	| { type: 'text'; data: ElementTextProps }
+	| { type: 'toggle'; data: ElementToggleProps }
+	| { type: 'dropdown'; data: ElementDropdownProps }
+	| { type: 'range'; data: ElementRangeProps }
+	| { type: 'custom'; data: React.ReactNode }
 );
 
 export type DropdownOption = {
@@ -47,14 +47,11 @@ export type ElementRangeProps = {
 	step?: number;
 };
 
-export const getElementTextNode = (
-	{ text, onPress }: ElementTextProps,
-	disabled: boolean
-) => {
+export const getElementTextNode = ({ text, onPress }: ElementTextProps, disabled: boolean) => {
 	return (
 		<Row
 			style={{
-				alignItems: "center",
+				alignItems: 'center',
 			}}
 		>
 			<Text
@@ -79,7 +76,7 @@ export const getElementTextNode = (
 };
 
 export const getElementToggleNode = (
-	{ onToggle, value, defaultValue }: ElementToggleProps,
+	{ value, defaultValue }: ElementToggleProps,
 	disabled: boolean
 ) => {
 	return (
@@ -105,18 +102,14 @@ export const getElementDropdownNode = (
 			isDisabled={disabled}
 		>
 			{options.map((option) => (
-				<Select.Item
-					key={option.label}
-					label={option.label}
-					value={option.value}
-				/>
+				<Select.Item key={option.label} label={option.label} value={option.value} />
 			))}
 		</Select>
 	);
 };
 
 export const getElementRangeNode = (
-	{ onChange, value, defaultValue, min, max, step }: ElementRangeProps,
+	{ onChange, value, min, max, step }: ElementRangeProps,
 	disabled: boolean,
 	title: string
 ) => {

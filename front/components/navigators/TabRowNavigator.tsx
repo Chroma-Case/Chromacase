@@ -1,16 +1,7 @@
-import * as React from "react";
-import { StyleProp, ViewStyle, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import {
-	View,
-	Text,
-	Pressable,
-	Box,
-	Row,
-	Icon,
-	Button,
-	useBreakpointValue,
-} from "native-base";
+import * as React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { View, Text, Row, Icon, Button, useBreakpointValue } from 'native-base';
 import {
 	createNavigatorFactory,
 	DefaultNavigatorOptions,
@@ -21,12 +12,12 @@ import {
 	TabRouter,
 	TabRouterOptions,
 	useNavigationBuilder,
-} from "@react-navigation/native";
-import { useNavigation } from "../../Navigation";
+} from '@react-navigation/native';
+import { useNavigation } from '../../Navigation';
 
-const TabRowNavigatorInitialComponentName = "TabIndex";
+const TabRowNavigatorInitialComponentName = 'TabIndex';
 
-export {TabRowNavigatorInitialComponentName};
+export { TabRowNavigatorInitialComponentName };
 
 // Props accepted by the view
 type TabNavigationConfig = {
@@ -37,6 +28,7 @@ type TabNavigationConfig = {
 // Supported screen options
 type TabNavigationOptions = {
 	title?: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	iconProvider?: any;
 	iconName?: string;
 };
@@ -70,34 +62,31 @@ function TabNavigator({
 	contentStyle,
 }: Props) {
 	const navigator = useNavigation();
-	const { state, navigation, descriptors, NavigationContent } =
-		useNavigationBuilder<
-			TabNavigationState<ParamListBase>,
-			TabRouterOptions,
-			TabActionHelpers<ParamListBase>,
-			TabNavigationOptions,
-			TabNavigationEventMap
-		>(TabRouter, {
-			children,
-			screenOptions,
-			initialRouteName,
-		});
+	const { state, navigation, descriptors, NavigationContent } = useNavigationBuilder<
+		TabNavigationState<ParamListBase>,
+		TabRouterOptions,
+		TabActionHelpers<ParamListBase>,
+		TabNavigationOptions,
+		TabNavigationEventMap
+	>(TabRouter, {
+		children,
+		screenOptions,
+		initialRouteName,
+	});
 
-	const screenSize = useBreakpointValue({ base: "small", md: "big" });
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const [isPanelView, setIsPanelView] = React.useState(false);
-	const isMobileView = screenSize == "small";
+	const isMobileView = screenSize == 'small';
 
 	React.useEffect(() => {
 		if (state.index === 0) {
 			if (isMobileView) {
 				setIsPanelView(true);
 			} else {
-				navigation.reset(
-					{
-						...state,
-						index: 1,
-					}
-				);
+				navigation.reset({
+					...state,
+					index: 1,
+				});
 			}
 		}
 	}, [state.index]);
@@ -110,18 +99,18 @@ function TabNavigator({
 
 	return (
 		<NavigationContent>
-			<Row height={"100%"}>
+			<Row height={'100%'}>
 				{(!isMobileView || isPanelView) && (
 					<View
 						style={[
 							{
-								display: "flex",
-								flexDirection: "column",
-								justifyContent: "flex-start",
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'flex-start',
 								borderRightWidth: 1,
-								borderRightColor: "lightgray",
-								overflow: "scroll",
-								width: isMobileView ? "100%" : "clamp(200px, 20%, 300px)",
+								borderRightColor: 'lightgray',
+								overflow: 'scroll',
+								width: isMobileView ? '100%' : 'clamp(200px, 20%, 300px)',
 							},
 							tabBarStyle,
 						]}
@@ -135,11 +124,11 @@ function TabNavigator({
 
 							return (
 								<Button
-									variant={"ghost"}
+									variant={'ghost'}
 									key={route.key}
 									onPress={() => {
 										const event = navigation.emit({
-											type: "tabPress",
+											type: 'tabPress',
 											target: route.key,
 											canPreventDefault: true,
 											data: {
@@ -157,12 +146,16 @@ function TabNavigator({
 											setIsPanelView(false);
 										}
 									}}
-									bgColor={isSelected && (!isMobileView || !isPanelView) ? "primary.300" : undefined}
+									bgColor={
+										isSelected && (!isMobileView || !isPanelView)
+											? 'primary.300'
+											: undefined
+									}
 									style={{
-										justifyContent: "flex-start",
-										padding: "10px",
-										height: "50px",
-										width: "100%",
+										justifyContent: 'flex-start',
+										padding: '10px',
+										height: '50px',
+										width: '100%',
 									}}
 									leftIcon={
 										options?.iconProvider && options?.iconName ? (
@@ -185,17 +178,14 @@ function TabNavigator({
 				)}
 				{(!isMobileView || !isPanelView) && (
 					<View
-						style={[
-							{ flex: 1, width: isMobileView ? "100%" : "700px" },
-							contentStyle,
-						]}
+						style={[{ flex: 1, width: isMobileView ? '100%' : '700px' }, contentStyle]}
 					>
 						{isMobileView && (
 							<Button
 								style={{
-									position: "absolute",
-									top: "10px",
-									left: "10px",
+									position: 'absolute',
+									top: '10px',
+									left: '10px',
 									zIndex: 100,
 								}}
 								onPress={() => setIsPanelView(true)}

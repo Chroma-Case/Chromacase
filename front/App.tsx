@@ -5,21 +5,20 @@ import store, { persistor } from './state/Store';
 import { Router } from './Navigation';
 import './i18n/i18n';
 import * as SplashScreen from 'expo-splash-screen';
-import { PersistGate } from "redux-persist/integration/react";
-import LanguageGate from "./i18n/LanguageGate";
+import { PersistGate } from 'redux-persist/integration/react';
+import LanguageGate from './i18n/LanguageGate';
 import ThemeProvider, { ColorSchemeProvider } from './Theme';
 import 'react-native-url-polyfill/auto';
 
 const queryClient = new QueryClient({
 	defaultOptions: {
-	  queries: {
-		refetchOnWindowFocus: false,
-	  },
+		queries: {
+			refetchOnWindowFocus: false,
+		},
 	},
-  });
+});
 
 export default function App() {
-
 	SplashScreen.preventAutoHideAsync();
 	setTimeout(SplashScreen.hideAsync, 500);
 
@@ -30,7 +29,7 @@ export default function App() {
 					<ThemeProvider>
 						<ColorSchemeProvider>
 							<LanguageGate>
-								<Router/>
+								<Router />
 							</LanguageGate>
 						</ColorSchemeProvider>
 					</ThemeProvider>

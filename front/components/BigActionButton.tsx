@@ -1,9 +1,7 @@
-import React from "react";
+import React from 'react';
 import {
 	Box,
-	Center,
 	Heading,
-	View,
 	Image,
 	Text,
 	Pressable,
@@ -11,9 +9,9 @@ import {
 	Icon,
 	Row,
 	PresenceTransition,
-} from "native-base";
-import { StyleProp, ViewStyle } from "react-native";
-import useColorScheme from "../hooks/colorScheme";
+} from 'native-base';
+import { StyleProp, ViewStyle } from 'react-native';
+import useColorScheme from '../hooks/colorScheme';
 
 type BigActionButtonProps = {
 	title: string;
@@ -21,6 +19,8 @@ type BigActionButtonProps = {
 	image: string;
 	style?: StyleProp<ViewStyle>;
 	iconName?: string;
+	// It is not possible to recover the type, the `Icon` parameter is `any` as well.
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	iconProvider?: any;
 	onPress: () => void;
 };
@@ -34,27 +34,27 @@ const BigActionButton = ({
 	iconProvider,
 	onPress,
 }: BigActionButtonProps) => {
-	const screenSize = useBreakpointValue({ base: "small", md: "big" });
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const colorScheme = useColorScheme();
-	const isDark = colorScheme === "dark";
+	const isDark = colorScheme === 'dark';
 
 	return (
 		<Pressable onPress={onPress} style={style}>
-			{({ isHovered, isPressed }) => {
+			{({ isHovered }) => {
 				return (
 					<Box
 						style={{
-							width: "100%",
-							height: "100%",
-							position: "relative",
+							width: '100%',
+							height: '100%',
+							position: 'relative',
 							borderRadius: 10,
-							overflow: "hidden",
+							overflow: 'hidden',
 						}}
 					>
 						<PresenceTransition
 							style={{
-								width: "100%",
-								height: "100%",
+								width: '100%',
+								height: '100%',
 							}}
 							visible={isHovered}
 							initial={{
@@ -68,15 +68,15 @@ const BigActionButton = ({
 								source={{ uri: image }}
 								alt="image"
 								style={{
-									width: "100%",
-									height: "100%",
-									resizeMode: "cover",
+									width: '100%',
+									height: '100%',
+									resizeMode: 'cover',
 								}}
 							/>
 						</PresenceTransition>
 						<PresenceTransition
 							style={{
-								height: "100%",
+								height: '100%',
 							}}
 							visible={isHovered}
 							initial={{
@@ -90,24 +90,24 @@ const BigActionButton = ({
 						>
 							<Box
 								style={{
-									position: "absolute",
-									left: "0",
-									width: "100%",
-									height: "100%",
-									backgroundColor: isDark ? "black" : "white",
-									padding: "10px",
+									position: 'absolute',
+									left: '0',
+									width: '100%',
+									height: '100%',
+									backgroundColor: isDark ? 'black' : 'white',
+									padding: '10px',
 								}}
 							>
 								<Row>
 									<Icon
 										as={iconProvider}
 										name={iconName}
-										size={screenSize === "small" ? "sm" : "md"}
-										color={isDark ? "white" : "black"}
+										size={screenSize === 'small' ? 'sm' : 'md'}
+										color={isDark ? 'white' : 'black'}
 										marginRight="10px"
 									/>
 									<Heading
-										fontSize={screenSize === "small" ? "md" : "xl"}
+										fontSize={screenSize === 'small' ? 'md' : 'xl'}
 										isTruncated
 									>
 										{title}
@@ -126,7 +126,7 @@ const BigActionButton = ({
 										}}
 									>
 										<Text
-											fontSize={screenSize === "small" ? "sm" : "md"}
+											fontSize={screenSize === 'small' ? 'sm' : 'md'}
 											isTruncated
 											noOfLines={2}
 										>

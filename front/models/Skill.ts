@@ -1,4 +1,5 @@
-type Skill = 'rhythm'
+type Skill =
+	| 'rhythm'
 	| 'two-hands'
 	| 'combos'
 	| 'arpeggio'
@@ -9,7 +10,6 @@ type Skill = 'rhythm'
 	| 'chord-complexity'
 	| 'chord-timing'
 	| 'pedal'
-	| 'precision'
-
+	| 'precision';
 
 export default Skill;

@@ -6,8 +6,12 @@ import store from '../state/Store';
 import AuthenticationView from '../views/AuthenticationView';
 
 describe('<AuthenticationView />', () => {
-  it('has 3 children', () => {
-    const tree = TestRenderer.create(<Provider store={store}><AuthenticationView /></Provider>).toJSON();
-    expect(tree.children.length).toBe(3);
-  });
+	it('has 3 children', () => {
+		const tree = TestRenderer.create(
+			<Provider store={store}>
+				<AuthenticationView />
+			</Provider>
+		).toJSON();
+		expect(tree.children.length).toBe(3);
+	});
 });

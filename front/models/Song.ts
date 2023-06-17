@@ -1,6 +1,6 @@
-import Model from "./Model";
-import SongDetails from "./SongDetails";
-import Artist from "./Artist";
+import Model from './Model';
+import SongDetails from './SongDetails';
+import Artist from './Artist';
 
 interface Song extends Model {
 	id: number;

@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import LocalSettings from "../models/LocalSettings";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import LocalSettings from '../models/LocalSettings';
 
 export const settingsSlice = createSlice({
 	name: 'settings',
@@ -12,14 +12,14 @@ export const settingsSlice = createSlice({
 			difficulty: 'beg',
 			colorBlind: false,
 			customAds: true,
-			dataCollection: true
+			dataCollection: true,
 		},
 	},
 	reducers: {
 		updateSettings: (state, action: PayloadAction<Partial<LocalSettings>>) => {
-			state.local = { ...state.local, ...action.payload }; 
-		}
-	}
+			state.local = { ...state.local, ...action.payload };
+		},
+	},
 });
 export const { updateSettings } = settingsSlice.actions;
 export default settingsSlice.reducer;
