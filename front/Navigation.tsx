@@ -5,7 +5,7 @@ import {
 	ParamListBase,
 	useNavigation as navigationHook,
 } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
@@ -30,21 +30,21 @@ import TextButton from './components/TextButton';
 
 const protectedRoutes = () =>
 	({
-		Home: { component: HomeView, options: { title: translate('welcome'), headerLeft: null } },
-		Play: { component: PlayView, options: { title: translate('play') } },
-		Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
-		Song: { component: SongLobbyView, options: { title: translate('play') } },
-		Artist: { component: ArtistDetailsView, options: { title: translate('artistFilter') } },
-		Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null } },
-		Search: { component: SearchView, options: { title: translate('search') } },
-		User: { component: ProfileView, options: { title: translate('user') } },
+		Home: { component: HomeView, options: { title: translate('welcome'), headerLeft: null }, link: '/' },
+		Play: { component: PlayView, options: { title: translate('play') }, link: '/play' },
+		Settings: { component: SetttingsNavigator, options: { title: 'Settings' }, link: '/settings' },
+		Song: { component: SongLobbyView, options: { title: translate('play') }, link: '/song/:songId' },
+		Artist: { component: ArtistDetailsView, options: { title: translate('artistFilter') }, link: '/artist/:artistId' },
+		Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null }, link: undefined },
+		Search: { component: SearchView, options: { title: translate('search') }, link: '/search/:query' },
+		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
 	} as const);
 
 const publicRoutes = () =>
 	({
-		Start: { component: StartPageView, options: { title: 'Chromacase', headerShown: false } },
-		Login: { component: AuthenticationView, options: { title: translate('signInBtn') } },
-		Oops: { component: ProfileErrorView, options: { title: 'Oops', headerShown: false } },
+		Start: { component: StartPageView, options: { title: 'Chromacase', headerShown: false }, link: undefined },
+		Login: { component: AuthenticationView, options: { title: translate('signInBtn') }, link: undefined },
+		Oops: { component: ProfileErrorView, options: { title: 'Oops', headerShown: false }, link: undefined },
 	} as const);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,6 +90,20 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 		/>
 	));
 
+const routesToLinkingConfig = (routes: Partial<Record<keyof AppRouteParams, { link?: string }>>) => {
+	const pagesToRoute = {} as Record<keyof AppRouteParams, string>;
+	Object.keys(routes).forEach((route) => {
+		const index = route as keyof AppRouteParams;
+		if (routes[index]?.link) {
+			pagesToRoute[index] = routes[index]!.link!;
+		}
+	});
+	return {
+		prefixes: [],
+		config: { screens: pagesToRoute }
+	}
+}
+
 const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 	const dispatch = useDispatch();
 	return (
@@ -123,6 +137,27 @@ export const Router = () => {
 		},
 	});
 	const colorScheme = useColorScheme();
+	const authStatus = useMemo(() => {
+		if (userProfile.isError && accessToken && !userProfile.isLoading) {
+			return 'error';
+		}
+		if (userProfile.isLoading && !userProfile.data) {
+			return 'loading';
+		}
+		if (userProfile.isSuccess && accessToken) {
+			return 'authed';
+		}
+		return 'noAuth'
+	}, [userProfile, accessToken]);
+
+	const linking = useMemo(() => {
+		if (authStatus == 'authed') {
+			return routesToLinkingConfig(protectedRoutes());
+		} else if (authStatus == 'noAuth') {
+			return routesToLinkingConfig(publicRoutes());
+		}
+		return null;
+	}, [authStatus])
 
 	useEffect(() => {
 		if (accessToken) {
@@ -131,20 +166,24 @@ export const Router = () => {
 	}, [accessToken]);
 
 	return (
-		<NavigationContainer theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}>
+		<NavigationContainer
+			linking={routesToLinkingConfig(protectedRoutes())}
+			fallback={<LoadingView/>}
+			theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}
+		>
 			<Stack.Navigator>
-				{userProfile.isError && accessToken && !userProfile.isLoading ? (
+				{authStatus == 'error' ? (
 					<Stack.Screen
 						name="Oops"
 						component={RouteToScreen(() => (
 							<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
 						))}
 					/>
-				) : userProfile.isLoading && !userProfile.data ? (
+				) : authStatus == 'loading' ? (
 					<Stack.Screen name="Loading" component={RouteToScreen(LoadingView)} />
 				) : (
 					routesToScreens(
-						userProfile.isSuccess && accessToken ? protectedRoutes() : publicRoutes()
+						authStatus == 'authed' ? protectedRoutes() : publicRoutes()
 					)
 				)}
 			</Stack.Navigator>
