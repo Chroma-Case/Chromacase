@@ -12,6 +12,7 @@ import PreferencesView from './PreferencesView';
 import GuestToUserView from './GuestToUserView';
 import { useQuery } from 'react-query';
 import API from '../../API';
+import { RouteProps } from '../../Navigation';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	await API.updateUserEmail(newEmail);
@@ -65,17 +66,17 @@ const TabRow = createTabRowNavigator();
 
 type SetttingsNavigatorProps = {
 	screen?:
-		| 'Profile'
-		| 'Preferences'
-		| 'Notifications'
-		| 'Privacy'
-		| 'ChangePassword'
-		| 'ChangeEmail'
-		| 'GoogleAccount'
-		| 'PianoSettings';
+		| 'profile'
+		| 'preferences'
+		| 'notifications'
+		| 'privacy'
+		| 'changePassword'
+		| 'changeEmail'
+		| 'googleAccount'
+		| 'pianoSettings';
 };
 
-const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
+const SetttingsNavigator = (props?: RouteProps<SetttingsNavigatorProps>) => {
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const user = useMemo(() => userQuery.data, [userQuery]);
 
@@ -98,7 +99,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 			<TabRow.Screen name="InternalDefault" component={Box} />
 			{user && user.isGuest && (
 				<TabRow.Screen
-					name="GuestToUser"
+					name="guestToUser"
 					component={GuestToUserView}
 					options={{
 						title: translate('SettingsCategoryGuest'),
@@ -108,7 +109,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				/>
 			)}
 			<TabRow.Screen
-				name="Profile"
+				name="profile"
 				component={ProfileSettings}
 				options={{
 					title: translate('SettingsCategoryProfile'),
@@ -117,7 +118,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				}}
 			/>
 			<TabRow.Screen
-				name="Preferences"
+				name="preferences"
 				component={PreferencesView}
 				options={{
 					title: translate('SettingsCategoryPreferences'),
@@ -126,7 +127,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				}}
 			/>
 			<TabRow.Screen
-				name="Notifications"
+				name="notifications"
 				component={NotificationsView}
 				options={{
 					title: translate('SettingsCategoryNotifications'),
@@ -135,7 +136,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				}}
 			/>
 			<TabRow.Screen
-				name="Privacy"
+				name="privacy"
 				component={PrivacyView}
 				options={{
 					title: translate('SettingsCategoryPrivacy'),
@@ -144,7 +145,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				}}
 			/>
 			<TabRow.Screen
-				name="ChangePassword"
+				name="changePassword"
 				component={ChangePasswordView}
 				options={{
 					title: translate('SettingsCategorySecurity'),
@@ -153,7 +154,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				}}
 			/>
 			<TabRow.Screen
-				name="ChangeEmail"
+				name="changeEmail"
 				component={ChangeEmailView}
 				options={{
 					title: translate('SettingsCategoryEmail'),
@@ -162,7 +163,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				}}
 			/>
 			<TabRow.Screen
-				name="GoogleAccount"
+				name="googleAccount"
 				component={GoogleAccountView}
 				options={{
 					title: translate('SettingsCategoryGoogle'),
@@ -171,7 +172,7 @@ const SetttingsNavigator = (props?: SetttingsNavigatorProps) => {
 				}}
 			/>
 			<TabRow.Screen
-				name="PianoSettings"
+				name="pianoSettings"
 				component={PianoSettingsView}
 				options={{
 					title: translate('SettingsCategoryPiano'),
