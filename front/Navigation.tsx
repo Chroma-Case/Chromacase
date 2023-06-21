@@ -30,22 +30,64 @@ import TextButton from './components/TextButton';
 
 const protectedRoutes = () =>
 	({
-		Home: { component: HomeView, options: { title: translate('welcome'), headerLeft: null }, link: '/' },
+		Home: {
+			component: HomeView,
+			options: { title: translate('welcome'), headerLeft: null },
+			link: '/',
+		},
 		Play: { component: PlayView, options: { title: translate('play') }, link: '/play' },
-		Settings: { component: SetttingsNavigator, options: { title: 'Settings' }, link: '/settings' },
-		Song: { component: SongLobbyView, options: { title: translate('play') }, link: '/song/:songId' },
-		Artist: { component: ArtistDetailsView, options: { title: translate('artistFilter') }, link: '/artist/:artistId' },
-		Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null }, link: undefined },
-		Search: { component: SearchView, options: { title: translate('search') }, link: '/search/:query?' },
+		Settings: {
+			component: SetttingsNavigator,
+			options: { title: 'Settings' },
+			link: '/settings',
+		},
+		Song: {
+			component: SongLobbyView,
+			options: { title: translate('play') },
+			link: '/song/:songId',
+		},
+		Artist: {
+			component: ArtistDetailsView,
+			options: { title: translate('artistFilter') },
+			link: '/artist/:artistId',
+		},
+		Score: {
+			component: ScoreView,
+			options: { title: translate('score'), headerLeft: null },
+			link: undefined,
+		},
+		Search: {
+			component: SearchView,
+			options: { title: translate('search') },
+			link: '/search/:query?',
+		},
 		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
 	} as const);
 
 const publicRoutes = () =>
 	({
-		Start: { component: StartPageView, options: { title: 'Chromacase', headerShown: false }, link: '/' },
-		Login: { component: (params: RouteProps<{}>) => AuthenticationView({ isSignup: false, ...params }), options: { title: translate('signInBtn') }, link: '/login' },
-		Signup: { component: (params: RouteProps<{}>) => AuthenticationView({ isSignup: true, ...params }), options: { title: translate('signUpBtn') }, link: '/signup' },
-		Oops: { component: ProfileErrorView, options: { title: 'Oops', headerShown: false }, link: undefined },
+		Start: {
+			component: StartPageView,
+			options: { title: 'Chromacase', headerShown: false },
+			link: '/',
+		},
+		Login: {
+			component: (params: RouteProps<{}>) =>
+				AuthenticationView({ isSignup: false, ...params }),
+			options: { title: translate('signInBtn') },
+			link: '/login',
+		},
+		Signup: {
+			component: (params: RouteProps<{}>) =>
+				AuthenticationView({ isSignup: true, ...params }),
+			options: { title: translate('signUpBtn') },
+			link: '/signup',
+		},
+		Oops: {
+			component: ProfileErrorView,
+			options: { title: 'Oops', headerShown: false },
+			link: undefined,
+		},
 	} as const);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,7 +133,9 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 		/>
 	));
 
-const routesToLinkingConfig = (routes: Partial<Record<keyof AppRouteParams, { link?: string }>>) => {
+const routesToLinkingConfig = (
+	routes: Partial<Record<keyof AppRouteParams, { link?: string }>>
+) => {
 	const pagesToRoute = {} as Record<keyof AppRouteParams, string>;
 	Object.keys(routes).forEach((route) => {
 		const index = route as keyof AppRouteParams;
@@ -101,9 +145,9 @@ const routesToLinkingConfig = (routes: Partial<Record<keyof AppRouteParams, { li
 	});
 	return {
 		prefixes: [],
-		config: { screens: pagesToRoute }
-	}
-}
+		config: { screens: pagesToRoute },
+	};
+};
 
 const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 	const dispatch = useDispatch();
@@ -148,7 +192,7 @@ export const Router = () => {
 		if (userProfile.isSuccess && accessToken) {
 			return 'authed';
 		}
-		return 'noAuth'
+		return 'noAuth';
 	}, [userProfile, accessToken]);
 	const routes = useMemo(() => {
 		if (authStatus == 'authed') {
@@ -165,13 +209,13 @@ export const Router = () => {
 
 	if (authStatus == 'loading') {
 		// We dont want this to be a screen, as this lead to a navigator without the requested route, and fallback.
-		return <LoadingView/>;
+		return <LoadingView />;
 	}
 
 	return (
 		<NavigationContainer
 			linking={routesToLinkingConfig(routes)}
-			fallback={<LoadingView/>}
+			fallback={<LoadingView />}
 			theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}
 		>
 			<Stack.Navigator>
