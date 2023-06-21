@@ -36,14 +36,15 @@ const protectedRoutes = () =>
 		Song: { component: SongLobbyView, options: { title: translate('play') }, link: '/song/:songId' },
 		Artist: { component: ArtistDetailsView, options: { title: translate('artistFilter') }, link: '/artist/:artistId' },
 		Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null }, link: undefined },
-		Search: { component: SearchView, options: { title: translate('search') }, link: '/search/:query' },
+		Search: { component: SearchView, options: { title: translate('search') }, link: '/search/:query?' },
 		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
 	} as const);
 
 const publicRoutes = () =>
 	({
-		Start: { component: StartPageView, options: { title: 'Chromacase', headerShown: false }, link: undefined },
-		Login: { component: AuthenticationView, options: { title: translate('signInBtn') }, link: undefined },
+		Start: { component: StartPageView, options: { title: 'Chromacase', headerShown: false }, link: '/' },
+		Login: { component: (params: RouteProps<{}>) => AuthenticationView({ isSignup: false, ...params }), options: { title: translate('signInBtn') }, link: '/login' },
+		Signup: { component: (params: RouteProps<{}>) => AuthenticationView({ isSignup: true, ...params }), options: { title: translate('signUpBtn') }, link: '/signup' },
 		Oops: { component: ProfileErrorView, options: { title: 'Oops', headerShown: false }, link: undefined },
 	} as const);
 
@@ -149,15 +150,12 @@ export const Router = () => {
 		}
 		return 'noAuth'
 	}, [userProfile, accessToken]);
-
-	const linking = useMemo(() => {
+	const routes = useMemo(() => {
 		if (authStatus == 'authed') {
-			return routesToLinkingConfig(protectedRoutes());
-		} else if (authStatus == 'noAuth') {
-			return routesToLinkingConfig(publicRoutes());
+			return protectedRoutes();
 		}
-		return null;
-	}, [authStatus])
+		return publicRoutes();
+	}, [authStatus]);
 
 	useEffect(() => {
 		if (accessToken) {
@@ -165,9 +163,14 @@ export const Router = () => {
 		}
 	}, [accessToken]);
 
+	if (authStatus == 'loading') {
+		// We dont want this to be a screen, as this lead to a navigator without the requested route, and fallback.
+		return <LoadingView/>;
+	}
+
 	return (
 		<NavigationContainer
-			linking={routesToLinkingConfig(protectedRoutes())}
+			linking={routesToLinkingConfig(routes)}
 			fallback={<LoadingView/>}
 			theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}
 		>
@@ -179,12 +182,8 @@ export const Router = () => {
 							<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
 						))}
 					/>
-				) : authStatus == 'loading' ? (
-					<Stack.Screen name="Loading" component={RouteToScreen(LoadingView)} />
 				) : (
-					routesToScreens(
-						authStatus == 'authed' ? protectedRoutes() : publicRoutes()
-					)
+					routesToScreens(routes)
 				)}
 			</Stack.Navigator>
 		</NavigationContainer>
