@@ -39,7 +39,7 @@ const protectedRoutes = () =>
 		Settings: {
 			component: SetttingsNavigator,
 			options: { title: 'Settings' },
-			link: '/settings',
+			link: '/settings/:screen?',
 		},
 		Song: {
 			component: SongLobbyView,
