@@ -34,7 +34,7 @@ Create and get an history record
     Integer    $[0].songID    ${song.body.id}
     Integer    $[0].score    55
 
-    [Teardown]    Run Keywords    DELETE    /users/${userID}
+    [Teardown]    Run Keywords    DELETE    /auth/me
     ...    AND    DELETE    /song/${song.body.id}
 
 Create and get a duplicated history record
@@ -68,7 +68,7 @@ Create and get a duplicated history record
     Integer    $[1].songID    ${song.body.id}
     Integer    $[1].score    55
 
-    [Teardown]    Run Keywords    DELETE    /users/${userID}
+    [Teardown]    Run Keywords    DELETE    /auth/me
     ...    AND    DELETE    /song/${song.body.id}
 
 Create and get a search history record
@@ -95,7 +95,7 @@ Create and get a search history record
     ${len}=   Get Length    ${res.body}
     Should Be Equal As Integers    ${len}    1
 
-    [Teardown]    DELETE    /users/${userID}
+    [Teardown]    DELETE    /auth/me
 
 Get the history of a single song
     [Documentation]    Create an history item
@@ -137,6 +137,6 @@ Get the history of a single song
     Integer    $.history[1].score    55
     Integer    $.best    65
 
-    [Teardown]    Run Keywords    DELETE    /users/${userID}
+    [Teardown]    Run Keywords    DELETE    /auth/me
     ...    AND    DELETE    /song/${song.body.id}
     ...    AND    DELETE    /song/${song2.body.id}

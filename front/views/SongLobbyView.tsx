@@ -1,23 +1,13 @@
-import {
-	Divider,
-	Box,
-	Center,
-	Image,
-	Text,
-	VStack,
-	PresenceTransition,
-	Icon,
-	Stack,
-} from "native-base";
-import { useQuery } from "react-query";
-import LoadingComponent, { LoadingView } from "../components/Loading";
-import React, { useEffect, useState } from "react";
-import { Translate, translate } from "../i18n/i18n";
-import formatDuration from "format-duration";
-import { Ionicons } from "@expo/vector-icons";
-import API from "../API";
-import TextButton from "../components/TextButton";
-import { RouteProps, useNavigation } from "../Navigation";
+import { Divider, Box, Image, Text, VStack, PresenceTransition, Icon, Stack } from 'native-base';
+import { useQuery } from 'react-query';
+import LoadingComponent, { LoadingView } from '../components/Loading';
+import React, { useEffect, useState } from 'react';
+import { Translate, translate } from '../i18n/i18n';
+import formatDuration from 'format-duration';
+import { Ionicons } from '@expo/vector-icons';
+import API from '../API';
+import TextButton from '../components/TextButton';
+import { RouteProps, useNavigation } from '../Navigation';
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -26,32 +16,30 @@ interface SongLobbyProps {
 
 const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	const navigation = useNavigation();
-	const songQuery = useQuery(["song", props.songId], () =>
-		API.getSong(props.songId)
-	);
-	const chaptersQuery = useQuery(["song", props.songId, "chapters"], () =>
+	const songQuery = useQuery(['song', props.songId], () => API.getSong(props.songId));
+	const chaptersQuery = useQuery(['song', props.songId, 'chapters'], () =>
 		API.getSongChapters(props.songId)
 	);
-	const scoresQuery = useQuery(["song", props.songId, "scores"], () =>
+	const scoresQuery = useQuery(['song', props.songId, 'scores'], () =>
 		API.getSongHistory(props.songId)
 	);
 	const [chaptersOpen, setChaptersOpen] = useState(false);
 	useEffect(() => {
 		if (chaptersOpen && !chaptersQuery.data) chaptersQuery.refetch();
 	}, [chaptersOpen]);
-	useEffect(() => { }, [songQuery.isLoading]);
+	useEffect(() => {}, [songQuery.isLoading]);
 	if (songQuery.isLoading || scoresQuery.isLoading) return <LoadingView />;
 	return (
-		<Box style={{ padding: 30, flexDirection: "column" }}>
-			<Box style={{ flexDirection: "row", height: "30%" }}>
+		<Box style={{ padding: 30, flexDirection: 'column' }}>
+			<Box style={{ flexDirection: 'row', height: '30%' }}>
 				<Box style={{ flex: 3 }}>
 					<Image
 						source={{ uri: songQuery.data!.cover }}
 						alt={songQuery.data?.name}
 						style={{
-							height: "100%",
+							height: '100%',
 							width: undefined,
-							resizeMode: "contain",
+							resizeMode: 'contain',
 							aspectRatio: 1,
 						}}
 					/>
@@ -61,8 +49,8 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					style={{
 						flex: 3,
 						padding: 10,
-						flexDirection: "column",
-						justifyContent: "space-between",
+						flexDirection: 'column',
+						justifyContent: 'space-between',
 					}}
 				>
 					<Stack flex={1} space={3}>
@@ -73,30 +61,31 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 							<Translate
 								translationKey="level"
 								format={(level) =>
-									`${level}: ${chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) /
-									chaptersQuery.data!.length
+									`${level}: ${
+										chaptersQuery.data!.reduce((a, b) => a + b.difficulty, 0) /
+										chaptersQuery.data!.length
 									}`
 								}
 							/>
 						</Text>
 						<TextButton
-							translate={{ translationKey: "playBtn" }}
+							translate={{ translationKey: 'playBtn' }}
 							width="auto"
 							onPress={() =>
-								navigation.navigate("Play", {
+								navigation.navigate('Play', {
 									songId: songQuery.data!.id,
-									type: "normal",
+									type: 'normal',
 								})
 							}
 							rightIcon={<Icon as={Ionicons} name="play-outline" />}
 						/>
 						<TextButton
-							translate={{ translationKey: "practiceBtn" }}
+							translate={{ translationKey: 'practiceBtn' }}
 							width="auto"
 							onPress={() =>
-								navigation.navigate("Play", {
+								navigation.navigate('Play', {
 									songId: songQuery.data!.id,
-									type: "practice",
+									type: 'practice',
 								})
 							}
 							rightIcon={<Icon as={Ionicons} name="play-outline" />}
@@ -107,18 +96,18 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 			</Box>
 			<Box
 				style={{
-					flexDirection: "row",
-					justifyContent: "space-between",
+					flexDirection: 'row',
+					justifyContent: 'space-between',
 					padding: 30,
 				}}
 			>
-				<Box style={{ flexDirection: "column", alignItems: "center" }}>
+				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize="lg">
 						<Translate translationKey="bestScore" />
 					</Text>
 					<Text>{scoresQuery.data?.best ?? 0}</Text>
 				</Box>
-				<Box style={{ flexDirection: "column", alignItems: "center" }}>
+				<Box style={{ flexDirection: 'column', alignItems: 'center' }}>
 					<Text bold fontSize="lg">
 						<Translate translationKey="lastScore" />
 					</Text>
@@ -128,15 +117,13 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}
 			<Box flexDirection="row">
 				<TextButton
-					translate={{ translationKey: "chapters" }}
+					translate={{ translationKey: 'chapters' }}
 					variant="ghost"
 					onPress={() => setChaptersOpen(!chaptersOpen)}
 					endIcon={
 						<Icon
 							as={Ionicons}
-							name={
-								chaptersOpen ? "chevron-up-outline" : "chevron-down-outline"
-							}
+							name={chaptersOpen ? 'chevron-up-outline' : 'chevron-down-outline'}
 						/>
 					}
 				/>
@@ -154,8 +141,9 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 							>
 								<Text>{chapter.name}</Text>
 								<Text>
-									{`${translate("level")} ${chapter.difficulty
-										} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}
+									{`${translate('level')} ${
+										chapter.difficulty
+									} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}
 								</Text>
 							</Box>
 						))}

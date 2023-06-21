@@ -2,7 +2,6 @@ import React from 'react';
 import { FlatGrid } from 'react-native-super-grid';
 import { Heading, VStack } from 'native-base';
 
-
 type CardGridCustomProps<T> = {
 	content: T[];
 	heading?: JSX.Element;
@@ -11,7 +10,7 @@ type CardGridCustomProps<T> = {
 	cardComponent: React.ComponentType<T>;
 };
 
-const CardGridCustom = <T extends Record<string, any>>(props: CardGridCustomProps<T>) => {
+const CardGridCustom = <T extends Record<string, unknown>>(props: CardGridCustomProps<T>) => {
 	const { content, heading, maxItemsPerRow, style, cardComponent: CardComponent } = props;
 
 	return (

@@ -76,7 +76,7 @@ Find multiples songs filtered
     [Teardown]    Run Keywords    DELETE    /song/${res.body.id}
     ...    AND    DELETE    /song/${res2.body.id}
 
-Find multiples songs filtered by type
+Find multiples songs filtered by id
     [Documentation]    Create two songs and find them
     &{res}=    POST
     ...    /song
@@ -95,6 +95,34 @@ Find multiples songs filtered by type
     Should Contain    ${get.body.data}    ${res.body}
     Should Not Contain    ${get.body.data}    ${res2.body}
     [Teardown]    Run Keywords    DELETE    /song/${res.body.id}
+    ...    AND    DELETE    /song/${res2.body.id}
+
+Find multiples songs filtered and skiping the first
+    [Documentation]    Create two songs and find them
+    &{genre}=    POST
+    ...    /genre
+    ...    {"name": "Mama mia" }
+    Output
+    Integer    response status    201
+
+    &{res}=    POST
+    ...    /song
+    ...    {"name": "Mama mia", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl", "genreId": ${genre.body.id} }
+    Output
+    Integer    response status    201
+    &{res2}=    POST
+    ...    /song
+    ...    {"name": "kldngsd", "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl", "genreId": ${genre.body.id} }
+    Output
+    Integer    response status    201
+
+    &{get}=    GET    /song?genreId=${genre.body.id}&skip=1
+    Output
+    Integer    response status    200
+    Should Contain    ${get.body.data}    ${res2.body}
+    Should Not Contain    ${get.body.data}    ${res.body}
+    [Teardown]    Run Keywords    DELETE    /song/${res.body.id}
+    ...    AND    DELETE    /genre/${genre.body.id}
     ...    AND    DELETE    /song/${res2.body.id}
 
 Get midi file

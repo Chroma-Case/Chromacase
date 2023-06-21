@@ -1,7 +1,6 @@
 import {
 	Controller,
 	Get,
-	Res,
 	Query,
 	Req,
 	Request,
@@ -18,6 +17,7 @@ import { Plage } from 'src/models/plage';
 import { LessonService } from './lesson.service';
 import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Prisma, Skill } from '@prisma/client';
+import { FilterQuery } from 'src/utils/filter.pipe';
 
 export class Lesson {
 	@ApiProperty()
@@ -35,6 +35,13 @@ export class Lesson {
 @ApiTags('lessons')
 @Controller('lesson')
 export class LessonController {
+	static filterableFields: string[] = [
+		'+id',
+		'name',
+		'+requiredLevel',
+		'mainSkill',
+	];
+
 	constructor(private lessonService: LessonService) {}
 
 	@ApiOperation({
@@ -43,26 +50,17 @@ export class LessonController {
 	@Get()
 	async getAll(
 		@Req() request: Request,
-		@Query() filter: Prisma.LessonWhereInput,
+		@FilterQuery(LessonController.filterableFields)
+		where: Prisma.LessonWhereInput,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Lesson>> {
-		try {
-			const ret = await this.lessonService.getAll({
-				skip,
-				take,
-				where: {
-					...filter,
-					requiredLevel: filter.requiredLevel
-						? +filter.requiredLevel
-						: undefined,
-				},
-			});
-			return new Plage(ret, request);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e?.toString());
-		}
+		const ret = await this.lessonService.getAll({
+			skip,
+			take,
+			where,
+		});
+		return new Plage(ret, request);
 	}
 
 	@ApiOperation({
@@ -95,9 +93,8 @@ export class LessonController {
 	async delete(@Param('id', ParseIntPipe) id: number): Promise<Lesson> {
 		try {
 			return await this.lessonService.delete(id);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e.toString());
+		} catch {
+			throw new NotFoundException();
 		}
 	}
 }

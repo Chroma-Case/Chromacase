@@ -1,10 +1,22 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform, Animated } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {  Box, Center, Column, Progress, Text, Row, View, useToast, Icon, HStack } from 'native-base';
+import {
+	Box,
+	Center,
+	Column,
+	Progress,
+	Text,
+	Row,
+	View,
+	useToast,
+	Icon,
+	HStack,
+} from 'native-base';
 import IconButton from '../components/IconButton';
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { RouteProps, useNavigation } from "../Navigation";
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { RouteProps, useNavigation } from '../Navigation';
 import { useQuery } from 'react-query';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
@@ -13,39 +25,36 @@ import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
-import { Translate, translate } from '../i18n/i18n';
+import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
-import { useStopwatch } from "react-use-precision-timer";
+import { useStopwatch } from 'react-use-precision-timer';
 import PartitionView from '../components/PartitionView';
 import TextButton from '../components/TextButton';
-import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from "@motiz88/react-native-midi";
+import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import { URL } from 'url';
-import { url } from 'inspector';
 
 type PlayViewProps = {
-	songId: number,
-	type: 'practice' | 'normal'
-}
+	songId: number;
+	type: 'practice' | 'normal';
+};
 
 type ScoreMessage = {
-	content: string,
-	color?: ColorSchemeType
-}
-
+	content: string;
+	color?: ColorSchemeType;
+};
 
 // this a hot fix this should be reverted soon
 let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
 
 if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
-	
 	Linking.getInitialURL().then((url) => {
 		if (url !== null) {
 			const location = new URL(url);
 			if (location.protocol === 'https:') {
-				scoroBaseApiUrl = "wss://" + location.host + "/ws";
+				scoroBaseApiUrl = 'wss://' + location.host + '/ws';
 			} else {
-				scoroBaseApiUrl = "ws://" + location.host + "/ws";
+				scoroBaseApiUrl = 'ws://' + location.host + '/ws';
 			}
 		}
 	});
@@ -74,8 +83,9 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
 	const fadeAnim = useRef(new Animated.Value(0)).current;
-	const musixml = useQuery(["musixml", songId], () =>
-		API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
+	const musixml = useQuery(
+		['musixml', songId],
+		() => API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
 		{ staleTime: Infinity }
 	);
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
@@ -84,12 +94,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const onPause = () => {
 		stopwatch.pause();
 		setPause(true);
-		webSocket.current?.send(JSON.stringify({
-			type: "pause",
-			paused: true,
-			time: getElapsedTime()
-		}));
-	}
+		webSocket.current?.send(
+			JSON.stringify({
+				type: 'pause',
+				paused: true,
+				time: getElapsedTime(),
+			})
+		);
+	};
 	const onResume = () => {
 		if (stopwatch.isStarted()) {
 			stopwatch.resume();
@@ -97,17 +109,21 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			stopwatch.start();
 		}
 		setPause(false);
-		webSocket.current?.send(JSON.stringify({
-			type: "pause",
-			paused: false,
-			time: getElapsedTime()
-		}));
-	}
+		webSocket.current?.send(
+			JSON.stringify({
+				type: 'pause',
+				paused: false,
+				time: getElapsedTime(),
+			})
+		);
+	};
 	const onEnd = () => {
-		webSocket.current?.send(JSON.stringify({
-			type: "end"
-		}));
-	}
+		webSocket.current?.send(
+			JSON.stringify({
+				type: 'end',
+			})
+		);
+	};
 
 	const onMIDISuccess = (access: MIDIAccess) => {
 		const inputs = access.inputs;
@@ -120,12 +136,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		let inputIndex = 0;
 		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
-			webSocket.current!.send(JSON.stringify({
-				type: "start",
-				id: song.data!.id,
-				mode: type,
-				bearer: accessToken
-			}));
+			webSocket.current!.send(
+				JSON.stringify({
+					type: 'start',
+					id: song.data!.id,
+					mode: type,
+					bearer: accessToken,
+				})
+			);
 		};
 		webSocket.current.onmessage = (message) => {
 			try {
@@ -137,7 +155,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
 
-				setScore(Math.floor(Math.max(points, 0) * 100 / maxPoints));
+				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
 				let formattedMessage = '';
 				let messageColor: ColorSchemeType | undefined;
@@ -172,18 +190,18 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			} catch (e) {
 				console.error(e);
 			}
-		}
+		};
 		inputs.forEach((input) => {
 			if (inputIndex != 0) {
 				return;
 			}
 			input.onmidimessage = (message) => {
-				const { command, channel, note, velocity } = parseMidiMessage(message);
-				const keyIsPressed = command == 9;;
+				const { command } = parseMidiMessage(message);
+				const keyIsPressed = command == 9;
 				const keyCode = message.data[1];
 				webSocket.current?.send(
 					JSON.stringify({
-						type: keyIsPressed ? "note_on" : "note_off",
+						type: keyIsPressed ? 'note_on' : 'note_off',
 						note: keyCode,
 						id: song.data!.id,
 						time: getElapsedTime(),
@@ -192,22 +210,22 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			};
 			inputIndex++;
 		});
-	}
+	};
 	const onMIDIFailure = () => {
 		toast.show({ description: `Failed to get MIDI access` });
-	}
+	};
 
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-		let interval = setInterval(() => {
-			setTime(() => getElapsedTime()) // Countdown
+		const interval = setInterval(() => {
+			setTime(() => getElapsedTime()); // Countdown
 		}, 1);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
 			onEnd();
 			clearInterval(interval);
-		}
+		};
 	}, []);
 	useEffect(() => {
 		if (lastScoreMessage) {
@@ -231,109 +249,157 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}, [song.data, partitionRendered]);
 
 	if (!song.data || !musixml.data) {
-		return <LoadingView/>;
+		return <LoadingView />;
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
-			<HStack width="100%" justifyContent="center" p={3} style={{ position: 'absolute', top: 1 }}>
+			<HStack
+				width="100%"
+				justifyContent="center"
+				p={3}
+				style={{ position: 'absolute', top: 1 }}
+			>
 				<Animated.View style={{ opacity: fadeAnim }}>
 					<TextButton
 						disabled
 						label={lastScoreMessage?.content ?? ''}
-						colorScheme={lastScoreMessage?.color} rounded='sm'
+						colorScheme={lastScoreMessage?.color}
+						rounded="sm"
 					/>
 				</Animated.View>
 			</HStack>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				<PartitionView file={musixml.data}
+				<PartitionView
+					file={musixml.data}
 					onPartitionReady={() => setPartitionRendered(true)}
 					timestamp={Math.max(0, time)}
 					onEndReached={() => {
 						onEnd();
 					}}
 				/>
-				{ !partitionRendered && <LoadingComponent/> }
+				{!partitionRendered && <LoadingComponent />}
 			</View>
 
-			{isVirtualPianoVisible && <Column
+			{isVirtualPianoVisible && (
+				<Column
+					style={{
+						display: 'flex',
+						justifyContent: 'flex-end',
+						alignItems: 'center',
+						height: '20%',
+						width: '100%',
+					}}
+				>
+					<VirtualPiano
+						onNoteDown={(note) => {
+							console.log('On note down', keyToStr(note));
+						}}
+						onNoteUp={(note) => {
+							console.log('On note up', keyToStr(note));
+						}}
+						showOctaveNumbers={true}
+						startNote={Note.C}
+						endNote={Note.B}
+						startOctave={2}
+						endOctave={5}
+						style={{
+							width: '80%',
+							height: '100%',
+						}}
+						highlightedNotes={[
+							{ key: strToKey('D3') },
+							{ key: strToKey('A#'), bgColor: '#00FF00' },
+						]}
+					/>
+				</Column>
+			)}
+			<Box
+				shadow={4}
 				style={{
-					display: 'flex',
-					justifyContent: "flex-end",
-					alignItems: "center",
-					height: '20%',
+					height: '12%',
 					width: '100%',
+					borderWidth: 0.5,
+					margin: 5,
+					display: !partitionRendered ? 'none' : undefined,
 				}}
 			>
-				<VirtualPiano
-					onNoteDown={(note: any) => {
-						console.log("On note down", keyToStr(note));
-					}}
-					onNoteUp={(note: any) => {
-						console.log("On note up", keyToStr(note));
-					}}
-					showOctaveNumbers={true}
-					startNote={Note.C}
-					endNote={Note.B}
-					startOctave={2}
-					endOctave={5}
-					style={{
-						width: '80%',
-						height: '100%',
-					}}
-					highlightedNotes={
-						[
-							{ key: strToKey("D3") },
-							{ key: strToKey("A#"), bgColor: "#00FF00" },
-						]
-					}
-
-				/>
-			</Column>}
-			<Box shadow={4} style={{ height: '12%', width:'100%', borderWidth: 0.5, margin: 5, display: !partitionRendered ? 'none' : undefined }}>
-				<Row justifyContent='space-between' style={{ flexGrow: 1, alignItems: 'center' }} >
-					<Column space={2} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+				<Row justifyContent="space-between" style={{ flexGrow: 1, alignItems: 'center' }}>
+					<Column
+						space={2}
+						style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+					>
 						<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
-						<Progress value={score} style={{ width: '90%' }}/>
+						<Progress value={score} style={{ width: '90%' }} />
 					</Column>
 					<Center style={{ flex: 1, alignItems: 'center' }}>
 						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
 					</Center>
-					<Row style={{ flex: 1, height: '100%', justifyContent: 'space-evenly', alignItems: 'center'  }}>
-					{midiKeyboardFound && <>
-						<IconButton size='sm' variant='solid' icon={
-							<Icon as={Ionicons} name={paused ? "play" : "pause"}/>
-						} onPress={() => {
-							if (paused) {
-								onResume();
-							} else {
-								onPause();
-							}
-						}}/>
-						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
-							<Icon as={MaterialCommunityIcons}
-							 name={ isVirtualPianoVisible ? "piano-off" : "piano"} />
-						} onPress={() => {
-							setVirtualPianoVisible(!isVirtualPianoVisible);
-						}}/>
-						<Text>
-						{ time < 0
-							? paused
-								? '0:00'
-								: Math.floor((time % 60000) / 1000).toFixed(0).toString()
-							: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000).toFixed(0).toString().padStart(2, '0')}`
-						}
-						</Text>
-						<IconButton size='sm' colorScheme='coolGray' variant='solid' icon={
-							<Icon as={Ionicons} name="stop"/>
-						} onPress={() => {
-							onEnd();
-						}}/>
-					</>}
+					<Row
+						style={{
+							flex: 1,
+							height: '100%',
+							justifyContent: 'space-evenly',
+							alignItems: 'center',
+						}}
+					>
+						{midiKeyboardFound && (
+							<>
+								<IconButton
+									size="sm"
+									variant="solid"
+									icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
+									onPress={() => {
+										if (paused) {
+											onResume();
+										} else {
+											onPause();
+										}
+									}}
+								/>
+								<IconButton
+									size="sm"
+									colorScheme="coolGray"
+									variant="solid"
+									icon={
+										<Icon
+											as={MaterialCommunityIcons}
+											name={isVirtualPianoVisible ? 'piano-off' : 'piano'}
+										/>
+									}
+									onPress={() => {
+										setVirtualPianoVisible(!isVirtualPianoVisible);
+									}}
+								/>
+								<Text>
+									{time < 0
+										? paused
+											? '0:00'
+											: Math.floor((time % 60000) / 1000)
+													.toFixed(0)
+													.toString()
+										: `${Math.floor(time / 60000)}:${Math.floor(
+												(time % 60000) / 1000
+										  )
+												.toFixed(0)
+												.toString()
+												.padStart(2, '0')}`}
+								</Text>
+								<IconButton
+									size="sm"
+									colorScheme="coolGray"
+									variant="solid"
+									icon={<Icon as={Ionicons} name="stop" />}
+									onPress={() => {
+										onEnd();
+									}}
+								/>
+							</>
+						)}
 					</Row>
 				</Row>
 			</Box>
 		</SafeAreaView>
 	);
-}
+};
 
-export default PlayView
+export default PlayView;

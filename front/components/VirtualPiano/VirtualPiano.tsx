@@ -1,16 +1,8 @@
-import { Row, Box } from "native-base";
-import React, { useState, useEffect } from "react";
-import Octave from "./Octave";
-import { StyleProp, ViewStyle } from "react-native";
-import {
-	Note,
-	PianoKey,
-	NoteNameBehavior,
-	KeyPressStyle,
-	keyToStr,
-	strToKey,
-	HighlightedKey,
-} from "../../models/Piano";
+import { Row } from 'native-base';
+import React from 'react';
+import Octave from './Octave';
+import { StyleProp, ViewStyle } from 'react-native';
+import { Note, PianoKey, NoteNameBehavior, HighlightedKey } from '../../models/Piano';
 
 type VirtualPianoProps = Parameters<typeof Row>[0] & {
 	onNoteDown: (note: PianoKey) => void;
@@ -37,29 +29,21 @@ const VirtualPiano = ({
 	showOctaveNumbers,
 	style,
 }: VirtualPianoProps) => {
-	const notesList: Array<Note> = [
-		Note.C,
-		Note.D,
-		Note.E,
-		Note.F,
-		Note.G,
-		Note.A,
-		Note.B,
-	];
+	const notesList: Array<Note> = [Note.C, Note.D, Note.E, Note.F, Note.G, Note.A, Note.B];
 	const octaveList = [];
 
 	for (let octaveNum = startOctave; octaveNum <= endOctave; octaveNum++) {
 		octaveList.push(octaveNum);
 	}
 
-    const octaveWidthExpr = `calc(100% / ${octaveList.length})`;
+	const octaveWidthExpr = `calc(100% / ${octaveList.length})`;
 
 	return (
 		<Row style={style}>
 			{octaveList.map((octaveNum) => {
 				return (
 					<Octave
-						style={{ width: octaveWidthExpr, height: "100%" }}
+						style={{ width: octaveWidthExpr, height: '100%' }}
 						key={octaveNum}
 						number={octaveNum}
 						showNoteNames={showNoteNames}
@@ -68,9 +52,7 @@ const VirtualPiano = ({
 							n.key.octave ? n.key.octave == octaveNum : true
 						)}
 						startNote={octaveNum == startOctave ? startNote : notesList[0]}
-						endNote={
-							octaveNum == endOctave ? endNote : notesList[notesList.length - 1]
-						}
+						endNote={octaveNum == endOctave ? endNote : notesList[notesList.length - 1]}
 						onNoteDown={onNoteDown}
 						onNoteUp={onNoteUp}
 					/>
@@ -81,8 +63,8 @@ const VirtualPiano = ({
 };
 
 VirtualPiano.defaultProps = {
-	onNoteDown: (_n: PianoKey) => {},
-	onNoteUp: (_n: PianoKey) => {},
+	onNoteDown: () => {},
+	onNoteUp: () => {},
 	startOctave: 2,
 	startNote: Note.C,
 	endOctave: 6,
@@ -90,7 +72,7 @@ VirtualPiano.defaultProps = {
 	showNoteNames: NoteNameBehavior.onpress,
 	highlightedNotes: [],
 	showOctaveNumbers: true,
-    style: {},
+	style: {},
 };
 
 export default VirtualPiano;

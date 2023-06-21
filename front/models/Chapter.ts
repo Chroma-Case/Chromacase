@@ -1,5 +1,5 @@
-import Skill from "./Skill";
-import Model from "./Model";
+import Skill from './Skill';
+import Model from './Model';
 
 interface Chapter extends Model {
 	start: number;
@@ -8,7 +8,7 @@ interface Chapter extends Model {
 	name: string;
 	type: 'chorus' | 'verse';
 	key_aspect: Skill;
-	difficulty: number
+	difficulty: number;
 }
 
 export default Chapter;

@@ -1,4 +1,4 @@
-import Model from "./Model";
+import Model from './Model';
 
 interface Album extends Model {
 	name: string;

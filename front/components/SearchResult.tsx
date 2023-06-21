@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from 'react';
 import {
 	HStack,
 	VStack,
@@ -12,34 +12,32 @@ import {
 	useBreakpointValue,
 	Column,
 	ScrollView,
-} from "native-base";
-import { SafeAreaView, useColorScheme } from "react-native";
-import { RootState, useSelector } from "../state/Store";
-import { SearchContext } from "../views/SearchView";
-import { useQuery } from "react-query";
-import { translate } from "../i18n/i18n";
-import API from "../API";
-import LoadingComponent from "./Loading";
-import ArtistCard from "./ArtistCard";
-import GenreCard from "./GenreCard";
-import SongCard from "./SongCard";
-import CardGridCustom from "./CardGridCustom";
-import TextButton from "./TextButton";
-import SearchHistoryCard from "./HistoryCard";
-import Song, { SongWithArtist } from "../models/Song";
-import { getSongWArtistSuggestions } from "./utils/api";
-import { useNavigation } from "../Navigation";
+} from 'native-base';
+import { SafeAreaView, useColorScheme } from 'react-native';
+import { RootState, useSelector } from '../state/Store';
+import { SearchContext } from '../views/SearchView';
+import { useQuery } from 'react-query';
+import { translate } from '../i18n/i18n';
+import API from '../API';
+import LoadingComponent from './Loading';
+import ArtistCard from './ArtistCard';
+import GenreCard from './GenreCard';
+import SongCard from './SongCard';
+import CardGridCustom from './CardGridCustom';
+import TextButton from './TextButton';
+import SearchHistoryCard from './HistoryCard';
+import Song, { SongWithArtist } from '../models/Song';
+import { getSongWArtistSuggestions } from './utils/api';
+import { useNavigation } from '../Navigation';
 
 const swaToSongCardProps = (song: SongWithArtist) => ({
 	songId: song.id,
 	name: song.name,
 	artistName: song.artist.name,
-	cover: song.cover ?? "https://picsum.photos/200",
+	cover: song.cover ?? 'https://picsum.photos/200',
 });
 
-const RowCustom = (
-	props: Parameters<typeof Box>[0] & { onPress?: () => void }
-) => {
+const RowCustom = (props: Parameters<typeof Box>[0] & { onPress?: () => void }) => {
 	const settings = useSelector((state: RootState) => state.settings.local);
 	const systemColorMode = useColorScheme();
 	const colorScheme = settings.colorScheme;
@@ -52,13 +50,13 @@ const RowCustom = (
 					py={3}
 					my={1}
 					bg={
-						(colorScheme == "system" ? systemColorMode : colorScheme) == "dark"
+						(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
 							? isHovered || isPressed
-								? "gray.800"
+								? 'gray.800'
 								: undefined
 							: isHovered || isPressed
-								? "coolGray.200"
-								: undefined
+							? 'coolGray.200'
+							: undefined
 					}
 				>
 					{props.children}
@@ -75,8 +73,8 @@ type SongRowProps = {
 
 const SongRow = ({ song, onPress }: SongRowProps) => {
 	return (
-		<RowCustom width={"100%"}>
-			<HStack px={2} space={5} justifyContent={"space-between"}>
+		<RowCustom width={'100%'}>
+			<HStack px={2} space={5} justifyContent={'space-between'}>
 				<Image
 					flexShrink={0}
 					flexGrow={0}
@@ -87,11 +85,11 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 				/>
 				<HStack
 					style={{
-						display: "flex",
+						display: 'flex',
 						flexShrink: 1,
 						flexGrow: 1,
-						alignItems: "center",
-						justifyContent: "flex-start",
+						alignItems: 'center',
+						justifyContent: 'flex-start',
 					}}
 					space={6}
 				>
@@ -101,7 +99,7 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 						}}
 						isTruncated
 						pl={10}
-						maxW={"100%"}
+						maxW={'100%'}
 						bold
 						fontSize="md"
 					>
@@ -111,17 +109,17 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 						style={{
 							flexShrink: 0,
 						}}
-						fontSize={"sm"}
+						fontSize={'sm'}
 					>
-						{song.artistId ?? "artist"}
+						{song.artistId ?? 'artist'}
 					</Text>
 				</HStack>
 				<TextButton
 					flexShrink={0}
 					flexGrow={0}
-					translate={{ translationKey: "playBtn" }}
+					translate={{ translationKey: 'playBtn' }}
 					colorScheme="primary"
-					variant={"outline"}
+					variant={'outline'}
 					size="sm"
 					onPress={onPress}
 				/>
@@ -131,26 +129,29 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 };
 
 SongRow.defaultProps = {
-	onPress: () => { },
+	onPress: () => {},
 };
 
 const HomeSearchComponent = () => {
-	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
+	const { updateStringQuery } = React.useContext(SearchContext);
 	const { isLoading: isLoadingHistory, data: historyData = [] } = useQuery(
-		"history",
+		'history',
 		() => API.getSearchHistory(0, 12),
 		{ enabled: true }
 	);
 
-	const { isLoading: isLoadingSuggestions, data: suggestionsData = [] } =
-		useQuery("suggestions", () => getSongWArtistSuggestions(), {
+	const { isLoading: isLoadingSuggestions, data: suggestionsData = [] } = useQuery(
+		'suggestions',
+		() => getSongWArtistSuggestions(),
+		{
 			enabled: true,
-		});
+		}
+	);
 
 	return (
-		<VStack mt="5" style={{ overflow: "hidden" }}>
+		<VStack mt="5" style={{ overflow: 'hidden' }}>
 			<Card shadow={3} mb={5}>
-				<Heading margin={5}>{translate("lastSearched")}</Heading>
+				<Heading margin={5}>{translate('lastSearched')}</Heading>
 				{isLoadingHistory ? (
 					<LoadingComponent />
 				) : (
@@ -169,7 +170,7 @@ const HomeSearchComponent = () => {
 				)}
 			</Card>
 			<Card shadow={3} mt={5} mb={5}>
-				<Heading margin={5}>{translate("songsToGetBetter")}</Heading>
+				<Heading margin={5}>{translate('songsToGetBetter')}</Heading>
 				{isLoadingSuggestions ? (
 					<LoadingComponent />
 				) : (
@@ -183,14 +184,18 @@ const HomeSearchComponent = () => {
 	);
 };
 
-const SongsSearchComponent = (props: any) => {
+type SongsSearchComponentProps = {
+	maxRows?: number;
+};
+
+const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 	const { songData } = React.useContext(SearchContext);
 	const navigation = useNavigation();
 
 	return (
 		<ScrollView>
 			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate("songsFilter")}
+				{translate('songsFilter')}
 			</Text>
 			<Box>
 				{songData?.length ? (
@@ -199,94 +204,94 @@ const SongsSearchComponent = (props: any) => {
 							key={index}
 							song={comp}
 							onPress={() => {
-								API.createSearchHistoryEntry(comp.name, "song", Date.now());
-								navigation.navigate("Song", { songId: comp.id });
+								API.createSearchHistoryEntry(comp.name, 'song');
+								navigation.navigate('Song', { songId: comp.id });
 							}}
 						/>
 					))
 				) : (
-					<Text>{translate("errNoResults")}</Text>
+					<Text>{translate('errNoResults')}</Text>
 				)}
 			</Box>
 		</ScrollView>
 	);
 };
 
-const ArtistSearchComponent = (props: any) => {
+type ItemSearchComponentProps = {
+	maxItems?: number;
+};
+
+const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 	const { artistData } = React.useContext(SearchContext);
 	const navigation = useNavigation();
 
 	return (
 		<Box>
 			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate("artistFilter")}
+				{translate('artistFilter')}
 			</Text>
 			{artistData?.length ? (
 				<CardGridCustom
-					content={artistData
-						.slice(0, props?.maxItems ?? artistData.length)
-						.map((a) => ({
-							image: API.getArtistIllustration(a.id),
-							name: a.name,
-							id: a.id,
-							onPress: () => {
-								API.createSearchHistoryEntry(a.name, "artist", Date.now());
-								navigation.navigate("Artist", { artistId: a.id });
-							},
-						}))}
+					content={artistData.slice(0, props.maxItems ?? artistData.length).map((a) => ({
+						image: API.getArtistIllustration(a.id),
+						name: a.name,
+						id: a.id,
+						onPress: () => {
+							API.createSearchHistoryEntry(a.name, 'artist');
+							navigation.navigate('Artist', { artistId: a.id });
+						},
+					}))}
 					cardComponent={ArtistCard}
 				/>
 			) : (
-				<Text>{translate("errNoResults")}</Text>
+				<Text>{translate('errNoResults')}</Text>
 			)}
 		</Box>
 	);
 };
 
-const GenreSearchComponent = (props: any) => {
+const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 	const { genreData } = React.useContext(SearchContext);
 	const navigation = useNavigation();
 
 	return (
 		<Box>
 			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate("genreFilter")}
+				{translate('genreFilter')}
 			</Text>
 			{genreData?.length ? (
 				<CardGridCustom
-					content={genreData
-						.slice(0, props?.maxItems ?? genreData.length)
-						.map((g) => ({
-							image: API.getGenreIllustration(g.id),
-							name: g.name,
-							id: g.id,
-							onPress: () => {
-								API.createSearchHistoryEntry(g.name, "genre", Date.now());
-								navigation.navigate("Home");
-							},
-						}))}
+					content={genreData.slice(0, props.maxItems ?? genreData.length).map((g) => ({
+						image: API.getGenreIllustration(g.id),
+						name: g.name,
+						id: g.id,
+						onPress: () => {
+							API.createSearchHistoryEntry(g.name, 'genre');
+							navigation.navigate('Home');
+						},
+					}))}
 					cardComponent={GenreCard}
 				/>
 			) : (
-				<Text>{translate("errNoResults")}</Text>
+				<Text>{translate('errNoResults')}</Text>
 			)}
 		</Box>
 	);
 };
 
 const AllComponent = () => {
-	const screenSize = useBreakpointValue({ base: "small", md: "big" });
-	const isMobileView = screenSize == "small";
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isMobileView = screenSize == 'small';
 
 	return (
 		<SafeAreaView>
 			<Flex
 				flexWrap="wrap"
-				direction={isMobileView ? "column" : "row"}
-				justifyContent={["flex-start"]}
+				direction={isMobileView ? 'column' : 'row'}
+				justifyContent={['flex-start']}
 				mt={4}
 			>
-				<Column w={isMobileView ? "100%" : "50%"}>
+				<Column w={isMobileView ? '100%' : '50%'}>
 					<Box minH={isMobileView ? 100 : 200}>
 						<ArtistSearchComponent maxItems={6} />
 					</Box>
@@ -294,7 +299,7 @@ const AllComponent = () => {
 						<GenreSearchComponent maxItems={6} />
 					</Box>
 				</Column>
-				<Box w={isMobileView ? "100%" : "50%"}>
+				<Box w={isMobileView ? '100%' : '50%'}>
 					<SongsSearchComponent maxRows={9} />
 				</Box>
 			</Flex>
@@ -311,22 +316,21 @@ const FilterSwitch = () => {
 	}, [filter]);
 
 	switch (currentFilter) {
-		case "all":
+		case 'all':
 			return <AllComponent />;
-		case "song":
+		case 'song':
 			return <SongsSearchComponent />;
-		case "artist":
+		case 'artist':
 			return <ArtistSearchComponent />;
-		case "genre":
+		case 'genre':
 			return <GenreSearchComponent />;
 		default:
 			return <Text>Something very bad happened: {currentFilter}</Text>;
 	}
 };
 
-export const SearchResultComponent = (props: any) => {
-	const [searchString, setSearchString] = useState<string>("");
-	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
+export const SearchResultComponent = () => {
+	const { stringQuery } = React.useContext(SearchContext);
 	const shouldOutput = !!stringQuery.trim();
 
 	return shouldOutput ? (

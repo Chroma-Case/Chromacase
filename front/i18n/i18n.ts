@@ -1,32 +1,30 @@
 import { en, fr, sp } from './Translations';
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import Translate from '../components/Translate';
 
 export type AvailableLanguages = 'en' | 'fr' | 'sp';
 export const DefaultLanguage: AvailableLanguages = 'en';
 
-i18n
-	.use(initReactI18next)
-	.init({
-		compatibilityJSON: 'v3',
-		resources: {
-			en: {
-				translation: en
-			},
-			fr: {
-				translation: fr
-			},
-			sp: {
-				translation: sp
-			}
+i18n.use(initReactI18next).init({
+	compatibilityJSON: 'v3',
+	resources: {
+		en: {
+			translation: en,
 		},
-		lng: DefaultLanguage,
-		fallbackLng: 'en',
-		interpolation: {
-			escapeValue: false
-		}
-	});
+		fr: {
+			translation: fr,
+		},
+		sp: {
+			translation: sp,
+		},
+	},
+	lng: DefaultLanguage,
+	fallbackLng: 'en',
+	interpolation: {
+		escapeValue: false,
+	},
+});
 
 export default i18n;
 
@@ -37,8 +35,8 @@ export default i18n;
  */
 export const translate = (key: keyof typeof en, language?: AvailableLanguages) => {
 	return i18n.t(key, {
-		lng: language
+		lng: language,
 	});
-}
+};
 
 export { Translate };
