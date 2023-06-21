@@ -72,7 +72,7 @@ export default class API {
 		try {
 			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
 			if (!response.ok) {
-				throw new APIError(jsonResponse ?? response.statusText, response.status);
+				throw new APIError(response.statusText ?? body, response.status);
 			}
 			return jsonResponse;
 		} catch (e) {

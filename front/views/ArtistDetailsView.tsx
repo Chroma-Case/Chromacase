@@ -2,8 +2,9 @@ import { VStack, Image, Heading, IconButton, Icon, Container } from 'native-base
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
 import { useQuery } from 'react-query';
-import LoadingComponent from '../components/Loading';
+import { LoadingView } from '../components/Loading';
 import API from '../API';
+import { useNavigation } from '../Navigation';
 
 const handleFavorite = () => {};
 
@@ -12,12 +13,19 @@ type ArtistDetailsViewProps = {
 };
 
 const ArtistDetailsView = ({ artistId }: ArtistDetailsViewProps) => {
-	const { isLoading, data: artistData } = useQuery(['artist', artistId], () =>
-		API.getArtist(artistId)
-	);
+	const navigation = useNavigation();
+	const {
+		isLoading,
+		data: artistData,
+		isError,
+	} = useQuery(['artist', artistId], () => API.getArtist(artistId));
 
 	if (isLoading) {
-		return <LoadingComponent />;
+		return <LoadingView />;
+	}
+
+	if (isError) {
+		navigation.navigate('Error');
 	}
 
 	return (

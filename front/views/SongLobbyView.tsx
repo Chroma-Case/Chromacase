@@ -29,6 +29,10 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	}, [chaptersOpen]);
 	useEffect(() => {}, [songQuery.isLoading]);
 	if (songQuery.isLoading || scoresQuery.isLoading) return <LoadingView />;
+	if (songQuery.isError || scoresQuery.isError) {
+		navigation.navigate('Error');
+		return <></>;
+	}
 	return (
 		<Box style={{ padding: 30, flexDirection: 'column' }}>
 			<Box style={{ flexDirection: 'row', height: '30%' }}>

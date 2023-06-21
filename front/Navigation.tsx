@@ -27,6 +27,7 @@ import ArtistDetailsView from './views/ArtistDetailsView';
 import { Button, Center, VStack } from 'native-base';
 import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
+import ErrorView from './views/ErrorView';
 
 const protectedRoutes = () =>
 	({
@@ -63,6 +64,11 @@ const protectedRoutes = () =>
 			component: SearchView,
 			options: { title: translate('search') },
 			link: '/search/:query?',
+		},
+		Error: {
+			component: ErrorView,
+			options: { title: translate('error'), headerLeft: null },
+			link: undefined,
 		},
 		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
 	} as const);
