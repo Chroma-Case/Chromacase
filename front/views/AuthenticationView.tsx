@@ -79,6 +79,13 @@ const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) =
 				</Button>
 			)}
 			<TextButton
+				translate={{ translationKey: "continuewithgoogle" }}
+				variant="outline"
+				marginTop={5}
+				colorScheme="primary"
+				onPress={() => window.location.href = "/api/login/google"}
+			/>
+			<TextButton
 				translate={{ translationKey: mode === 'signin' ? 'signUpBtn' : 'signInBtn' }}
 				variant="outline"
 				marginTop={5}

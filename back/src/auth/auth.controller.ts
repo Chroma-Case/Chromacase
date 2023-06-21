@@ -12,6 +12,7 @@ import {
 	InternalServerErrorException,
 	Patch,
 	NotFoundException,
+	Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -32,6 +33,7 @@ import { Profile } from './dto/profile.dto';
 import { Setting } from 'src/models/setting';
 import { UpdateSettingDto } from 'src/settings/dto/update-setting.dto';
 import { SettingsService } from 'src/settings/settings.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,6 +43,21 @@ export class AuthController {
 		private usersService: UsersService,
 		private settingsService: SettingsService,
 	) {}
+
+	@Get("login/google")
+	@UseGuards(AuthGuard('google'))
+	googleLogin() { }
+
+	@Get("logged/google")
+	@UseGuards(AuthGuard('google'))
+	async googleLoginCallbakc(@Req() req: any) {
+		let user = await this.usersService.user({googleID: req.id});
+		if (!user) {
+			user = await this.usersService.createUser(req)
+			await this.settingsService.createUserSetting(user.id);
+		}
+		return this.authService.login(user);
+	}
 
 	@Post('register')
 	async register(@Body() registerDto: RegisterDto): Promise<void> {

@@ -7,6 +7,7 @@ export const en = {
 	signOutBtn: 'Sign out',
 	signInBtn: 'Sign in',
 	signUpBtn: 'Sign up',
+	continuewithgoogle: 'Continue with Google',
 	changeLanguageBtn: 'Change language',
 	search: 'Search',
 	login: 'Login',
@@ -189,6 +190,7 @@ export const fr: typeof en = {
 	welcomeMessage: 'Re-Bonjour ',
 	signOutBtn: 'Se déconnecter',
 	signInBtn: 'Se connecter',
+	continuewithgoogle: 'Continuer avec Google',
 	changeLanguageBtn: 'Changer la langue',
 	searchBtn: 'Rechercher',
 	playBtn: 'Jouer',
@@ -362,7 +364,7 @@ export const fr: typeof en = {
 	noRecentSearches: 'Aucune recherche récente',
 };
 
-export const sp: typeof en = {
+export const sp: Partial<typeof en> = {
 	error: 'Error',
 	anErrorOccured: 'ocurrió un error',
 	goBackHome: 'regresar a casa',
