@@ -40,6 +40,9 @@ const protectedRoutes = () =>
 			component: SetttingsNavigator,
 			options: { title: 'Settings' },
 			link: '/settings/:screen?',
+			stringify: {
+				screen: () => '',
+			},
 		},
 		Song: {
 			component: SongLobbyView,
@@ -134,13 +137,20 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 	));
 
 const routesToLinkingConfig = (
-	routes: Partial<Record<keyof AppRouteParams, { link?: string }>>
+	routes: Partial<
+		Record<keyof AppRouteParams, { link?: string; stringify?: Record<string, () => string> }>
+	>
 ) => {
-	const pagesToRoute = {} as Record<keyof AppRouteParams, string>;
+	// Too lazy to (find the) type
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const pagesToRoute = {} as Record<keyof AppRouteParams, any>;
 	Object.keys(routes).forEach((route) => {
 		const index = route as keyof AppRouteParams;
 		if (routes[index]?.link) {
-			pagesToRoute[index] = routes[index]!.link!;
+			pagesToRoute[index] = {
+				path: routes[index]!.link!,
+				stringify: routes[index]!.stringify,
+			};
 		}
 	});
 	return {

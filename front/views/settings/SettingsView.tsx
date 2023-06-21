@@ -79,7 +79,7 @@ type SetttingsNavigatorProps = {
 const SetttingsNavigator = (props?: RouteProps<SetttingsNavigatorProps>) => {
 	const userQuery = useQuery(['user'], () => API.getUserInfo());
 	const user = useMemo(() => userQuery.data, [userQuery]);
-
+	console.log(props?.screen);
 	if (userQuery.isLoading) {
 		return (
 			<Center style={{ flex: 1 }}>
