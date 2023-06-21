@@ -26,6 +26,7 @@ import { createReadStream, existsSync } from 'fs';
 import { ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { HistoryService } from 'src/history/history.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { IsDefined } from 'class-validator';
 
 @Controller('song')
 @ApiTags('song')
@@ -107,6 +108,7 @@ export class SongController {
 		@Query() filter: Prisma.SongWhereInput,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
+		// @Query('artistId') artistId: number,
 	): Promise<Plage<Song>> {
 		try {
 			const ret = await this.songService.songs({
@@ -115,6 +117,7 @@ export class SongController {
 				where: {
 					...filter,
 					id: filter.id ? +filter.id : undefined,
+					// artistId: artistId ? +artistId : undefined,
 				},
 			});
 			return new Plage(ret, req);
