@@ -120,7 +120,7 @@ const ProfileView = () => {
 			<PlayerStats />
 			<Box w="10%" paddingY={10} paddingLeft={5} paddingRight={50} zIndex={1}>
 				<TextButton
-					onPress={() => navigation.navigate('Settings', { screen: 'Profile' })}
+					onPress={() => navigation.navigate('Settings', { screen: 'profile' })}
 					translate={{ translationKey: 'settingsBtn' }}
 				/>
 			</Box>
