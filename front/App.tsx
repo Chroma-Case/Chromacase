@@ -9,14 +9,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 import LanguageGate from './i18n/LanguageGate';
 import ThemeProvider, { ColorSchemeProvider } from './Theme';
 import 'react-native-url-polyfill/auto';
+import { QueryRules } from './Queries';
 
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			refetchOnWindowFocus: false,
-		},
-	},
-});
+const queryClient = new QueryClient(QueryRules);
 
 export default function App() {
 	SplashScreen.preventAutoHideAsync();
