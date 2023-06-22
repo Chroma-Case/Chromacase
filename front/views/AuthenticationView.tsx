@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
-import API, { APIError } from '../API';
+import API, { APIError, baseAPIUrl } from '../API';
 import { setAccessToken } from '../state/UserSlice';
 import { Center, Button, Text } from 'native-base';
 import SigninForm from '../components/forms/signinform';
@@ -56,6 +56,13 @@ const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) =
 			<Text>
 				<Translate translationKey="welcome" />
 			</Text>
+			<TextButton
+				translate={{ translationKey: "continuewithgoogle" }}
+				variant="outline"
+				marginTop={5}
+				colorScheme="primary"
+				onPress={() => window.location.href = `${baseAPIUrl}/auth/login/google`}
+			/>
 			{mode === 'signin' ? (
 				<SigninForm
 					onSubmit={(username, password) =>
@@ -78,13 +85,6 @@ const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) =
 					{translate('forgottenPassword')}
 				</Button>
 			)}
-			<TextButton
-				translate={{ translationKey: "continuewithgoogle" }}
-				variant="outline"
-				marginTop={5}
-				colorScheme="primary"
-				onPress={() => window.location.href = "/api/login/google"}
-			/>
 			<TextButton
 				translate={{ translationKey: mode === 'signin' ? 'signUpBtn' : 'signInBtn' }}
 				variant="outline"

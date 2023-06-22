@@ -51,9 +51,9 @@ export class AuthController {
 	@Get("logged/google")
 	@UseGuards(AuthGuard('google'))
 	async googleLoginCallbakc(@Req() req: any) {
-		let user = await this.usersService.user({googleID: req.id});
+		let user = await this.usersService.user({googleID: req.user.googleID});
 		if (!user) {
-			user = await this.usersService.createUser(req)
+			user = await this.usersService.createUser(req.user)
 			await this.settingsService.createUserSetting(user.id);
 		}
 		return this.authService.login(user);

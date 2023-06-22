@@ -1,6 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {
@@ -8,7 +9,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 		super({
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_SECRET,
-			callbackURL: 'http://localhost:3000/google/redirect',
+			callbackURL: process.env.GOOGLE_CALLBACK_URL,
 			scope: ['email', 'profile'],
 		});
 	}
@@ -19,16 +20,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
 		profile: any,
 		done: VerifyCallback,
 	): Promise<any> {
-		console.log(profile);
-		const { name, emails, photos, username } = profile;
 		const user = {
-			email: emails[0].value,
-			username,
+			email: profile.emails[0].value,
+			username: profile.displayName,
 			password: null,
+			googleID: profile.id,
 			// firstName: name.givenName,
 			// lastName: name.familyName,
 			// picture: photos[0].value,
 		};
 		done(null, user);
+		return user;
 	}
 }

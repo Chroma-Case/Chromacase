@@ -47,7 +47,7 @@ export class APIError extends Error {
 }
 
 // we will need the same thing for the scorometer API url
-const baseAPIUrl =
+export const baseAPIUrl =
 	process.env.NODE_ENV != 'development' && Platform.OS === 'web'
 		? '/api'
 		: Constants.manifest?.extra?.apiUrl;
