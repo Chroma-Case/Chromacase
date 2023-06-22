@@ -20,10 +20,13 @@
 		"@typescript-eslint/no-explicit-any": "error",
 		"@typescript-eslint/no-non-null-assertion": "off",
 		"@typescript-eslint/no-empty-function": "off",
-		"no-restricted-imports": ["error", {
-			"name": "react-query",
-			"importNames": ["useQuery", "useInfiniteQuery", "useQueries"],
-			"message": "Use wrapper functions provided by Queries.ts"
-		}]
+		"no-restricted-imports": [
+			"error",
+			{
+				"name": "react-query",
+				"importNames": ["useQuery", "useInfiniteQuery", "useQueries"],
+				"message": "Use wrapper functions provided by Queries.ts"
+			}
+		]
 	}
 }
