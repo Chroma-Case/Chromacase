@@ -151,6 +151,7 @@ export default class API {
 					name: (user.username ?? user.name) as string,
 					email: user.email as string,
 					premium: false,
+					googleID: user.googleID as string,
 					isGuest: user.isGuest as boolean,
 					data: {
 						gamesPlayed: user.partyPlayed as number,
@@ -232,16 +233,16 @@ export default class API {
 					// To be fixed with #168
 					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					(song: any) =>
-						({
-							id: song.id as number,
-							name: song.name as string,
-							artistId: song.artistId as number,
-							albumId: song.albumId as number,
-							genreId: song.genreId as number,
-							details: song.difficulties,
-							cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-							metrics: {},
-						} as Song)
+					({
+						id: song.id as number,
+						name: song.name as string,
+						artistId: song.artistId as number,
+						albumId: song.albumId as number,
+						genreId: song.genreId as number,
+						details: song.difficulties,
+						cover: `${baseAPIUrl}/song/${song.id}/illustration`,
+						metrics: {},
+					} as Song)
 				);
 			},
 		};
@@ -474,13 +475,13 @@ export default class API {
 						// To be fixed with #168
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						(e: any) =>
-							({
-								id: e.id,
-								query: e.query,
-								type: e.type,
-								userId: e.userId,
-								timestamp: new Date(e.searchDate),
-							} as SearchHistory)
+						({
+							id: e.id,
+							query: e.query,
+							type: e.type,
+							userId: e.userId,
+							timestamp: new Date(e.searchDate),
+						} as SearchHistory)
 					)
 				),
 		};

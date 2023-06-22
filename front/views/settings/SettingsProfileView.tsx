@@ -89,6 +89,17 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						},
 						{
 							type: 'text',
+							title: 'Google Account',
+							data: {
+								text: user.googleID ? "Linked" : "Not linked"
+							},
+							// type: 'custom',
+							// data: user.googleID
+							// 	? <Button><Text>Unlink</Text></Button>
+							// 	: <Button><Text>Link</Text></Button>,
+						},
+						{
+							type: 'text',
 							title: translate('nbGamesPlayed'),
 							data: {
 								text: user.data.gamesPlayed.toString(),
