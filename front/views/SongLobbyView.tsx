@@ -1,5 +1,5 @@
 import { Divider, Box, Image, Text, VStack, PresenceTransition, Icon, Stack } from 'native-base';
-import { useQuery } from 'react-query';
+import { useQuery } from '../Queries';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import React, { useEffect, useState } from 'react';
 import { Translate, translate } from '../i18n/i18n';
@@ -16,13 +16,9 @@ interface SongLobbyProps {
 
 const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	const navigation = useNavigation();
-	const songQuery = useQuery(['song', props.songId], () => API.getSong(props.songId));
-	const chaptersQuery = useQuery(['song', props.songId, 'chapters'], () =>
-		API.getSongChapters(props.songId)
-	);
-	const scoresQuery = useQuery(['song', props.songId, 'scores'], () =>
-		API.getSongHistory(props.songId)
-	);
+	const songQuery = useQuery(API.getSong(props.songId));
+	const chaptersQuery = useQuery(API.getSongChapters(props.songId));
+	const scoresQuery = useQuery(API.getSongHistory(props.songId));
 	const [chaptersOpen, setChaptersOpen] = useState(false);
 	useEffect(() => {
 		if (chaptersOpen && !chaptersQuery.data) chaptersQuery.refetch();

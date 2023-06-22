@@ -4,7 +4,7 @@ import Artist from '../models/Artist';
 import Song from '../models/Song';
 import Genre from '../models/Genre';
 import API from '../API';
-import { useQuery } from 'react-query';
+import { useQuery } from '../Queries';
 import { SearchResultComponent } from '../components/SearchResult';
 import { SafeAreaView } from 'react-native';
 import { Filter } from '../components/SearchBar';
@@ -46,20 +46,17 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 	const [stringQuery, setStringQuery] = useState<string>(props?.query ?? '');
 
 	const { isLoading: isLoadingSong, data: songData = [] } = useQuery(
-		['song', stringQuery],
-		() => API.searchSongs(stringQuery),
+		API.searchSongs(stringQuery),
 		{ enabled: !!stringQuery }
 	);
 
 	const { isLoading: isLoadingArtist, data: artistData = [] } = useQuery(
-		['artist', stringQuery],
-		() => API.searchArtists(stringQuery),
+		API.searchArtists(stringQuery),
 		{ enabled: !!stringQuery }
 	);
 
 	const { isLoading: isLoadingGenre, data: genreData = [] } = useQuery(
-		['genre', stringQuery],
-		() => API.searchGenres(stringQuery),
+		API.searchGenres(stringQuery),
 		{ enabled: !!stringQuery }
 	);
 

@@ -16,7 +16,7 @@ import StartPageView from './views/StartPageView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/settings/SettingsView';
-import { useQuery } from 'react-query';
+import { useQuery } from './Queries';
 import API, { APIError } from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
@@ -188,7 +188,7 @@ const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 export const Router = () => {
 	const dispatch = useDispatch();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
-	const userProfile = useQuery(['user', 'me', accessToken], () => API.getUserInfo(), {
+	const userProfile = useQuery(API.getUserInfo, {
 		retry: 1,
 		refetchOnWindowFocus: false,
 		onError: (err) => {

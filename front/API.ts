@@ -11,7 +11,6 @@ import Constants from 'expo-constants';
 import store from './state/Store';
 import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
-import { QueryClient } from 'react-query';
 import UserSettings from './models/UserSettings';
 import { PartialDeep } from 'type-fest';
 import SearchHistory from './models/SearchHistory';
