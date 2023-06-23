@@ -7,7 +7,7 @@ import TextButton from '../../components/TextButton';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
-import { useQuery } from 'react-query';
+import { useQuery } from '../../Queries';
 
 const getInitials = (name: string) => {
 	return name
@@ -19,7 +19,7 @@ const getInitials = (name: string) => {
 // Too painful to infer the settings-only, typed navigator. Gave up
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ProfileSettings = ({ navigation }: { navigation: any }) => {
-	const userQuery = useQuery(['user'], () => API.getUserInfo());
+	const userQuery = useQuery(API.getUserInfo);
 	const dispatch = useDispatch();
 
 	if (!userQuery.data || userQuery.isLoading) {

@@ -16,7 +16,7 @@ import StartPageView from './views/StartPageView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/settings/SettingsView';
-import { useQuery } from 'react-query';
+import { useQuery } from './Queries';
 import API, { APIError } from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
@@ -29,6 +29,9 @@ import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
 import ErrorView from './views/ErrorView';
 
+// Util function to hide route props in URL
+const removeMe = () => '';
+
 const protectedRoutes = () =>
 	({
 		Home: {
@@ -36,13 +39,13 @@ const protectedRoutes = () =>
 			options: { title: translate('welcome'), headerLeft: null },
 			link: '/',
 		},
-		Play: { component: PlayView, options: { title: translate('play') }, link: '/play' },
+		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
 		Settings: {
 			component: SetttingsNavigator,
 			options: { title: 'Settings' },
 			link: '/settings/:screen?',
 			stringify: {
-				screen: () => '',
+				screen: removeMe,
 			},
 		},
 		Song: {
@@ -188,7 +191,7 @@ const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 export const Router = () => {
 	const dispatch = useDispatch();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
-	const userProfile = useQuery(['user', 'me', accessToken], () => API.getUserInfo(), {
+	const userProfile = useQuery(API.getUserInfo, {
 		retry: 1,
 		refetchOnWindowFocus: false,
 		onError: (err) => {

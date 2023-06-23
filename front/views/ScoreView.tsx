@@ -6,7 +6,7 @@ import TextButton from '../components/TextButton';
 import API from '../API';
 import CardGridCustom from '../components/CardGridCustom';
 import SongCard from '../components/SongCard';
-import { useQueries, useQuery } from 'react-query';
+import { useQueries, useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 
 type ScoreViewProps = {
@@ -25,25 +25,18 @@ type ScoreViewProps = {
 	};
 };
 
-const ScoreView = ({ songId, overallScore, precision, score }: RouteProps<ScoreViewProps>) => {
+const ScoreView = (props: RouteProps<ScoreViewProps>) => {
+	const { songId, overallScore, precision, score } = props;
 	const navigation = useNavigation();
-	const songQuery = useQuery(['song', songId], () => API.getSong(songId));
-	const artistQuery = useQuery(
-		['song', songId, 'artist'],
-		() => API.getArtist(songQuery.data!.artistId!),
-		{
-			enabled: songQuery.data != undefined,
-		}
-	);
-	// const perfoamnceRecommandationsQuery = useQuery(['song', props.songId, 'score', 'latest', 'recommendations'], () => API.getLastSongPerformanceScore(props.songId));
-	const recommendations = useQuery(['song', 'recommendations'], () => API.getSongSuggestions());
+	const songQuery = useQuery(API.getSong(songId));
+	const artistQuery = useQuery(() => API.getArtist(songQuery.data!.artistId!), {
+		enabled: songQuery.data !== undefined,
+	});
+	const recommendations = useQuery(API.getSongSuggestions);
 	const artistRecommendations = useQueries(
 		recommendations.data
 			?.filter(({ artistId }) => artistId !== null)
-			.map((song) => ({
-				queryKey: ['artist', song.artistId],
-				queryFn: () => API.getArtist(song.artistId!),
-			})) ?? []
+			.map((song) => API.getArtist(song.artistId)) ?? []
 	);
 
 	if (
@@ -53,6 +46,10 @@ const ScoreView = ({ songId, overallScore, precision, score }: RouteProps<ScoreV
 		(songQuery.data.artistId && !artistQuery.data)
 	) {
 		return <LoadingView />;
+	}
+	if (songQuery.isError) {
+		navigation.navigate('Error');
+		return <></>;
 	}
 
 	return (

@@ -1,7 +1,7 @@
 import { VStack, Image, Heading, IconButton, Icon, Container } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
-import { useQuery } from 'react-query';
+import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import API from '../API';
 import { useNavigation } from '../Navigation';
@@ -14,11 +14,7 @@ type ArtistDetailsViewProps = {
 
 const ArtistDetailsView = ({ artistId }: ArtistDetailsViewProps) => {
 	const navigation = useNavigation();
-	const {
-		isLoading,
-		data: artistData,
-		isError,
-	} = useQuery(['artist', artistId], () => API.getArtist(artistId));
+	const { isLoading, data: artistData, isError } = useQuery(API.getArtist(artistId));
 
 	if (isLoading) {
 		return <LoadingView />;

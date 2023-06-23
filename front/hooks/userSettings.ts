@@ -1,9 +1,8 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '../Queries';
 import API from '../API';
 
 const useUserSettings = () => {
-	const queryKey = ['settings'];
-	const settings = useQuery(queryKey, () => API.getUserSettings());
+	const settings = useQuery(API.getUserSettings);
 	const updateSettings = (...params: Parameters<typeof API.updateUserSettings>) =>
 		API.updateUserSettings(...params).then(() => settings.refetch());
 	return { settings, updateSettings };

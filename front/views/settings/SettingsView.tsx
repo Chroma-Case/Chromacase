@@ -10,7 +10,7 @@ import NotificationsView from './NotificationView';
 import PrivacyView from './PrivacyView';
 import PreferencesView from './PreferencesView';
 import GuestToUserView from './GuestToUserView';
-import { useQuery } from 'react-query';
+import { useQuery } from '../../Queries';
 import API from '../../API';
 import { RouteProps } from '../../Navigation';
 
@@ -77,7 +77,7 @@ type SetttingsNavigatorProps = {
 };
 
 const SetttingsNavigator = (props?: RouteProps<SetttingsNavigatorProps>) => {
-	const userQuery = useQuery(['user'], () => API.getUserInfo());
+	const userQuery = useQuery(API.getUserInfo);
 	const user = useMemo(() => userQuery.data, [userQuery]);
 
 	if (userQuery.isLoading) {

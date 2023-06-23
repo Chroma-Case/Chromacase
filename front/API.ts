@@ -1,6 +1,5 @@
 import Artist from './models/Artist';
 import Album from './models/Album';
-import AuthToken from './models/AuthToken';
 import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
 import Genre from './models/Genre';
@@ -12,10 +11,11 @@ import Constants from 'expo-constants';
 import store from './state/Store';
 import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
-import { QueryClient } from 'react-query';
 import UserSettings from './models/UserSettings';
 import { PartialDeep } from 'type-fest';
 import SearchHistory from './models/SearchHistory';
+import { Query } from './Queries';
+import CompetenciesTable from './components/CompetenciesTable';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -137,43 +137,53 @@ export default class API {
 	/***
 	 * Retrieve information of the currently authentified user
 	 */
-	public static async getUserInfo(): Promise<User> {
-		const user = await API.fetch({
-			route: '/auth/me',
-		});
-
-		// this a dummy settings object, we will need to fetch the real one from the API
+	public static getUserInfo(): Query<User> {
 		return {
-			id: user.id as number,
-			name: (user.username ?? user.name) as string,
-			email: user.email as string,
-			premium: false,
-			isGuest: user.isGuest as boolean,
-			data: {
-				gamesPlayed: user.partyPlayed as number,
-				xp: 0,
-				createdAt: new Date('2023-04-09T00:00:00.000Z'),
-				avatar: 'https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn',
+			key: 'user',
+			exec: async () => {
+				const user = await API.fetch({
+					route: '/auth/me',
+				});
+
+				// this a dummy settings object, we will need to fetch the real one from the API
+				return {
+					id: user.id as number,
+					name: (user.username ?? user.name) as string,
+					email: user.email as string,
+					premium: false,
+					isGuest: user.isGuest as boolean,
+					data: {
+						gamesPlayed: user.partyPlayed as number,
+						xp: 0,
+						createdAt: new Date('2023-04-09T00:00:00.000Z'),
+						avatar: 'https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn',
+					},
+				} as User;
 			},
-		} as User;
+		};
 	}
 
-	public static async getUserSettings(): Promise<UserSettings> {
-		const settings = await API.fetch({
-			route: '/auth/me/settings',
-		});
-
+	public static getUserSettings(): Query<UserSettings> {
 		return {
-			notifications: {
-				pushNotif: settings.pushNotification,
-				emailNotif: settings.emailNotification,
-				trainNotif: settings.trainingNotification,
-				newSongNotif: settings.newSongNotification,
+			key: 'settings',
+			exec: async () => {
+				const settings = await API.fetch({
+					route: '/auth/me/settings',
+				});
+
+				return {
+					notifications: {
+						pushNotif: settings.pushNotification,
+						emailNotif: settings.emailNotification,
+						trainNotif: settings.trainingNotification,
+						newSongNotif: settings.newSongNotification,
+					},
+					recommendations: settings.recommendations,
+					weeklyReport: settings.weeklyReport,
+					leaderBoard: settings.leaderBoard,
+					showActivity: settings.showActivity,
+				};
 			},
-			recommendations: settings.recommendations,
-			weeklyReport: settings.weeklyReport,
-			leaderBoard: settings.leaderBoard,
-			showActivity: settings.showActivity,
 		};
 	}
 
@@ -195,36 +205,62 @@ export default class API {
 		});
 	}
 
-	public static async getUserSkills() {
+	public static getUserSkills(): Query<Parameters<typeof CompetenciesTable>[0]> {
 		return {
-			pedalsCompetency: Math.random() * 100,
-			rightHandCompetency: Math.random() * 100,
-			leftHandCompetency: Math.random() * 100,
-			accuracyCompetency: Math.random() * 100,
-			arpegeCompetency: Math.random() * 100,
-			chordsCompetency: Math.random() * 100,
+			key: 'skills',
+			exec: async () => ({
+				pedalsCompetency: Math.random() * 100,
+				rightHandCompetency: Math.random() * 100,
+				leftHandCompetency: Math.random() * 100,
+				accuracyCompetency: Math.random() * 100,
+				arpegeCompetency: Math.random() * 100,
+				chordsCompetency: Math.random() * 100,
+			}),
+		};
+	}
+
+	public static getAllSongs(): Query<Song[]> {
+		return {
+			key: 'songs',
+			exec: async () => {
+				const songs = await API.fetch({
+					route: '/song',
+				});
+
+				// this is a dummy illustration, we will need to fetch the real one from the API
+				return songs.data.map(
+					// To be fixed with #168
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					(song: any) =>
+						({
+							id: song.id as number,
+							name: song.name as string,
+							artistId: song.artistId as number,
+							albumId: song.albumId as number,
+							genreId: song.genreId as number,
+							details: song.difficulties,
+							cover: `${baseAPIUrl}/song/${song.id}/illustration`,
+							metrics: {},
+						} as Song)
+				);
+			},
 		};
 	}
 
 	/**
-	 * Authentify a new user through Google
+	 * Retrieve a song
+	 * @param songId the id to find the song
 	 */
-	public static async authWithGoogle(): Promise<AuthToken> {
-		//TODO
-		return '11111';
-	}
+	public static getSong(songId: number): Query<Song> {
+		return {
+			key: ['song', songId],
+			exec: async () => {
+				const song = await API.fetch({
+					route: `/song/${songId}`,
+				});
 
-	public static async getAllSongs(): Promise<Song[]> {
-		const songs = await API.fetch({
-			route: '/song',
-		});
-
-		// this is a dummy illustration, we will need to fetch the real one from the API
-		return songs.data.map(
-			// To be fixed with #168
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			(song: any) =>
-				({
+				// this is a dummy illustration, we will need to fetch the real one from the API
+				return {
 					id: song.id as number,
 					name: song.name as string,
 					artistId: song.artistId as number,
@@ -232,40 +268,23 @@ export default class API {
 					genreId: song.genreId as number,
 					details: song.difficulties,
 					cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-					metrics: {},
-				} as Song)
-		);
-	}
-
-	/**
-	 * Retrieve a song
-	 * @param songId the id to find the song
-	 */
-	public static async getSong(songId: number): Promise<Song> {
-		const song = await API.fetch({
-			route: `/song/${songId}`,
-		});
-
-		// this is a dummy illustration, we will need to fetch the real one from the API
-		return {
-			id: song.id as number,
-			name: song.name as string,
-			artistId: song.artistId as number,
-			albumId: song.albumId as number,
-			genreId: song.genreId as number,
-			details: song.difficulties,
-			cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-		} as Song;
+				} as Song;
+			},
+		};
 	}
 	/**
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMidi(songId: number): Promise<ArrayBuffer> {
-		return API.fetch({
-			route: `/song/${songId}/midi`,
-			raw: true,
-		});
+	public static getSongMidi(songId: number): Query<ArrayBuffer> {
+		return {
+			key: ['midi', songId],
+			exec: () =>
+				API.fetch({
+					route: `/song/${songId}/midi`,
+					raw: true,
+				}),
+		};
 	}
 
 	/**
@@ -288,119 +307,152 @@ export default class API {
 	 * Retrive a song's musicXML partition
 	 * @param songId the id to find the song
 	 */
-	public static async getSongMusicXML(songId: number): Promise<ArrayBuffer> {
-		return API.fetch({
-			route: `/song/${songId}/musicXml`,
-			raw: true,
-		});
+	public static getSongMusicXML(songId: number): Query<ArrayBuffer> {
+		return {
+			key: ['musixml', songId],
+			exec: () =>
+				API.fetch({
+					route: `/song/${songId}/musicXml`,
+					raw: true,
+				}),
+		};
 	}
 
 	/**
 	 * Retrive an artist
 	 */
-	public static async getArtist(artistId: number): Promise<Artist> {
-		return API.fetch({
-			route: `/artist/${artistId}`,
-		});
+	public static getArtist(artistId: number): Query<Artist> {
+		return {
+			key: ['artist', artistId],
+			exec: () =>
+				API.fetch({
+					route: `/artist/${artistId}`,
+				}),
+		};
 	}
 
 	/**
 	 * Retrive a song's chapters
 	 * @param songId the id to find the song
 	 */
-	public static async getSongChapters(songId: number): Promise<Chapter[]> {
-		return [1, 2, 3, 4, 5].map((value) => ({
-			start: 100 * (value - 1),
-			end: 100 * value,
-			songId: songId,
-			name: `Chapter ${value}`,
-			type: 'chorus',
-			key_aspect: 'rhythm',
-			difficulty: value,
-			id: value * 10,
-		}));
+	public static getSongChapters(songId: number): Query<Chapter[]> {
+		return {
+			key: ['chapters', songId],
+			exec: async () =>
+				[1, 2, 3, 4, 5].map((value) => ({
+					start: 100 * (value - 1),
+					end: 100 * value,
+					songId: songId,
+					name: `Chapter ${value}`,
+					type: 'chorus',
+					key_aspect: 'rhythm',
+					difficulty: value,
+					id: value * 10,
+				})),
+		};
 	}
 
 	/**
 	 * Retrieve a song's play history
 	 * @param songId the id to find the song
 	 */
-	public static async getSongHistory(
-		songId: number
-	): Promise<{ best: number; history: SongHistory[] }> {
-		return API.fetch({
-			route: `/song/${songId}/history`,
-		});
+	public static getSongHistory(songId: number): Query<{ best: number; history: SongHistory[] }> {
+		return {
+			key: ['song', 'history', songId],
+			exec: () =>
+				API.fetch({
+					route: `/song/${songId}/history`,
+				}),
+		};
 	}
 
 	/**
 	 * Search a song by its name
 	 * @param query the string used to find the songs
 	 */
-	public static async searchSongs(query: string): Promise<Song[]> {
-		return API.fetch({
-			route: `/search/songs/${query}`,
-		});
+	public static searchSongs(query: string): Query<Song[]> {
+		return {
+			key: ['search', 'song', query],
+			exec: () =>
+				API.fetch({
+					route: `/search/songs/${query}`,
+				}),
+		};
 	}
 
 	/**
 	 * Search artists by name
 	 * @param query the string used to find the artists
 	 */
-	public static async searchArtists(query?: string): Promise<Artist[]> {
-		return API.fetch({
-			route: `/search/artists/${query}`,
-		});
+	public static searchArtists(query: string): Query<Artist[]> {
+		return {
+			key: ['search', 'artist', query],
+			exec: () =>
+				API.fetch({
+					route: `/search/artists/${query}`,
+				}),
+		};
 	}
 
 	/**
 	 * Search Album by name
 	 * @param query the string used to find the album
 	 */
-	public static async searchAlbum(
+	public static searchAlbum(
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		query?: string
-	): Promise<Album[]> {
-		return [
-			{
-				id: 1,
-				name: 'Super Trooper',
-			},
-			{
-				id: 2,
-				name: 'Kingdom Heart 365/2 OST',
-			},
-			{
-				id: 3,
-				name: 'The Legend Of Zelda Ocarina Of Time OST',
-			},
-			{
-				id: 4,
-				name: 'Random Access Memories',
-			},
-		] as Album[];
+		query: string
+	): Query<Album[]> {
+		return {
+			key: ['search', 'album', query],
+			exec: async () =>
+				[
+					{
+						id: 1,
+						name: 'Super Trooper',
+					},
+					{
+						id: 2,
+						name: 'Kingdom Heart 365/2 OST',
+					},
+					{
+						id: 3,
+						name: 'The Legend Of Zelda Ocarina Of Time OST',
+					},
+					{
+						id: 4,
+						name: 'Random Access Memories',
+					},
+				] as Album[],
+		};
 	}
 
 	/**
 	 * Retrieve music genres
 	 */
-	public static async searchGenres(query?: string): Promise<Genre[]> {
-		return API.fetch({
-			route: `/search/genres/${query}`,
-		});
+	public static searchGenres(query: string): Query<Genre[]> {
+		return {
+			key: ['search', 'genre', query],
+			exec: () =>
+				API.fetch({
+					route: `/search/genres/${query}`,
+				}),
+		};
 	}
 
 	/**
 	 * Retrieve a lesson
 	 * @param lessonId the id to find the lesson
 	 */
-	public static async getLesson(lessonId: number): Promise<Lesson> {
+	public static getLesson(lessonId: number): Query<Lesson> {
 		return {
-			title: 'Song',
-			description: 'A song',
-			requiredLevel: 1,
-			mainSkill: 'lead-head-change',
-			id: lessonId,
+			key: ['lesson', lessonId],
+			exec: async () => ({
+				title: 'Song',
+				description: 'A song',
+				requiredLevel: 1,
+				mainSkill: 'lead-head-change',
+				id: lessonId,
+			}),
 		};
 	}
 
@@ -410,26 +462,28 @@ export default class API {
 	 * @param take how much do we take to return
 	 * @returns Returns an array of history entries (temporary type any)
 	 */
-	public static async getSearchHistory(skip?: number, take?: number): Promise<SearchHistory[]> {
-		return (
-			(
-				await API.fetch({
+	public static getSearchHistory(skip?: number, take?: number): Query<SearchHistory[]> {
+		return {
+			key: ['search', 'history', 'skip', skip, 'take', take],
+			exec: () =>
+				API.fetch({
 					route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
 					method: 'GET',
-				})
-			)
-				// To be fixed with #168
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				.map((e: any) => {
-					return {
-						id: e.id,
-						query: e.query,
-						type: e.type,
-						userId: e.userId,
-						timestamp: new Date(e.searchDate),
-					} as SearchHistory;
-				})
-		);
+				}).then((value) =>
+					value.map(
+						// To be fixed with #168
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						(e: any) =>
+							({
+								id: e.id,
+								query: e.query,
+								type: e.type,
+								userId: e.userId,
+								timestamp: new Date(e.searchDate),
+							} as SearchHistory)
+					)
+				),
+		};
 	}
 
 	/**
@@ -454,85 +508,38 @@ export default class API {
 	 * Retrieve the authenticated user's recommendations
 	 * @returns an array of songs
 	 */
-	public static async getSongSuggestions(): Promise<Song[]> {
-		const queryClient = new QueryClient();
-		return await queryClient.fetchQuery(['API', 'allsongs'], API.getAllSongs);
+	public static getSongSuggestions(): Query<Song[]> {
+		return API.getAllSongs();
 	}
 
 	/**
 	 * Retrieve the authenticated user's play history
 	 * * @returns an array of songs
 	 */
-	public static async getUserPlayHistory(): Promise<SongHistory[]> {
-		return this.fetch({
-			route: '/history',
-		});
+	public static getUserPlayHistory(): Query<SongHistory[]> {
+		return {
+			key: ['history'],
+			exec: () =>
+				API.fetch({
+					route: '/history',
+				}),
+		};
 	}
 
 	/**
 	 * Retrieve a lesson's history
 	 * @param lessonId the id to find the lesson
 	 */
-	public static async getLessonHistory(lessonId: number): Promise<LessonHistory[]> {
-		return [
-			{
-				lessonId,
-				userId: 1,
-			},
-		];
-	}
-
-	/**
-	 * Retrieve a partition images
-	 * @param _songId the id of the song
-	 * This API may be merged with the fetch song in the future
-	 */
-	public static async getPartitionRessources(
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		songId: number
-	): Promise<[string, number, number][]> {
-		return [
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469560426545222/vivaldi_split_1.png',
-				1868,
-				400,
+	public static getLessonHistory(lessonId: number): Query<LessonHistory[]> {
+		return {
+			key: ['lesson', 'history', lessonId],
+			exec: async () => [
+				{
+					lessonId,
+					userId: 1,
+				},
 			],
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469560900505660/vivaldi_split_2.png',
-				1868,
-				400,
-			],
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469561261203506/vivaldi_split_3.png',
-				1868,
-				400,
-			],
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469561546424381/vivaldi_split_4.png',
-				1868,
-				400,
-			],
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469562058133564/vivaldi_split_5.png',
-				1868,
-				400,
-			],
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469562347528202/vivaldi_split_6.png',
-				1868,
-				400,
-			],
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469562792136815/vivaldi_split_7.png',
-				1868,
-				400,
-			],
-			[
-				'https://media.discordapp.net/attachments/717080637038788731/1067469563073142804/vivaldi_split_8.png',
-				1868,
-				400,
-			],
-		];
+		};
 	}
 
 	public static async updateUserEmail(newEmail: string): Promise<User> {
