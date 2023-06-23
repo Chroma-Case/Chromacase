@@ -47,6 +47,10 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 	) {
 		return <LoadingView />;
 	}
+	if (songQuery.isError) {
+		navigation.navigate('Error');
+		return <></>;
+	}
 
 	return (
 		<ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>

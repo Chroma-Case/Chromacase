@@ -29,6 +29,9 @@ import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
 import ErrorView from './views/ErrorView';
 
+// Util function to hide route props in URL  
+const removeMe = () => '';
+
 const protectedRoutes = () =>
 	({
 		Home: {
@@ -36,13 +39,13 @@ const protectedRoutes = () =>
 			options: { title: translate('welcome'), headerLeft: null },
 			link: '/',
 		},
-		Play: { component: PlayView, options: { title: translate('play') }, link: '/play' },
+		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
 		Settings: {
 			component: SetttingsNavigator,
 			options: { title: 'Settings' },
 			link: '/settings/:screen?',
 			stringify: {
-				screen: () => '',
+				screen: removeMe
 			},
 		},
 		Song: {
