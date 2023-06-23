@@ -18,7 +18,9 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	const navigation = useNavigation();
 	// Refetch to update score when coming back from score view
 	const songQuery = useQuery(API.getSong(props.songId), { refetchOnWindowFocus: true });
-	const chaptersQuery = useQuery(API.getSongChapters(props.songId), { refetchOnWindowFocus: true });
+	const chaptersQuery = useQuery(API.getSongChapters(props.songId), {
+		refetchOnWindowFocus: true,
+	});
 	const scoresQuery = useQuery(API.getSongHistory(props.songId), { refetchOnWindowFocus: true });
 	const [chaptersOpen, setChaptersOpen] = useState(false);
 	useEffect(() => {
