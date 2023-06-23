@@ -6,6 +6,8 @@ const QueryRules: RQ.QueryClientConfig = {
 	defaultOptions: {
 		queries: {
 			refetchOnWindowFocus: false,
+			// This is needed explicitly, otherwise will refetch **all** the time
+			staleTime: Infinity
 		},
 	},
 };
@@ -23,19 +25,39 @@ export type Query<ReturnType> = {
 // We want `useQuery`/`ies` to accept either a function or a `Query` directly
 type QueryOrQueryFn<T> = Query<T> | (() => Query<T>);
 // A simple util function to avoid conditions everywhere
-const resolveQuery = <T>(q: QueryOrQueryFn<T>) => {
+const queryToFn = <T>(q: QueryOrQueryFn<T>) => {
 	if (typeof q === 'function') {
-		return q();
+		return q;
 	}
-	return q;
+	return () => q;
 };
 
-const useQuery = <ReturnType>(
+// This also allows lazy laoding of query function.
+// I.e. not call the function before it is enabled;
+const buildRQuery = <T, Opts extends QueryOptions<T>>(q: QueryOrQueryFn<T>, opts?: Opts) => {
+	const laziedQuery = queryToFn(q);
+	if (opts?.enabled === false) {
+		return {
+			queryKey: [],
+			// This will not be called because the query is disabled.
+			// However, this is done for type-safety
+			queryFn: () => laziedQuery().exec(),
+			...opts
+		}
+	}
+	const resolvedQuery = laziedQuery();
+	return {
+		queryKey: resolvedQuery.key,
+		queryFn: resolvedQuery.exec,
+		...opts
+	}
+}
+
+const useQuery = <ReturnType, Opts extends QueryOptions<ReturnType>>(
 	query: QueryOrQueryFn<ReturnType>,
-	options?: QueryOptions<ReturnType>
+	options?: Opts
 ) => {
-	const resolvedQuery = resolveQuery(query);
-	return RQ.useQuery<ReturnType>(resolvedQuery.key, resolvedQuery.exec, options);
+	return RQ.useQuery<ReturnType>(buildRQuery(query, options));
 };
 
 const transformQuery = <OldReturnType, NewReturnType>(
@@ -53,14 +75,7 @@ const useQueries = <ReturnTypes>(
 	options?: QueryOptions<ReturnTypes>
 ) => {
 	return RQ.useQueries(
-		queries.map(resolveQuery).map(
-			(query) =>
-				({
-					queryKey: query.key,
-					queryFn: query.exec,
-					...options,
-				} as const)
-		)
+		queries.map((q) => buildRQuery(q, options))
 	);
 };
 

@@ -520,7 +520,7 @@ export default class API {
 		return {
 			key: ['history'],
 			exec: () =>
-				this.fetch({
+				API.fetch({
 					route: '/history',
 				}),
 		};

@@ -25,11 +25,12 @@ type ScoreViewProps = {
 	};
 };
 
-const ScoreView = ({ songId, overallScore, precision, score }: RouteProps<ScoreViewProps>) => {
+const ScoreView = (props: RouteProps<ScoreViewProps>) => {
+	const { songId, overallScore, precision, score } = props;
 	const navigation = useNavigation();
 	const songQuery = useQuery(API.getSong(songId));
 	const artistQuery = useQuery(() => API.getArtist(songQuery.data!.artistId!), {
-		enabled: songQuery.data != undefined,
+		enabled: songQuery.data !== undefined,
 	});
 	const recommendations = useQuery(API.getSongSuggestions);
 	const artistRecommendations = useQueries(
