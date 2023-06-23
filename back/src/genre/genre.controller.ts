@@ -1,5 +1,4 @@
 import {
-	BadRequestException,
 	Body,
 	ConflictException,
 	Controller,
@@ -22,11 +21,14 @@ import { GenreService } from './genre.service';
 import { Prisma, Genre } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
 import { createReadStream, existsSync } from 'fs';
+import { FilterQuery } from 'src/utils/filter.pipe';
 
 @Controller('genre')
 @ApiTags('genre')
 export class GenreController {
-	constructor(private readonly service: GenreService) { }
+	static filterableFields: string[] = ['+id', 'name'];
+
+	constructor(private readonly service: GenreService) {}
 
 	@Post()
 	async create(@Body() dto: CreateGenreDto) {
@@ -39,7 +41,11 @@ export class GenreController {
 
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
-		return await this.service.delete({ id });
+		try {
+			return await this.service.delete({ id });
+		} catch {
+			throw new NotFoundException('Invalid ID');
+		}
 	}
 
 	@Get(':id/illustration')
@@ -61,24 +67,17 @@ export class GenreController {
 	@Get()
 	async findAll(
 		@Req() req: Request,
-		@Query() filter: Prisma.SongWhereInput,
+		@FilterQuery(GenreController.filterableFields)
+		where: Prisma.GenreWhereInput,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Genre>> {
-		try {
-			const ret = await this.service.list({
-				skip,
-				take,
-				where: {
-					...filter,
-					id: filter.id ? +filter.id : undefined,
-				},
-			});
-			return new Plage(ret, req);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e?.toString());
-		}
+		const ret = await this.service.list({
+			skip,
+			take,
+			where,
+		});
+		return new Plage(ret, req);
 	}
 
 	@Get(':id')

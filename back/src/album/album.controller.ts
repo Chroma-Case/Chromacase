@@ -6,26 +6,26 @@ import {
 	DefaultValuePipe,
 	Delete,
 	Get,
-	InternalServerErrorException,
 	NotFoundException,
 	Param,
 	ParseIntPipe,
 	Post,
 	Query,
 	Req,
-	StreamableFile,
 } from '@nestjs/common';
 import { Plage } from 'src/models/plage';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { AlbumService } from './album.service';
 import { Request } from 'express';
 import { Prisma, Album } from '@prisma/client';
-import { createReadStream } from 'fs';
 import { ApiTags } from '@nestjs/swagger';
+import { FilterQuery } from 'src/utils/filter.pipe';
 
 @Controller('album')
 @ApiTags('album')
 export class AlbumController {
+	static filterableFields: string[] = ['+id', 'name', '+artistId'];
+
 	constructor(private readonly albumService: AlbumService) {}
 
 	@Post()
@@ -46,30 +46,27 @@ export class AlbumController {
 
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
-		return await this.albumService.deleteAlbum({ id });
+		try {
+			return await this.albumService.deleteAlbum({ id });
+		} catch {
+			throw new NotFoundException('Invalid ID');
+		}
 	}
 
 	@Get()
 	async findAll(
 		@Req() req: Request,
-		@Query() filter: Prisma.AlbumWhereInput,
+		@FilterQuery(AlbumController.filterableFields)
+		where: Prisma.AlbumWhereInput,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Album>> {
-		try {
-			const ret = await this.albumService.albums({
-				skip,
-				take,
-				where: {
-					...filter,
-					id: filter.id ? +filter.id : undefined,
-				},
-			});
-			return new Plage(ret, req);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e?.toString());
-		}
+		const ret = await this.albumService.albums({
+			skip,
+			take,
+			where,
+		});
+		return new Plage(ret, req);
 	}
 
 	@Get(':id')

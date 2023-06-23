@@ -22,11 +22,14 @@ import { ArtistService } from './artist.service';
 import { Prisma, Artist } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
 import { createReadStream, existsSync } from 'fs';
+import { FilterQuery } from 'src/utils/filter.pipe';
 
 @Controller('artist')
 @ApiTags('artist')
 export class ArtistController {
-	constructor(private readonly service: ArtistService) { }
+	static filterableFields = ['+id', 'name'];
+
+	constructor(private readonly service: ArtistService) {}
 
 	@Post()
 	async create(@Body() dto: CreateArtistDto) {
@@ -39,7 +42,11 @@ export class ArtistController {
 
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
-		return await this.service.delete({ id });
+		try {
+			return await this.service.delete({ id });
+		} catch {
+			throw new NotFoundException('Invalid ID');
+		}
 	}
 
 	@Get(':id/illustration')
@@ -61,24 +68,17 @@ export class ArtistController {
 	@Get()
 	async findAll(
 		@Req() req: Request,
-		@Query() filter: Prisma.SongWhereInput,
+		@FilterQuery(ArtistController.filterableFields)
+		where: Prisma.ArtistWhereInput,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Artist>> {
-		try {
-			const ret = await this.service.list({
-				skip,
-				take,
-				where: {
-					...filter,
-					id: filter.id ? +filter.id : undefined,
-				},
-			});
-			return new Plage(ret, req);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e?.toString());
-		}
+		const ret = await this.service.list({
+			skip,
+			take,
+			where,
+		});
+		return new Plage(ret, req);
 	}
 
 	@Get(':id')

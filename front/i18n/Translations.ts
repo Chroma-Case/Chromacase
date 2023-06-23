@@ -184,7 +184,7 @@ export const en = {
 export const fr: typeof en = {
 	error: 'Erreur',
 	goBackHome: "Retourner à l'accueil",
-	anErrorOccured: 'Une Errur est survenue',
+	anErrorOccured: 'Une erreur est survenue',
 	welcome: 'Bienvenue',
 	welcomeMessage: 'Re-Bonjour ',
 	signOutBtn: 'Se déconnecter',

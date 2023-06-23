@@ -1,5 +1,4 @@
 import {
-	BadRequestException,
 	Body,
 	ConflictException,
 	Controller,
@@ -26,14 +25,23 @@ import { createReadStream, existsSync } from 'fs';
 import { ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { HistoryService } from 'src/history/history.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { FilterQuery } from 'src/utils/filter.pipe';
 
 @Controller('song')
 @ApiTags('song')
 export class SongController {
+	static filterableFields: string[] = [
+		'+id',
+		'name',
+		'+artistId',
+		'+albumId',
+		'+genreId',
+	];
+
 	constructor(
 		private readonly songService: SongService,
 		private readonly historyService: HistoryService,
-	) { }
+	) {}
 
 	@Get(':id/midi')
 	async getMidi(@Param('id', ParseIntPipe) id: number) {
@@ -98,30 +106,26 @@ export class SongController {
 
 	@Delete(':id')
 	async remove(@Param('id', ParseIntPipe) id: number) {
-		return await this.songService.deleteSong({ id });
+		try {
+			return await this.songService.deleteSong({ id });
+		} catch {
+			throw new NotFoundException('Invalid ID');
+		}
 	}
 
 	@Get()
 	async findAll(
 		@Req() req: Request,
-		@Query() filter: Prisma.SongWhereInput,
+		@FilterQuery(SongController.filterableFields) where: Prisma.SongWhereInput,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Song>> {
-		try {
-			const ret = await this.songService.songs({
-				skip,
-				take,
-				where: {
-					...filter,
-					id: filter.id ? +filter.id : undefined,
-				},
-			});
-			return new Plage(ret, req);
-		} catch (e) {
-			console.log(e);
-			throw new BadRequestException(null, e?.toString());
-		}
+		const ret = await this.songService.songs({
+			skip,
+			take,
+			where,
+		});
+		return new Plage(ret, req);
 	}
 
 	@Get(':id')
