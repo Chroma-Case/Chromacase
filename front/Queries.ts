@@ -7,7 +7,7 @@ const QueryRules: RQ.QueryClientConfig = {
 		queries: {
 			refetchOnWindowFocus: false,
 			// This is needed explicitly, otherwise will refetch **all** the time
-			staleTime: Infinity
+			staleTime: Infinity,
 		},
 	},
 };
@@ -42,16 +42,16 @@ const buildRQuery = <T, Opts extends QueryOptions<T>>(q: QueryOrQueryFn<T>, opts
 			// This will not be called because the query is disabled.
 			// However, this is done for type-safety
 			queryFn: () => laziedQuery().exec(),
-			...opts
-		}
+			...opts,
+		};
 	}
 	const resolvedQuery = laziedQuery();
 	return {
 		queryKey: resolvedQuery.key,
 		queryFn: resolvedQuery.exec,
-		...opts
-	}
-}
+		...opts,
+	};
+};
 
 const useQuery = <ReturnType, Opts extends QueryOptions<ReturnType>>(
 	query: QueryOrQueryFn<ReturnType>,
@@ -74,9 +74,7 @@ const useQueries = <ReturnTypes>(
 	queries: readonly QueryOrQueryFn<ReturnTypes>[],
 	options?: QueryOptions<ReturnTypes>
 ) => {
-	return RQ.useQueries(
-		queries.map((q) => buildRQuery(q, options))
-	);
+	return RQ.useQueries(queries.map((q) => buildRQuery(q, options)));
 };
 
 export { useQuery, useQueries, QueryRules, transformQuery };

@@ -29,7 +29,7 @@ import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
 import ErrorView from './views/ErrorView';
 
-// Util function to hide route props in URL  
+// Util function to hide route props in URL
 const removeMe = () => '';
 
 const protectedRoutes = () =>
@@ -45,7 +45,7 @@ const protectedRoutes = () =>
 			options: { title: 'Settings' },
 			link: '/settings/:screen?',
 			stringify: {
-				screen: removeMe
+				screen: removeMe,
 			},
 		},
 		Song: {
