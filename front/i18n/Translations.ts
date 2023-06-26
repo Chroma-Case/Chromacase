@@ -364,7 +364,7 @@ export const fr: typeof en = {
 	noRecentSearches: 'Aucune recherche récente',
 };
 
-export const sp: Partial<typeof en> = {
+export const sp: typeof en = {
 	error: 'Error',
 	anErrorOccured: 'ocurrió un error',
 	goBackHome: 'regresar a casa',
@@ -547,4 +547,5 @@ export const sp: Partial<typeof en> = {
 
 	recentSearches: 'Búsquedas recientes',
 	noRecentSearches: 'No hay búsquedas recientes',
+	continuewithgoogle: 'Continuar con Google',
 };

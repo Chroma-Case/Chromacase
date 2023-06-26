@@ -57,11 +57,11 @@ const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) =
 				<Translate translationKey="welcome" />
 			</Text>
 			<TextButton
-				translate={{ translationKey: "continuewithgoogle" }}
+				translate={{ translationKey: 'continuewithgoogle' }}
 				variant="outline"
 				marginTop={5}
 				colorScheme="primary"
-				onPress={() => window.location.href = `${baseAPIUrl}/auth/login/google`}
+				onPress={() => (window.location.href = `${baseAPIUrl}/auth/login/google`)}
 			/>
 			{mode === 'signin' ? (
 				<SigninForm

@@ -91,7 +91,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							type: 'text',
 							title: 'Google Account',
 							data: {
-								text: user.googleID ? "Linked" : "Not linked"
+								text: user.googleID ? 'Linked' : 'Not linked',
 							},
 							// type: 'custom',
 							// data: user.googleID
