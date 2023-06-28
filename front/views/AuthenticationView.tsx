@@ -7,7 +7,7 @@ import { Center, Button, Text } from 'native-base';
 import SigninForm from '../components/forms/signinform';
 import SignupForm from '../components/forms/signupform';
 import TextButton from '../components/TextButton';
-import { RouteProps } from '../Navigation';
+import { RouteProps, useNavigation } from '../Navigation';
 
 const hanldeSignin = async (
 	username: string,
@@ -48,7 +48,8 @@ type AuthenticationViewProps = {
 
 const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) => {
 	const dispatch = useDispatch();
-	const [mode, setMode] = React.useState<'signin' | 'signup'>(isSignup ? 'signup' : 'signin');
+	const navigation = useNavigation();
+	const mode = isSignup ? 'signup' : 'signin';
 
 	return (
 		<Center style={{ flex: 1 }}>
@@ -82,7 +83,7 @@ const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) =
 				variant="outline"
 				marginTop={5}
 				colorScheme="primary"
-				onPress={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
+				onPress={() => navigation.navigate(mode === 'signin' ? 'Signup' : 'Login', {})}
 			/>
 		</Center>
 	);

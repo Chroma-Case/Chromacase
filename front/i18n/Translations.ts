@@ -1,4 +1,7 @@
 export const en = {
+	error: 'Error',
+	goBackHome: 'Go Back Home',
+	anErrorOccured: 'An Error Occured',
 	welcome: 'Welcome',
 	welcomeMessage: 'Welcome back ',
 	signOutBtn: 'Sign out',
@@ -179,6 +182,9 @@ export const en = {
 };
 
 export const fr: typeof en = {
+	error: 'Erreur',
+	goBackHome: "Retourner à l'accueil",
+	anErrorOccured: 'Une erreur est survenue',
 	welcome: 'Bienvenue',
 	welcomeMessage: 'Re-Bonjour ',
 	signOutBtn: 'Se déconnecter',
@@ -357,6 +363,9 @@ export const fr: typeof en = {
 };
 
 export const sp: typeof en = {
+	error: 'Error',
+	anErrorOccured: 'ocurrió un error',
+	goBackHome: 'regresar a casa',
 	welcomeMessage: 'Benvenido',
 	signOutBtn: 'Desconectarse',
 	signInBtn: 'Connectarse',

@@ -5,7 +5,7 @@ import {
 	ParamListBase,
 	useNavigation as navigationHook,
 } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
@@ -16,7 +16,7 @@ import StartPageView from './views/StartPageView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/settings/SettingsView';
-import { useQuery } from 'react-query';
+import { useQuery } from './Queries';
 import API, { APIError } from './API';
 import PlayView from './views/PlayView';
 import ScoreView from './views/ScoreView';
@@ -27,24 +27,79 @@ import ArtistDetailsView from './views/ArtistDetailsView';
 import { Button, Center, VStack } from 'native-base';
 import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
+import ErrorView from './views/ErrorView';
+
+// Util function to hide route props in URL
+const removeMe = () => '';
 
 const protectedRoutes = () =>
 	({
-		Home: { component: HomeView, options: { title: translate('welcome'), headerLeft: null } },
-		Play: { component: PlayView, options: { title: translate('play') } },
-		Settings: { component: SetttingsNavigator, options: { title: 'Settings' } },
-		Song: { component: SongLobbyView, options: { title: translate('play') } },
-		Artist: { component: ArtistDetailsView, options: { title: translate('artistFilter') } },
-		Score: { component: ScoreView, options: { title: translate('score'), headerLeft: null } },
-		Search: { component: SearchView, options: { title: translate('search') } },
-		User: { component: ProfileView, options: { title: translate('user') } },
+		Home: {
+			component: HomeView,
+			options: { title: translate('welcome'), headerLeft: null },
+			link: '/',
+		},
+		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
+		Settings: {
+			component: SetttingsNavigator,
+			options: { title: 'Settings' },
+			link: '/settings/:screen?',
+			stringify: {
+				screen: removeMe,
+			},
+		},
+		Song: {
+			component: SongLobbyView,
+			options: { title: translate('play') },
+			link: '/song/:songId',
+		},
+		Artist: {
+			component: ArtistDetailsView,
+			options: { title: translate('artistFilter') },
+			link: '/artist/:artistId',
+		},
+		Score: {
+			component: ScoreView,
+			options: { title: translate('score'), headerLeft: null },
+			link: undefined,
+		},
+		Search: {
+			component: SearchView,
+			options: { title: translate('search') },
+			link: '/search/:query?',
+		},
+		Error: {
+			component: ErrorView,
+			options: { title: translate('error'), headerLeft: null },
+			link: undefined,
+		},
+		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
 	} as const);
 
 const publicRoutes = () =>
 	({
-		Start: { component: StartPageView, options: { title: 'Chromacase', headerShown: false } },
-		Login: { component: AuthenticationView, options: { title: translate('signInBtn') } },
-		Oops: { component: ProfileErrorView, options: { title: 'Oops', headerShown: false } },
+		Start: {
+			component: StartPageView,
+			options: { title: 'Chromacase', headerShown: false },
+			link: '/',
+		},
+		Login: {
+			component: (params: RouteProps<{}>) =>
+				AuthenticationView({ isSignup: false, ...params }),
+			options: { title: translate('signInBtn') },
+			link: '/login',
+		},
+		Signup: {
+			component: (params: RouteProps<{}>) =>
+				AuthenticationView({ isSignup: true, ...params }),
+			options: { title: translate('signUpBtn') },
+			link: '/signup',
+		},
+		Oops: {
+			component: ProfileErrorView,
+			options: { title: 'Oops', headerShown: false },
+			link: undefined,
+		},
 	} as const);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -90,6 +145,29 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 		/>
 	));
 
+const routesToLinkingConfig = (
+	routes: Partial<
+		Record<keyof AppRouteParams, { link?: string; stringify?: Record<string, () => string> }>
+	>
+) => {
+	// Too lazy to (find the) type
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const pagesToRoute = {} as Record<keyof AppRouteParams, any>;
+	Object.keys(routes).forEach((route) => {
+		const index = route as keyof AppRouteParams;
+		if (routes[index]?.link) {
+			pagesToRoute[index] = {
+				path: routes[index]!.link!,
+				stringify: routes[index]!.stringify,
+			};
+		}
+	});
+	return {
+		prefixes: [],
+		config: { screens: pagesToRoute },
+	};
+};
+
 const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 	const dispatch = useDispatch();
 	return (
@@ -113,7 +191,7 @@ const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 export const Router = () => {
 	const dispatch = useDispatch();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
-	const userProfile = useQuery(['user', 'me', accessToken], () => API.getUserInfo(), {
+	const userProfile = useQuery(API.getUserInfo, {
 		retry: 1,
 		refetchOnWindowFocus: false,
 		onError: (err) => {
@@ -123,6 +201,24 @@ export const Router = () => {
 		},
 	});
 	const colorScheme = useColorScheme();
+	const authStatus = useMemo(() => {
+		if (userProfile.isError && accessToken && !userProfile.isLoading) {
+			return 'error';
+		}
+		if (userProfile.isLoading && !userProfile.data) {
+			return 'loading';
+		}
+		if (userProfile.isSuccess && accessToken) {
+			return 'authed';
+		}
+		return 'noAuth';
+	}, [userProfile, accessToken]);
+	const routes = useMemo(() => {
+		if (authStatus == 'authed') {
+			return protectedRoutes();
+		}
+		return publicRoutes();
+	}, [authStatus]);
 
 	useEffect(() => {
 		if (accessToken) {
@@ -130,22 +226,27 @@ export const Router = () => {
 		}
 	}, [accessToken]);
 
+	if (authStatus == 'loading') {
+		// We dont want this to be a screen, as this lead to a navigator without the requested route, and fallback.
+		return <LoadingView />;
+	}
+
 	return (
-		<NavigationContainer theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}>
+		<NavigationContainer
+			linking={routesToLinkingConfig(routes)}
+			fallback={<LoadingView />}
+			theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}
+		>
 			<Stack.Navigator>
-				{userProfile.isError && accessToken && !userProfile.isLoading ? (
+				{authStatus == 'error' ? (
 					<Stack.Screen
 						name="Oops"
 						component={RouteToScreen(() => (
 							<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
 						))}
 					/>
-				) : userProfile.isLoading && !userProfile.data ? (
-					<Stack.Screen name="Loading" component={RouteToScreen(LoadingView)} />
 				) : (
-					routesToScreens(
-						userProfile.isSuccess && accessToken ? protectedRoutes() : publicRoutes()
-					)
+					routesToScreens(routes)
 				)}
 			</Stack.Navigator>
 		</NavigationContainer>

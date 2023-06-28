@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQueries, useQuery } from 'react-query';
+import { useQueries, useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import { Box, ScrollView, Flex, Stack, Heading, VStack, HStack } from 'native-base';
@@ -14,26 +14,20 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 const HomeView = () => {
 	const navigation = useNavigation();
-	const userQuery = useQuery(['user'], () => API.getUserInfo());
-	const playHistoryQuery = useQuery(['history', 'play'], () => API.getUserPlayHistory());
-	const searchHistoryQuery = useQuery(['history', 'search'], () => API.getSearchHistory(0, 10));
-	const skillsQuery = useQuery(['skills'], () => API.getUserSkills());
-	const nextStepQuery = useQuery(['user', 'recommendations'], () => API.getSongSuggestions());
+	const userQuery = useQuery(API.getUserInfo);
+	const playHistoryQuery = useQuery(API.getUserPlayHistory);
+	const searchHistoryQuery = useQuery(API.getSearchHistory(0, 10));
+	const skillsQuery = useQuery(API.getUserSkills);
+	const nextStepQuery = useQuery(API.getSongSuggestions);
 	const songHistory = useQueries(
-		playHistoryQuery.data?.map(({ songID }) => ({
-			queryKey: ['song', songID],
-			queryFn: () => API.getSong(songID),
-		})) ?? []
+		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
 	);
 	const artistsQueries = useQueries(
 		songHistory
 			.map((entry) => entry.data)
 			.concat(nextStepQuery.data ?? [])
 			.filter((s): s is Song => s !== undefined)
-			.map((song) => ({
-				queryKey: ['artist', song.id],
-				queryFn: () => API.getArtist(song.artistId),
-			}))
+			.map((song) => API.getArtist(song.artistId))
 	);
 
 	if (

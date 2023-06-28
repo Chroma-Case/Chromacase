@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
 	HStack,
 	VStack,
@@ -16,7 +16,7 @@ import {
 import { SafeAreaView, useColorScheme } from 'react-native';
 import { RootState, useSelector } from '../state/Store';
 import { SearchContext } from '../views/SearchView';
-import { useQuery } from 'react-query';
+import { useQueries, useQuery } from '../Queries';
 import { translate } from '../i18n/i18n';
 import API from '../API';
 import LoadingComponent from './Loading';
@@ -27,8 +27,8 @@ import CardGridCustom from './CardGridCustom';
 import TextButton from './TextButton';
 import SearchHistoryCard from './HistoryCard';
 import Song, { SongWithArtist } from '../models/Song';
-import { getSongWArtistSuggestions } from './utils/api';
 import { useNavigation } from '../Navigation';
+import Artist from '../models/Artist';
 
 const swaToSongCardProps = (song: SongWithArtist) => ({
 	songId: song.id,
@@ -135,18 +135,38 @@ SongRow.defaultProps = {
 const HomeSearchComponent = () => {
 	const { updateStringQuery } = React.useContext(SearchContext);
 	const { isLoading: isLoadingHistory, data: historyData = [] } = useQuery(
-		'history',
-		() => API.getSearchHistory(0, 12),
+		API.getSearchHistory(0, 12),
 		{ enabled: true }
 	);
-
-	const { isLoading: isLoadingSuggestions, data: suggestionsData = [] } = useQuery(
-		'suggestions',
-		() => getSongWArtistSuggestions(),
-		{
-			enabled: true,
-		}
+	const songSuggestions = useQuery(API.getSongSuggestions);
+	const songArtistSuggestions = useQueries(
+		songSuggestions.data
+			?.filter((song) => song.artistId !== null)
+			.map(({ artistId }) => API.getArtist(artistId)) ?? []
 	);
+	const isLoadingSuggestions = useMemo(
+		() => songSuggestions.isLoading || songArtistSuggestions.some((q) => q.isLoading),
+		[songSuggestions, songArtistSuggestions]
+	);
+	const suggestionsData = useMemo(() => {
+		if (isLoadingSuggestions) {
+			return [];
+		}
+		return (
+			songSuggestions.data
+				?.map((song): [Song, Artist | undefined] => [
+					song,
+					songArtistSuggestions
+						.map((q) => q.data)
+						.filter((d) => d !== undefined)
+						.find((data) => data?.id === song.artistId),
+				])
+				// We do not need the song
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				.filter(([song, artist]) => artist !== undefined)
+				.map(([song, artist]) => ({ ...song, artist: artist! })) ?? []
+		);
+	}, [songSuggestions, songArtistSuggestions]);
 
 	return (
 		<VStack mt="5" style={{ overflow: 'hidden' }}>

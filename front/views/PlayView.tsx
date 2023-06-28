@@ -17,7 +17,7 @@ import {
 import IconButton from '../components/IconButton';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { RouteProps, useNavigation } from '../Navigation';
-import { useQuery } from 'react-query';
+import { transformQuery, useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
@@ -72,7 +72,7 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
-	const song = useQuery(['song', songId], () => API.getSong(songId), { staleTime: Infinity });
+	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
 	const toast = useToast();
 	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
@@ -84,8 +84,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [score, setScore] = useState(0); // Between 0 and 100
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const musixml = useQuery(
-		['musixml', songId],
-		() => API.getSongMusicXML(songId).then((data) => new TextDecoder().decode(data)),
+		transformQuery(API.getSongMusicXML(songId), (data) => new TextDecoder().decode(data)),
 		{ staleTime: Infinity }
 	);
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
