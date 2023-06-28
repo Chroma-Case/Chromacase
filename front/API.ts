@@ -238,6 +238,31 @@ export default class API {
 	}
 
 	/**
+	 * @description retrieves songs from a specific artist
+	 * @param artistId is the id of the artist that composed the songs aimed
+	 * @param skip is how much songs do we skip before returning the list
+	 * @param take is how much songs should be returned
+	 * @returns a Promise of Songs type array
+	 */
+	public static async getSongsByArtist(artistId: number): Promise<Song[]> {
+		// let queryString = `/song?artisId=${artistId}`;
+
+		// if (skip) {
+		// 	queryString = `${queryString}&skip=${skip}`;
+		// }
+		// if (take) {
+		// 	queryString = `${queryString}&take=${take}`;
+		// }
+		// return await API.fetch({
+		// 	route: queryString,
+		// });
+
+		return API.fetch({
+			route: `/song?artistId=${artistId}`,
+		});
+	}
+
+	/**
 	 * Retrieve a song
 	 * @param songId the id to find the song
 	 */

@@ -47,7 +47,7 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 
 	const { isLoading: isLoadingSong, data: songData = [] } = useQuery(
 		['song', stringQuery],
-		() => API.searchSongs(stringQuery),
+		() => API.getSongsByArtist(112),
 		{ enabled: !!stringQuery }
 	);
 
