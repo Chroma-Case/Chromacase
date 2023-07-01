@@ -12,10 +12,11 @@ import store from './state/Store';
 import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
 import UserSettings from './models/UserSettings';
-import { PartialDeep } from 'type-fest';
+import { PartialDeep, RequireExactlyOne } from 'type-fest';
 import SearchHistory from './models/SearchHistory';
 import { Query } from './Queries';
 import CompetenciesTable from './components/CompetenciesTable';
+import ResponseHandler from './models/ResponseHandler';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -26,9 +27,13 @@ type FetchParams = {
 	route: string;
 	body?: object;
 	method?: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
-	// If true, No JSON parsing is done, the raw response's content is returned
-	raw?: true;
-};
+}
+
+type HandleParams<APIType = unknown, ModelType = APIType> = RequireExactlyOne<{
+	raw: true,
+	emptyResponse: true,
+	handler: ResponseHandler<APIType, ModelType>
+}>;
 
 // This Exception is intended to cover all business logic errors (invalid credentials, couldn't find a song, etc.)
 // technical errors (network, server, etc.) should be handled as standard Error exceptions
@@ -53,7 +58,11 @@ const baseAPIUrl =
 		: Constants.manifest?.extra?.apiUrl;
 
 export default class API {
-	public static async fetch(params: FetchParams) {
+	public static async fetch(params: FetchParams, handle: Pick<Required<HandleParams>, 'raw'>): Promise<ArrayBuffer>;
+	public static async fetch(params: FetchParams, handle: Pick<Required<HandleParams>, 'emptyResponse'>): Promise<void>;
+	public static async fetch(params: FetchParams, handle: Pick<Required<HandleParams>, 'raw'>): Promise<ArrayBuffer>;
+	public static async fetch(params: FetchParams): Promise<void>;
+	public static async fetch(params: FetchParams, handle?: HandleParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
 			'Content-Type': 'application/json',
@@ -65,18 +74,24 @@ export default class API {
 		}).catch(() => {
 			throw new Error('Error while fetching API: ' + baseAPIUrl);
 		});
-		if (params.raw) {
+		if (!handle || handle.emptyResponse) {
+			return;
+		}
+		if (handle.raw) {
 			return response.arrayBuffer();
 		}
+		const handler = handle.handler;
 		const body = await response.text();
 		try {
-			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
+			const jsonResponse = JSON.parse(body);
 			if (!response.ok) {
 				throw new APIError(response.statusText ?? body, response.status);
 			}
-			return jsonResponse;
+			const validated = await handler.validator.validate(jsonResponse);
+			return handler.transformer(handler.validator.cast(validated));
 		} catch (e) {
 			if (e instanceof SyntaxError) throw new Error("Error while parsing Server's response");
+			console.error(e);
 			throw e;
 		}
 	}
@@ -282,7 +297,8 @@ export default class API {
 			exec: () =>
 				API.fetch({
 					route: `/song/${songId}/midi`,
-					raw: true,
+				}, {
+					raw: true
 				}),
 		};
 	}
