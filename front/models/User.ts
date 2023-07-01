@@ -1,6 +1,13 @@
-import UserData from './UserData';
-import Model from './Model';
-import UserSettings from './UserSettings';
+import Model, { ModelValidator } from './Model';
+import * as yup from 'yup'
+
+export const UserValidator = yup.object({
+	username: yup.string().required(),
+	password: yup.string().required(),
+	email: yup.string().required(),
+	isGuest: yup.boolean().required(),
+	partyPlayed: yup.number().required()
+}).concat(ModelValidator);
 
 interface User extends Model {
 	name: string;
@@ -8,7 +15,13 @@ interface User extends Model {
 	isGuest: boolean;
 	premium: boolean;
 	data: UserData;
-	settings: UserSettings;
+}
+
+interface UserData {
+	gamesPlayed: number;
+	xp: number;
+	avatar: string | undefined;
+	createdAt: Date;
 }
 
 export default User;
