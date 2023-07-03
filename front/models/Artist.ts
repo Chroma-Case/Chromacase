@@ -10,8 +10,8 @@ export const ArtistValidator = yup
 
 export const ArtistHandler: ResponseHandler<Artist> = {
 	validator: ArtistValidator,
-	transformer: (value) => value
-}
+	transformer: (value) => value,
+};
 
 interface Artist extends Model {
 	name: string;

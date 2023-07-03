@@ -10,8 +10,8 @@ export const GenreValidator = yup
 
 export const GenreHandler: ResponseHandler<Genre> = {
 	validator: GenreValidator,
-	transformer: (value) => value
-}
+	transformer: (value) => value,
+};
 
 interface Genre extends Model {
 	name: string;

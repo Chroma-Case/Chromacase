@@ -3,7 +3,7 @@ import SongDetails, { SongDetailsHandler, SongDetailsValidator } from './SongDet
 import Artist from './Artist';
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
-import { baseAPIUrl } from '../API';
+import API from '../API';
 
 export const SongValidator = yup
 	.object({
@@ -27,7 +27,7 @@ export const SongHandler: ResponseHandler<yup.InferType<typeof SongValidator>, S
 		albumId: song.albumId,
 		genreId: song.genreId,
 		details: SongDetailsHandler.transformer(song.difficulties),
-		cover: `${baseAPIUrl}/song/${song.id}/illustration`,
+		cover: `${API.baseUrl}/song/${song.id}/illustration`,
 	}),
 };
 

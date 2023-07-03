@@ -2,11 +2,15 @@ import Artist, { ArtistHandler } from './models/Artist';
 import Album from './models/Album';
 import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
-import Genre from './models/Genre';
+import Genre, { GenreHandler } from './models/Genre';
 import LessonHistory from './models/LessonHistory';
 import Song, { SongHandler } from './models/Song';
-import SongHistory from './models/SongHistory';
-import User from './models/User';
+import {
+	SongHistoryHandler,
+	SongHistoryItem,
+	SongHistoryItemHandler,
+} from './models/SongHistory';
+import User, { UserHandler } from './models/User';
 import Constants from 'expo-constants';
 import store from './state/Store';
 import { Platform } from 'react-native';
@@ -18,6 +22,9 @@ import { Query } from './Queries';
 import CompetenciesTable from './components/CompetenciesTable';
 import ResponseHandler from './models/ResponseHandler';
 import { PlageHandler } from './models/Plage';
+import { ListHandler } from './models/List';
+import { AccessTokenResponseHandler } from './models/AccessTokenResponse';
+import * as yup from 'yup';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -52,13 +59,19 @@ export class APIError extends Error {
 	}
 }
 
-// we will need the same thing for the scorometer API url
-export const baseAPIUrl =
-	process.env.NODE_ENV != 'development' && Platform.OS === 'web'
-		? '/api'
-		: Constants.manifest?.extra?.apiUrl;
+export class ValidationError extends Error {
+	constructor(
+		message: string
+	) {
+		super(message)
+	}
+}
+
 
 export default class API {
+	public static readonly baseUrl = process.env.NODE_ENV != 'development' && Platform.OS === 'web'
+		? '/api'
+		: Constants.manifest?.extra?.apiUrl;
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>
@@ -77,12 +90,12 @@ export default class API {
 		const header = {
 			'Content-Type': 'application/json',
 		};
-		const response = await fetch(`${baseAPIUrl}${params.route}`, {
+		const response = await fetch(`${API.baseUrl}${params.route}`, {
 			headers: (jwtToken && { ...header, Authorization: `Bearer ${jwtToken}` }) || header,
 			body: JSON.stringify(params.body),
 			method: params.method ?? 'GET',
 		}).catch(() => {
-			throw new Error('Error while fetching API: ' + baseAPIUrl);
+			throw new Error('Error while fetching API: ' + API.baseUrl);
 		});
 		if (!handle || handle.emptyResponse) {
 			return;
@@ -97,7 +110,13 @@ export default class API {
 			if (!response.ok) {
 				throw new APIError(response.statusText ?? body, response.status);
 			}
-			const validated = await handler.validator.validate(jsonResponse);
+			const validated = await handler.validator.validate(jsonResponse).catch((e) => {
+				if (e instanceof yup.ValidationError) {
+					console.error(e)
+					throw new ValidationError(e.message);
+				}
+				throw e
+			});
 			return handler.transformer(handler.validator.cast(validated));
 		} catch (e) {
 			if (e instanceof SyntaxError) throw new Error("Error while parsing Server's response");
@@ -113,13 +132,14 @@ export default class API {
 			route: '/auth/login',
 			body: authenticationInput,
 			method: 'POST',
-		})
+		}, { handler: AccessTokenResponseHandler })
 			.then((responseBody) => responseBody.access_token)
 			.catch((e) => {
-				if (!(e instanceof APIError)) throw e;
-
+				/// If validation fails, it means that auth failed.
+				/// We want that 401 error to be thrown, instead of the plain validation vone  
 				if (e.status == 401)
 					throw new APIError('invalidCredentials', 401, 'invalidCredentials');
+				if (!(e instanceof APIError)) throw e;
 				throw e;
 			});
 	}
@@ -143,12 +163,17 @@ export default class API {
 	}
 
 	public static async createAndGetGuestAccount(): Promise<AccessToken> {
-		const response = await API.fetch({
+		return API.fetch({
 			route: '/auth/guest',
 			method: 'POST',
-		});
-		if (!response.access_token) throw new APIError('No access token', response.status);
-		return response.access_token;
+		}, { handler: AccessTokenResponseHandler })
+			.then(({ access_token }) => access_token)
+			.catch((e) => {
+				if (e.status == 401)
+					throw new APIError('invalidCredentials', 401, 'invalidCredentials');
+				if (!(e instanceof APIError)) throw e;
+				throw e;
+			});
 	}
 
 	public static async transformGuestToUser(registrationInput: RegistrationInput): Promise<void> {
@@ -165,26 +190,13 @@ export default class API {
 	public static getUserInfo(): Query<User> {
 		return {
 			key: 'user',
-			exec: async () => {
-				const user = await API.fetch({
-					route: '/auth/me',
-				});
-
-				// this a dummy settings object, we will need to fetch the real one from the API
-				return {
-					id: user.id as number,
-					name: (user.username ?? user.name) as string,
-					email: user.email as string,
-					premium: false,
-					isGuest: user.isGuest as boolean,
-					data: {
-						gamesPlayed: user.partyPlayed as number,
-						xp: 0,
-						createdAt: new Date('2023-04-09T00:00:00.000Z'),
-						avatar: 'https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn',
+			exec: async () =>
+				API.fetch(
+					{
+						route: '/auth/me',
 					},
-				} as User;
-			},
+					{ handler: UserHandler }
+				),
 		};
 	}
 
@@ -290,7 +302,7 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static getArtistIllustration(artistId: number): string {
-		return `${baseAPIUrl}/artist/${artistId}/illustration`;
+		return `${API.baseUrl}/artist/${artistId}/illustration`;
 	}
 
 	/**
@@ -298,7 +310,7 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static getGenreIllustration(genreId: number): string {
-		return `${baseAPIUrl}/genre/${genreId}/illustration`;
+		return `${API.baseUrl}/genre/${genreId}/illustration`;
 	}
 
 	/**
@@ -309,9 +321,12 @@ export default class API {
 		return {
 			key: ['musixml', songId],
 			exec: () =>
-				API.fetch({
-					route: `/song/${songId}/musicXml`,
-				}, { raw: true }),
+				API.fetch(
+					{
+						route: `/song/${songId}/musicXml`,
+					},
+					{ raw: true }
+				),
 		};
 	}
 
@@ -322,9 +337,12 @@ export default class API {
 		return {
 			key: ['artist', artistId],
 			exec: () =>
-				API.fetch({
-					route: `/artist/${artistId}`,
-				}, { handler: ArtistHandler }),
+				API.fetch(
+					{
+						route: `/artist/${artistId}`,
+					},
+					{ handler: ArtistHandler }
+				),
 		};
 	}
 
@@ -353,13 +371,16 @@ export default class API {
 	 * Retrieve a song's play history
 	 * @param songId the id to find the song
 	 */
-	public static getSongHistory(songId: number): Query<{ best: number; history: SongHistory[] }> {
+	public static getSongHistory(songId: number) {
 		return {
 			key: ['song', 'history', songId],
 			exec: () =>
-				API.fetch({
-					route: `/song/${songId}/history`,
-				}),
+				API.fetch(
+					{
+						route: `/song/${songId}/history`,
+					},
+					{ handler: SongHistoryHandler }
+				),
 		};
 	}
 
@@ -371,9 +392,12 @@ export default class API {
 		return {
 			key: ['search', 'song', query],
 			exec: () =>
-				API.fetch({
-					route: `/search/songs/${query}`,
-				}),
+				API.fetch(
+					{
+						route: `/search/songs/${query}`,
+					},
+					{ handler: ListHandler(SongHandler) }
+				),
 		};
 	}
 
@@ -385,9 +409,12 @@ export default class API {
 		return {
 			key: ['search', 'artist', query],
 			exec: () =>
-				API.fetch({
-					route: `/search/artists/${query}`,
-				}),
+				API.fetch(
+					{
+						route: `/search/artists/${query}`,
+					},
+					{ handler: ListHandler(ArtistHandler) }
+				),
 		};
 	}
 
@@ -396,7 +423,6 @@ export default class API {
 	 * @param query the string used to find the album
 	 */
 	public static searchAlbum(
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		query: string
 	): Query<Album[]> {
 		return {
@@ -419,7 +445,7 @@ export default class API {
 						id: 4,
 						name: 'Random Access Memories',
 					},
-				] as Album[],
+				],
 		};
 	}
 
@@ -430,9 +456,12 @@ export default class API {
 		return {
 			key: ['search', 'genre', query],
 			exec: () =>
-				API.fetch({
-					route: `/search/genres/${query}`,
-				}),
+				API.fetch(
+					{
+						route: `/search/genres/${query}`,
+					},
+					{ handler: ListHandler(GenreHandler) }
+				),
 		};
 	}
 
@@ -444,7 +473,7 @@ export default class API {
 		return {
 			key: ['lesson', lessonId],
 			exec: async () => ({
-				title: 'Song',
+				name: 'Song',
 				description: 'A song',
 				requiredLevel: 1,
 				mainSkill: 'lead-head-change',
@@ -513,13 +542,16 @@ export default class API {
 	 * Retrieve the authenticated user's play history
 	 * * @returns an array of songs
 	 */
-	public static getUserPlayHistory(): Query<SongHistory[]> {
+	public static getUserPlayHistory(): Query<SongHistoryItem[]> {
 		return {
 			key: ['history'],
 			exec: () =>
-				API.fetch({
-					route: '/history',
-				}),
+				API.fetch(
+					{
+						route: '/history',
+					},
+					{ handler: ListHandler(SongHistoryItemHandler) }
+				),
 		};
 	}
 
