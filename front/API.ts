@@ -5,11 +5,7 @@ import Lesson from './models/Lesson';
 import Genre, { GenreHandler } from './models/Genre';
 import LessonHistory from './models/LessonHistory';
 import Song, { SongHandler } from './models/Song';
-import {
-	SongHistoryHandler,
-	SongHistoryItem,
-	SongHistoryItemHandler,
-} from './models/SongHistory';
+import { SongHistoryHandler, SongHistoryItem, SongHistoryItemHandler } from './models/SongHistory';
 import User, { UserHandler } from './models/User';
 import Constants from 'expo-constants';
 import store from './state/Store';
@@ -17,7 +13,7 @@ import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
 import UserSettings, { UserSettingsHandler } from './models/UserSettings';
 import { PartialDeep, RequireExactlyOne } from 'type-fest';
-import SearchHistory from './models/SearchHistory';
+import SearchHistory, { SearchHistoryHandler } from './models/SearchHistory';
 import { Query } from './Queries';
 import CompetenciesTable from './components/CompetenciesTable';
 import ResponseHandler from './models/ResponseHandler';
@@ -60,18 +56,16 @@ export class APIError extends Error {
 }
 
 export class ValidationError extends Error {
-	constructor(
-		message: string
-	) {
-		super(message)
+	constructor(message: string) {
+		super(message);
 	}
 }
 
-
 export default class API {
-	public static readonly baseUrl = process.env.NODE_ENV != 'development' && Platform.OS === 'web'
-		? '/api'
-		: Constants.manifest?.extra?.apiUrl;
+	public static readonly baseUrl =
+		process.env.NODE_ENV != 'development' && Platform.OS === 'web'
+			? '/api'
+			: Constants.manifest?.extra?.apiUrl;
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>
@@ -112,10 +106,10 @@ export default class API {
 			}
 			const validated = await handler.validator.validate(jsonResponse).catch((e) => {
 				if (e instanceof yup.ValidationError) {
-					console.error(e)
+					console.error(e);
 					throw new ValidationError(e.message);
 				}
-				throw e
+				throw e;
 			});
 			return handler.transformer(handler.validator.cast(validated));
 		} catch (e) {
@@ -128,15 +122,18 @@ export default class API {
 	public static async authenticate(
 		authenticationInput: AuthenticationInput
 	): Promise<AccessToken> {
-		return API.fetch({
-			route: '/auth/login',
-			body: authenticationInput,
-			method: 'POST',
-		}, { handler: AccessTokenResponseHandler })
+		return API.fetch(
+			{
+				route: '/auth/login',
+				body: authenticationInput,
+				method: 'POST',
+			},
+			{ handler: AccessTokenResponseHandler }
+		)
 			.then((responseBody) => responseBody.access_token)
 			.catch((e) => {
 				/// If validation fails, it means that auth failed.
-				/// We want that 401 error to be thrown, instead of the plain validation vone  
+				/// We want that 401 error to be thrown, instead of the plain validation vone
 				if (e.status == 401)
 					throw new APIError('invalidCredentials', 401, 'invalidCredentials');
 				if (!(e instanceof APIError)) throw e;
@@ -163,10 +160,13 @@ export default class API {
 	}
 
 	public static async createAndGetGuestAccount(): Promise<AccessToken> {
-		return API.fetch({
-			route: '/auth/guest',
-			method: 'POST',
-		}, { handler: AccessTokenResponseHandler })
+		return API.fetch(
+			{
+				route: '/auth/guest',
+				method: 'POST',
+			},
+			{ handler: AccessTokenResponseHandler }
+		)
 			.then(({ access_token }) => access_token)
 			.catch((e) => {
 				if (e.status == 401)
@@ -422,30 +422,27 @@ export default class API {
 	 * Search Album by name
 	 * @param query the string used to find the album
 	 */
-	public static searchAlbum(
-		query: string
-	): Query<Album[]> {
+	public static searchAlbum(query: string): Query<Album[]> {
 		return {
 			key: ['search', 'album', query],
-			exec: async () =>
-				[
-					{
-						id: 1,
-						name: 'Super Trooper',
-					},
-					{
-						id: 2,
-						name: 'Kingdom Heart 365/2 OST',
-					},
-					{
-						id: 3,
-						name: 'The Legend Of Zelda Ocarina Of Time OST',
-					},
-					{
-						id: 4,
-						name: 'Random Access Memories',
-					},
-				],
+			exec: async () => [
+				{
+					id: 1,
+					name: 'Super Trooper',
+				},
+				{
+					id: 2,
+					name: 'Kingdom Heart 365/2 OST',
+				},
+				{
+					id: 3,
+					name: 'The Legend Of Zelda Ocarina Of Time OST',
+				},
+				{
+					id: 4,
+					name: 'Random Access Memories',
+				},
+			],
 		};
 	}
 
@@ -492,22 +489,12 @@ export default class API {
 		return {
 			key: ['search', 'history', 'skip', skip, 'take', take],
 			exec: () =>
-				API.fetch({
-					route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
-					method: 'GET',
-				}).then((value) =>
-					value.map(
-						// To be fixed with #168
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						(e: any) =>
-							({
-								id: e.id,
-								query: e.query,
-								type: e.type,
-								userId: e.userId,
-								timestamp: new Date(e.searchDate),
-							} as SearchHistory)
-					)
+				API.fetch(
+					{
+						route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
+						method: 'GET',
+					},
+					{ handler: ListHandler(SearchHistoryHandler) }
 				),
 		};
 	}
