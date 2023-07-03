@@ -32,7 +32,7 @@ import PartitionView from '../components/PartitionView';
 import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
-import { URL } from 'url';
+import url from 'url';
 
 type PlayViewProps = {
 	songId: number;
@@ -48,9 +48,9 @@ type ScoreMessage = {
 let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
 
 if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
-	Linking.getInitialURL().then((url) => {
-		if (url !== null) {
-			const location = new URL(url);
+	Linking.getInitialURL().then((initUrl) => {
+		if (initUrl !== null) {
+			const location = url.parse(initUrl);
 			if (location.protocol === 'https:') {
 				scoroBaseApiUrl = 'wss://' + location.host + '/ws';
 			} else {
