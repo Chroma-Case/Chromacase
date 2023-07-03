@@ -559,36 +559,32 @@ export default class API {
 	}
 
 	public static async updateUserEmail(newEmail: string): Promise<User> {
-		const rep = await API.fetch({
-			route: '/auth/me',
-			method: 'PUT',
-			body: {
-				email: newEmail,
+		return API.fetch(
+			{
+				route: '/auth/me',
+				method: 'PUT',
+				body: {
+					email: newEmail,
+				},
 			},
-		});
-
-		if (rep.error) {
-			throw new Error(rep.error);
-		}
-		return rep;
+			{ handler: UserHandler }
+		);
 	}
 
 	public static async updateUserPassword(
 		oldPassword: string,
 		newPassword: string
 	): Promise<User> {
-		const rep = await API.fetch({
-			route: '/auth/me',
-			method: 'PUT',
-			body: {
-				oldPassword: oldPassword,
-				password: newPassword,
+		return API.fetch(
+			{
+				route: '/auth/me',
+				method: 'PUT',
+				body: {
+					oldPassword: oldPassword,
+					password: newPassword,
+				},
 			},
-		});
-
-		if (rep.error) {
-			throw new Error(rep.error);
-		}
-		return rep;
+			{ handler: UserHandler }
+		);
 	}
 }
