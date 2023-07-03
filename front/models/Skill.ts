@@ -12,10 +12,10 @@ const Skills = [
 	'chord-complexity',
 	'chord-timing',
 	'pedal',
-	'precision'
+	'precision',
 ] as const;
-type Skill = typeof Skills[number];
+type Skill = (typeof Skills)[number];
 
-export const SkillValidator =  yup.mixed<Skill>().oneOf(Skills);
+export const SkillValidator = yup.mixed<Skill>().oneOf(Skills);
 
 export default Skill;

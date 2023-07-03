@@ -4,7 +4,7 @@ export const SongHistoryValidator = yup.object({
 	songID: yup.number().required(),
 	userID: yup.number().required(),
 	score: yup.number().required(),
-	difficulties: yup.mixed()
+	difficulties: yup.mixed(),
 });
 
 interface SongHistory {

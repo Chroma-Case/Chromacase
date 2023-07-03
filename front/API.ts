@@ -1,22 +1,23 @@
-import Artist from './models/Artist';
+import Artist, { ArtistHandler } from './models/Artist';
 import Album from './models/Album';
 import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
 import Genre from './models/Genre';
 import LessonHistory from './models/LessonHistory';
-import Song from './models/Song';
+import Song, { SongHandler } from './models/Song';
 import SongHistory from './models/SongHistory';
 import User from './models/User';
 import Constants from 'expo-constants';
 import store from './state/Store';
 import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
-import UserSettings from './models/UserSettings';
+import UserSettings, { UserSettingsHandler } from './models/UserSettings';
 import { PartialDeep, RequireExactlyOne } from 'type-fest';
 import SearchHistory from './models/SearchHistory';
 import { Query } from './Queries';
 import CompetenciesTable from './components/CompetenciesTable';
 import ResponseHandler from './models/ResponseHandler';
+import { PlageHandler } from './models/Plage';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -27,12 +28,12 @@ type FetchParams = {
 	route: string;
 	body?: object;
 	method?: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
-}
+};
 
 type HandleParams<APIType = unknown, ModelType = APIType> = RequireExactlyOne<{
-	raw: true,
-	emptyResponse: true,
-	handler: ResponseHandler<APIType, ModelType>
+	raw: true;
+	emptyResponse: true;
+	handler: ResponseHandler<APIType, ModelType>;
 }>;
 
 // This Exception is intended to cover all business logic errors (invalid credentials, couldn't find a song, etc.)
@@ -52,15 +53,24 @@ export class APIError extends Error {
 }
 
 // we will need the same thing for the scorometer API url
-const baseAPIUrl =
+export const baseAPIUrl =
 	process.env.NODE_ENV != 'development' && Platform.OS === 'web'
 		? '/api'
 		: Constants.manifest?.extra?.apiUrl;
 
 export default class API {
-	public static async fetch(params: FetchParams, handle: Pick<Required<HandleParams>, 'raw'>): Promise<ArrayBuffer>;
-	public static async fetch(params: FetchParams, handle: Pick<Required<HandleParams>, 'emptyResponse'>): Promise<void>;
-	public static async fetch(params: FetchParams, handle: Pick<Required<HandleParams>, 'raw'>): Promise<ArrayBuffer>;
+	public static async fetch(
+		params: FetchParams,
+		handle: Pick<Required<HandleParams>, 'raw'>
+	): Promise<ArrayBuffer>;
+	public static async fetch(
+		params: FetchParams,
+		handle: Pick<Required<HandleParams>, 'emptyResponse'>
+	): Promise<void>;
+	public static async fetch<A, R>(
+		params: FetchParams,
+		handle: Pick<Required<HandleParams<A, R>>, 'handler'>
+	): Promise<R>;
 	public static async fetch(params: FetchParams): Promise<void>;
 	public static async fetch(params: FetchParams, handle?: HandleParams) {
 		const jwtToken = store.getState().user.accessToken;
@@ -181,24 +191,15 @@ export default class API {
 	public static getUserSettings(): Query<UserSettings> {
 		return {
 			key: 'settings',
-			exec: async () => {
-				const settings = await API.fetch({
-					route: '/auth/me/settings',
-				});
-
-				return {
-					notifications: {
-						pushNotif: settings.pushNotification,
-						emailNotif: settings.emailNotification,
-						trainNotif: settings.trainingNotification,
-						newSongNotif: settings.newSongNotification,
+			exec: () =>
+				API.fetch(
+					{
+						route: '/auth/me/settings',
 					},
-					recommendations: settings.recommendations,
-					weeklyReport: settings.weeklyReport,
-					leaderBoard: settings.leaderBoard,
-					showActivity: settings.showActivity,
-				};
-			},
+					{
+						handler: UserSettingsHandler,
+					}
+				),
 		};
 	}
 
@@ -237,28 +238,15 @@ export default class API {
 	public static getAllSongs(): Query<Song[]> {
 		return {
 			key: 'songs',
-			exec: async () => {
-				const songs = await API.fetch({
-					route: '/song',
-				});
-
-				// this is a dummy illustration, we will need to fetch the real one from the API
-				return songs.data.map(
-					// To be fixed with #168
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					(song: any) =>
-						({
-							id: song.id as number,
-							name: song.name as string,
-							artistId: song.artistId as number,
-							albumId: song.albumId as number,
-							genreId: song.genreId as number,
-							details: song.difficulties,
-							cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-							metrics: {},
-						} as Song)
-				);
-			},
+			exec: () =>
+				API.fetch(
+					{
+						route: '/song',
+					},
+					{
+						handler: PlageHandler(SongHandler),
+					}
+				).then(({ data }) => data),
 		};
 	}
 
@@ -269,22 +257,13 @@ export default class API {
 	public static getSong(songId: number): Query<Song> {
 		return {
 			key: ['song', songId],
-			exec: async () => {
-				const song = await API.fetch({
-					route: `/song/${songId}`,
-				});
-
-				// this is a dummy illustration, we will need to fetch the real one from the API
-				return {
-					id: song.id as number,
-					name: song.name as string,
-					artistId: song.artistId as number,
-					albumId: song.albumId as number,
-					genreId: song.genreId as number,
-					details: song.difficulties,
-					cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-				} as Song;
-			},
+			exec: async () =>
+				API.fetch(
+					{
+						route: `/song/${songId}`,
+					},
+					{ handler: SongHandler }
+				),
 		};
 	}
 	/**
@@ -295,11 +274,14 @@ export default class API {
 		return {
 			key: ['midi', songId],
 			exec: () =>
-				API.fetch({
-					route: `/song/${songId}/midi`,
-				}, {
-					raw: true
-				}),
+				API.fetch(
+					{
+						route: `/song/${songId}/midi`,
+					},
+					{
+						raw: true,
+					}
+				),
 		};
 	}
 
@@ -329,8 +311,7 @@ export default class API {
 			exec: () =>
 				API.fetch({
 					route: `/song/${songId}/musicXml`,
-					raw: true,
-				}),
+				}, { raw: true }),
 		};
 	}
 
@@ -343,7 +324,7 @@ export default class API {
 			exec: () =>
 				API.fetch({
 					route: `/artist/${artistId}`,
-				}),
+				}, { handler: ArtistHandler }),
 		};
 	}
 
