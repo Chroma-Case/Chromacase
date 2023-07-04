@@ -20,7 +20,7 @@ export const SongHistoryItemHandler: ResponseHandler<
 };
 
 export const SongHistoryValidator = yup.object({
-	best: yup.number().required(),
+	best: yup.number().required().nullable(),
 	history: yup.array(SongHistoryItemValidator).required(),
 });
 

@@ -106,7 +106,7 @@ export default class API {
 			}
 			const validated = await handler.validator.validate(jsonResponse).catch((e) => {
 				if (e instanceof yup.ValidationError) {
-					console.error(e);
+					console.error(e, 'Got: ' + body);
 					throw new ValidationError(e.message);
 				}
 				throw e;
