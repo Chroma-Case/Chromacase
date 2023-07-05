@@ -279,15 +279,22 @@ export default class API {
 		};
 	}
 
-		/**
+	/**
 	 * @description retrieves songs from a specific artist
 	 * @param artistId is the id of the artist that composed the songs aimed
 	 * @returns a Promise of Songs type array
 	 */
-	public static async getSongsByArtist(artistId: number): Promise<Song[]> {
-		return API.fetch({
-			route: `/song?artistId=${artistId}`,
-		});
+	public static getSongsByArtist(artistId: number): Query<Song[]> {
+		return {
+			key: ['artist', artistId, 'songs'],
+			exec: () =>
+				API.fetch(
+					{
+						route: `/song?artistId=${artistId}`,
+					},
+					{ handler: PlageHandler(SongHandler) }
+				).then(({ data }) => data),
+		};
 	}
 
 	/**

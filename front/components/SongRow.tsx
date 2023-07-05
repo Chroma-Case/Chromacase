@@ -1,8 +1,7 @@
-import { HStack, Image, Text } from "native-base";
-import Song, { SongWithArtist } from "../models/Song";
-import RowCustom from "./RowCustom";
-import TextButton from "./TextButton";
-
+import { HStack, Image, Text } from 'native-base';
+import Song, { SongWithArtist } from '../models/Song';
+import RowCustom from './RowCustom';
+import TextButton from './TextButton';
 
 type SongRowProps = {
 	song: Song | SongWithArtist; // TODO: remove Song
@@ -11,8 +10,8 @@ type SongRowProps = {
 
 const SongRow = ({ song, onPress }: SongRowProps) => {
 	return (
-		<RowCustom width={"100%"}>
-			<HStack px={2} space={5} justifyContent={"space-between"}>
+		<RowCustom width={'100%'}>
+			<HStack px={2} space={5} justifyContent={'space-between'}>
 				<Image
 					flexShrink={0}
 					flexGrow={0}
@@ -20,16 +19,16 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
 					source={{ uri: song.cover }}
 					alt={song.name}
-                    borderColor={'white'}
-                    borderWidth={1}
+					borderColor={'white'}
+					borderWidth={1}
 				/>
 				<HStack
 					style={{
-						display: "flex",
+						display: 'flex',
 						flexShrink: 1,
 						flexGrow: 1,
-						alignItems: "center",
-						justifyContent: "flex-start",
+						alignItems: 'center',
+						justifyContent: 'flex-start',
 					}}
 					space={6}
 				>
@@ -39,7 +38,7 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 						}}
 						isTruncated
 						pl={5}
-						maxW={"100%"}
+						maxW={'100%'}
 						bold
 						fontSize="md"
 					>
@@ -49,19 +48,19 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 						style={{
 							flexShrink: 0,
 						}}
-						fontSize={"sm"}
+						fontSize={'sm'}
 					>
-						{song.artistId ?? "artist"}
+						{song.artistId ?? 'artist'}
 					</Text>
 				</HStack>
 				<TextButton
 					flexShrink={0}
 					flexGrow={0}
-					translate={{ translationKey: "playBtn" }}
+					translate={{ translationKey: 'playBtn' }}
 					colorScheme="primary"
-					variant={"outline"}
+					variant={'outline'}
 					size="sm"
-                    mr={5}
+					mr={5}
 					onPress={onPress}
 				/>
 			</HStack>

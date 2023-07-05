@@ -1,10 +1,8 @@
-import { useColorScheme } from "react-native";
-import { RootState, useSelector } from "../state/Store";
-import { Box, Pressable } from "native-base";
+import { useColorScheme } from 'react-native';
+import { RootState, useSelector } from '../state/Store';
+import { Box, Pressable } from 'native-base';
 
-const RowCustom = (
-	props: Parameters<typeof Box>[0] & { onPress?: () => void }
-) => {
+const RowCustom = (props: Parameters<typeof Box>[0] & { onPress?: () => void }) => {
 	const settings = useSelector((state: RootState) => state.settings.local);
 	const systemColorMode = useColorScheme();
 	const colorScheme = settings.colorScheme;
@@ -17,13 +15,13 @@ const RowCustom = (
 					py={3}
 					my={1}
 					bg={
-						(colorScheme == "system" ? systemColorMode : colorScheme) == "dark"
+						(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
 							? isHovered || isPressed
-								? "gray.800"
+								? 'gray.800'
 								: undefined
 							: isHovered || isPressed
-								? "coolGray.200"
-								: undefined
+							? 'coolGray.200'
+							: undefined
 					}
 				>
 					{props.children}
