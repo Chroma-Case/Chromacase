@@ -278,10 +278,32 @@ export default class API {
 	 * @param artistId is the id of the artist that composed the songs aimed
 	 * @returns a Promise of Songs type array
 	 */
-	public static async getSongsByArtist(artistId: number): Promise<Song[]> {
-		return API.fetch({
-			route: `/song?artistId=${artistId}`,
-		});
+	public static getSongsByArtist(artistId: string): Query<Song[]> {
+		return {
+			key: ['songs', artistId],
+			exec: async () => {
+				const songs = await API.fetch({
+					route: `/song/artist/${artistId}`,
+				});
+
+				// this is a dummy illustration, we will need to fetch the real one from the API
+				return songs.data.map(
+					// To be fixed with #168
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					(song: any) =>
+						({
+							id: song.id as number,
+							name: song.name as string,
+							artistId: song.artistId as number,
+							albumId: song.albumId as number,
+							genreId: song.genreId as number,
+							details: song.difficulties,
+							cover: `${baseAPIUrl}/song/${song.id}/illustration`,
+							metrics: {},
+						} as Song)
+				);
+			},
+		};
 	}
 
 	/**

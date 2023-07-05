@@ -10,25 +10,17 @@ import { Key, useEffect, useState } from 'react';
 import { useNavigation } from '../Navigation';
 
 const ArtistDetailsView = ({ artistId }: any) => {
-	const { isLoading, data: artistData, isError } = useQuery(API.getArtist(artistId));
-	// const { isLoading: isLoadingSongs, data: songData = [], error: errorSongs } = useQuery(['songs', artistId], () => API.getSongsByArtist(artistId))
+	const { isLoading: isLoadingArt, data: artistData, error: isErrorArt } = useQuery(API.getArtist(artistId));
+	const { isLoading: isLoadingSong, data: songData = [], error: isErrorSong } = useQuery(API.getSongsByArtist(artistId));
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isMobileView = screenSize == "small";
 	const navigation = useNavigation();
-	const [merde, setMerde] = useState<any>(null);
 
-	useEffect(() => {
-		// Code to be executed when the component is focused
-		console.warn('Component focused!');
-		setMerde(API.getSongsByArtist(112));
-		// Call your function or perform any other actions here
-	}, []);
-
-	if (isLoading) {
+	if (isLoadingArt) {
 		return <LoadingView />;
 	}
 
-	if (isError) {
+	if (isErrorArt) {
 		navigation.navigate('Error');
 	}
 
@@ -44,9 +36,9 @@ const ArtistDetailsView = ({ artistId }: any) => {
 				resizeMode='cover'
 				/>
 				<Box>
-					<Heading m={3} >Abba</Heading>
+					<Heading mt={-20} ml={3} fontSize={50} >{artistData?.name}</Heading>
 					<Box>
-						{merde.map((comp: Song | SongWithArtist, index: Key | null | undefined) => (
+						{songData.map((comp: Song | SongWithArtist, index: Key | null | undefined) => (
 							<SongRow
 								key={index}
 								song={comp}
