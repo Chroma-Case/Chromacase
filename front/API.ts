@@ -1,21 +1,26 @@
-import Artist from './models/Artist';
+import Artist, { ArtistHandler } from './models/Artist';
 import Album from './models/Album';
 import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
-import Genre from './models/Genre';
+import Genre, { GenreHandler } from './models/Genre';
 import LessonHistory from './models/LessonHistory';
-import Song from './models/Song';
-import SongHistory from './models/SongHistory';
-import User from './models/User';
+import Song, { SongHandler } from './models/Song';
+import { SongHistoryHandler, SongHistoryItem, SongHistoryItemHandler } from './models/SongHistory';
+import User, { UserHandler } from './models/User';
 import Constants from 'expo-constants';
 import store from './state/Store';
 import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
-import UserSettings from './models/UserSettings';
-import { PartialDeep } from 'type-fest';
-import SearchHistory from './models/SearchHistory';
+import UserSettings, { UserSettingsHandler } from './models/UserSettings';
+import { PartialDeep, RequireExactlyOne } from 'type-fest';
+import SearchHistory, { SearchHistoryHandler } from './models/SearchHistory';
 import { Query } from './Queries';
 import CompetenciesTable from './components/CompetenciesTable';
+import ResponseHandler from './models/ResponseHandler';
+import { PlageHandler } from './models/Plage';
+import { ListHandler } from './models/List';
+import { AccessTokenResponseHandler } from './models/AccessTokenResponse';
+import * as yup from 'yup';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -26,9 +31,13 @@ type FetchParams = {
 	route: string;
 	body?: object;
 	method?: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
-	// If true, No JSON parsing is done, the raw response's content is returned
-	raw?: true;
 };
+
+type HandleParams<APIType = unknown, ModelType = APIType> = RequireExactlyOne<{
+	raw: true;
+	emptyResponse: true;
+	handler: ResponseHandler<APIType, ModelType>;
+}>;
 
 // This Exception is intended to cover all business logic errors (invalid credentials, couldn't find a song, etc.)
 // technical errors (network, server, etc.) should be handled as standard Error exceptions
@@ -46,37 +55,66 @@ export class APIError extends Error {
 	}
 }
 
-// we will need the same thing for the scorometer API url
-const baseAPIUrl =
-	process.env.NODE_ENV != 'development' && Platform.OS === 'web'
-		? '/api'
-		: Constants.manifest?.extra?.apiUrl;
+export class ValidationError extends Error {
+	constructor(message: string) {
+		super(message);
+	}
+}
 
 export default class API {
-	public static async fetch(params: FetchParams) {
+	public static readonly baseUrl =
+		process.env.NODE_ENV != 'development' && Platform.OS === 'web'
+			? '/api'
+			: Constants.manifest?.extra?.apiUrl;
+	public static async fetch(
+		params: FetchParams,
+		handle: Pick<Required<HandleParams>, 'raw'>
+	): Promise<ArrayBuffer>;
+	public static async fetch(
+		params: FetchParams,
+		handle: Pick<Required<HandleParams>, 'emptyResponse'>
+	): Promise<void>;
+	public static async fetch<A, R>(
+		params: FetchParams,
+		handle: Pick<Required<HandleParams<A, R>>, 'handler'>
+	): Promise<R>;
+	public static async fetch(params: FetchParams): Promise<void>;
+	public static async fetch(params: FetchParams, handle?: HandleParams) {
 		const jwtToken = store.getState().user.accessToken;
 		const header = {
 			'Content-Type': 'application/json',
 		};
-		const response = await fetch(`${baseAPIUrl}${params.route}`, {
+		const response = await fetch(`${API.baseUrl}${params.route}`, {
 			headers: (jwtToken && { ...header, Authorization: `Bearer ${jwtToken}` }) || header,
 			body: JSON.stringify(params.body),
 			method: params.method ?? 'GET',
 		}).catch(() => {
-			throw new Error('Error while fetching API: ' + baseAPIUrl);
+			throw new Error('Error while fetching API: ' + API.baseUrl);
 		});
-		if (params.raw) {
+		if (!handle || handle.emptyResponse) {
+			return;
+		}
+		if (handle.raw) {
 			return response.arrayBuffer();
 		}
+		const handler = handle.handler;
 		const body = await response.text();
 		try {
-			const jsonResponse = body.length != 0 ? JSON.parse(body) : {};
+			const jsonResponse = JSON.parse(body);
 			if (!response.ok) {
 				throw new APIError(response.statusText ?? body, response.status);
 			}
-			return jsonResponse;
+			const validated = await handler.validator.validate(jsonResponse).catch((e) => {
+				if (e instanceof yup.ValidationError) {
+					console.error(e, 'Got: ' + body);
+					throw new ValidationError(e.message);
+				}
+				throw e;
+			});
+			return handler.transformer(handler.validator.cast(validated));
 		} catch (e) {
 			if (e instanceof SyntaxError) throw new Error("Error while parsing Server's response");
+			console.error(e);
 			throw e;
 		}
 	}
@@ -84,17 +122,21 @@ export default class API {
 	public static async authenticate(
 		authenticationInput: AuthenticationInput
 	): Promise<AccessToken> {
-		return API.fetch({
-			route: '/auth/login',
-			body: authenticationInput,
-			method: 'POST',
-		})
+		return API.fetch(
+			{
+				route: '/auth/login',
+				body: authenticationInput,
+				method: 'POST',
+			},
+			{ handler: AccessTokenResponseHandler }
+		)
 			.then((responseBody) => responseBody.access_token)
 			.catch((e) => {
-				if (!(e instanceof APIError)) throw e;
-
+				/// If validation fails, it means that auth failed.
+				/// We want that 401 error to be thrown, instead of the plain validation vone
 				if (e.status == 401)
 					throw new APIError('invalidCredentials', 401, 'invalidCredentials');
+				if (!(e instanceof APIError)) throw e;
 				throw e;
 			});
 	}
@@ -118,12 +160,20 @@ export default class API {
 	}
 
 	public static async createAndGetGuestAccount(): Promise<AccessToken> {
-		const response = await API.fetch({
-			route: '/auth/guest',
-			method: 'POST',
-		});
-		if (!response.access_token) throw new APIError('No access token', response.status);
-		return response.access_token;
+		return API.fetch(
+			{
+				route: '/auth/guest',
+				method: 'POST',
+			},
+			{ handler: AccessTokenResponseHandler }
+		)
+			.then(({ access_token }) => access_token)
+			.catch((e) => {
+				if (e.status == 401)
+					throw new APIError('invalidCredentials', 401, 'invalidCredentials');
+				if (!(e instanceof APIError)) throw e;
+				throw e;
+			});
 	}
 
 	public static async transformGuestToUser(registrationInput: RegistrationInput): Promise<void> {
@@ -140,50 +190,28 @@ export default class API {
 	public static getUserInfo(): Query<User> {
 		return {
 			key: 'user',
-			exec: async () => {
-				const user = await API.fetch({
-					route: '/auth/me',
-				});
-
-				// this a dummy settings object, we will need to fetch the real one from the API
-				return {
-					id: user.id as number,
-					name: (user.username ?? user.name) as string,
-					email: user.email as string,
-					premium: false,
-					isGuest: user.isGuest as boolean,
-					data: {
-						gamesPlayed: user.partyPlayed as number,
-						xp: 0,
-						createdAt: new Date('2023-04-09T00:00:00.000Z'),
-						avatar: 'https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn',
+			exec: async () =>
+				API.fetch(
+					{
+						route: '/auth/me',
 					},
-				} as User;
-			},
+					{ handler: UserHandler }
+				),
 		};
 	}
 
 	public static getUserSettings(): Query<UserSettings> {
 		return {
 			key: 'settings',
-			exec: async () => {
-				const settings = await API.fetch({
-					route: '/auth/me/settings',
-				});
-
-				return {
-					notifications: {
-						pushNotif: settings.pushNotification,
-						emailNotif: settings.emailNotification,
-						trainNotif: settings.trainingNotification,
-						newSongNotif: settings.newSongNotification,
+			exec: () =>
+				API.fetch(
+					{
+						route: '/auth/me/settings',
 					},
-					recommendations: settings.recommendations,
-					weeklyReport: settings.weeklyReport,
-					leaderBoard: settings.leaderBoard,
-					showActivity: settings.showActivity,
-				};
-			},
+					{
+						handler: UserSettingsHandler,
+					}
+				),
 		};
 	}
 
@@ -222,28 +250,15 @@ export default class API {
 	public static getAllSongs(): Query<Song[]> {
 		return {
 			key: 'songs',
-			exec: async () => {
-				const songs = await API.fetch({
-					route: '/song',
-				});
-
-				// this is a dummy illustration, we will need to fetch the real one from the API
-				return songs.data.map(
-					// To be fixed with #168
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					(song: any) =>
-						({
-							id: song.id as number,
-							name: song.name as string,
-							artistId: song.artistId as number,
-							albumId: song.albumId as number,
-							genreId: song.genreId as number,
-							details: song.difficulties,
-							cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-							metrics: {},
-						} as Song)
-				);
-			},
+			exec: () =>
+				API.fetch(
+					{
+						route: '/song',
+					},
+					{
+						handler: PlageHandler(SongHandler),
+					}
+				).then(({ data }) => data),
 		};
 	}
 
@@ -254,22 +269,13 @@ export default class API {
 	public static getSong(songId: number): Query<Song> {
 		return {
 			key: ['song', songId],
-			exec: async () => {
-				const song = await API.fetch({
-					route: `/song/${songId}`,
-				});
-
-				// this is a dummy illustration, we will need to fetch the real one from the API
-				return {
-					id: song.id as number,
-					name: song.name as string,
-					artistId: song.artistId as number,
-					albumId: song.albumId as number,
-					genreId: song.genreId as number,
-					details: song.difficulties,
-					cover: `${baseAPIUrl}/song/${song.id}/illustration`,
-				} as Song;
-			},
+			exec: async () =>
+				API.fetch(
+					{
+						route: `/song/${songId}`,
+					},
+					{ handler: SongHandler }
+				),
 		};
 	}
 
@@ -292,10 +298,14 @@ export default class API {
 		return {
 			key: ['midi', songId],
 			exec: () =>
-				API.fetch({
-					route: `/song/${songId}/midi`,
-					raw: true,
-				}),
+				API.fetch(
+					{
+						route: `/song/${songId}/midi`,
+					},
+					{
+						raw: true,
+					}
+				),
 		};
 	}
 
@@ -304,7 +314,7 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static getArtistIllustration(artistId: number): string {
-		return `${baseAPIUrl}/artist/${artistId}/illustration`;
+		return `${API.baseUrl}/artist/${artistId}/illustration`;
 	}
 
 	/**
@@ -312,7 +322,7 @@ export default class API {
 	 * @param songId the id to find the song
 	 */
 	public static getGenreIllustration(genreId: number): string {
-		return `${baseAPIUrl}/genre/${genreId}/illustration`;
+		return `${API.baseUrl}/genre/${genreId}/illustration`;
 	}
 
 	/**
@@ -323,10 +333,12 @@ export default class API {
 		return {
 			key: ['musixml', songId],
 			exec: () =>
-				API.fetch({
-					route: `/song/${songId}/musicXml`,
-					raw: true,
-				}),
+				API.fetch(
+					{
+						route: `/song/${songId}/musicXml`,
+					},
+					{ raw: true }
+				),
 		};
 	}
 
@@ -337,9 +349,12 @@ export default class API {
 		return {
 			key: ['artist', artistId],
 			exec: () =>
-				API.fetch({
-					route: `/artist/${artistId}`,
-				}),
+				API.fetch(
+					{
+						route: `/artist/${artistId}`,
+					},
+					{ handler: ArtistHandler }
+				),
 		};
 	}
 
@@ -368,13 +383,16 @@ export default class API {
 	 * Retrieve a song's play history
 	 * @param songId the id to find the song
 	 */
-	public static getSongHistory(songId: number): Query<{ best: number; history: SongHistory[] }> {
+	public static getSongHistory(songId: number) {
 		return {
 			key: ['song', 'history', songId],
 			exec: () =>
-				API.fetch({
-					route: `/song/${songId}/history`,
-				}),
+				API.fetch(
+					{
+						route: `/song/${songId}/history`,
+					},
+					{ handler: SongHistoryHandler }
+				),
 		};
 	}
 
@@ -386,9 +404,12 @@ export default class API {
 		return {
 			key: ['search', 'song', query],
 			exec: () =>
-				API.fetch({
-					route: `/search/songs/${query}`,
-				}),
+				API.fetch(
+					{
+						route: `/search/songs/${query}`,
+					},
+					{ handler: ListHandler(SongHandler) }
+				),
 		};
 	}
 
@@ -400,9 +421,12 @@ export default class API {
 		return {
 			key: ['search', 'artist', query],
 			exec: () =>
-				API.fetch({
-					route: `/search/artists/${query}`,
-				}),
+				API.fetch(
+					{
+						route: `/search/artists/${query}`,
+					},
+					{ handler: ListHandler(ArtistHandler) }
+				),
 		};
 	}
 
@@ -410,31 +434,27 @@ export default class API {
 	 * Search Album by name
 	 * @param query the string used to find the album
 	 */
-	public static searchAlbum(
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		query: string
-	): Query<Album[]> {
+	public static searchAlbum(query: string): Query<Album[]> {
 		return {
 			key: ['search', 'album', query],
-			exec: async () =>
-				[
-					{
-						id: 1,
-						name: 'Super Trooper',
-					},
-					{
-						id: 2,
-						name: 'Kingdom Heart 365/2 OST',
-					},
-					{
-						id: 3,
-						name: 'The Legend Of Zelda Ocarina Of Time OST',
-					},
-					{
-						id: 4,
-						name: 'Random Access Memories',
-					},
-				] as Album[],
+			exec: async () => [
+				{
+					id: 1,
+					name: 'Super Trooper',
+				},
+				{
+					id: 2,
+					name: 'Kingdom Heart 365/2 OST',
+				},
+				{
+					id: 3,
+					name: 'The Legend Of Zelda Ocarina Of Time OST',
+				},
+				{
+					id: 4,
+					name: 'Random Access Memories',
+				},
+			],
 		};
 	}
 
@@ -445,9 +465,12 @@ export default class API {
 		return {
 			key: ['search', 'genre', query],
 			exec: () =>
-				API.fetch({
-					route: `/search/genres/${query}`,
-				}),
+				API.fetch(
+					{
+						route: `/search/genres/${query}`,
+					},
+					{ handler: ListHandler(GenreHandler) }
+				),
 		};
 	}
 
@@ -459,7 +482,7 @@ export default class API {
 		return {
 			key: ['lesson', lessonId],
 			exec: async () => ({
-				title: 'Song',
+				name: 'Song',
 				description: 'A song',
 				requiredLevel: 1,
 				mainSkill: 'lead-head-change',
@@ -478,22 +501,12 @@ export default class API {
 		return {
 			key: ['search', 'history', 'skip', skip, 'take', take],
 			exec: () =>
-				API.fetch({
-					route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
-					method: 'GET',
-				}).then((value) =>
-					value.map(
-						// To be fixed with #168
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						(e: any) =>
-							({
-								id: e.id,
-								query: e.query,
-								type: e.type,
-								userId: e.userId,
-								timestamp: new Date(e.searchDate),
-							} as SearchHistory)
-					)
+				API.fetch(
+					{
+						route: `/history/search?skip=${skip ?? 0}&take=${take ?? 5}`,
+						method: 'GET',
+					},
+					{ handler: ListHandler(SearchHistoryHandler) }
 				),
 		};
 	}
@@ -528,13 +541,16 @@ export default class API {
 	 * Retrieve the authenticated user's play history
 	 * * @returns an array of songs
 	 */
-	public static getUserPlayHistory(): Query<SongHistory[]> {
+	public static getUserPlayHistory(): Query<SongHistoryItem[]> {
 		return {
 			key: ['history'],
 			exec: () =>
-				API.fetch({
-					route: '/history',
-				}),
+				API.fetch(
+					{
+						route: '/history',
+					},
+					{ handler: ListHandler(SongHistoryItemHandler) }
+				),
 		};
 	}
 
@@ -555,36 +571,32 @@ export default class API {
 	}
 
 	public static async updateUserEmail(newEmail: string): Promise<User> {
-		const rep = await API.fetch({
-			route: '/auth/me',
-			method: 'PUT',
-			body: {
-				email: newEmail,
+		return API.fetch(
+			{
+				route: '/auth/me',
+				method: 'PUT',
+				body: {
+					email: newEmail,
+				},
 			},
-		});
-
-		if (rep.error) {
-			throw new Error(rep.error);
-		}
-		return rep;
+			{ handler: UserHandler }
+		);
 	}
 
 	public static async updateUserPassword(
 		oldPassword: string,
 		newPassword: string
 	): Promise<User> {
-		const rep = await API.fetch({
-			route: '/auth/me',
-			method: 'PUT',
-			body: {
-				oldPassword: oldPassword,
-				password: newPassword,
+		return API.fetch(
+			{
+				route: '/auth/me',
+				method: 'PUT',
+				body: {
+					oldPassword: oldPassword,
+					password: newPassword,
+				},
 			},
-		});
-
-		if (rep.error) {
-			throw new Error(rep.error);
-		}
-		return rep;
+			{ handler: UserHandler }
+		);
 	}
 }
