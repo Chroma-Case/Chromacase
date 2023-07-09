@@ -1,4 +1,4 @@
-import { VStack, Text, Box, Image, Heading, IconButton, Icon, Container, Center, useBreakpointValue } from 'native-base';
+import { VStack, Text, Box, Image, Heading, IconButton, Icon, Container, Center, useBreakpointValue, ScrollView } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native';
 import { useQuery } from '../Queries';
@@ -8,6 +8,99 @@ import Song, { SongWithArtist } from '../models/Song';
 import SongRow from '../components/SongRow';
 import { Key, useEffect, useState } from 'react';
 import { useNavigation } from '../Navigation';
+
+const songs: Song[] = [
+	{
+		id: 1,
+		name: "Dancing Queen",
+		artistId: 1,
+		albumId: 1,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 2,
+		name: "Mamma Mia",
+		artistId: 1,
+		albumId: 1,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 3,
+		name: "Take a Chance on Me",
+		artistId: 1,
+		albumId: 2,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 4,
+		name: "Fernando",
+		artistId: 1,
+		albumId: 3,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 5,
+		name: "Waterloo",
+		artistId: 1,
+		albumId: 4,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 6,
+		name: "The Winner Takes It All",
+		artistId: 1,
+		albumId: 5,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 7,
+		name: "SOS",
+		artistId: 1,
+		albumId: 6,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 8,
+		name: "Knowing Me, Knowing You",
+		artistId: 1,
+		albumId: 7,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 9,
+		name: "Money, Money, Money",
+		artistId: 1,
+		albumId: 8,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+	{
+		id: 10,
+		name: "Gimme! Gimme! Gimme! (A Man After Midnight)",
+		artistId: 1,
+		albumId: 9,
+		genreId: 1,
+		cover: undefined,
+		details: undefined,
+	},
+];
 
 const ArtistDetailsView = ({ artistId }: any) => {
 	const { isLoading: isLoadingArt, data: artistData, error: isErrorArt } = useQuery(API.getArtist(artistId));
@@ -25,10 +118,10 @@ const ArtistDetailsView = ({ artistId }: any) => {
 	}
 
 	return (
-		<SafeAreaView>
+		<ScrollView>
 			<Box>
 				<Image
-				source={{ uri: 'https://picsum.photos/200' }}
+				source={{ uri: 'https://picsum.photos/720' }}
 				alt={artistData?.name}
 				size={'100%'}
 				height={isMobileView ? 200 : 300}
@@ -36,9 +129,9 @@ const ArtistDetailsView = ({ artistId }: any) => {
 				resizeMode='cover'
 				/>
 				<Box>
-					<Heading mt={-20} ml={3} fontSize={50} >{artistData?.name}</Heading>
-					<Box>
-						{songData.map((comp: Song | SongWithArtist, index: Key | null | undefined) => (
+					<Heading mt={-20} ml={3} fontSize={50}>{artistData?.name}</Heading>
+					<ScrollView mt={3}>
+						{songs.map((comp: Song | SongWithArtist, index: Key | null | undefined) => (
 							<SongRow
 								key={index}
 								song={comp}
@@ -49,10 +142,10 @@ const ArtistDetailsView = ({ artistId }: any) => {
 							/>
 							))
 						}
-					</Box>
+					</ScrollView>
 				</Box>
 			</Box>
-		</SafeAreaView>
+		</ScrollView>
 	);
 };
 

@@ -252,13 +252,13 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 			</Text>
 			{artistData?.length ? (
 				<CardGridCustom
-					content={artistData.slice(0, props.maxItems ?? artistData.length).map((a) => ({
-						image: API.getArtistIllustration(a.id),
-						name: a.name,
-						id: a.id,
+					content={artistData.slice(0, props.maxItems ?? artistData.length).map((artistData) => ({
+						image: API.getArtistIllustration(artistData.id),
+						name: artistData.name,
+						id: artistData.id,
 						onPress: () => {
-							API.createSearchHistoryEntry(a.name, 'artist');
-							navigation.navigate('Artist', { artistId: a.id });
+							API.createSearchHistoryEntry(artistData.name, 'artist');
+							navigation.navigate('Artist', { artistId: artistData.id });
 						},
 					}))}
 					cardComponent={ArtistCard}
@@ -287,7 +287,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 						id: g.id,
 						onPress: () => {
 							API.createSearchHistoryEntry(g.name, 'genre');
-							navigation.navigate('Home');
+							navigation.navigate('Genre', {genreId: g.id});
 						},
 					}))}
 					cardComponent={GenreCard}
