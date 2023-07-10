@@ -5,6 +5,9 @@ import { LoadingView } from '../components/Loading';
 import { useNavigation } from '../Navigation';
 import API from '../API';
 import Artist from '../models/Artist';
+import ArtistCard from '../components/ArtistCard';
+import CardGridCustom from '../components/CardGridCustom';
+import { translate } from '../i18n/i18n';
 
 const colorRange = [
 	{
@@ -121,7 +124,7 @@ const GenreDetailsView = ({ genreId }: any) => {
 			size={'100%'}
 			height={isMobileView ? 200 : 300}
 			width={'100%'}
-			backgroundColor={'#20c997'}
+			backgroundColor={colorRange[Math.floor(Math.random() * 5)]?.code ?? '#364fc7'}
 			/>
 			<Flex
 				flexWrap="wrap"
@@ -130,7 +133,22 @@ const GenreDetailsView = ({ genreId }: any) => {
 				mt={4}
 			>
 				<Box>
-					
+				{rockArtists?.length ? (
+				<CardGridCustom
+					content={rockArtists.slice(0, rockArtists.length).map((artistData) => ({
+						image: API.getArtistIllustration(artistData.id),
+						name: artistData.name,
+						id: artistData.id,
+						onPress: () => {
+							API.createSearchHistoryEntry(artistData.name, 'artist');
+							navigation.navigate('Artist', { artistId: artistData.id });
+						},
+					}))}
+					cardComponent={ArtistCard}
+				/>
+			) : (
+				<Text>{translate('errNoResults')}</Text>
+			)}
 				</Box>
 				<Box>
 					

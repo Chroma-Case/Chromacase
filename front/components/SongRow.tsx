@@ -20,8 +20,8 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
 					source={{ uri: song.cover }}
 					alt={song.name}
-                    borderColor={'white'}
-                    borderWidth={1}
+					borderColor={'white'}
+					borderWidth={1}
 				/>
 				<HStack
 					style={{
@@ -61,7 +61,7 @@ const SongRow = ({ song, onPress }: SongRowProps) => {
 					colorScheme="primary"
 					variant={"outline"}
 					size="sm"
-                    mr={5}
+					mr={5}
 					onPress={onPress}
 				/>
 			</HStack>
