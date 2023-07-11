@@ -8,6 +8,25 @@ import Song, { SongWithArtist } from '../models/Song';
 import SongRow from '../components/SongRow';
 import { Key, useEffect, useState } from 'react';
 import { useNavigation } from '../Navigation';
+import { ImageBackground } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+const colorRange = [
+	{
+		code: '#364fc7',
+	},
+	{
+		code: '#5c940d',
+	},
+	{
+		code: '#c92a2a',
+	},
+	{
+		code: '#d6336c',
+	},
+	{
+		code: '#20c997'
+	}
+]
 
 const songs: Song[] = [
 	{
@@ -119,7 +138,14 @@ const ArtistDetailsView = ({ artistId }: any) => {
 
 	return (
 		<ScrollView>
-			<Box>
+			<ImageBackground
+    style={{width : '100%', height: isMobileView ? 200 : 300}}
+    source={{uri : "https://picsum.photos/720"}}>
+    <LinearGradient 
+        colors={['#00000000', '#000000']} 
+        style={{height : '100%', width : '100%'}}/>
+</ImageBackground>
+			{/* <Box>
 				<Image
 				source={{ uri: 'https://picsum.photos/720' }}
 				alt={artistData?.name}
@@ -127,7 +153,7 @@ const ArtistDetailsView = ({ artistId }: any) => {
 				height={isMobileView ? 200 : 300}
 				width={'100%'}
 				resizeMode='cover'
-				/>
+				/> */}
 				<Box>
 					<Heading mt={-20} ml={3} fontSize={50}>{artistData?.name}</Heading>
 					<ScrollView mt={3}>
@@ -144,7 +170,7 @@ const ArtistDetailsView = ({ artistId }: any) => {
 						}
 					</ScrollView>
 				</Box>
-			</Box>
+			{/* </Box> */}
 		</ScrollView>
 	);
 };

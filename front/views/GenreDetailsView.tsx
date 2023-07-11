@@ -124,7 +124,13 @@ const GenreDetailsView = ({ genreId }: any) => {
 			size={'100%'}
 			height={isMobileView ? 200 : 300}
 			width={'100%'}
-			backgroundColor={colorRange[Math.floor(Math.random() * 5)]?.code ?? '#364fc7'}
+			// backgroundColor={colorRange[Math.floor(Math.random() * 5)]?.code ?? '#364fc7'}
+			bg={{
+				linearGradient: {
+					colors: [colorRange[Math.floor(Math.random() * 5)]?.code ?? '#364fc7', 'black'],
+					start: [0, 0],
+					end: [0, 1],
+				},}}
 			/>
 			<Flex
 				flexWrap="wrap"
