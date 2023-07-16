@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
-import API, { APIError, baseAPIUrl } from '../API';
+import API, { APIError } from '../API';
 import { setAccessToken } from '../state/UserSlice';
 import { Center, Button, Text } from 'native-base';
 import SigninForm from '../components/forms/signinform';
@@ -62,7 +62,7 @@ const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) =
 				variant="outline"
 				marginTop={5}
 				colorScheme="primary"
-				onPress={() => Linking.openURL(`${baseAPIUrl}/auth/login/google`)}
+				onPress={() => Linking.openURL(`${API.baseUrl}/auth/login/google`)}
 			/>
 			{mode === 'signin' ? (
 				<SigninForm
