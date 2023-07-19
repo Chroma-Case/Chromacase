@@ -29,6 +29,7 @@ import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
 import PartitionView from '../components/PartitionView';
+import PartitionCoord from '../components/PartitionCoord';
 import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
@@ -268,13 +269,21 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				</Animated.View>
 			</HStack>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				<PartitionView
+				{/* <PartitionView
 					file={musixml.data}
 					onPartitionReady={() => setPartitionRendered(true)}
 					timestamp={Math.max(0, time)}
 					onEndReached={() => {
 						onEnd();
 					}}
+				/> */}
+				<PartitionCoord
+					file={musixml.data}
+					timestamp={Math.max(0, time)}
+					onEndReached={() => {
+						onEnd();
+					}}
+					onPartitionReady={() => setPartitionRendered(true)}
 				/>
 				{!partitionRendered && <LoadingComponent />}
 			</View>

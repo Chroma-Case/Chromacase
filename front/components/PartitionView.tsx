@@ -17,7 +17,7 @@ import * as SAC from 'standardized-audio-context';
 type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
 	file: string;
-	onPartitionReady: () => void;
+	onPartitionReady: (base64data: string) => void;
 	onEndReached: () => void;
 	// Timestamp of the play session, in milisecond
 	timestamp: number;
@@ -33,6 +33,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	const OSMD_DIV_ID = 'osmd-div';
 	const options: IOSMDOptions = {
 		darkMode: colorScheme == 'dark',
+		backend: 'canvas',
 		drawComposer: false,
 		drawCredits: false,
 		drawLyrics: false,
@@ -68,14 +69,14 @@ const PartitionView = (props: PartitionViewProps) => {
 				// Put your hands together for https://github.com/jimutt/osmd-audio-player/blob/master/src/internals/noteHelpers.ts
 				const fixedKey =
 					note.ParentVoiceEntry.ParentVoice.Parent.SubInstruments.at(0)?.fixedKey ?? 0;
-				const midiNumber = note.halfTone - fixedKey * 12;
-				// console.log('Expecting midi ' + midiNumber);
-				const duration = getActualNoteLength(note);
-				const gain = note.ParentVoiceEntry.ParentVoice.Volume;
-				soundPlayer!.play(midiNumber.toString(), audioContext.currentTime, {
-					duration,
-					gain,
-				});
+				// const midiNumber = note.halfTone - fixedKey * 12;
+				// // console.log('Expecting midi ' + midiNumber);
+				// const duration = getActualNoteLength(note);
+				// const gain = note.ParentVoiceEntry.ParentVoice.Volume;
+				// soundPlayer!.play(midiNumber.toString(), audioContext.currentTime, {
+				// 	duration,
+				// 	gain,
+				// });
 			});
 	};
 	const getShortedNoteUnderCursor = () => {
@@ -88,16 +89,29 @@ const PartitionView = (props: PartitionViewProps) => {
 	useEffect(() => {
 		const _osmd = new OSMD(OSMD_DIV_ID, options);
 		Promise.all([
-			SoundFont.instrument(audioContext as unknown as AudioContext, 'electric_piano_1'),
+			// SoundFont.instrument(audioContext as unknown as AudioContext, 'electric_piano_1'),
 			_osmd.load(props.file),
 		]).then(([player]) => {
-			setSoundPlayer(player);
+			// setSoundPlayer(player);
 			_osmd.render();
+			_osmd.cursor.show();
+			// get the current cursor position
+			const curPos = [];
+			while (!_osmd.cursor.iterator.EndReached) {
+				curPos.push(_osmd.cursor.cursorElement.offsetLeft);
+				_osmd.cursor.next();
+			}
+			console.log('curPos', curPos);
+			_osmd.cursor.reset();
 			_osmd.cursor.hide();
+			console.log("timestamp cursor", _osmd.cursor.iterator.CurrentSourceTimestamp);
+			console.log("timestamp cursor", _osmd.cursor.iterator.CurrentVoiceEntries);
+			console.log("current measure index", _osmd.cursor.iterator.CurrentMeasureIndex);
+			const osmdCanvas = document.querySelector( "#" + OSMD_DIV_ID + " canvas");
 			// Ty https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL77C12-L77C63
 			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
 			setWholeNoteLength(Math.round((60 / bpm) * 4000));
-			props.onPartitionReady();
+			props.onPartitionReady(osmdCanvas.toDataURL());
 			// Do not show cursor before actuall start
 		});
 		setOsmd(_osmd);
@@ -114,7 +128,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	}, [dimensions]);
 
 	useEffect(() => {
-		if (!osmd || !soundPlayer) {
+		if (!osmd) {
 			return;
 		}
 		if (props.timestamp > 0 && osmd.cursor.hidden && !osmd.cursor.iterator.EndReached) {
@@ -138,7 +152,7 @@ const PartitionView = (props: PartitionViewProps) => {
 			osmd.cursor.next();
 			if (osmd.cursor.iterator.EndReached) {
 				osmd.cursor.hide(); // Lousy fix for https://github.com/opensheetmusicdisplay/opensheetmusicdisplay/issues/1338
-				soundPlayer.stop();
+				// soundPlayer.stop();
 				props.onEndReached();
 			} else {
 				// Shamelessly stolen from https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL223C7-L224C1

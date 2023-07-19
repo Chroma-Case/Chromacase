@@ -48,6 +48,7 @@
 		"moti": "^0.22.0",
 		"native-base": "^3.4.17",
 		"opensheetmusicdisplay": "^1.7.5",
+		"phaser": "^3.60.0",
 		"react": "18.1.0",
 		"react-dom": "18.1.0",
 		"react-i18next": "^11.18.3",
