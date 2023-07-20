@@ -13,11 +13,12 @@ import useColorScheme from '../hooks/colorScheme';
 import { useWindowDimensions } from 'react-native';
 import SoundFont from 'soundfont-player';
 import * as SAC from 'standardized-audio-context';
+import { PianoCursorPosition } from './PartitionVisualizer/PhaserCanvas';
 
 type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
 	file: string;
-	onPartitionReady: (base64data: string) => void;
+	onPartitionReady: (base64data: string, cursorInfos: PianoCursorPosition[]) => void;
 	onEndReached: () => void;
 	// Timestamp of the play session, in milisecond
 	timestamp: number;
@@ -104,14 +105,22 @@ const PartitionView = (props: PartitionViewProps) => {
 			console.log('curPos', curPos);
 			_osmd.cursor.reset();
 			_osmd.cursor.hide();
-			console.log("timestamp cursor", _osmd.cursor.iterator.CurrentSourceTimestamp);
-			console.log("timestamp cursor", _osmd.cursor.iterator.CurrentVoiceEntries);
-			console.log("current measure index", _osmd.cursor.iterator.CurrentMeasureIndex);
-			const osmdCanvas = document.querySelector( "#" + OSMD_DIV_ID + " canvas");
+			console.log('timestamp cursor', _osmd.cursor.iterator.CurrentSourceTimestamp);
+			console.log('timestamp cursor', _osmd.cursor.iterator.CurrentVoiceEntries);
+			console.log('current measure index', _osmd.cursor.iterator.CurrentMeasureIndex);
+			const osmdCanvas = document.querySelector('#' + OSMD_DIV_ID + ' canvas');
 			// Ty https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL77C12-L77C63
 			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
 			setWholeNoteLength(Math.round((60 / bpm) * 4000));
-			props.onPartitionReady(osmdCanvas.toDataURL());
+			props.onPartitionReady(
+				osmdCanvas.toDataURL(),
+				curPos.map((pos) => {
+					return {
+						x: pos,
+						timing: Math.floor(Math.random() * 600) + 100,
+					};
+				})
+			);
 			// Do not show cursor before actuall start
 		});
 		setOsmd(_osmd);

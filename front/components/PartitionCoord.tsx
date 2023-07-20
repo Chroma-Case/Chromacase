@@ -1,6 +1,7 @@
 import * as React from 'react';
 import PartitionView from './PartitionView';
 import PhaserCanvas from './PartitionVisualizer/PhaserCanvas';
+import { PianoCursorPosition } from './PartitionVisualizer/PhaserCanvas';
 
 type PartitionCoordProps = {
 	// The Buffer of the MusicXML file retreived from the API
@@ -17,22 +18,29 @@ const PartitionCoord = ({
 	onEndReached,
 	timestamp,
 }: PartitionCoordProps) => {
-	const [partitionB64, setPartitionB64] = React.useState<string | null>(null);
+	const [partitionData, setPartitionData] = React.useState<
+		[string, PianoCursorPosition[]] | null
+	>(null);
 
 	return (
 		<>
-			{!partitionB64 && (
+			{!partitionData && (
 				<PartitionView
 					file={file}
-					onPartitionReady={(base64data) => {
-						setPartitionB64(base64data);
+					onPartitionReady={(base64data, a) => {
+						setPartitionData([base64data, a]);
 						onPartitionReady();
 					}}
 					onEndReached={onEndReached}
 					timestamp={timestamp}
 				/>
 			)}
-			{partitionB64 && <PhaserCanvas partitionB64={partitionB64} cursorPositions={[]} />}
+			{partitionData && (
+				<PhaserCanvas
+					partitionB64={partitionData?.[0]}
+					cursorPositions={partitionData?.[1]}
+				/>
+			)}
 		</>
 	);
 };
