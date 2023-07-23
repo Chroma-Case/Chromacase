@@ -1,6 +1,7 @@
 import Model, { ModelValidator } from './Model';
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
+import API from '../API';
 
 export const UserValidator = yup
 	.object({
@@ -23,7 +24,7 @@ export const UserHandler: ResponseHandler<yup.InferType<typeof UserValidator>, U
 			gamesPlayed: value.partyPlayed as number,
 			xp: 0,
 			createdAt: new Date('2023-04-09T00:00:00.000Z'),
-			avatar: 'https://imgs.search.brave.com/RnQpFhmAFvuQsN_xTw7V-CN61VeHDBg2tkEXnKRYHAE/rs:fit:768:512:1/g:ce/aHR0cHM6Ly96b29h/c3Ryby5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDIv/Q2FzdG9yLTc2OHg1/MTIuanBn',
+			avatar: `${API.baseUrl}/users/${value.id}/picture`,
 		},
 	}),
 };
