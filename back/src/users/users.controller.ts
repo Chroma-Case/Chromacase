@@ -20,4 +20,9 @@ export class UsersController {
 		if (!ret) throw new NotFoundException();
 		return ret;
 	}
+
+	@Get(':id/picture')
+	async getPicture(@Param('id') id: number) {
+		return await this.usersService.getProfilePicture(+id);
+	}
 }

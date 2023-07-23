@@ -44,16 +44,16 @@ export class AuthController {
 		private settingsService: SettingsService,
 	) {}
 
-	@Get("login/google")
+	@Get('login/google')
 	@UseGuards(AuthGuard('google'))
-	googleLogin() { }
+	googleLogin() {}
 
-	@Get("logged/google")
+	@Get('logged/google')
 	@UseGuards(AuthGuard('google'))
 	async googleLoginCallbakc(@Req() req: any) {
-		let user = await this.usersService.user({googleID: req.user.googleID});
+		let user = await this.usersService.user({ googleID: req.user.googleID });
 		if (!user) {
-			user = await this.usersService.createUser(req.user)
+			user = await this.usersService.createUser(req.user);
 			await this.settingsService.createUserSetting(user.id);
 		}
 		return this.authService.login(user);
@@ -62,9 +62,9 @@ export class AuthController {
 	@Post('register')
 	async register(@Body() registerDto: RegisterDto): Promise<void> {
 		try {
-			const user = await this.usersService.createUser(registerDto)
+			const user = await this.usersService.createUser(registerDto);
 			await this.settingsService.createUserSetting(user.id);
-		} catch(e) {
+		} catch (e) {
 			console.error(e);
 			throw new BadRequestException();
 		}
@@ -84,6 +84,15 @@ export class AuthController {
 		const user = await this.usersService.createGuest();
 		await this.settingsService.createUserSetting(user.id);
 		return this.authService.login(user);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'The user profile picture' })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Get('me/picture')
+	async getProfilePicture(@Request() req: any) {
+		return await this.usersService.getProfilePicture(req.user.id);
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -133,25 +142,28 @@ export class AuthController {
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({description: 'Successfully edited settings', type: Setting})
-	@ApiUnauthorizedResponse({description: 'Invalid token'})
+	@ApiOkResponse({ description: 'Successfully edited settings', type: Setting })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Patch('me/settings')
 	udpateSettings(
 		@Request() req: any,
-		@Body() settingUserDto: UpdateSettingDto): Promise<Setting> {
+		@Body() settingUserDto: UpdateSettingDto,
+	): Promise<Setting> {
 		return this.settingsService.updateUserSettings({
-			where: { userId: +req.user.id},
+			where: { userId: +req.user.id },
 			data: settingUserDto,
 		});
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({description: 'Successfully edited settings', type: Setting})
-	@ApiUnauthorizedResponse({description: 'Invalid token'})
+	@ApiOkResponse({ description: 'Successfully edited settings', type: Setting })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me/settings')
 	async getSettings(@Request() req: any): Promise<Setting> {
-		const result = await this.settingsService.getUserSetting({ userId: +req.user.id });
+		const result = await this.settingsService.getUserSetting({
+			userId: +req.user.id,
+		});
 		if (!result) throw new NotFoundException();
 		return result;
 	}
