@@ -115,16 +115,13 @@ export class AuthController {
 				.addFileTypeValidator({
 					fileType: 'jpeg',
 				})
-				.addMaxSizeValidator({
-					maxSize: 5000,
-				})
 				.build({
 					errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
 				}),
 		)
 		file: Express.Multer.File,
 	) {
-		const path = `/data/${req.user.id}.png`;
+		const path = `/data/${req.user.id}.jpg`
 		writeFile(path, file.buffer, (err) => {
 			if (err) throw err;
 		});
