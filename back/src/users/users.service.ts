@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+	Injectable,
+	InternalServerErrorException,
+	NotFoundException,
+	StreamableFile,
+} from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
-import { randomUUID } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
+import { createReadStream, existsSync } from 'fs';
 
 @Injectable()
 export class UsersService {
@@ -34,8 +40,7 @@ export class UsersService {
 	}
 
 	async createUser(data: Prisma.UserCreateInput): Promise<User> {
-		if (data.password)
-			data.password = await bcrypt.hash(data.password, 8);
+		if (data.password) data.password = await bcrypt.hash(data.password, 8);
 		return this.prisma.user.create({
 			data,
 		});
@@ -72,5 +77,24 @@ export class UsersService {
 		return this.prisma.user.delete({
 			where,
 		});
+	}
+
+	async getProfilePicture(userId: number) {
+		const path = `/data/${userId}.png`;
+		if (existsSync(path)) {
+			const file = createReadStream(path);
+			return new StreamableFile(file);
+		}
+		// We could not find a profile icon locally, using gravatar instead.
+		const user = await this.user({ id: userId });
+		if (!user) throw new InternalServerErrorException();
+		const hash = createHash('md5')
+			.update(user.email.trim().toLowerCase())
+			.digest('hex');
+		const resp = await fetch(
+			`https://www.gravatar.com/avatar/${hash}.jpg?d=404`,
+		);
+		if (!resp.ok) throw new NotFoundException('No image found for user');
+		return resp.arrayBuffer();
 	}
 }
