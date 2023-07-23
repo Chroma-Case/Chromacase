@@ -1,13 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { PrismaService } from './prisma/prisma.service';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
-	const prismaService = app.get(PrismaService);
-	await prismaService.enableShutdownHooks(app);
+	app.enableShutdownHooks();
 
 	const config = new DocumentBuilder()
 		.setTitle('Chromacase')
