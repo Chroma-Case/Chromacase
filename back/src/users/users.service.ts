@@ -81,10 +81,10 @@ export class UsersService {
 	}
 
 	async getProfilePicture(userId: number, res: any) {
-		const path = `/data/${userId}.png`;
+		const path = `/data/${userId}.jpg`;
 		if (existsSync(path)) {
 			const file = createReadStream(path);
-			return new StreamableFile(file);
+			return file.pipe(res);
 		}
 		// We could not find a profile icon locally, using gravatar instead.
 		const user = await this.user({ id: userId });
