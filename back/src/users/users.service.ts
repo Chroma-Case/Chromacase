@@ -9,6 +9,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { createHash, randomUUID } from 'crypto';
 import { createReadStream, existsSync } from 'fs';
+import fetch from 'node-fetch';
 
 @Injectable()
 export class UsersService {
@@ -79,7 +80,7 @@ export class UsersService {
 		});
 	}
 
-	async getProfilePicture(userId: number) {
+	async getProfilePicture(userId: number, res: any) {
 		const path = `/data/${userId}.png`;
 		if (existsSync(path)) {
 			const file = createReadStream(path);
@@ -92,9 +93,10 @@ export class UsersService {
 			.update(user.email.trim().toLowerCase())
 			.digest('hex');
 		const resp = await fetch(
-			`https://www.gravatar.com/avatar/${hash}.jpg?d=404`,
+			`https://www.gravatar.com/avatar/${hash}.jpg?d=404&s=200`,
 		);
-		if (!resp.ok) throw new NotFoundException('No image found for user');
-		return resp.arrayBuffer();
+		for (const [k, v] of resp.headers)
+			resp.headers.set(k, v);
+		resp.body!.pipe(res);
 	}
 }

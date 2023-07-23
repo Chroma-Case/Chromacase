@@ -17,6 +17,7 @@ import {
 	UploadedFile,
 	HttpStatus,
 	ParseFilePipeBuilder,
+	Response,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -97,8 +98,8 @@ export class AuthController {
 	@ApiOkResponse({ description: 'The user profile picture' })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me/picture')
-	async getProfilePicture(@Request() req: any) {
-		return await this.usersService.getProfilePicture(req.user.id);
+	async getProfilePicture(@Request() req: any, @Response() res: any) {
+		return await this.usersService.getProfilePicture(req.user.id, res);
 	}
 
 	@UseGuards(JwtAuthGuard)
