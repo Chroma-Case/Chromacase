@@ -10,7 +10,7 @@ services:
       - .env
     volumes:
       - ./assets:/assets
-      - data:/data
+      - ./data:/data
   scorometer:
     image: ghcr.io/chroma-case/scorometer:main
     ports:
@@ -44,6 +44,3 @@ services:
       - "back"
     env_file:
       - .env
-
-volumes:
-  data:
