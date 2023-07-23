@@ -13,6 +13,10 @@ import {
 	Patch,
 	NotFoundException,
 	Req,
+	UseInterceptors,
+	UploadedFile,
+	HttpStatus,
+	ParseFilePipeBuilder,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -34,6 +38,8 @@ import { Setting } from 'src/models/setting';
 import { UpdateSettingDto } from 'src/settings/dto/update-setting.dto';
 import { SettingsService } from 'src/settings/settings.service';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { writeFile } from 'fs';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -93,6 +99,34 @@ export class AuthController {
 	@Get('me/picture')
 	async getProfilePicture(@Request() req: any) {
 		return await this.usersService.getProfilePicture(req.user.id);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'The user profile picture' })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Post('me/picture')
+	@UseInterceptors(FileInterceptor('file'))
+	async postProfilePicture(
+		@Request() req: any,
+		@UploadedFile(
+			new ParseFilePipeBuilder()
+				.addFileTypeValidator({
+					fileType: 'jpeg',
+				})
+				.addMaxSizeValidator({
+					maxSize: 5000,
+				})
+				.build({
+					errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+				}),
+		)
+		file: Express.Multer.File,
+	) {
+		const path = `/data/${req.user.id}.png`;
+		writeFile(path, file.buffer, (err) => {
+			if (err) throw err;
+		});
 	}
 
 	@UseGuards(JwtAuthGuard)
