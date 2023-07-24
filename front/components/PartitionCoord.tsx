@@ -31,7 +31,9 @@ const PartitionCoord = ({
 						setPartitionData([base64data, a]);
 						onPartitionReady();
 					}}
-					onEndReached={onEndReached}
+					onEndReached={() => {
+						console.log('osmd end reached');
+					}}
 					timestamp={timestamp}
 				/>
 			)}
@@ -39,6 +41,9 @@ const PartitionCoord = ({
 				<PhaserCanvas
 					partitionB64={partitionData?.[0]}
 					cursorPositions={partitionData?.[1]}
+					onEndReached={() => {
+						onEndReached();
+					}}
 				/>
 			)}
 		</>
