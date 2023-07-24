@@ -2,19 +2,13 @@ import API from '../../API';
 import { useDispatch } from 'react-redux';
 import { unsetAccessToken } from '../../state/UserSlice';
 import React from 'react';
-import { Column, Text, Button, Box, Flex, Center, Heading, Avatar, Popover } from 'native-base';
+import { Column, Text, Button, Box, Flex, Center, Heading, Popover } from 'native-base';
 import TextButton from '../../components/TextButton';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
 import { useQuery } from '../../Queries';
-
-const getInitials = (name: string) => {
-	return name
-		.split(' ')
-		.map((n) => n[0])
-		.join('');
-};
+import UserAvatar from '../../components/UserAvatar';
 
 // Too painful to infer the settings-only, typed navigator. Gave up
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,9 +35,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 				}}
 			>
 				<Center>
-					<Avatar size="2xl" source={{ uri: user.data.avatar }}>
-						{getInitials(user.name)}
-					</Avatar>
+					<UserAvatar size="2xl" />
 				</Center>
 				<ElementList
 					style={{

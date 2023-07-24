@@ -41,7 +41,7 @@ interface User extends Model {
 interface UserData {
 	gamesPlayed: number;
 	xp: number;
-	avatar: string | undefined;
+	avatar: string;
 	createdAt: Date;
 }
 
