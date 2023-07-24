@@ -1,32 +1,21 @@
-import { Box, Image, Text, Icon, Stack, useTheme } from 'native-base';
+import { Box, Image, Text, Icon, Stack } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Translate } from '../i18n/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import API from '../API';
 import TextButton from '../components/TextButton';
 import { RouteProps, useNavigation } from '../Navigation';
 import { Dimensions } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
-import { CardBorderRadius } from '../components/Card';
+import ScoreGraph from '../components/ScoreGraph';
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
 	songId: number;
 }
 
-const formatScoreDate = (playDate: Date): string => {
-	const pad = (n: number) => n.toString().padStart(2, '0');
-	const formattedDate = `${pad(playDate.getDay())}/${pad(
-		playDate.getMonth()
-	)}/${playDate.getFullYear()}`;
-	const formattedTime = `${pad(playDate.getHours())}:${pad(playDate.getMinutes())}`;
-	return `${formattedDate} ${formattedTime}`;
-};
-
 const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
-	const theme = useTheme();
 	const rootComponentPadding = 30;
 	const navigation = useNavigation();
 	// Refetch to update score when coming back from score view
@@ -35,10 +24,6 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 		refetchOnWindowFocus: true,
 	});
 	const scoresQuery = useQuery(API.getSongHistory(props.songId), { refetchOnWindowFocus: true });
-	const scores = useMemo(
-		() => Array.from(scoresQuery.data?.history ?? []).reverse(),
-		[scoresQuery.data]
-	);
 	if (songQuery.isLoading || scoresQuery.isLoading) return <LoadingView />;
 	if (songQuery.isError || scoresQuery.isError) {
 		navigation.navigate('Error');
@@ -129,36 +114,10 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					<Text>{scoresQuery.data?.history.at(0)?.score ?? 0}</Text>
 				</Box>
 			</Box>
-			{(scores?.length ?? 0) > 0 && (
-				<LineChart
-					data={{
-						labels: scores?.map(({ playDate }) => formatScoreDate(playDate)) ?? [],
-						datasets: [
-							{
-								data: scores?.map(({ score }) => score) ?? [],
-							},
-						],
-					}}
+			{scoresQuery.data && (scoresQuery.data?.history?.length ?? 0) > 0 && (
+				<ScoreGraph
+					songHistory={scoresQuery.data}
 					width={Dimensions.get('window').width - rootComponentPadding * 2}
-					height={200} // Completelty arbitrary
-					yAxisSuffix=" pts"
-					chartConfig={{
-						backgroundColor: theme.colors.primary[500],
-						backgroundGradientFrom: theme.colors.primary[500],
-						backgroundGradientTo: theme.colors.primary[500],
-						decimalPlaces: 0,
-						color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-						labelColor: () => theme.colors.white,
-						propsForDots: {
-							r: '6',
-							strokeWidth: '2',
-						},
-					}}
-					bezier
-					style={{
-						margin: 3,
-						borderRadius: CardBorderRadius,
-					}}
 				/>
 			)}
 		</Box>
