@@ -1,20 +1,33 @@
-import { Divider, Box, Image, Text, VStack, PresenceTransition, Icon, Stack } from 'native-base';
+import { Box, Image, Text, Icon, Stack, useTheme } from 'native-base';
 import { useQuery } from '../Queries';
-import LoadingComponent, { LoadingView } from '../components/Loading';
-import React, { useEffect, useState } from 'react';
-import { Translate, translate } from '../i18n/i18n';
-import formatDuration from 'format-duration';
+import { LoadingView } from '../components/Loading';
+import React, { useMemo } from 'react';
+import { Translate } from '../i18n/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import API from '../API';
 import TextButton from '../components/TextButton';
 import { RouteProps, useNavigation } from '../Navigation';
+import { Dimensions } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
+import { CardBorderRadius } from '../components/Card';
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
 	songId: number;
 }
 
+const formatScoreDate = (playDate: Date): string => {
+	const pad = (n: number) => n.toString().padStart(2, '0');
+	const formattedDate = `${pad(playDate.getDay())}/${pad(
+		playDate.getMonth()
+	)}/${playDate.getFullYear()}`;
+	const formattedTime = `${pad(playDate.getHours())}:${pad(playDate.getMinutes())}`;
+	return `${formattedDate} ${formattedTime}`;
+};
+
 const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
+	const theme = useTheme();
+	const rootComponentPadding = 30;
 	const navigation = useNavigation();
 	// Refetch to update score when coming back from score view
 	const songQuery = useQuery(API.getSong(props.songId), { refetchOnWindowFocus: true });
@@ -22,18 +35,17 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 		refetchOnWindowFocus: true,
 	});
 	const scoresQuery = useQuery(API.getSongHistory(props.songId), { refetchOnWindowFocus: true });
-	const [chaptersOpen, setChaptersOpen] = useState(false);
-	useEffect(() => {
-		if (chaptersOpen && !chaptersQuery.data) chaptersQuery.refetch();
-	}, [chaptersOpen]);
-	useEffect(() => {}, [songQuery.isLoading]);
+	const scores = useMemo(
+		() => Array.from(scoresQuery.data?.history ?? []).reverse(),
+		[scoresQuery.data]
+	);
 	if (songQuery.isLoading || scoresQuery.isLoading) return <LoadingView />;
 	if (songQuery.isError || scoresQuery.isError) {
 		navigation.navigate('Error');
 		return <></>;
 	}
 	return (
-		<Box style={{ padding: 30, flexDirection: 'column' }}>
+		<Box style={{ padding: rootComponentPadding, flexDirection: 'column' }}>
 			<Box style={{ flexDirection: 'row', height: '30%' }}>
 				<Box style={{ flex: 3 }}>
 					<Image
@@ -117,42 +129,38 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					<Text>{scoresQuery.data?.history.at(0)?.score ?? 0}</Text>
 				</Box>
 			</Box>
-			{/* <Text style={{ paddingBottom: 10 }}>{songQuery.data!.description}</Text> */}
-			<Box flexDirection="row">
-				<TextButton
-					translate={{ translationKey: 'chapters' }}
-					variant="ghost"
-					onPress={() => setChaptersOpen(!chaptersOpen)}
-					endIcon={
-						<Icon
-							as={Ionicons}
-							name={chaptersOpen ? 'chevron-up-outline' : 'chevron-down-outline'}
-						/>
-					}
+			{(scores?.length ?? 0) > 0 && (
+				<LineChart
+					data={{
+						labels: scores?.map(({ playDate }) => formatScoreDate(playDate)) ?? [],
+						datasets: [
+							{
+								data: scores?.map(({ score }) => score) ?? [],
+							},
+						],
+					}}
+					width={Dimensions.get('window').width - rootComponentPadding * 2}
+					height={200} // Completelty arbitrary
+					yAxisSuffix=" pts"
+					chartConfig={{
+						backgroundColor: theme.colors.primary[500],
+						backgroundGradientFrom: theme.colors.primary[500],
+						backgroundGradientTo: theme.colors.primary[500],
+						decimalPlaces: 0,
+						color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+						labelColor: () => theme.colors.white,
+						propsForDots: {
+							r: '6',
+							strokeWidth: '2',
+						},
+					}}
+					bezier
+					style={{
+						margin: 3,
+						borderRadius: CardBorderRadius,
+					}}
 				/>
-			</Box>
-			<PresenceTransition visible={chaptersOpen} initial={{ opacity: 0 }}>
-				{chaptersQuery.isLoading && <LoadingComponent />}
-				{!chaptersQuery.isLoading && (
-					<VStack flex={1} space={4} padding="4" divider={<Divider />}>
-						{chaptersQuery.data!.map((chapter) => (
-							<Box
-								key={chapter.id}
-								flexGrow={1}
-								flexDirection="row"
-								justifyContent="space-between"
-							>
-								<Text>{chapter.name}</Text>
-								<Text>
-									{`${translate('level')} ${
-										chapter.difficulty
-									} - ${formatDuration((chapter.end - chapter.start) * 1000)}`}
-								</Text>
-							</Box>
-						))}
-					</VStack>
-				)}
-			</PresenceTransition>
+			)}
 		</Box>
 	);
 };
