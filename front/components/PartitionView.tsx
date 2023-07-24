@@ -28,7 +28,7 @@ const PartitionView = (props: PartitionViewProps) => {
 	const [osmd, setOsmd] = useState<OSMD>();
 	const [soundPlayer, setSoundPlayer] = useState<SoundFont.Player>();
 	const audioContext = new SAC.AudioContext();
-	const [wholeNoteLength, setWholeNoteLength] = useState(0); // Length of Whole note, in ms (?)
+	// const [wholeNoteLength, setWholeNoteLength] = useState(0); // Length of Whole note, in ms (?)
 	const colorScheme = useColorScheme();
 	const dimensions = useWindowDimensions();
 	const OSMD_DIV_ID = 'osmd-div';
@@ -45,15 +45,15 @@ const PartitionView = (props: PartitionViewProps) => {
 		autoResize: false,
 	};
 	// Turns note.Length or timestamp in ms
-	const timestampToMs = (timestamp: Fraction) => {
+	const timestampToMs = (timestamp: Fraction, wholeNoteLength: number) => {
 		return timestamp.RealValue * wholeNoteLength;
 	};
-	const getActualNoteLength = (note: Note) => {
-		let duration = timestampToMs(note.Length);
+	const getActualNoteLength = (note: Note, wholeNoteLength: number) => {
+		let duration = timestampToMs(note.Length, wholeNoteLength);
 		if (note.NoteTie) {
 			const firstNote = note.NoteTie.Notes.at(1);
 			if (Object.is(note.NoteTie.StartNote, note) && firstNote) {
-				duration += timestampToMs(firstNote.Length);
+				duration += timestampToMs(firstNote.Length, wholeNoteLength);
 			} else {
 				duration = 0;
 			}
@@ -97,9 +97,38 @@ const PartitionView = (props: PartitionViewProps) => {
 			_osmd.render();
 			_osmd.cursor.show();
 			// get the current cursor position
+			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
+			// setWholeNoteLength(Math.round((60 / bpm) * 4000));
+			const wholeNoteLength = Math.round((60 / bpm) * 4000);
 			const curPos = [];
 			while (!_osmd.cursor.iterator.EndReached) {
-				curPos.push(_osmd.cursor.cursorElement.offsetLeft);
+				const notesToPlay = _osmd.cursor
+					.NotesUnderCursor()
+					.filter((note) => {
+						return note.isRest() == false && note.Pitch;
+					})
+					.map((note) => {
+						return {
+							note: note,
+							duration: getActualNoteLength(note, wholeNoteLength),
+						};
+					});
+				const shortestNotes = _osmd!.cursor
+					.NotesUnderCursor()
+					.sort((n1, n2) => n1.Length.CompareTo(n2.Length))
+					.at(0);
+				const ts = timestampToMs(shortestNotes?.getAbsoluteTimestamp() ?? new Fraction(-1), wholeNoteLength);
+				const sNL = timestampToMs(shortestNotes?.Length ?? new Fraction(-1), wholeNoteLength);
+				curPos.push({
+					offset: _osmd.cursor.cursorElement.offsetLeft,
+					notes: notesToPlay,
+					shortedNotes: shortestNotes,
+					sNinfos: {
+						ts,
+						sNL,
+						isRest: shortestNotes?.isRest(),
+					}
+				});
 				_osmd.cursor.next();
 			}
 			console.log('curPos', curPos);
@@ -110,14 +139,14 @@ const PartitionView = (props: PartitionViewProps) => {
 			console.log('current measure index', _osmd.cursor.iterator.CurrentMeasureIndex);
 			const osmdCanvas = document.querySelector('#' + OSMD_DIV_ID + ' canvas');
 			// Ty https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL77C12-L77C63
-			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
-			setWholeNoteLength(Math.round((60 / bpm) * 4000));
 			props.onPartitionReady(
 				osmdCanvas.toDataURL(),
 				curPos.map((pos) => {
 					return {
-						x: pos,
-						timing: Math.floor(Math.random() * 600) + 100,
+						x: pos.offset,
+						timing: pos.sNinfos.sNL,
+						timestamp: pos.sNinfos.ts,
+						notes: pos.notes,
 					};
 				})
 			);

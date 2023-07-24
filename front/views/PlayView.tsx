@@ -21,7 +21,6 @@ import { transformQuery, useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
 import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
@@ -70,6 +69,14 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
+export const PartitionContext = React.createContext<{
+	// Timestamp of the play session, in milisecond
+	timestamp: number;
+}>({
+	timestamp: 0,
+});
+
+
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -79,7 +86,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
-	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
@@ -218,7 +224,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
-			setTime(() => getElapsedTime()); // Countdown
+			setTime(() =>getElapsedTime()); // Countdown
 		}, 1);
 
 		return () => {
@@ -253,6 +259,11 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
+			<PartitionContext.Provider
+				value={{
+					timestamp: time,
+				}}
+			>
 			<HStack
 				width="100%"
 				justifyContent="center"
@@ -279,7 +290,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				/> */}
 				<PartitionCoord
 					file={musixml.data}
-					timestamp={Math.max(0, time)}
+					// timestamp={Math.max(0, time)}
+					timestamp={0}
 					onEndReached={() => {
 						onEnd();
 					}}
@@ -288,39 +300,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				{!partitionRendered && <LoadingComponent />}
 			</View>
 
-			{isVirtualPianoVisible && (
-				<Column
-					style={{
-						display: 'flex',
-						justifyContent: 'flex-end',
-						alignItems: 'center',
-						height: '20%',
-						width: '100%',
-					}}
-				>
-					<VirtualPiano
-						onNoteDown={(note) => {
-							console.log('On note down', keyToStr(note));
-						}}
-						onNoteUp={(note) => {
-							console.log('On note up', keyToStr(note));
-						}}
-						showOctaveNumbers={true}
-						startNote={Note.C}
-						endNote={Note.B}
-						startOctave={2}
-						endOctave={5}
-						style={{
-							width: '80%',
-							height: '100%',
-						}}
-						highlightedNotes={[
-							{ key: strToKey('D3') },
-							{ key: strToKey('A#'), bgColor: '#00FF00' },
-						]}
-					/>
-				</Column>
-			)}
 			<Box
 				shadow={4}
 				style={{
@@ -364,20 +343,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 										}
 									}}
 								/>
-								<IconButton
-									size="sm"
-									colorScheme="coolGray"
-									variant="solid"
-									icon={
-										<Icon
-											as={MaterialCommunityIcons}
-											name={isVirtualPianoVisible ? 'piano-off' : 'piano'}
-										/>
-									}
-									onPress={() => {
-										setVirtualPianoVisible(!isVirtualPianoVisible);
-									}}
-								/>
 								<Text>
 									{time < 0
 										? paused
@@ -406,6 +371,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					</Row>
 				</Row>
 			</Box>
+			</PartitionContext.Provider>
 		</SafeAreaView>
 	);
 };
