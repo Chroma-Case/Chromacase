@@ -5,8 +5,9 @@ import ResponseHandler from './ResponseHandler';
 export const UserValidator = yup
 	.object({
 		username: yup.string().required(),
-		password: yup.string().required(),
+		password: yup.string().required().nullable(),
 		email: yup.string().required(),
+		googleID: yup.string().required().nullable(),
 		isGuest: yup.boolean().required(),
 		partyPlayed: yup.number().required(),
 	})
@@ -30,6 +31,7 @@ export const UserHandler: ResponseHandler<yup.InferType<typeof UserValidator>, U
 interface User extends Model {
 	name: string;
 	email: string;
+	googleID: string | null;
 	isGuest: boolean;
 	premium: boolean;
 	data: UserData;

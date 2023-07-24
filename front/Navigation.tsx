@@ -28,6 +28,7 @@ import { Button, Center, VStack } from 'native-base';
 import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
 import ErrorView from './views/ErrorView';
+import GoogleView from './views/GoogleView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -99,6 +100,11 @@ const publicRoutes = () =>
 			component: ProfileErrorView,
 			options: { title: 'Oops', headerShown: false },
 			link: undefined,
+		},
+		Google: {
+			component: GoogleView,
+			options: { title: 'Google signin', headerShown: false },
+			link: '/logged/google',
 		},
 	} as const);
 
