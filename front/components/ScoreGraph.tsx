@@ -61,6 +61,9 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 			bezier
 			style={{
 				margin: 3,
+				shadowColor: theme.colors.primary[400],
+				shadowOpacity: 1,
+				shadowRadius: 20,
 				borderRadius: CardBorderRadius,
 			}}
 		/>
