@@ -1,7 +1,6 @@
 import { Box, Image, Text, Icon, Stack } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
-import React, { useState } from 'react';
 import { Translate } from '../i18n/i18n';
 import { Ionicons } from '@expo/vector-icons';
 import API from '../API';
@@ -22,7 +21,6 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	const chaptersQuery = useQuery(API.getSongChapters(props.songId), {
 		refetchOnWindowFocus: true,
 	});
-	const [containerWidth, setContainerWidth] = useState(0);
 	const scoresQuery = useQuery(API.getSongHistory(props.songId), { refetchOnWindowFocus: true });
 	if (songQuery.isLoading || scoresQuery.isLoading) return <LoadingView />;
 	if (songQuery.isError || scoresQuery.isError) {
@@ -31,7 +29,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 	}
 	return (
 		<Box style={{ padding: rootComponentPadding, flexDirection: 'column' }}>
-			<Box style={{ flexDirection: 'row', height: '30%' }} onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}>
+			<Box style={{ flexDirection: 'row', height: '30%' }}>
 				<Box style={{ flex: 3 }}>
 					<Image
 						source={{ uri: songQuery.data!.cover }}
@@ -115,10 +113,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 				</Box>
 			</Box>
 			{scoresQuery.data && (scoresQuery.data?.history?.length ?? 0) > 0 && (
-				<ScoreGraph
-					songHistory={scoresQuery.data}
-					width={containerWidth}
-				/>
+				<ScoreGraph songHistory={scoresQuery.data} />
 			)}
 		</Box>
 	);
