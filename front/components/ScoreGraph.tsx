@@ -36,7 +36,8 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 
 	return (
 		<Box
-			style={{ width: '100%' }}
+			bgColor={theme.colors.primary[500]}
+			style={{ width: '100%', borderRadius: CardBorderRadius }}
 			onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
 		>
 			<LineChart
@@ -52,11 +53,9 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 				}}
 				width={containerWidth}
 				height={200} // Completely arbitrary
+				transparent={true}
 				yAxisSuffix=" pts"
 				chartConfig={{
-					backgroundColor: theme.colors.primary[500],
-					backgroundGradientFrom: theme.colors.primary[500],
-					backgroundGradientTo: theme.colors.primary[500],
 					decimalPlaces: 0,
 					color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
 					labelColor: () => theme.colors.white,
