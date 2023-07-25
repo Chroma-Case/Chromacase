@@ -27,7 +27,7 @@ type PartitionViewProps = {
 const PartitionView = (props: PartitionViewProps) => {
 	const [osmd, setOsmd] = useState<OSMD>();
 	const [soundPlayer, setSoundPlayer] = useState<SoundFont.Player>();
-	const audioContext = new SAC.AudioContext();
+	// const audioContext = new SAC.AudioContext();
 	// const [wholeNoteLength, setWholeNoteLength] = useState(0); // Length of Whole note, in ms (?)
 	const colorScheme = useColorScheme();
 	const dimensions = useWindowDimensions();
@@ -68,8 +68,8 @@ const PartitionView = (props: PartitionViewProps) => {
 			.filter((note) => note.Pitch) // Pitch Can be null, avoiding them
 			.forEach((note) => {
 				// Put your hands together for https://github.com/jimutt/osmd-audio-player/blob/master/src/internals/noteHelpers.ts
-				const fixedKey =
-					note.ParentVoiceEntry.ParentVoice.Parent.SubInstruments.at(0)?.fixedKey ?? 0;
+				// const fixedKey =
+				// 	note.ParentVoiceEntry.ParentVoice.Parent.SubInstruments.at(0)?.fixedKey ?? 0;
 				// const midiNumber = note.halfTone - fixedKey * 12;
 				// // console.log('Expecting midi ' + midiNumber);
 				// const duration = getActualNoteLength(note);
