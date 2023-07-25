@@ -6,14 +6,31 @@ import Phaser from 'phaser';
 import useColorScheme from '../../hooks/colorScheme';
 import { PartitionContext } from '../../views/PlayView';
 import { on } from 'events';
+import SoundFont from 'soundfont-player';
+import * as SAC from 'standardized-audio-context';
 
 let globalTimestamp = 0;
 let globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
+
+const playNotes = (notes: any[], soundPlayer: SoundFont.Player, audioContext: SAC.AudioContext) => {
+	notes.forEach(({ note, duration }) => {
+		const fixedKey =
+			note.ParentVoiceEntry.ParentVoice.Parent.SubInstruments.at(0)?.fixedKey ?? 0;
+		const midiNumber = note.halfTone - fixedKey * 12;
+		const gain = note.ParentVoiceEntry.ParentVoice.Volume;
+		soundPlayer!.play(midiNumber.toString(), audioContext.currentTime, {
+			duration,
+			gain,
+		});
+	});
+};
 
 const getPianoScene = (
 	partitionB64: string,
 	cursorPositions: PianoCursorPosition[],
 	onEndReached: () => void,
+	soundPlayer: SoundFont.Player,
+	audioContext: SAC.AudioContext,
 	colorScheme: 'light' | 'dark'
 ) => {
 	class PianoScene extends Phaser.Scene {
@@ -50,6 +67,7 @@ const getPianoScene = (
 					return false;
 				});
 				if (cP) {
+					playNotes(cP.notes, soundPlayer, audioContext);
 					const tw = {
 						targets: this!.cursor,
 						x: cP!.x,
@@ -58,6 +76,7 @@ const getPianoScene = (
 					};
 					if (this.cursorPositionsIdx === cursorPositions.length - 1) {
 						tw.onComplete = () => {
+							soundPlayer.stop();
 							onEndReached();
 						};
 					}
@@ -89,32 +108,43 @@ export type PhaserCanvasProps = {
 	onEndReached: () => void;
 };
 
-const PhaserCanvas = ({
-	partitionB64,
-	cursorPositions,
-	onEndReached,
-}: PhaserCanvasProps) => {
+const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached }: PhaserCanvasProps) => {
 	const colorScheme = useColorScheme();
+	const audioContext = new SAC.AudioContext();
+	const [soundPlayer, setSoundPlayer] = React.useState<SoundFont.Player>();
 	const { timestamp } = React.useContext(PartitionContext);
 	const [game, setGame] = React.useState<Phaser.Game | null>(null);
 
 	globalTimestamp = timestamp;
 	useEffect(() => {
-		const pianoScene = getPianoScene(partitionB64, cursorPositions, onEndReached, colorScheme);
+		Promise.resolve(
+			SoundFont.instrument(audioContext as unknown as AudioContext, 'electric_piano_1')
+		).then((sound) => {
+			setSoundPlayer(sound);
 
-		const config = {
-			type: Phaser.AUTO,
-			parent: 'phaser-canvas',
-			width: 1000,
-			height: 400,
-			scene: pianoScene,
-			scale: {
-				mode: Phaser.Scale.FIT,
-				autoCenter: Phaser.Scale.CENTER_BOTH,
-			},
-		};
+			const pianoScene = getPianoScene(
+				partitionB64,
+				cursorPositions,
+				onEndReached,
+				sound,
+				audioContext,
+				colorScheme
+			);
 
-		setGame(new Phaser.Game(config));
+			const config = {
+				type: Phaser.AUTO,
+				parent: 'phaser-canvas',
+				width: 1000,
+				height: 400,
+				scene: pianoScene,
+				scale: {
+					mode: Phaser.Scale.FIT,
+					autoCenter: Phaser.Scale.CENTER_BOTH,
+				},
+			};
+
+			setGame(new Phaser.Game(config));
+		});
 	}, []);
 
 	return <div id="phaser-canvas"></div>;

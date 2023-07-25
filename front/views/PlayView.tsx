@@ -76,7 +76,6 @@ export const PartitionContext = React.createContext<{
 	timestamp: 0,
 });
 
-
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -100,13 +99,15 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const onPause = () => {
 		stopwatch.pause();
 		setPause(true);
-		webSocket.current?.send(
-			JSON.stringify({
-				type: 'pause',
-				paused: true,
-				time: getElapsedTime(),
-			})
-		);
+		if (webSocket.current?.readyState == WebSocket.OPEN) {
+			webSocket.current?.send(
+				JSON.stringify({
+					type: 'pause',
+					paused: true,
+					time: getElapsedTime(),
+				})
+			);
+		}
 	};
 	const onResume = () => {
 		if (stopwatch.isStarted()) {
@@ -115,20 +116,26 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			stopwatch.start();
 		}
 		setPause(false);
-		webSocket.current?.send(
-			JSON.stringify({
-				type: 'pause',
-				paused: false,
-				time: getElapsedTime(),
-			})
-		);
+		if (webSocket.current?.readyState == WebSocket.OPEN) {
+			webSocket.current?.send(
+				JSON.stringify({
+					type: 'pause',
+					paused: false,
+					time: getElapsedTime(),
+				})
+			);
+		}
 	};
 	const onEnd = () => {
-		webSocket.current?.send(
-			JSON.stringify({
-				type: 'end',
-			})
-		);
+		setTime(0);
+		stopwatch.stop();
+		if (webSocket.current?.readyState == WebSocket.OPEN) {
+			webSocket.current?.send(
+				JSON.stringify({
+					type: 'end',
+				})
+			);
+		}
 	};
 
 	const onMIDISuccess = (access: MIDIAccess) => {
@@ -224,7 +231,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
-			setTime(() =>getElapsedTime()); // Countdown
+			setTime(() => getElapsedTime()); // Countdown
 		}, 1);
 
 		return () => {
@@ -264,23 +271,23 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					timestamp: time,
 				}}
 			>
-			<HStack
-				width="100%"
-				justifyContent="center"
-				p={3}
-				style={{ position: 'absolute', top: 1 }}
-			>
-				<Animated.View style={{ opacity: fadeAnim }}>
-					<TextButton
-						disabled
-						label={lastScoreMessage?.content ?? ''}
-						colorScheme={lastScoreMessage?.color}
-						rounded="sm"
-					/>
-				</Animated.View>
-			</HStack>
-			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				{/* <PartitionView
+				<HStack
+					width="100%"
+					justifyContent="center"
+					p={3}
+					style={{ position: 'absolute', top: 1 }}
+				>
+					<Animated.View style={{ opacity: fadeAnim }}>
+						<TextButton
+							disabled
+							label={lastScoreMessage?.content ?? ''}
+							colorScheme={lastScoreMessage?.color}
+							rounded="sm"
+						/>
+					</Animated.View>
+				</HStack>
+				<View style={{ flexGrow: 1, justifyContent: 'center' }}>
+					{/* <PartitionView
 					file={musixml.data}
 					onPartitionReady={() => setPartitionRendered(true)}
 					timestamp={Math.max(0, time)}
@@ -288,89 +295,94 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						onEnd();
 					}}
 				/> */}
-				<PartitionCoord
-					file={musixml.data}
-					// timestamp={Math.max(0, time)}
-					timestamp={0}
-					onEndReached={() => {
-						onEnd();
-					}}
-					onPartitionReady={() => setPartitionRendered(true)}
-				/>
-				{!partitionRendered && <LoadingComponent />}
-			</View>
-
-			<Box
-				shadow={4}
-				style={{
-					height: '12%',
-					width: '100%',
-					borderWidth: 0.5,
-					margin: 5,
-					display: !partitionRendered ? 'none' : undefined,
-				}}
-			>
-				<Row justifyContent="space-between" style={{ flexGrow: 1, alignItems: 'center' }}>
-					<Column
-						space={2}
-						style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-					>
-						<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
-						<Progress value={score} style={{ width: '90%' }} />
-					</Column>
-					<Center style={{ flex: 1, alignItems: 'center' }}>
-						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
-					</Center>
-					<Row
-						style={{
-							flex: 1,
-							height: '100%',
-							justifyContent: 'space-evenly',
-							alignItems: 'center',
+					<PartitionCoord
+						file={musixml.data}
+						// timestamp={Math.max(0, time)}
+						timestamp={0}
+						onEndReached={() => {
+							onEnd();
 						}}
+						onPartitionReady={() => setPartitionRendered(true)}
+					/>
+					{!partitionRendered && <LoadingComponent />}
+				</View>
+
+				<Box
+					shadow={4}
+					style={{
+						height: '12%',
+						width: '100%',
+						borderWidth: 0.5,
+						margin: 5,
+						display: !partitionRendered ? 'none' : undefined,
+					}}
+				>
+					<Row
+						justifyContent="space-between"
+						style={{ flexGrow: 1, alignItems: 'center' }}
 					>
-						{midiKeyboardFound && (
-							<>
-								<IconButton
-									size="sm"
-									variant="solid"
-									icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
-									onPress={() => {
-										if (paused) {
-											onResume();
-										} else {
-											onPause();
+						<Column
+							space={2}
+							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+						>
+							<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
+							<Progress value={score} style={{ width: '90%' }} />
+						</Column>
+						<Center style={{ flex: 1, alignItems: 'center' }}>
+							<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
+						</Center>
+						<Row
+							style={{
+								flex: 1,
+								height: '100%',
+								justifyContent: 'space-evenly',
+								alignItems: 'center',
+							}}
+						>
+							{midiKeyboardFound && (
+								<>
+									<IconButton
+										size="sm"
+										variant="solid"
+										icon={
+											<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />
 										}
-									}}
-								/>
-								<Text>
-									{time < 0
-										? paused
-											? '0:00'
-											: Math.floor((time % 60000) / 1000)
+										onPress={() => {
+											if (paused) {
+												onResume();
+											} else {
+												onPause();
+											}
+										}}
+									/>
+									<Text>
+										{time < 0
+											? paused
+												? '0:00'
+												: Math.floor((time % 60000) / 1000)
+														.toFixed(0)
+														.toString()
+											: `${Math.floor(time / 60000)}:${Math.floor(
+													(time % 60000) / 1000
+											  )
 													.toFixed(0)
 													.toString()
-										: `${Math.floor(time / 60000)}:${Math.floor(
-												(time % 60000) / 1000
-										  )
-												.toFixed(0)
-												.toString()
-												.padStart(2, '0')}`}
-								</Text>
-								<IconButton
-									size="sm"
-									colorScheme="coolGray"
-									variant="solid"
-									icon={<Icon as={Ionicons} name="stop" />}
-									onPress={() => {
-										onEnd();
-									}}
-								/>
-							</>
-						)}
+													.padStart(2, '0')}`}
+									</Text>
+									<IconButton
+										size="sm"
+										colorScheme="coolGray"
+										variant="solid"
+										icon={<Icon as={Ionicons} name="stop" />}
+										onPress={() => {
+											onEnd();
+										}}
+									/>
+								</>
+							)}
+						</Row>
 					</Row>
-				</Row>
-			</Box>
+				</Box>
 			</PartitionContext.Provider>
 		</SafeAreaView>
 	);
