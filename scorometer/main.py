@@ -21,6 +21,9 @@ from chroma_case.Message import (
 from chroma_case.Partition import Partition
 from chroma_case.song_check import getPartition
 from mido import MidiFile
+import uuid
+
+game_uuid = uuid.uuid4()
 
 
 logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
