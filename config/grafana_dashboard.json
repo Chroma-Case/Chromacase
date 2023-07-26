@@ -1,0 +1,283 @@
+{
+	"annotations": {
+	  "list": [
+		{
+		  "builtIn": 1,
+		  "datasource": {
+			"type": "grafana",
+			"uid": "-- Grafana --"
+		  },
+		  "enable": true,
+		  "hide": true,
+		  "iconColor": "rgba(0, 211, 255, 1)",
+		  "name": "Annotations & Alerts",
+		  "type": "dashboard"
+		}
+	  ]
+	},
+	"editable": true,
+	"fiscalYearStartMonth": 0,
+	"graphTooltip": 0,
+	"id": 1,
+	"links": [],
+	"liveNow": false,
+	"panels": [
+	  {
+		"datasource": {
+		  "type": "loki",
+		  "uid": "P8E80F9AEF21F6940"
+		},
+		"gridPos": {
+		  "h": 8,
+		  "w": 12,
+		  "x": 0,
+		  "y": 0
+		},
+		"id": 1,
+		"options": {
+		  "dedupStrategy": "none",
+		  "enableLogDetails": true,
+		  "prettifyLogMessage": false,
+		  "showCommonLabels": false,
+		  "showLabels": false,
+		  "showTime": false,
+		  "sortOrder": "Descending",
+		  "wrapLogMessage": false
+		},
+		"targets": [
+		  {
+			"datasource": {
+			  "type": "loki",
+			  "uid": "P8E80F9AEF21F6940"
+			},
+			"editorMode": "builder",
+			"expr": "{container=\"chromacase-back-1\"} | json | userId = `$userId`",
+			"key": "Q-a2f514d0-81a4-4c43-a260-bad7add20957-1",
+			"queryType": "range",
+			"refId": "B"
+		  }
+		],
+		"title": "Back logs by user id",
+		"type": "logs"
+	  },
+	  {
+		"datasource": {
+		  "type": "loki",
+		  "uid": "P8E80F9AEF21F6940"
+		},
+		"gridPos": {
+		  "h": 8,
+		  "w": 12,
+		  "x": 12,
+		  "y": 0
+		},
+		"id": 2,
+		"options": {
+		  "dedupStrategy": "none",
+		  "enableLogDetails": true,
+		  "prettifyLogMessage": false,
+		  "showCommonLabels": false,
+		  "showLabels": false,
+		  "showTime": false,
+		  "sortOrder": "Descending",
+		  "wrapLogMessage": false
+		},
+		"targets": [
+		  {
+			"datasource": {
+			  "type": "loki",
+			  "uid": "P8E80F9AEF21F6940"
+			},
+			"editorMode": "builder",
+			"expr": "{container=\"chromacase-back-1\"} | json | username = `$username`",
+			"key": "Q-a2f514d0-81a4-4c43-a260-bad7add20957-1",
+			"queryType": "range",
+			"refId": "B"
+		  }
+		],
+		"title": "Back logs by username",
+		"type": "logs"
+	  },
+	  {
+		"datasource": {
+		  "type": "loki",
+		  "uid": "P8E80F9AEF21F6940"
+		},
+		"gridPos": {
+		  "h": 8,
+		  "w": 12,
+		  "x": 0,
+		  "y": 8
+		},
+		"id": 4,
+		"options": {
+		  "dedupStrategy": "none",
+		  "enableLogDetails": true,
+		  "prettifyLogMessage": false,
+		  "showCommonLabels": false,
+		  "showLabels": false,
+		  "showTime": false,
+		  "sortOrder": "Ascending",
+		  "wrapLogMessage": false
+		},
+		"targets": [
+		  {
+			"datasource": {
+			  "type": "loki",
+			  "uid": "P8E80F9AEF21F6940"
+			},
+			"editorMode": "code",
+			"expr": "{container=\"chromacase-back-1\"}",
+			"key": "Q-a2f514d0-81a4-4c43-a260-bad7add20957-1",
+			"queryType": "range",
+			"refId": "B"
+		  }
+		],
+		"title": "Back logs",
+		"type": "logs"
+	  },
+	  {
+		"datasource": {
+		  "type": "loki",
+		  "uid": "P8E80F9AEF21F6940"
+		},
+		"gridPos": {
+		  "h": 8,
+		  "w": 12,
+		  "x": 12,
+		  "y": 8
+		},
+		"id": 3,
+		"options": {
+		  "dedupStrategy": "none",
+		  "enableLogDetails": true,
+		  "prettifyLogMessage": false,
+		  "showCommonLabels": false,
+		  "showLabels": false,
+		  "showTime": false,
+		  "sortOrder": "Descending",
+		  "wrapLogMessage": false
+		},
+		"targets": [
+		  {
+			"datasource": {
+			  "type": "loki",
+			  "uid": "P8E80F9AEF21F6940"
+			},
+			"editorMode": "code",
+			"expr": "{container=\"chromacase-front-1\"} | json | userId = `$userId`",
+			"key": "Q-a2f514d0-81a4-4c43-a260-bad7add20957-1",
+			"queryType": "range",
+			"refId": "B"
+		  }
+		],
+		"title": "Front logs",
+		"type": "logs"
+	  },
+	  {
+		"datasource": {
+		  "type": "loki",
+		  "uid": "P8E80F9AEF21F6940"
+		},
+		"gridPos": {
+		  "h": 8,
+		  "w": 12,
+		  "x": 0,
+		  "y": 16
+		},
+		"id": 5,
+		"options": {
+		  "dedupStrategy": "none",
+		  "enableLogDetails": true,
+		  "prettifyLogMessage": false,
+		  "showCommonLabels": false,
+		  "showLabels": false,
+		  "showTime": false,
+		  "sortOrder": "Descending",
+		  "wrapLogMessage": false
+		},
+		"targets": [
+		  {
+			"datasource": {
+			  "type": "loki",
+			  "uid": "P8E80F9AEF21F6940"
+			},
+			"editorMode": "code",
+			"expr": "{container=\"chromacase-scorometer-1\"}",
+			"key": "Q-a2f514d0-81a4-4c43-a260-bad7add20957-1",
+			"queryType": "range",
+			"refId": "B"
+		  }
+		],
+		"title": "Scorometer logs",
+		"type": "logs"
+	  }
+	],
+	"refresh": "",
+	"schemaVersion": 38,
+	"style": "dark",
+	"tags": [],
+	"templating": {
+	  "list": [
+		{
+		  "current": {
+			"selected": false,
+			"text": "2",
+			"value": "2"
+		  },
+		  "hide": 0,
+		  "name": "userId",
+		  "options": [
+			{
+			  "selected": true,
+			  "text": "2",
+			  "value": "2"
+			}
+		  ],
+		  "query": "2",
+		  "skipUrlSync": false,
+		  "type": "textbox"
+		},
+		{
+		  "current": {
+			"selected": false,
+			"text": "lou",
+			"value": "lou"
+		  },
+		  "hide": 0,
+		  "name": "username",
+		  "options": [
+			{
+			  "selected": true,
+			  "text": "lou",
+			  "value": "lou"
+			}
+		  ],
+		  "query": "lou",
+		  "skipUrlSync": false,
+		  "type": "textbox"
+		},
+		{
+		  "current": {},
+		  "description": "unique id of scorometer game",
+		  "hide": 0,
+		  "label": "game uuid",
+		  "name": "game_uuid",
+		  "options": [],
+		  "query": "",
+		  "skipUrlSync": false,
+		  "type": "textbox"
+		}
+	  ]
+	},
+	"time": {
+	  "from": "now-6h",
+	  "to": "now"
+	},
+	"timepicker": {},
+	"timezone": "",
+	"title": "Chromacase dashboard",
+	"uid": "c3d1eb51-85f6-43d3-b2fd-e0096b72cf67",
+	"version": 2,
+	"weekStart": ""
+  }

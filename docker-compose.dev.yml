@@ -1,7 +1,66 @@
 networks:
   loki:
 
+
 services:
+  back:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.dev
+    privileged: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./back:/app
+      - ./assets:/assets
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  scorometer:
+    build:
+      context: ./scorometer
+      dockerfile: Dockerfile.dev
+    ports:
+      - "6543:6543"
+    volumes:
+      - ./scorometer:/app
+      - ./assets:/assets
+
+  db:
+    container_name: db
+    image: postgres:alpine3.14
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.dev
+    environment:
+      - SCOROMETER_URL=http://scorometer:6543/
+      - NGINX_PORT=80
+    ports:
+      - "19006:19006"
+    volumes:
+      - ./front:/app
+    depends_on:
+      - "back"
+    env_file:
+      - .env
+
+# logs setup
+
   read:
     image: grafana/loki:2.8.2
     command: "-config.file=/etc/loki/config.yaml -target=read"
@@ -10,7 +69,7 @@ services:
       - 7946
       - 9095
     volumes:
-      - ./loki-config.yaml:/etc/loki/config.yaml
+      - ./config/loki-config.yaml:/etc/loki/config.yaml
     depends_on:
       - minio
     healthcheck:
@@ -31,7 +90,7 @@ services:
       - 7946
       - 9095
     volumes:
-      - ./loki-config.yaml:/etc/loki/config.yaml
+      - ./config/loki-config.yaml:/etc/loki/config.yaml
     healthcheck:
       test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
       interval: 10s
@@ -45,7 +104,7 @@ services:
   promtail:
     image: grafana/promtail:2.8.2
     volumes:
-      - ./promtail-local-config.yaml:/etc/promtail/config.yaml:ro
+      - ./config/promtail-local-config.yaml:/etc/promtail/config.yaml:ro
       - /var/run/docker.sock:/var/run/docker.sock
     command: -config.file=/etc/promtail/config.yaml
     depends_on:
@@ -54,7 +113,7 @@ services:
       - loki
 
   minio:
-    image: minio/minio
+    image: minio/minio:RELEASE.2023-07-21T21-12-44Z
     entrypoint:
       - sh
       - -euc
@@ -64,7 +123,7 @@ services:
         minio server /data
     environment:
       - MINIO_ROOT_USER=loki
-      - MINIO_ROOT_PASSWORD=supersecret
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - MINIO_PROMETHEUS_AUTH_TYPE=public
       - MINIO_UPDATE=off
     ports:
@@ -80,7 +139,7 @@ services:
       - loki
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:9.5.6
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=true
@@ -116,7 +175,7 @@ services:
       - loki
 
   gateway:
-    image: nginx:latest
+    image: nginx:1.25.1
     depends_on:
       - read
       - write
@@ -183,59 +242,3 @@ services:
       retries: 5
     networks:
       - loki
-
-  back:
-    build:
-      context: ./back
-      dockerfile: Dockerfile.dev
-    privileged: true
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./back:/app
-      - ./assets:/assets
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - .env
-
-  scorometer:
-    build:
-      context: ./scorometer
-      dockerfile: Dockerfile.dev
-    ports:
-      - "6543:6543"
-    volumes:
-      - ./scorometer:/app
-      - ./assets:/assets
-
-  db:
-    container_name: db
-    image: postgres:alpine3.14
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "5432:5432"
-  front:
-    build:
-      context: ./front
-      dockerfile: Dockerfile.dev
-    environment:
-      - SCOROMETER_URL=http://scorometer:6543/
-      - NGINX_PORT=80
-    ports:
-      - "19006:19006"
-    volumes:
-      - ./front:/app
-    depends_on:
-      - "back"
-    env_file:
-      - .env
