@@ -42,12 +42,10 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 		>
 			<LineChart
 				data={{
-					labels: isSmall
-						? []
-						: scores?.map(({ playDate }) => formatScoreDate(playDate)) ?? [],
+					labels: isSmall ? [] : scores.map(({ playDate }) => formatScoreDate(playDate)),
 					datasets: [
 						{
-							data: scores?.map(({ score }) => score) ?? [],
+							data: scores.map(({ score }) => score),
 						},
 					],
 				}}
