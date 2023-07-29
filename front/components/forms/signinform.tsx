@@ -5,6 +5,8 @@ import { Translate, translate } from '../../i18n/i18n';
 import { string } from 'yup';
 import { FormControl, Input, Stack, WarningOutlineIcon, Box, useToast } from 'native-base';
 import TextButton from '../TextButton';
+import TextFormField from '../UI/TextFormField';
+import ButtonBase from '../UI/ButtonBase';
 
 interface SigninFormProps {
 	onSubmit: (username: string, password: string) => Promise<string>;
@@ -21,8 +23,6 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 			error: null as string | null,
 		},
 	});
-	const [submittingForm, setSubmittingForm] = React.useState(false);
-
 	const validationSchemas = {
 		username: string()
 			.min(3, translate('usernameTooShort'))
@@ -35,18 +35,15 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 	};
 	const toast = useToast();
 	return (
-		<Box alignItems="center" style={{ width: '100%' }}>
+		<Box alignItems="center" style={{ width: '100%', backgroundColor: "#101014" }}>
 			<Stack mx="4" style={{ width: '80%', maxWidth: 400 }}>
 				<FormControl
 					isRequired
 					isInvalid={formData.username.error !== null || formData.password.error !== null}
 				>
-					<FormControl.Label>
-						<Translate translationKey="username" />
-					</FormControl.Label>
-					<Input
-						isRequired
-						type="text"
+					<TextFormField
+						error={formData.username.error}
+						icon='person'
 						placeholder="Username"
 						autoComplete="username"
 						value={formData.username.value}
@@ -59,16 +56,14 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 									setFormData({ ...formData, username: { value: t, error } });
 								});
 						}}
-					/>
-					<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-						{formData.username.error}
-					</FormControl.ErrorMessage>
-					<FormControl.Label>
-						<Translate translationKey="password" />
-					</FormControl.Label>
-					<Input
 						isRequired
-						type="password"
+					/>
+					<TextFormField
+						isRequired
+						isSecret
+						error={formData.password.error}
+						icon='lock-closed'
+						placeholder="Password"
 						autoComplete="password"
 						value={formData.password.value}
 						onChangeText={(t) => {
@@ -81,13 +76,8 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 								});
 						}}
 					/>
-					<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-						{formData.password.error}
-					</FormControl.ErrorMessage>
-					<TextButton
-						translate={{ translationKey: 'signInBtn' }}
-						style={{ marginTop: 10 }}
-						isLoading={submittingForm}
+					<ButtonBase
+						title="Signin"
 						isDisabled={
 							formData.password.error !== null ||
 							formData.username.error !== null ||
@@ -95,23 +85,26 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 							formData.password.value === ''
 						}
 						onPress={async () => {
-							setSubmittingForm(true);
 							try {
 								const resp = await onSubmit(
 									formData.username.value,
 									formData.password.value
 								);
 								toast.show({ description: resp, colorScheme: 'secondary' });
-								setSubmittingForm(false);
 							} catch (e) {
 								toast.show({
 									description: e as string,
 									colorScheme: 'red',
 									avoidKeyboard: true,
 								});
-								setSubmittingForm(false);
 							}
 						}}
+					/>
+					<ButtonBase
+						// icon='logo-google'
+						isOutlined
+						iconImage='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2008px-Google_%22G%22_Logo.svg.png'
+						title="Signin with google"
 					/>
 				</FormControl>
 			</Stack>
