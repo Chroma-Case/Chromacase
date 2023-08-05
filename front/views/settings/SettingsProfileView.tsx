@@ -2,13 +2,14 @@ import API from '../../API';
 import { useDispatch } from 'react-redux';
 import { unsetAccessToken } from '../../state/UserSlice';
 import React from 'react';
-import { Column, Text, Button, Box, Flex, Center, Heading, Popover } from 'native-base';
+import { Column, Text, Button, Box, Flex, Center, Heading, Popover, Toast } from 'native-base';
 import TextButton from '../../components/TextButton';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
 import { useQuery } from '../../Queries';
 import UserAvatar from '../../components/UserAvatar';
+import * as ImagePicker from 'expo-image-picker';
 
 // Too painful to infer the settings-only, typed navigator. Gave up
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +51,39 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							data: {
 								text: user.email || translate('NoAssociatedEmail'),
 								onPress: () => {
-									navigation.navigate('ChangeEmail');
+									navigation.navigate('changeEmail');
+								},
+							},
+						},
+						{
+							type: 'text',
+							title: translate('avatar'),
+							data: {
+								text: translate('changeIt'),
+								onPress: () => {
+									ImagePicker.launchImageLibraryAsync({
+										mediaTypes: ImagePicker.MediaTypeOptions.Images,
+										aspect: [1, 1],
+										quality: 1,
+										base64: true,
+									}).then((result) => {
+										console.log(result);
+										const image = result.assets?.at(0);
+
+										if (!result.canceled && image) {
+											API.updateProfileAvatar(image)
+												.then(() => {
+													userQuery.refetch();
+													Toast.show({
+														description: 'Update successful',
+													});
+												})
+												.catch((e) => {
+													console.error(e);
+													Toast.show({ description: 'Update failed' });
+												});
+										}
+									});
 								},
 							},
 						},
