@@ -180,6 +180,8 @@ export const en = {
 
 	recentSearches: 'Recent searches',
 	noRecentSearches: 'No recent searches',
+	avatar: 'Avatar',
+	changeIt: 'Change It',
 };
 
 export const fr: typeof en = {
@@ -362,6 +364,8 @@ export const fr: typeof en = {
 
 	recentSearches: 'Recherches récentes',
 	noRecentSearches: 'Aucune recherche récente',
+	avatar: 'Avatar',
+	changeIt: 'Modifier',
 };
 
 export const sp: typeof en = {
@@ -548,4 +552,7 @@ export const sp: typeof en = {
 	recentSearches: 'Búsquedas recientes',
 	noRecentSearches: 'No hay búsquedas recientes',
 	continuewithgoogle: 'Continuar con Google',
+
+	avatar: 'Avatar',
+	changeIt: 'Cambialo',
 };
