@@ -139,38 +139,28 @@ const ArtistDetailsView = ({ artistId }: any) => {
 	return (
 		<ScrollView>
 			<ImageBackground
-    style={{width : '100%', height: isMobileView ? 200 : 300}}
-    source={{uri : "https://picsum.photos/720"}}>
-    <LinearGradient 
-        colors={['#00000000', '#000000']} 
-        style={{height : '100%', width : '100%'}}/>
-</ImageBackground>
-			{/* <Box>
-				<Image
-				source={{ uri: 'https://picsum.photos/720' }}
-				alt={artistData?.name}
-				size={'100%'}
-				height={isMobileView ? 200 : 300}
-				width={'100%'}
-				resizeMode='cover'
-				/> */}
-				<Box>
-					<Heading mt={-20} ml={3} fontSize={50}>{artistData?.name}</Heading>
-					<ScrollView mt={3}>
-						{songs.map((comp: Song | SongWithArtist, index: Key | null | undefined) => (
-							<SongRow
-								key={index}
-								song={comp}
-								onPress={() => {
-									API.createSearchHistoryEntry(comp.name, "song", Date.now());
-									navigation.navigate("Song", { songId: comp.id });
-								}}
-							/>
-							))
-						}
-					</ScrollView>
-				</Box>
-			{/* </Box> */}
+				style={{width : '100%', height: isMobileView ? 200 : 300}}
+				source={{uri : "https://picsum.photos/720"}}>
+				<LinearGradient 
+					colors={['#00000000', '#000000']} 
+					style={{height : '100%', width : '100%'}}/>
+			</ImageBackground>
+			<Box>
+				<Heading mt={-20} ml={3} fontSize={50}>{artistData?.name}</Heading>
+				<ScrollView mt={3}>
+					{songs.map((comp: Song | SongWithArtist, index: Key | null | undefined) => (
+						<SongRow
+							key={index}
+							song={comp}
+							onPress={() => {
+								API.createSearchHistoryEntry(comp.name, "song", Date.now());
+								navigation.navigate("Song", { songId: comp.id });
+							}}
+						/>
+						))
+					}
+				</ScrollView>
+			</Box>
 		</ScrollView>
 	);
 };

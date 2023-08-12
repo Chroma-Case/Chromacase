@@ -12,13 +12,14 @@ import { ScrollView } from 'native-base';
 import { RouteProps } from '../Navigation';
 
 interface SearchContextType {
-	filter: 'artist' | 'song' | 'genre' | 'all';
-	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all') => void;
+	filter: 'artist' | 'song' | 'genre' | 'all' | 'favorite';
+	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all' | 'favorite') => void;
 	stringQuery: string;
 	updateStringQuery: (newData: string) => void;
 	songData: Song[];
 	artistData: Artist[];
 	genreData: Genre[];
+	favoriteData: Song[];
 	isLoadingSong: boolean;
 	isLoadingArtist: boolean;
 	isLoadingGenre: boolean;
@@ -32,6 +33,7 @@ export const SearchContext = React.createContext<SearchContextType>({
 	songData: [],
 	artistData: [],
 	genreData: [],
+	favoriteData: [],
 	isLoadingSong: false,
 	isLoadingArtist: false,
 	isLoadingGenre: false,
@@ -60,6 +62,11 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 		{ enabled: !!stringQuery }
 	);
 
+	const { isLoading: isLoadingFavorite, data: favoriteData = [] } = useQuery(
+		API.getFavorites(),
+		{ enabled: true }
+	)
+
 	const updateFilter = (newData: Filter) => {
 		// called when the filter is changed
 		setFilter(newData);
@@ -80,6 +87,7 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 						songData,
 						artistData,
 						genreData,
+						favoriteData,
 						isLoadingSong,
 						isLoadingArtist,
 						isLoadingGenre,

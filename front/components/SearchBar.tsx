@@ -5,7 +5,7 @@ import { translate } from '../i18n/i18n';
 import { SearchContext } from '../views/SearchView';
 import { debounce } from 'lodash';
 
-export type Filter = 'artist' | 'song' | 'genre' | 'all';
+export type Filter = 'artist' | 'song' | 'genre' | 'all' | 'favorite';
 
 type FilterButton = {
 	name: string;
@@ -16,7 +16,7 @@ type FilterButton = {
 const SearchBar = () => {
 	const { filter, updateFilter } = React.useContext(SearchContext);
 	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
-	const [barText, updateBarText] = React.useState(stringQuery);
+	const [ barText, updateBarText ] = React.useState(stringQuery);
 
 	const debouncedUpdateStringQuery = debounce(updateStringQuery, 500);
 
@@ -41,6 +41,11 @@ const SearchBar = () => {
 			name: translate('allFilter'),
 			callback: () => updateFilter('all'),
 			id: 'all',
+		},
+		{
+			name: translate('favoriteFilter'),
+			callback: () => updateFilter('favorite'),
+			id: 'favorite',
 		},
 		{
 			name: translate('artistFilter'),
