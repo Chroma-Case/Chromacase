@@ -55,57 +55,8 @@ const rockArtists: Artist[] = [
 	},
 ];
 
-const rockSongs: Song[] = [
-	{
-		id: 1,
-		name: "Stairway to Heaven",
-		artistId: 1,
-		albumId: 1,
-		genreId: 1,
-		cover: "https://picsum.photos/200",
-		details: { /* song details */ },
-	},
-	{
-		id: 2,
-		name: "Bohemian Rhapsody",
-		artistId: 2,
-		albumId: 2,
-		genreId: 1,
-		cover: "https://picsum.photos/200",
-		details: { /* song details */ },
-	},
-	{
-		id: 3,
-		name: "Paint It Black",
-		artistId: 3,
-		albumId: 3,
-		genreId: 1,
-		cover: "https://picsum.photos/200",
-		details: { /* song details */ },
-	},
-	{
-		id: 4,
-		name: "Highway to Hell",
-		artistId: 4,
-		albumId: 4,
-		genreId: 1,
-		cover: "https://picsum.photos/200",
-		details: { /* song details */ },
-	},
-	{
-		id: 5,
-		name: "Sweet Child o' Mine",
-		artistId: 5,
-		albumId: 5,
-		genreId: 1,
-		cover: "https://picsum.photos/200",
-		details: { /* song details */ },
-	},
-	// Add more songs as needed
-  ];
-
 const GenreDetailsView = ({ genreId }: any) => {
-	// const { isLoading: isLoadingGenre, data: genreData, error: isErrorGenre } = useQuery(API.getArtist(genreId));
+	const { isLoading: isLoadingGenre, data: genreData, error: isErrorGenre } = useQuery(API.getArtist(genreId));
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isMobileView = screenSize == "small";
 	const navigation = useNavigation();
@@ -124,7 +75,6 @@ const GenreDetailsView = ({ genreId }: any) => {
 			size={'100%'}
 			height={isMobileView ? 200 : 300}
 			width={'100%'}
-			// backgroundColor={colorRange[Math.floor(Math.random() * 5)]?.code ?? '#364fc7'}
 			bg={{
 				linearGradient: {
 					colors: [colorRange[Math.floor(Math.random() * 5)]?.code ?? '#364fc7', 'black'],

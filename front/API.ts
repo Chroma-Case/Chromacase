@@ -337,6 +337,16 @@ export default class API {
 		return `${baseAPIUrl}/genre/${genreId}/illustration`;
 	}
 
+	public static getGenre(genreId: number): Query<Genre> {
+		return {
+			key: ['genre', genreId],
+			exec: () =>
+				API.fetch({
+					route: `/genre/${genreId}`,
+				}),
+		}
+	}
+
 	/**
 	 * Retrive a song's musicXML partition
 	 * @param songId the id to find the song
@@ -487,6 +497,16 @@ export default class API {
 				mainSkill: 'lead-head-change',
 				id: lessonId,
 			}),
+		};
+	}
+
+	public static getFavorites(): Query<Song[]> {
+		return {
+			key: 'favorites',
+			exec: () =>
+				API.fetch({
+					route: '/search/songs/o',
+				}),
 		};
 	}
 

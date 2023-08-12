@@ -42,6 +42,7 @@ export const en = {
 	artistFilter: 'Artists',
 	songsFilter: 'Songs',
 	genreFilter: 'Genres',
+    favoriteFilter: 'Favorites',
 
 	// profile page
 	user: 'Profile',
@@ -227,6 +228,7 @@ export const fr: typeof en = {
 	artistFilter: 'Artistes',
 	songsFilter: 'Morceaux',
 	genreFilter: 'Genres',
+    favoriteFilter: 'Favoris',
 
 	// Difficulty settings
 	diffBtn: 'Difficulté',
@@ -422,6 +424,7 @@ export const sp: typeof en = {
 	artistFilter: 'Artistas',
 	songsFilter: 'canciones',
 	genreFilter: 'géneros',
+    favoriteFilter: 'Favorites',
 
 	// Difficulty settings
 	diffBtn: 'Dificultad',
