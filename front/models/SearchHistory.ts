@@ -2,7 +2,7 @@ import Model, { ModelValidator } from './Model';
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
 
-export const SearchType = ['song', 'artist', 'album'] as const;
+export const SearchType = ['song', 'artist', 'album', 'genre'] as const;
 export type SearchType = (typeof SearchType)[number];
 
 const SearchHistoryValidator = yup

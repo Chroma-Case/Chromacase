@@ -18,6 +18,7 @@ import {
 	HttpStatus,
 	ParseFilePipeBuilder,
 	Response,
+	Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -199,4 +200,20 @@ export class AuthController {
 		if (!result) throw new NotFoundException();
 		return result;
 	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'Successfully added liked song'})
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Post('me/likes:id')
+	addLikedSong(
+		@Request() req: any,
+		@Body() data: any,
+	) {
+		return this.usersService.addLikedSong(
+			req.user.id,
+			data.songId,
+		);
+	}
+
 }

@@ -99,4 +99,21 @@ export class UsersService {
 			resp.headers.set(k, v);
 		resp.body!.pipe(res);
 	}
+
+	async addLikedSong(
+		where: Prisma.UserWhereUniqueInput,
+		songId: number,
+	) {
+		return this.prisma.user.update({
+			where,
+			data: {
+				likedSongs: {
+					merde: {
+						songId: songId,
+						time: Date()
+					}
+				}
+			}
+		})
+	}
 }

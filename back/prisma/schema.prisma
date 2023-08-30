@@ -21,6 +21,7 @@ model User {
     SongHistory   SongHistory[]
     searchHistory SearchHistory[]
     settings      UserSettings?
+    likedSongs    Json?
 }
 
 model UserSettings {
