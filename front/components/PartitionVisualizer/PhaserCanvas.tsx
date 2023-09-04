@@ -8,10 +8,7 @@ import { PartitionContext } from '../../views/PlayView';
 import store, { RootState, useSelector } from '../../state/Store';
 import { setSoundPlayer as setSPStore } from '../../state/SoundPlayerSlice';
 import { useDispatch } from 'react-redux';
-import SoundFont from 'soundfont-player';
-import * as SAC from 'standardized-audio-context';
 import { SplendidGrandPiano, CacheStorage } from 'smplr';
-// import * as Tone from 'tone';
 
 let globalTimestamp = 0;
 let globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
@@ -89,21 +86,6 @@ const getPianoScene = (
 		}
 	}
 	return PianoScene;
-};
-
-const getSoundPlayer = async (audioContext: AudioContext) => {
-	const soundPlayerStore = store.getState().soundPlayer.soundPlayer;
-	if (soundPlayerStore) {
-		console.log('csp', soundPlayerStore);
-		return soundPlayerStore as unknown as SplendidGrandPiano;
-	}
-	const soundPlayer = await new SplendidGrandPiano(audioContext, {
-		storage: new CacheStorage(),
-	}).loaded();
-	console.log('sp', soundPlayer);
-	setSPStore(soundPlayer);
-	console.log('asp', soundPlayer);
-	return soundPlayer;
 };
 
 export type PianoCursorPosition = {
