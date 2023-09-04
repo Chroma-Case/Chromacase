@@ -5,7 +5,6 @@ import TextButton from "./TextButton";
 import { MaterialIcons } from "@expo/vector-icons";
 import API from "../API";
 
-
 type SongRowProps = {
 	liked: boolean;
 	song: Song | SongWithArtist; // TODO: remove Song
@@ -17,8 +16,8 @@ const handleLikeButton = {
 
 const SongRow = ({ song, onPress, liked }: SongRowProps) => {
 	return (
-		<RowCustom width={"100%"}>
-			<HStack px={2} space={5} justifyContent={"space-between"}>
+		<RowCustom width={'100%'}>
+			<HStack px={2} space={5} justifyContent={'space-between'}>
 				<Image
 					flexShrink={0}
 					flexGrow={0}
@@ -35,11 +34,11 @@ const SongRow = ({ song, onPress, liked }: SongRowProps) => {
 				}} />
 				<HStack
 					style={{
-						display: "flex",
+						display: 'flex',
 						flexShrink: 1,
 						flexGrow: 1,
-						alignItems: "center",
-						justifyContent: "flex-start",
+						alignItems: 'center',
+						justifyContent: 'flex-start',
 					}}
 					space={6}
 				>
@@ -49,7 +48,7 @@ const SongRow = ({ song, onPress, liked }: SongRowProps) => {
 						}}
 						isTruncated
 						pl={5}
-						maxW={"100%"}
+						maxW={'100%'}
 						bold
 						fontSize="md"
 					>
@@ -59,17 +58,17 @@ const SongRow = ({ song, onPress, liked }: SongRowProps) => {
 						style={{
 							flexShrink: 0,
 						}}
-						fontSize={"sm"}
+						fontSize={'sm'}
 					>
-						{song.artistId ?? "artist"}
+						{song.artistId ?? 'artist'}
 					</Text>
 				</HStack>
 				<TextButton
 					flexShrink={0}
 					flexGrow={0}
-					translate={{ translationKey: "playBtn" }}
+					translate={{ translationKey: 'playBtn' }}
 					colorScheme="primary"
-					variant={"outline"}
+					variant={'outline'}
 					size="sm"
 					mr={5}
 					onPress={onPress}
