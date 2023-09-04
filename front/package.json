@@ -69,8 +69,10 @@
 		"react-timer-hook": "^3.0.5",
 		"react-use-precision-timer": "^3.3.1",
 		"redux-persist": "^6.0.0",
+		"smplr": "^0.6.1",
 		"soundfont-player": "^0.12.0",
 		"standardized-audio-context": "^25.3.51",
+		"tone": "^14.7.77",
 		"type-fest": "^3.6.0",
 		"yup": "^1.2.0"
 	},

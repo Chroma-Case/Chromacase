@@ -99,15 +99,13 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const onPause = () => {
 		stopwatch.pause();
 		setPause(true);
-		if (webSocket.current?.readyState == WebSocket.OPEN) {
-			webSocket.current?.send(
-				JSON.stringify({
-					type: 'pause',
-					paused: true,
-					time: getElapsedTime(),
-				})
-			);
-		}
+		webSocket.current?.send(
+			JSON.stringify({
+				type: 'pause',
+				paused: true,
+				time: getElapsedTime(),
+			})
+		);
 	};
 	const onResume = () => {
 		if (stopwatch.isStarted()) {
@@ -116,26 +114,20 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			stopwatch.start();
 		}
 		setPause(false);
-		if (webSocket.current?.readyState == WebSocket.OPEN) {
-			webSocket.current?.send(
-				JSON.stringify({
-					type: 'pause',
-					paused: false,
-					time: getElapsedTime(),
-				})
-			);
-		}
+		webSocket.current?.send(
+			JSON.stringify({
+				type: 'pause',
+				paused: false,
+				time: getElapsedTime(),
+			})
+		);
 	};
 	const onEnd = () => {
-		setTime(0);
-		stopwatch.stop();
-		if (webSocket.current?.readyState == WebSocket.OPEN) {
-			webSocket.current?.send(
-				JSON.stringify({
-					type: 'end',
-				})
-			);
-		}
+		// webSocket.current?.send(
+		// 	JSON.stringify({
+		// 		type: 'end',
+		// 	})
+		// );
 	};
 
 	const onMIDISuccess = (access: MIDIAccess) => {
@@ -147,63 +139,63 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 		setMidiKeyboardFound(true);
 		let inputIndex = 0;
-		webSocket.current = new WebSocket(scoroBaseApiUrl);
-		webSocket.current.onopen = () => {
-			webSocket.current!.send(
-				JSON.stringify({
-					type: 'start',
-					id: song.data!.id,
-					mode: type,
-					bearer: accessToken,
-				})
-			);
-		};
-		webSocket.current.onmessage = (message) => {
-			try {
-				const data = JSON.parse(message.data);
-				if (data.type == 'end') {
-					navigation.navigate('Score', { songId: song.data!.id, ...data });
-					return;
-				}
-				const points = data.info.score;
-				const maxPoints = data.info.max_score || 1;
+		//webSocket.current = new WebSocket(scoroBaseApiUrl);
+		// webSocket.current.onopen = () => {
+		// 	webSocket.current!.send(
+		// 		JSON.stringify({
+		// 			type: 'start',
+		// 			id: song.data!.id,
+		// 			mode: type,
+		// 			bearer: accessToken,
+		// 		})
+		// 	);
+		// };
+		// webSocket.current.onmessage = (message) => {
+		// 	try {
+		// 		const data = JSON.parse(message.data);
+		// 		if (data.type == 'end') {
+		// 			navigation.navigate('Score', { songId: song.data!.id, ...data });
+		// 			return;
+		// 		}
+		// 		const points = data.info.score;
+		// 		const maxPoints = data.info.max_score || 1;
 
-				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
+		// 		setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
-				let formattedMessage = '';
-				let messageColor: ColorSchemeType | undefined;
+		// 		let formattedMessage = '';
+		// 		let messageColor: ColorSchemeType | undefined;
 
-				if (data.type == 'miss') {
-					formattedMessage = translate('missed');
-					messageColor = 'black';
-				} else if (data.type == 'timing' || data.type == 'duration') {
-					formattedMessage = translate(data[data.type]);
-					switch (data[data.type]) {
-						case 'perfect':
-							messageColor = 'green';
-							break;
-						case 'great':
-							messageColor = 'blue';
-							break;
-						case 'short':
-						case 'long':
-						case 'good':
-							messageColor = 'lightBlue';
-							break;
-						case 'too short':
-						case 'too long':
-						case 'wrong':
-							messageColor = 'trueGray';
-							break;
-						default:
-							break;
-					}
-				}
-				setLastScoreMessage({ content: formattedMessage, color: messageColor });
-			} catch (e) {
-				console.error(e);
-			}
-		};
+		// 		if (data.type == 'miss') {
+		// 			formattedMessage = translate('missed');
+		// 			messageColor = 'black';
+		// 		} else if (data.type == 'timing' || data.type == 'duration') {
+		// 			formattedMessage = translate(data[data.type]);
+		// 			switch (data[data.type]) {
+		// 				case 'perfect':
+		// 					messageColor = 'green';
+		// 					break;
+		// 				case 'great':
+		// 					messageColor = 'blue';
+		// 					break;
+		// 				case 'short':
+		// 				case 'long':
+		// 				case 'good':
+		// 					messageColor = 'lightBlue';
+		// 					break;
+		// 				case 'too short':
+		// 				case 'too long':
+		// 				case 'wrong':
+		// 					messageColor = 'trueGray';
+		// 					break;
+		// 				default:
+		// 					break;
+		// 			}
+		// 		}
+		// 		setLastScoreMessage({ content: formattedMessage, color: messageColor });
+		// 	} catch (e) {
+		// 		console.error(e);
+		// 	}
+		// };
 		inputs.forEach((input) => {
 			if (inputIndex != 0) {
 				return;
@@ -232,7 +224,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
 			setTime(() => getElapsedTime()); // Countdown
-		}, 1);
+		}, 10);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
