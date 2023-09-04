@@ -39,7 +39,7 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 					resizeMode="cover"
 				/>
 				<Box>
-					<Heading m={3}>Abba</Heading>
+					<Heading m={3}>{artistQuery.data.name}</Heading>
 					<Box>
 						{songsQuery.data.map((comp: Song, index: Key | null | undefined) => (
 							<SongRow
