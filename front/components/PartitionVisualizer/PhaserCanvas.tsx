@@ -5,23 +5,28 @@ import { useEffect, useRef } from 'react';
 import Phaser from 'phaser';
 import useColorScheme from '../../hooks/colorScheme';
 import { PartitionContext } from '../../views/PlayView';
-import { on } from 'events';
+import store, { RootState, useSelector } from '../../state/Store';
+import { setSoundPlayer as setSPStore } from '../../state/SoundPlayerSlice';
+import { useDispatch } from 'react-redux';
 import SoundFont from 'soundfont-player';
 import * as SAC from 'standardized-audio-context';
+import { SplendidGrandPiano, CacheStorage } from 'smplr';
+// import * as Tone from 'tone';
 
 let globalTimestamp = 0;
 let globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
 
-const playNotes = (notes: any[], soundPlayer: SoundFont.Player, audioContext: SAC.AudioContext) => {
+const isValidSoundPlayer = (soundPlayer: SplendidGrandPiano | undefined) => {
+	return soundPlayer && soundPlayer.loaded;
+}
+
+const playNotes = (notes: any[], soundPlayer: SplendidGrandPiano) => {
 	notes.forEach(({ note, duration }) => {
 		const fixedKey =
 			note.ParentVoiceEntry.ParentVoice.Parent.SubInstruments.at(0)?.fixedKey ?? 0;
 		const midiNumber = note.halfTone - fixedKey * 12;
 		const gain = note.ParentVoiceEntry.ParentVoice.Volume;
-		soundPlayer!.play(midiNumber.toString(), audioContext.currentTime, {
-			duration,
-			gain,
-		});
+		soundPlayer.start({ note: midiNumber, duration, velocity: gain * 127 });
 	});
 };
 
@@ -29,8 +34,7 @@ const getPianoScene = (
 	partitionB64: string,
 	cursorPositions: PianoCursorPosition[],
 	onEndReached: () => void,
-	soundPlayer: SoundFont.Player,
-	audioContext: SAC.AudioContext,
+	soundPlayer: SplendidGrandPiano,
 	colorScheme: 'light' | 'dark'
 ) => {
 	class PianoScene extends Phaser.Scene {
@@ -67,7 +71,7 @@ const getPianoScene = (
 					return false;
 				});
 				if (cP) {
-					playNotes(cP.notes, soundPlayer, audioContext);
+					playNotes(cP.notes, soundPlayer);
 					const tw = {
 						targets: this!.cursor,
 						x: cP!.x,
@@ -76,7 +80,6 @@ const getPianoScene = (
 					};
 					if (this.cursorPositionsIdx === cursorPositions.length - 1) {
 						tw.onComplete = () => {
-							soundPlayer.stop();
 							onEndReached();
 						};
 					}
@@ -86,6 +89,21 @@ const getPianoScene = (
 		}
 	}
 	return PianoScene;
+};
+
+const getSoundPlayer = async (audioContext: AudioContext) => {
+	const soundPlayerStore = store.getState().soundPlayer.soundPlayer;
+	if (soundPlayerStore) {
+		console.log('csp', soundPlayerStore);
+		return soundPlayerStore as unknown as SplendidGrandPiano;
+	}
+	const soundPlayer = await new SplendidGrandPiano(audioContext, {
+		storage: new CacheStorage(),
+	}).loaded();
+	console.log('sp', soundPlayer);
+	setSPStore(soundPlayer);
+	console.log('asp', soundPlayer);
+	return soundPlayer;
 };
 
 export type PianoCursorPosition = {
@@ -110,42 +128,61 @@ export type PhaserCanvasProps = {
 
 const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached }: PhaserCanvasProps) => {
 	const colorScheme = useColorScheme();
-	const audioContext = new SAC.AudioContext();
-	const [soundPlayer, setSoundPlayer] = React.useState<SoundFont.Player>();
+	const dispatch = useDispatch();
+	const soundPlayer = useSelector((state: RootState) => state.soundPlayer.soundPlayer);
 	const { timestamp } = React.useContext(PartitionContext);
 	const [game, setGame] = React.useState<Phaser.Game | null>(null);
 
 	globalTimestamp = timestamp;
+
 	useEffect(() => {
-		Promise.resolve(
-			SoundFont.instrument(audioContext as unknown as AudioContext, 'electric_piano_1')
-		).then((sound) => {
-			setSoundPlayer(sound);
-
-			const pianoScene = getPianoScene(
-				partitionB64,
-				cursorPositions,
-				onEndReached,
-				sound,
-				audioContext,
-				colorScheme
-			);
-
-			const config = {
-				type: Phaser.AUTO,
-				parent: 'phaser-canvas',
-				width: 1000,
-				height: 400,
-				scene: pianoScene,
-				scale: {
-					mode: Phaser.Scale.FIT,
-					autoCenter: Phaser.Scale.CENTER_BOTH,
-				},
-			};
-
-			setGame(new Phaser.Game(config));
-		});
+		if (isValidSoundPlayer(soundPlayer)) {
+			console.log('cache soundplayer', soundPlayer);
+			return;
+		}
+		console.log('creating soundplayer');
+		new SplendidGrandPiano(new AudioContext(), {
+			storage: new CacheStorage(),
+		})
+			.loaded()
+			.then((sp) => {
+				console.log('sp', sp);
+				dispatch(setSPStore(sp));
+			});
 	}, []);
+
+	useEffect(() => {
+		console.log('soundPlayer', soundPlayer);
+		if (!isValidSoundPlayer(soundPlayer) || !soundPlayer) return;
+		const pianoScene = getPianoScene(
+			partitionB64,
+			cursorPositions,
+			onEndReached,
+			soundPlayer,
+			colorScheme
+		);
+
+		const config = {
+			type: Phaser.AUTO,
+			parent: 'phaser-canvas',
+			width: 1000,
+			height: 400,
+			scene: pianoScene,
+			scale: {
+				mode: Phaser.Scale.FIT,
+				autoCenter: Phaser.Scale.CENTER_BOTH,
+			},
+		};
+
+		setGame(new Phaser.Game(config));
+		return () => {
+			console.log('destroying phaser game sp');
+			if (game) {
+				// currently the condition is always false
+				game.destroy(true);
+			}
+		}
+	}, [soundPlayer]);
 
 	return <div id="phaser-canvas"></div>;
 };
