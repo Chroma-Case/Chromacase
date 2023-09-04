@@ -88,6 +88,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
+	// const [endMsgReceived, setEndMsgReceived] = useState(false); // Used to know if to go to error screen when websocket closes
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const musixml = useQuery(
 		transformQuery(API.getSongMusicXML(songId), (data) => new TextDecoder().decode(data)),
@@ -123,15 +124,19 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		);
 	};
 	const onEnd = () => {
-		// webSocket.current?.send(
-		// 	JSON.stringify({
-		// 		type: 'end',
-		// 	})
-		// );
+		if (webSocket.current?.readyState != WebSocket.OPEN) {
+			navigation.navigate('Error');
+		}
+		webSocket.current?.send(
+			JSON.stringify({
+				type: 'end',
+			})
+		);
 	};
 
 	const onMIDISuccess = (access: MIDIAccess) => {
 		const inputs = access.inputs;
+		let endMsgReceived = false; // Used to know if to go to error screen when websocket closes
 
 		if (inputs.size < 2) {
 			toast.show({ description: 'No MIDI Keyboard found' });
@@ -139,63 +144,72 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 		setMidiKeyboardFound(true);
 		let inputIndex = 0;
-		//webSocket.current = new WebSocket(scoroBaseApiUrl);
-		// webSocket.current.onopen = () => {
-		// 	webSocket.current!.send(
-		// 		JSON.stringify({
-		// 			type: 'start',
-		// 			id: song.data!.id,
-		// 			mode: type,
-		// 			bearer: accessToken,
-		// 		})
-		// 	);
-		// };
-		// webSocket.current.onmessage = (message) => {
-		// 	try {
-		// 		const data = JSON.parse(message.data);
-		// 		if (data.type == 'end') {
-		// 			navigation.navigate('Score', { songId: song.data!.id, ...data });
-		// 			return;
-		// 		}
-		// 		const points = data.info.score;
-		// 		const maxPoints = data.info.max_score || 1;
+		webSocket.current = new WebSocket(scoroBaseApiUrl);
+		webSocket.current.onopen = () => {
+			webSocket.current!.send(
+				JSON.stringify({
+					type: 'start',
+					id: song.data!.id,
+					mode: type,
+					bearer: accessToken,
+				})
+			);
+		};
+		webSocket.current.onclose = () => {
+			console.log('Websocket closed', endMsgReceived);
+			if (!endMsgReceived) {
+				navigation.replace('Error');
+				return;
+			}
+		};
+		webSocket.current.onmessage = (message) => {
+			try {
+				const data = JSON.parse(message.data);
+				if (data.type == 'end') {
+					endMsgReceived = true;
+					webSocket.current?.close();
+					navigation.replace('Score', { songId: song.data!.id, ...data });
+					return;
+				}
+				const points = data.info.score;
+				const maxPoints = data.info.max_score || 1;
 
-		// 		setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
+				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
-		// 		let formattedMessage = '';
-		// 		let messageColor: ColorSchemeType | undefined;
+				let formattedMessage = '';
+				let messageColor: ColorSchemeType | undefined;
 
-		// 		if (data.type == 'miss') {
-		// 			formattedMessage = translate('missed');
-		// 			messageColor = 'black';
-		// 		} else if (data.type == 'timing' || data.type == 'duration') {
-		// 			formattedMessage = translate(data[data.type]);
-		// 			switch (data[data.type]) {
-		// 				case 'perfect':
-		// 					messageColor = 'green';
-		// 					break;
-		// 				case 'great':
-		// 					messageColor = 'blue';
-		// 					break;
-		// 				case 'short':
-		// 				case 'long':
-		// 				case 'good':
-		// 					messageColor = 'lightBlue';
-		// 					break;
-		// 				case 'too short':
-		// 				case 'too long':
-		// 				case 'wrong':
-		// 					messageColor = 'trueGray';
-		// 					break;
-		// 				default:
-		// 					break;
-		// 			}
-		// 		}
-		// 		setLastScoreMessage({ content: formattedMessage, color: messageColor });
-		// 	} catch (e) {
-		// 		console.error(e);
-		// 	}
-		// };
+				if (data.type == 'miss') {
+					formattedMessage = translate('missed');
+					messageColor = 'black';
+				} else if (data.type == 'timing' || data.type == 'duration') {
+					formattedMessage = translate(data[data.type]);
+					switch (data[data.type]) {
+						case 'perfect':
+							messageColor = 'green';
+							break;
+						case 'great':
+							messageColor = 'blue';
+							break;
+						case 'short':
+						case 'long':
+						case 'good':
+							messageColor = 'lightBlue';
+							break;
+						case 'too short':
+						case 'too long':
+						case 'wrong':
+							messageColor = 'trueGray';
+							break;
+						default:
+							break;
+					}
+				}
+				setLastScoreMessage({ content: formattedMessage, color: messageColor });
+			} catch (e) {
+				console.error(e);
+			}
+		};
 		inputs.forEach((input) => {
 			if (inputIndex != 0) {
 				return;
