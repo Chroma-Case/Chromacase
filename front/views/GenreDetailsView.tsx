@@ -71,13 +71,13 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 			>
 				<Box>
 				<CardGridCustom
-					content={songsQuery.data.slice(0, songsQuery.data.length).map((artistData) => ({
-						image: API.getArtistIllustration(artistData.id),
-						name: artistData.name,
-						id: artistData.id,
+					content={songsQuery.data.slice(0, songsQuery.data.length).map((songData) => ({
+						image: API.getArtistIllustration(songData.id),
+						name: songData.name,
+						id: songData.id,
 						onPress: () => {
-							API.createSearchHistoryEntry(artistData.name, 'artist');
-							navigation.navigate('Artist', { artistId: artistData.id });
+							API.createSearchHistoryEntry(songData.name, 'artist');
+							navigation.navigate('Song', { songId: songData.id });
 						},
 					}))}
 					cardComponent={ArtistCard}
