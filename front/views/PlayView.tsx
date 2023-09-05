@@ -79,7 +79,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
-	// const [endMsgReceived, setEndMsgReceived] = useState(false); // Used to know if to go to error screen when websocket closes
 	const fadeAnim = useRef(new Animated.Value(0)).current;
 	const musixml = useQuery(
 		transformQuery(API.getSongMusicXML(songId), (data) => new TextDecoder().decode(data)),
