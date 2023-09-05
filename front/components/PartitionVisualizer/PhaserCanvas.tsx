@@ -1,11 +1,10 @@
 // create a simple phaser effect with a canvas that can be easily imported as a react component
 
 import * as React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Phaser from 'phaser';
 import useColorScheme from '../../hooks/colorScheme';
-import { PartitionContext } from '../../views/PlayView';
-import store, { RootState, useSelector } from '../../state/Store';
+import { RootState, useSelector } from '../../state/Store';
 import { setSoundPlayer as setSPStore } from '../../state/SoundPlayerSlice';
 import { useDispatch } from 'react-redux';
 import { SplendidGrandPiano, CacheStorage } from 'smplr';
@@ -106,35 +105,34 @@ export type PhaserCanvasProps = {
 	partitionB64: string;
 	cursorPositions: PianoCursorPosition[];
 	onEndReached: () => void;
+	onPause: () => void;
+	onResume: () => void;
+	// Timestamp of the play session, in milisecond
+	timestamp: number;
 };
 
-const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached }: PhaserCanvasProps) => {
+const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached, timestamp }: PhaserCanvasProps) => {
 	const colorScheme = useColorScheme();
 	const dispatch = useDispatch();
 	const soundPlayer = useSelector((state: RootState) => state.soundPlayer.soundPlayer);
-	const { timestamp } = React.useContext(PartitionContext);
 	const [game, setGame] = React.useState<Phaser.Game | null>(null);
 
 	globalTimestamp = timestamp;
 
 	useEffect(() => {
 		if (isValidSoundPlayer(soundPlayer)) {
-			console.log('cache soundplayer', soundPlayer);
 			return;
 		}
-		console.log('creating soundplayer');
 		new SplendidGrandPiano(new AudioContext(), {
 			storage: new CacheStorage(),
 		})
 			.loaded()
 			.then((sp) => {
-				console.log('sp', sp);
 				dispatch(setSPStore(sp));
 			});
 	}, []);
 
 	useEffect(() => {
-		console.log('soundPlayer', soundPlayer);
 		if (!isValidSoundPlayer(soundPlayer) || !soundPlayer) return;
 		const pianoScene = getPianoScene(
 			partitionB64,
@@ -152,13 +150,12 @@ const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached }: PhaserCan
 			scene: pianoScene,
 			scale: {
 				mode: Phaser.Scale.FIT,
-				autoCenter: Phaser.Scale.CENTER_BOTH,
+				autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
 			},
 		};
 
 		setGame(new Phaser.Game(config));
 		return () => {
-			console.log('destroying phaser game sp');
 			if (game) {
 				// currently the condition is always false
 				game.destroy(true);

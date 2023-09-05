@@ -15,19 +15,17 @@ import {
 	HStack,
 } from 'native-base';
 import IconButton from '../components/IconButton';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { RouteProps, useNavigation } from '../Navigation';
 import { transformQuery, useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import PartitionView from '../components/PartitionView';
 import PartitionCoord from '../components/PartitionCoord';
 import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
@@ -124,8 +122,11 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		);
 	};
 	const onEnd = () => {
+		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
-			navigation.navigate('Error');
+			console.warn('onEnd: Websocket not open');
+			navigation.navigate('Home');
+			return;
 		}
 		webSocket.current?.send(
 			JSON.stringify({
@@ -158,7 +159,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current.onclose = () => {
 			console.log('Websocket closed', endMsgReceived);
 			if (!endMsgReceived) {
-				navigation.replace('Error');
+				toast.show({ description: 'Connection lost with Scorometer' });
+				// the special case when the front send the end message succesfully 
+				// but the websocket is closed before the end message is received
+				// is not handled
 				return;
 			}
 		};
@@ -168,7 +172,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				if (data.type == 'end') {
 					endMsgReceived = true;
 					webSocket.current?.close();
-					navigation.replace('Score', { songId: song.data!.id, ...data });
+					navigation.navigate('Score', { songId: song.data!.id, ...data });
 					return;
 				}
 				const points = data.info.score;
@@ -272,11 +276,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
-			<PartitionContext.Provider
-				value={{
-					timestamp: time,
-				}}
-			>
 				<HStack
 					width="100%"
 					justifyContent="center"
@@ -293,21 +292,12 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					</Animated.View>
 				</HStack>
 				<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-					{/* <PartitionView
-					file={musixml.data}
-					onPartitionReady={() => setPartitionRendered(true)}
-					timestamp={Math.max(0, time)}
-					onEndReached={() => {
-						onEnd();
-					}}
-				/> */}
 					<PartitionCoord
 						file={musixml.data}
-						// timestamp={Math.max(0, time)}
-						timestamp={0}
-						onEndReached={() => {
-							onEnd();
-						}}
+						timestamp={time}
+						onEndReached={onEnd}
+						onPause={onPause}
+						onResume={onResume}
 						onPartitionReady={() => setPartitionRendered(true)}
 					/>
 					{!partitionRendered && <LoadingComponent />}
@@ -389,7 +379,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						</Row>
 					</Row>
 				</Box>
-			</PartitionContext.Provider>
 		</SafeAreaView>
 	);
 };

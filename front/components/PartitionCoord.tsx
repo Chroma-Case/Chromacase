@@ -8,6 +8,8 @@ type PartitionCoordProps = {
 	file: string;
 	onPartitionReady: () => void;
 	onEndReached: () => void;
+	onResume: () => void;
+	onPause: () => void;
 	// Timestamp of the play session, in milisecond
 	timestamp: number;
 };
@@ -16,6 +18,8 @@ const PartitionCoord = ({
 	file,
 	onPartitionReady,
 	onEndReached,
+	onPause,
+	onResume,
 	timestamp,
 }: PartitionCoordProps) => {
 	const [partitionData, setPartitionData] = React.useState<
@@ -41,6 +45,9 @@ const PartitionCoord = ({
 				<PhaserCanvas
 					partitionB64={partitionData?.[0]}
 					cursorPositions={partitionData?.[1]}
+					timestamp={timestamp}
+					onPause={onPause}
+					onResume={onResume}
 					onEndReached={() => {
 						onEndReached();
 					}}
