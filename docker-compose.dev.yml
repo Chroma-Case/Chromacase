@@ -9,6 +9,7 @@ services:
     volumes:
       - ./back:/app
       - ./assets:/assets
+      - ./data:/data
     depends_on:
       db:
         condition: service_healthy

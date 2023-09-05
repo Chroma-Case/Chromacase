@@ -1,81 +1,11 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import { Box, Image, Heading, HStack, Card, Text } from 'native-base';
-import Translate from '../components/Translate';
+import { Box, Image, Heading, HStack } from 'native-base';
 import { useNavigation } from '../Navigation';
 import TextButton from '../components/TextButton';
-
-const UserMedals = () => {
-	return (
-		<Card marginX={20} marginY={10}>
-			<Heading>
-				<Translate translationKey="medals" />
-			</Heading>
-			<HStack alignItems={'row'} space="10">
-				<Image
-					source={{
-						uri: 'https://wallpaperaccess.com/full/317501.jpg',
-					}}
-					alt="Profile picture"
-					size="lg"
-				/>
-				<Image
-					source={{
-						uri: 'https://wallpaperaccess.com/full/317501.jpg',
-					}}
-					alt="Profile picture"
-					size="lg"
-				/>
-				<Image
-					source={{
-						uri: 'https://wallpaperaccess.com/full/317501.jpg',
-					}}
-					alt="Profile picture"
-					size="lg"
-				/>
-				<Image
-					source={{
-						uri: 'https://wallpaperaccess.com/full/317501.jpg',
-					}}
-					alt="Profile picture"
-					size="lg"
-				/>
-			</HStack>
-		</Card>
-	);
-};
-
-const PlayerStats = () => {
-	const answer = 'Answer from back';
-
-	return (
-		<Card marginX={20} marginY={10}>
-			<Heading>
-				{' '}
-				<Translate translationKey="playerStats" />{' '}
-			</Heading>
-			<Text>
-				{' '}
-				<Translate translationKey="mostPlayedSong" /> {answer}{' '}
-			</Text>
-			<Text>
-				{' '}
-				<Translate translationKey="goodNotesPlayed" /> {answer}{' '}
-			</Text>
-			<Text>
-				{' '}
-				<Translate translationKey="longestCombo" /> {answer}{' '}
-			</Text>
-			<Text>
-				{' '}
-				<Translate translationKey="favoriteGenre" /> {answer}{' '}
-			</Text>
-		</Card>
-	);
-};
+import UserAvatar from '../components/UserAvatar';
 
 const ProfilePictureBannerAndLevel = () => {
-	const profilePic = 'https://wallpaperaccess.com/full/317501.jpg';
 	const username = 'Username';
 	const level = '1';
 
@@ -93,19 +23,13 @@ const ProfilePictureBannerAndLevel = () => {
 				size="lg"
 				style={{ height: imageHeight, width: imageWidth, zIndex: 0, opacity: 0.5 }}
 			/>
-			<Box zIndex={1} position={'absolute'} marginY={10} marginX={10}>
-				<Image
-					borderRadius={100}
-					source={{ uri: profilePic }}
-					alt="Profile picture"
-					size="lg"
-					style={{ position: 'absolute' }}
-				/>
-				<Box w="100%" paddingY={3} paddingLeft={100}>
+			<HStack zIndex={1} space={3} position={'absolute'} marginY={10} marginX={10}>
+				<UserAvatar size="lg" />
+				<Box>
 					<Heading>{username}</Heading>
 					<Heading>Level : {level}</Heading>
 				</Box>
-			</Box>
+			</HStack>
 		</View>
 	);
 };
@@ -116,8 +40,6 @@ const ProfileView = () => {
 	return (
 		<View style={{ flexDirection: 'column' }}>
 			<ProfilePictureBannerAndLevel />
-			<UserMedals />
-			<PlayerStats />
 			<Box w="10%" paddingY={10} paddingLeft={5} paddingRight={50} zIndex={1}>
 				<TextButton
 					onPress={() => navigation.navigate('Settings', { screen: 'profile' })}

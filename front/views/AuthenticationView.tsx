@@ -8,6 +8,7 @@ import SigninForm from '../components/forms/signinform';
 import SignupForm from '../components/forms/signupform';
 import TextButton from '../components/TextButton';
 import { RouteProps, useNavigation } from '../Navigation';
+import * as Linking from 'expo-linking';
 
 const hanldeSignin = async (
 	username: string,
@@ -56,6 +57,13 @@ const AuthenticationView = ({ isSignup }: RouteProps<AuthenticationViewProps>) =
 			<Text>
 				<Translate translationKey="welcome" />
 			</Text>
+			<TextButton
+				translate={{ translationKey: 'continuewithgoogle' }}
+				variant="outline"
+				marginTop={5}
+				colorScheme="primary"
+				onPress={() => Linking.openURL(`${API.baseUrl}/auth/login/google`)}
+			/>
 			{mode === 'signin' ? (
 				<SigninForm
 					onSubmit={(username, password) =>

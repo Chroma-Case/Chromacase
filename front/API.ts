@@ -21,6 +21,8 @@ import { PlageHandler } from './models/Plage';
 import { ListHandler } from './models/List';
 import { AccessTokenResponseHandler } from './models/AccessTokenResponse';
 import * as yup from 'yup';
+import { base64ToBlob } from 'file64';
+import { ImagePickerAsset } from 'expo-image-picker';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -30,6 +32,7 @@ export type AccessToken = string;
 type FetchParams = {
 	route: string;
 	body?: object;
+	formData?: FormData;
 	method?: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
 };
 
@@ -81,17 +84,22 @@ export default class API {
 	public static async fetch(params: FetchParams): Promise<void>;
 	public static async fetch(params: FetchParams, handle?: HandleParams) {
 		const jwtToken = store.getState().user.accessToken;
-		const header = {
-			'Content-Type': 'application/json',
+		const headers = {
+			...(params.formData == undefined && { 'Content-Type': 'application/json' }),
+			...(jwtToken && { Authorization: `Bearer ${jwtToken}` }),
 		};
 		const response = await fetch(`${API.baseUrl}${params.route}`, {
-			headers: (jwtToken && { ...header, Authorization: `Bearer ${jwtToken}` }) || header,
-			body: JSON.stringify(params.body),
+			headers: headers,
+			body: params.formData ?? JSON.stringify(params.body),
 			method: params.method ?? 'GET',
 		}).catch(() => {
 			throw new Error('Error while fetching API: ' + API.baseUrl);
 		});
 		if (!handle || handle.emptyResponse) {
+			if (!response.ok) {
+				console.log(await response.json());
+				throw new APIError(response.statusText, response.status);
+			}
 			return;
 		}
 		if (handle.raw) {
@@ -164,6 +172,7 @@ export default class API {
 			{
 				route: '/auth/guest',
 				method: 'POST',
+				body: undefined,
 			},
 			{ handler: AccessTokenResponseHandler }
 		)
@@ -625,5 +634,17 @@ export default class API {
 			},
 			{ handler: UserHandler }
 		);
+	}
+
+	public static async updateProfileAvatar(image: ImagePickerAsset): Promise<void> {
+		const data = await base64ToBlob(image.uri);
+		const formData = new FormData();
+
+		formData.append('file', data);
+		return API.fetch({
+			route: '/auth/me/picture',
+			method: 'POST',
+			formData,
+		});
 	}
 }
