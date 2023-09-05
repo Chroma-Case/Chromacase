@@ -32,6 +32,14 @@
 			"eas": {
 				"projectId": "dade8e5e-3e2c-49f7-98c5-cf8834c7ebb2"
 			}
-		}
+		},
+		"plugins": [
+			[
+				"expo-image-picker",
+				{
+					"photosPermission": "The app accesses your photos to let you set your personal avatar."
+				}
+			]
+		]
 	}
 }

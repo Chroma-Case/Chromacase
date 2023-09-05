@@ -5,6 +5,7 @@ export const SongHistoryItemValidator = yup.object({
 	songID: yup.number().required(),
 	userID: yup.number().required(),
 	score: yup.number().required(),
+	playDate: yup.date().required(),
 	difficulties: yup.mixed().required(),
 });
 
@@ -38,6 +39,7 @@ export type SongHistoryItem = {
 	songID: number;
 	userID: number;
 	score: number;
+	playDate: Date;
 	difficulties: object;
 };
 

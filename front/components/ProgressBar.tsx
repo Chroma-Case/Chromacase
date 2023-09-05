@@ -1,9 +1,9 @@
 import React from 'react';
 import { translate } from '../i18n/i18n';
-import { Box, Text, VStack, Progress, Stack, AspectRatio } from 'native-base';
+import { Box, Text, VStack, Progress, Stack } from 'native-base';
 import { useNavigation } from '../Navigation';
-import { Image } from 'native-base';
 import Card from '../components/Card';
+import UserAvatar from './UserAvatar';
 
 const ProgressBar = ({ xp }: { xp: number }) => {
 	const level = Math.floor(xp / 1000);
@@ -15,18 +15,8 @@ const ProgressBar = ({ xp }: { xp: number }) => {
 
 	return (
 		<Card w="100%" onPress={() => nav.navigate('User')}>
-			<Stack padding={4} space={2} direction="row">
-				<AspectRatio ratio={1}>
-					<Image
-						position="relative"
-						borderRadius={100}
-						source={{
-							uri: 'https://wallpaperaccess.com/full/317501.jpg', // TODO : put the actual profile pic
-						}}
-						alt="Profile picture"
-						zIndex={0}
-					/>
-				</AspectRatio>
+			<Stack padding={4} space={2} direction="row" alignItems="center">
+				<UserAvatar />
 				<VStack alignItems={'center'} flexGrow={1} space={2}>
 					<Text>{`${translate('level')} ${level}`}</Text>
 					<Box w="100%">

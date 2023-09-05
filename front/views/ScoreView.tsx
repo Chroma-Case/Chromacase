@@ -8,6 +8,7 @@ import CardGridCustom from '../components/CardGridCustom';
 import SongCard from '../components/SongCard';
 import { useQueries, useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
+import ScoreGraph from '../components/ScoreGraph';
 
 type ScoreViewProps = {
 	songId: number;
@@ -32,6 +33,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 	const artistQuery = useQuery(() => API.getArtist(songQuery.data!.artistId!), {
 		enabled: songQuery.data !== undefined,
 	});
+	const scoresQuery = useQuery(API.getSongHistory(props.songId), { refetchOnWindowFocus: true });
 	const recommendations = useQuery(API.getSongSuggestions);
 	const artistRecommendations = useQueries(
 		recommendations.data
@@ -54,7 +56,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 
 	return (
 		<ScrollView p={8} contentContainerStyle={{ alignItems: 'center' }}>
-			<VStack width={{ base: '100%', lg: '50%' }} textAlign="center">
+			<VStack width={{ base: '100%', lg: '50%' }} space={3} textAlign="center">
 				<Text bold fontSize="lg">
 					{songQuery.data.name}
 				</Text>
@@ -137,6 +139,9 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 						</Column>
 					</Card>
 				</Row>
+				{scoresQuery.data && (scoresQuery.data?.history?.length ?? 0) > 1 && (
+					<ScoreGraph songHistory={scoresQuery.data} />
+				)}
 				<CardGridCustom
 					style={{ justifyContent: 'space-evenly' }}
 					content={recommendations.data.map((i) => ({

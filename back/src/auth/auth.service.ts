@@ -15,7 +15,7 @@ export class AuthService {
 		password: string,
 	): Promise<PayloadInterface | null> {
 		const user = await this.userService.user({ username });
-		if (user && bcrypt.compareSync(password, user.password)) {
+		if (user && user.password && bcrypt.compareSync(password, user.password)) {
 			return {
 				username: user.username,
 				id: user.id,

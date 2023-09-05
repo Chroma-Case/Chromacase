@@ -12,6 +12,12 @@ import {
 	InternalServerErrorException,
 	Patch,
 	NotFoundException,
+	Req,
+	UseInterceptors,
+	UploadedFile,
+	HttpStatus,
+	ParseFilePipeBuilder,
+	Response,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -32,6 +38,9 @@ import { Profile } from './dto/profile.dto';
 import { Setting } from 'src/models/setting';
 import { UpdateSettingDto } from 'src/settings/dto/update-setting.dto';
 import { SettingsService } from 'src/settings/settings.service';
+import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { writeFile } from 'fs';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -42,12 +51,27 @@ export class AuthController {
 		private settingsService: SettingsService,
 	) {}
 
+	@Get('login/google')
+	@UseGuards(AuthGuard('google'))
+	googleLogin() {}
+
+	@Get('logged/google')
+	@UseGuards(AuthGuard('google'))
+	async googleLoginCallbakc(@Req() req: any) {
+		let user = await this.usersService.user({ googleID: req.user.googleID });
+		if (!user) {
+			user = await this.usersService.createUser(req.user);
+			await this.settingsService.createUserSetting(user.id);
+		}
+		return this.authService.login(user);
+	}
+
 	@Post('register')
 	async register(@Body() registerDto: RegisterDto): Promise<void> {
 		try {
-			const user = await this.usersService.createUser(registerDto)
+			const user = await this.usersService.createUser(registerDto);
 			await this.settingsService.createUserSetting(user.id);
-		} catch(e) {
+		} catch (e) {
 			console.error(e);
 			throw new BadRequestException();
 		}
@@ -67,6 +91,40 @@ export class AuthController {
 		const user = await this.usersService.createGuest();
 		await this.settingsService.createUserSetting(user.id);
 		return this.authService.login(user);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'The user profile picture' })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Get('me/picture')
+	async getProfilePicture(@Request() req: any, @Response() res: any) {
+		return await this.usersService.getProfilePicture(req.user.id, res);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'The user profile picture' })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Post('me/picture')
+	@UseInterceptors(FileInterceptor('file'))
+	async postProfilePicture(
+		@Request() req: any,
+		@UploadedFile(
+			new ParseFilePipeBuilder()
+				.addFileTypeValidator({
+					fileType: 'jpeg',
+				})
+				.build({
+					errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+				}),
+		)
+		file: Express.Multer.File,
+	) {
+		const path = `/data/${req.user.id}.jpg`
+		writeFile(path, file.buffer, (err) => {
+			if (err) throw err;
+		});
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -116,25 +174,28 @@ export class AuthController {
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({description: 'Successfully edited settings', type: Setting})
-	@ApiUnauthorizedResponse({description: 'Invalid token'})
+	@ApiOkResponse({ description: 'Successfully edited settings', type: Setting })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Patch('me/settings')
 	udpateSettings(
 		@Request() req: any,
-		@Body() settingUserDto: UpdateSettingDto): Promise<Setting> {
+		@Body() settingUserDto: UpdateSettingDto,
+	): Promise<Setting> {
 		return this.settingsService.updateUserSettings({
-			where: { userId: +req.user.id},
+			where: { userId: +req.user.id },
 			data: settingUserDto,
 		});
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({description: 'Successfully edited settings', type: Setting})
-	@ApiUnauthorizedResponse({description: 'Invalid token'})
+	@ApiOkResponse({ description: 'Successfully edited settings', type: Setting })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me/settings')
 	async getSettings(@Request() req: any): Promise<Setting> {
-		const result = await this.settingsService.getUserSetting({ userId: +req.user.id });
+		const result = await this.settingsService.getUserSetting({
+			userId: +req.user.id,
+		});
 		if (!result) throw new NotFoundException();
 		return result;
 	}
