@@ -67,13 +67,6 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
-export const PartitionContext = React.createContext<{
-	// Timestamp of the play session, in milisecond
-	timestamp: number;
-}>({
-	timestamp: 0,
-});
-
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
