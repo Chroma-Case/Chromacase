@@ -2,72 +2,52 @@ import { SafeAreaView } from 'react-native';
 import { VStack, Text, Box, Flex, Image, Heading, IconButton, Icon, Container, Center, useBreakpointValue, ScrollView } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
-import { useNavigation } from '../Navigation';
+import { RouteProps, useNavigation } from '../Navigation';
 import API from '../API';
 import Artist from '../models/Artist';
 import ArtistCard from '../components/ArtistCard';
 import CardGridCustom from '../components/CardGridCustom';
 import { translate } from '../i18n/i18n';
 
-const colorRange = [
-	{
-		code: '#364fc7',
-	},
-	{
-		code: '#5c940d',
-	},
-	{
-		code: '#c92a2a',
-	},
-	{
-		code: '#d6336c',
-	},
-	{
-		code: '#20c997'
-	}
-]
+const colorRange = ['#364fc7', '#5c940d', '#c92a2a', '#d6336c', '#20c997'];
+// 	{
+// 		code: '#364fc7',
+// 	},
+// 	{
+// 		code: '#5c940d',
+// 	},
+// 	{
+// 		code: '#c92a2a',
+// 	},
+// 	{
+// 		code: '#d6336c',
+// 	},
+// 	{
+// 		code: '#20c997'
+// 	}
+// ]
 
-const rockArtists: Artist[] = [
-	{
-		id: 1,
-		name: "Led Zeppelin",
-		picture: "https://picsum.photos/200",
-	},
-	{
-		id: 2,
-		name: "Queen",
-		picture: "https://picsum.photos/200",
-	},
-	{
-		id: 3,
-		name: "The Rolling Stones",
-		picture: "https://picsum.photos/200",
-	},
-	{
-		id: 4,
-		name: "AC/DC",
-		picture: "https://picsum.photos/200",
-	},
-	{
-		name: "Guns N' Roses",
-		id: 5,
-		picture: "https://picsum.photos/200",
-	},
-];
+type GenreDetailsViewProps = {
+	genreId: number;
+}
 
-const GenreDetailsView = ({ genreId }: any) => {
-	const { isLoading: isLoadingGenre, data: genreData, error: isErrorGenre } = useQuery(API.getArtist(genreId));
+const rockArtists: any[] = [];
+
+const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
+	// const { isLoading: isLoadingGenre, data: genreData, error: isErrorGenre } = useQuery(API.getArtist(genreId));
+	const genreQuery = useQuery(API.getGenre(genreId))
+	const songsQuery = useQuery(API.getSongsByGenre(genreId))
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isMobileView = screenSize == "small";
 	const navigation = useNavigation();
 
-	// if (isLoadingGenre) {
-	// 	return <LoadingView />;
-	// }
-
-	// if (isErrorGenre) {
-	// 	navigation.navigate('Error');
-	// }
+	if (genreQuery.isError || songsQuery.isError) {
+		navigation.navigate('Error');
+		return <></>;
+	}
+	if (!genreQuery.data || songsQuery.data === undefined) {
+		return <LoadingView />;
+	}
 
 	return (
 		<ScrollView>
@@ -77,11 +57,12 @@ const GenreDetailsView = ({ genreId }: any) => {
 			width={'100%'}
 			bg={{
 				linearGradient: {
-					colors: [colorRange[Math.floor(Math.random() * 5)]?.code ?? '#364fc7', 'black'],
+					colors: [colorRange[Math.floor(Math.random() * 5)] ?? '#364fc7', 'black'],
 					start: [0, 0],
 					end: [0, 1],
 				},}}
 			/>
+			<Heading ml={3} fontSize={50}>{genreQuery.data.name}</Heading>
 			<Flex
 				flexWrap="wrap"
 				direction={isMobileView ? 'column' : 'row'}
@@ -89,9 +70,8 @@ const GenreDetailsView = ({ genreId }: any) => {
 				mt={4}
 			>
 				<Box>
-				{rockArtists?.length ? (
 				<CardGridCustom
-					content={rockArtists.slice(0, rockArtists.length).map((artistData) => ({
+					content={songsQuery.data.slice(0, songsQuery.data.length).map((artistData) => ({
 						image: API.getArtistIllustration(artistData.id),
 						name: artistData.name,
 						id: artistData.id,
@@ -102,9 +82,6 @@ const GenreDetailsView = ({ genreId }: any) => {
 					}))}
 					cardComponent={ArtistCard}
 				/>
-			) : (
-				<Text>{translate('errNoResults')}</Text>
-			)}
 				</Box>
 				<Box>
 					

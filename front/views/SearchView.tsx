@@ -19,7 +19,7 @@ interface SearchContextType {
 	songData: Song[];
 	artistData: Artist[];
 	genreData: Genre[];
-	favoriteData: Song[];
+	// favoriteData: Song[];
 	isLoadingSong: boolean;
 	isLoadingArtist: boolean;
 	isLoadingGenre: boolean;
@@ -33,7 +33,7 @@ export const SearchContext = React.createContext<SearchContextType>({
 	songData: [],
 	artistData: [],
 	genreData: [],
-	favoriteData: [],
+	// favoriteData: [],
 	isLoadingSong: false,
 	isLoadingArtist: false,
 	isLoadingGenre: false,
@@ -62,10 +62,10 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 		{ enabled: !!stringQuery }
 	);
 
-	const { isLoading: isLoadingFavorite, data: favoriteData = [] } = useQuery(
-		API.getFavorites(),
-		{ enabled: true }
-	)
+	// const { isLoading: isLoadingFavorite, data: favoriteData = [] } = useQuery(
+	// 	API.getFavorites(),
+	// 	{ enabled: true }
+	// )
 
 	const updateFilter = (newData: Filter) => {
 		// called when the filter is changed
@@ -87,7 +87,7 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 						songData,
 						artistData,
 						genreData,
-						favoriteData,
+						// favoriteData,
 						isLoadingSong,
 						isLoadingArtist,
 						isLoadingGenre,

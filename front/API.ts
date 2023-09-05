@@ -298,6 +298,24 @@ export default class API {
 	}
 
 	/**
+	 *  Retrieves all songs corresponding to the given genre ID
+	 * @param genreId the id of the genre we're aiming
+	 * @returns a promise of an array of Songs
+	 */
+	public static getSongsByGenre(genreId: number): Query<Song[]> {
+		return {
+			key: ['genre', genreId, 'songs'],
+			exec: () =>
+				API.fetch(
+					{
+						route: `/song?genreId=${genreId}`,
+					},
+					{ handler: PlageHandler(SongHandler) }
+				).then(({ data }) => data),
+		};
+	}
+
+	/**
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
 	 */
@@ -332,15 +350,22 @@ export default class API {
 		return `${API.baseUrl}/genre/${genreId}/illustration`;
 	}
 
-	// public static getGenre(genreId: number): Query<Genre> {
-	// 	return {
-	// 		key: ['genre', genreId],
-	// 		exec: () =>
-	// 			API.fetch({
-	// 				route: `/genre/${genreId}`,
-	// 			}),
-	// 	}
-	// }
+	/**
+	 * Retrieves a genre
+	 * @param genreId the id of the aimed genre
+	 */
+	public static getGenre(genreId: number): Query<Genre> {
+		return {
+			key: ['genre', genreId],
+			exec: () =>
+				API.fetch(
+					{
+						route: `/genre/${genreId}`,
+					},
+					{ handler: GenreHandler }
+				),
+		};
+	}
 
 	/**
 	 * Retrive a song's musicXML partition

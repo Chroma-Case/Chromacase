@@ -146,10 +146,4 @@ export class SongController {
 			songId: id,
 		});
 	}
-
-    @Get('/artist/:artistId')
-    async getSongByArtist(@Param('artistId', ParseIntPipe) artistId: number) {
-        const res = await this.songService.songByArtist(artistId)
-        return res;
-    }
 }
