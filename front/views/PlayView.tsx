@@ -1,4 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform, Animated } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -117,7 +118,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
 			console.warn('onEnd: Websocket not open');
-			navigation.navigate('Home');
+			navigation.dispatch(StackActions.replace('Home'));
 			return;
 		}
 		webSocket.current?.send(
@@ -164,7 +165,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				if (data.type == 'end') {
 					endMsgReceived = true;
 					webSocket.current?.close();
-					navigation.navigate('Score', { songId: song.data!.id, ...data });
+					console.log('End message received stack action');
+					navigation.dispatch(
+						StackActions.replace('Score', { songId: song.data!.id, ...data })
+					);
 					return;
 				}
 				const points = data.info.score;
@@ -238,7 +242,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
-			onEnd();
+			stopwatch.stop();
 			clearInterval(interval);
 		};
 	}, []);
