@@ -14,7 +14,7 @@ let globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
 
 const isValidSoundPlayer = (soundPlayer: SplendidGrandPiano | undefined) => {
 	return soundPlayer && soundPlayer.loaded;
-}
+};
 
 const playNotes = (notes: any[], soundPlayer: SplendidGrandPiano) => {
 	notes.forEach(({ note, duration }) => {
@@ -111,7 +111,12 @@ export type PhaserCanvasProps = {
 	timestamp: number;
 };
 
-const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached, timestamp }: PhaserCanvasProps) => {
+const PhaserCanvas = ({
+	partitionB64,
+	cursorPositions,
+	onEndReached,
+	timestamp,
+}: PhaserCanvasProps) => {
 	const colorScheme = useColorScheme();
 	const dispatch = useDispatch();
 	const soundPlayer = useSelector((state: RootState) => state.soundPlayer.soundPlayer);
@@ -160,7 +165,7 @@ const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached, timestamp }
 				// currently the condition is always false
 				game.destroy(true);
 			}
-		}
+		};
 	}, [soundPlayer]);
 
 	return <div id="phaser-canvas"></div>;

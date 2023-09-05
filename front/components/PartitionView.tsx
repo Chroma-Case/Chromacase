@@ -55,9 +55,7 @@ const PartitionView = (props: PartitionViewProps) => {
 
 	useEffect(() => {
 		const _osmd = new OSMD(OSMD_DIV_ID, options);
-		Promise.all([
-			_osmd.load(props.file),
-		]).then(() => {
+		Promise.all([_osmd.load(props.file)]).then(() => {
 			_osmd.render();
 			_osmd.cursor.show();
 			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
@@ -79,8 +77,14 @@ const PartitionView = (props: PartitionViewProps) => {
 					.NotesUnderCursor()
 					.sort((n1, n2) => n1.Length.CompareTo(n2.Length))
 					.at(0);
-				const ts = timestampToMs(shortestNotes?.getAbsoluteTimestamp() ?? new Fraction(-1), wholeNoteLength);
-				const sNL = timestampToMs(shortestNotes?.Length ?? new Fraction(-1), wholeNoteLength);
+				const ts = timestampToMs(
+					shortestNotes?.getAbsoluteTimestamp() ?? new Fraction(-1),
+					wholeNoteLength
+				);
+				const sNL = timestampToMs(
+					shortestNotes?.Length ?? new Fraction(-1),
+					wholeNoteLength
+				);
 				curPos.push({
 					offset: _osmd.cursor.cursorElement.offsetLeft,
 					notes: notesToPlay,
@@ -89,7 +93,7 @@ const PartitionView = (props: PartitionViewProps) => {
 						ts,
 						sNL,
 						isRest: shortestNotes?.isRest(),
-					}
+					},
 				});
 				_osmd.cursor.next();
 			}
