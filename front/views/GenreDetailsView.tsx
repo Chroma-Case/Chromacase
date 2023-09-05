@@ -10,31 +10,12 @@ import CardGridCustom from '../components/CardGridCustom';
 import { translate } from '../i18n/i18n';
 
 const colorRange = ['#364fc7', '#5c940d', '#c92a2a', '#d6336c', '#20c997'];
-// 	{
-// 		code: '#364fc7',
-// 	},
-// 	{
-// 		code: '#5c940d',
-// 	},
-// 	{
-// 		code: '#c92a2a',
-// 	},
-// 	{
-// 		code: '#d6336c',
-// 	},
-// 	{
-// 		code: '#20c997'
-// 	}
-// ]
 
 type GenreDetailsViewProps = {
 	genreId: number;
 }
 
-const rockArtists: any[] = [];
-
 const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
-	// const { isLoading: isLoadingGenre, data: genreData, error: isErrorGenre } = useQuery(API.getArtist(genreId));
 	const genreQuery = useQuery(API.getGenre(genreId))
 	const songsQuery = useQuery(API.getSongsByGenre(genreId))
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
@@ -69,7 +50,6 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 				justifyContent={['flex-start']}
 				mt={4}
 			>
-				<Box>
 				<CardGridCustom
 					content={songsQuery.data.slice(0, songsQuery.data.length).map((songData) => ({
 						image: API.getArtistIllustration(songData.id),
@@ -82,10 +62,6 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 					}))}
 					cardComponent={ArtistCard}
 				/>
-				</Box>
-				<Box>
-					
-				</Box>
 			</Flex>
 		</ScrollView>
 );
