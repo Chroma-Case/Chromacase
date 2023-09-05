@@ -103,7 +103,11 @@ const PartitionView = (props: PartitionViewProps) => {
 			// console.log('timestamp cursor', _osmd.cursor.iterator.CurrentSourceTimestamp);
 			// console.log('timestamp cursor', _osmd.cursor.iterator.CurrentVoiceEntries);
 			// console.log('current measure index', _osmd.cursor.iterator.CurrentMeasureIndex);
-			const osmdCanvas = document.querySelector('#' + OSMD_DIV_ID + ' canvas');
+			const osmdCanvas = document.querySelector<HTMLCanvasElement>('#' + OSMD_DIV_ID + ' canvas');
+			if (!osmdCanvas) {
+				// this should never happen this is done to silent ts linter about maybe null
+				throw new Error('No canvas found');
+			}
 			// Ty https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL77C12-L77C63
 			props.onPartitionReady(
 				osmdCanvas.toDataURL(),

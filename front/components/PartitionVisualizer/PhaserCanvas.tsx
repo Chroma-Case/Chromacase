@@ -8,9 +8,10 @@ import { RootState, useSelector } from '../../state/Store';
 import { setSoundPlayer as setSPStore } from '../../state/SoundPlayerSlice';
 import { useDispatch } from 'react-redux';
 import { SplendidGrandPiano, CacheStorage } from 'smplr';
+import { Note } from 'opensheetmusicdisplay';
 
 let globalTimestamp = 0;
-let globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
+const globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
 
 const isValidSoundPlayer = (soundPlayer: SplendidGrandPiano | undefined) => {
 	return soundPlayer && soundPlayer.loaded;
@@ -35,7 +36,9 @@ const getPianoScene = (
 ) => {
 	class PianoScene extends Phaser.Scene {
 		async preload() {}
-
+		private cursorPositionsIdx = -1;
+		private partition!: Phaser.GameObjects.Image;
+		private cursor!: Phaser.GameObjects.Rectangle;
 		create() {
 			this.textures.addBase64('partition', partitionB64);
 			this.cursorPositionsIdx = -1;
@@ -56,7 +59,7 @@ const getPianoScene = (
 
 			if (status === 'playing') {
 				const transitionTime = 75;
-				const cP = cursorPositions.findLast((cP, idx) => {
+				const cP = cursorPositions.findLast((cP: { timestamp: number; }, idx: number) => {
 					if (
 						cP.timestamp < currentTimestamp + transitionTime &&
 						idx > this.cursorPositionsIdx
@@ -73,6 +76,7 @@ const getPianoScene = (
 						x: cP!.x,
 						duration: transitionTime,
 						ease: 'Sine.easeInOut',
+						onComplete: undefined as (() => void) | undefined,
 					};
 					if (this.cursorPositionsIdx === cursorPositions.length - 1) {
 						tw.onComplete = () => {
@@ -93,7 +97,7 @@ export type PianoCursorPosition = {
 	// timestamp in ms
 	timing: number;
 	timestamp: number;
-	notes: any[];
+	notes: Note[];
 };
 
 export type UpdateInfo = {
