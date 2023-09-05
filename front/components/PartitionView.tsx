@@ -56,15 +56,11 @@ const PartitionView = (props: PartitionViewProps) => {
 	useEffect(() => {
 		const _osmd = new OSMD(OSMD_DIV_ID, options);
 		Promise.all([
-			// SoundFont.instrument(audioContext as unknown as AudioContext, 'electric_piano_1'),
 			_osmd.load(props.file),
-		]).then(([player]) => {
-			// setSoundPlayer(player);
+		]).then(() => {
 			_osmd.render();
 			_osmd.cursor.show();
-			// get the current cursor position
 			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
-			// setWholeNoteLength(Math.round((60 / bpm) * 4000));
 			const wholeNoteLength = Math.round((60 / bpm) * 4000);
 			const curPos = [];
 			while (!_osmd.cursor.iterator.EndReached) {
