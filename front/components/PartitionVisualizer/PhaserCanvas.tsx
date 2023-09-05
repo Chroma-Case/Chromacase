@@ -24,7 +24,7 @@ const myFindLast = <T,>(a: T[], p: (_: T, _2: number) => boolean) => {
 		}
 	}
 	return undefined;
-}
+};
 
 const playNotes = (notes: PianoCursorNote[], soundPlayer: SplendidGrandPiano) => {
 	notes.forEach(({ note, duration }) => {
@@ -68,7 +68,7 @@ const getPianoScene = (
 
 			if (status === 'playing') {
 				const transitionTime = 75;
-				const cP = myFindLast(cursorPositions, (cP: { timestamp: number; }, idx: number) => {
+				const cP = myFindLast(cursorPositions, (cP: { timestamp: number }, idx: number) => {
 					if (
 						cP.timestamp < currentTimestamp + transitionTime &&
 						idx > this.cursorPositionsIdx

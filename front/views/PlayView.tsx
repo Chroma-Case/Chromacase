@@ -152,7 +152,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			console.log('Websocket closed', endMsgReceived);
 			if (!endMsgReceived) {
 				toast.show({ description: 'Connection lost with Scorometer' });
-				// the special case when the front send the end message succesfully 
+				// the special case when the front send the end message succesfully
 				// but the websocket is closed before the end message is received
 				// is not handled
 				return;
@@ -268,109 +268,104 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}
 	return (
 		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
-				<HStack
-					width="100%"
-					justifyContent="center"
-					p={3}
-					style={{ position: 'absolute', top: 1 }}
-				>
-					<Animated.View style={{ opacity: fadeAnim }}>
-						<TextButton
-							disabled
-							label={lastScoreMessage?.content ?? ''}
-							colorScheme={lastScoreMessage?.color}
-							rounded="sm"
-						/>
-					</Animated.View>
-				</HStack>
-				<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-					<PartitionCoord
-						file={musixml.data}
-						timestamp={time}
-						onEndReached={onEnd}
-						onPause={onPause}
-						onResume={onResume}
-						onPartitionReady={() => setPartitionRendered(true)}
+			<HStack
+				width="100%"
+				justifyContent="center"
+				p={3}
+				style={{ position: 'absolute', top: 1 }}
+			>
+				<Animated.View style={{ opacity: fadeAnim }}>
+					<TextButton
+						disabled
+						label={lastScoreMessage?.content ?? ''}
+						colorScheme={lastScoreMessage?.color}
+						rounded="sm"
 					/>
-					{!partitionRendered && <LoadingComponent />}
-				</View>
+				</Animated.View>
+			</HStack>
+			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
+				<PartitionCoord
+					file={musixml.data}
+					timestamp={time}
+					onEndReached={onEnd}
+					onPause={onPause}
+					onResume={onResume}
+					onPartitionReady={() => setPartitionRendered(true)}
+				/>
+				{!partitionRendered && <LoadingComponent />}
+			</View>
 
-				<Box
-					shadow={4}
-					style={{
-						height: '12%',
-						width: '100%',
-						borderWidth: 0.5,
-						margin: 5,
-						display: !partitionRendered ? 'none' : undefined,
-					}}
-				>
-					<Row
-						justifyContent="space-between"
-						style={{ flexGrow: 1, alignItems: 'center' }}
+			<Box
+				shadow={4}
+				style={{
+					height: '12%',
+					width: '100%',
+					borderWidth: 0.5,
+					margin: 5,
+					display: !partitionRendered ? 'none' : undefined,
+				}}
+			>
+				<Row justifyContent="space-between" style={{ flexGrow: 1, alignItems: 'center' }}>
+					<Column
+						space={2}
+						style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
 					>
-						<Column
-							space={2}
-							style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-						>
-							<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
-							<Progress value={score} style={{ width: '90%' }} />
-						</Column>
-						<Center style={{ flex: 1, alignItems: 'center' }}>
-							<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
-						</Center>
-						<Row
-							style={{
-								flex: 1,
-								height: '100%',
-								justifyContent: 'space-evenly',
-								alignItems: 'center',
-							}}
-						>
-							{midiKeyboardFound && (
-								<>
-									<IconButton
-										size="sm"
-										variant="solid"
-										icon={
-											<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />
+						<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
+						<Progress value={score} style={{ width: '90%' }} />
+					</Column>
+					<Center style={{ flex: 1, alignItems: 'center' }}>
+						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
+					</Center>
+					<Row
+						style={{
+							flex: 1,
+							height: '100%',
+							justifyContent: 'space-evenly',
+							alignItems: 'center',
+						}}
+					>
+						{midiKeyboardFound && (
+							<>
+								<IconButton
+									size="sm"
+									variant="solid"
+									icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
+									onPress={() => {
+										if (paused) {
+											onResume();
+										} else {
+											onPause();
 										}
-										onPress={() => {
-											if (paused) {
-												onResume();
-											} else {
-												onPause();
-											}
-										}}
-									/>
-									<Text>
-										{time < 0
-											? paused
-												? '0:00'
-												: Math.floor((time % 60000) / 1000)
-														.toFixed(0)
-														.toString()
-											: `${Math.floor(time / 60000)}:${Math.floor(
-													(time % 60000) / 1000
-											  )
+									}}
+								/>
+								<Text>
+									{time < 0
+										? paused
+											? '0:00'
+											: Math.floor((time % 60000) / 1000)
 													.toFixed(0)
 													.toString()
-													.padStart(2, '0')}`}
-									</Text>
-									<IconButton
-										size="sm"
-										colorScheme="coolGray"
-										variant="solid"
-										icon={<Icon as={Ionicons} name="stop" />}
-										onPress={() => {
-											onEnd();
-										}}
-									/>
-								</>
-							)}
-						</Row>
+										: `${Math.floor(time / 60000)}:${Math.floor(
+												(time % 60000) / 1000
+										  )
+												.toFixed(0)
+												.toString()
+												.padStart(2, '0')}`}
+								</Text>
+								<IconButton
+									size="sm"
+									colorScheme="coolGray"
+									variant="solid"
+									icon={<Icon as={Ionicons} name="stop" />}
+									onPress={() => {
+										onEnd();
+									}}
+								/>
+							</>
+						)}
 					</Row>
-				</Box>
+				</Row>
+			</Box>
 		</SafeAreaView>
 	);
 };
