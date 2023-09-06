@@ -45,7 +45,6 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 							<SongRow
 								key={index}
 								song={comp}
-								liked={true}
 								onPress={() => {
 									API.createSearchHistoryEntry(comp.name, 'song');
 									navigation.navigate('Song', { songId: comp.id });
