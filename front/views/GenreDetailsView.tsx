@@ -1,13 +1,9 @@
-import { SafeAreaView } from 'react-native';
-import { VStack, Text, Box, Flex, Image, Heading, IconButton, Icon, Container, Center, useBreakpointValue, ScrollView } from 'native-base';
+import { Box, Flex, Heading, useBreakpointValue, ScrollView } from 'native-base';
 import { useQueries, useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import { RouteProps, useNavigation } from '../Navigation';
 import API from '../API';
-import Artist from '../models/Artist';
-import ArtistCard from '../components/ArtistCard';
 import CardGridCustom from '../components/CardGridCustom';
-import { translate } from '../i18n/i18n';
 import SongCard from '../components/SongCard';
 
 const colorRange = ['#364fc7', '#5c940d', '#c92a2a', '#d6336c', '#20c997'];
@@ -22,7 +18,6 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isMobileView = screenSize == "small";
 	const navigation = useNavigation();
-
 
 	if (genreQuery.isError || songsQuery.isError) {
 		navigation.navigate('Error');

@@ -1,7 +1,4 @@
-import { VStack, Text, Box, Image, Heading, IconButton, Icon, Container, Center, useBreakpointValue, ScrollView } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
-// import { Box, Image, Heading, useBreakpointValue } from 'native-base';
-import { SafeAreaView } from 'react-native';
+import { Box, Heading, useBreakpointValue, ScrollView } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import API from '../API';
