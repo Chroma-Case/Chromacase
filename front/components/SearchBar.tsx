@@ -43,11 +43,6 @@ const SearchBar = () => {
 			id: 'all',
 		},
 		{
-			name: translate('favoriteFilter'),
-			callback: () => updateFilter('favorite'),
-			id: 'favorite',
-		},
-		{
 			name: translate('artistFilter'),
 			callback: () => updateFilter('artist'),
 			id: 'artist',

@@ -39,101 +39,6 @@ const swaToSongCardProps = (song: SongWithArtist) => ({
 	cover: song.cover ?? 'https://picsum.photos/200',
 });
 
-const RowCustom = (props: Parameters<typeof Box>[0] & { onPress?: () => void }) => {
-	const settings = useSelector((state: RootState) => state.settings.local);
-	const systemColorMode = useColorScheme();
-	const colorScheme = settings.colorScheme;
-
-	return (
-		<Pressable onPress={props.onPress}>
-			{({ isHovered, isPressed }) => (
-				<Box
-					{...props}
-					py={3}
-					my={1}
-					bg={
-						(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
-							? isHovered || isPressed
-								? 'gray.800'
-								: undefined
-							: isHovered || isPressed
-							? 'coolGray.200'
-							: undefined
-					}
-				>
-					{props.children}
-				</Box>
-			)}
-		</Pressable>
-	);
-};
-
-// type SongRowProps = {
-// 	song: Song | SongWithArtist; // TODO: remove Song
-// 	onPress: () => void;
-// };
-
-// const SongRow = ({ song, onPress }: SongRowProps) => {
-// 	return (
-// 		<RowCustom width={'100%'}>
-// 			<HStack px={2} space={5} justifyContent={'space-between'}>
-// 				<Image
-// 					flexShrink={0}
-// 					flexGrow={0}
-// 					pl={10}
-// 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-// 					source={{ uri: song.cover }}
-// 					alt={song.name}
-// 				/>
-// 				<HStack
-// 					style={{
-// 						display: 'flex',
-// 						flexShrink: 1,
-// 						flexGrow: 1,
-// 						alignItems: 'center',
-// 						justifyContent: 'flex-start',
-// 					}}
-// 					space={6}
-// 				>
-// 					<Text
-// 						style={{
-// 							flexShrink: 1,
-// 						}}
-// 						isTruncated
-// 						pl={10}
-// 						maxW={'100%'}
-// 						bold
-// 						fontSize="md"
-// 					>
-// 						{song.name}
-// 					</Text>
-// 					<Text
-// 						style={{
-// 							flexShrink: 0,
-// 						}}
-// 						fontSize={'sm'}
-// 					>
-// 						{song.artistId ?? 'artist'}
-// 					</Text>
-// 				</HStack>
-// 				<TextButton
-// 					flexShrink={0}
-// 					flexGrow={0}
-// 					translate={{ translationKey: 'playBtn' }}
-// 					colorScheme="primary"
-// 					variant={'outline'}
-// 					size="sm"
-// 					onPress={onPress}
-// 				/>
-// 			</HStack>
-// 		</RowCustom>
-// 	);
-// };
-
-SongRow.defaultProps = {
-	onPress: () => {},
-};
-
 const HomeSearchComponent = () => {
 	const { updateStringQuery } = React.useContext(SearchContext);
 	const { isLoading: isLoadingHistory, data: historyData = [] } = useQuery(
@@ -301,35 +206,6 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 	);
 };
 
-const FavoriteSearchComponent = (props: SongsSearchComponentProps) => {
-	const { favoriteData } = React.useContext(SearchContext);
-	const navigation = useNavigation();
-
-	return (
-		<Box>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('favoriteFilter')}
-			</Text>
-			<Box>
-				{favoriteData?.length ? (
-					favoriteData.slice(0, props.maxRows).map((comp, index) => (
-						<SongRow
-							key={index}
-							song={comp}
-							onPress={() => {
-								API.createSearchHistoryEntry(comp.name, 'song');
-								navigation.navigate('Song', { songId: comp.id });
-							}}
-						/>
-					))
-				) : (
-					<Text>{translate('errNoResults')}</Text>
-				)}
-			</Box>
-		</Box>
-	)
-}
-
 const AllComponent = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isMobileView = screenSize == 'small';
@@ -375,8 +251,6 @@ const FilterSwitch = () => {
 			return <ArtistSearchComponent />;
 		case 'genre':
 			return <GenreSearchComponent />;
-		case 'favorite':
-			return <FavoriteSearchComponent />;
 		default:
 			return <Text>Something very bad happened: {currentFilter}</Text>;
 	}

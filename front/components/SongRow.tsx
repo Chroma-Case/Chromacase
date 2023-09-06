@@ -3,18 +3,13 @@ import Song, { SongWithArtist } from "../models/Song";
 import RowCustom from "./RowCustom";
 import TextButton from "./TextButton";
 import { MaterialIcons } from "@expo/vector-icons";
-import API from "../API";
 
 type SongRowProps = {
-	liked: boolean;
 	song: Song | SongWithArtist; // TODO: remove Song
 	onPress: () => void;
 };
 
-const handleLikeButton = {
-}
-
-const SongRow = ({ song, onPress, liked }: SongRowProps) => {
+const SongRow = ({ song, onPress }: SongRowProps) => {
 	return (
 		<RowCustom width={'100%'}>
 			<HStack px={2} space={5} justifyContent={'space-between'}>
@@ -28,10 +23,6 @@ const SongRow = ({ song, onPress, liked }: SongRowProps) => {
 					borderColor={'white'}
 					borderWidth={1}
 				/>
-				<IconButton size={'sm'} variant="ghost" _icon={{
-				as: MaterialIcons,
-				name: !liked ? "favorite-outline" : 'favorite',
-				}} />
 				<HStack
 					style={{
 						display: 'flex',
