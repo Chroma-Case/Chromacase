@@ -165,7 +165,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				if (data.type == 'end') {
 					endMsgReceived = true;
 					webSocket.current?.close();
-					console.log('End message received stack action');
 					navigation.dispatch(
 						StackActions.replace('Score', { songId: song.data!.id, ...data })
 					);
@@ -238,7 +237,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
 			setTime(() => getElapsedTime()); // Countdown
-		}, 10);
+		}, 1);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
