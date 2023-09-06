@@ -10,6 +10,7 @@ import { SafeAreaView } from 'react-native';
 import { Filter } from '../components/SearchBar';
 import { ScrollView } from 'native-base';
 import { RouteProps } from '../Navigation';
+import LikedSong from '../models/LikedSong';
 
 interface SearchContextType {
 	filter: 'artist' | 'song' | 'genre' | 'all';
@@ -19,6 +20,7 @@ interface SearchContextType {
 	songData: Song[];
 	artistData: Artist[];
 	genreData: Genre[];
+	favoriteData: LikedSong[];
 	isLoadingSong: boolean;
 	isLoadingArtist: boolean;
 	isLoadingGenre: boolean;
@@ -32,6 +34,7 @@ export const SearchContext = React.createContext<SearchContextType>({
 	songData: [],
 	artistData: [],
 	genreData: [],
+	favoriteData: [],
 	isLoadingSong: false,
 	isLoadingArtist: false,
 	isLoadingGenre: false,
@@ -60,6 +63,11 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 		{ enabled: !!stringQuery }
 	);
 
+	const { isLoading: isLoadingFavorite, data: favoriteData = [] } = useQuery(
+		API.getLikedSongs(),
+		{ enabled: true }
+	)
+
 	const updateFilter = (newData: Filter) => {
 		// called when the filter is changed
 		setFilter(newData);
@@ -80,6 +88,7 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 						songData,
 						artistData,
 						genreData,
+						favoriteData,
 						isLoadingSong,
 						isLoadingArtist,
 						isLoadingGenre,
@@ -96,3 +105,6 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 };
 
 export default SearchView;
+
+
+

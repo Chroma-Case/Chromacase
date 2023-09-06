@@ -288,6 +288,7 @@ export default class API {
 				),
 		};
 	}
+
 	/**
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
