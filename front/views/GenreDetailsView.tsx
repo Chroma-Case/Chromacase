@@ -15,6 +15,12 @@ type GenreDetailsViewProps = {
 const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 	const genreQuery = useQuery(API.getGenre(genreId))
 	const songsQuery = useQuery(API.getSongsByGenre(genreId))
+	const artistQueries = useQueries(songsQuery.data.map((song) => song.artistId).map((artistId) => API.getArtist(artistId)));
+	const songWithArtist = songsQuery.data.map((song) => ({
+		...song,
+		artist: artistQueries.find((query) => query.data.id == song.artistId)
+	})).filter((song) => song.artist !== undefined);
+
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isMobileView = screenSize == "small";
 	const navigation = useNavigation();
@@ -48,10 +54,10 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 				mt={4}
 			>
 				<CardGridCustom
-					content={songsQuery.data.map((songData) => ({
+					content={songWithArtist.map((songData) => ({
 						name: songData.name,
 						cover: songData.cover,
-						artistName: songData.artistId.toString(),
+						artistName: songData.artist.name,
 						songId: songData.id,
 						onPress: () => {
 							API.createSearchHistoryEntry(songData.name, 'song');
