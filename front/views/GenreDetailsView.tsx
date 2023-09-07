@@ -15,10 +15,11 @@ type GenreDetailsViewProps = {
 const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 	const genreQuery = useQuery(API.getGenre(genreId))
 	const songsQuery = useQuery(API.getSongsByGenre(genreId))
-	const artistQueries = useQueries(songsQuery.data.map((song) => song.artistId).map((artistId) => API.getArtist(artistId)));
-	const songWithArtist = songsQuery.data.map((song) => ({
+	const artistQueries = useQueries(songsQuery.data?.map((song) => song.artistId).map((artistId) => API.getArtist(artistId)) ?? []);
+	// Here, .artist will always be defined
+	const songWithArtist = songsQuery?.data?.map((song) => ({
 		...song,
-		artist: artistQueries.find((query) => query.data.id == song.artistId)
+		artist: artistQueries.find((query) => query.data?.id == song.artistId)?.data
 	})).filter((song) => song.artist !== undefined);
 
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
@@ -29,7 +30,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 		navigation.navigate('Error');
 		return <></>;
 	}
-	if (!genreQuery.data || songsQuery.data === undefined) {
+	if (!genreQuery.data || songsQuery.data === undefined || songWithArtist === undefined) {
 		return <LoadingView />;
 	}
 
@@ -57,7 +58,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 					content={songWithArtist.map((songData) => ({
 						name: songData.name,
 						cover: songData.cover,
-						artistName: songData.artist.name,
+						artistName: songData.artist!.name,
 						songId: songData.id,
 						onPress: () => {
 							API.createSearchHistoryEntry(songData.name, 'song');
