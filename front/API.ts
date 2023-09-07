@@ -21,7 +21,7 @@ import { PlageHandler } from './models/Plage';
 import { ListHandler } from './models/List';
 import { AccessTokenResponseHandler } from './models/AccessTokenResponse';
 import * as yup from 'yup';
-import { base64ToBlob } from 'file64';
+import { base64ToBlob } from './utils/base64ToBlob';
 import { ImagePickerAsset } from 'expo-image-picker';
 
 type AuthenticationInput = { username: string; password: string };
