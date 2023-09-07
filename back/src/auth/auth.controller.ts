@@ -41,6 +41,7 @@ import { SettingsService } from 'src/settings/settings.service';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { writeFile } from 'fs';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -49,6 +50,7 @@ export class AuthController {
 		private authService: AuthService,
 		private usersService: UsersService,
 		private settingsService: SettingsService,
+		private emailService: MailerService,
 	) {}
 
 	@Get('login/google')
@@ -71,6 +73,13 @@ export class AuthController {
 		try {
 			const user = await this.usersService.createUser(registerDto);
 			await this.settingsService.createUserSetting(user.id);
+			await this.emailService.sendMail({
+				to: user.email,
+				from: "chromacase@octohub.app",
+				subject: "Mail verification",
+				text: "To verify your mail click here",
+				html: "<b>Verify</b>",
+			})
 		} catch (e) {
 			console.error(e);
 			throw new BadRequestException();
