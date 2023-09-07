@@ -14,6 +14,7 @@ model User {
     username      String          @unique
     password      String?
     email         String
+    emailVerified Boolean         @default(false)
     googleID      String?         @unique
     isGuest       Boolean         @default(false)
     partyPlayed   Int             @default(0)
