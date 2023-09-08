@@ -20,7 +20,7 @@ const UserAvatar = ({ size }: UserAvatarProps) => {
 		}
 		// NOTE: We do this to avoid parsing URL with `new URL`, which is not compatible with related path
 		// (which is used for production, on web)
-		return `${user.data.data.avatar}?updatedAt=${user.dataUpdatedAt.toString()}`
+		return `${user.data.data.avatar}?updatedAt=${user.dataUpdatedAt.toString()}`;
 	}, [user.data]);
 
 	return (
