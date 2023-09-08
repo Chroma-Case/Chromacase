@@ -18,10 +18,9 @@ const UserAvatar = ({ size }: UserAvatarProps) => {
 		if (!user.data) {
 			return null;
 		}
-		const url = new URL(user.data.data.avatar);
-
-		url.searchParams.append('updatedAt', user.dataUpdatedAt.toString());
-		return url;
+		// NOTE: We do this to avoid parsing URL with `new URL`, which is not compatible with related path
+		// (which is used for production, on web)
+		return `${user.data.data.avatar}?updatedAt=${user.dataUpdatedAt.toString()}`
 	}, [user.data]);
 
 	return (

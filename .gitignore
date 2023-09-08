@@ -13,3 +13,4 @@ log.html
 node_modules/
 ./front/coverage
 .venv
+.DS_Store
