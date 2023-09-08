@@ -7,6 +7,7 @@ import {
 	Body,
 	Delete,
 	BadRequestException,
+	UnprocessableEntityException,
 	HttpCode,
 	Put,
 	InternalServerErrorException,
@@ -74,6 +75,10 @@ export class AuthController {
 			await this.settingsService.createUserSetting(user.id);
 			await this.authService.sendVerifyMail(user);
 		} catch (e) {
+			// check if the error is a duplicate key error
+			if (e.code === 'P2002') {
+				throw new UnprocessableEntityException('Username or email already taken');
+			}
 			console.error(e);
 			throw new BadRequestException();
 		}
