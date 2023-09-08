@@ -7,8 +7,12 @@ export const UserValidator = yup
 	.object({
 		username: yup.string().required(),
 		password: yup.string().required().nullable(),
+<<<<<<< HEAD
 		email: yup.string().required(),
 		emailVerified: yup.boolean().required(),
+=======
+		email: yup.string().required().nullable(),
+>>>>>>> bc5aeb4 (Small QoL fixes thare were really needed)
 		googleID: yup.string().required().nullable(),
 		isGuest: yup.boolean().required(),
 		partyPlayed: yup.number().required(),
@@ -32,8 +36,9 @@ export const UserHandler: ResponseHandler<yup.InferType<typeof UserValidator>, U
 
 interface User extends Model {
 	name: string;
-	email: string;
 	emailVerified: boolean;
+	// guest accounts don't have a mail
+	email: string | null;
 	googleID: string | null;
 	isGuest: boolean;
 	premium: boolean;
