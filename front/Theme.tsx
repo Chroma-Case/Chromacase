@@ -4,15 +4,9 @@ import { useEffect } from 'react';
 
 const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	const colorScheme = useColorScheme();
-	const config = {
-		dependencies: {
-			'linear-gradient': require('expo-linear-gradient').LinearGradient,
-		},
-	};
 
 	return (
 		<NativeBaseProvider
-			config={config}
 			theme={extendTheme({
 				config: {
 					useSystemColorMode: false,

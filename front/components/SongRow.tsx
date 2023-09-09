@@ -1,8 +1,7 @@
-import { HStack, IconButton, Image, Text } from 'native-base';
+import { HStack, Image, Text } from 'native-base';
 import Song, { SongWithArtist } from '../models/Song';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
-import { MaterialIcons } from '@expo/vector-icons';
 
 type SongRowProps = {
 	song: Song | SongWithArtist; // TODO: remove Song

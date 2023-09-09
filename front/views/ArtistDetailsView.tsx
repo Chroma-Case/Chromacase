@@ -2,7 +2,7 @@ import { Box, Heading, useBreakpointValue, ScrollView, useColorModeValue } from 
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import API from '../API';
-import Song, { SongWithArtist } from '../models/Song';
+import Song from '../models/Song';
 import SongRow from '../components/SongRow';
 import { Key } from 'react';
 import { RouteProps, useNavigation } from '../Navigation';

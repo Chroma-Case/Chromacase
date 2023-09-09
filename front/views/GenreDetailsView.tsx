@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, useBreakpointValue, ScrollView, useColorModeValue } from 'native-base';
+import { Flex, Heading, useBreakpointValue, ScrollView, useColorModeValue } from 'native-base';
 import { useQueries, useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import { RouteProps, useNavigation } from '../Navigation';

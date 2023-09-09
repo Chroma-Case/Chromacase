@@ -1,20 +1,16 @@
 import React, { useMemo } from 'react';
 import {
-	HStack,
 	VStack,
 	Heading,
 	Text,
-	Pressable,
 	Box,
 	Card,
-	Image,
 	Flex,
 	useBreakpointValue,
 	Column,
 	ScrollView,
 } from 'native-base';
-import { SafeAreaView, useColorScheme } from 'react-native';
-import { RootState, useSelector } from '../state/Store';
+import { SafeAreaView } from 'react-native';
 import { SearchContext } from '../views/SearchView';
 import { useQueries, useQuery } from '../Queries';
 import { translate } from '../i18n/i18n';
@@ -24,7 +20,6 @@ import ArtistCard from './ArtistCard';
 import GenreCard from './GenreCard';
 import SongCard from './SongCard';
 import CardGridCustom from './CardGridCustom';
-import TextButton from './TextButton';
 import SearchHistoryCard from './HistoryCard';
 import Song, { SongWithArtist } from '../models/Song';
 import { useNavigation } from '../Navigation';
@@ -259,7 +254,6 @@ const FilterSwitch = () => {
 
 export const SearchResultComponent = () => {
 	const { stringQuery } = React.useContext(SearchContext);
-	const { filter } = React.useContext(SearchContext);
 	const shouldOutput = !!stringQuery.trim();
 
 	return shouldOutput ? (
