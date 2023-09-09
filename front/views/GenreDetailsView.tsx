@@ -5,8 +5,8 @@ import { RouteProps, useNavigation } from '../Navigation';
 import API from '../API';
 import CardGridCustom from '../components/CardGridCustom';
 import SongCard from '../components/SongCard';
-
-const colorRange = ['#364fc7', '#5c940d', '#c92a2a', '#d6336c', '#20c997'];
+import { ImageBackground } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type GenreDetailsViewProps = {
 	genreId: number;
@@ -37,17 +37,13 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 
 	return (
 		<ScrollView>
-			<Box
-			size={'100%'}
-			height={isMobileView ? 200 : 300}
-			width={'100%'}
-			bg={{
-				linearGradient: {
-					colors: [colorRange[Math.floor(Math.random() * 5)] ?? '#364fc7', fadeColor],
-					start: [0, 0],
-					end: [0, 1],
-				},}}
-			/>
+			<ImageBackground
+				style={{width : '100%', height: isMobileView ? 200 : 300}}
+				source={{uri : API.getGenreIllustration(genreQuery.data.id)}}>
+				<LinearGradient
+					colors={['#00000000', fadeColor]}
+					style={{height : '100%', width : '100%'}}/>
+			</ImageBackground>
 			<Heading ml={3} fontSize={50}>{genreQuery.data.name}</Heading>
 			<Flex
 				flexWrap="wrap"
