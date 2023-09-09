@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, useBreakpointValue, ScrollView } from 'native-base';
+import { Box, Flex, Heading, useBreakpointValue, ScrollView, useColorModeValue } from 'native-base';
 import { useQueries, useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import { RouteProps, useNavigation } from '../Navigation';
@@ -24,6 +24,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 
 	const screenSize = useBreakpointValue({ base: "small", md: "big" });
 	const isMobileView = screenSize == "small";
+	const fadeColor = useColorModeValue('#ffffff', '#000000');
 	const navigation = useNavigation();
 
 	if (genreQuery.isError || songsQuery.isError) {
@@ -42,7 +43,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 			width={'100%'}
 			bg={{
 				linearGradient: {
-					colors: [colorRange[Math.floor(Math.random() * 5)] ?? '#364fc7', 'black'],
+					colors: [colorRange[Math.floor(Math.random() * 5)] ?? '#364fc7', fadeColor],
 					start: [0, 0],
 					end: [0, 1],
 				},}}

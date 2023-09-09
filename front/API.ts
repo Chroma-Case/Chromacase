@@ -542,16 +542,6 @@ export default class API {
 		};
 	}
 
-	// public static getFavorites(): Query<Song[]> {
-	// 	return {
-	// 		key: 'favorites',
-	// 		exec: () =>
-	// 			API.fetch({
-	// 				route: '/search/songs/o',
-	// 			}),
-	// 	};
-	// }
-
 	/**
 	 * Retrieve the authenticated user's search history
 	 * @param skip number of entries skipped before returning

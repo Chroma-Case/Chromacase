@@ -259,7 +259,7 @@ const FilterSwitch = () => {
 export const SearchResultComponent = () => {
 	const { stringQuery } = React.useContext(SearchContext);
 	const { filter } = React.useContext(SearchContext);
-	const shouldOutput = !!stringQuery.trim() || filter == "favorite";
+	const shouldOutput = !!stringQuery.trim();
 
 	return shouldOutput ? (
 		<Box p={5}>

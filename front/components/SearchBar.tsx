@@ -5,7 +5,7 @@ import { translate } from '../i18n/i18n';
 import { SearchContext } from '../views/SearchView';
 import { debounce } from 'lodash';
 
-export type Filter = 'artist' | 'song' | 'genre' | 'all' | 'favorite';
+export type Filter = 'artist' | 'song' | 'genre' | 'all';
 
 type FilterButton = {
 	name: string;
