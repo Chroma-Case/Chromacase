@@ -12,8 +12,8 @@ import { ScrollView } from 'native-base';
 import { RouteProps } from '../Navigation';
 
 interface SearchContextType {
-	filter: 'artist' | 'song' | 'genre' | 'all' | 'favorite';
-	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all' | 'favorite') => void;
+	filter: 'artist' | 'song' | 'genre' | 'all';
+	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all') => void;
 	stringQuery: string;
 	updateStringQuery: (newData: string) => void;
 	songData: Song[];
