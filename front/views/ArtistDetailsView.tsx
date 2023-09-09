@@ -32,14 +32,18 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 	return (
 		<ScrollView>
 			<ImageBackground
-				style={{width : '100%', height: isMobileView ? 200 : 300}}
-				source={{uri : API.getArtistIllustration(artistQuery.data.id)}}>
-				<LinearGradient 
+				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
+				source={{ uri: API.getArtistIllustration(artistQuery.data.id) }}
+			>
+				<LinearGradient
 					colors={['#00000000', fadeColor]}
-					style={{height : '100%', width : '100%'}}/>
+					style={{ height: '100%', width: '100%' }}
+				/>
 			</ImageBackground>
 			<Box>
-				<Heading mt={-20} ml={3} fontSize={50}>{artistQuery.data.name}</Heading>
+				<Heading mt={-20} ml={3} fontSize={50}>
+					{artistQuery.data.name}
+				</Heading>
 				<ScrollView mt={3}>
 					<Box>
 						{songsQuery.data.map((comp: Song, index: Key | null | undefined) => (

@@ -16,7 +16,7 @@ type FilterButton = {
 const SearchBar = () => {
 	const { filter, updateFilter } = React.useContext(SearchContext);
 	const { stringQuery, updateStringQuery } = React.useContext(SearchContext);
-	const [ barText, updateBarText ] = React.useState(stringQuery);
+	const [barText, updateBarText] = React.useState(stringQuery);
 
 	const debouncedUpdateStringQuery = debounce(updateStringQuery, 500);
 

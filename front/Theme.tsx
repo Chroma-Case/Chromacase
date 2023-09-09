@@ -6,7 +6,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	const colorScheme = useColorScheme();
 	const config = {
 		dependencies: {
-			"linear-gradient": require("expo-linear-gradient").LinearGradient,
+			'linear-gradient': require('expo-linear-gradient').LinearGradient,
 		},
 	};
 

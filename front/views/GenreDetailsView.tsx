@@ -10,20 +10,25 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 type GenreDetailsViewProps = {
 	genreId: number;
-}
+};
 
 const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
-	const genreQuery = useQuery(API.getGenre(genreId))
-	const songsQuery = useQuery(API.getSongsByGenre(genreId))
-	const artistQueries = useQueries(songsQuery.data?.map((song) => song.artistId).map((artistId) => API.getArtist(artistId)) ?? []);
+	const genreQuery = useQuery(API.getGenre(genreId));
+	const songsQuery = useQuery(API.getSongsByGenre(genreId));
+	const artistQueries = useQueries(
+		songsQuery.data?.map((song) => song.artistId).map((artistId) => API.getArtist(artistId)) ??
+			[]
+	);
 	// Here, .artist will always be defined
-	const songWithArtist = songsQuery?.data?.map((song) => ({
-		...song,
-		artist: artistQueries.find((query) => query.data?.id == song.artistId)?.data
-	})).filter((song) => song.artist !== undefined);
+	const songWithArtist = songsQuery?.data
+		?.map((song) => ({
+			...song,
+			artist: artistQueries.find((query) => query.data?.id == song.artistId)?.data,
+		}))
+		.filter((song) => song.artist !== undefined);
 
-	const screenSize = useBreakpointValue({ base: "small", md: "big" });
-	const isMobileView = screenSize == "small";
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isMobileView = screenSize == 'small';
 	const fadeColor = useColorModeValue('#ffffff', '#000000');
 	const navigation = useNavigation();
 
@@ -38,13 +43,17 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 	return (
 		<ScrollView>
 			<ImageBackground
-				style={{width : '100%', height: isMobileView ? 200 : 300}}
-				source={{uri : API.getGenreIllustration(genreQuery.data.id)}}>
+				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
+				source={{ uri: API.getGenreIllustration(genreQuery.data.id) }}
+			>
 				<LinearGradient
 					colors={['#00000000', fadeColor]}
-					style={{height : '100%', width : '100%'}}/>
+					style={{ height: '100%', width: '100%' }}
+				/>
 			</ImageBackground>
-			<Heading ml={3} fontSize={50}>{genreQuery.data.name}</Heading>
+			<Heading ml={3} fontSize={50}>
+				{genreQuery.data.name}
+			</Heading>
 			<Flex
 				flexWrap="wrap"
 				direction={isMobileView ? 'column' : 'row'}
@@ -66,7 +75,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 				/>
 			</Flex>
 		</ScrollView>
-);
-}
+	);
+};
 
 export default GenreDetailsView;

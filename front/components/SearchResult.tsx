@@ -31,7 +31,6 @@ import { useNavigation } from '../Navigation';
 import Artist from '../models/Artist';
 import SongRow from '../components/SongRow';
 
-
 const swaToSongCardProps = (song: SongWithArtist) => ({
 	songId: song.id,
 	name: song.name,
@@ -159,15 +158,17 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 			</Text>
 			{artistData?.length ? (
 				<CardGridCustom
-					content={artistData.slice(0, props.maxItems ?? artistData.length).map((artistData) => ({
-						image: API.getArtistIllustration(artistData.id),
-						name: artistData.name,
-						id: artistData.id,
-						onPress: () => {
-							API.createSearchHistoryEntry(artistData.name, 'artist');
-							navigation.navigate('Artist', { artistId: artistData.id });
-						},
-					}))}
+					content={artistData
+						.slice(0, props.maxItems ?? artistData.length)
+						.map((artistData) => ({
+							image: API.getArtistIllustration(artistData.id),
+							name: artistData.name,
+							id: artistData.id,
+							onPress: () => {
+								API.createSearchHistoryEntry(artistData.name, 'artist');
+								navigation.navigate('Artist', { artistId: artistData.id });
+							},
+						}))}
 					cardComponent={ArtistCard}
 				/>
 			) : (
@@ -194,7 +195,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 						id: g.id,
 						onPress: () => {
 							API.createSearchHistoryEntry(g.name, 'genre');
-							navigation.navigate('Genre', {genreId: g.id});
+							navigation.navigate('Genre', { genreId: g.id });
 						},
 					}))}
 					cardComponent={GenreCard}

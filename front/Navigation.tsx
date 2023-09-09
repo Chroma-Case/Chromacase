@@ -62,7 +62,7 @@ const protectedRoutes = () =>
 		},
 		Genre: {
 			component: GenreDetailsView,
-			options: { title: translate('genreFilter')},
+			options: { title: translate('genreFilter') },
 			link: '/genre/:genreId',
 		},
 		Score: {
