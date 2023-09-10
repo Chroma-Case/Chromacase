@@ -13,8 +13,8 @@ import { RouteProps } from '../Navigation';
 import LikedSong from '../models/LikedSong';
 
 interface SearchContextType {
-	filter: 'artist' | 'song' | 'genre' | 'all';
-	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all') => void;
+	filter: 'artist' | 'song' | 'genre' | 'all' | 'favorites';
+	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all' | 'favorites' s) => void;
 	stringQuery: string;
 	updateStringQuery: (newData: string) => void;
 	songData: Song[];

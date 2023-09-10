@@ -19,7 +19,7 @@ import { SearchContext } from '../views/SearchView';
 import { useQueries, useQuery } from '../Queries';
 import { translate } from '../i18n/i18n';
 import API from '../API';
-import LoadingComponent from './Loading';
+import LoadingComponent, { LoadingView } from './Loading';
 import ArtistCard from './ArtistCard';
 import GenreCard from './GenreCard';
 import SongCard from './SongCard';
@@ -299,6 +299,47 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 	);
 };
 
+type FavoriteComponentProps = {
+	maxRows?: number;
+};
+
+const FavoritesComponent = (props: FavoriteComponentProps) => {
+	const favoritesQuery = useQuery(API.getLikedSongs());
+	const songQueries = useQueries(
+		favoritesQuery.data?.map((favorite) => favorite.songId).map((songId) => API.getSong(songId)) ??
+			[]
+	);
+
+	const navigation = useNavigation();
+
+	if (favoritesQuery.isError) {
+		navigation.navigate('Error');
+		return <></>;
+	}
+	if (!favoritesQuery.data) {
+		return <LoadingView />;
+	}
+
+	return (
+		<ScrollView>
+			<Text fontSize="xl" fontWeight="bold" mt={4}>
+				{translate('songsFilter')}
+			</Text>
+			<Box>
+						{songQueries.map((songData) => (
+							<SongRow
+								song={songData} //todo
+								onPress={() => {
+									API.createSearchHistoryEntry(comp.name, 'song'); //todo
+									navigation.navigate('Song', { songId: comp.id }); //todo
+								}}
+							/>
+						))}
+					</Box>
+		</ScrollView>
+	);
+}
+
 const AllComponent = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isMobileView = screenSize == 'small';
@@ -344,6 +385,8 @@ const FilterSwitch = () => {
 			return <ArtistSearchComponent />;
 		case 'genre':
 			return <GenreSearchComponent />;
+		case 'favorites':
+			return <FavoritesComponent />;
 		default:
 			return <Text>Something very bad happened: {currentFilter}</Text>;
 	}
@@ -351,7 +394,8 @@ const FilterSwitch = () => {
 
 export const SearchResultComponent = () => {
 	const { stringQuery } = React.useContext(SearchContext);
-	const shouldOutput = !!stringQuery.trim();
+	const {filter} = React.useContext(SearchContext)
+	const shouldOutput = !!stringQuery.trim() || filter == 'favorites';
 
 	return shouldOutput ? (
 		<Box p={5}>
