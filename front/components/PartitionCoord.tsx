@@ -12,6 +12,7 @@ type PartitionCoordProps = {
 	onPause: () => void;
 	// Timestamp of the play session, in milisecond
 	timestamp: number;
+	pressedKeys: Map<number, number>;
 };
 
 const PartitionCoord = ({
@@ -21,6 +22,7 @@ const PartitionCoord = ({
 	onPause,
 	onResume,
 	timestamp,
+	pressedKeys,
 }: PartitionCoordProps) => {
 	const [partitionData, setPartitionData] = React.useState<
 		[string, PianoCursorPosition[]] | null
@@ -48,6 +50,7 @@ const PartitionCoord = ({
 					timestamp={timestamp}
 					onPause={onPause}
 					onResume={onResume}
+					pressedKeys={pressedKeys}
 					onEndReached={() => {
 						onEndReached();
 					}}

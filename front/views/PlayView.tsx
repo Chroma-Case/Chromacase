@@ -87,6 +87,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	);
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
+	// first number is the note, the other is the time when pressed on release the key is removed
+	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -210,17 +212,30 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			}
 		};
 		inputs.forEach((input) => {
-			if (inputIndex != 0) {
-				return;
-			}
+			// if (inputIndex != 0) {
+
+			// 	return;
+			// }
 			input.onmidimessage = (message) => {
-				const { command } = parseMidiMessage(message);
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const { command, channel, note, velocity } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
-				const keyCode = message.data[1];
+				if (keyIsPressed) {
+					setPressedKeys((prev) => {
+						prev.set(note, getElapsedTime());
+						return prev;
+					});
+				} else {
+					setPressedKeys((prev) => {
+						prev.delete(note);
+						return prev;
+					});
+				}
+
 				webSocket.current?.send(
 					JSON.stringify({
 						type: keyIsPressed ? 'note_on' : 'note_off',
-						note: keyCode,
+						note: note,
 						id: song.data!.id,
 						time: getElapsedTime(),
 					})
@@ -293,6 +308,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					onEndReached={onEnd}
 					onPause={onPause}
 					onResume={onResume}
+					pressedKeys={pressedKeys}
 					onPartitionReady={() => setPartitionRendered(true)}
 				/>
 				{!partitionRendered && <LoadingComponent />}
