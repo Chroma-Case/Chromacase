@@ -7,7 +7,6 @@ import SongRow from '../components/SongRow';
 import { Key } from 'react';
 import { RouteProps, useNavigation } from '../Navigation';
 import { ImageBackground } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 
 type ArtistDetailsViewProps = {
 	artistId: number;
@@ -35,10 +34,6 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
 				source={{ uri: API.getArtistIllustration(artistQuery.data.id) }}
 			>
-				<LinearGradient
-					colors={['#00000000', fadeColor]}
-					style={{ height: '100%', width: '100%' }}
-				/>
 			</ImageBackground>
 			<Box>
 				<Heading mt={-20} ml={3} fontSize={50}>

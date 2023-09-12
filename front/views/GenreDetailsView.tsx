@@ -6,7 +6,6 @@ import API from '../API';
 import CardGridCustom from '../components/CardGridCustom';
 import SongCard from '../components/SongCard';
 import { ImageBackground } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 
 type GenreDetailsViewProps = {
 	genreId: number;
@@ -46,10 +45,6 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
 				source={{ uri: API.getGenreIllustration(genreQuery.data.id) }}
 			>
-				<LinearGradient
-					colors={['#00000000', fadeColor]}
-					style={{ height: '100%', width: '100%' }}
-				/>
 			</ImageBackground>
 			<Heading ml={3} fontSize={50}>
 				{genreQuery.data.name}
