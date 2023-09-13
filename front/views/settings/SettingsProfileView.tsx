@@ -49,7 +49,7 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							type: 'text',
 							title: translate('email'),
 							data: {
-								text: user.email || translate('NoAssociatedEmail'),
+								text: `${user.email} ${user.emailVerified ? "verified" : "not verified"}` || translate('NoAssociatedEmail'),
 								onPress: () => {
 									navigation.navigate('changeEmail');
 								},

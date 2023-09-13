@@ -1,13 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import PayloadInterface from './interface/payload.interface';
+import { User } from 'src/models/user';
+import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class AuthService {
 	constructor(
 		private userService: UsersService,
 		private jwtService: JwtService,
+		private emailService: MailerService,
 	) {}
 
 	async validateUser(
@@ -30,5 +33,34 @@ export class AuthService {
 		return {
 			access_token,
 		};
+	}
+
+	async sendVerifyMail(user: User) {
+		const token = await this.jwtService.signAsync(
+			{
+				userId: user.id,
+			},
+			{ expiresIn: '10h' },
+		);
+		await this.emailService.sendMail({
+			to: user.email,
+			from: 'chromacase@octohub.app',
+			subject: 'Mail verification for Chromacase',
+			html: `To verify your mail, please click on this <a href="{${process.env.PUBLIC_URL}/verify?token=${token}">link</a>.`,
+		});
+	}
+
+	async verifyMail(userId: number, token: string): Promise<boolean> {
+		try {
+			await this.jwtService.verifyAsync(token);
+		} catch(e) {
+			console.log("Verify mail token failure", e);
+			return false;
+		}
+		await this.userService.updateUser({
+			where: { id: userId },
+			data: { emailVerified: true },
+		});
+		return true;
 	}
 }
