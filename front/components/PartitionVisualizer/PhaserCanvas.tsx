@@ -1,17 +1,21 @@
 // create a simple phaser effect with a canvas that can be easily imported as a react component
 
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import Phaser from 'phaser';
 import useColorScheme from '../../hooks/colorScheme';
 import { RootState, useSelector } from '../../state/Store';
 import { setSoundPlayer as setSPStore } from '../../state/SoundPlayerSlice';
 import { useDispatch } from 'react-redux';
 import { SplendidGrandPiano, CacheStorage } from 'smplr';
-import { Note } from 'opensheetmusicdisplay';
+import { handlePianoGameMsg } from './PianoGameUpdateFunctions';
+import { PianoCC } from '../../views/PlayView';
+import { PianoCanvasMsg, PianoCursorNote, PianoCursorPosition } from '../../models/PianoGame';
 
 let globalTimestamp = 0;
 let globalPressedKeys: Map<number, number> = new Map();
+// the messages are consummed from the end and new messages should be added at the end
+let globalMessages: Array<PianoCanvasMsg> = [];
 const globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
 
 const isValidSoundPlayer = (soundPlayer: SplendidGrandPiano | undefined) => {
@@ -50,8 +54,7 @@ const getPianoScene = (
 		private partition!: Phaser.GameObjects.Image;
 		private cursor!: Phaser.GameObjects.Rectangle;
 		private emitter!: Phaser.GameObjects.Particles.ParticleEmitter;
-		private emitzone!: Phaser.GameObjects.Particles.Zones.EdgeZone;
-		private nbTextureTolad!: number;
+		private nbTextureToload!: number;
 		create() {
 			this.textures.addBase64(
 				'star',
@@ -59,12 +62,13 @@ const getPianoScene = (
 			);
 			this.textures.addBase64('partition', partitionB64);
 			this.cursorPositionsIdx = -1;
-			this.nbTextureTolad = 2;
+			// this is to prevent multiple initialisation of the scene
+			this.nbTextureToload = 2;
 
 			this.cameras.main.setBackgroundColor(colorScheme === 'light' ? '#FFFFFF' : '#000000');
 			this.textures.on('onload', () => {
-				this.nbTextureTolad--;
-				if (this.nbTextureTolad > 0) return;
+				this.nbTextureToload--;
+				if (this.nbTextureToload > 0) return;
 				this.partition = this.add.image(0, 0, 'partition').setOrigin(0, 0);
 				this.cameras.main.setBounds(0, 0, this.partition.width, this.partition.height);
 
@@ -103,11 +107,13 @@ const getPianoScene = (
 						return true;
 					}
 					if (globalPressedKeys.size > 0) {
-						// add particles at the position of the cursor
-						this.emitter.start(1);
 						this.cursor.fillAlpha = 0.9;
 					} else if (this.cursor) {
 						this.cursor.fillAlpha = 0.5;
+					}
+
+					if (globalMessages.length > 0) {
+						handlePianoGameMsg(globalMessages, this.emitter);
 					}
 
 					return false;
@@ -134,50 +140,28 @@ const getPianoScene = (
 	return PianoScene;
 };
 
-type PianoCursorNote = {
-	note: Note;
-	duration: number;
-};
-
-export type PianoCursorPosition = {
-	// offset in pixels
-	x: number;
-	// timestamp in ms
-	timing: number;
-	timestamp: number;
-	notes: PianoCursorNote[];
-};
-
-export type UpdateInfo = {
-	currentTimestamp: number;
-	status: 'playing' | 'paused' | 'stopped';
-};
-
 export type PhaserCanvasProps = {
 	partitionB64: string;
 	cursorPositions: PianoCursorPosition[];
 	onEndReached: () => void;
 	onPause: () => void;
 	onResume: () => void;
-	// Timestamp of the play session, in milisecond
-	timestamp: number;
-	pressedKeys: Map<number, number>;
 };
 
 const PhaserCanvas = ({
 	partitionB64,
 	cursorPositions,
 	onEndReached,
-	timestamp,
-	pressedKeys,
 }: PhaserCanvasProps) => {
 	const colorScheme = useColorScheme();
 	const dispatch = useDispatch();
+	const pianoCC = useContext(PianoCC);
 	const soundPlayer = useSelector((state: RootState) => state.soundPlayer.soundPlayer);
 	const [game, setGame] = React.useState<Phaser.Game | null>(null);
 
-	globalTimestamp = timestamp;
-	globalPressedKeys = pressedKeys;
+	globalTimestamp = pianoCC.timestamp;
+	globalPressedKeys = pianoCC.pressedKeys;
+	globalMessages = pianoCC.messages;
 
 	useEffect(() => {
 		if (isValidSoundPlayer(soundPlayer)) {

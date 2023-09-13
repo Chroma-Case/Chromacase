@@ -10,8 +10,7 @@ import {
 	Note,
 } from 'opensheetmusicdisplay';
 import useColorScheme from '../hooks/colorScheme';
-import { PianoCursorPosition } from './PartitionVisualizer/PhaserCanvas';
-
+import { PianoCursorPosition } from '../models/PianoGame';
 type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
 	file: string;
