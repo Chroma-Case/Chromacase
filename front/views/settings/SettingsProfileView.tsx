@@ -49,10 +49,20 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 							type: 'text',
 							title: translate('email'),
 							data: {
-								text: `${user.email} ${user.emailVerified ? "verified" : "not verified"}` || translate('NoAssociatedEmail'),
+								text: user.email || translate('NoAssociatedEmail'),
 								onPress: () => {
 									navigation.navigate('changeEmail');
 								},
+							},
+						},
+						{
+							type: 'text',
+							title: translate('verified'),
+							data: {
+								text: user.emailVerified ? 'verified' : 'not verified',
+								onPress: user.emailVerified
+									? undefined
+									: () => API.fetch({ route: '/auth/reverify', method: 'PUT' }),
 							},
 						},
 						{
