@@ -18,6 +18,7 @@ import {
 	HttpStatus,
 	ParseFilePipeBuilder,
 	Response,
+	Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -41,7 +42,6 @@ import { SettingsService } from 'src/settings/settings.service';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { writeFile } from 'fs';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -50,7 +50,6 @@ export class AuthController {
 		private authService: AuthService,
 		private usersService: UsersService,
 		private settingsService: SettingsService,
-		private emailService: MailerService,
 	) {}
 
 	@Get('login/google')
@@ -73,17 +72,27 @@ export class AuthController {
 		try {
 			const user = await this.usersService.createUser(registerDto);
 			await this.settingsService.createUserSetting(user.id);
-			await this.emailService.sendMail({
-				to: user.email,
-				from: "chromacase@octohub.app",
-				subject: "Mail verification",
-				text: "To verify your mail click here",
-				html: "<b>Verify</b>",
-			})
+			await this.authService.sendVerifyMail(user);
 		} catch (e) {
 			console.error(e);
 			throw new BadRequestException();
 		}
+	}
+
+	@HttpCode(200)
+	@UseGuards(JwtAuthGuard)
+	@Put('verify')
+	async verify(@Request() req: any, @Query('token') token: string): Promise<void> {
+		if (await this.authService.verifyMail(req.user.id, token))
+			return;
+		throw new BadRequestException("Invalid token. Expired or invalid.");
+	}
+
+	@HttpCode(200)
+	@UseGuards(JwtAuthGuard)
+	@Put('reverify')
+	async reverify(@Request() req: any): Promise<void> {
+		await this.authService.sendVerifyMail(req.user);
 	}
 
 	@ApiBody({ type: LoginDto })
@@ -130,7 +139,7 @@ export class AuthController {
 		)
 		file: Express.Multer.File,
 	) {
-		const path = `/data/${req.user.id}.jpg`
+		const path = `/data/${req.user.id}.jpg`;
 		writeFile(path, file.buffer, (err) => {
 			if (err) throw err;
 		});

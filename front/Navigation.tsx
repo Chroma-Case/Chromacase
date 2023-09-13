@@ -29,6 +29,7 @@ import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
 import ErrorView from './views/ErrorView';
 import GoogleView from './views/GoogleView';
+import VerifiedView from './views/VerifiedView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -75,6 +76,11 @@ const protectedRoutes = () =>
 			link: undefined,
 		},
 		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
+		Verified: {
+			component: VerifiedView,
+			options: { title: 'Verify email', headerShown: false },
+			link: '/verify',
+		},
 	} as const);
 
 const publicRoutes = () =>

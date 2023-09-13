@@ -1,8 +1,6 @@
 import {
 	Injectable,
 	InternalServerErrorException,
-	NotFoundException,
-	StreamableFile,
 } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -13,7 +11,9 @@ import fetch from 'node-fetch';
 
 @Injectable()
 export class UsersService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+	) {}
 
 	async user(
 		userWhereUniqueInput: Prisma.UserWhereUniqueInput,
@@ -95,8 +95,7 @@ export class UsersService {
 		const resp = await fetch(
 			`https://www.gravatar.com/avatar/${hash}.jpg?d=404&s=200`,
 		);
-		for (const [k, v] of resp.headers)
-			resp.headers.set(k, v);
+		for (const [k, v] of resp.headers) resp.headers.set(k, v);
 		resp.body!.pipe(res);
 	}
 }
