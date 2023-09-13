@@ -28,6 +28,7 @@ import { Button, Center, VStack } from 'native-base';
 import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
 import ErrorView from './views/ErrorView';
+import GenreDetailsView from './views/GenreDetailsView';
 import GoogleView from './views/GoogleView';
 
 // Util function to hide route props in URL
@@ -58,6 +59,11 @@ const protectedRoutes = () =>
 			component: ArtistDetailsView,
 			options: { title: translate('artistFilter') },
 			link: '/artist/:artistId',
+		},
+		Genre: {
+			component: GenreDetailsView,
+			options: { title: translate('genreFilter') },
+			link: '/genre/:genreId',
 		},
 		Score: {
 			component: ScoreView,

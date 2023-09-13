@@ -290,6 +290,42 @@ export default class API {
 	}
 
 	/**
+	 * @description retrieves songs from a specific artist
+	 * @param artistId is the id of the artist that composed the songs aimed
+	 * @returns a Promise of Songs type array
+	 */
+	public static getSongsByArtist(artistId: number): Query<Song[]> {
+		return {
+			key: ['artist', artistId, 'songs'],
+			exec: () =>
+				API.fetch(
+					{
+						route: `/song?artistId=${artistId}`,
+					},
+					{ handler: PlageHandler(SongHandler) }
+				).then(({ data }) => data),
+		};
+	}
+
+	/**
+	 *  Retrieves all songs corresponding to the given genre ID
+	 * @param genreId the id of the genre we're aiming
+	 * @returns a promise of an array of Songs
+	 */
+	public static getSongsByGenre(genreId: number): Query<Song[]> {
+		return {
+			key: ['genre', genreId, 'songs'],
+			exec: () =>
+				API.fetch(
+					{
+						route: `/song?genreId=${genreId}`,
+					},
+					{ handler: PlageHandler(SongHandler) }
+				).then(({ data }) => data),
+		};
+	}
+
+	/**
 	 * Retrive a song's midi partition
 	 * @param songId the id to find the song
 	 */
@@ -322,6 +358,23 @@ export default class API {
 	 */
 	public static getGenreIllustration(genreId: number): string {
 		return `${API.baseUrl}/genre/${genreId}/illustration`;
+	}
+
+	/**
+	 * Retrieves a genre
+	 * @param genreId the id of the aimed genre
+	 */
+	public static getGenre(genreId: number): Query<Genre> {
+		return {
+			key: ['genre', genreId],
+			exec: () =>
+				API.fetch(
+					{
+						route: `/genre/${genreId}`,
+					},
+					{ handler: GenreHandler }
+				),
+		};
 	}
 
 	/**
