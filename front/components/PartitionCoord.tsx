@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PartitionView from './PartitionView';
 import PhaserCanvas from './PartitionVisualizer/PhaserCanvas';
-import { PianoCursorPosition } from './PartitionVisualizer/PhaserCanvas';
+import { PianoCursorPosition } from '../models/PianoGame';
 
 type PartitionCoordProps = {
 	// The Buffer of the MusicXML file retreived from the API
@@ -10,9 +10,6 @@ type PartitionCoordProps = {
 	onEndReached: () => void;
 	onResume: () => void;
 	onPause: () => void;
-	// Timestamp of the play session, in milisecond
-	timestamp: number;
-	pressedKeys: Map<number, number>;
 };
 
 const PartitionCoord = ({
@@ -21,8 +18,6 @@ const PartitionCoord = ({
 	onEndReached,
 	onPause,
 	onResume,
-	timestamp,
-	pressedKeys,
 }: PartitionCoordProps) => {
 	const [partitionData, setPartitionData] = React.useState<
 		[string, PianoCursorPosition[]] | null
@@ -40,17 +35,15 @@ const PartitionCoord = ({
 					onEndReached={() => {
 						console.log('osmd end reached');
 					}}
-					timestamp={timestamp}
+					timestamp={0}
 				/>
 			)}
 			{partitionData && (
 				<PhaserCanvas
 					partitionB64={partitionData?.[0]}
 					cursorPositions={partitionData?.[1]}
-					timestamp={timestamp}
 					onPause={onPause}
 					onResume={onResume}
-					pressedKeys={pressedKeys}
 					onEndReached={() => {
 						onEndReached();
 					}}

@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { StackActions } from '@react-navigation/native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, createContext, useReducer } from 'react';
 import { SafeAreaView, Platform, Animated } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {
@@ -32,6 +32,7 @@ import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
+import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
 
 type PlayViewProps = {
 	songId: number;
@@ -68,6 +69,13 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
+//create a context with an array of number
+export const PianoCC = createContext<PianoCanvasContext>({
+	pressedKeys: new Map(),
+	timestamp: 0,
+	messages: [],
+});
+
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -89,6 +97,13 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
+	const [pianoMsgs, setPianoMsgs] = useReducer(
+		(state: PianoCanvasMsg[], action: PianoCanvasMsg) => {
+			state.push(action);
+			return state;
+		},
+		[]
+	);
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -182,25 +197,45 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 				if (data.type == 'miss') {
 					formattedMessage = translate('missed');
+					setPianoMsgs({
+						type: 'noteTiming',
+						data: NoteTiming.Missed,
+					});
 					messageColor = 'black';
 				} else if (data.type == 'timing' || data.type == 'duration') {
 					formattedMessage = translate(data[data.type]);
 					switch (data[data.type]) {
 						case 'perfect':
 							messageColor = 'green';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Perfect,
+							});
 							break;
 						case 'great':
 							messageColor = 'blue';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Great,
+							});
 							break;
 						case 'short':
 						case 'long':
 						case 'good':
 							messageColor = 'lightBlue';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Good,
+							});
 							break;
 						case 'too short':
 						case 'too long':
 						case 'wrong':
 							messageColor = 'trueGray';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Wrong,
+							});
 							break;
 						default:
 							break;
@@ -302,15 +337,21 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				</Animated.View>
 			</HStack>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				<PartitionCoord
-					file={musixml.data}
-					timestamp={time}
-					onEndReached={onEnd}
-					onPause={onPause}
-					onResume={onResume}
-					pressedKeys={pressedKeys}
-					onPartitionReady={() => setPartitionRendered(true)}
-				/>
+				<PianoCC.Provider
+					value={{
+						pressedKeys: pressedKeys,
+						timestamp: time,
+						messages: pianoMsgs,
+					}}
+				>
+					<PartitionCoord
+						file={musixml.data}
+						onEndReached={onEnd}
+						onPause={onPause}
+						onResume={onResume}
+						onPartitionReady={() => setPartitionRendered(true)}
+					/>
+				</PianoCC.Provider>
 				{!partitionRendered && <LoadingComponent />}
 			</View>
 
