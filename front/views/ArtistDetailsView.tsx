@@ -1,4 +1,4 @@
-import { Box, Heading, useBreakpointValue, ScrollView, useColorModeValue } from 'native-base';
+import { Box, Heading, useBreakpointValue, ScrollView } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import API from '../API';
@@ -16,7 +16,6 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 	const artistQuery = useQuery(API.getArtist(artistId));
 	const songsQuery = useQuery(API.getSongsByArtist(artistId));
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
-	const fadeColor = useColorModeValue('#ffffff', '#000000');
 	const isMobileView = screenSize == 'small';
 	const navigation = useNavigation();
 
