@@ -114,9 +114,8 @@ class Scorometer:
 			),
 			None,
 		)
-		if to_play or True:
-			# perf = self.getTimingScore(key, to_play)
-			perf = "perfect"
+		if to_play:
+			perf = self.getTimingScore(key, to_play)
 			self.info[perf] += 1
 			self.info["score"] += (
 				100
