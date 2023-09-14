@@ -6,6 +6,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class SongService {
 	constructor(private prisma: PrismaService) {}
 
+	async songByArtist(data: number): Promise<Song[]> {
+		return this.prisma.song.findMany({
+			where: {
+				artistId: {equals: data},
+			},
+		});
+	}
+
 	async createSong(data: Prisma.SongCreateInput): Promise<Song> {
 		return this.prisma.song.create({
 			data,
