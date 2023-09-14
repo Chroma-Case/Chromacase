@@ -79,7 +79,6 @@ const getPianoScene = (
 				this.cursor = this.add.rectangle(0, 0, 30, 350, 0x31ef8c, 0.5).setOrigin(0, 0);
 				this.cameras.main.startFollow(this.cursor, true, 0.05, 0.05);
 
-				// create an emitter the once called later will spawn 15 particules all around the sprite that it is attached to
 				this.emitter = this.add.particles(0, 0, 'star', {
 					lifespan: 700,
 					duration: 100,
