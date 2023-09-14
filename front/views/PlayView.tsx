@@ -32,7 +32,7 @@ import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
-import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
+import { PianoCanvasContext, PianoCanvasMsg, NoteTiming, PianoScoreInfo } from '../models/PianoGame';
 
 type PlayViewProps = {
 	songId: number;
@@ -187,8 +187,17 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					);
 					return;
 				}
+
+				const currentStreak = data.info.current_streak;
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
+
+				if (currentStreak && points) {
+					setPianoMsgs({
+						type: 'scoreInfo',
+						data: { streak: currentStreak, score: points },
+					});
+				}
 
 				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 

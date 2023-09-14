@@ -19,6 +19,12 @@ export type UpdateInfo = {
 	status: 'playing' | 'paused' | 'stopped';
 };
 
+export type PianoScoreInfo = {
+	score: number;
+	streak: number;
+};
+
+
 export enum NoteTiming {
 	Perfect = 'Perfect',
 	Great = 'Great',
@@ -28,8 +34,8 @@ export enum NoteTiming {
 }
 
 export type PianoCanvasMsg = {
-	type: 'noteTiming' | 'score' | 'gameUpdate';
-	data: UpdateInfo | NoteTiming | number;
+	type: 'noteTiming' | 'scoreInfo' | 'gameUpdate';
+	data: UpdateInfo | NoteTiming | PianoScoreInfo | number;
 };
 
 export type PianoCanvasContext = {
