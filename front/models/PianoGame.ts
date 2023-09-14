@@ -24,7 +24,6 @@ export type PianoScoreInfo = {
 	streak: number;
 };
 
-
 export enum NoteTiming {
 	Perfect = 'Perfect',
 	Great = 'Great',

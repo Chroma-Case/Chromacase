@@ -32,7 +32,7 @@ import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
-import { PianoCanvasContext, PianoCanvasMsg, NoteTiming, PianoScoreInfo } from '../models/PianoGame';
+import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
 
 type PlayViewProps = {
 	songId: number;
