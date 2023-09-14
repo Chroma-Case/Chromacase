@@ -154,6 +154,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			return;
 		}
 		setMidiKeyboardFound(true);
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		let inputIndex = 0;
 		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
@@ -192,7 +193,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
 
-				if (currentStreak && points) {
+				if (currentStreak !== undefined && points !== undefined) {
 					setPianoMsgs({
 						type: 'scoreInfo',
 						data: { streak: currentStreak, score: points },
