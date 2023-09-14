@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useEffect, useContext } from 'react';
+import { Dimensions } from 'react-native';
 import Phaser from 'phaser';
 import useColorScheme from '../../hooks/colorScheme';
 import { RootState, useSelector } from '../../state/Store';
@@ -21,6 +22,9 @@ const globalStatus: 'playing' | 'paused' | 'stopped' = 'playing';
 const isValidSoundPlayer = (soundPlayer: SplendidGrandPiano | undefined) => {
 	return soundPlayer && soundPlayer.loaded;
 };
+
+const min = (a: number, b: number) => (a < b ? a : b);
+const max = (a: number, b: number) => (a > b ? a : b);
 
 const myFindLast = <T,>(a: T[], p: (_: T, _2: number) => boolean) => {
 	for (let i = a.length - 1; i >= 0; i--) {
@@ -75,19 +79,17 @@ const getPianoScene = (
 				this.cursor = this.add.rectangle(0, 0, 30, 350, 0x31ef8c, 0.5).setOrigin(0, 0);
 				this.cameras.main.startFollow(this.cursor, true, 0.05, 0.05);
 
-
 				// create an emitter the once called later will spawn 15 particules all around the sprite that it is attached to
 				this.emitter = this.add.particles(0, 0, 'star', {
 					lifespan: 700,
 					duration: 100,
-					quantity: 2,
 					follow: this.cursor,
 					speed: { min: 10, max: 20 },
 					scale: { start: 0, end: 0.4 },
 					// rotate: { start: 0, end: 360 },
 					emitZone: { type: 'edge', source: this.cursor.getBounds(), quantity: 50 },
 
-					emitting: false
+					emitting: false,
 				});
 			});
 		}
@@ -113,7 +115,7 @@ const getPianoScene = (
 					}
 
 					if (globalMessages.length > 0) {
-						handlePianoGameMsg(globalMessages, this.emitter);
+						handlePianoGameMsg(globalMessages, this.emitter, undefined);
 					}
 
 					return false;
@@ -148,11 +150,7 @@ export type PhaserCanvasProps = {
 	onResume: () => void;
 };
 
-const PhaserCanvas = ({
-	partitionB64,
-	cursorPositions,
-	onEndReached,
-}: PhaserCanvasProps) => {
+const PhaserCanvas = ({ partitionB64, cursorPositions, onEndReached }: PhaserCanvasProps) => {
 	const colorScheme = useColorScheme();
 	const dispatch = useDispatch();
 	const pianoCC = useContext(PianoCC);
@@ -185,13 +183,43 @@ const PhaserCanvas = ({
 			soundPlayer,
 			colorScheme
 		);
+		const { width, height } = Dimensions.get('window');
+
+		class UIScene extends Phaser.Scene {
+			private statusTextValue: string;
+			private statusText!: Phaser.GameObjects.Text;
+			constructor() {
+				super({ key: 'UIScene', active: true });
+
+				this.statusTextValue = 'Score: 0 Streak: 0';
+			}
+
+			create() {
+				this.statusText = this.add.text(
+					this.cameras.main.width - 300,
+					10,
+					this.statusTextValue,
+					{
+						fontFamily: 'Arial',
+						fontSize: 25,
+						color: '#3A784B',
+					}
+				);
+			}
+
+			override update() {
+				if (globalMessages.length > 0) {
+					handlePianoGameMsg(globalMessages, undefined, this.statusText);
+				}
+			}
+		}
 
 		const config = {
 			type: Phaser.AUTO,
 			parent: 'phaser-canvas',
-			width: 1000,
-			height: 400,
-			scene: pianoScene,
+			width: max(width * 0.7, 850),
+			height: min(max(height * 0.7, 400), 600),
+			scene: [pianoScene, UIScene],
 			scale: {
 				mode: Phaser.Scale.FIT,
 				autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
