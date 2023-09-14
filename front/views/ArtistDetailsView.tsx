@@ -33,8 +33,7 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 			<ImageBackground
 				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
 				source={{ uri: API.getArtistIllustration(artistQuery.data.id) }}
-			>
-			</ImageBackground>
+			></ImageBackground>
 			<Box>
 				<Heading mt={-20} ml={3} fontSize={50}>
 					{artistQuery.data.name}

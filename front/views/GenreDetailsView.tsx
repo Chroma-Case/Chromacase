@@ -44,8 +44,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 			<ImageBackground
 				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
 				source={{ uri: API.getGenreIllustration(genreQuery.data.id) }}
-			>
-			</ImageBackground>
+			></ImageBackground>
 			<Heading ml={3} fontSize={50}>
 				{genreQuery.data.name}
 			</Heading>
