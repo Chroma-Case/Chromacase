@@ -13,6 +13,7 @@ const VerifiedView = () => {
 		async function run() {
 			try {
 				await API.fetch({
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
 					route: `/auth/verify?token=${(route.params as any).token}`,
 					method: 'PUT',
 				});
