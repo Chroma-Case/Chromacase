@@ -93,7 +93,7 @@ jobs:
         run: |
           docker-compose ps -a
           docker-compose logs
-          wget --retry-connrefused http://localhost:3000 # /healthcheck
+          wget --retry-connrefused http://localhost:3000 || (docker-compose logs && exit 1)
 
       - name: Run scorometer tests
         run: |
