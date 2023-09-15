@@ -81,6 +81,22 @@ export class AuthController {
 
 	@HttpCode(200)
 	@UseGuards(JwtAuthGuard)
+	@Put('reset')
+	async password_reset(@Request() req: any, @Query('token') token: string): Promise<void> {
+		if (await this.authService.resetPassword(req.user.id, token))
+			return;
+		throw new BadRequestException("Invalid token. Expired or invalid.");
+	}
+
+	@HttpCode(200)
+	@UseGuards(JwtAuthGuard)
+	@Put('send-reset')
+	async send_reset(@Request() req: any): Promise<void> {
+		await this.authService.sendResetMail(req.user);
+	}
+
+	@HttpCode(200)
+	@UseGuards(JwtAuthGuard)
 	@Put('verify')
 	async verify(@Request() req: any, @Query('token') token: string): Promise<void> {
 		if (await this.authService.verifyMail(req.user.id, token))
