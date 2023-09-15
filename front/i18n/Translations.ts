@@ -182,7 +182,7 @@ export const en = {
 	noRecentSearches: 'No recent searches',
 	avatar: 'Avatar',
 	changeIt: 'Change It',
-	verified: "Verified",
+	verified: 'Verified',
 };
 
 export const fr: typeof en = {
@@ -367,7 +367,7 @@ export const fr: typeof en = {
 	noRecentSearches: 'Aucune recherche récente',
 	avatar: 'Avatar',
 	changeIt: 'Modifier',
-	verified: "Verifié",
+	verified: 'Verifié',
 };
 
 export const sp: typeof en = {
@@ -557,5 +557,5 @@ export const sp: typeof en = {
 
 	avatar: 'Avatar',
 	changeIt: 'Cambialo',
-	verified: "Verified"
+	verified: 'Verified',
 };

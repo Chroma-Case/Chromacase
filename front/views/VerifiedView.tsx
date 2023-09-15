@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import API from '../API';
 import { Text } from 'native-base';
 import { useNavigation } from '../Navigation';
