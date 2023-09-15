@@ -75,8 +75,11 @@ const getPianoScene = (
 				if (this.nbTextureToload > 0) return;
 				this.partition = this.add.image(0, 0, 'partition').setOrigin(0, 0);
 				this.cameras.main.setBounds(0, 0, this.partition.width, this.partition.height);
+				console.log("canvas", this.partition.width, this.partition.height);
 
-				this.cursor = this.add.rectangle(0, 0, 30, 350, 0x31ef8c, 0.5).setOrigin(0, 0);
+				const dims = this.partition.getBounds();
+				// base ref normal cursor is 350px by 30px
+				this.cursor = this.add.rectangle(0, 0, dims.height * 30 / 350, dims.height, 0x31ef8c, 0.5).setOrigin(0, 0);
 				this.cameras.main.startFollow(this.cursor, true, 0.05, 0.05);
 
 				this.emitter = this.add.particles(0, 0, 'star', {

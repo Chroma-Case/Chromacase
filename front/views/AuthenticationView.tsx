@@ -38,7 +38,7 @@ const handleSignup = async (
 		return translate('loggedIn');
 	} catch (error) {
 		if (error instanceof APIError) {
-			if (error.status === 422) return translate('usernameTaken');
+			if (error.status === 409) return translate('usernameTaken');
 			return translate(error.userMessage);
 		}
 		if (error instanceof Error) return error.message;

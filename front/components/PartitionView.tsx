@@ -60,6 +60,7 @@ const PartitionView = (props: PartitionViewProps) => {
 			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
 			const wholeNoteLength = Math.round((60 / bpm) * 4000);
 			const curPos = [];
+			_osmd.setLogLevel('info');
 			while (!_osmd.cursor.iterator.EndReached) {
 				const notesToPlay = _osmd.cursor
 					.NotesUnderCursor()
