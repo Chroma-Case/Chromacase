@@ -6,6 +6,7 @@ import operator
 import os
 import sys
 from typing import TypedDict
+from pathlib import Path
 
 import requests
 from chroma_case.Key import Key
@@ -24,9 +25,11 @@ from mido import MidiFile
 import uuid
 
 game_uuid = uuid.uuid4()
-
-
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+logname = f"/logs/{game_uuid}.log"
+Path("/logs").mkdir(parents=True, exist_ok=True)
+Path(logname).touch(exist_ok=True)
+logging.basicConfig(filename=logname,
+                    filemode='a', level=logging.DEBUG)
 
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
@@ -61,7 +64,6 @@ class Scorometer:
 	def __init__(self, mode: int, midiFile: str, song_id: int, user_id: int) -> None:
 		self.partition: Partition = getPartition(midiFile)
 		self.practice_partition: list[list[Key]] = self.getPracticePartition(mode)
-		logging.debug({"partition": self.partition.notes})
 		self.keys_down = []
 		self.mode: int = mode
 		self.song_id: int = song_id
@@ -82,6 +84,7 @@ class Scorometer:
 
 	def send(self, obj):
 		obj["info"] = self.info
+		obj["game_id"] = game_uuid
 		send(obj)
 
 	def getPracticePartition(self, mode: int) -> list[list[Key]]:
