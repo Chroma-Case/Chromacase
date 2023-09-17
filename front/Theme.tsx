@@ -13,9 +13,9 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 					initialColorMode: colorScheme,
 				},
 				fonts: {
-					heading: "Lexend",
-					body: "Lexend",
-					mono: "Lexend",
+					heading: 'Lexend',
+					body: 'Lexend',
+					mono: 'Lexend',
 				},
 				colors: {
 					primary: {
@@ -101,30 +101,30 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 						700: '#8e2c31',
 						800: '#6b2124',
 						900: '#531a1c',
-					}
+					},
 				},
 				components: {
 					Button: {
 						baseStyle: () => ({
-							borderRadius: 'md'
+							borderRadius: 'md',
 						}),
 					},
 					Link: {
 						defaultProps: {
-							isUnderlined: false
+							isUnderlined: false,
 						},
 						baseStyle: () => ({
 							_text: {
-								color: "secondary.300"
+								color: 'secondary.300',
 							},
 							_hover: {
 								isUnderlined: true,
 								_text: {
-									color: "secondary.400"
-								}
+									color: 'secondary.400',
+								},
 							},
-						})
-					}
+						}),
+					},
 				},
 			})}
 		>
