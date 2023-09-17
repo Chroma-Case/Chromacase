@@ -15,7 +15,6 @@ import {
 	Row,
 	Heading,
 	Icon,
-	Button,
 } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 import BigActionButton from '../components/BigActionButton';
@@ -177,9 +176,7 @@ const StartPageView = () => {
 							href="https://chroma-case.github.io/"
 							isExternal
 						>
-							<Button>
-								Click here for more info
-							</Button>
+							Click here for more info
 						</Link>
 					</Box>
 				</Box>
