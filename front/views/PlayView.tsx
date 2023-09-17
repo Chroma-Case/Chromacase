@@ -77,7 +77,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
-	const [time, setTime] = useState(0);
+	const time = useRef(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
 	const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -236,7 +236,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
-			setTime(() => getElapsedTime()); // Countdown
+			time.current = getElapsedTime(); // Countdown
 		}, 1);
 
 		return () => {
@@ -289,7 +289,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
 				<PartitionCoord
 					file={musixml.data}
-					timestamp={time}
+					timestamp={time.current}
 					onEndReached={onEnd}
 					onPause={onPause}
 					onResume={onResume}
@@ -342,14 +342,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 									}}
 								/>
 								<Text>
-									{time < 0
+									{time.current < 0
 										? paused
 											? '0:00'
-											: Math.floor((time % 60000) / 1000)
+											: Math.floor((time.current % 60000) / 1000)
 													.toFixed(0)
 													.toString()
-										: `${Math.floor(time / 60000)}:${Math.floor(
-												(time % 60000) / 1000
+										: `${Math.floor(time.current / 60000)}:${Math.floor(
+												(time.current % 60000) / 1000
 										  )
 												.toFixed(0)
 												.toString()
