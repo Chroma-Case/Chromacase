@@ -14,7 +14,7 @@ import LikedSong from '../models/LikedSong';
 
 interface SearchContextType {
 	filter: 'artist' | 'song' | 'genre' | 'all' | 'favorites';
-	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all' | 'favorites' s) => void;
+	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all' | 'favorites') => void;
 	stringQuery: string;
 	updateStringQuery: (newData: string) => void;
 	songData: Song[];

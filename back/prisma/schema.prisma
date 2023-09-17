@@ -21,7 +21,16 @@ model User {
     SongHistory   SongHistory[]
     searchHistory SearchHistory[]
     settings      UserSettings?
-    likedSongs    Json?
+    likedSongs    LikedSongs[]
+}
+
+model LikedSongs {
+    id                   Int        @id @default(autoincrement())
+    user                 User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId               Int
+    song                 Song       @relation(fields: [songId], references: [id], onDelete: Cascade)
+    songId               Int
+    addedDate            DateTime   @default(now())
 }
 
 model UserSettings {
@@ -61,6 +70,7 @@ model Song {
     genre            Genre?        @relation(fields: [genreId], references: [id])
     difficulties     Json
     SongHistory      SongHistory[]
+    likedByUsers     LikedSongs[]
 }
 
 model SongHistory {

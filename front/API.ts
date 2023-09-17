@@ -665,13 +665,19 @@ export default class API {
 	}
 
 	public static async addLikedSong(songId: number): Promise<void> {
-		const data = await API.fetch(
+		await API.fetch(
 			{
-				route: `/auth/me/likes${songId}`,
+				route: `/auth/me/likes/${songId}`,
 				method: 'POST',
-				body: {
-					songId: songId
-				}
+			}
+		)
+	}
+
+	public static async removeLikedSong(songId: number): Promise<void> {
+		await API.fetch(
+			{
+				route: `/auth/me/likes/${songId}`,
+				method: 'DELETE',
 			}
 		)
 	}

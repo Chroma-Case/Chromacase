@@ -1,23 +1,16 @@
 import { HStack, IconButton, Image, Text } from 'native-base';
-import Song, { SongWithArtist } from '../models/Song';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
+import { LikedSongWithDetails } from '../models/LikedSong';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../API';
 
-type SongRowProps = {
-	song: Song | SongWithArtist; // TODO: remove Song
-	isLiked: boolean;
+type FavSongRowProps = {
+	FavSong: LikedSongWithDetails; // TODO: remove Song
 	onPress: () => void;
-	handleLike: () => void;
 };
 
-const handleFavoriteButton = (state: boolean, songId: number): void => {
-	if (state == false) API.removeLikedSong(songId);
-	else API.addLikedSong(songId);
-}
-
-const SongRow = ({ song, onPress, isLiked }: SongRowProps) => {
+const FavSongRow = ({ FavSong, onPress }: FavSongRowProps) => {
 	return (
 		<RowCustom width={'100%'}>
 			<HStack px={2} space={5} justifyContent={'space-between'}>
@@ -26,8 +19,8 @@ const SongRow = ({ song, onPress, isLiked }: SongRowProps) => {
 					flexGrow={0}
 					pl={10}
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-					source={{ uri: song.cover }}
-					alt={song.name}
+					source={{ uri: FavSong.details.cover }}
+					alt={FavSong.details.name}
 					borderColor={'white'}
 					borderWidth={1}
 				/>
@@ -51,7 +44,7 @@ const SongRow = ({ song, onPress, isLiked }: SongRowProps) => {
 						bold
 						fontSize="md"
 					>
-						{song.name}
+						{FavSong.details.name}
 					</Text>
 					<Text
 						style={{
@@ -59,13 +52,13 @@ const SongRow = ({ song, onPress, isLiked }: SongRowProps) => {
 						}}
 						fontSize={'sm'}
 					>
-						{song.artistId ?? 'artist'}
+						{FavSong.addedDate.toLocaleDateString()}
 					</Text>
 				</HStack>
-				<IconButton colorScheme="rose" variant={'ghost'} borderRadius={'full'} onPress={() => { handleFavoriteButton(isLiked, song.id)}}
+				<IconButton colorScheme="primary" variant={'ghost'} borderRadius={'full'} onPress={() => {API.removeLikedSong(FavSong.songId)}}
 					_icon={{
 					as: MaterialIcons,
-					name: isLiked ? "favorite-outline" : "favorite"
+					name: "favorite"
 				}} />
 				<TextButton
 					flexShrink={0}
@@ -82,4 +75,4 @@ const SongRow = ({ song, onPress, isLiked }: SongRowProps) => {
 	);
 };
 
-export default SongRow;
+export default FavSongRow;

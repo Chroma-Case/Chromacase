@@ -101,19 +101,34 @@ export class UsersService {
 	}
 
 	async addLikedSong(
-		where: Prisma.UserWhereUniqueInput,
+		userId: number,
 		songId: number,
 	) {
-		return this.prisma.user.update({
-			where,
-			data: {
-				likedSongs: {
-					merde: {
-						songId: songId,
-						time: Date()
-					}
-				}
+		return this.prisma.likedSongs.create(
+			{
+				data: { songId: songId, userId: userId }
 			}
-		})
+		)
+	}
+
+	async getLikedSongs(
+		userId: number,
+	) {
+		return this.prisma.likedSongs.findMany(
+			{
+				where: { userId: userId },
+			}
+		)
+	}
+
+	async removeLikedSong(
+		userId: number,
+		songId: number,
+	) {
+		return this.prisma.likedSongs.deleteMany(
+			{
+				where: { userId: userId, songId: songId },
+			}
+		)
 	}
 }

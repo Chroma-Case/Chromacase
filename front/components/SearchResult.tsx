@@ -25,6 +25,9 @@ import Song, { SongWithArtist } from '../models/Song';
 import { useNavigation } from '../Navigation';
 import Artist from '../models/Artist';
 import SongRow from '../components/SongRow';
+import RowCustom from './RowCustom';
+import FavSongRow from './FavSongRow';
+import { LikedSongWithDetails } from '../models/LikedSong';
 
 const swaToSongCardProps = (song: SongWithArtist) => ({
 	songId: song.id,
@@ -110,8 +113,13 @@ type SongsSearchComponentProps = {
 };
 
 const SongsSearchComponent = (props: SongsSearchComponentProps) => {
-	const { songData } = React.useContext(SearchContext);
 	const navigation = useNavigation();
+	const { songData } = React.useContext(SearchContext);
+	const favoritesQuery = useQuery(API.getLikedSongs());
+	// const songQueryWithFavorite = songData?.map((songs) => ({
+	// 	...songs,
+	// 	isLiked: !favoritesQuery.data?.find((query) => query?.songId == songs.id)
+	// }))
 
 	return (
 		<ScrollView>
@@ -124,6 +132,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 						<SongRow
 							key={index}
 							song={comp}
+							isLiked={!favoritesQuery.data?.find((query) => query?.songId == comp.id)}
 							onPress={() => {
 								API.createSearchHistoryEntry(comp.name, 'song');
 								navigation.navigate('Song', { songId: comp.id });
@@ -207,13 +216,18 @@ type FavoriteComponentProps = {
 };
 
 const FavoritesComponent = (props: FavoriteComponentProps) => {
+	const navigation = useNavigation();
 	const favoritesQuery = useQuery(API.getLikedSongs());
 	const songQueries = useQueries(
 		favoritesQuery.data?.map((favorite) => favorite.songId).map((songId) => API.getSong(songId)) ??
 			[]
 	);
 
-	const navigation = useNavigation();
+	const favSongWithDetails = favoritesQuery?.data
+		?.map((favorite) => ({
+			...favorite,
+			details: songQueries.find((query) => query.data?.id == favorite.songId)?.data,
+		})).filter((favorite) => favorite.details !== undefined).map((likedSong) => likedSong as LikedSongWithDetails);
 
 	if (favoritesQuery.isError) {
 		navigation.navigate('Error');
@@ -229,12 +243,12 @@ const FavoritesComponent = (props: FavoriteComponentProps) => {
 				{translate('songsFilter')}
 			</Text>
 			<Box>
-						{songQueries.map((songData) => (
-							<SongRow
-								song={songData} //todo
+						{favSongWithDetails?.map((songData) => (
+							<FavSongRow
+								FavSong={songData}
 								onPress={() => {
-									API.createSearchHistoryEntry(comp.name, 'song'); //todo
-									navigation.navigate('Song', { songId: comp.id }); //todo
+									API.createSearchHistoryEntry(songData.details!.name, 'song'); //todo
+									navigation.navigate('Song', { songId: songData.details!.id }); //todo
 								}}
 							/>
 						))}
