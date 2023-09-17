@@ -20,7 +20,7 @@ const PartitionCoord = ({
 	onResume,
 }: PartitionCoordProps) => {
 	const [partitionData, setPartitionData] = React.useState<
-		[string, PianoCursorPosition[]] | null
+		[[number, number], string, PianoCursorPosition[]] | null
 	>(null);
 
 	return (
@@ -28,8 +28,8 @@ const PartitionCoord = ({
 			{!partitionData && (
 				<PartitionView
 					file={file}
-					onPartitionReady={(base64data, a) => {
-						setPartitionData([base64data, a]);
+					onPartitionReady={(dims, base64data, a) => {
+						setPartitionData([dims, base64data, a]);
 						onPartitionReady();
 					}}
 					onEndReached={() => {
@@ -40,8 +40,9 @@ const PartitionCoord = ({
 			)}
 			{partitionData && (
 				<PhaserCanvas
-					partitionB64={partitionData?.[0]}
-					cursorPositions={partitionData?.[1]}
+					partitionDims={partitionData?.[0]}
+					partitionB64={partitionData?.[1]}
+					cursorPositions={partitionData?.[2]}
 					onPause={onPause}
 					onResume={onResume}
 					onEndReached={() => {
