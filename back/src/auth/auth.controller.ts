@@ -7,7 +7,7 @@ import {
 	Body,
 	Delete,
 	BadRequestException,
-	DuplicateException,
+	ConflictException,
 	HttpCode,
 	Put,
 	InternalServerErrorException,
@@ -77,7 +77,7 @@ export class AuthController {
 		} catch (e) {
 			// check if the error is a duplicate key error
 			if (e.code === 'P2002') {
-				throw new DuplicateException('Username or email already taken');
+				throw new ConflictException('Username or email already taken');
 			}
 			console.error(e);
 			throw new BadRequestException();
