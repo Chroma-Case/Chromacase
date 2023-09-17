@@ -9,13 +9,15 @@ import TextButton from '../components/TextButton';
 import { useNavigation } from '../Navigation';
 import { string } from 'yup';
 import { FormControl, Input, Stack, Center, Button, Text, Box, useToast } from 'native-base';
-import { TouchableOpacity, Linking, View  } from 'react-native'
+import { TouchableOpacity, Linking, View, StyleSheet  } from 'react-native'
 import TextFormField from '../components/UI/TextFormField';
 import LinkBase from '../components/UI/LinkBase';
 import SeparatorBase from '../components/UI/SeparatorBase';
 import ButtonBase from '../components/UI/ButtonBase';
 import { Image, Flex } from 'native-base';
 import ImageBanner from '../assets/banner.jpg';
+import TMPBase from '../components/UI/TMPBase';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const hanldeSignin = async (
 	username: string,
@@ -76,9 +78,14 @@ const SigninView = () => {
                         Continuez avec Google ou entrez vos coordonnées.
                     </Text>
                     <ButtonBase
-                        isOutlined
+                        type='outlined'
                         iconImage='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2008px-Google_%22G%22_Logo.svg.png'
                         title="Signin with google"
+                    />
+                    <ButtonBase
+                        type='menu'
+                        icon='person'
+                        title="Menu"
                     />
                     <SeparatorBase>or</SeparatorBase>
                     <TextFormField
@@ -121,6 +128,8 @@ const SigninView = () => {
                     </LinkBase>
 
                     <ButtonBase
+                        type='outlined'
+                        icon='alert'
                         title="Signin"
                         isDisabled={
                             formData.password.error !== null ||
@@ -157,6 +166,12 @@ const SigninView = () => {
                     style={{width: '100%', height: '100%', borderRadius: 8}}
                 />
             </View>
+            <LinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
+                colors={['#101014', '#6075F9']}
+                style={{top: 0, bottom: 0, right: 0, left: 0, width: '100%', height: '100%', position: 'absolute', zIndex: -2}}
+            />
         </Flex>
 	);
 };
