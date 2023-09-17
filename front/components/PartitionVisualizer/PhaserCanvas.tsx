@@ -77,7 +77,7 @@ const getPianoScene = (
 				this.cameras.main.setBounds(0, 0, this.partition.width, this.partition.height);
 
 				const dims = this.partition.getBounds();
-				// base ref normal cursor is 350px by 30px
+				// base ref normal cursor is 276px by 30px
 				this.cursor = this.add
 					.rectangle(0, 0, (dims.height * 30) / 276, dims.height, 0x31ef8c, 0.5)
 					.setOrigin(0, 0);
@@ -89,7 +89,6 @@ const getPianoScene = (
 					follow: this.cursor,
 					speed: { min: 10, max: 20 },
 					scale: { start: 0, end: 0.4 },
-					// rotate: { start: 0, end: 360 },
 					emitZone: { type: 'edge', source: this.cursor.getBounds(), quantity: 50 },
 
 					emitting: false,
