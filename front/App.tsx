@@ -18,9 +18,9 @@ export default function App() {
 	SplashScreen.preventAutoHideAsync();
 
 	const [fontsLoaded] = useFonts({
-		'Lexend': require('./assets/fonts/lexend.ttf'),
+		Lexend: require('./assets/fonts/lexend.ttf'),
 	});
-	
+
 	useEffect(() => {
 		if (fontsLoaded) {
 			SplashScreen.hideAsync();

@@ -11,9 +11,9 @@ import API from '../API';
 const ProfileView = () => {
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
-	
+
 	if (!userQuery.data) {
-		return <LoadingView/>
+		return <LoadingView />;
 	}
 
 	return (

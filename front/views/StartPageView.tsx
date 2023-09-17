@@ -38,10 +38,11 @@ const StartPageView = () => {
 	const dispatch = useDispatch();
 	const colorScheme = useColorScheme();
 	const toast = useToast();
-	const [icon] = useAssets(colorScheme == 'light'
-		? require('../assets/icon_light.png')
-		: require('../assets/icon_dark.png')
-	)
+	const [icon] = useAssets(
+		colorScheme == 'light'
+			? require('../assets/icon_light.png')
+			: require('../assets/icon_dark.png')
+	);
 	const [loginBanner] = useAssets(require('../assets/auth/login_banner.png'));
 	const [guestBanner] = useAssets(require('../assets/auth/guest_banner.png'));
 	const [registerBanner] = useAssets(require('../assets/auth/register_banner.png'));
@@ -172,10 +173,7 @@ const StartPageView = () => {
 							alignItems: 'center',
 						}}
 					>
-						<Link
-							href="https://chroma-case.github.io/"
-							isExternal
-						>
+						<Link href="https://chroma-case.github.io/" isExternal>
 							Click here for more info
 						</Link>
 					</Box>
