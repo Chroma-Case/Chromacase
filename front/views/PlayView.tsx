@@ -154,8 +154,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			return;
 		}
 		setMidiKeyboardFound(true);
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		let inputIndex = 0;
 		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
 			webSocket.current!.send(
@@ -257,13 +255,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			}
 		};
 		inputs.forEach((input) => {
-			// if (inputIndex != 0) {
-
-			// 	return;
-			// }
 			input.onmidimessage = (message) => {
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const { command, channel, note, velocity } = parseMidiMessage(message);
+				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
 				if (keyIsPressed) {
 					setPressedKeys((prev) => {
@@ -286,7 +279,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					})
 				);
 			};
-			inputIndex++;
 		});
 	};
 	const onMIDIFailure = () => {
