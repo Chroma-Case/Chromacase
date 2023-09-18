@@ -22,6 +22,7 @@ RUN yarn tsc && expo build:web
 # Serve the app
 FROM nginx:1.21-alpine
 COPY --from=build /app/web-build /usr/share/nginx/html
-COPY nginx.conf.template /etc/nginx/conf.d/default.conf.template
+COPY ./assets/ /usr/share/nginx/html/assets/
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
-CMD envsubst '$API_URL $SCOROMETER_URL $NGINX_PORT' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+CMD nginx -g 'daemon off;'
