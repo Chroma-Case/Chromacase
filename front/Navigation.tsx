@@ -31,6 +31,7 @@ import ErrorView from './views/ErrorView';
 import GenreDetailsView from './views/GenreDetailsView';
 import GoogleView from './views/GoogleView';
 import VerifiedView from './views/VerifiedView';
+import TabNavigation from './components/V2/TabNavigation';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -38,8 +39,8 @@ const removeMe = () => '';
 const protectedRoutes = () =>
 	({
 		Home: {
-			component: HomeView,
-			options: { title: translate('welcome'), headerLeft: null },
+			component: TabNavigation,
+			options: { title: translate('welcome'), headerShown: false },
 			link: '/',
 		},
 		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
