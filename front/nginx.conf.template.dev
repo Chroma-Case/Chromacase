@@ -1,19 +1,19 @@
 server {
-	listen ${NGINX_PORT};
+	listen ${PORT};
 	root /usr/share/nginx/html;
 
 	index index.html;
 
 	location /assets {
-		alias ./assets;
+		alias /assets;
 	}
 
 	location / {
-		try_files $uri $uri/ /index.html;
+		proxy_pass ${FRONT_URL}/;
 	}
 
 	location /api/ {
-		proxy_pass ${API_URL};
+		proxy_pass ${API_URL}/;
 	}
 
 	location /ws {

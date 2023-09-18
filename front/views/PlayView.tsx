@@ -33,6 +33,7 @@ import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
+import { Metronome } from '../components/Metronome';
 
 type PlayViewProps = {
 	songId: number;
@@ -356,6 +357,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				</PianoCC.Provider>
 				{!partitionRendered && <LoadingComponent />}
 			</View>
+
+			<Metronome paused={paused} bpm={60} />
 
 			<Box
 				shadow={4}
