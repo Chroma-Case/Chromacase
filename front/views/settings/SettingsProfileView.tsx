@@ -57,6 +57,16 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 						},
 						{
 							type: 'text',
+							title: translate('verified'),
+							data: {
+								text: user.emailVerified ? 'verified' : 'not verified',
+								onPress: user.emailVerified
+									? undefined
+									: () => API.fetch({ route: '/auth/reverify', method: 'PUT' }),
+							},
+						},
+						{
+							type: 'text',
 							title: translate('avatar'),
 							data: {
 								text: translate('changeIt'),

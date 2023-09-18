@@ -6,7 +6,7 @@ module.exports = {
 	icon: './assets/icon.png',
 	userInterfaceStyle: 'light',
 	splash: {
-		image: './assets/splashLogo.png',
+		image: './assets/splash.png',
 		resizeMode: 'contain',
 		backgroundColor: '#ffffff',
 	},
@@ -18,12 +18,6 @@ module.exports = {
 		supportsTablet: true,
 	},
 	android: {
-		adaptiveIcon: {
-			foregroundImage: './assets/adaptive-icon.png',
-			backgroundColor: '#FFFFFF',
-			package: 'com.chromacase.chromacase',
-			versionCode: 1,
-		},
 		package: 'build.apk',
 	},
 	web: {

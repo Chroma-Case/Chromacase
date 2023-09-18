@@ -1,4 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
+import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform, Animated } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
@@ -15,20 +16,18 @@ import {
 	HStack,
 } from 'native-base';
 import IconButton from '../components/IconButton';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { RouteProps, useNavigation } from '../Navigation';
 import { transformQuery, useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
-import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import PartitionView from '../components/PartitionView';
+import PartitionCoord from '../components/PartitionCoord';
 import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
@@ -78,7 +77,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
-	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
@@ -117,6 +115,12 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		);
 	};
 	const onEnd = () => {
+		stopwatch.stop();
+		if (webSocket.current?.readyState != WebSocket.OPEN) {
+			console.warn('onEnd: Websocket not open');
+			navigation.dispatch(StackActions.replace('Home'));
+			return;
+		}
 		webSocket.current?.send(
 			JSON.stringify({
 				type: 'end',
@@ -126,6 +130,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 	const onMIDISuccess = (access: MIDIAccess) => {
 		const inputs = access.inputs;
+		let endMsgReceived = false; // Used to know if to go to error screen when websocket closes
 
 		if (inputs.size < 2) {
 			toast.show({ description: 'No MIDI Keyboard found' });
@@ -144,11 +149,25 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				})
 			);
 		};
+		webSocket.current.onclose = () => {
+			console.log('Websocket closed', endMsgReceived);
+			if (!endMsgReceived) {
+				toast.show({ description: 'Connection lost with Scorometer' });
+				// the special case when the front send the end message succesfully
+				// but the websocket is closed before the end message is received
+				// is not handled
+				return;
+			}
+		};
 		webSocket.current.onmessage = (message) => {
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
-					navigation.navigate('Score', { songId: song.data!.id, ...data });
+					endMsgReceived = true;
+					webSocket.current?.close();
+					navigation.dispatch(
+						StackActions.replace('Score', { songId: song.data!.id, ...data })
+					);
 					return;
 				}
 				const points = data.info.score;
@@ -222,7 +241,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
-			onEnd();
+			stopwatch.stop();
 			clearInterval(interval);
 		};
 	}, []);
@@ -268,50 +287,17 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				</Animated.View>
 			</HStack>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				<PartitionView
+				<PartitionCoord
 					file={musixml.data}
+					timestamp={time}
+					onEndReached={onEnd}
+					onPause={onPause}
+					onResume={onResume}
 					onPartitionReady={() => setPartitionRendered(true)}
-					timestamp={Math.max(0, time)}
-					onEndReached={() => {
-						onEnd();
-					}}
 				/>
 				{!partitionRendered && <LoadingComponent />}
 			</View>
 
-			{isVirtualPianoVisible && (
-				<Column
-					style={{
-						display: 'flex',
-						justifyContent: 'flex-end',
-						alignItems: 'center',
-						height: '20%',
-						width: '100%',
-					}}
-				>
-					<VirtualPiano
-						onNoteDown={(note) => {
-							console.log('On note down', keyToStr(note));
-						}}
-						onNoteUp={(note) => {
-							console.log('On note up', keyToStr(note));
-						}}
-						showOctaveNumbers={true}
-						startNote={Note.C}
-						endNote={Note.B}
-						startOctave={2}
-						endOctave={5}
-						style={{
-							width: '80%',
-							height: '100%',
-						}}
-						highlightedNotes={[
-							{ key: strToKey('D3') },
-							{ key: strToKey('A#'), bgColor: '#00FF00' },
-						]}
-					/>
-				</Column>
-			)}
 			<Box
 				shadow={4}
 				style={{
@@ -353,20 +339,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 										} else {
 											onPause();
 										}
-									}}
-								/>
-								<IconButton
-									size="sm"
-									colorScheme="coolGray"
-									variant="solid"
-									icon={
-										<Icon
-											as={MaterialCommunityIcons}
-											name={isVirtualPianoVisible ? 'piano-off' : 'piano'}
-										/>
-									}
-									onPress={() => {
-										setVirtualPianoVisible(!isVirtualPianoVisible);
 									}}
 								/>
 								<Text>

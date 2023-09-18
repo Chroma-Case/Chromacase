@@ -19,6 +19,7 @@ import {
 	ParseFilePipeBuilder,
 	Response,
 	Param,
+	Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -72,10 +73,27 @@ export class AuthController {
 		try {
 			const user = await this.usersService.createUser(registerDto);
 			await this.settingsService.createUserSetting(user.id);
+			await this.authService.sendVerifyMail(user);
 		} catch (e) {
 			console.error(e);
 			throw new BadRequestException();
 		}
+	}
+
+	@HttpCode(200)
+	@UseGuards(JwtAuthGuard)
+	@Put('verify')
+	async verify(@Request() req: any, @Query('token') token: string): Promise<void> {
+		if (await this.authService.verifyMail(req.user.id, token))
+			return;
+		throw new BadRequestException("Invalid token. Expired or invalid.");
+	}
+
+	@HttpCode(200)
+	@UseGuards(JwtAuthGuard)
+	@Put('reverify')
+	async reverify(@Request() req: any): Promise<void> {
+		await this.authService.sendVerifyMail(req.user);
 	}
 
 	@ApiBody({ type: LoginDto })
@@ -122,7 +140,7 @@ export class AuthController {
 		)
 		file: Express.Multer.File,
 	) {
-		const path = `/data/${req.user.id}.jpg`
+		const path = `/data/${req.user.id}.jpg`;
 		writeFile(path, file.buffer, (err) => {
 			if (err) throw err;
 		});

@@ -27,7 +27,7 @@ export const SearchHistoryHandler: ResponseHandler<
 
 interface SearchHistory extends Model {
 	query: string;
-	type: 'song' | 'artist' | 'album' | 'genre';
+	type: SearchType;
 	userId: number;
 	timestamp: Date;
 }

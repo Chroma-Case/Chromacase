@@ -14,5 +14,7 @@ yarn.error*
 # macOS
 .DS_Store
 
+yarn-error.log
+
 .idea/
 .expo

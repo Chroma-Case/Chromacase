@@ -16,7 +16,7 @@ import useColorScheme from '../hooks/colorScheme';
 type BigActionButtonProps = {
 	title: string;
 	subtitle: string;
-	image: string;
+	image?: string;
 	style?: StyleProp<ViewStyle>;
 	iconName?: string;
 	// It is not possible to recover the type, the `Icon` parameter is `any` as well.
