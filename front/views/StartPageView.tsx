@@ -173,7 +173,7 @@ const StartPageView = () => {
 							alignItems: 'center',
 						}}
 					>
-						<Link href="https://chroma-case.github.io/" isExternal>
+						<Link href="http://eip.epitech.eu/2024/chromacase" isExternal>
 							Click here for more info
 						</Link>
 					</Box>
