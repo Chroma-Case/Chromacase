@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 // Inspired from OSMD example project
 // https://github.com/opensheetmusicdisplay/react-opensheetmusicdisplay/blob/master/src/lib/OpenSheetMusicDisplay.jsx
-import React, { useEffect } from 'react';
+import React, { MutableRefObject, useEffect } from 'react';
 import {
 	CursorType,
 	Fraction,
@@ -19,6 +19,7 @@ type PartitionViewProps = {
 		base64data: string,
 		cursorInfos: PianoCursorPosition[]
 	) => void;
+	bpmRef: MutableRefObject<number>;
 	onEndReached: () => void;
 	// Timestamp of the play session, in milisecond
 	timestamp: number;
@@ -62,6 +63,7 @@ const PartitionView = (props: PartitionViewProps) => {
 			_osmd.render();
 			_osmd.cursor.show();
 			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
+			props.bpmRef.current = bpm;
 			const wholeNoteLength = Math.round((60 / bpm) * 4000);
 			const curPos = [];
 			while (!_osmd.cursor.iterator.EndReached) {
