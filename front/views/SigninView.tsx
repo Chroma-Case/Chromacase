@@ -18,6 +18,7 @@ import { Image, Flex } from 'native-base';
 import ImageBanner from '../assets/banner.jpg';
 import TMPBase from '../components/UI/TMPBase';
 import { LinearGradient } from 'expo-linear-gradient';
+import SettingBase from '../components/UI/SettingsBase';
 
 const hanldeSignin = async (
 	username: string,
@@ -87,6 +88,7 @@ const SigninView = () => {
                         icon='person'
                         title="Menu"
                     />
+                    <SettingBase icon='person' title='title' description='description'>coucou</SettingBase>
                     <SeparatorBase>or</SeparatorBase>
                     <TextFormField
                         error={formData.username.error}

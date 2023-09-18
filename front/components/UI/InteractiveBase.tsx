@@ -1,13 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Animated, StyleSheet, TouchableOpacity, ActivityIndicator, View, Image, StyleProp, ViewStyle } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { Text, useTheme } from 'native-base'
-import { BlurView } from 'expo-blur';
-
-import {
-  Fill,
-  BackdropBlur,
-} from "@shopify/react-native-skia";
+// import Ionicons from '@expo/vector-icons/Ionicons';
+// import { Text, useTheme } from 'native-base'
+// import { BlurView } from '@react-native-community/blur';
 
 interface InteractiveBaseProps {
   children?: React.ReactNode;
@@ -200,7 +195,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({ children, onPress, st
       style={[
         style,
         isDisabled ? styleAnimate.Disabled : {
-          backgroundColor: isOutlined ? 'transparent' : backgroundColorValue,
+          backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : backgroundColorValue,
           borderColor: isOutlined ? backgroundColorValue :  'transparent',
           borderWidth: 2,
           transform: [{ scale: scaleValue }],
@@ -219,17 +214,19 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({ children, onPress, st
           onMouseLeave={handleMouseLeave}
           style={styles.container}
         >
-          {/* <BlurView
-            // style={[styles.container, {width: isCollapsed ? 'fit-content': '100%'}]}
-            tint="dark"
-            intensity={100}
-          >
-            {children}
-          </BlurView> */}
           {children}
-          <BackdropBlur blur={4} clip={{ x: 0, y: 128, width: 256, height: 128 }}>
-            <Fill color="rgba(0, 0, 0, 0.2)" />
-          </BackdropBlur>
+          {/* <BlurView
+            style={{
+              width: '420px',
+              height: '50px',
+              borderRadius: 20,
+              borderWidth: 1,
+
+            }}
+            blurType="light"
+            blurAmount={20}
+            blurRadius={5}
+          /> */}
       </TouchableOpacity>
     </Animated.View>
   );
