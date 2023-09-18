@@ -55,11 +55,18 @@ const FavSongRow = ({ FavSong, onPress }: FavSongRowProps) => {
 						{FavSong.addedDate.toLocaleDateString()}
 					</Text>
 				</HStack>
-				<IconButton colorScheme="primary" variant={'ghost'} borderRadius={'full'} onPress={() => {API.removeLikedSong(FavSong.songId)}}
+				<IconButton
+					colorScheme="primary"
+					variant={'ghost'}
+					borderRadius={'full'}
+					onPress={() => {
+						API.removeLikedSong(FavSong.songId);
+					}}
 					_icon={{
-					as: MaterialIcons,
-					name: "favorite"
-				}} />
+						as: MaterialIcons,
+						name: 'favorite',
+					}}
+				/>
 				<TextButton
 					flexShrink={0}
 					flexGrow={0}

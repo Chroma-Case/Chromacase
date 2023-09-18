@@ -7,9 +7,13 @@ export const LikedSongValidator = yup
 	.object({
 		songId: yup.number().required(),
 		addedDate: yup.date().required(),
-	}).concat(ModelValidator);
+	})
+	.concat(ModelValidator);
 
-export const LikedSongHandler: ResponseHandler<yup.InferType<typeof LikedSongValidator>, LikedSong> = {
+export const LikedSongHandler: ResponseHandler<
+	yup.InferType<typeof LikedSongValidator>,
+	LikedSong
+> = {
 	validator: LikedSongValidator,
 	transformer: (likedSong) => ({
 		id: likedSong.id,
@@ -20,7 +24,7 @@ export const LikedSongHandler: ResponseHandler<yup.InferType<typeof LikedSongVal
 interface LikedSong extends Model {
 	songId: number;
 	addedDate: Date;
-};
+}
 
 export interface LikedSongWithDetails extends LikedSong {
 	details: Song;

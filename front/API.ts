@@ -665,21 +665,17 @@ export default class API {
 	}
 
 	public static async addLikedSong(songId: number): Promise<void> {
-		await API.fetch(
-			{
-				route: `/auth/me/likes/${songId}`,
-				method: 'POST',
-			}
-		)
+		await API.fetch({
+			route: `/auth/me/likes/${songId}`,
+			method: 'POST',
+		});
 	}
 
 	public static async removeLikedSong(songId: number): Promise<void> {
-		await API.fetch(
-			{
-				route: `/auth/me/likes/${songId}`,
-				method: 'DELETE',
-			}
-		)
+		await API.fetch({
+			route: `/auth/me/likes/${songId}`,
+			method: 'DELETE',
+		});
 	}
 
 	public static getLikedSongs(): Query<likedSong[]> {
@@ -690,21 +686,21 @@ export default class API {
 					{
 						route: '/auth/me/likes',
 					},
-					{ handler: ListHandler(LikedSongHandler)}
+					{ handler: ListHandler(LikedSongHandler) }
 				),
 		};
 	}
 
-		public static getUserPlaayHistory(): Query<SongHistoryItem[]> {
-			return {
-				key: ['history'],
-				exec: () =>
-					API.fetch(
-						{
-							route: '/history',
-						},
-						{ handler: ListHandler(SongHistoryItemHandler) }
-					),
-			};
-		}
+	public static getUserPlaayHistory(): Query<SongHistoryItem[]> {
+		return {
+			key: ['history'],
+			exec: () =>
+				API.fetch(
+					{
+						route: '/history',
+					},
+					{ handler: ListHandler(SongHistoryItemHandler) }
+				),
+		};
+	}
 }

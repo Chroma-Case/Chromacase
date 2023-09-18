@@ -24,6 +24,7 @@ interface SearchContextType {
 	isLoadingSong: boolean;
 	isLoadingArtist: boolean;
 	isLoadingGenre: boolean;
+	isLoadingFavorite: boolean;
 }
 
 export const SearchContext = React.createContext<SearchContextType>({
@@ -38,6 +39,7 @@ export const SearchContext = React.createContext<SearchContextType>({
 	isLoadingSong: false,
 	isLoadingArtist: false,
 	isLoadingGenre: false,
+	isLoadingFavorite: false,
 });
 
 type SearchViewProps = {
@@ -66,7 +68,7 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 	const { isLoading: isLoadingFavorite, data: favoriteData = [] } = useQuery(
 		API.getLikedSongs(),
 		{ enabled: true }
-	)
+	);
 
 	const updateFilter = (newData: Filter) => {
 		// called when the filter is changed
@@ -92,6 +94,7 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 						isLoadingSong,
 						isLoadingArtist,
 						isLoadingGenre,
+						isLoadingFavorite,
 						updateFilter,
 						updateStringQuery,
 					}}
@@ -105,6 +108,3 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 };
 
 export default SearchView;
-
-
-

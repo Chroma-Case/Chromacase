@@ -1,4 +1,4 @@
-import { Flex, Heading, useBreakpointValue, ScrollView, useColorModeValue } from 'native-base';
+import { Flex, Heading, useBreakpointValue, ScrollView } from 'native-base';
 import { useQueries, useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import { RouteProps, useNavigation } from '../Navigation';
@@ -28,7 +28,6 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isMobileView = screenSize == 'small';
-	const fadeColor = useColorModeValue('#ffffff', '#000000');
 	const navigation = useNavigation();
 
 	if (genreQuery.isError || songsQuery.isError) {
@@ -44,8 +43,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 			<ImageBackground
 				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
 				source={{ uri: API.getGenreIllustration(genreQuery.data.id) }}
-			>
-			</ImageBackground>
+			></ImageBackground>
 			<Heading ml={3} fontSize={50}>
 				{genreQuery.data.name}
 			</Heading>

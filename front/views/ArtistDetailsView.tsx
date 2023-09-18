@@ -1,4 +1,4 @@
-import { Box, Heading, useBreakpointValue, ScrollView, useColorModeValue } from 'native-base';
+import { Box, Heading, useBreakpointValue, ScrollView } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import API from '../API';
@@ -16,9 +16,15 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 	const artistQuery = useQuery(API.getArtist(artistId));
 	const songsQuery = useQuery(API.getSongsByArtist(artistId));
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
-	const fadeColor = useColorModeValue('#ffffff', '#000000');
 	const isMobileView = screenSize == 'small';
 	const navigation = useNavigation();
+
+	const favoritesQuery = useQuery(API.getLikedSongs());
+
+	const handleFavoriteButton = async (state: boolean, songId: number): Promise<void> => {
+		if (state == false) await API.removeLikedSong(songId);
+		else await API.addLikedSong(songId);
+	};
 
 	if (artistQuery.isError || songsQuery.isError) {
 		navigation.navigate('Error');
@@ -33,8 +39,7 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 			<ImageBackground
 				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
 				source={{ uri: API.getArtistIllustration(artistQuery.data.id) }}
-			>
-			</ImageBackground>
+			></ImageBackground>
 			<Box>
 				<Heading mt={-20} ml={3} fontSize={50}>
 					{artistQuery.data.name}
@@ -45,6 +50,12 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 							<SongRow
 								key={index}
 								song={comp}
+								isLiked={
+									!favoritesQuery.data?.find((query) => query?.songId == comp.id)
+								}
+								handleLike={(state: boolean, songId: number) =>
+									handleFavoriteButton(state, songId)
+								}
 								onPress={() => {
 									API.createSearchHistoryEntry(comp.name, 'song');
 									navigation.navigate('Song', { songId: comp.id });

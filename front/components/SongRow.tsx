@@ -3,21 +3,15 @@ import Song, { SongWithArtist } from '../models/Song';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
 import { MaterialIcons } from '@expo/vector-icons';
-import API from '../API';
 
 type SongRowProps = {
 	song: Song | SongWithArtist; // TODO: remove Song
 	isLiked: boolean;
 	onPress: () => void;
-	handleLike: () => void;
+	handleLike: (state: boolean, songId: number) => Promise<void>;
 };
 
-const handleFavoriteButton = (state: boolean, songId: number): void => {
-	if (state == false) API.removeLikedSong(songId);
-	else API.addLikedSong(songId);
-}
-
-const SongRow = ({ song, onPress, isLiked }: SongRowProps) => {
+const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 	return (
 		<RowCustom width={'100%'}>
 			<HStack px={2} space={5} justifyContent={'space-between'}>
@@ -62,11 +56,18 @@ const SongRow = ({ song, onPress, isLiked }: SongRowProps) => {
 						{song.artistId ?? 'artist'}
 					</Text>
 				</HStack>
-				<IconButton colorScheme="rose" variant={'ghost'} borderRadius={'full'} onPress={() => { handleFavoriteButton(isLiked, song.id)}}
+				<IconButton
+					colorScheme="rose"
+					variant={'ghost'}
+					borderRadius={'full'}
+					onPress={async () => {
+						await handleLike(isLiked, song.id);
+					}}
 					_icon={{
-					as: MaterialIcons,
-					name: isLiked ? "favorite-outline" : "favorite"
-				}} />
+						as: MaterialIcons,
+						name: isLiked ? 'favorite-outline' : 'favorite',
+					}}
+				/>
 				<TextButton
 					flexShrink={0}
 					flexGrow={0}

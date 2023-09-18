@@ -25,7 +25,6 @@ import Song, { SongWithArtist } from '../models/Song';
 import { useNavigation } from '../Navigation';
 import Artist from '../models/Artist';
 import SongRow from '../components/SongRow';
-import RowCustom from './RowCustom';
 import FavSongRow from './FavSongRow';
 import { LikedSongWithDetails } from '../models/LikedSong';
 
@@ -116,10 +115,11 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 	const navigation = useNavigation();
 	const { songData } = React.useContext(SearchContext);
 	const favoritesQuery = useQuery(API.getLikedSongs());
-	// const songQueryWithFavorite = songData?.map((songs) => ({
-	// 	...songs,
-	// 	isLiked: !favoritesQuery.data?.find((query) => query?.songId == songs.id)
-	// }))
+
+	const handleFavoriteButton = async (state: boolean, songId: number): Promise<void> => {
+		if (state == false) await API.removeLikedSong(songId);
+		else await API.addLikedSong(songId);
+	};
 
 	return (
 		<ScrollView>
@@ -132,7 +132,12 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 						<SongRow
 							key={index}
 							song={comp}
-							isLiked={!favoritesQuery.data?.find((query) => query?.songId == comp.id)}
+							isLiked={
+								!favoritesQuery.data?.find((query) => query?.songId == comp.id)
+							}
+							handleLike={(state: boolean, songId: number) =>
+								handleFavoriteButton(state, songId)
+							}
 							onPress={() => {
 								API.createSearchHistoryEntry(comp.name, 'song');
 								navigation.navigate('Song', { songId: comp.id });
@@ -211,23 +216,22 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 	);
 };
 
-type FavoriteComponentProps = {
-	maxRows?: number;
-};
-
-const FavoritesComponent = (props: FavoriteComponentProps) => {
+const FavoritesComponent = () => {
 	const navigation = useNavigation();
 	const favoritesQuery = useQuery(API.getLikedSongs());
 	const songQueries = useQueries(
-		favoritesQuery.data?.map((favorite) => favorite.songId).map((songId) => API.getSong(songId)) ??
-			[]
+		favoritesQuery.data
+			?.map((favorite) => favorite.songId)
+			.map((songId) => API.getSong(songId)) ?? []
 	);
 
 	const favSongWithDetails = favoritesQuery?.data
 		?.map((favorite) => ({
 			...favorite,
 			details: songQueries.find((query) => query.data?.id == favorite.songId)?.data,
-		})).filter((favorite) => favorite.details !== undefined).map((likedSong) => likedSong as LikedSongWithDetails);
+		}))
+		.filter((favorite) => favorite.details !== undefined)
+		.map((likedSong) => likedSong as LikedSongWithDetails);
 
 	if (favoritesQuery.isError) {
 		navigation.navigate('Error');
@@ -243,19 +247,20 @@ const FavoritesComponent = (props: FavoriteComponentProps) => {
 				{translate('songsFilter')}
 			</Text>
 			<Box>
-						{favSongWithDetails?.map((songData) => (
-							<FavSongRow
-								FavSong={songData}
-								onPress={() => {
-									API.createSearchHistoryEntry(songData.details!.name, 'song'); //todo
-									navigation.navigate('Song', { songId: songData.details!.id }); //todo
-								}}
-							/>
-						))}
-					</Box>
+				{favSongWithDetails?.map((songData) => (
+					<FavSongRow
+						key={songData.id}
+						FavSong={songData}
+						onPress={() => {
+							API.createSearchHistoryEntry(songData.details!.name, 'song'); //todo
+							navigation.navigate('Song', { songId: songData.details!.id }); //todo
+						}}
+					/>
+				))}
+			</Box>
 		</ScrollView>
 	);
-}
+};
 
 const AllComponent = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
@@ -311,7 +316,7 @@ const FilterSwitch = () => {
 
 export const SearchResultComponent = () => {
 	const { stringQuery } = React.useContext(SearchContext);
-	const {filter} = React.useContext(SearchContext)
+	const { filter } = React.useContext(SearchContext);
 	const shouldOutput = !!stringQuery.trim() || filter == 'favorites';
 
 	return shouldOutput ? (
