@@ -35,7 +35,7 @@ const TabNavigationPhone = (props: TabNavigationPhoneProps) => {
 							flexDirection: 'row',
 							alignItems: 'center',
 							alignSelf: 'stretch',
-							borderRadius: '8px',
+							borderRadius: 8,
 							backgroundColor: 'rgba(16, 16, 20, 0.5)',
 						}}
 					>

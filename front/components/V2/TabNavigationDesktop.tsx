@@ -84,6 +84,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 					<TabNavigationList
 						style={{
 							flexShrink: 0,
+							// @ts-expect-error gap is not in the types because we have an old version of react-native
 							gap: '20px',
 						}}
 					>
@@ -117,6 +118,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 						<Divider />
 						<TabNavigationList
 							style={{
+								// @ts-expect-error gap is not in the types because we have an old version of react-native
 								gap: '20px',
 							}}
 						>

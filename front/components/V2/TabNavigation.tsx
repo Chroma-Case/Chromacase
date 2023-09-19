@@ -4,8 +4,6 @@ import TabNavigationDesktop from './TabNavigationDesktop';
 import TabNavigationPhone from './TabNavigationPhone';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../state/Store';
 import useColorScheme from '../../hooks/colorScheme';
 
 export type NaviTab = {
