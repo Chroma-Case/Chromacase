@@ -12,6 +12,7 @@ type TabNavigationDesktopProps = {
 	setIsCollapsed: (isCollapsed: boolean) => void;
 	activeTabID: string;
 	setActiveTabID: (id: string) => void;
+	children?: React.ReactNode;
 };
 
 const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
@@ -139,9 +140,10 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 					</TabNavigationList>
 				</View>
 			</View>
-			<View>
-				<Text>Main content page</Text>
-			</View>
+			<View style={{
+				height: '100%',
+				width: 'calc(100% - 300px)',
+			}}>{props.children}</View>
 		</View>
 	);
 };

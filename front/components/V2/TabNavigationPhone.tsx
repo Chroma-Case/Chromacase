@@ -7,6 +7,7 @@ type TabNavigationPhoneProps = {
 	tabs: NaviTab[];
 	activeTabID: string;
 	setActiveTabID: (id: string) => void;
+	children?: React.ReactNode;
 };
 
 const TabNavigationPhone = (props: TabNavigationPhoneProps) => {
@@ -54,9 +55,10 @@ const TabNavigationPhone = (props: TabNavigationPhoneProps) => {
 					</View>
 				</Center>
 			</View>
-			<View>
-				<Text>Main content page</Text>
-			</View>
+			<View style={{
+				width: '100%',
+				height: 'calc(100% - 90px)',
+			}}>{props.children}</View>
 		</View>
 	);
 };
