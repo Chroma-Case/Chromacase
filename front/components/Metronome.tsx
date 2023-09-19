@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Slider, Switch, Text, View } from 'native-base';
 
 export const Metronome = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
