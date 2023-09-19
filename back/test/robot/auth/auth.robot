@@ -30,7 +30,7 @@ Register Duplicates
     # We can't use the `Register` keyword because it assert for success
     POST    /auth/register    {"username": "user-duplicate", "password": "pass", "email": "mail@kyoo.moe"}
     Output
-    Integer    response status    400
+    Integer    response status    409
     Login    user-duplicate
     [Teardown]    DELETE    /auth/me
 

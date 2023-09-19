@@ -96,8 +96,16 @@ export default class API {
 		});
 		if (!handle || handle.emptyResponse) {
 			if (!response.ok) {
-				console.log(await response.json());
-				throw new APIError(response.statusText, response.status);
+				let responseMessage = response.statusText;
+				try {
+					const responseData = await response.json();
+					console.log(responseData);
+					if (responseData.message) responseMessage = responseData.message;
+				} catch (e) {
+					console.log(e);
+					throw new APIError(response.statusText, response.status, 'unknownError');
+				}
+				throw new APIError(responseMessage, response.status, 'unknownError');
 			}
 			return;
 		}
@@ -109,7 +117,7 @@ export default class API {
 		try {
 			const jsonResponse = JSON.parse(body);
 			if (!response.ok) {
-				throw new APIError(response.statusText ?? body, response.status);
+				throw new APIError(response.statusText ?? body, response.status, 'unknownError');
 			}
 			const validated = await handler.validator.validate(jsonResponse).catch((e) => {
 				if (e instanceof yup.ValidationError) {

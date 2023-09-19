@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
 import { useNavigation } from '../Navigation';
 import {
@@ -6,7 +7,6 @@ import {
 	Stack,
 	Box,
 	useToast,
-	AspectRatio,
 	Column,
 	useBreakpointValue,
 	Image,
@@ -22,6 +22,8 @@ import API, { APIError } from '../API';
 import { setAccessToken } from '../state/UserSlice';
 import { useDispatch } from '../state/Store';
 import { translate } from '../i18n/i18n';
+import useColorScheme from '../hooks/colorScheme';
+import { useAssets } from 'expo-asset';
 
 const handleGuestLogin = async (apiSetter: (accessToken: string) => void): Promise<string> => {
 	const apiAccess = await API.createAndGetGuestAccount();
@@ -29,25 +31,21 @@ const handleGuestLogin = async (apiSetter: (accessToken: string) => void): Promi
 	return translate('loggedIn');
 };
 
-const imgLogin =
-	'https://media.discordapp.net/attachments/717080637038788731/1095980610981478470/Octopus_a_moder_style_image_of_a_musician_showing_a_member_card_c0b9072c-d834-40d5-bc83-796501e1382c.png?width=657&height=657';
-const imgGuest =
-	'https://media.discordapp.net/attachments/717080637038788731/1095996800835539014/Chromacase_guest_2.png?width=865&height=657';
-const imgRegister =
-	'https://media.discordapp.net/attachments/717080637038788731/1095991220267929641/chromacase_register.png?width=1440&height=511';
-
-const imgBanner =
-	'https://chromacase.studio/wp-content/uploads/2023/03/music-sheet-music-color-2462438.jpg';
-
-const imgLogo =
-	'https://chromacase.studio/wp-content/uploads/2023/03/cropped-cropped-splashLogo-280x300.png';
-
 const StartPageView = () => {
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';
 	const dispatch = useDispatch();
+	const colorScheme = useColorScheme();
 	const toast = useToast();
+	const [icon] = useAssets(
+		colorScheme == 'light'
+			? require('../assets/icon_light.png')
+			: require('../assets/icon_dark.png')
+	);
+	const [loginBanner] = useAssets(require('../assets/auth/login_banner.png'));
+	const [guestBanner] = useAssets(require('../assets/auth/guest_banner.png'));
+	const [registerBanner] = useAssets(require('../assets/auth/register_banner.png'));
 
 	return (
 		<View
@@ -63,14 +61,14 @@ const StartPageView = () => {
 						justifyContent: 'center',
 						marginTop: 20,
 					}}
+					space={3}
 				>
 					<Icon
 						as={
 							<Image
 								alt="Chromacase logo"
-								source={{
-									uri: imgLogo,
-								}}
+								// source={{ uri: titleBanner?.at(0)?.uri }}
+								source={{ uri: icon?.at(0)?.uri }}
 							/>
 						}
 						size={isSmallScreen ? '5xl' : '6xl'}
@@ -89,7 +87,7 @@ const StartPageView = () => {
 				<BigActionButton
 					title="Authenticate"
 					subtitle="Save and resume your learning at anytime on all devices"
-					image={imgLogin}
+					image={loginBanner?.at(0)?.uri}
 					iconName="user"
 					iconProvider={FontAwesome5}
 					onPress={() => navigation.navigate('Login', {})}
@@ -102,7 +100,7 @@ const StartPageView = () => {
 				<BigActionButton
 					title="Test Chromacase"
 					subtitle="Use a guest account to see around but your progression won't be saved"
-					image={imgGuest}
+					image={guestBanner?.at(0)?.uri}
 					iconName="user-clock"
 					iconProvider={FontAwesome5}
 					onPress={() => {
@@ -128,7 +126,7 @@ const StartPageView = () => {
 			<Center>
 				<BigActionButton
 					title="Register"
-					image={imgRegister}
+					image={registerBanner?.at(0)?.uri}
 					subtitle="Create an account to save your progress"
 					iconProvider={FontAwesome5}
 					iconName="user-plus"
@@ -175,45 +173,8 @@ const StartPageView = () => {
 							alignItems: 'center',
 						}}
 					>
-						<Link
-							href="https://chromacase.studio"
-							isExternal
-							style={{
-								width: 'clamp(200px, 100%, 700px)',
-								position: 'relative',
-								overflow: 'hidden',
-								borderRadius: 10,
-							}}
-						>
-							<AspectRatio ratio={40 / 9} style={{ width: '100%' }}>
-								<Image
-									alt="Chromacase Banner"
-									source={{ uri: imgBanner }}
-									resizeMode="cover"
-								/>
-							</AspectRatio>
-							<Box
-								style={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									width: '100%',
-									height: '100%',
-									backgroundColor: 'rgba(0,0,0,0.5)',
-								}}
-							></Box>
-							<Heading
-								fontSize="2xl"
-								style={{
-									textAlign: 'center',
-									position: 'absolute',
-									top: '40%',
-									left: 20,
-									color: 'white',
-								}}
-							>
-								Click here for more infos
-							</Heading>
+						<Link href="http://eip.epitech.eu/2024/chromacase" isExternal>
+							Click here for more info
 						</Link>
 					</Box>
 				</Box>

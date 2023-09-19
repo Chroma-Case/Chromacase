@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PartitionView from './PartitionView';
 import PhaserCanvas from './PartitionVisualizer/PhaserCanvas';
-import { PianoCursorPosition } from './PartitionVisualizer/PhaserCanvas';
+import { PianoCursorPosition } from '../models/PianoGame';
 
 type PartitionCoordProps = {
 	// The Buffer of the MusicXML file retreived from the API
@@ -10,8 +10,6 @@ type PartitionCoordProps = {
 	onEndReached: () => void;
 	onResume: () => void;
 	onPause: () => void;
-	// Timestamp of the play session, in milisecond
-	timestamp: number;
 };
 
 const PartitionCoord = ({
@@ -20,10 +18,9 @@ const PartitionCoord = ({
 	onEndReached,
 	onPause,
 	onResume,
-	timestamp,
 }: PartitionCoordProps) => {
 	const [partitionData, setPartitionData] = React.useState<
-		[string, PianoCursorPosition[]] | null
+		[[number, number], string, PianoCursorPosition[]] | null
 	>(null);
 
 	return (
@@ -31,21 +28,21 @@ const PartitionCoord = ({
 			{!partitionData && (
 				<PartitionView
 					file={file}
-					onPartitionReady={(base64data, a) => {
-						setPartitionData([base64data, a]);
+					onPartitionReady={(dims, base64data, a) => {
+						setPartitionData([dims, base64data, a]);
 						onPartitionReady();
 					}}
 					onEndReached={() => {
 						console.log('osmd end reached');
 					}}
-					timestamp={timestamp}
+					timestamp={0}
 				/>
 			)}
 			{partitionData && (
 				<PhaserCanvas
-					partitionB64={partitionData?.[0]}
-					cursorPositions={partitionData?.[1]}
-					timestamp={timestamp}
+					partitionDims={partitionData?.[0]}
+					partitionB64={partitionData?.[1]}
+					cursorPositions={partitionData?.[2]}
 					onPause={onPause}
 					onResume={onResume}
 					onEndReached={() => {

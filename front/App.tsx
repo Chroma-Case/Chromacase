@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import store, { persistor } from './state/Store';
@@ -16,8 +16,16 @@ const queryClient = new QueryClient(QueryRules);
 
 export default function App() {
 	SplashScreen.preventAutoHideAsync();
-	setTimeout(SplashScreen.hideAsync, 500);
-	useFonts({ Lexend: require('./assets/fonts/Lexend-VariableFont_wght.ttf') });
+
+	const [fontsLoaded] = useFonts({
+		Lexend: require('./assets/fonts/lexend.ttf'),
+	});
+
+	useEffect(() => {
+		if (fontsLoaded) {
+			SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded]);
 
 	return (
 		<Provider store={store}>
