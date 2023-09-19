@@ -1,4 +1,5 @@
 ---
+auth_enabled: false
 server:
   http_listen_port: 3100
 memberlist:
@@ -22,11 +23,13 @@ common:
       insecure: true
       bucketnames: loki-data
       access_key_id: loki
-      secret_access_key: supersecret
+      secret_access_key: 12345678
       s3forcepathstyle: true
   ring:
     kvstore:
       store: memberlist
+query_range:
+  parallelise_shardable_queries: false
 ruler:
   storage:
     s3:

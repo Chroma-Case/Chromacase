@@ -1,6 +1,9 @@
 networks:
   loki:
 
+volumes:
+  scoro_logs:
+
 
 services:
   back:
@@ -28,6 +31,9 @@ services:
     volumes:
       - ./scorometer:/app
       - ./assets:/assets
+      - scoro_logs:/logs
+    networks:
+      - loki
 
   db:
     container_name: db
@@ -166,6 +172,9 @@ services:
         /run.sh
     ports:
       - "3001:3000"
+    volumes:
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     healthcheck:
       test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || exit 1" ]
       interval: 10s

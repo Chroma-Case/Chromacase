@@ -1,6 +1,9 @@
 networks:
   loki:
 
+volumes:
+  scoro_logs:
+
 services:
   back:
     image: ghcr.io/chroma-case/back:main
@@ -18,13 +21,14 @@ services:
     ports:
       - "6543:6543"
     volumes:
+      - scoro_logs:/logs
       - ./assets:/assets
   db:
     container_name: db
     image: postgres:alpine3.14
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORDgrafana}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"
@@ -154,6 +158,9 @@ services:
         /run.sh
     ports:
       - "3001:3000"
+    volumes:
+      - ./grafana/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
     healthcheck:
       test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3001/api/health || exit 1" ]
       interval: 10s

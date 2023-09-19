@@ -165,7 +165,7 @@
 			  "uid": "P8E80F9AEF21F6940"
 			},
 			"editorMode": "code",
-			"expr": "{container=\"chromacase-front-1\"} | json | userId = `$userId`",
+			"expr": "{container=\"chromacase-front-1\"} | json",
 			"key": "Q-a2f514d0-81a4-4c43-a260-bad7add20957-1",
 			"queryType": "range",
 			"refId": "B"
