@@ -690,5 +690,4 @@ export default class API {
 				),
 		};
 	}
-
 }
