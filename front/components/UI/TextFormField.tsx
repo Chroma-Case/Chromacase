@@ -24,7 +24,7 @@ const TextFormField: React.FC<TextFormFieldProps> = ({ error, style, ...textFiel
         {
           toValue: error ? 1 : 0,
           duration: 150,
-          useNativeDriver: true
+          useNativeDriver: false
         }
       ),
       Animated.timing(

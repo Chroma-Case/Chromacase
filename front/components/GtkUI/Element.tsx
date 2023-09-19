@@ -70,7 +70,7 @@ export const Element = <T extends ElementProps>(props: T) => {
 				</InteractiveBase>
 				{
 					props.type === 'sectionDropdown' && dropdownValue &&
-					<View>
+					<View backgroundColor={'rgba(16,16,20,0.3)'}>
 						{
 							props.data.section.map((value, index) => (
 								<View

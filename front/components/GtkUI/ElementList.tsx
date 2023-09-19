@@ -30,7 +30,7 @@ const ElementList = ({ elements, style }: ElementListProps) => {
 			{elements.map((element, index) => (
 				<Box key={element.title}>
 					<Element {...element} />
-					{index < elements.length - 1 && <Divider />}
+					{index < elements.length - 1 && <Divider  bg="transparent" thickness="2"/>}
 				</Box>
 			))}
 		</Column>

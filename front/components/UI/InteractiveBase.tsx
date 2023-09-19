@@ -1,8 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { Animated, StyleSheet, TouchableOpacity, ActivityIndicator, View, Image, StyleProp, ViewStyle } from 'react-native';
-// import Ionicons from '@expo/vector-icons/Ionicons';
-// import { Text, useTheme } from 'native-base'
-// import { BlurView } from '@react-native-community/blur';
+import { Pressable } from 'native-base';
+import React, { useRef } from 'react';
+import { Animated, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
 interface InteractiveBaseProps {
   children?: React.ReactNode;
@@ -128,7 +126,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({ children, onPress, st
     ]).start();
   };
   // Mouse Up
-  const handlePressOut = async () => {
+  const handlePressOut = () => {
     Animated.parallel([
       Animated.spring(scaleAnimator, {
         toValue: 1,
@@ -157,7 +155,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({ children, onPress, st
     ]).start();
 
     if (onPress && !isDisabled) {
-      await onPress();
+      onPress();
     }
   }
   // Mouse Leave
@@ -205,29 +203,16 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({ children, onPress, st
         },
       ]}
     >
-        <TouchableOpacity
-          activeOpacity={1}
+        <Pressable
           disabled={isDisabled}
-          onMouseEnter={handleMouseEnter}
+          onHoverIn={handleMouseEnter}
           onPressIn={handlePressIn}
           onPressOut={handlePressOut}
-          onMouseLeave={handleMouseLeave}
+          onHoverOut={handleMouseLeave}
           style={styles.container}
         >
           {children}
-          {/* <BlurView
-            style={{
-              width: '420px',
-              height: '50px',
-              borderRadius: 20,
-              borderWidth: 1,
-
-            }}
-            blurType="light"
-            blurAmount={20}
-            blurRadius={5}
-          /> */}
-      </TouchableOpacity>
+      </Pressable>
     </Animated.View>
   );
 };

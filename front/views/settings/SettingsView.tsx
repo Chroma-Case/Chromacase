@@ -15,7 +15,7 @@ import API from '../../API';
 import { RouteProps } from '../../Navigation';
 import { PressableAndroidRippleConfig, StyleProp, TextStyle, View, ViewStyle, useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar, NavigationState, Route, SceneRendererProps, TabBarIndicatorProps, TabBarItemProps } from 'react-native-tab-view';
-import { HeartEdit, Star1, UserEdit, Notification, SecurityUser, Music, Icon } from 'iconsax-react-native';
+import { HeartEdit, Star1, UserEdit, Notification, SecurityUser, Music, FolderCross } from 'iconsax-react-native';
 import { Scene, Event } from 'react-native-tab-view/lib/typescript/src/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import PremiumSettings from './SettingsPremiumView';
@@ -37,17 +37,36 @@ const renderScene = SceneMap({
 	piano: PianoSettingsView,
 });
 
+const getTabData = (key: string) => {
+		switch (key){
+		case 'profile':
+			return { index: 0, icon: UserEdit };
+		case 'premium':
+			return { index: 1, icon: Star1 };
+		case 'preferences':
+			return { index: 2, icon: HeartEdit };
+		case 'notifications':
+			return { index: 3, icon: Notification };
+		case 'privacy':
+			return { index: 4, icon: SecurityUser };
+		case 'piano':
+			return { index: 5, icon: Music };
+		default:
+			return { index: 6, icon: FolderCross };
+	}
+}
+
 const SetttingsNavigator = () => {
 	const layout = useWindowDimensions();
 
 	const [index, setIndex] = React.useState(0);
-	const [routes] = React.useState([
-		{index: 0, key: 'profile', title: 'Profile', icon: UserEdit},
-		{index: 1, key: 'premium', title: 'Premium', icon: Star1},
-		{index: 2, key: 'preferences', title: 'Preferences', icon: HeartEdit},
-		{index: 3, key: 'notifications', title: 'Notifications', icon: Notification},
-		{index: 4, key: 'privacy', title: 'Privacy', icon: SecurityUser},
-		{index: 5, key: 'piano', title: 'Piano', icon: Music},
+	const [routes] = React.useState<Route[]>([
+		{key: 'profile', title: 'Profile'},
+		{key: 'premium', title: 'Premium'},
+		{key: 'preferences', title: 'Preferences'},
+		{key: 'notifications', title: 'Notifications'},
+		{key: 'privacy', title: 'Privacy'},
+		{key: 'piano', title: 'Piano'},
 	]);
 
 	const renderTabBar = (props: JSX.IntrinsicAttributes & SceneRendererProps & { navigationState: NavigationState<Route>; scrollEnabled?: boolean | undefined; bounces?: boolean | undefined; activeColor?: string | undefined; inactiveColor?: string | undefined; pressColor?: string | undefined; pressOpacity?: number | undefined; getLabelText?: ((scene: Scene<Route>) => string | undefined) | undefined; getAccessible?: ((scene: Scene<Route>) => boolean | undefined) | undefined; getAccessibilityLabel?: ((scene: Scene<Route>) => string | undefined) | undefined; getTestID?: ((scene: Scene<Route>) => string | undefined) | undefined; renderLabel?: ((scene: Scene<Route> & { focused: boolean; color: string; }) => React.ReactNode) | undefined; renderIcon?: ((scene: Scene<Route> & { focused: boolean; color: string; }) => React.ReactNode) | undefined; renderBadge?: ((scene: Scene<Route>) => React.ReactNode) | undefined; renderIndicator?: ((props: TabBarIndicatorProps<Route>) => React.ReactNode) | undefined; renderTabBarItem?: ((props: TabBarItemProps<Route> & { key: string; }) => React.ReactElement<any, string | React.JSXElementConstructor<any>>) | undefined; onTabPress?: ((scene: Scene<Route> & Event) => void) | undefined; onTabLongPress?: ((scene: Scene<Route>) => void) | undefined; tabStyle?: StyleProp<ViewStyle>; indicatorStyle?: StyleProp<ViewStyle>; indicatorContainerStyle?: StyleProp<ViewStyle>; labelStyle?: StyleProp<TextStyle>; contentContainerStyle?: StyleProp<ViewStyle>; style?: StyleProp<ViewStyle>; gap?: number | undefined; testID?: string | undefined; android_ripple?: PressableAndroidRippleConfig | undefined; }) => (
@@ -59,10 +78,10 @@ const SetttingsNavigator = () => {
 				focused: boolean;
 				color: string;
 			}) => {
-				const MyIcon: Icon = scene.route?.icon as unknown as Icon;
-				return scene.route?.index == index ?
-					<MyIcon size="18" color="#6075F9" variant='Bold'/>
-					: <MyIcon size="18" color="#6075F9"/>
+				const tabHeader = getTabData(scene.route!.key);
+				return tabHeader.index == index ?
+					<tabHeader.icon size="18" color="#6075F9" variant='Bold'/>
+					: <tabHeader.icon size="18" color="#6075F9"/>
 			}}
 			renderLabel={({ route, focused, color }) => (
 				layout.width > 750 ?
