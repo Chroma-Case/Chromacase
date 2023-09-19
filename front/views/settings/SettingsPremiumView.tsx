@@ -11,7 +11,15 @@ import { useQuery } from '../../Queries';
 import UserAvatar from '../../components/UserAvatar';
 import * as ImagePicker from 'expo-image-picker';
 import SettingBase from '../../components/UI/SettingsBase';
-import { Designtools, Google, Magicpen, PasswordCheck, SmsEdit, Star1, UserSquare } from 'iconsax-react-native';
+import {
+	Designtools,
+	Google,
+	Magicpen,
+	PasswordCheck,
+	SmsEdit,
+	Star1,
+	UserSquare,
+} from 'iconsax-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 // Too painful to infer the settings-only, typed navigator. Gave up
@@ -40,19 +48,21 @@ const PremiumSettings = () => {
 				}}
 				elements={[
 					{
-						icon: <Star1 size="24" color="#FFF"  style={{minWidth: 24}}/>,
+						icon: <Star1 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'text',
 						title: translate('premiumAccount'),
-						description: 'Personalisation premium et outils vous permetant de passer au niveau supperieur',
+						description:
+							'Personalisation premium et outils vous permetant de passer au niveau supperieur',
 						data: {
 							text: translate(user.premium ? 'yes' : 'no'),
 						},
 					},
 					{
-						icon: <Magicpen size="24" color="#FFF"  style={{minWidth: 24}}/>,
+						icon: <Magicpen size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'toggle',
 						title: 'Piano Magique',
-						description: 'Fait apparaître de la lumière sur le piano pendant les parties',
+						description:
+							'Fait apparaître de la lumière sur le piano pendant les parties',
 						helperText:
 							'Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité',
 						disabled: true,
@@ -62,7 +72,7 @@ const PremiumSettings = () => {
 						},
 					},
 					{
-						icon: <Designtools size="24" color="#FFF"  style={{minWidth: 24}}/>,
+						icon: <Designtools size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: 'Thème de piano',
 						description: 'Définissez le theme de votre piano',

@@ -18,7 +18,7 @@ const ElementList = ({ elements, style }: ElementListProps) => {
 	// const isDark = colorScheme === 'dark';
 	const elementStyle = {
 		borderRadius: 10,
-		shadowOpacity: 0.30,
+		shadowOpacity: 0.3,
 		shadowRadius: 4.65,
 		elevation: 8,
 		backgroundColor: 'transparent',
@@ -30,7 +30,7 @@ const ElementList = ({ elements, style }: ElementListProps) => {
 			{elements.map((element, index) => (
 				<Box key={element.title}>
 					<Element {...element} />
-					{index < elements.length - 1 && <Divider  bg="transparent" thickness="2"/>}
+					{index < elements.length - 1 && <Divider bg="transparent" thickness="2" />}
 				</Box>
 			))}
 		</Column>

@@ -2,7 +2,18 @@ import API from '../../API';
 import { useDispatch } from 'react-redux';
 import { unsetAccessToken } from '../../state/UserSlice';
 import React from 'react';
-import { Column, Text, Button, Box, Flex, Center, Heading, Popover, Toast, View } from 'native-base';
+import {
+	Column,
+	Text,
+	Button,
+	Box,
+	Flex,
+	Center,
+	Heading,
+	Popover,
+	Toast,
+	View,
+} from 'native-base';
 import TextButton from '../../components/TextButton';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
@@ -11,7 +22,16 @@ import { useQuery } from '../../Queries';
 import UserAvatar from '../../components/UserAvatar';
 import * as ImagePicker from 'expo-image-picker';
 import SettingBase from '../../components/UI/SettingsBase';
-import { ArrowDown2, EyeSlash, Google, Lock1, PasswordCheck, Sms, SmsEdit, UserSquare } from 'iconsax-react-native';
+import {
+	ArrowDown2,
+	EyeSlash,
+	Google,
+	Lock1,
+	PasswordCheck,
+	Sms,
+	SmsEdit,
+	UserSquare,
+} from 'iconsax-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import TextFormField from '../../components/UI/TextFormField';
 import ButtonBase from '../../components/UI/ButtonBase';
@@ -54,19 +74,19 @@ const ProfileSettings = () => {
 				}}
 				elements={[
 					{
-						icon: <Google size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <Google size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'text',
-						title: "Google account", // TODO translate
-						description: "Liez votre compte Google à ChromaCase", // TODO translate
+						title: 'Google account', // TODO translate
+						description: 'Liez votre compte Google à ChromaCase', // TODO translate
 						data: {
 							text: user.googleID ? 'Linked' : 'Not linked',
 						},
 					},
 					{
-						icon: <UserSquare size="24" color="#FFF"  style={{minWidth: 24}}/>,
+						icon: <UserSquare size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'text',
 						title: translate('avatar'),
-						description: "Changer votre photo de profile", // TODO translate
+						description: 'Changer votre photo de profile', // TODO translate
 						data: {
 							text: translate('changeIt'),
 							onPress: () => {
@@ -97,10 +117,11 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <SmsEdit size="24" color="#FFF"  style={{minWidth: 24}}/>,
+						icon: <SmsEdit size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
-						title: 'Change email', // TODO translate	
-						description: "Saisissez votre adresse électronique actuelle et définissez votre nouvelle adresse électroniquetion", // TODO translate
+						title: 'Change email', // TODO translate
+						description:
+							'Saisissez votre adresse électronique actuelle et définissez votre nouvelle adresse électroniquetion', // TODO translate
 						data: {
 							value: true,
 							section: [
@@ -108,25 +129,24 @@ const ProfileSettings = () => {
 									onSubmit={(oldPassword, newPassword) =>
 										handleChangePassword(oldPassword, newPassword)
 									}
-								/>
-							]
-						}
+								/>,
+							],
+						},
 					},
 					{
-						icon: <PasswordCheck size="24" color="#FFF"  style={{minWidth: 24}}/>,
+						icon: <PasswordCheck size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
 						title: 'Change password', // TODO translate
-						description: "Saisissez votre mot de passe actuel et définissez votre nouveau mot de passe", // TODO translate
+						description:
+							'Saisissez votre mot de passe actuel et définissez votre nouveau mot de passe', // TODO translate
 						data: {
 							value: true,
 							section: [
 								<ChangeEmailForm
-									onSubmit={(oldEmail, newEmail) =>
-										handleChangeEmail(newEmail)
-									}
-								/>
-							]
-						}
+									onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}
+								/>,
+							],
+						},
 					},
 				]}
 			/>

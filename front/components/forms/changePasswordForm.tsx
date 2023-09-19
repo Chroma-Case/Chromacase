@@ -1,7 +1,16 @@
 import React from 'react';
 import { translate } from '../../i18n/i18n';
 import { string } from 'yup';
-import { FormControl, Input, Stack, WarningOutlineIcon, Box, Button, useToast, Flex } from 'native-base';
+import {
+	FormControl,
+	Input,
+	Stack,
+	WarningOutlineIcon,
+	Box,
+	Button,
+	useToast,
+	Flex,
+} from 'native-base';
 import TextFormField from '../UI/TextFormField';
 import { Lock1 } from 'iconsax-react-native';
 import ButtonBase from '../UI/ButtonBase';
@@ -35,13 +44,13 @@ const ChangePasswordForm = ({ onSubmit }: ChangePasswordFormProps) => {
 	const toast = useToast();
 
 	return (
-		<Flex style={{width: '100%', maxWidth: 420}}>
+		<Flex style={{ width: '100%', maxWidth: 420 }}>
 			<TextFormField
 				style={{ marginVertical: 10 }}
 				isSecret
 				isRequired
 				autoComplete="password"
-				icon={(size, color) => (<Lock1 size={size} color={color} variant="Bold"/>)}
+				icon={(size, color) => <Lock1 size={size} color={color} variant="Bold" />}
 				placeholder={translate('oldPassword')}
 				value={formData.oldPassword.value}
 				error={formData.oldPassword.error}
@@ -60,7 +69,7 @@ const ChangePasswordForm = ({ onSubmit }: ChangePasswordFormProps) => {
 				isSecret
 				isRequired
 				autoComplete="password"
-				icon={(size, color) => (<Lock1 size={size} color={color} variant="Bold"/>)}
+				icon={(size, color) => <Lock1 size={size} color={color} variant="Bold" />}
 				placeholder={translate('newPassword')}
 				value={formData.newPassword.value}
 				error={formData.newPassword.error}
@@ -79,15 +88,13 @@ const ChangePasswordForm = ({ onSubmit }: ChangePasswordFormProps) => {
 				isSecret
 				isRequired
 				autoComplete="password"
-				icon={(size, color) => (<Lock1 size={size} color={color} variant="Bold"/>)}
+				icon={(size, color) => <Lock1 size={size} color={color} variant="Bold" />}
 				placeholder={translate('confirmNewPassword')}
 				value={formData.confirmNewPassword.value}
 				error={formData.confirmNewPassword.error}
 				onChangeText={(t) => {
 					let error: null | string = null;
-					validationSchemas.password
-						.validate(t)
-						.catch((e) => (error = e.message));
+					validationSchemas.password.validate(t).catch((e) => (error = e.message));
 					if (!error && t !== formData.newPassword.value) {
 						error = translate('passwordsDontMatch');
 					}

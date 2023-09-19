@@ -68,7 +68,7 @@ export default class API {
 	public static readonly baseUrl =
 		process.env.NODE_ENV != 'development' && Platform.OS === 'web'
 			? '/api'
-			: "https://nightly.chroma.octohub.app/api";
+			: 'https://nightly.chroma.octohub.app/api';
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>

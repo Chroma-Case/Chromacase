@@ -19,7 +19,7 @@ export default function App() {
 	setTimeout(SplashScreen.hideAsync, 500);
 
 	const [fontsLoaded] = useFonts({
-		'Lexend': require('./assets/fonts/Lexend-VariableFont_wght.ttf'),
+		Lexend: require('./assets/fonts/Lexend-VariableFont_wght.ttf'),
 	});
 
 	return (

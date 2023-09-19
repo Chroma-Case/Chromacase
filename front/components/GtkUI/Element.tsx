@@ -6,10 +6,10 @@ import { Animated, StyleSheet } from 'react-native';
 import InteractiveBase from '../UI/InteractiveBase';
 
 export const Element = <T extends ElementProps>(props: T) => {
-	let actionFunction: (() => void) | null | undefined  = null;
+	let actionFunction: (() => void) | null | undefined = null;
 	const dropdownAnimator = useRef(new Animated.Value(1)).current;
 	const [dropdownValue, setDropdownValue] = useState(false);
-	
+
 	switch (props.type) {
 		case 'text':
 			actionFunction = props.data?.onPress;
@@ -55,39 +55,43 @@ export const Element = <T extends ElementProps>(props: T) => {
 			shadowRadius: 0,
 			elevation: 0,
 			backgroundColor: 'rgba(16, 16, 20, 0.50)',
-		}
+		},
 	});
 
 	if (!props?.disabled && actionFunction) {
 		return (
 			<Column>
 				<InteractiveBase
-					style={{width: '100%'}}
+					style={{ width: '100%' }}
 					styleAnimate={styleSetting}
-					onPress={async ()  => {actionFunction?.();}}
+					onPress={async () => {
+						actionFunction?.();
+					}}
 				>
 					<RawElement element={props} />
 				</InteractiveBase>
-				{
-					props.type === 'sectionDropdown' && dropdownValue &&
+				{props.type === 'sectionDropdown' && dropdownValue && (
 					<View backgroundColor={'rgba(16,16,20,0.3)'}>
-						{
-							props.data.section.map((value, index) => (
-								<View
-									key={value?.toString() + index.toString()}
-									style={{
-										padding: 10,
-										justifyContent: 'center',
-										alignItems: 'center'
-								}}>
-									{value}
-								</View>
-							))
-						}
+						{props.data.section.map((value, index) => (
+							<View
+								key={value?.toString() + index.toString()}
+								style={{
+									padding: 10,
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								{value}
+							</View>
+						))}
 					</View>
-				}
+				)}
 			</Column>
 		);
 	}
-	return <View style={{backgroundColor: 'rgba(16, 16, 20, 0.50)',}}><RawElement element={props}/></View>;
+	return (
+		<View style={{ backgroundColor: 'rgba(16, 16, 20, 0.50)' }}>
+			<RawElement element={props} />
+		</View>
+	);
 };

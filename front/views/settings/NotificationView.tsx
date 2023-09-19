@@ -29,7 +29,7 @@ const NotificationsView = () => {
 				elements={[
 					{
 						type: 'toggle',
-						icon: <MonitorMobbile size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <MonitorMobbile size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsPushNotifications'),
 						description: 'Cette notification apparaitra sur votre apparail en pop-up',
 						data: {
@@ -45,7 +45,7 @@ const NotificationsView = () => {
 					},
 					{
 						type: 'toggle',
-						icon: <Send2 size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <Send2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsEmailNotifications'),
 						description: 'Recevez des mails pour atteindre vos objectifs',
 						data: {
@@ -61,7 +61,7 @@ const NotificationsView = () => {
 					},
 					{
 						type: 'toggle',
-						icon: <Calendar1 size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <Calendar1 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsTrainingReminder'),
 						description: 'Un apprentissage régulier est la clé',
 						data: {
@@ -77,7 +77,7 @@ const NotificationsView = () => {
 					},
 					{
 						type: 'toggle',
-						icon: <Warning2 size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <Warning2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsReleaseAlert'),
 						description: 'Restez informé de nos mises à jour',
 						data: {

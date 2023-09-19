@@ -1,7 +1,16 @@
 import React from 'react';
 import { translate } from '../../i18n/i18n';
 import { string } from 'yup';
-import { FormControl, Input, Stack, WarningOutlineIcon, Box, Button, useToast, Flex } from 'native-base';
+import {
+	FormControl,
+	Input,
+	Stack,
+	WarningOutlineIcon,
+	Box,
+	Button,
+	useToast,
+	Flex,
+} from 'native-base';
 import TextFormField from '../UI/TextFormField';
 import ButtonBase from '../UI/ButtonBase';
 import { Sms } from 'iconsax-react-native';
@@ -29,11 +38,11 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 	const toast = useToast();
 
 	return (
-		<Flex style={{width: '100%', maxWidth: 420}}>
+		<Flex style={{ width: '100%', maxWidth: 420 }}>
 			<TextFormField
 				style={{ marginVertical: 10 }}
 				isRequired
-				icon={(size, color) => (<Sms size={size} color={color} variant="Bold"/>)}
+				icon={(size, color) => <Sms size={size} color={color} variant="Bold" />}
 				placeholder={translate('oldEmail')}
 				value={formData.oldEmail.value}
 				error={formData.oldEmail.error}
@@ -51,7 +60,7 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 				style={{ marginVertical: 10 }}
 				isRequired
 				autoComplete="off"
-				icon={(size, color) => (<Sms size={size} color={color} variant="Bold"/>)}
+				icon={(size, color) => <Sms size={size} color={color} variant="Bold" />}
 				placeholder={translate('newEmail')}
 				value={formData.newEmail.value}
 				error={formData.newEmail.error}
@@ -67,11 +76,11 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 			/>
 			<ButtonBase
 				isDisabled={
-					formData.oldEmail.error !== null
-					|| formData.newEmail.error !== null
-					|| formData.oldEmail.value === ''
-					|| formData.newEmail.value === ''
-				}	
+					formData.oldEmail.error !== null ||
+					formData.newEmail.error !== null ||
+					formData.oldEmail.value === '' ||
+					formData.newEmail.value === ''
+				}
 				type={'filled'}
 				title={translate('submitBtn')}
 				style={{ marginVertical: 10 }}

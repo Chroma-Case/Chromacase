@@ -1,5 +1,15 @@
 import React from 'react';
-import { Box, Button, Column, Icon, Popover, Row, Text, Wrap, useBreakpointValue } from 'native-base';
+import {
+	Box,
+	Button,
+	Column,
+	Icon,
+	Popover,
+	Row,
+	Text,
+	Wrap,
+	useBreakpointValue,
+} from 'native-base';
 import useColorScheme from '../../hooks/colorScheme';
 import { Ionicons } from '@expo/vector-icons';
 import { ElementProps } from './ElementTypes';
@@ -30,7 +40,6 @@ export const RawElement = ({ element }: RawElementProps) => {
 				justifyContent: 'space-between',
 				alignContent: 'stretch',
 				alignItems: 'center',
-				
 			}}
 		>
 			<Row
@@ -42,7 +51,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 					alignItems: 'center',
 				}}
 			>
-				{icon}	
+				{icon}
 				<Box
 					style={{
 						flexGrow: 1,
@@ -122,7 +131,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 								case 'custom':
 									return data;
 								case 'sectionDropdown':
-									return <ArrowDown2 size="24" color="#fff" variant="Outline"/>;
+									return <ArrowDown2 size="24" color="#fff" variant="Outline" />;
 								default:
 									return <Text>Unknown type</Text>;
 							}

@@ -13,9 +13,9 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 					initialColorMode: colorScheme,
 				},
 				fonts: {
-					heading: "Lexend",
-					body: "Lexend",
-					mono: "Lexend",
+					heading: 'Lexend',
+					body: 'Lexend',
+					mono: 'Lexend',
 				},
 				colors: {
 					primary: {

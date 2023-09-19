@@ -109,14 +109,10 @@ export const getElementDropdownNode = (
 			bgColor={'rgba(16,16,20,0.5)'}
 			variant="filled"
 			isDisabled={disabled}
-			width={layout.width > 650 ? "200" : "100"}
+			width={layout.width > 650 ? '200' : '100'}
 		>
 			{options.map((option) => (
-				<Select.Item
-					key={option.label}
-					label={option.label}
-					value={option.value}
-				/>
+				<Select.Item key={option.label} label={option.label} value={option.value} />
 			))}
 		</Select>
 	);
@@ -141,7 +137,7 @@ export const getElementRangeNode = (
 			isDisabled={disabled}
 			onChangeEnd={onChange}
 			accessibilityLabel={`Slider for ${title}`}
-			width={layout.width > 650 ? "200" : "100"}
+			width={layout.width > 650 ? '200' : '100'}
 		>
 			<Slider.Track>
 				<Slider.FilledTrack />

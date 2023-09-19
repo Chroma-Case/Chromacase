@@ -34,9 +34,10 @@ const PrivacyView = () => {
 				elements={[
 					{
 						type: 'toggle',
-						icon: <Driver size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <Driver size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('dataCollection'),
-						description: 'Acceptez-vous la récupération de vos données pour l\'amélioration de Chromacase ?',
+						description:
+							"Acceptez-vous la récupération de vos données pour l'amélioration de Chromacase ?",
 						data: {
 							value: settings.dataCollection,
 							onToggle: () =>
@@ -47,7 +48,7 @@ const PrivacyView = () => {
 					},
 					{
 						type: 'toggle',
-						icon: <Shop size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <Shop size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('customAds'),
 						description: 'Afficher les suggestions dans la section des recommandations',
 						data: {
@@ -58,7 +59,7 @@ const PrivacyView = () => {
 					},
 					{
 						type: 'toggle',
-						icon: <Like1 size="24" color="#FFF" style={{minWidth: 24}}/>,
+						icon: <Like1 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('recommendations'),
 						description: 'Souhaitez-vous recevoir nos conseils et recommandations ?',
 						data: {
