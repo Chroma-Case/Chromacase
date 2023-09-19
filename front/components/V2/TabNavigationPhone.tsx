@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import { Text, Center } from 'native-base';
+import { Center, ScrollView } from 'native-base';
 import TabNavigationButton from './TabNavigationButton';
 import { NaviTab } from './TabNavigation';
 
@@ -55,10 +55,14 @@ const TabNavigationPhone = (props: TabNavigationPhoneProps) => {
 					</View>
 				</Center>
 			</View>
-			<View style={{
-				width: '100%',
-				height: 'calc(100% - 90px)',
-			}}>{props.children}</View>
+			<ScrollView
+				style={{
+					width: '100%',
+					height: 'calc(100% - 90px)',
+				}}
+			>
+				{props.children}
+			</ScrollView>
 		</View>
 	);
 };
