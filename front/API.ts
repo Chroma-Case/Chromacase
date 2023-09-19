@@ -691,16 +691,4 @@ export default class API {
 		};
 	}
 
-	public static getUserPlaayHistory(): Query<SongHistoryItem[]> {
-		return {
-			key: ['history'],
-			exec: () =>
-				API.fetch(
-					{
-						route: '/history',
-					},
-					{ handler: ListHandler(SongHistoryItemHandler) }
-				),
-		};
-	}
 }
