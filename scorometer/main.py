@@ -32,8 +32,10 @@ Path(logname).touch(exist_ok=True)
 logging.basicConfig(filename=logname,
                     filemode='a', level=logging.DEBUG)
 
-handler = logging_loki.LokiQueueHandler(
-    Queue(-1),
+'''
+Logging to loki directly
+
+handler = logging_loki.LokiHandler(
     url="http://gateway:3100/loki/api/v1/push", 
     tags={"application": "scorometer"},
     version="1",
@@ -41,7 +43,7 @@ handler = logging_loki.LokiQueueHandler(
 
 logger = logging.getLogger()
 logger.addHandler(handler)
-
+'''
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
 MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/assets/musics/"
@@ -303,7 +305,7 @@ class Scorometer:
 	def gameLoop(self):
 		while True:
 			message, line = getMessage()
-			logging.debug(f"handling message {line}")
+			logging.debug(f"handling message {line}", extra={"tags": {"service": "my-service"}})
 			self.handleMessage(message, line)
 
 	def endGame(self):
