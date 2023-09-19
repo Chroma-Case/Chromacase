@@ -66,6 +66,7 @@ const TabNavigation = () => {
 	const child = <HomeView />;
 
 	const appTabs = tabs.map((t) => {
+		// use the same instance of a component between desktop and mobile
 		return {
 			...t,
 			onPress: () => setActiveTab(t.id),
@@ -94,7 +95,20 @@ const TabNavigation = () => {
 					activeTabID={activeTab}
 					setActiveTabID={setActiveTab}
 				>
-					{child}
+					<View
+						style={{
+							width: 'calc(100% - 5)',
+							height: '100%',
+							backgroundColor: 'rgba(16, 16, 20, 0.50)',
+							borderRadius: 12,
+							margin: 5,
+							// @ts-expect-error backDropFilter isn't yet supported by react native
+							backDropFilter: 'blur(2px)',
+							padding: 15,
+						}}
+					>
+						{child}
+					</View>
 				</TabNavigationPhone>
 			) : (
 				<TabNavigationDesktop
@@ -104,7 +118,21 @@ const TabNavigation = () => {
 					isCollapsed={isDesktopCollapsed}
 					setIsCollapsed={setIsDesktopCollapsed}
 				>
-					{child}
+					<View
+						style={{
+							width: 'calc(100% - 10)',
+							height: '100%',
+							backgroundColor: 'rgba(16, 16, 20, 0.50)',
+							borderRadius: 12,
+							marginVertical: 10,
+							marginRight: 10,
+							// @ts-expect-error backDropFilter isn't yet supported by react native
+							backDropFilter: 'blur(2px)',
+							padding: 20,
+						}}
+					>
+						{child}
+					</View>
 				</TabNavigationDesktop>
 			)}
 		</View>

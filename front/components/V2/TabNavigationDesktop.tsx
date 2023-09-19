@@ -1,5 +1,5 @@
 import { View, Image } from 'react-native';
-import { Divider, Text, Center } from 'native-base';
+import { Divider, Text, Center, ScrollView } from 'native-base';
 import TabNavigationButton from './TabNavigationButton';
 import TabNavigationList from './TabNavigationList';
 import { useAssets } from 'expo-asset';
@@ -140,10 +140,14 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 					</TabNavigationList>
 				</View>
 			</View>
-			<View style={{
-				height: '100%',
-				width: 'calc(100% - 300px)',
-			}}>{props.children}</View>
+			<ScrollView
+				style={{
+					height: '100%',
+					width: 'calc(100% - 300px)',
+				}}
+			>
+				{props.children}
+			</ScrollView>
 		</View>
 	);
 };

@@ -136,6 +136,12 @@ const HomeView = () => {
 							size="sm"
 							onPress={() => navigation.navigate('Settings')}
 						/>
+						<TextButton
+							label={'V2'}
+							colorScheme="gray"
+							size="sm"
+							onPress={() => navigation.navigate('HomeNew')}
+						/>
 					</HStack>
 					<Box style={{ width: '100%' }}>
 						<Heading>

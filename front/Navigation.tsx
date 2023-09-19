@@ -39,9 +39,14 @@ const removeMe = () => '';
 const protectedRoutes = () =>
 	({
 		Home: {
-			component: TabNavigation,
-			options: { title: translate('welcome'), headerShown: false },
+			component: HomeView,
+			options: { title: translate('welcome'), headerLeft: null },
 			link: '/',
+		},
+		HomeNew: {
+			component: TabNavigation,
+			options: { headerShown: false },
+			link: '/V2',
 		},
 		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
 		Settings: {
