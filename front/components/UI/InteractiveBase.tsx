@@ -215,23 +215,18 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		]).start();
 	};
 
+	const animatedStyle = {
+		backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : backgroundColorValue,
+		borderColor: isOutlined ? backgroundColorValue : 'transparent',
+		borderWidth: 2,
+		transform: [{ scale: scaleValue }],
+		shadowOpacity: shadowOpacityValue,
+		shadowRadius: shadowRadiusValue,
+		elevation: elevationValue,
+	};
+
 	return (
-		<Animated.View
-			style={[
-				style,
-				isDisabled
-					? styleAnimate.Disabled
-					: {
-							backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : backgroundColorValue,
-							borderColor: isOutlined ? backgroundColorValue : 'transparent',
-							borderWidth: 2,
-							transform: [{ scale: scaleValue }],
-							shadowOpacity: shadowOpacityValue,
-							shadowRadius: shadowRadiusValue,
-							elevation: elevationValue,
-						},
-			]}
-		>
+		<Animated.View style={[style, isDisabled ? styleAnimate.Disabled : animatedStyle]}>
 			<Pressable
 				disabled={isDisabled}
 				onHoverIn={handleMouseEnter}
