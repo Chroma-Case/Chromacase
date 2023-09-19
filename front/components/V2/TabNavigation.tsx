@@ -5,6 +5,7 @@ import TabNavigationPhone from './TabNavigationPhone';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import useColorScheme from '../../hooks/colorScheme';
+import HomeView from '../../views/V2/HomeView';
 
 export type NaviTab = {
 	id: string;
@@ -62,6 +63,8 @@ const TabNavigation = () => {
 	const [activeTab, setActiveTab] = useState(tabs[0]?.id ?? 'home');
 	const colorScheme = useColorScheme();
 
+	const child = <HomeView />;
+
 	const appTabs = tabs.map((t) => {
 		return {
 			...t,
@@ -90,7 +93,9 @@ const TabNavigation = () => {
 					tabs={appTabs}
 					activeTabID={activeTab}
 					setActiveTabID={setActiveTab}
-				/>
+				>
+					{child}
+				</TabNavigationPhone>
 			) : (
 				<TabNavigationDesktop
 					tabs={appTabs}
@@ -98,7 +103,9 @@ const TabNavigation = () => {
 					setActiveTabID={setActiveTab}
 					isCollapsed={isDesktopCollapsed}
 					setIsCollapsed={setIsDesktopCollapsed}
-				/>
+				>
+					{child}
+				</TabNavigationDesktop>
 			)}
 		</View>
 	);
