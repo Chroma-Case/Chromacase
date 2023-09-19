@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Flex, Heading } from 'native-base';
+import { Flex } from 'native-base';
 import { translate } from '../../i18n/i18n';
 import ElementList from '../../components/GtkUI/ElementList';
 import { useDispatch } from 'react-redux';
@@ -7,7 +7,7 @@ import { RootState, useSelector } from '../../state/Store';
 import { updateSettings } from '../../state/SettingsSlice';
 import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';
-import { Driver, Driver2, Like1, Shop } from 'iconsax-react-native';
+import { Driver, Like1, Shop } from 'iconsax-react-native';
 
 const PrivacyView = () => {
 	const dispatch = useDispatch();

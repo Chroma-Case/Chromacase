@@ -17,10 +17,7 @@ const queryClient = new QueryClient(QueryRules);
 export default function App() {
 	SplashScreen.preventAutoHideAsync();
 	setTimeout(SplashScreen.hideAsync, 500);
-
-	const [fontsLoaded] = useFonts({
-		Lexend: require('./assets/fonts/Lexend-VariableFont_wght.ttf'),
-	});
+	useFonts({ Lexend: require('./assets/fonts/Lexend-VariableFont_wght.ttf') });
 
 	return (
 		<Provider store={store}>

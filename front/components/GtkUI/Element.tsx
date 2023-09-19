@@ -1,13 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { ElementProps } from './ElementTypes';
 import { RawElement } from './RawElement';
-import { Pressable, IPressableProps, View, Text, Wrap, Column } from 'native-base';
-import { Animated, StyleSheet } from 'react-native';
+import { View, Column } from 'native-base';
+import { StyleSheet } from 'react-native';
 import InteractiveBase from '../UI/InteractiveBase';
 
 export const Element = <T extends ElementProps>(props: T) => {
 	let actionFunction: (() => void) | null | undefined = null;
-	const dropdownAnimator = useRef(new Animated.Value(1)).current;
 	const [dropdownValue, setDropdownValue] = useState(false);
 
 	switch (props.type) {

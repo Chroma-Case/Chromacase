@@ -1,32 +1,16 @@
 import API from '../../API';
-import { useDispatch } from 'react-redux';
-import { unsetAccessToken } from '../../state/UserSlice';
 import React from 'react';
-import { Column, Text, Button, Box, Flex, Center, Heading, Popover, Toast } from 'native-base';
-import TextButton from '../../components/TextButton';
+import { Flex } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
 import { useQuery } from '../../Queries';
-import UserAvatar from '../../components/UserAvatar';
-import * as ImagePicker from 'expo-image-picker';
-import SettingBase from '../../components/UI/SettingsBase';
-import {
-	Designtools,
-	Google,
-	Magicpen,
-	PasswordCheck,
-	SmsEdit,
-	Star1,
-	UserSquare,
-} from 'iconsax-react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { Designtools, Magicpen, Star1 } from 'iconsax-react-native';
 
 // Too painful to infer the settings-only, typed navigator. Gave up
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const PremiumSettings = () => {
 	const userQuery = useQuery(API.getUserInfo);
-	const dispatch = useDispatch();
 
 	if (!userQuery.data || userQuery.isLoading) {
 		return <LoadingView />;

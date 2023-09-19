@@ -1,12 +1,8 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Element } from './Element';
-import useColorScheme from '../../hooks/colorScheme';
 import { ElementProps } from './ElementTypes';
-
 import { Box, Column, Divider } from 'native-base';
-import InteractiveBase from '../UI/InteractiveBase';
-import { StyleSheet } from 'react-native';
 
 type ElementListProps = {
 	elements: ElementProps[];
@@ -14,8 +10,6 @@ type ElementListProps = {
 };
 
 const ElementList = ({ elements, style }: ElementListProps) => {
-	const colorScheme = useColorScheme();
-	// const isDark = colorScheme === 'dark';
 	const elementStyle = {
 		borderRadius: 10,
 		shadowOpacity: 0.3,

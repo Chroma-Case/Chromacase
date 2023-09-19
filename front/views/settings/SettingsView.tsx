@@ -1,26 +1,10 @@
-import React, { useMemo } from 'react';
-import { Center, Text, Heading, Box, Row } from 'native-base';
-import { translate } from '../../i18n/i18n';
-import createTabRowNavigator from '../../components/navigators/TabRowNavigator';
-import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-import ChangePasswordForm from '../../components/forms/changePasswordForm';
-import ChangeEmailForm from '../../components/forms/changeEmailForm';
+import React from 'react';
+import { Center, Text } from 'native-base';
 import ProfileSettings from './SettingsProfileView';
 import NotificationsView from './NotificationView';
 import PrivacyView from './PrivacyView';
 import PreferencesView from './PreferencesView';
-import GuestToUserView from './GuestToUserView';
-import { useQuery } from '../../Queries';
-import API from '../../API';
-import { RouteProps } from '../../Navigation';
-import {
-	PressableAndroidRippleConfig,
-	StyleProp,
-	TextStyle,
-	View,
-	ViewStyle,
-	useWindowDimensions,
-} from 'react-native';
+import { View, useWindowDimensions } from 'react-native';
 import {
 	TabView,
 	SceneMap,
@@ -28,8 +12,6 @@ import {
 	NavigationState,
 	Route,
 	SceneRendererProps,
-	TabBarIndicatorProps,
-	TabBarItemProps,
 } from 'react-native-tab-view';
 import {
 	HeartEdit,
@@ -40,7 +22,7 @@ import {
 	Music,
 	FolderCross,
 } from 'iconsax-react-native';
-import { Scene, Event } from 'react-native-tab-view/lib/typescript/src/types';
+import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import { LinearGradient } from 'expo-linear-gradient';
 import PremiumSettings from './SettingsPremiumView';
 
@@ -94,50 +76,7 @@ const SetttingsNavigator = () => {
 	]);
 
 	const renderTabBar = (
-		props: JSX.IntrinsicAttributes &
-			SceneRendererProps & {
-				navigationState: NavigationState<Route>;
-				scrollEnabled?: boolean | undefined;
-				bounces?: boolean | undefined;
-				activeColor?: string | undefined;
-				inactiveColor?: string | undefined;
-				pressColor?: string | undefined;
-				pressOpacity?: number | undefined;
-				getLabelText?: ((scene: Scene<Route>) => string | undefined) | undefined;
-				getAccessible?: ((scene: Scene<Route>) => boolean | undefined) | undefined;
-				getAccessibilityLabel?: ((scene: Scene<Route>) => string | undefined) | undefined;
-				getTestID?: ((scene: Scene<Route>) => string | undefined) | undefined;
-				renderLabel?:
-					| ((
-							scene: Scene<Route> & { focused: boolean; color: string }
-					  ) => React.ReactNode)
-					| undefined;
-				renderIcon?:
-					| ((
-							scene: Scene<Route> & { focused: boolean; color: string }
-					  ) => React.ReactNode)
-					| undefined;
-				renderBadge?: ((scene: Scene<Route>) => React.ReactNode) | undefined;
-				renderIndicator?:
-					| ((props: TabBarIndicatorProps<Route>) => React.ReactNode)
-					| undefined;
-				renderTabBarItem?:
-					| ((
-							props: TabBarItemProps<Route> & { key: string }
-					  ) => React.ReactElement<any, string | React.JSXElementConstructor<any>>)
-					| undefined;
-				onTabPress?: ((scene: Scene<Route> & Event) => void) | undefined;
-				onTabLongPress?: ((scene: Scene<Route>) => void) | undefined;
-				tabStyle?: StyleProp<ViewStyle>;
-				indicatorStyle?: StyleProp<ViewStyle>;
-				indicatorContainerStyle?: StyleProp<ViewStyle>;
-				labelStyle?: StyleProp<TextStyle>;
-				contentContainerStyle?: StyleProp<ViewStyle>;
-				style?: StyleProp<ViewStyle>;
-				gap?: number | undefined;
-				testID?: string | undefined;
-				android_ripple?: PressableAndroidRippleConfig | undefined;
-			}
+		props: SceneRendererProps & { navigationState: NavigationState<Route> }
 	) => (
 		<TabBar
 			{...props}
@@ -160,7 +99,7 @@ const SetttingsNavigator = () => {
 					<tabHeader.icon size="18" color="#6075F9" />
 				);
 			}}
-			renderLabel={({ route, focused, color }) =>
+			renderLabel={({ route, color }) =>
 				layout.width > 750 ? (
 					<Text style={{ color, paddingLeft: 10, overflow: 'hidden' }}>
 						{route.title}

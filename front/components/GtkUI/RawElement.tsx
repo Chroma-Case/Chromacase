@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-	Box,
-	Button,
-	Column,
-	Icon,
-	Popover,
-	Row,
-	Text,
-	Wrap,
-	useBreakpointValue,
-} from 'native-base';
-import useColorScheme from '../../hooks/colorScheme';
+import { Box, Button, Column, Icon, Popover, Row, Text, useBreakpointValue } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { ElementProps } from './ElementTypes';
 import {
@@ -27,8 +16,6 @@ type RawElementProps = {
 
 export const RawElement = ({ element }: RawElementProps) => {
 	const { title, icon, type, helperText, description, disabled, data } = element;
-	const colorScheme = useColorScheme();
-	const isDark = colorScheme === 'dark';
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';
 	return (

@@ -1,16 +1,7 @@
 import React from 'react';
 import { translate } from '../../i18n/i18n';
 import { string } from 'yup';
-import {
-	FormControl,
-	Input,
-	Stack,
-	WarningOutlineIcon,
-	Box,
-	Button,
-	useToast,
-	Flex,
-} from 'native-base';
+import { useToast, Flex } from 'native-base';
 import TextFormField from '../UI/TextFormField';
 import ButtonBase from '../UI/ButtonBase';
 import { Sms } from 'iconsax-react-native';

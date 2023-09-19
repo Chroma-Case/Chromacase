@@ -1,5 +1,5 @@
 import { Eye, EyeSlash } from 'iconsax-react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import InteractiveBase from './InteractiveBase';
 import { Input } from 'native-base';

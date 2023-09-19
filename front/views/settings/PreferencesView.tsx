@@ -1,22 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Center, Flex, Heading } from 'native-base';
+import { Flex } from 'native-base';
 import { useLanguage } from '../../state/LanguageSlice';
-import { AvailableLanguages, DefaultLanguage, translate, Translate } from '../../i18n/i18n';
+import { AvailableLanguages, DefaultLanguage, translate } from '../../i18n/i18n';
 import { useSelector } from '../../state/Store';
 import { updateSettings } from '../../state/SettingsSlice';
 import ElementList from '../../components/GtkUI/ElementList';
 import LocalSettings from '../../models/LocalSettings';
-import {
-	Brush,
-	Brush2,
-	Colorfilter,
-	LanguageSquare,
-	Rank,
-	Ranking,
-	Sound,
-	Star1,
-} from 'iconsax-react-native';
+import { Brush2, Colorfilter, LanguageSquare, Rank, Sound } from 'iconsax-react-native';
 
 const PreferencesView = () => {
 	const dispatch = useDispatch();

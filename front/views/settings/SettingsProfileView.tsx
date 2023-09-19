@@ -1,40 +1,12 @@
 import API from '../../API';
-import { useDispatch } from 'react-redux';
-import { unsetAccessToken } from '../../state/UserSlice';
 import React from 'react';
-import {
-	Column,
-	Text,
-	Button,
-	Box,
-	Flex,
-	Center,
-	Heading,
-	Popover,
-	Toast,
-	View,
-} from 'native-base';
-import TextButton from '../../components/TextButton';
+import { Flex, Toast } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
 import { useQuery } from '../../Queries';
-import UserAvatar from '../../components/UserAvatar';
 import * as ImagePicker from 'expo-image-picker';
-import SettingBase from '../../components/UI/SettingsBase';
-import {
-	ArrowDown2,
-	EyeSlash,
-	Google,
-	Lock1,
-	PasswordCheck,
-	Sms,
-	SmsEdit,
-	UserSquare,
-} from 'iconsax-react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import TextFormField from '../../components/UI/TextFormField';
-import ButtonBase from '../../components/UI/ButtonBase';
+import { Google, PasswordCheck, SmsEdit, UserSquare } from 'iconsax-react-native';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 
@@ -52,7 +24,6 @@ const handleChangePassword = async (oldPassword: string, newPassword: string): P
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ProfileSettings = () => {
 	const userQuery = useQuery(API.getUserInfo);
-	const dispatch = useDispatch();
 
 	if (!userQuery.data || userQuery.isLoading) {
 		return <LoadingView />;
@@ -126,6 +97,7 @@ const ProfileSettings = () => {
 							value: true,
 							section: [
 								<ChangePasswordForm
+									key={'ChangePasswordForm'}
 									onSubmit={(oldPassword, newPassword) =>
 										handleChangePassword(oldPassword, newPassword)
 									}
@@ -143,6 +115,7 @@ const ProfileSettings = () => {
 							value: true,
 							section: [
 								<ChangeEmailForm
+									key={'ChangeEmailForm'}
 									onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}
 								/>,
 							],

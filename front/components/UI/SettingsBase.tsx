@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import { StyleSheet, ActivityIndicator, View, Image } from 'react-native';
-// import Ionicons from '@expo/vector-icons/Ionicons';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import InteractiveBase from './InteractiveBase';
-import { Text, useTheme } from 'native-base';
-// import { BlurView } from 'expo-blur';
+import { Text } from 'native-base';
 
 interface SettingProps {
 	icon: (size: number, color: string) => React.ReactNode;
 	title: string;
 	description?: string;
-	onPress?: () => Promise<any>;
+	onPress?: () => Promise<void>;
 	children?: React.ReactNode;
 }
 

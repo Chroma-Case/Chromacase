@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, ActivityIndicator, View, Image, StyleProp, ViewStyle } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import InteractiveBase from './InteractiveBase';
 import { Text, useTheme } from 'native-base';
-// import { BlurView } from 'expo-blur';
 
 interface ButtonProps {
 	title?: string;
 	style?: StyleProp<ViewStyle>;
-	onPress?: () => Promise<any>;
+	onPress?: () => Promise<void>;
 	isDisabled?: boolean;
 	icon?: (size: string, color: string) => React.ReactNode;
 	iconImage?: string;
-	isCollapsed?: boolean;
 	type: 'filled' | 'outlined' | 'menu';
 }
 
@@ -23,7 +20,6 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	isDisabled,
 	icon,
 	iconImage,
-	isCollapsed,
 	type = 'filled',
 }) => {
 	const { colors } = useTheme();

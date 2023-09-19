@@ -4,7 +4,7 @@ import { Animated, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
 interface InteractiveBaseProps {
 	children?: React.ReactNode;
-	onPress?: () => Promise<any>;
+	onPress?: () => Promise<void>;
 	isDisabled?: boolean;
 	isOutlined?: boolean;
 	style?: StyleProp<ViewStyle>;
@@ -229,7 +229,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 							shadowOpacity: shadowOpacityValue,
 							shadowRadius: shadowRadiusValue,
 							elevation: elevationValue,
-					  },
+						},
 			]}
 		>
 			<Pressable

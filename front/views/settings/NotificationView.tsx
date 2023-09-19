@@ -1,6 +1,6 @@
 import React from 'react';
-import { Center, Flex, Heading } from 'native-base';
-import { translate, Translate } from '../../i18n/i18n';
+import { Flex } from 'native-base';
+import { translate } from '../../i18n/i18n';
 import ElementList from '../../components/GtkUI/ElementList';
 import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';

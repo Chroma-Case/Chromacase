@@ -1,4 +1,4 @@
-import { Select, Switch, Text, Icon, Row, Slider, Box } from 'native-base';
+import { Select, Switch, Text, Icon, Row, Slider } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useWindowDimensions } from 'react-native';
 
