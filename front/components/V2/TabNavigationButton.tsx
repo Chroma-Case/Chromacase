@@ -29,8 +29,9 @@ const TabNavigationButton = (props: TabNavigationButtonProps) => {
 						alignItems: 'center',
 						justifyContent: 'flex-start',
 						padding: '10px',
-						borderRadius: '8px',
+						borderRadius: 8,
 						flexGrow: 0,
+						// @ts-expect-error BoxShadow is not in the types but I want it this may be a legitimate error on my part
 						boxShadow: (() => {
 							if (isHovered) {
 								return '0px 0px 16px 0px rgba(0, 0, 0, 0.25)';
