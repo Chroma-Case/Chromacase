@@ -1,12 +1,14 @@
-import { View, Text } from 'react-native';
-import { Pressable } from 'native-base';
+import { View } from 'react-native';
+import { Pressable, Text } from 'native-base';
+import React from 'react';
 
 type TabNavigationButtonProps = {
-	icon?: string;
+	icon?: React.ReactNode;
 	label: string;
 	onPress: () => void;
 	onLongPress: () => void;
 	isActive: boolean;
+	isCollapsed: boolean;
 };
 
 const TabNavigationButton = (props: TabNavigationButtonProps) => {
@@ -29,13 +31,23 @@ const TabNavigationButton = (props: TabNavigationButtonProps) => {
 						padding: '10px',
 						borderRadius: '8px',
 						flexGrow: 0,
+						boxShadow: (() => {
+							if (isHovered) {
+								return '0px 0px 16px 0px rgba(0, 0, 0, 0.25)';
+							} else if (props.isActive) {
+								return '0px 0px 8px 0px rgba(0, 0, 0, 0.25)';
+							} else {
+								return undefined;
+							}
+						})(),
+						backdropFilter: 'blur(2px)',
 						backgroundColor: (() => {
 							if (isPressed) {
 								return 'rgba(0, 0, 0, 0.1)';
 							} else if (isHovered) {
-								return 'rgba(0, 0, 0, 0.05)';
+								return 'rgba(231, 231, 232, 0.2)';
 							} else if (props.isActive) {
-								return 'rgba(0, 0, 0, 0.1)';
+								return 'rgba(16, 16, 20, 0.5)';
 							} else {
 								return 'transparent';
 							}
@@ -45,17 +57,17 @@ const TabNavigationButton = (props: TabNavigationButtonProps) => {
 					{props.icon && (
 						<View
 							style={{
-								marginRight: '10px',
+								marginRight: props.isCollapsed ? undefined : '10px',
 							}}
 						>
-							<Text>{props.icon}</Text>
+							{props.icon}
 						</View>
 					)}
-					<View>
+					{!props.isCollapsed && (
 						<Text numberOfLines={1} selectable={false}>
 							{props.label}
 						</Text>
-					</View>
+					)}
 				</View>
 			)}
 		</Pressable>
@@ -67,6 +79,7 @@ TabNavigationButton.defaultProps = {
 	onPress: () => {},
 	onLongPress: () => {},
 	isActive: false,
+	isCollapsed: false,
 };
 
 export default TabNavigationButton;
