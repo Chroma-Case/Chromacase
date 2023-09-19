@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Center, Text, Heading, Box } from 'native-base';
+import { Center, Text, Heading, Box, Row } from 'native-base';
 import { translate } from '../../i18n/i18n';
 import createTabRowNavigator from '../../components/navigators/TabRowNavigator';
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
@@ -13,46 +13,12 @@ import GuestToUserView from './GuestToUserView';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import { RouteProps } from '../../Navigation';
-
-const handleChangeEmail = async (newEmail: string): Promise<string> => {
-	await API.updateUserEmail(newEmail);
-	return translate('emailUpdated');
-};
-
-const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
-	await API.updateUserPassword(oldPassword, newPassword);
-	return translate('passwordUpdated');
-};
-
-export const ChangePasswordView = () => {
-	return (
-		<Center style={{ flex: 1 }}>
-			<Heading paddingBottom={'2%'}>{translate('changePassword')}</Heading>
-			<ChangePasswordForm
-				onSubmit={(oldPassword, newPassword) =>
-					handleChangePassword(oldPassword, newPassword)
-				}
-			/>
-		</Center>
-	);
-};
-
-export const ChangeEmailView = () => {
-	return (
-		<Center style={{ flex: 1 }}>
-			<Heading paddingBottom={'2%'}>{translate('changeEmail')}</Heading>
-			<ChangeEmailForm onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)} />
-		</Center>
-	);
-};
-
-export const GoogleAccountView = () => {
-	return (
-		<Center style={{ flex: 1 }}>
-			<Text>GoogleAccount</Text>
-		</Center>
-	);
-};
+import { PressableAndroidRippleConfig, StyleProp, TextStyle, View, ViewStyle, useWindowDimensions } from 'react-native';
+import { TabView, SceneMap, TabBar, NavigationState, Route, SceneRendererProps, TabBarIndicatorProps, TabBarItemProps } from 'react-native-tab-view';
+import { HeartEdit, Star1, UserEdit, Notification, SecurityUser, Music, Icon } from 'iconsax-react-native';
+import { Scene, Event } from 'react-native-tab-view/lib/typescript/src/types';
+import { LinearGradient } from 'expo-linear-gradient';
+import PremiumSettings from './SettingsPremiumView';
 
 export const PianoSettingsView = () => {
 	return (
@@ -62,125 +28,69 @@ export const PianoSettingsView = () => {
 	);
 };
 
-const TabRow = createTabRowNavigator();
+const renderScene = SceneMap({
+	profile: ProfileSettings,
+	premium: PremiumSettings,
+	preferences: PreferencesView,
+	notifications: NotificationsView,
+	privacy: PrivacyView,
+	piano: PianoSettingsView,
+});
 
-type SetttingsNavigatorProps = {
-	screen?:
-		| 'profile'
-		| 'preferences'
-		| 'notifications'
-		| 'privacy'
-		| 'changePassword'
-		| 'changeEmail'
-		| 'googleAccount'
-		| 'pianoSettings';
-};
+const SetttingsNavigator = () => {
+	const layout = useWindowDimensions();
 
-const SetttingsNavigator = (props?: RouteProps<SetttingsNavigatorProps>) => {
-	const userQuery = useQuery(API.getUserInfo);
-	const user = useMemo(() => userQuery.data, [userQuery]);
+	const [index, setIndex] = React.useState(0);
+	const [routes] = React.useState([
+		{index: 0, key: 'profile', title: 'Profile', icon: UserEdit},
+		{index: 1, key: 'premium', title: 'Premium', icon: Star1},
+		{index: 2, key: 'preferences', title: 'Preferences', icon: HeartEdit},
+		{index: 3, key: 'notifications', title: 'Notifications', icon: Notification},
+		{index: 4, key: 'privacy', title: 'Privacy', icon: SecurityUser},
+		{index: 5, key: 'piano', title: 'Piano', icon: Music},
+	]);
 
-	if (userQuery.isLoading) {
-		return (
-			<Center style={{ flex: 1 }}>
-				<Text>Loading...</Text>
-			</Center>
-		);
-	}
+	const renderTabBar = (props: JSX.IntrinsicAttributes & SceneRendererProps & { navigationState: NavigationState<Route>; scrollEnabled?: boolean | undefined; bounces?: boolean | undefined; activeColor?: string | undefined; inactiveColor?: string | undefined; pressColor?: string | undefined; pressOpacity?: number | undefined; getLabelText?: ((scene: Scene<Route>) => string | undefined) | undefined; getAccessible?: ((scene: Scene<Route>) => boolean | undefined) | undefined; getAccessibilityLabel?: ((scene: Scene<Route>) => string | undefined) | undefined; getTestID?: ((scene: Scene<Route>) => string | undefined) | undefined; renderLabel?: ((scene: Scene<Route> & { focused: boolean; color: string; }) => React.ReactNode) | undefined; renderIcon?: ((scene: Scene<Route> & { focused: boolean; color: string; }) => React.ReactNode) | undefined; renderBadge?: ((scene: Scene<Route>) => React.ReactNode) | undefined; renderIndicator?: ((props: TabBarIndicatorProps<Route>) => React.ReactNode) | undefined; renderTabBarItem?: ((props: TabBarItemProps<Route> & { key: string; }) => React.ReactElement<any, string | React.JSXElementConstructor<any>>) | undefined; onTabPress?: ((scene: Scene<Route> & Event) => void) | undefined; onTabLongPress?: ((scene: Scene<Route>) => void) | undefined; tabStyle?: StyleProp<ViewStyle>; indicatorStyle?: StyleProp<ViewStyle>; indicatorContainerStyle?: StyleProp<ViewStyle>; labelStyle?: StyleProp<TextStyle>; contentContainerStyle?: StyleProp<ViewStyle>; style?: StyleProp<ViewStyle>; gap?: number | undefined; testID?: string | undefined; android_ripple?: PressableAndroidRippleConfig | undefined; }) => (
+		<TabBar
+		  {...props}
+			style={{backgroundColor: 'rgba(0, 0, 0, 0)', borderBottomWidth: 2, borderColor: 'rgba(255,255,255,0.5)'}}
+			indicatorStyle={{ backgroundColor: 'white' }}
+			renderIcon={(scene: Scene<Route> & {
+				focused: boolean;
+				color: string;
+			}) => {
+				const MyIcon: Icon = scene.route?.icon as unknown as Icon;
+				return scene.route?.index == index ?
+					<MyIcon size="18" color="#6075F9" variant='Bold'/>
+					: <MyIcon size="18" color="#6075F9"/>
+			}}
+			renderLabel={({ route, focused, color }) => (
+				layout.width > 750 ?
+				<Text style={{color, paddingLeft: 10, overflow: 'hidden'}}>
+					{route.title}
+				</Text> : null
+			)}	
+			tabStyle={{flexDirection: 'row'}}
+			/>
+	  );
 
 	return (
-		<TabRow.Navigator
-			initialRouteName={props?.screen ?? 'InternalDefault'}
-			contentStyle={{}}
-			tabBarStyle={{}}
-		>
-			{/* I'm doing this to be able to land on the summary of settings when clicking on settings and directly to the
-			wanted settings page if needed so I need to do special work with the 0 index */}
-			<TabRow.Screen name="InternalDefault" component={Box} />
-			{user && user.isGuest && (
-				<TabRow.Screen
-					name="guestToUser"
-					component={GuestToUserView}
-					options={{
-						title: translate('SettingsCategoryGuest'),
-						iconProvider: FontAwesome5,
-						iconName: 'user-clock',
-					}}
-				/>
-			)}
-			<TabRow.Screen
-				name="profile"
-				component={ProfileSettings}
-				options={{
-					title: translate('SettingsCategoryProfile'),
-					iconProvider: FontAwesome5,
-					iconName: 'user',
-				}}
+		<View>
+			<TabView
+			style={{minHeight: layout.height, height: '100%', paddingBottom: 32}}
+			renderTabBar={renderTabBar}
+			navigationState={{ index, routes }}
+			renderScene={renderScene}
+			onIndexChange={setIndex}
+			initialLayout={{ width: layout.width }}
 			/>
-			<TabRow.Screen
-				name="preferences"
-				component={PreferencesView}
-				options={{
-					title: translate('SettingsCategoryPreferences'),
-					iconProvider: FontAwesome5,
-					iconName: 'music',
-				}}
+			<LinearGradient
+				start={{x: 0, y: 0}}
+				end={{x: 1, y: 1}}
+				colors={['#101014', '#6075F9']}
+				style={{top: 0, bottom: 0, right: 0, left: 0, width: '100%', height: '100%', margin: 0, padding: 0,  position: 'absolute', zIndex: -2}}
 			/>
-			<TabRow.Screen
-				name="notifications"
-				component={NotificationsView}
-				options={{
-					title: translate('SettingsCategoryNotifications'),
-					iconProvider: FontAwesome5,
-					iconName: 'bell',
-				}}
-			/>
-			<TabRow.Screen
-				name="privacy"
-				component={PrivacyView}
-				options={{
-					title: translate('SettingsCategoryPrivacy'),
-					iconProvider: FontAwesome5,
-					iconName: 'lock',
-				}}
-			/>
-			<TabRow.Screen
-				name="changePassword"
-				component={ChangePasswordView}
-				options={{
-					title: translate('SettingsCategorySecurity'),
-					iconProvider: FontAwesome5,
-					iconName: 'key',
-				}}
-			/>
-			<TabRow.Screen
-				name="changeEmail"
-				component={ChangeEmailView}
-				options={{
-					title: translate('SettingsCategoryEmail'),
-					iconProvider: FontAwesome5,
-					iconName: 'envelope',
-				}}
-			/>
-			<TabRow.Screen
-				name="googleAccount"
-				component={GoogleAccountView}
-				options={{
-					title: translate('SettingsCategoryGoogle'),
-					iconProvider: FontAwesome5,
-					iconName: 'google',
-				}}
-			/>
-			<TabRow.Screen
-				name="pianoSettings"
-				component={PianoSettingsView}
-				options={{
-					title: translate('SettingsCategoryPiano'),
-					iconProvider: MaterialCommunityIcons,
-					iconName: 'piano',
-				}}
-			/>
-		</TabRow.Navigator>
+		</View>
 	);
 };
 

@@ -5,6 +5,8 @@ import useColorScheme from '../../hooks/colorScheme';
 import { ElementProps } from './ElementTypes';
 
 import { Box, Column, Divider } from 'native-base';
+import InteractiveBase from '../UI/InteractiveBase';
+import { StyleSheet } from 'react-native';
 
 type ElementListProps = {
 	elements: ElementProps[];
@@ -13,12 +15,13 @@ type ElementListProps = {
 
 const ElementList = ({ elements, style }: ElementListProps) => {
 	const colorScheme = useColorScheme();
-	const isDark = colorScheme === 'dark';
+	// const isDark = colorScheme === 'dark';
 	const elementStyle = {
 		borderRadius: 10,
-		boxShadow: isDark
-			? '0px 0px 3px 0px rgba(255,255,255,0.6)'
-			: '0px 0px 3px 0px rgba(0,0,0,0.4)',
+		shadowOpacity: 0.30,
+		shadowRadius: 4.65,
+		elevation: 8,
+		backgroundColor: 'transparent',
 		overflow: 'hidden',
 	} as const;
 

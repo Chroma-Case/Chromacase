@@ -10,12 +10,17 @@ import LanguageGate from './i18n/LanguageGate';
 import ThemeProvider, { ColorSchemeProvider } from './Theme';
 import 'react-native-url-polyfill/auto';
 import { QueryRules } from './Queries';
+import { useFonts } from 'expo-font';
 
 const queryClient = new QueryClient(QueryRules);
 
 export default function App() {
 	SplashScreen.preventAutoHideAsync();
 	setTimeout(SplashScreen.hideAsync, 500);
+
+	const [fontsLoaded] = useFonts({
+		'Lexend': require('./assets/fonts/Lexend-VariableFont_wght.ttf'),
+	});
 
 	return (
 		<Provider store={store}>
