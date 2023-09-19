@@ -7,7 +7,8 @@ import os
 import sys
 from typing import TypedDict
 from pathlib import Path
-
+import logging_loki
+from multiprocessing import Queue
 import requests
 from chroma_case.Key import Key
 from chroma_case.Message import (
@@ -30,6 +31,16 @@ Path("/logs").mkdir(parents=True, exist_ok=True)
 Path(logname).touch(exist_ok=True)
 logging.basicConfig(filename=logname,
                     filemode='a', level=logging.DEBUG)
+
+handler = logging_loki.LokiQueueHandler(
+    Queue(-1),
+    url="http://gateway:3100/loki/api/v1/push", 
+    tags={"application": "scorometer"},
+    version="1",
+)
+
+logger = logging.getLogger()
+logger.addHandler(handler)
 
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
