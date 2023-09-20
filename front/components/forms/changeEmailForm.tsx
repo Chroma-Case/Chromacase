@@ -33,7 +33,7 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 			<TextFormField
 				style={{ marginVertical: 10 }}
 				isRequired
-				icon={(size, color) => <Sms size={size} color={color} variant="Bold" />}
+				icon={Sms}
 				placeholder={translate('oldEmail')}
 				value={formData.oldEmail.value}
 				error={formData.oldEmail.error}
@@ -51,7 +51,7 @@ const ChangeEmailForm = ({ onSubmit }: ChangeEmailFormProps) => {
 				style={{ marginVertical: 10 }}
 				isRequired
 				autoComplete="off"
-				icon={(size, color) => <Sms size={size} color={color} variant="Bold" />}
+				icon={Sms}
 				placeholder={translate('newEmail')}
 				value={formData.newEmail.value}
 				error={formData.newEmail.error}

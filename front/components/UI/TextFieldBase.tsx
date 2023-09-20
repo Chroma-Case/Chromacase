@@ -103,7 +103,13 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 		<InteractiveBase style={[style, { borderRadius: 12 }]} styleAnimate={styleAnimate}>
 			<View style={styles.container}>
 				<View style={styles.iconContainerLeft}>
-					{icon && <MyIcon size={'20'} color={iconColor ? iconColor : isFocused ? '#5f74f7' : '#394694'} variant="Bold"/>}
+					{icon && (
+						<MyIcon
+							size={'20'}
+							color={iconColor ? iconColor : isFocused ? '#5f74f7' : '#394694'}
+							variant="Bold"
+						/>
+					)}
 				</View>
 				<Input
 					variant="unstyled"

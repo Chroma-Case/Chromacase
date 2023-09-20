@@ -107,12 +107,15 @@ const ButtonBase: React.FC<ButtonProps> = ({
 		>
 			{loading ? (
 				<ActivityIndicator
+					style={styles.content}
 					size="small"
 					color={type === 'outlined' ? '#6075F9' : '#FFFFFF'}
 				/>
 			) : (
 				<View style={styles.content}>
-					{icon && <MyIcon size={'18'} color={type === 'outlined' ? '#6075F9' : '#FFFFFF'}/>}
+					{icon && (
+						<MyIcon size={'18'} color={type === 'outlined' ? '#6075F9' : '#FFFFFF'} />
+					)}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
 					{title && <Text style={styles.text}>{title}</Text>}
 				</View>

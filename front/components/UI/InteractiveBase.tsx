@@ -233,7 +233,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		shadowOpacity: styleAnimate.Disabled.shadowOpacity,
 		shadowRadius: styleAnimate.Disabled.shadowRadius,
 		elevation: styleAnimate.Disabled.elevation,
-	}
+	};
 
 	return (
 		<Animated.View style={[style, isDisabled ? disableStyle : animatedStyle]}>

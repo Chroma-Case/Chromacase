@@ -12,7 +12,7 @@ const getInitials = (name: string) => {
 
 type UserAvatarProps = Pick<Parameters<typeof Avatar>[0], 'size'>;
 
-const UserAvatar = ({ size }: UserAvatarProps) => {
+const UserAvatar = ({ size = 'md' }: UserAvatarProps) => {
 	const user = useQuery(API.getUserInfo);
 	const avatarUrl = useMemo(() => {
 		if (!user.data) {
@@ -25,7 +25,9 @@ const UserAvatar = ({ size }: UserAvatarProps) => {
 
 	return (
 		<Avatar
+			borderRadius={12}
 			size={size}
+			_image={{ borderRadius: 12 }}
 			source={avatarUrl ? { uri: avatarUrl.toString() } : undefined}
 			style={{ zIndex: 0 }}
 		>

@@ -31,7 +31,7 @@ const hanldeSignin = async (
 const SigninView = () => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
-    const [formData, setFormData] = React.useState({
+	const [formData, setFormData] = React.useState({
 		username: {
 			value: '',
 			error: null as string | null,
@@ -53,89 +53,91 @@ const SigninView = () => {
 	};
 	const toast = useToast();
 
-    const onSubmit= (username: string, password: string) => {
-        return hanldeSignin(username, password, (accessToken) =>
-            dispatch(setAccessToken(accessToken))
-        );
-    }
+	const onSubmit = (username: string, password: string) => {
+		return hanldeSignin(username, password, (accessToken) =>
+			dispatch(setAccessToken(accessToken))
+		);
+	};
 
-    return (
-        <ScaffoldAuth
-            title="Bienvenue !"
-            description="Continuez avec Google ou entrez vos coordonnées."
-            form={[
-                <TextFormField
-                    error={formData.username.error}
-                    icon={User}
-                    placeholder="Username"
-                    autoComplete="username"
-                    value={formData.username.value}
-                    onChangeText={(t) => {
-                        let error: null | string = null;
-                        validationSchemas.username
-                            .validate(t)
-                            .catch((e) => (error = e.message))
-                            .finally(() => {
-                                setFormData({ ...formData, username: { value: t, error } });
-                            });
-                    }}
-                    isRequired
-                />,
-                <TextFormField
-                    error={formData.password.error}
-                    icon={Lock1}
-                    placeholder="Password"
-                    autoComplete="password"
-                    value={formData.password.value}
-                    onChangeText={(t) => {
-                        let error: null | string = null;
-                        validationSchemas.password
-                            .validate(t)
-                            .catch((e) => (error = e.message))
-                            .finally(() => {
-                                setFormData({ ...formData, password: { value: t, error } });
-                            });
-                    }}
-                    isRequired
-                />,
-                <LinkBase onPress={() => console.log('Link clicked!')}>
-                    {translate('forgottenPassword')}
-                </LinkBase>,
-            ]}
-            submitButton={
-                <ButtonBase
-                style={{width: '100%'}}
-                title="Signin"
-                isDisabled={
-                    formData.password.error !== null ||
-                    formData.username.error !== null ||
-                    formData.username.value === '' ||
-                    formData.password.value === ''
-                }
-                onPress={async () => {
-                    try {
-                        const resp = await onSubmit(
-                            formData.username.value,
-                            formData.password.value
-                        );
-                        toast.show({ description: resp, colorScheme: 'secondary' });
-                    } catch (e) {
-                        toast.show({
-                            description: e as string,
-                            colorScheme: 'red',
-                            avoidKeyboard: true,
-                        });
-                    }
-                }}
-            />
-            }
-            link={{
-                text: "Inscrivez-vous gratuitement",
-                description: "Vous n'avez pas de compte ? ",
-                onPress: () => navigation.navigate('Signup')
-            }}
-        />
-    );
+	return (
+		<ScaffoldAuth
+			title="Bienvenue !"
+			description="Continuez avec Google ou entrez vos coordonnées."
+			form={[
+				<TextFormField
+					key={'signin-form-1'}
+					error={formData.username.error}
+					icon={User}
+					placeholder="Username"
+					autoComplete="username"
+					value={formData.username.value}
+					onChangeText={(t) => {
+						let error: null | string = null;
+						validationSchemas.username
+							.validate(t)
+							.catch((e) => (error = e.message))
+							.finally(() => {
+								setFormData({ ...formData, username: { value: t, error } });
+							});
+					}}
+					isRequired
+				/>,
+				<TextFormField
+					key={'signin-form-2'}
+					error={formData.password.error}
+					icon={Lock1}
+					placeholder="Password"
+					autoComplete="password"
+					value={formData.password.value}
+					onChangeText={(t) => {
+						let error: null | string = null;
+						validationSchemas.password
+							.validate(t)
+							.catch((e) => (error = e.message))
+							.finally(() => {
+								setFormData({ ...formData, password: { value: t, error } });
+							});
+					}}
+					isRequired
+				/>,
+				<LinkBase key={'signin-link'} onPress={() => console.log('Link clicked!')}>
+					{translate('forgottenPassword')}
+				</LinkBase>,
+			]}
+			submitButton={
+				<ButtonBase
+					style={{ width: '100%' }}
+					title="Signin"
+					isDisabled={
+						formData.password.error !== null ||
+						formData.username.error !== null ||
+						formData.username.value === '' ||
+						formData.password.value === ''
+					}
+					onPress={async () => {
+						try {
+							const resp = await onSubmit(
+								formData.username.value,
+								formData.password.value
+							);
+							toast.show({ description: resp, colorScheme: 'secondary' });
+						} catch (e) {
+							toast.show({
+								description: e as string,
+								colorScheme: 'red',
+								avoidKeyboard: true,
+							});
+						}
+					}}
+				/>
+			}
+			link={{
+				text: 'Inscrivez-vous gratuitement',
+				description: "Vous n'avez pas de compte ? ",
+				onPress: () => navigation.navigate('Signup'),
+			}}
+		/>
+	);
 };
 
 export default SigninView;
