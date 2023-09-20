@@ -79,7 +79,7 @@ export class AuthController {
 	@Post('register')
 	@ApiOperation({description: 'Register a new user'})
 	@ApiConflictResponse({ description: 'Username or email already taken' })
-	@ApiCreatedResponse({ description: 'Successfully registered, email sent to verify' })
+	@ApiOkResponse({ description: 'Successfully registered, email sent to verify' })
 	@ApiBadRequestResponse({ description: 'Invalid data or database error' })
 	async register(@Body() registerDto: RegisterDto): Promise<void> {
 		try {
