@@ -199,7 +199,6 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 							</View>
 						</View>
 					</PresenceTransition>
-					{/* icon bu=outon appear in the middle of the card after the first presencetransition is done */}
 					<PresenceTransition
 						style={{
 							width: '100%',
@@ -224,7 +223,7 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 								alignItems: 'center',
 							}}
 						>
-							<Button
+							<Pressable
 								onHoverIn={() => {
 									setIsPlayHovered(true);
 								}}
@@ -233,16 +232,37 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 								}}
 								borderRadius={100}
 								marginBottom={35}
-								leftIcon={
-									<Ionicons
-										name="play-outline"
-										color={'white'}
-										size={20}
-										rounded="sm"
-									/>
-								}
 								onPress={props.onPlay}
-							/>
+							>
+								{({ isPressed, isHovered }) => (
+									<View
+										style={{
+											width: 40,
+											height: 40,
+											borderRadius: 100,
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											backgroundColor: (() => {
+												if (isPressed) {
+													return 'rgba(96, 117, 249, 1)';
+												} else if (isHovered) {
+													return 'rgba(96, 117, 249, 0.9)';
+												} else {
+													return 'rgba(96, 117, 249, 0.7)';
+												}
+											})(),
+										}}
+									>
+										<Ionicons
+											name="play-outline"
+											color={'white'}
+											size={20}
+											rounded="sm"
+										/>
+									</View>
+								)}
+							</Pressable>
 						</View>
 					</PresenceTransition>
 				</>
