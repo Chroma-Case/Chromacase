@@ -77,6 +77,7 @@ export class AuthController {
 	}
 
 	@Post('register')
+	@HttpCode(200)
 	@ApiOperation({description: 'Register a new user'})
 	@ApiConflictResponse({ description: 'Username or email already taken' })
 	@ApiOkResponse({ description: 'Successfully registered, email sent to verify' })
@@ -116,6 +117,7 @@ export class AuthController {
 	}
 
 	@Post('login')
+	@HttpCode(200)
 	@UseGuards(LocalAuthGuard)
 	@ApiBody({ type: LoginDto })
 	@ApiOperation({ description: 'Login with username and password' })
@@ -126,6 +128,7 @@ export class AuthController {
 	}
 
 	@Post('guest')
+	@HttpCode(200)
 	@ApiOperation({ description: 'Login as a guest account' })
 	@ApiOkResponse({ description: 'Successfully logged in', type: JwtToken })
 	async guest(): Promise<JwtToken> {
