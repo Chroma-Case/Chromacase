@@ -37,6 +37,7 @@ export class AuthService {
 
 	async sendVerifyMail(user: User) {
 		if (process.env.IGNORE_MAILS === "true") return;
+		console.log("Sending verification mail to", user.email);
 		const token = await this.jwtService.signAsync(
 			{
 				userId: user.id,

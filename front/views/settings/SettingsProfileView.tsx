@@ -62,7 +62,19 @@ const ProfileSettings = ({ navigation }: { navigation: any }) => {
 								text: user.emailVerified ? 'verified' : 'not verified',
 								onPress: user.emailVerified
 									? undefined
-									: () => API.fetch({ route: '/auth/reverify', method: 'PUT' }),
+									: () =>
+											API.fetch({ route: '/auth/reverify', method: 'PUT' })
+												.then(() =>
+													Toast.show({
+														description: 'Verification mail sent',
+													})
+												)
+												.catch((e) => {
+													console.error(e);
+													Toast.show({
+														description: 'Verification mail send error',
+													});
+												}),
 							},
 						},
 						{
