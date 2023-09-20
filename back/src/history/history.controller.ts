@@ -25,6 +25,7 @@ export class HistoryController {
 	constructor(private readonly historyService: HistoryService) { }
 
 	@Get()
+	@HttpCode(200)
 	@ApiOperation({ description: "Get song history of connected user"})
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({ type: _SongHistory, isArray: true})
@@ -38,6 +39,7 @@ export class HistoryController {
 	}
 
 	@Get('search')
+	@HttpCode(200)
 	@ApiOperation({ description: "Get search history of connected user"})
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({ type: _SearchHistory, isArray: true})
@@ -51,6 +53,7 @@ export class HistoryController {
 	}
 
 	@Post()
+	@HttpCode(201)
 	@ApiOperation({ description: "Create a record of a song played by a user"})
 	@ApiCreatedResponse({ description: "Succesfully created a record"})
 	async create(@Body() record: SongHistoryDto): Promise<SongHistory> {
@@ -58,6 +61,7 @@ export class HistoryController {
 	}
 
 	@Post("search")
+	@HttpCode(201)
 	@ApiOperation({ description: "Creates a search record in the users history"})
 	@UseGuards(JwtAuthGuard)
 	@ApiUnauthorizedResponse({description: "Invalid token"})
