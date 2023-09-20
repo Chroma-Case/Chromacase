@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { RequestLogger, RequestLoggerOptions } from 'json-logger-service';
 import { tap } from 'rxjs';
-import { ValidationPipe } from '@nestjs/common';
 import { PrismaModel } from './_gen/prisma-class'
+import { PrismaService } from './prisma/prisma.service';
 
 @Injectable()
 export class AspectLogger implements NestInterceptor {
@@ -52,8 +52,7 @@ async function bootstrap() {
 			doNotLogPaths: ['/health'],
 		} as RequestLoggerOptions),
 	);
-	const prismaService = app.get(PrismaService);
-	await prismaService.enableShutdownHooks(app);
+	app.enableShutdownHooks();
 
 	const config = new DocumentBuilder()
 		.setTitle('Chromacase')
