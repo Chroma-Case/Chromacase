@@ -2,3 +2,4 @@ mido
 requests
 black-with-tabs
 validated-dc
+python-logging-loki

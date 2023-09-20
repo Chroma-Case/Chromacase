@@ -6,7 +6,9 @@ import operator
 import os
 import sys
 from typing import TypedDict
-
+from pathlib import Path
+import logging_loki
+from multiprocessing import Queue
 import requests
 from chroma_case.Key import Key
 from chroma_case.Message import (
@@ -21,10 +23,32 @@ from chroma_case.Message import (
 from chroma_case.Partition import Partition
 from chroma_case.song_check import getPartition
 from mido import MidiFile
+import uuid
 
+game_uuid = uuid.uuid4()
 
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+testing = os.environ.get("SCORO_TEST")
 
+if not testing:
+
+	logname = f"/logs/{game_uuid}.log"
+	Path("/logs").mkdir(parents=True, exist_ok=True)
+	Path(logname).touch(exist_ok=True)
+	logging.basicConfig(filename=logname,
+	                    filemode='a', level=logging.DEBUG)
+
+'''
+Logging to loki directly
+
+handler = logging_loki.LokiHandler(
+    url="http://gateway:3100/loki/api/v1/push", 
+    tags={"application": "scorometer"},
+    version="1",
+)
+
+logger = logging.getLogger()
+logger.addHandler(handler)
+'''
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
 MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/assets/musics/"
@@ -80,6 +104,7 @@ class Scorometer:
 
 	def send(self, obj):
 		obj["info"] = self.info
+		obj["game_id"] = str(game_uuid) if not testing else "test"
 		send(obj)
 
 	def getPracticePartition(self, mode: int) -> list[list[Key]]:
@@ -287,7 +312,7 @@ class Scorometer:
 	def gameLoop(self):
 		while True:
 			message, line = getMessage()
-			logging.debug(f"handling message {line}")
+			logging.debug(f"handling message {line}", extra={"tags": {"service": "my-service"}})
 			self.handleMessage(message, line)
 
 	def endGame(self):

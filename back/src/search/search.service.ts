@@ -5,7 +5,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class SearchService {
-	constructor(private prisma: PrismaService, private history: HistoryService) { }
+	constructor(
+		private prisma: PrismaService,
+		private history: HistoryService,
+	) {}
 
 	async songByGuess(query: string, userID: number): Promise<Song[]> {
 		return this.prisma.song.findMany({

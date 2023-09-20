@@ -24,14 +24,17 @@ import { Artist as _Artist } from 'src/_gen/prisma-class/artist';
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-	constructor(private readonly searchService: SearchService) { }
+	constructor(private readonly searchService: SearchService) {}
 
 	@Get('songs/:query')
 	@ApiOkResponse({ type: _Song, isArray: true})
 	@ApiOperation({ description: "Search a song"})
 	@ApiUnauthorizedResponse({ description: "Invalid token"})
 	@UseGuards(JwtAuthGuard)
-	async searchSong(@Request() req: any, @Param('query') query: string): Promise<Song[] | null> {
+	async searchSong(
+		@Request() req: any,
+		@Param('query') query: string,
+	): Promise<Song[] | null> {
 		try {
 			const ret = await this.searchService.songByGuess(query, req.user?.id);
 			if (!ret.length) throw new NotFoundException();

@@ -1,3 +1,12 @@
+networks:
+  loki:
+
+
+volumes:
+  db:
+  scoro_logs:
+
+
 services:
   back:
     build: ./back
@@ -17,6 +26,7 @@ services:
       - "6543:6543"
     volumes:
       - ./assets:/assets
+      - scoro_logs:/logs
   db:
     container_name: db
     image: postgres:alpine3.14
@@ -46,6 +56,3 @@ services:
       - "back"
     env_file:
       - .env
-
-volumes:
-  db:

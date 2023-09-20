@@ -10,7 +10,7 @@ TESTS_SUCCESS=0
 TESTS_FAILED=0
 
 function test {
-  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../assets/musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
+  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../assets/musics/" SCORO_TEST=true python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   TESTS_DONE=$((TESTS_DONE + 1))
   if [ -n "$SCOROMETER_AUTOFIX" ]; then
     cat /tmp/scorometer_res > $1/output
@@ -36,7 +36,7 @@ then
   done
   exit $TESTS_FAILED
 else
-  cat $1/input | BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../assets/musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
+  cat $1/input | SCORO_TEST=true BACK_URL="http://localhost:3000" MUSICS_FOLDER="../../assets/musics/" python3 ../main.py 1> /tmp/scorometer_res 2> /tmp/scorometer_log
   echo "=========== CURRENT OUTPUT ==========="
   cat /tmp/scorometer_res
   echo "======================================"

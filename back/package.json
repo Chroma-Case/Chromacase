@@ -36,6 +36,8 @@
     "@types/passport": "^1.0.12",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
+    "json-logger-service": "^9.0.1",
     "class-validator": "^0.14.0",
     "node-fetch": "^2.6.12",
     "nodemailer": "^6.9.5",

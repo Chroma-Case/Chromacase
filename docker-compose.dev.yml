@@ -1,3 +1,10 @@
+networks:
+  loki:
+
+volumes:
+  scoro_logs:
+
+
 services:
   back:
     build:
@@ -25,6 +32,9 @@ services:
     volumes:
       - ./scorometer:/app
       - ./assets:/assets
+      - scoro_logs:/logs
+    networks:
+      - loki
 
   db:
     container_name: db

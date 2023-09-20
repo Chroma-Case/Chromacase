@@ -22,7 +22,7 @@ import { SearchHistory as _SearchHistory} from 'src/_gen/prisma-class/search_his
 @Controller('history')
 @ApiTags('history')
 export class HistoryController {
-	constructor(private readonly historyService: HistoryService) { }
+	constructor(private readonly historyService: HistoryService) {}
 
 	@Get()
 	@HttpCode(200)
@@ -60,15 +60,18 @@ export class HistoryController {
 		return this.historyService.createSongHistoryRecord(record);
 	}
 
-	@Post("search")
+	@Post('search')
 	@HttpCode(201)
 	@ApiOperation({ description: "Creates a search record in the users history"})
 	@UseGuards(JwtAuthGuard)
-	@ApiUnauthorizedResponse({description: "Invalid token"})
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	async createSearchHistory(
 		@Request() req: any,
-		@Body() record: SearchHistoryDto
-		): Promise<void> {
-			await this.historyService.createSearchHistoryRecord(req.user.id, { query: record.query, type: record.type });
-		}
+		@Body() record: SearchHistoryDto,
+	): Promise<void> {
+		await this.historyService.createSearchHistoryRecord(req.user.id, {
+			query: record.query,
+			type: record.type,
+		});
+	}
 }

@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber } from 'class-validator';
 
 export class SongHistoryDto {
 	@ApiProperty()
@@ -15,8 +15,8 @@ export class SongHistoryDto {
 	score: number;
 
 	@ApiProperty()
-	difficulties: Record<string, number>
+	difficulties: Record<string, number>;
 
 	@ApiProperty()
-	info: Record<string, number>
+	info: Record<string, number>;
 }

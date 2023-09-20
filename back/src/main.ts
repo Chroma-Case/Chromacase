@@ -1,12 +1,57 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import {
+	CallHandler,
+	ExecutionContext,
+	Injectable,
+	NestInterceptor,
+	ValidationPipe,
+} from '@nestjs/common';
+import { RequestLogger, RequestLoggerOptions } from 'json-logger-service';
+import { tap } from 'rxjs';
 import { PrismaModel } from './_gen/prisma-class'
+import { PrismaService } from './prisma/prisma.service';
 
+@Injectable()
+export class AspectLogger implements NestInterceptor {
+	intercept(context: ExecutionContext, next: CallHandler) {
+		const req = context.switchToHttp().getRequest();
+		const res = context.switchToHttp().getResponse();
+		const { statusCode } = context.switchToHttp().getResponse();
+		const { originalUrl, method, params, query, body, user } = req;
+
+		const toPrint = {
+			originalUrl,
+			method,
+			params,
+			query,
+			body,
+			userId: user?.id ?? 'not logged in',
+			username: user?.username ?? 'not logged in',
+		};
+
+		return next.handle().pipe(
+			tap((data) =>
+				console.log(
+					JSON.stringify({
+						...toPrint,
+						statusCode,
+						data,
+					}),
+				),
+			),
+		);
+	}
+}
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+	app.use(
+		RequestLogger.buildExpressRequestLogger({
+			doNotLogPaths: ['/health'],
+		} as RequestLoggerOptions),
+	);
 	app.enableShutdownHooks();
 
 	const config = new DocumentBuilder()
@@ -19,6 +64,8 @@ async function bootstrap() {
 
 	app.useGlobalPipes(new ValidationPipe());
 	app.enableCors();
+	app.useGlobalInterceptors(new AspectLogger());
+
 	await app.listen(3000);
 }
 bootstrap();
