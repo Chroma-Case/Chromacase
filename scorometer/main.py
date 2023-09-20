@@ -26,11 +26,16 @@ from mido import MidiFile
 import uuid
 
 game_uuid = uuid.uuid4()
-logname = f"/logs/{game_uuid}.log"
-Path("/logs").mkdir(parents=True, exist_ok=True)
-Path(logname).touch(exist_ok=True)
-logging.basicConfig(filename=logname,
-                    filemode='a', level=logging.DEBUG)
+
+testing = os.environ.get("SCORO_TEST")
+
+if not testing:
+
+	logname = f"/logs/{game_uuid}.log"
+	Path("/logs").mkdir(parents=True, exist_ok=True)
+	Path(logname).touch(exist_ok=True)
+	logging.basicConfig(filename=logname,
+	                    filemode='a', level=logging.DEBUG)
 
 '''
 Logging to loki directly
