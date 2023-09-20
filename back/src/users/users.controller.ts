@@ -1,6 +1,6 @@
 import { Controller, Get, Param, NotFoundException, Response } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/models/user';
 
 @ApiTags('users')
@@ -22,6 +22,7 @@ export class UsersController {
 	}
 
 	@Get(':id/picture')
+	@ApiOkResponse({description: 'Return the profile picture of the requested user'})
 	async getPicture(@Response() res: any, @Param('id') id: number) {
 		return await this.usersService.getProfilePicture(+id, res);
 	}

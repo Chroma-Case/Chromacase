@@ -27,9 +27,15 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { RegisterDto } from './dto/register.dto';
 import { UsersService } from 'src/users/users.service';
 import {
+	ApiBadRequestResponse,
 	ApiBearerAuth,
 	ApiBody,
+	ApiConflictResponse,
+	ApiCreatedResponse,
+	ApiNoContentResponse,
 	ApiOkResponse,
+	ApiOperation,
+	ApiResponse,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -55,9 +61,11 @@ export class AuthController {
 
 	@Get('login/google')
 	@UseGuards(AuthGuard('google'))
+	@ApiOperation({description: 'Redirect to google login page'})
 	googleLogin() {}
 
 	@Get('logged/google')
+	@ApiOperation({description: 'Redirect to the front page after connecting to the google account'})
 	@UseGuards(AuthGuard('google'))
 	async googleLoginCallbakc(@Req() req: any) {
 		let user = await this.usersService.user({ googleID: req.user.googleID });
@@ -69,6 +77,10 @@ export class AuthController {
 	}
 
 	@Post('register')
+	@ApiOperation({description: 'Register a new user'})
+	@ApiConflictResponse({ description: 'Username or email already taken' })
+	@ApiOkResponse({ description: 'Successfully registered, email sent to verify' })
+	@ApiBadRequestResponse({ description: 'Invalid data or database error' })
 	async register(@Body() registerDto: RegisterDto): Promise<void> {
 		try {
 			const user = await this.usersService.createUser(registerDto);
@@ -84,34 +96,43 @@ export class AuthController {
 		}
 	}
 
+	@Put('verify')
 	@HttpCode(200)
 	@UseGuards(JwtAuthGuard)
-	@Put('verify')
+	@ApiOperation({description: 'Verify the email of the user'})
+	@ApiOkResponse({ description: 'Successfully verified' })
+	@ApiBadRequestResponse({ description: 'Invalid or expired token' })
 	async verify(@Request() req: any, @Query('token') token: string): Promise<void> {
 		if (await this.authService.verifyMail(req.user.id, token))
 			return;
 		throw new BadRequestException("Invalid token. Expired or invalid.");
 	}
 
-	@HttpCode(200)
-	@UseGuards(JwtAuthGuard)
 	@Put('reverify')
+	@UseGuards(JwtAuthGuard)
+	@HttpCode(200)
+	@ApiOperation({description: 'Resend the verification email'})
 	async reverify(@Request() req: any): Promise<void> {
 		const user = await this.usersService.user({ id: req.user.id });
 		if (!user) throw new BadRequestException("Invalid user");
 		await this.authService.sendVerifyMail(user);
 	}
 
-	@ApiBody({ type: LoginDto })
+	@Post('login')
 	@HttpCode(200)
 	@UseGuards(LocalAuthGuard)
-	@Post('login')
+	@ApiBody({ type: LoginDto })
+	@ApiOperation({ description: 'Login with username and password' })
+	@ApiOkResponse({ description: 'Successfully logged in', type: JwtToken })
+	@ApiUnauthorizedResponse({ description: 'Invalid credentials' })
 	async login(@Request() req: any): Promise<JwtToken> {
 		return this.authService.login(req.user);
 	}
 
-	@HttpCode(200)
 	@Post('guest')
+	@HttpCode(200)
+	@ApiOperation({ description: 'Login as a guest account' })
+	@ApiOkResponse({ description: 'Successfully logged in', type: JwtToken })
 	async guest(): Promise<JwtToken> {
 		const user = await this.usersService.createGuest();
 		await this.settingsService.createUserSetting(user.id);
@@ -120,6 +141,7 @@ export class AuthController {
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
+	@ApiOperation({ description: 'Get the profile picture of connected user' })
 	@ApiOkResponse({ description: 'The user profile picture' })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me/picture')
@@ -132,6 +154,7 @@ export class AuthController {
 	@ApiOkResponse({ description: 'The user profile picture' })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Post('me/picture')
+	@ApiOperation({ description: 'Upload a new profile picture' })
 	@UseInterceptors(FileInterceptor('file'))
 	async postProfilePicture(
 		@Request() req: any,
@@ -157,6 +180,7 @@ export class AuthController {
 	@ApiOkResponse({ description: 'Successfully logged in', type: User })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me')
+	@ApiOperation({ description: 'Get the user info of connected user' })
 	async getProfile(@Request() req: any): Promise<User> {
 		const user = await this.usersService.user({ id: req.user.id });
 		if (!user) throw new InternalServerErrorException();
@@ -168,6 +192,7 @@ export class AuthController {
 	@ApiOkResponse({ description: 'Successfully edited profile', type: User })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Put('me')
+	@ApiOperation({ description: 'Edit the profile of connected user' })
 	editProfile(
 		@Request() req: any,
 		@Body() profile: Partial<Profile>,
@@ -193,6 +218,7 @@ export class AuthController {
 	@ApiOkResponse({ description: 'Successfully deleted', type: User })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Delete('me')
+	@ApiOperation({ description: 'Delete the profile of connected user' })
 	deleteSelf(@Request() req: any): Promise<User> {
 		return this.usersService.deleteUser({ id: req.user.id });
 	}
@@ -202,6 +228,7 @@ export class AuthController {
 	@ApiOkResponse({ description: 'Successfully edited settings', type: Setting })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Patch('me/settings')
+	@ApiOperation({ description: 'Edit the settings of connected user' })
 	udpateSettings(
 		@Request() req: any,
 		@Body() settingUserDto: UpdateSettingDto,
@@ -217,6 +244,7 @@ export class AuthController {
 	@ApiOkResponse({ description: 'Successfully edited settings', type: Setting })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me/settings')
+	@ApiOperation({ description: 'Get the settings of connected user' })
 	async getSettings(@Request() req: any): Promise<Setting> {
 		const result = await this.settingsService.getUserSetting({
 			userId: +req.user.id,

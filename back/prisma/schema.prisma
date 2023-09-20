@@ -4,6 +4,12 @@ generator client {
     provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+    provider = "prisma-class-generator"
+    dryRun   = false
+    separateRelationFields = true
+}
+
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")

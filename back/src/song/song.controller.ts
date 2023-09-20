@@ -16,16 +16,26 @@ import {
 	StreamableFile,
 	UseGuards,
 } from '@nestjs/common';
-import { Plage } from 'src/models/plage';
+import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { CreateSongDto } from './dto/create-song.dto';
 import { SongService } from './song.service';
 import { Request } from 'express';
 import { Prisma, Song } from '@prisma/client';
 import { createReadStream, existsSync } from 'fs';
-import { ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiProperty, ApiResponse, ApiResponseProperty, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { HistoryService } from 'src/history/history.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { FilterQuery } from 'src/utils/filter.pipe';
+import { Song as _Song } from 'src/_gen/prisma-class/song';
+import { SongHistory } from 'src/_gen/prisma-class/song_history';
+
+
+class SongHistoryResult {
+	@ApiProperty()
+	best: number;
+	@ApiProperty({ type: SongHistory, isArray: true})
+	history: SongHistory[];
+}
 
 @Controller('song')
 @ApiTags('song')
@@ -44,6 +54,9 @@ export class SongController {
 	) {}
 
 	@Get(':id/midi')
+	@ApiOperation({ description: "Streams the midi file of the requested song"})
+	@ApiNotFoundResponse({ description: "Song not found"})
+	@ApiOkResponse({ description: "Returns the midi file succesfully"})
 	async getMidi(@Param('id', ParseIntPipe) id: number) {
 		const song = await this.songService.song({ id });
 		if (!song) throw new NotFoundException('Song not found');
@@ -57,6 +70,9 @@ export class SongController {
 	}
 
 	@Get(':id/illustration')
+	@ApiOperation({ description: "Streams the illustration of the requested song"})
+	@ApiNotFoundResponse({ description: "Song not found"})
+	@ApiOkResponse({ description: "Returns the illustration succesfully"})
 	async getIllustration(@Param('id', ParseIntPipe) id: number) {
 		const song = await this.songService.song({ id });
 		if (!song) throw new NotFoundException('Song not found');
@@ -74,6 +90,9 @@ export class SongController {
 	}
 
 	@Get(':id/musicXml')
+	@ApiOperation({ description: "Streams the musicXML file of the requested song"})
+	@ApiNotFoundResponse({ description: "Song not found"})
+	@ApiOkResponse({ description: "Returns the musicXML file succesfully"})
 	async getMusicXml(@Param('id', ParseIntPipe) id: number) {
 		const song = await this.songService.song({ id });
 		if (!song) throw new NotFoundException('Song not found');
@@ -83,6 +102,7 @@ export class SongController {
 	}
 
 	@Post()
+	@ApiOperation({description: "register a new song in the database, should not be used by the frontend"})
 	async create(@Body() createSongDto: CreateSongDto) {
 		try {
 			return await this.songService.createSong({
@@ -98,6 +118,7 @@ export class SongController {
 					: undefined,
 			});
 		} catch {
+
 			throw new ConflictException(
 				await this.songService.song({ name: createSongDto.name }),
 			);
@@ -105,6 +126,7 @@ export class SongController {
 	}
 
 	@Delete(':id')
+	@ApiOperation({ description: "delete a song by id"})
 	async remove(@Param('id', ParseIntPipe) id: number) {
 		try {
 			return await this.songService.deleteSong({ id });
@@ -114,6 +136,7 @@ export class SongController {
 	}
 
 	@Get()
+	@ApiOkResponsePlaginated(_Song)
 	async findAll(
 		@Req() req: Request,
 		@FilterQuery(SongController.filterableFields) where: Prisma.SongWhereInput,
@@ -129,6 +152,9 @@ export class SongController {
 	}
 
 	@Get(':id')
+	@ApiOperation({ description: "Get a specific song data"})
+	@ApiNotFoundResponse({ description: "Song not found"})
+	@ApiOkResponse({ type: _Song, description: "Requested song"})
 	async findOne(@Param('id', ParseIntPipe) id: number) {
 		const res = await this.songService.song({ id });
 
@@ -139,6 +165,8 @@ export class SongController {
 	@Get(':id/history')
 	@HttpCode(200)
 	@UseGuards(JwtAuthGuard)
+	@ApiOperation({ description: "get the history of the connected user on a specific song"})
+	@ApiOkResponse({ type: SongHistoryResult, description: "Records of previous games of the user"})
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	async getHistory(@Req() req: any, @Param('id', ParseIntPipe) id: number) {
 		return this.historyService.getForSong({

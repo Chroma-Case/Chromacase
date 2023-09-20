@@ -14,7 +14,7 @@ import {
 	Req,
 	StreamableFile,
 } from '@nestjs/common';
-import { Plage } from 'src/models/plage';
+import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { CreateGenreDto } from './dto/create-genre.dto';
 import { Request } from 'express';
 import { GenreService } from './genre.service';
@@ -22,6 +22,7 @@ import { Prisma, Genre } from '@prisma/client';
 import { ApiTags } from '@nestjs/swagger';
 import { createReadStream, existsSync } from 'fs';
 import { FilterQuery } from 'src/utils/filter.pipe';
+import { Genre as _Genre } from 'src/_gen/prisma-class/genre';
 
 @Controller('genre')
 @ApiTags('genre')
@@ -65,6 +66,7 @@ export class GenreController {
 	}
 
 	@Get()
+	@ApiOkResponsePlaginated(_Genre)
 	async findAll(
 		@Req() req: Request,
 		@FilterQuery(GenreController.filterableFields)

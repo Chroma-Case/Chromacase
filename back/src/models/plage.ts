@@ -2,16 +2,21 @@
  * Thanks to https://github.com/Arthi-chaud/Meelo/blob/master/src/pagination/models/paginated-response.ts
  */
 
-import { ApiProperty } from '@nestjs/swagger';
+import { Type, applyDecorators } from '@nestjs/common';
+import { ApiExtraModels, ApiOkResponse, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 
-export class Plage<T> {
+export class PlageMetadata {
 	@ApiProperty()
-	metadata: {
-		this: string;
-		next: string | null;
-		previous: string | null;
-	};
+	this: string;
+	@ApiProperty({ type: "string", nullable: true, description: "null if there is no next page, couldn't set it in swagger"})
+	next: string | null;
+	@ApiProperty({ type: "string", nullable: true, description: "null if there is no previous page, couldn't set it in swagger" })
+	previous: string | null;
+}
+
+export class Plage<T extends object> {
 	@ApiProperty()
+	metadata: PlageMetadata;
 	data: T[];
 
 	constructor(data: T[], request: Request | any) {
@@ -49,3 +54,23 @@ export class Plage<T> {
 		return route;
 	}
 }
+
+export const ApiOkResponsePlaginated = <DataDto extends Type<unknown>>(dataDto: DataDto) =>
+  applyDecorators(
+    ApiExtraModels(Plage, dataDto),
+    ApiOkResponse({
+      schema: {
+        allOf: [
+          { $ref: getSchemaPath(Plage) },
+          {
+            properties: {
+              data: {
+                type: 'array',
+                items: { $ref: getSchemaPath(dataDto) },
+              },
+            },
+          },
+        ],
+      },
+    })
+  )
