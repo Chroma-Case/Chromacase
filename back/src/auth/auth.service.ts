@@ -36,8 +36,8 @@ export class AuthService {
 	}
 
 	async sendVerifyMail(user: User) {
-		if (process.env.IGNORE_MAILS === "true") return;
-		console.log("Sending verification mail to", user.email);
+		if (process.env.IGNORE_MAILS === 'true') return;
+		console.log('Sending verification mail to', user.email);
 		const token = await this.jwtService.signAsync(
 			{
 				userId: user.id,
@@ -52,11 +52,44 @@ export class AuthService {
 		});
 	}
 
+	async sendPasswordResetMail(user: User) {
+		if (process.env.IGNORE_MAILS === 'true') return;
+		console.log('Sending password reset mail to', user.email);
+		const token = await this.jwtService.signAsync(
+			{
+				userId: user.id,
+			},
+			{ expiresIn: '10h' },
+		);
+		await this.emailService.sendMail({
+			to: user.email,
+			from: 'chromacase@octohub.app',
+			subject: 'Password reset for Chromacase',
+			html: `To reset your password, please click on this <a href="{${process.env.PUBLIC_URL}/password_reset?token=${token}">link</a>.`,
+		});
+	}
+
+	async changePassword(new_password: string, token: string): Promise<boolean> {
+		let verified;
+		try {
+			verified = await this.jwtService.verifyAsync(token);
+		} catch (e) {
+			console.log('Password reset token failure', e);
+			return false;
+		}
+		console.log(verified)
+		await this.userService.updateUser({
+			where: { id: verified.userId },
+			data: { password: new_password },
+		});
+		return true;
+	}
+
 	async verifyMail(userId: number, token: string): Promise<boolean> {
 		try {
 			await this.jwtService.verifyAsync(token);
-		} catch(e) {
-			console.log("Verify mail token failure", e);
+		} catch (e) {
+			console.log('Verify mail token failure', e);
 			return false;
 		}
 		await this.userService.updateUser({
