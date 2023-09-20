@@ -6,8 +6,8 @@ import {
 	useBreakpointValue,
 	useTheme,
 	Text,
-	ScrollView,
 	View,
+	Wrap,
 } from 'native-base';
 import { LineChart } from 'react-native-chart-kit';
 import SongHistory from '../models/SongHistory';
@@ -153,10 +153,10 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 					alignItems: 'center',
 				}}
 			>
-				<Text>Skils</Text>
-				<ScrollView horizontal={true}>
+				<Text style={{ padding: 10 }}>Skils</Text>
+				<Wrap style={{ flexDirection: 'row', maxWidth: '100%', flex: 1 }}>
 					{skills.map((skill) => (
-						<View key={skill.value} style={{ paddingLeft: 20 }}>
+						<View key={skill.value} style={{ padding: 10 }}>
 							<CheckboxBase
 								title={skill.title}
 								value={skill.value}
@@ -165,20 +165,25 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 							/>
 						</View>
 					))}
-				</ScrollView>
-				<Select
-					selectedValue={selectedRange}
-					onValueChange={(itemValue) => setSelectedRange(itemValue)}
-					defaultValue={'3days'}
-					bgColor={'rgba(16,16,20,0.5)'}
-					variant="filled"
-					style={{ display: 'flex', justifyContent: 'center' }}
-					width={layout.width > 650 ? '200' : '100'}
-				>
-					{rangeOptions.map((option) => (
-						<Select.Item key={option.label} label={option.label} value={option.value} />
-					))}
-				</Select>
+					<Box style={{ padding: 10 }}>
+						<Select
+							selectedValue={selectedRange}
+							onValueChange={(itemValue) => setSelectedRange(itemValue)}
+							defaultValue={'3days'}
+							bgColor={'rgba(16,16,20,0.5)'}
+							variant="filled"
+							width={layout.width > 650 ? '200' : '150'}
+						>
+							{rangeOptions.map((option) => (
+								<Select.Item
+									key={option.label}
+									label={option.label}
+									value={option.value}
+								/>
+							))}
+						</Select>
+					</Box>
+				</Wrap>
 			</Row>
 			<Box
 				style={{ width: '100%', marginTop: 20 }}

@@ -809,7 +809,7 @@ const ProfileView = () => {
 					right: 0,
 					left: 0,
 					width: '100%',
-					height: '100%',
+					height: '180%', // TODO Need to fixe the background
 					margin: 0,
 					padding: 0,
 					position: 'absolute',
