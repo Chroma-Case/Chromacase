@@ -6,6 +6,7 @@ import { PianoCursorPosition } from '../models/PianoGame';
 type PartitionCoordProps = {
 	// The Buffer of the MusicXML file retreived from the API
 	file: string;
+	bpmRef: React.MutableRefObject<number>;
 	onPartitionReady: () => void;
 	onEndReached: () => void;
 	onResume: () => void;
@@ -18,6 +19,7 @@ const PartitionCoord = ({
 	onEndReached,
 	onPause,
 	onResume,
+	bpmRef,
 }: PartitionCoordProps) => {
 	const [partitionData, setPartitionData] = React.useState<
 		[[number, number], string, PianoCursorPosition[]] | null
@@ -28,6 +30,7 @@ const PartitionCoord = ({
 			{!partitionData && (
 				<PartitionView
 					file={file}
+					bpmRef={bpmRef}
 					onPartitionReady={(dims, base64data, a) => {
 						setPartitionData([dims, base64data, a]);
 						onPartitionReady();

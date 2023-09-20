@@ -41,7 +41,7 @@ const ChangePasswordForm = ({ onSubmit }: ChangePasswordFormProps) => {
 				isSecret
 				isRequired
 				autoComplete="password"
-				icon={(size, color) => <Lock1 size={size} color={color} variant="Bold" />}
+				icon={Lock1}
 				placeholder={translate('oldPassword')}
 				value={formData.oldPassword.value}
 				error={formData.oldPassword.error}
@@ -60,7 +60,7 @@ const ChangePasswordForm = ({ onSubmit }: ChangePasswordFormProps) => {
 				isSecret
 				isRequired
 				autoComplete="password"
-				icon={(size, color) => <Lock1 size={size} color={color} variant="Bold" />}
+				icon={Lock1}
 				placeholder={translate('newPassword')}
 				value={formData.newPassword.value}
 				error={formData.newPassword.error}
@@ -79,7 +79,7 @@ const ChangePasswordForm = ({ onSubmit }: ChangePasswordFormProps) => {
 				isSecret
 				isRequired
 				autoComplete="password"
-				icon={(size, color) => <Lock1 size={size} color={color} variant="Bold" />}
+				icon={Lock1}
 				placeholder={translate('confirmNewPassword')}
 				value={formData.confirmNewPassword.value}
 				error={formData.confirmNewPassword.error}

@@ -97,7 +97,9 @@ export class AuthController {
 	@UseGuards(JwtAuthGuard)
 	@Put('reverify')
 	async reverify(@Request() req: any): Promise<void> {
-		await this.authService.sendVerifyMail(req.user);
+		const user = await this.usersService.user({ id: req.user.id });
+		if (!user) throw new BadRequestException("Invalid user");
+		await this.authService.sendVerifyMail(user);
 	}
 
 	@ApiBody({ type: LoginDto })

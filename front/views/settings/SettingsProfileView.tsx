@@ -6,7 +6,7 @@ import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
 import { useQuery } from '../../Queries';
 import * as ImagePicker from 'expo-image-picker';
-import { Google, PasswordCheck, SmsEdit, UserSquare } from 'iconsax-react-native';
+import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-react-native';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 
@@ -51,6 +51,30 @@ const ProfileSettings = () => {
 						description: 'Liez votre compte Google à ChromaCase', // TODO translate
 						data: {
 							text: user.googleID ? 'Linked' : 'Not linked',
+						},
+					},
+					{
+						icon: <Verify size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						type: 'text',
+						description: 'Vérifiez votre adresse e-mail', // TODO translate
+						title: translate('verified'),
+						data: {
+							text: user.emailVerified ? 'verified' : 'not verified',
+							onPress: user.emailVerified
+								? undefined
+								: () =>
+										API.fetch({ route: '/auth/reverify', method: 'PUT' })
+											.then(() =>
+												Toast.show({
+													description: 'Verification mail sent',
+												})
+											)
+											.catch((e) => {
+												console.error(e);
+												Toast.show({
+													description: 'Verification mail send error',
+												});
+											}),
 						},
 					},
 					{

@@ -33,6 +33,7 @@ import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
+import { Metronome } from '../components/Metronome';
 
 type PlayViewProps = {
 	songId: number;
@@ -83,6 +84,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const toast = useToast();
 	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
+	const bpm = useRef<number>(60);
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
@@ -348,6 +350,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				>
 					<PartitionCoord
 						file={musixml.data}
+						bpmRef={bpm}
 						onEndReached={onEnd}
 						onPause={onPause}
 						onResume={onResume}
@@ -356,6 +359,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				</PianoCC.Provider>
 				{!partitionRendered && <LoadingComponent />}
 			</View>
+
+			<Metronome paused={paused} bpm={bpm.current} />
 
 			<Box
 				shadow={4}

@@ -42,6 +42,7 @@
 		"expo-secure-store": "~12.0.0",
 		"expo-splash-screen": "~0.17.5",
 		"expo-status-bar": "~1.4.2",
+		"file-loader": "^6.2.0",
 		"format-duration": "^2.0.0",
 		"i18next": "^21.8.16",
 		"iconsax-react-native": "^0.0.8",
