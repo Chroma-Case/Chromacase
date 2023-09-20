@@ -14,6 +14,7 @@ type HomeCardProps = {
 	image: string;
 	title: string;
 	artist: string;
+	fontSize: number;
 };
 
 const cards = [
@@ -21,21 +22,25 @@ const cards = [
 		image: 'https://media.discordapp.net/attachments/717080637038788731/1153688155292180560/image_homeview1.png',
 		title: 'Beethoven',
 		artist: 'Synphony No. 9',
+		fontSize: 46,
 	},
 	{
 		image: 'https://media.discordapp.net/attachments/717080637038788731/1153688154923090093/image_homeview2.png',
 		title: 'Mozart',
 		artist: 'Lieder Kantate KV 619',
+		fontSize: 36,
 	},
 	{
 		image: 'https://media.discordapp.net/attachments/717080637038788731/1153688154499457096/image_homeview3.png',
 		title: 'Back',
 		artist: 'Truc Truc',
+		fontSize: 26,
 	},
 	{
 		image: 'https://media.discordapp.net/attachments/717080637038788731/1153688154109394985/image_homeview4.png',
 		title: 'Mozart',
 		artist: 'Machin Machin',
+		fontSize: 22,
 	},
 ] as [HomeCardProps, HomeCardProps, HomeCardProps, HomeCardProps];
 
