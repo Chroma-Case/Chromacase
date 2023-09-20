@@ -13,11 +13,12 @@ import {
 	Delete,
 	NotFoundException,
 } from '@nestjs/common';
-import { Plage } from 'src/models/plage';
+import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { LessonService } from './lesson.service';
 import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Prisma, Skill } from '@prisma/client';
 import { FilterQuery } from 'src/utils/filter.pipe';
+import { Lesson as _Lesson} from 'src/_gen/prisma-class/lesson';
 
 export class Lesson {
 	@ApiProperty()
@@ -48,6 +49,7 @@ export class LessonController {
 		summary: 'Get all lessons',
 	})
 	@Get()
+	@ApiOkResponsePlaginated(_Lesson)
 	async getAll(
 		@Req() request: Request,
 		@FilterQuery(LessonController.filterableFields)
