@@ -6,7 +6,7 @@ import { SongHistoryDto } from './dto/SongHistoryDto';
 
 @Injectable()
 export class HistoryService {
-	constructor(private prisma: PrismaService) { }
+	constructor(private prisma: PrismaService) {}
 
 	async createSongHistoryRecord({
 		songID,
@@ -74,7 +74,7 @@ export class HistoryService {
 
 	async createSearchHistoryRecord(
 		userID: number,
-		{ query, type }: SearchHistoryDto
+		{ query, type }: SearchHistoryDto,
 	): Promise<SearchHistory> {
 		return this.prisma.searchHistory.create({
 			data: {

@@ -2,43 +2,55 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { PrismaService } from './prisma/prisma.service';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { CallHandler, ExecutionContext, Injectable, NestInterceptor, ValidationPipe } from '@nestjs/common';
-import {RequestLogger, RequestLoggerOptions} from 'json-logger-service';
+import {
+	CallHandler,
+	ExecutionContext,
+	Injectable,
+	NestInterceptor,
+	ValidationPipe,
+} from '@nestjs/common';
+import { RequestLogger, RequestLoggerOptions } from 'json-logger-service';
 import { tap } from 'rxjs';
 
 @Injectable()
 export class AspectLogger implements NestInterceptor {
-  intercept(context: ExecutionContext, next: CallHandler) {
-    const req = context.switchToHttp().getRequest();
-	const res = context.switchToHttp().getResponse();
-    const { statusCode } = context.switchToHttp().getResponse();
-    const { originalUrl, method, params, query, body, user} = req;
+	intercept(context: ExecutionContext, next: CallHandler) {
+		const req = context.switchToHttp().getRequest();
+		const res = context.switchToHttp().getResponse();
+		const { statusCode } = context.switchToHttp().getResponse();
+		const { originalUrl, method, params, query, body, user } = req;
 
-	const toPrint = {
-		originalUrl,
-		method,
-		params,
-		query,
-		body,
-		"userId": user?.id ?? "not logged in",
-		"username": user?.username ?? "not logged in",
-	  };
+		const toPrint = {
+			originalUrl,
+			method,
+			params,
+			query,
+			body,
+			userId: user?.id ?? 'not logged in',
+			username: user?.username ?? 'not logged in',
+		};
 
-    return next.handle().pipe(
-      tap((data) =>
-        console.log(JSON.stringify({
-			...toPrint,
-          statusCode,
-          data
-        }))
-      )
-    );
-  }
+		return next.handle().pipe(
+			tap((data) =>
+				console.log(
+					JSON.stringify({
+						...toPrint,
+						statusCode,
+						data,
+					}),
+				),
+			),
+		);
+	}
 }
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
-	app.use(RequestLogger.buildExpressRequestLogger({ doNotLogPaths: ['/health'] } as RequestLoggerOptions));
+	app.use(
+		RequestLogger.buildExpressRequestLogger({
+			doNotLogPaths: ['/health'],
+		} as RequestLoggerOptions),
+	);
 	const prismaService = app.get(PrismaService);
 	await prismaService.enableShutdownHooks(app);
 

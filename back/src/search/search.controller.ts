@@ -21,11 +21,14 @@ import { SearchService } from './search.service';
 @ApiTags('search')
 @Controller('search')
 export class SearchController {
-	constructor(private readonly searchService: SearchService) { }
+	constructor(private readonly searchService: SearchService) {}
 
 	@Get('songs/:query')
 	@UseGuards(JwtAuthGuard)
-	async searchSong(@Request() req: any, @Param('query') query: string): Promise<Song[] | null> {
+	async searchSong(
+		@Request() req: any,
+		@Param('query') query: string,
+	): Promise<Song[] | null> {
 		try {
 			const ret = await this.searchService.songByGuess(query, req.user?.id);
 			if (!ret.length) throw new NotFoundException();
@@ -37,7 +40,10 @@ export class SearchController {
 
 	@Get('genres/:query')
 	@UseGuards(JwtAuthGuard)
-	async searchGenre(@Request() req: any, @Param('query') query: string): Promise<Genre[] | null> {
+	async searchGenre(
+		@Request() req: any,
+		@Param('query') query: string,
+	): Promise<Genre[] | null> {
 		try {
 			const ret = await this.searchService.genreByGuess(query, req.user?.id);
 			if (!ret.length) throw new NotFoundException();
@@ -49,7 +55,10 @@ export class SearchController {
 
 	@Get('artists/:query')
 	@UseGuards(JwtAuthGuard)
-	async searchArtists(@Request() req: any, @Param('query') query: string): Promise<Artist[] | null> {
+	async searchArtists(
+		@Request() req: any,
+		@Param('query') query: string,
+	): Promise<Artist[] | null> {
 		try {
 			const ret = await this.searchService.artistByGuess(query, req.user?.id);
 			if (!ret.length) throw new NotFoundException();

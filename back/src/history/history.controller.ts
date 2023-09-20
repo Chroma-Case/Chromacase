@@ -20,7 +20,7 @@ import { SearchHistoryDto } from './dto/SearchHistoryDto';
 @Controller('history')
 @ApiTags('history')
 export class HistoryController {
-	constructor(private readonly historyService: HistoryService) { }
+	constructor(private readonly historyService: HistoryService) {}
 
 	@Get()
 	@HttpCode(200)
@@ -52,14 +52,17 @@ export class HistoryController {
 		return this.historyService.createSongHistoryRecord(record);
 	}
 
-	@Post("search")
+	@Post('search')
 	@HttpCode(201)
 	@UseGuards(JwtAuthGuard)
-	@ApiUnauthorizedResponse({description: "Invalid token"})
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	async createSearchHistory(
 		@Request() req: any,
-		@Body() record: SearchHistoryDto
-		): Promise<void> {
-			await this.historyService.createSearchHistoryRecord(req.user.id, { query: record.query, type: record.type });
-		}
+		@Body() record: SearchHistoryDto,
+	): Promise<void> {
+		await this.historyService.createSearchHistoryRecord(req.user.id, {
+			query: record.query,
+			type: record.type,
+		});
+	}
 }
