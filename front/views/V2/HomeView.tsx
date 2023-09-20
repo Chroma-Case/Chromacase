@@ -1,11 +1,12 @@
 import { View } from 'react-native';
 import { Text, useBreakpointValue } from 'native-base';
 import React from 'react';
-import { useQuery } from '../../Queries';
+import { useQuery, useQueries } from '../../Queries';
 import HomeMainSongCard from '../../components/V2/HomeMainSongCard';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
 import { useNavigation } from '../../Navigation';
+import Song from '../../models/Song';
 
 const bigSideRatio = 1000;
 const smallSideRatio = 618;
@@ -15,9 +16,10 @@ type HomeCardProps = {
 	title: string;
 	artist: string;
 	fontSize: number;
+	onPress?: () => void;
 };
 
-const cards = [
+let cards = [
 	{
 		image: 'https://media.discordapp.net/attachments/717080637038788731/1153688155292180560/image_homeview1.png',
 		title: 'Beethoven',
@@ -49,6 +51,30 @@ const HomeView = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
 	const navigation = useNavigation();
+	const artistsQueries = useQueries(
+		(songsQuery.data ?? []).map((song) => API.getArtist(song.artistId))
+	);
+
+	React.useEffect(() => {
+		if (!songsQuery.data) return;
+		if (artistsQueries.every((query) => !query.isLoading)) return;
+
+		(songsQuery.data ?? [])
+			.filter((song) =>
+				artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)
+			)
+			.forEach((song, index) => {
+				if (index > 3) return;
+				cards[index]!.image = song.cover;
+				cards[index]!.title = song.name;
+				cards[index]!.artist = artistsQueries.find(
+					(artistQuery) => artistQuery.data?.id === song.artistId
+				)!.data!.name;
+				cards[index]!.onPress = () => {
+					navigation.navigate('Song', { songId: song.id });
+				};
+			});
+	}, [artistsQueries]);
 
 	return (
 		<View

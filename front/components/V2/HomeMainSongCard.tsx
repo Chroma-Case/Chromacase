@@ -65,6 +65,7 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 									fontSize: props.fontSize,
 									fontWeight: 'bold',
 								}}
+								numberOfLines={2}
 								selectable={false}
 							>
 								{props.title}
@@ -76,6 +77,7 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 									fontWeight: 'bold',
 									textAlign: 'center',
 								}}
+								numberOfLines={1}
 								selectable={false}
 							>
 								{props.artist}
