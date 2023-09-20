@@ -5,6 +5,7 @@ import { useQuery } from '../../Queries';
 import HomeMainSongCard from '../../components/V2/HomeMainSongCard';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
+import { useNavigation } from '../../Navigation';
 
 const bigSideRatio = 1000;
 const smallSideRatio = 618;
@@ -42,6 +43,7 @@ const HomeView = () => {
 	const songsQuery = useQuery(API.getSongSuggestions);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
+	const navigation = useNavigation();
 
 	return (
 		<View
@@ -163,7 +165,10 @@ const HomeView = () => {
 							key={song.id}
 							song={song}
 							onPress={() => {
-								console.log('SongCardInfo pressed');
+								navigation.navigate('Song', { songId: song.id });
+							}}
+							onPlay={() => {
+								console.log('play');
 							}}
 						/>
 					))}
