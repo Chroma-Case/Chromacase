@@ -2,15 +2,16 @@ import React, { useState } from 'react';
 import { StyleSheet, ActivityIndicator, View, Image, StyleProp, ViewStyle } from 'react-native';
 import InteractiveBase from './InteractiveBase';
 import { Text, useTheme } from 'native-base';
+import { Icon } from 'iconsax-react-native';
 
 interface ButtonProps {
 	title?: string;
 	style?: StyleProp<ViewStyle>;
 	onPress?: () => Promise<void>;
 	isDisabled?: boolean;
-	icon?: (size: string, color: string) => React.ReactNode;
+	icon?: Icon;
 	iconImage?: string;
-	type: 'filled' | 'outlined' | 'menu';
+	type?: 'filled' | 'outlined' | 'menu';
 }
 
 const ButtonBase: React.FC<ButtonProps> = ({
@@ -88,6 +89,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	});
 
 	const typeToStyleAnimator = { filled: styleButton, outlined: styleButton, menu: styleMenu };
+	const MyIcon: Icon = icon as Icon;
 
 	return (
 		<InteractiveBase
@@ -110,7 +112,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 				/>
 			) : (
 				<View style={styles.content}>
-					{icon && icon('18', type === 'outlined' ? '#6075F9' : '#FFFFFF')}
+					{icon && <MyIcon size={'18'} color={type === 'outlined' ? '#6075F9' : '#FFFFFF'}/>}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
 					{title && <Text style={styles.text}>{title}</Text>}
 				</View>
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
 	icon: {
 		width: 18,
 		height: 18,
-		// marginRight: 8,
 	},
 	text: {
 		color: '#fff',

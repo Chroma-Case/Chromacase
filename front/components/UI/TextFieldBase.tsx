@@ -1,4 +1,4 @@
-import { Eye, EyeSlash } from 'iconsax-react-native';
+import { Eye, EyeSlash, Icon } from 'iconsax-react-native';
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import InteractiveBase from './InteractiveBase';
@@ -7,7 +7,7 @@ import { Input } from 'native-base';
 export interface TextFieldBaseProps {
 	style?: StyleProp<ViewStyle>;
 	value?: string;
-	icon?: (size: string, color: string) => React.ReactNode;
+	icon?: Icon;
 	iconColor?: string;
 	placeholder?: string;
 	autoComplete?:
@@ -66,6 +66,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 }) => {
 	const [isPasswordVisible, setPasswordVisible] = useState(!isSecret);
 	const [isFocused, setFocused] = useState(false);
+	const MyIcon: Icon = icon as Icon;
 
 	const styleAnimate = StyleSheet.create({
 		Default: {
@@ -102,7 +103,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 		<InteractiveBase style={[style, { borderRadius: 12 }]} styleAnimate={styleAnimate}>
 			<View style={styles.container}>
 				<View style={styles.iconContainerLeft}>
-					{icon && icon('20', iconColor ? iconColor : isFocused ? '#5f74f7' : '#394694')}
+					{icon && <MyIcon size={'20'} color={iconColor ? iconColor : isFocused ? '#5f74f7' : '#394694'} variant="Bold"/>}
 				</View>
 				<Input
 					variant="unstyled"

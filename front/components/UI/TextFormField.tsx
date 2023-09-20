@@ -59,9 +59,7 @@ const TextFormField: React.FC<TextFormFieldProps> = ({ error, style, ...textFiel
 
 const styles = StyleSheet.create({
 	wrapper: {
-		flex: 1,
 		width: '100%',
-		// maxWidth: 400,
 	},
 	errorContainer: {
 		flexDirection: 'row',

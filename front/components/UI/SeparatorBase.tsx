@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 		width: '100%',
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginVertical: 20,
+		marginVertical: 2,
 	},
 	text: {
 		color: 'white',

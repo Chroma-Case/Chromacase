@@ -225,8 +225,18 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		elevation: elevationValue,
 	};
 
+	const disableStyle = {
+		backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : styleAnimate.Disabled.backgroundColor,
+		borderColor: isOutlined ? styleAnimate.Disabled.backgroundColor : 'transparent',
+		borderWidth: 2,
+		scale: styleAnimate.Disabled.scale,
+		shadowOpacity: styleAnimate.Disabled.shadowOpacity,
+		shadowRadius: styleAnimate.Disabled.shadowRadius,
+		elevation: styleAnimate.Disabled.elevation,
+	}
+
 	return (
-		<Animated.View style={[style, isDisabled ? styleAnimate.Disabled : animatedStyle]}>
+		<Animated.View style={[style, isDisabled ? disableStyle : animatedStyle]}>
 			<Pressable
 				disabled={isDisabled}
 				onHoverIn={handleMouseEnter}

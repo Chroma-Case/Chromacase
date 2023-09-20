@@ -1,6 +1,5 @@
 import { Box, useBreakpointValue, useTheme } from 'native-base';
 import { LineChart } from 'react-native-chart-kit';
-import { CardBorderRadius } from './Card';
 import SongHistory from '../models/SongHistory';
 import { useState } from 'react';
 
@@ -36,8 +35,7 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 
 	return (
 		<Box
-			bgColor={theme.colors.primary[500]}
-			style={{ width: '100%', borderRadius: CardBorderRadius }}
+			style={{ width: '100%' }}
 			onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
 		>
 			<LineChart
@@ -48,10 +46,12 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 							data: scores.map(({ score }) => score),
 						},
 					],
-				}}
+					}
+				}
 				width={containerWidth}
 				height={200} // Completely arbitrary
 				transparent={true}
+				withDots={false}
 				yAxisSuffix=" pts"
 				chartConfig={{
 					decimalPlaces: 0,
@@ -63,13 +63,13 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 					},
 				}}
 				bezier
-				style={{
-					margin: 3,
-					shadowColor: theme.colors.primary[400],
-					shadowOpacity: 1,
-					shadowRadius: 20,
-					borderRadius: CardBorderRadius,
-				}}
+				// style={{
+				// 	margin: 3,
+				// 	shadowColor: theme.colors.primary[400],
+				// 	shadowOpacity: 1,
+				// 	shadowRadius: 20,
+				// 	borderRadius: CardBorderRadius,
+				// }}
 			/>
 		</Box>
 	);
