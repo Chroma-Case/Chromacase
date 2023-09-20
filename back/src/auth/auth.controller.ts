@@ -77,7 +77,6 @@ export class AuthController {
 	}
 
 	@Post('register')
-	@HttpCode(200)
 	@ApiOperation({description: 'Register a new user'})
 	@ApiConflictResponse({ description: 'Username or email already taken' })
 	@ApiOkResponse({ description: 'Successfully registered, email sent to verify' })
@@ -98,6 +97,7 @@ export class AuthController {
 	}
 
 	@Put('verify')
+	@HttpCode(200)
 	@UseGuards(JwtAuthGuard)
 	@ApiOperation({description: 'Verify the email of the user'})
 	@ApiOkResponse({ description: 'Successfully verified' })
