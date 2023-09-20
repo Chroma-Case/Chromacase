@@ -9,7 +9,6 @@ export const Metronome = ({ paused = false, bpm }: { paused?: boolean; bpm: numb
 	useEffect(() => {
 		if (paused) return;
 		const int = setInterval(() => {
-			console.log(enabled.current, volume.current);
 			if (!enabled.current) return;
 			if (!ref.current) ref.current = new Audio('/assets/metronome.mp3');
 			ref.current.volume = volume.current / 100;

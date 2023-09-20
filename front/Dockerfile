@@ -24,5 +24,3 @@ FROM nginx:1.21-alpine
 COPY --from=build /app/web-build /usr/share/nginx/html
 COPY ./assets/ /usr/share/nginx/html/assets/
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
-
-CMD nginx -g 'daemon off;'
