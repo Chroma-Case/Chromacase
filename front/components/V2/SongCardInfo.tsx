@@ -1,7 +1,7 @@
 import Song from '../../models/Song';
 import React from 'react';
 import { Image, View } from 'react-native';
-import { Pressable, Text, PresenceTransition, Icon, Button } from 'native-base';
+import { Pressable, Text, PresenceTransition, Icon } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
 type SongCardInfoProps = {

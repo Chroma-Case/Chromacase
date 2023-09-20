@@ -5,6 +5,7 @@ type HomeMainSongCardProps = {
 	image: string;
 	title: string;
 	artist: string;
+	fontSize: number;
 	onPress: () => void;
 };
 
@@ -61,7 +62,7 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 							<Text
 								style={{
 									color: 'white',
-									fontSize: 46,
+									fontSize: props.fontSize,
 									fontWeight: 'bold',
 								}}
 								selectable={false}
@@ -71,7 +72,7 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 							<Text
 								style={{
 									color: 'white',
-									fontSize: 16,
+									fontSize: props.fontSize * 0.4,
 									fontWeight: 'bold',
 									textAlign: 'center',
 								}}
@@ -89,6 +90,7 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 
 HomeMainSongCard.defaultProps = {
 	onPress: () => {},
+	fontSize: 16,
 };
 
 export default HomeMainSongCard;
