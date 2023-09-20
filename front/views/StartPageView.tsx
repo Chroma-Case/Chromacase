@@ -178,6 +178,25 @@ const StartPageView = () => {
 						</Link>
 					</Box>
 				</Box>
+				<Box
+					style={{
+						width: '90%',
+						marginTop: 20,
+					}}
+				>
+					<Box
+						style={{
+							width: '100%',
+							height: '100%',
+							display: 'flex',
+							alignItems: 'center',
+						}}
+					>
+						<Link href="/forgot_password">
+							I forgot my password
+						</Link>
+					</Box>
+				</Box>
 			</Column>
 		</View>
 	);

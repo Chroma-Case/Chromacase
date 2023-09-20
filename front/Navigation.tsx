@@ -33,6 +33,8 @@ import VerifiedView from './views/VerifiedView';
 import SigninView from './views/SigninView';
 import SignupView from './views/SignupView';
 import TabNavigation from './components/V2/TabNavigation';
+import PasswordResetView from './views/PasswordResetView';
+import ForgotPasswordView from './views/ForgotPasswordView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -123,6 +125,17 @@ const publicRoutes = () =>
 			options: { title: 'Google signin', headerShown: false },
 			link: '/logged/google',
 		},
+		PasswordReset: {
+			component: PasswordResetView,
+			options: { title: 'Password reset form', headerShown: false },
+			link: '/password_reset',
+		},
+		ForgotPassword: {
+			component: ForgotPasswordView,
+			options: { title: 'Password reset form', headerShown: false },
+			link: '/forgot_password',
+		
+		}
 	} as const);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
