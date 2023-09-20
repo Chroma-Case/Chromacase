@@ -90,7 +90,7 @@ const StartPageView = () => {
 					image={loginBanner?.at(0)?.uri}
 					iconName="user"
 					iconProvider={FontAwesome5}
-					onPress={() => navigation.navigate('Login', {})}
+					onPress={() => navigation.navigate('Login')}
 					style={{
 						width: isSmallScreen ? '90%' : 'clamp(100px, 33.3%, 600px)',
 						height: '300px',
@@ -130,7 +130,7 @@ const StartPageView = () => {
 					subtitle="Create an account to save your progress"
 					iconProvider={FontAwesome5}
 					iconName="user-plus"
-					onPress={() => navigation.navigate('Signup', {})}
+					onPress={() => navigation.navigate('Signup')}
 					style={{
 						height: '150px',
 						width: isSmallScreen ? '90%' : 'clamp(150px, 50%, 600px)',

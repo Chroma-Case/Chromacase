@@ -7,7 +7,6 @@ import LessonHistory from './models/LessonHistory';
 import Song, { SongHandler } from './models/Song';
 import { SongHistoryHandler, SongHistoryItem, SongHistoryItemHandler } from './models/SongHistory';
 import User, { UserHandler } from './models/User';
-import Constants from 'expo-constants';
 import store from './state/Store';
 import { Platform } from 'react-native';
 import { en } from './i18n/Translations';
@@ -68,7 +67,7 @@ export default class API {
 	public static readonly baseUrl =
 		process.env.NODE_ENV != 'development' && Platform.OS === 'web'
 			? '/api'
-			: Constants.manifest?.extra?.apiUrl;
+			: 'https://nightly.chroma.octohub.app/api';
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>

@@ -99,13 +99,13 @@ function TabNavigator({
 
 	return (
 		<NavigationContent>
-			<Row height={'100%'}>
+			<Row width={'100%'} height={'fit-content'}>
 				{(!isMobileView || isPanelView) && (
 					<View
 						style={[
 							{
 								display: 'flex',
-								flexDirection: 'column',
+								flexDirection: 'row',
 								justifyContent: 'flex-start',
 								borderRightWidth: 1,
 								borderRightColor: 'lightgray',

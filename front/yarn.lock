@@ -2468,6 +2468,11 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@nyashanziramasanga/react-native-horizontal-scroll-menu@^1.0.11":
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/@nyashanziramasanga/react-native-horizontal-scroll-menu/-/react-native-horizontal-scroll-menu-1.0.11.tgz#e57c479a1a549034f49a23cc20710bb47ce48fed"
+  integrity sha512-5pqEpG9cqRoOZk6o8cGQN4PHbn1ceLpQvxBdY4dFAgffD8DHvSb9pS9MlmhAI0stvMWgacfef9fghcmjGYC4cg==
+
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.10"
   resolved "https://registry.yarnpkg.com/@pmmmwh/react-refresh-webpack-plugin/-/react-refresh-webpack-plugin-0.5.10.tgz#2eba163b8e7dbabb4ce3609ab5e32ab63dda3ef8"
@@ -9118,10 +9123,10 @@ expo-keep-awake@~11.0.1:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-11.0.1.tgz#ee354465892a94040ffe09901b85b469e7d54fb3"
   integrity sha512-44ZjgLE4lnce2d40Pv8xsjMVc6R5GvgHOwZfkLYtGmgYG9TYrEJeEj5UfSeweXPL3pBFhXKfFU8xpGYMaHdP0A==
 
-expo-linear-gradient@^12.3.0:
-  version "12.3.0"
-  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-12.3.0.tgz#7abd8fedbf0138c86805aebbdfbbf5e5fa865f19"
-  integrity sha512-f9e+Oxe5z7fNQarTBZXilMyswlkbYWQHONVfq8MqmiEnW3h9XsxxmVJLG8uVQSQPUsbW+x1UUT/tnU6mkMWeLg==
+expo-linear-gradient@~12.0.1:
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-12.0.1.tgz#452f793b0463ddf313aad431552f23acc85f5d64"
+  integrity sha512-TMl/wBTVQOliL4S3DS5Aa3UFfVySr0mdJEHLG6kfBdMCLkr+tfLI2rGyJ+scS7xgMsvhTIaurhf1+Z0sL3aLCg==
 
 expo-linking@~3.3.1:
   version "3.3.1"
@@ -10763,6 +10768,13 @@ i18next@^21.8.16:
   integrity sha512-YeuIBmFsGjUfO3qBmMOc0rQaun4mIpGKET5WDwvu8lU7gvwpcariZLNtL0Fzj+zazcHUrlXHiptcFhBMFaxzfg==
   dependencies:
     "@babel/runtime" "^7.17.2"
+
+iconsax-react-native@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/iconsax-react-native/-/iconsax-react-native-0.0.8.tgz#7e80737c98acc63fbb3c327fcb48b1d9095b84c1"
+  integrity sha512-iEQku/mu5Tuq5hBdEtQ3nhQJ0iPSmJj1lUu8PibSD9kPgIesA/gPCqU0U29l78l+LOUMgus8eTJZ0+1LJxUo3Q==
+  dependencies:
+    prop-types "^15.7.2"
 
 iconv-lite@0.4.24:
   version "0.4.24"
@@ -15831,6 +15843,13 @@ react-native-svg@^13.10.0:
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"
+
+react-native-tab-view@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-3.5.2.tgz#2789b8af6148b16835869566bf13dc3b0e6c1b46"
+  integrity sha512-nE5WqjbeEPsWQx4mtz81QGVvgHRhujTNIIZiMCx3Bj6CBFDafbk7XZp9ocmtzXUQaZ4bhtVS43R4FIiR4LboJw==
+  dependencies:
+    use-latest-callback "^0.1.5"
 
 react-native-testing-library@^6.0.0:
   version "6.0.0"

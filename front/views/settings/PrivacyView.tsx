@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Heading } from 'native-base';
+import { Flex } from 'native-base';
 import { translate } from '../../i18n/i18n';
 import ElementList from '../../components/GtkUI/ElementList';
 import { useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { RootState, useSelector } from '../../state/Store';
 import { updateSettings } from '../../state/SettingsSlice';
 import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';
+import { Driver, Like1, Shop } from 'iconsax-react-native';
 
 const PrivacyView = () => {
 	const dispatch = useDispatch();
@@ -17,9 +18,13 @@ const PrivacyView = () => {
 		return <LoadingView />;
 	}
 	return (
-		<Center style={{ flex: 1 }}>
-			<Heading style={{ textAlign: 'center' }}>{translate('privBtn')}</Heading>
-
+		<Flex
+			style={{
+				flex: 1,
+				alignItems: 'center',
+				paddingTop: 32,
+			}}
+		>
 			<ElementList
 				style={{
 					marginTop: 20,
@@ -29,7 +34,10 @@ const PrivacyView = () => {
 				elements={[
 					{
 						type: 'toggle',
+						icon: <Driver size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('dataCollection'),
+						description:
+							"Acceptez-vous la récupération de vos données pour l'amélioration de Chromacase ?",
 						data: {
 							value: settings.dataCollection,
 							onToggle: () =>
@@ -40,7 +48,9 @@ const PrivacyView = () => {
 					},
 					{
 						type: 'toggle',
+						icon: <Shop size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('customAds'),
+						description: 'Afficher les suggestions dans la section des recommandations',
 						data: {
 							value: settings.customAds,
 							onToggle: () =>
@@ -49,7 +59,9 @@ const PrivacyView = () => {
 					},
 					{
 						type: 'toggle',
+						icon: <Like1 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('recommendations'),
+						description: 'Souhaitez-vous recevoir nos conseils et recommandations ?',
 						data: {
 							value: userSettings.data.recommendations,
 							onToggle: () =>
@@ -60,7 +72,7 @@ const PrivacyView = () => {
 					},
 				]}
 			/>
-		</Center>
+		</Flex>
 	);
 };
 
