@@ -6,9 +6,15 @@ import API from '../API';
 export const UserValidator = yup
 	.object({
 		username: yup.string().required(),
-		password: yup.string().required().nullable(),
+		password: yup
+			.string()
+			.nullable()
+			.transform((value) => (value === '' ? null : value)),
 		emailVerified: yup.boolean().required(),
-		email: yup.string().required().nullable(),
+		email: yup
+			.string()
+			.nullable()
+			.transform((value) => (value === '' ? null : value)),
 		googleID: yup.string().required().nullable(),
 		isGuest: yup.boolean().required(),
 		partyPlayed: yup.number().required(),
@@ -19,6 +25,7 @@ export const UserHandler: ResponseHandler<yup.InferType<typeof UserValidator>, U
 	validator: UserValidator,
 	transformer: (value) => ({
 		...value,
+		email: value.email ?? null,
 		name: value.username,
 		premium: false,
 		data: {
