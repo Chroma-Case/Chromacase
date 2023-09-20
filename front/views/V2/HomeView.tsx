@@ -6,7 +6,6 @@ import HomeMainSongCard from '../../components/V2/HomeMainSongCard';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
 import { useNavigation } from '../../Navigation';
-import Song from '../../models/Song';
 
 const bigSideRatio = 1000;
 const smallSideRatio = 618;
@@ -19,7 +18,7 @@ type HomeCardProps = {
 	onPress?: () => void;
 };
 
-let cards = [
+const cards = [
 	{
 		image: 'https://media.discordapp.net/attachments/717080637038788731/1153688155292180560/image_homeview1.png',
 		title: 'Beethoven',
