@@ -19,6 +19,7 @@ services:
       - .env
     volumes:
       - ./assets:/assets
+      - ./data:/data
   scorometer:
     build: ./scorometer
     ports:
@@ -44,11 +45,7 @@ services:
       retries: 5
 
   front:
-    build:
-      context: ./front
-      args:
-        - API_URL=${API_URL}
-        - SCORO_URL=${SCORO_URL}
+    build: ./front
     environment:
       - API_URL=http://back:3000/
       - SCOROMETER_URL=http://scorometer:6543/

@@ -11,7 +11,6 @@ import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
 import { Translate, translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
-import AuthenticationView from './views/AuthenticationView';
 import StartPageView from './views/StartPageView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
@@ -28,6 +27,12 @@ import { Button, Center, VStack } from 'native-base';
 import { unsetAccessToken } from './state/UserSlice';
 import TextButton from './components/TextButton';
 import ErrorView from './views/ErrorView';
+import GenreDetailsView from './views/GenreDetailsView';
+import GoogleView from './views/GoogleView';
+import VerifiedView from './views/VerifiedView';
+import SigninView from './views/SigninView';
+import SignupView from './views/SignupView';
+import TabNavigation from './components/V2/TabNavigation';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -38,6 +43,11 @@ const protectedRoutes = () =>
 			component: HomeView,
 			options: { title: translate('welcome'), headerLeft: null },
 			link: '/',
+		},
+		HomeNew: {
+			component: TabNavigation,
+			options: { headerShown: false },
+			link: '/V2',
 		},
 		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
 		Settings: {
@@ -58,6 +68,11 @@ const protectedRoutes = () =>
 			options: { title: translate('artistFilter') },
 			link: '/artist/:artistId',
 		},
+		Genre: {
+			component: GenreDetailsView,
+			options: { title: translate('genreFilter') },
+			link: '/genre/:genreId',
+		},
 		Score: {
 			component: ScoreView,
 			options: { title: translate('score'), headerLeft: null },
@@ -74,6 +89,11 @@ const protectedRoutes = () =>
 			link: undefined,
 		},
 		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
+		Verified: {
+			component: VerifiedView,
+			options: { title: 'Verify email', headerShown: false },
+			link: '/verify',
+		},
 	} as const);
 
 const publicRoutes = () =>
@@ -84,21 +104,24 @@ const publicRoutes = () =>
 			link: '/',
 		},
 		Login: {
-			component: (params: RouteProps<{}>) =>
-				AuthenticationView({ isSignup: false, ...params }),
-			options: { title: translate('signInBtn') },
+			component: SigninView,
+			options: { title: translate('signInBtn'), headerShown: false },
 			link: '/login',
 		},
 		Signup: {
-			component: (params: RouteProps<{}>) =>
-				AuthenticationView({ isSignup: true, ...params }),
-			options: { title: translate('signUpBtn') },
+			component: SignupView,
+			options: { title: translate('signUpBtn'), headerShown: false },
 			link: '/signup',
 		},
 		Oops: {
 			component: ProfileErrorView,
 			options: { title: 'Oops', headerShown: false },
 			link: undefined,
+		},
+		Google: {
+			component: GoogleView,
+			options: { title: 'Google signin', headerShown: false },
+			link: '/logged/google',
 		},
 	} as const);
 

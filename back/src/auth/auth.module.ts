@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { SettingsModule } from 'src/settings/settings.module';
+import { GoogleStrategy } from './google.strategy';
 
 @Module({
 	imports: [
@@ -20,12 +21,12 @@ import { SettingsModule } from 'src/settings/settings.module';
 			imports: [ConfigModule],
 			useFactory: async (configService: ConfigService) => ({
 				secret: configService.get('JWT_SECRET'),
-				signOptions: { expiresIn: '1h' },
+				signOptions: { expiresIn: '365d' },
 			}),
 			inject: [ConfigService],
 		}),
 	],
-	providers: [AuthService, LocalStrategy, JwtStrategy],
+	providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
 	controllers: [AuthController],
 })
 export class AuthModule {}

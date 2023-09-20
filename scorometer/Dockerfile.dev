@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.10-alpine
 RUN wget -q -O /tmp/websocketd.zip \
     https://github.com/joewalnes/websocketd/releases/download/v0.4.1/websocketd-0.4.1-linux_amd64.zip \
     && unzip /tmp/websocketd.zip -d /tmp/websocketd && mv /tmp/websocketd/websocketd /usr/bin \

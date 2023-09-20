@@ -4,6 +4,12 @@ generator client {
     provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+    provider = "prisma-class-generator"
+    dryRun   = false
+    separateRelationFields = true
+}
+
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
@@ -12,8 +18,10 @@ datasource db {
 model User {
     id            Int             @id @default(autoincrement())
     username      String          @unique
-    password      String
+    password      String?
     email         String
+    emailVerified Boolean         @default(false)
+    googleID      String?         @unique
     isGuest       Boolean         @default(false)
     partyPlayed   Int             @default(0)
     LessonHistory LessonHistory[]

@@ -1,49 +1,58 @@
-import { VStack, Image, Heading, IconButton, Icon, Container } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native';
+import { Box, Heading, useBreakpointValue, ScrollView } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import API from '../API';
-import { useNavigation } from '../Navigation';
-
-const handleFavorite = () => {};
+import Song from '../models/Song';
+import SongRow from '../components/SongRow';
+import { Key } from 'react';
+import { RouteProps, useNavigation } from '../Navigation';
+import { ImageBackground } from 'react-native';
 
 type ArtistDetailsViewProps = {
 	artistId: number;
 };
 
-const ArtistDetailsView = ({ artistId }: ArtistDetailsViewProps) => {
+const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => {
+	const artistQuery = useQuery(API.getArtist(artistId));
+	const songsQuery = useQuery(API.getSongsByArtist(artistId));
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isMobileView = screenSize == 'small';
 	const navigation = useNavigation();
-	const { isLoading, data: artistData, isError } = useQuery(API.getArtist(artistId));
 
-	if (isLoading) {
+	if (artistQuery.isError || songsQuery.isError) {
+		navigation.navigate('Error');
+		return <></>;
+	}
+	if (!artistQuery.data || songsQuery.data === undefined) {
 		return <LoadingView />;
 	}
 
-	if (isError) {
-		navigation.navigate('Error');
-	}
-
 	return (
-		<SafeAreaView>
-			<Container m={3}>
-				<Image
-					source={{ uri: 'https://picsum.photos/200' }}
-					alt={artistData?.name}
-					size={20}
-					borderRadius="full"
-				/>
-				<VStack space={3}>
-					<Heading>{artistData?.name}</Heading>
-					<IconButton
-						icon={<Icon as={Ionicons} name="heart" size={6} color="red.500" />}
-						onPress={() => handleFavorite()}
-						variant="unstyled"
-						_pressed={{ opacity: 0.6 }}
-					/>
-				</VStack>
-			</Container>
-		</SafeAreaView>
+		<ScrollView>
+			<ImageBackground
+				style={{ width: '100%', height: isMobileView ? 200 : 300 }}
+				source={{ uri: API.getArtistIllustration(artistQuery.data.id) }}
+			></ImageBackground>
+			<Box>
+				<Heading mt={-20} ml={3} fontSize={50}>
+					{artistQuery.data.name}
+				</Heading>
+				<ScrollView mt={3}>
+					<Box>
+						{songsQuery.data.map((comp: Song, index: Key | null | undefined) => (
+							<SongRow
+								key={index}
+								song={comp}
+								onPress={() => {
+									API.createSearchHistoryEntry(comp.name, 'song');
+									navigation.navigate('Song', { songId: comp.id });
+								}}
+							/>
+						))}
+					</Box>
+				</ScrollView>
+			</Box>
+		</ScrollView>
 	);
 };
 

@@ -7,6 +7,7 @@ export const en = {
 	signOutBtn: 'Sign out',
 	signInBtn: 'Sign in',
 	signUpBtn: 'Sign up',
+	continuewithgoogle: 'Continue with Google',
 	changeLanguageBtn: 'Change language',
 	search: 'Search',
 	login: 'Login',
@@ -42,6 +43,7 @@ export const en = {
 	artistFilter: 'Artists',
 	songsFilter: 'Songs',
 	genreFilter: 'Genres',
+	favoriteFilter: 'Favorites',
 
 	// profile page
 	user: 'Profile',
@@ -179,6 +181,9 @@ export const en = {
 
 	recentSearches: 'Recent searches',
 	noRecentSearches: 'No recent searches',
+	avatar: 'Avatar',
+	changeIt: 'Change It',
+	verified: 'Verified',
 };
 
 export const fr: typeof en = {
@@ -189,6 +194,7 @@ export const fr: typeof en = {
 	welcomeMessage: 'Re-Bonjour ',
 	signOutBtn: 'Se déconnecter',
 	signInBtn: 'Se connecter',
+	continuewithgoogle: 'Continuer avec Google',
 	changeLanguageBtn: 'Changer la langue',
 	searchBtn: 'Rechercher',
 	playBtn: 'Jouer',
@@ -227,6 +233,7 @@ export const fr: typeof en = {
 	artistFilter: 'Artistes',
 	songsFilter: 'Morceaux',
 	genreFilter: 'Genres',
+	favoriteFilter: 'Favoris',
 
 	// Difficulty settings
 	diffBtn: 'Difficulté',
@@ -360,6 +367,9 @@ export const fr: typeof en = {
 
 	recentSearches: 'Recherches récentes',
 	noRecentSearches: 'Aucune recherche récente',
+	avatar: 'Avatar',
+	changeIt: 'Modifier',
+	verified: 'Verifié',
 };
 
 export const sp: typeof en = {
@@ -422,6 +432,7 @@ export const sp: typeof en = {
 	artistFilter: 'Artistas',
 	songsFilter: 'canciones',
 	genreFilter: 'géneros',
+	favoriteFilter: 'Favorites',
 
 	// Difficulty settings
 	diffBtn: 'Dificultad',
@@ -545,4 +556,9 @@ export const sp: typeof en = {
 
 	recentSearches: 'Búsquedas recientes',
 	noRecentSearches: 'No hay búsquedas recientes',
+	continuewithgoogle: 'Continuar con Google',
+
+	avatar: 'Avatar',
+	changeIt: 'Cambialo',
+	verified: 'Verified',
 };

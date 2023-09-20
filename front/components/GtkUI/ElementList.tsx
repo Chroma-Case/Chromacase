@@ -1,9 +1,7 @@
 import React from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import { Element } from './Element';
-import useColorScheme from '../../hooks/colorScheme';
 import { ElementProps } from './ElementTypes';
-
 import { Box, Column, Divider } from 'native-base';
 
 type ElementListProps = {
@@ -12,13 +10,12 @@ type ElementListProps = {
 };
 
 const ElementList = ({ elements, style }: ElementListProps) => {
-	const colorScheme = useColorScheme();
-	const isDark = colorScheme === 'dark';
 	const elementStyle = {
 		borderRadius: 10,
-		boxShadow: isDark
-			? '0px 0px 3px 0px rgba(255,255,255,0.6)'
-			: '0px 0px 3px 0px rgba(0,0,0,0.4)',
+		shadowOpacity: 0.3,
+		shadowRadius: 4.65,
+		elevation: 8,
+		backgroundColor: 'transparent',
 		overflow: 'hidden',
 	} as const;
 
@@ -27,7 +24,7 @@ const ElementList = ({ elements, style }: ElementListProps) => {
 			{elements.map((element, index) => (
 				<Box key={element.title}>
 					<Element {...element} />
-					{index < elements.length - 1 && <Divider />}
+					{index < elements.length - 1 && <Divider bg="transparent" thickness="2" />}
 				</Box>
 			))}
 		</Column>

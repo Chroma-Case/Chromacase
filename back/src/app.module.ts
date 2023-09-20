@@ -14,6 +14,7 @@ import { ArtistModule } from './artist/artist.module';
 import { AlbumModule } from './album/album.module';
 import { SearchModule } from './search/search.module';
 import { HistoryModule } from './history/history.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 
 @Module({
 	imports: [
@@ -28,6 +29,12 @@ import { HistoryModule } from './history/history.module';
 		SearchModule,
 		SettingsModule,
 		HistoryModule,
+		MailerModule.forRoot({
+			transport: process.env.SMTP_TRANSPORT,
+			defaults: {
+				from: process.env.MAIL_AUTHOR,
+			},
+		}),
 	],
 	controllers: [AppController],
 	providers: [AppService, PrismaService, ArtistService],

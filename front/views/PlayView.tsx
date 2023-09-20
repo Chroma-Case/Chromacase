@@ -1,5 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { useEffect, useRef, useState } from 'react';
+import { StackActions } from '@react-navigation/native';
+import React, { useEffect, useRef, useState, createContext, useReducer } from 'react';
 import { SafeAreaView, Platform, Animated } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {
@@ -15,24 +16,24 @@ import {
 	HStack,
 } from 'native-base';
 import IconButton from '../components/IconButton';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { RouteProps, useNavigation } from '../Navigation';
 import { transformQuery, useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import Constants from 'expo-constants';
-import VirtualPiano from '../components/VirtualPiano/VirtualPiano';
-import { strToKey, keyToStr, Note } from '../models/Piano';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import PartitionView from '../components/PartitionView';
+import PartitionCoord from '../components/PartitionCoord';
 import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
-import { URL } from 'url';
+import url from 'url';
+import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
+import { Metronome } from '../components/Metronome';
 
 type PlayViewProps = {
 	songId: number;
@@ -48,9 +49,9 @@ type ScoreMessage = {
 let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
 
 if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
-	Linking.getInitialURL().then((url) => {
-		if (url !== null) {
-			const location = new URL(url);
+	Linking.getInitialURL().then((initUrl) => {
+		if (initUrl !== null) {
+			const location = url.parse(initUrl);
 			if (location.protocol === 'https:') {
 				scoroBaseApiUrl = 'wss://' + location.host + '/ws';
 			} else {
@@ -69,6 +70,13 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
+//create a context with an array of number
+export const PianoCC = createContext<PianoCanvasContext>({
+	pressedKeys: new Map(),
+	timestamp: 0,
+	messages: [],
+});
+
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -76,9 +84,9 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const toast = useToast();
 	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
+	const bpm = useRef<number>(60);
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
-	const [isVirtualPianoVisible, setVirtualPianoVisible] = useState<boolean>(false);
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
@@ -89,6 +97,15 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	);
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
+	// first number is the note, the other is the time when pressed on release the key is removed
+	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
+	const [pianoMsgs, setPianoMsgs] = useReducer(
+		(state: PianoCanvasMsg[], action: PianoCanvasMsg) => {
+			state.push(action);
+			return state;
+		},
+		[]
+	);
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -117,6 +134,12 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		);
 	};
 	const onEnd = () => {
+		stopwatch.stop();
+		if (webSocket.current?.readyState != WebSocket.OPEN) {
+			console.warn('onEnd: Websocket not open');
+			navigation.dispatch(StackActions.replace('Home'));
+			return;
+		}
 		webSocket.current?.send(
 			JSON.stringify({
 				type: 'end',
@@ -126,13 +149,13 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 	const onMIDISuccess = (access: MIDIAccess) => {
 		const inputs = access.inputs;
+		let endMsgReceived = false; // Used to know if to go to error screen when websocket closes
 
 		if (inputs.size < 2) {
 			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
 		}
 		setMidiKeyboardFound(true);
-		let inputIndex = 0;
 		webSocket.current = new WebSocket(scoroBaseApiUrl);
 		webSocket.current.onopen = () => {
 			webSocket.current!.send(
@@ -144,15 +167,38 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				})
 			);
 		};
+		webSocket.current.onclose = () => {
+			console.log('Websocket closed', endMsgReceived);
+			if (!endMsgReceived) {
+				toast.show({ description: 'Connection lost with Scorometer' });
+				// the special case when the front send the end message succesfully
+				// but the websocket is closed before the end message is received
+				// is not handled
+				return;
+			}
+		};
 		webSocket.current.onmessage = (message) => {
 			try {
 				const data = JSON.parse(message.data);
 				if (data.type == 'end') {
-					navigation.navigate('Score', { songId: song.data!.id, ...data });
+					endMsgReceived = true;
+					webSocket.current?.close();
+					navigation.dispatch(
+						StackActions.replace('Score', { songId: song.data!.id, ...data })
+					);
 					return;
 				}
+
+				const currentStreak = data.info.current_streak;
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
+
+				if (currentStreak !== undefined && points !== undefined) {
+					setPianoMsgs({
+						type: 'scoreInfo',
+						data: { streak: currentStreak, score: points },
+					});
+				}
 
 				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
@@ -161,25 +207,45 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 				if (data.type == 'miss') {
 					formattedMessage = translate('missed');
+					setPianoMsgs({
+						type: 'noteTiming',
+						data: NoteTiming.Missed,
+					});
 					messageColor = 'black';
 				} else if (data.type == 'timing' || data.type == 'duration') {
 					formattedMessage = translate(data[data.type]);
 					switch (data[data.type]) {
 						case 'perfect':
 							messageColor = 'green';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Perfect,
+							});
 							break;
 						case 'great':
 							messageColor = 'blue';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Great,
+							});
 							break;
 						case 'short':
 						case 'long':
 						case 'good':
 							messageColor = 'lightBlue';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Good,
+							});
 							break;
 						case 'too short':
 						case 'too long':
 						case 'wrong':
 							messageColor = 'trueGray';
+							setPianoMsgs({
+								type: 'noteTiming',
+								data: NoteTiming.Wrong,
+							});
 							break;
 						default:
 							break;
@@ -191,23 +257,30 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			}
 		};
 		inputs.forEach((input) => {
-			if (inputIndex != 0) {
-				return;
-			}
 			input.onmidimessage = (message) => {
-				const { command } = parseMidiMessage(message);
+				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
-				const keyCode = message.data[1];
+				if (keyIsPressed) {
+					setPressedKeys((prev) => {
+						prev.set(note, getElapsedTime());
+						return prev;
+					});
+				} else {
+					setPressedKeys((prev) => {
+						prev.delete(note);
+						return prev;
+					});
+				}
+
 				webSocket.current?.send(
 					JSON.stringify({
 						type: keyIsPressed ? 'note_on' : 'note_off',
-						note: keyCode,
+						note: note,
 						id: song.data!.id,
 						time: getElapsedTime(),
 					})
 				);
 			};
-			inputIndex++;
 		});
 	};
 	const onMIDIFailure = () => {
@@ -222,7 +295,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
-			onEnd();
+			stopwatch.stop();
 			clearInterval(interval);
 		};
 	}, []);
@@ -268,50 +341,27 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				</Animated.View>
 			</HStack>
 			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				<PartitionView
-					file={musixml.data}
-					onPartitionReady={() => setPartitionRendered(true)}
-					timestamp={Math.max(0, time)}
-					onEndReached={() => {
-						onEnd();
+				<PianoCC.Provider
+					value={{
+						pressedKeys: pressedKeys,
+						timestamp: time,
+						messages: pianoMsgs,
 					}}
-				/>
+				>
+					<PartitionCoord
+						file={musixml.data}
+						bpmRef={bpm}
+						onEndReached={onEnd}
+						onPause={onPause}
+						onResume={onResume}
+						onPartitionReady={() => setPartitionRendered(true)}
+					/>
+				</PianoCC.Provider>
 				{!partitionRendered && <LoadingComponent />}
 			</View>
 
-			{isVirtualPianoVisible && (
-				<Column
-					style={{
-						display: 'flex',
-						justifyContent: 'flex-end',
-						alignItems: 'center',
-						height: '20%',
-						width: '100%',
-					}}
-				>
-					<VirtualPiano
-						onNoteDown={(note) => {
-							console.log('On note down', keyToStr(note));
-						}}
-						onNoteUp={(note) => {
-							console.log('On note up', keyToStr(note));
-						}}
-						showOctaveNumbers={true}
-						startNote={Note.C}
-						endNote={Note.B}
-						startOctave={2}
-						endOctave={5}
-						style={{
-							width: '80%',
-							height: '100%',
-						}}
-						highlightedNotes={[
-							{ key: strToKey('D3') },
-							{ key: strToKey('A#'), bgColor: '#00FF00' },
-						]}
-					/>
-				</Column>
-			)}
+			<Metronome paused={paused} bpm={bpm.current} />
+
 			<Box
 				shadow={4}
 				style={{
@@ -353,20 +403,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 										} else {
 											onPause();
 										}
-									}}
-								/>
-								<IconButton
-									size="sm"
-									colorScheme="coolGray"
-									variant="solid"
-									icon={
-										<Icon
-											as={MaterialCommunityIcons}
-											name={isVirtualPianoVisible ? 'piano-off' : 'piano'}
-										/>
-									}
-									onPress={() => {
-										setVirtualPianoVisible(!isVirtualPianoVisible);
 									}}
 								/>
 								<Text>

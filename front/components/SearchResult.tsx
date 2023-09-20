@@ -1,20 +1,16 @@
 import React, { useMemo } from 'react';
 import {
-	HStack,
 	VStack,
 	Heading,
 	Text,
-	Pressable,
 	Box,
 	Card,
-	Image,
 	Flex,
 	useBreakpointValue,
 	Column,
 	ScrollView,
 } from 'native-base';
-import { SafeAreaView, useColorScheme } from 'react-native';
-import { RootState, useSelector } from '../state/Store';
+import { SafeAreaView } from 'react-native';
 import { SearchContext } from '../views/SearchView';
 import { useQueries, useQuery } from '../Queries';
 import { translate } from '../i18n/i18n';
@@ -24,11 +20,11 @@ import ArtistCard from './ArtistCard';
 import GenreCard from './GenreCard';
 import SongCard from './SongCard';
 import CardGridCustom from './CardGridCustom';
-import TextButton from './TextButton';
 import SearchHistoryCard from './HistoryCard';
 import Song, { SongWithArtist } from '../models/Song';
 import { useNavigation } from '../Navigation';
 import Artist from '../models/Artist';
+import SongRow from '../components/SongRow';
 
 const swaToSongCardProps = (song: SongWithArtist) => ({
 	songId: song.id,
@@ -36,101 +32,6 @@ const swaToSongCardProps = (song: SongWithArtist) => ({
 	artistName: song.artist.name,
 	cover: song.cover ?? 'https://picsum.photos/200',
 });
-
-const RowCustom = (props: Parameters<typeof Box>[0] & { onPress?: () => void }) => {
-	const settings = useSelector((state: RootState) => state.settings.local);
-	const systemColorMode = useColorScheme();
-	const colorScheme = settings.colorScheme;
-
-	return (
-		<Pressable onPress={props.onPress}>
-			{({ isHovered, isPressed }) => (
-				<Box
-					{...props}
-					py={3}
-					my={1}
-					bg={
-						(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
-							? isHovered || isPressed
-								? 'gray.800'
-								: undefined
-							: isHovered || isPressed
-							? 'coolGray.200'
-							: undefined
-					}
-				>
-					{props.children}
-				</Box>
-			)}
-		</Pressable>
-	);
-};
-
-type SongRowProps = {
-	song: Song | SongWithArtist; // TODO: remove Song
-	onPress: () => void;
-};
-
-const SongRow = ({ song, onPress }: SongRowProps) => {
-	return (
-		<RowCustom width={'100%'}>
-			<HStack px={2} space={5} justifyContent={'space-between'}>
-				<Image
-					flexShrink={0}
-					flexGrow={0}
-					pl={10}
-					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-					source={{ uri: song.cover }}
-					alt={song.name}
-				/>
-				<HStack
-					style={{
-						display: 'flex',
-						flexShrink: 1,
-						flexGrow: 1,
-						alignItems: 'center',
-						justifyContent: 'flex-start',
-					}}
-					space={6}
-				>
-					<Text
-						style={{
-							flexShrink: 1,
-						}}
-						isTruncated
-						pl={10}
-						maxW={'100%'}
-						bold
-						fontSize="md"
-					>
-						{song.name}
-					</Text>
-					<Text
-						style={{
-							flexShrink: 0,
-						}}
-						fontSize={'sm'}
-					>
-						{song.artistId ?? 'artist'}
-					</Text>
-				</HStack>
-				<TextButton
-					flexShrink={0}
-					flexGrow={0}
-					translate={{ translationKey: 'playBtn' }}
-					colorScheme="primary"
-					variant={'outline'}
-					size="sm"
-					onPress={onPress}
-				/>
-			</HStack>
-		</RowCustom>
-	);
-};
-
-SongRow.defaultProps = {
-	onPress: () => {},
-};
 
 const HomeSearchComponent = () => {
 	const { updateStringQuery } = React.useContext(SearchContext);
@@ -252,15 +153,17 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 			</Text>
 			{artistData?.length ? (
 				<CardGridCustom
-					content={artistData.slice(0, props.maxItems ?? artistData.length).map((a) => ({
-						image: API.getArtistIllustration(a.id),
-						name: a.name,
-						id: a.id,
-						onPress: () => {
-							API.createSearchHistoryEntry(a.name, 'artist');
-							navigation.navigate('Artist', { artistId: a.id });
-						},
-					}))}
+					content={artistData
+						.slice(0, props.maxItems ?? artistData.length)
+						.map((artistData) => ({
+							image: API.getArtistIllustration(artistData.id),
+							name: artistData.name,
+							id: artistData.id,
+							onPress: () => {
+								API.createSearchHistoryEntry(artistData.name, 'artist');
+								navigation.navigate('Artist', { artistId: artistData.id });
+							},
+						}))}
 					cardComponent={ArtistCard}
 				/>
 			) : (
@@ -287,7 +190,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 						id: g.id,
 						onPress: () => {
 							API.createSearchHistoryEntry(g.name, 'genre');
-							navigation.navigate('Home');
+							navigation.navigate('Genre', { genreId: g.id });
 						},
 					}))}
 					cardComponent={GenreCard}

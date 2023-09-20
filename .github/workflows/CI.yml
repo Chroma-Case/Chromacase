@@ -42,7 +42,7 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-      
+
       - name: Type Check
         run: yarn tsc
       - name: Check Prettier
@@ -84,16 +84,7 @@ jobs:
           fetch-depth: 0
 
       - name: Copy env file to github secret env file
-        run: |
-          touch .env
-          echo "POSTGRES_USER=user" >> .env
-          echo "POSTGRES_PASSWORD=eip" >> .env
-          echo "POSTGRES_NAME=chromacase" >> .env
-          echo "POSTGRES_HOST=db" >> .env
-          echo "DATABASE_URL=postgresql://user:eip@db:5432/chromacase" >> .env
-          echo "JWT_SECRET=wow" >> .env
-          echo "POSTGRES_DB=chromacase" >> .env
-          echo "API_URL=http://localhost:80/api" >> .env
+        run: cp .env.example .env
 
       - name: Start the service
         run: docker-compose up -d back db
@@ -101,7 +92,8 @@ jobs:
       - name: Perform healthchecks
         run: |
           docker-compose ps -a
-          wget --retry-connrefused http://localhost:3000 # /healthcheck
+          docker-compose logs
+          wget --retry-connrefused http://localhost:3000 || (docker-compose logs && exit 1)
 
       - name: Run scorometer tests
         run: |

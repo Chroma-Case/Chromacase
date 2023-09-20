@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { PrismaService } from './prisma/prisma.service';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import {
 	CallHandler,
@@ -11,6 +10,8 @@ import {
 } from '@nestjs/common';
 import { RequestLogger, RequestLoggerOptions } from 'json-logger-service';
 import { tap } from 'rxjs';
+import { ValidationPipe } from '@nestjs/common';
+import { PrismaModel } from './_gen/prisma-class'
 
 @Injectable()
 export class AspectLogger implements NestInterceptor {
@@ -59,7 +60,7 @@ async function bootstrap() {
 		.setDescription('The chromacase API')
 		.setVersion('1.0')
 		.build();
-	const document = SwaggerModule.createDocument(app, config);
+	const document = SwaggerModule.createDocument(app, config, { extraModels: [...PrismaModel.extraModels]});
 	SwaggerModule.setup('api', app, document);
 
 	app.useGlobalPipes(new ValidationPipe());
