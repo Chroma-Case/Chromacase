@@ -102,7 +102,7 @@ class Scorometer:
 
 	def send(self, obj):
 		obj["info"] = self.info
-		obj["game_id"] = game_uuid
+		obj["game_id"] = str(game_uuid) if not testing else "test"
 		send(obj)
 
 	def getPracticePartition(self, mode: int) -> list[list[Key]]:
