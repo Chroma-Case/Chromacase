@@ -19,7 +19,6 @@ import {
 	HttpStatus,
 	ParseFilePipeBuilder,
 	Response,
-	Param,
 	Query,
 	Param,
 } from '@nestjs/common';
