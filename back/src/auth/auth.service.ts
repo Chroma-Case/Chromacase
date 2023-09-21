@@ -49,7 +49,7 @@ export class AuthService {
 			to: user.email,
 			from: 'chromacase@octohub.app',
 			subject: 'Mail verification for Chromacase',
-			html: `To verify your mail, please click on this <a href="{${process.env.PUBLIC_URL}/verify?token=${token}">link</a>.`,
+			html: `To verify your mail, please click on this <a href="${process.env.PUBLIC_URL}/verify?token=${token}">link</a>.`,
 		});
 	}
 
