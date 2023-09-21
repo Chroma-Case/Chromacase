@@ -19,6 +19,13 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 	const isMobileView = screenSize == 'small';
 	const navigation = useNavigation();
 
+	const favoritesQuery = useQuery(API.getLikedSongs());
+
+	const handleFavoriteButton = async (state: boolean, songId: number): Promise<void> => {
+		if (state == false) await API.removeLikedSong(songId);
+		else await API.addLikedSong(songId);
+	};
+
 	if (artistQuery.isError || songsQuery.isError) {
 		navigation.navigate('Error');
 		return <></>;
@@ -43,6 +50,12 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 							<SongRow
 								key={index}
 								song={comp}
+								isLiked={
+									!favoritesQuery.data?.find((query) => query?.songId == comp.id)
+								}
+								handleLike={(state: boolean, songId: number) =>
+									handleFavoriteButton(state, songId)
+								}
 								onPress={() => {
 									API.createSearchHistoryEntry(comp.name, 'song');
 									navigation.navigate('Song', { songId: comp.id });

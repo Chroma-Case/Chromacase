@@ -4,6 +4,7 @@ import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
 import Genre, { GenreHandler } from './models/Genre';
 import LessonHistory from './models/LessonHistory';
+import likedSong, { LikedSongHandler } from './models/LikedSong';
 import Song, { SongHandler } from './models/Song';
 import { SongHistoryHandler, SongHistoryItem, SongHistoryItemHandler } from './models/SongHistory';
 import User, { UserHandler } from './models/User';
@@ -668,5 +669,32 @@ export default class API {
 			method: 'POST',
 			formData,
 		});
+	}
+
+	public static async addLikedSong(songId: number): Promise<void> {
+		await API.fetch({
+			route: `/auth/me/likes/${songId}`,
+			method: 'POST',
+		});
+	}
+
+	public static async removeLikedSong(songId: number): Promise<void> {
+		await API.fetch({
+			route: `/auth/me/likes/${songId}`,
+			method: 'DELETE',
+		});
+	}
+
+	public static getLikedSongs(): Query<likedSong[]> {
+		return {
+			key: ['liked songs'],
+			exec: () =>
+				API.fetch(
+					{
+						route: '/auth/me/likes',
+					},
+					{ handler: ListHandler(LikedSongHandler) }
+				),
+		};
 	}
 }

@@ -19,6 +19,7 @@ import {
 	HttpStatus,
 	ParseFilePipeBuilder,
 	Response,
+	Param,
 	Query,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -251,5 +252,46 @@ export class AuthController {
 		});
 		if (!result) throw new NotFoundException();
 		return result;
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'Successfully added liked song'})
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Post('me/likes/:id')
+	addLikedSong(
+		@Request() req: any,
+		@Param('id') songId: number
+	) {
+		return this.usersService.addLikedSong(
+			+req.user.id,
+			+songId,
+		);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'Successfully removed liked song'})
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Delete('me/likes/:id')
+	removeLikedSong(
+		@Request() req: any,
+		@Param('id') songId: number,
+	) {
+		return this.usersService.removeLikedSong(
+			+req.user.id,
+			+songId,
+		);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'Successfully retrieved liked song'})
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Get('me/likes')
+	getLikedSongs(
+		@Request() req: any,
+	) {
+		return this.usersService.getLikedSongs(+req.user.id)
 	}
 }

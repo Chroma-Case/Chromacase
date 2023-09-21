@@ -10,18 +10,21 @@ import { SafeAreaView } from 'react-native';
 import { Filter } from '../components/SearchBar';
 import { ScrollView } from 'native-base';
 import { RouteProps } from '../Navigation';
+import LikedSong from '../models/LikedSong';
 
 interface SearchContextType {
-	filter: 'artist' | 'song' | 'genre' | 'all';
-	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all') => void;
+	filter: 'artist' | 'song' | 'genre' | 'all' | 'favorites';
+	updateFilter: (newData: 'artist' | 'song' | 'genre' | 'all' | 'favorites') => void;
 	stringQuery: string;
 	updateStringQuery: (newData: string) => void;
 	songData: Song[];
 	artistData: Artist[];
 	genreData: Genre[];
+	favoriteData: LikedSong[];
 	isLoadingSong: boolean;
 	isLoadingArtist: boolean;
 	isLoadingGenre: boolean;
+	isLoadingFavorite: boolean;
 }
 
 export const SearchContext = React.createContext<SearchContextType>({
@@ -32,9 +35,11 @@ export const SearchContext = React.createContext<SearchContextType>({
 	songData: [],
 	artistData: [],
 	genreData: [],
+	favoriteData: [],
 	isLoadingSong: false,
 	isLoadingArtist: false,
 	isLoadingGenre: false,
+	isLoadingFavorite: false,
 });
 
 type SearchViewProps = {
@@ -60,6 +65,11 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 		{ enabled: !!stringQuery }
 	);
 
+	const { isLoading: isLoadingFavorite, data: favoriteData = [] } = useQuery(
+		API.getLikedSongs(),
+		{ enabled: true }
+	);
+
 	const updateFilter = (newData: Filter) => {
 		// called when the filter is changed
 		setFilter(newData);
@@ -80,9 +90,11 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 						songData,
 						artistData,
 						genreData,
+						favoriteData,
 						isLoadingSong,
 						isLoadingArtist,
 						isLoadingGenre,
+						isLoadingFavorite,
 						updateFilter,
 						updateStringQuery,
 					}}

@@ -98,4 +98,36 @@ export class UsersService {
 		for (const [k, v] of resp.headers) resp.headers.set(k, v);
 		resp.body!.pipe(res);
 	}
+
+	async addLikedSong(
+		userId: number,
+		songId: number,
+	) {
+		return this.prisma.likedSongs.create(
+			{
+				data: { songId: songId, userId: userId }
+			}
+		)
+	}
+
+	async getLikedSongs(
+		userId: number,
+	) {
+		return this.prisma.likedSongs.findMany(
+			{
+				where: { userId: userId },
+			}
+		)
+	}
+
+	async removeLikedSong(
+		userId: number,
+		songId: number,
+	) {
+		return this.prisma.likedSongs.deleteMany(
+			{
+				where: { userId: userId, songId: songId },
+			}
+		)
+	}
 }
