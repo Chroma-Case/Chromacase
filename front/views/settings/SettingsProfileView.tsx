@@ -120,11 +120,9 @@ const ProfileSettings = () => {
 						data: {
 							value: true,
 							section: [
-								<ChangePasswordForm
-									key={'ChangePasswordForm'}
-									onSubmit={(oldPassword, newPassword) =>
-										handleChangePassword(oldPassword, newPassword)
-									}
+								<ChangeEmailForm
+									key={'ChangeEmailForm'}
+									onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}
 								/>,
 							],
 						},
@@ -138,9 +136,11 @@ const ProfileSettings = () => {
 						data: {
 							value: true,
 							section: [
-								<ChangeEmailForm
-									key={'ChangeEmailForm'}
-									onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}
+								<ChangePasswordForm
+									key={'ChangePasswordForm'}
+									onSubmit={(oldPassword, newPassword) =>
+										handleChangePassword(oldPassword, newPassword)
+									}
 								/>,
 							],
 						},
