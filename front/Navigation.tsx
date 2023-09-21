@@ -11,7 +11,6 @@ import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
 import { Translate, translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
-import AuthenticationView from './views/AuthenticationView';
 import StartPageView from './views/StartPageView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
@@ -31,6 +30,9 @@ import ErrorView from './views/ErrorView';
 import GenreDetailsView from './views/GenreDetailsView';
 import GoogleView from './views/GoogleView';
 import VerifiedView from './views/VerifiedView';
+import SigninView from './views/SigninView';
+import SignupView from './views/SignupView';
+import TabNavigation from './components/V2/TabNavigation';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -41,6 +43,11 @@ const protectedRoutes = () =>
 			component: HomeView,
 			options: { title: translate('welcome'), headerLeft: null },
 			link: '/',
+		},
+		HomeNew: {
+			component: TabNavigation,
+			options: { headerShown: false },
+			link: '/V2',
 		},
 		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
 		Settings: {
@@ -97,15 +104,13 @@ const publicRoutes = () =>
 			link: '/',
 		},
 		Login: {
-			component: (params: RouteProps<{}>) =>
-				AuthenticationView({ isSignup: false, ...params }),
-			options: { title: translate('signInBtn') },
+			component: SigninView,
+			options: { title: translate('signInBtn'), headerShown: false },
 			link: '/login',
 		},
 		Signup: {
-			component: (params: RouteProps<{}>) =>
-				AuthenticationView({ isSignup: true, ...params }),
-			options: { title: translate('signUpBtn') },
+			component: SignupView,
+			options: { title: translate('signUpBtn'), headerShown: false },
 			link: '/signup',
 		},
 		Oops: {

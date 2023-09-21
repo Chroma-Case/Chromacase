@@ -1,58 +1,30 @@
-import React, { useMemo } from 'react';
-import { Center, Text, Heading, Box } from 'native-base';
-import { translate } from '../../i18n/i18n';
-import createTabRowNavigator from '../../components/navigators/TabRowNavigator';
-import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-import ChangePasswordForm from '../../components/forms/changePasswordForm';
-import ChangeEmailForm from '../../components/forms/changeEmailForm';
+import React from 'react';
+import { Center, Text } from 'native-base';
 import ProfileSettings from './SettingsProfileView';
 import NotificationsView from './NotificationView';
 import PrivacyView from './PrivacyView';
 import PreferencesView from './PreferencesView';
-import GuestToUserView from './GuestToUserView';
-import { useQuery } from '../../Queries';
-import API from '../../API';
-import { RouteProps } from '../../Navigation';
-
-const handleChangeEmail = async (newEmail: string): Promise<string> => {
-	await API.updateUserEmail(newEmail);
-	return translate('emailUpdated');
-};
-
-const handleChangePassword = async (oldPassword: string, newPassword: string): Promise<string> => {
-	await API.updateUserPassword(oldPassword, newPassword);
-	return translate('passwordUpdated');
-};
-
-export const ChangePasswordView = () => {
-	return (
-		<Center style={{ flex: 1 }}>
-			<Heading paddingBottom={'2%'}>{translate('changePassword')}</Heading>
-			<ChangePasswordForm
-				onSubmit={(oldPassword, newPassword) =>
-					handleChangePassword(oldPassword, newPassword)
-				}
-			/>
-		</Center>
-	);
-};
-
-export const ChangeEmailView = () => {
-	return (
-		<Center style={{ flex: 1 }}>
-			<Heading paddingBottom={'2%'}>{translate('changeEmail')}</Heading>
-			<ChangeEmailForm onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)} />
-		</Center>
-	);
-};
-
-export const GoogleAccountView = () => {
-	return (
-		<Center style={{ flex: 1 }}>
-			<Text>GoogleAccount</Text>
-		</Center>
-	);
-};
+import { View, useWindowDimensions } from 'react-native';
+import {
+	TabView,
+	SceneMap,
+	TabBar,
+	NavigationState,
+	Route,
+	SceneRendererProps,
+} from 'react-native-tab-view';
+import {
+	HeartEdit,
+	Star1,
+	UserEdit,
+	Notification,
+	SecurityUser,
+	Music,
+	FolderCross,
+} from 'iconsax-react-native';
+import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
+import { LinearGradient } from 'expo-linear-gradient';
+import PremiumSettings from './SettingsPremiumView';
 
 export const PianoSettingsView = () => {
 	return (
@@ -62,125 +34,110 @@ export const PianoSettingsView = () => {
 	);
 };
 
-const TabRow = createTabRowNavigator();
+const renderScene = SceneMap({
+	profile: ProfileSettings,
+	premium: PremiumSettings,
+	preferences: PreferencesView,
+	notifications: NotificationsView,
+	privacy: PrivacyView,
+	piano: PianoSettingsView,
+});
 
-type SetttingsNavigatorProps = {
-	screen?:
-		| 'profile'
-		| 'preferences'
-		| 'notifications'
-		| 'privacy'
-		| 'changePassword'
-		| 'changeEmail'
-		| 'googleAccount'
-		| 'pianoSettings';
+const getTabData = (key: string) => {
+	switch (key) {
+		case 'profile':
+			return { index: 0, icon: UserEdit };
+		case 'premium':
+			return { index: 1, icon: Star1 };
+		case 'preferences':
+			return { index: 2, icon: HeartEdit };
+		case 'notifications':
+			return { index: 3, icon: Notification };
+		case 'privacy':
+			return { index: 4, icon: SecurityUser };
+		case 'piano':
+			return { index: 5, icon: Music };
+		default:
+			return { index: 6, icon: FolderCross };
+	}
 };
 
-const SetttingsNavigator = (props?: RouteProps<SetttingsNavigatorProps>) => {
-	const userQuery = useQuery(API.getUserInfo);
-	const user = useMemo(() => userQuery.data, [userQuery]);
+const SetttingsNavigator = () => {
+	const layout = useWindowDimensions();
 
-	if (userQuery.isLoading) {
-		return (
-			<Center style={{ flex: 1 }}>
-				<Text>Loading...</Text>
-			</Center>
-		);
-	}
+	const [index, setIndex] = React.useState(0);
+	const [routes] = React.useState<Route[]>([
+		{ key: 'profile', title: 'Profile' },
+		{ key: 'premium', title: 'Premium' },
+		{ key: 'preferences', title: 'Preferences' },
+		{ key: 'notifications', title: 'Notifications' },
+		{ key: 'privacy', title: 'Privacy' },
+		{ key: 'piano', title: 'Piano' },
+	]);
+
+	const renderTabBar = (
+		props: SceneRendererProps & { navigationState: NavigationState<Route> }
+	) => (
+		<TabBar
+			{...props}
+			style={{
+				backgroundColor: 'rgba(0, 0, 0, 0)',
+				borderBottomWidth: 2,
+				borderColor: 'rgba(255,255,255,0.5)',
+			}}
+			indicatorStyle={{ backgroundColor: 'white' }}
+			renderIcon={(
+				scene: Scene<Route> & {
+					focused: boolean;
+					color: string;
+				}
+			) => {
+				const tabHeader = getTabData(scene.route!.key);
+				return tabHeader.index == index ? (
+					<tabHeader.icon size="18" color="#6075F9" variant="Bold" />
+				) : (
+					<tabHeader.icon size="18" color="#6075F9" />
+				);
+			}}
+			renderLabel={({ route, color }) =>
+				layout.width > 750 ? (
+					<Text style={{ color, paddingLeft: 10, overflow: 'hidden' }}>
+						{route.title}
+					</Text>
+				) : null
+			}
+			tabStyle={{ flexDirection: 'row' }}
+		/>
+	);
 
 	return (
-		<TabRow.Navigator
-			initialRouteName={props?.screen ?? 'InternalDefault'}
-			contentStyle={{}}
-			tabBarStyle={{}}
-		>
-			{/* I'm doing this to be able to land on the summary of settings when clicking on settings and directly to the
-			wanted settings page if needed so I need to do special work with the 0 index */}
-			<TabRow.Screen name="InternalDefault" component={Box} />
-			{user && user.isGuest && (
-				<TabRow.Screen
-					name="guestToUser"
-					component={GuestToUserView}
-					options={{
-						title: translate('SettingsCategoryGuest'),
-						iconProvider: FontAwesome5,
-						iconName: 'user-clock',
-					}}
-				/>
-			)}
-			<TabRow.Screen
-				name="profile"
-				component={ProfileSettings}
-				options={{
-					title: translate('SettingsCategoryProfile'),
-					iconProvider: FontAwesome5,
-					iconName: 'user',
+		<View>
+			<TabView
+				style={{ minHeight: layout.height, height: '100%', paddingBottom: 32 }}
+				renderTabBar={renderTabBar}
+				navigationState={{ index, routes }}
+				renderScene={renderScene}
+				onIndexChange={setIndex}
+				initialLayout={{ width: layout.width }}
+			/>
+			<LinearGradient
+				start={{ x: 0, y: 0 }}
+				end={{ x: 1, y: 1 }}
+				colors={['#101014', '#6075F9']}
+				style={{
+					top: 0,
+					bottom: 0,
+					right: 0,
+					left: 0,
+					width: '100%',
+					height: '100%',
+					margin: 0,
+					padding: 0,
+					position: 'absolute',
+					zIndex: -2,
 				}}
 			/>
-			<TabRow.Screen
-				name="preferences"
-				component={PreferencesView}
-				options={{
-					title: translate('SettingsCategoryPreferences'),
-					iconProvider: FontAwesome5,
-					iconName: 'music',
-				}}
-			/>
-			<TabRow.Screen
-				name="notifications"
-				component={NotificationsView}
-				options={{
-					title: translate('SettingsCategoryNotifications'),
-					iconProvider: FontAwesome5,
-					iconName: 'bell',
-				}}
-			/>
-			<TabRow.Screen
-				name="privacy"
-				component={PrivacyView}
-				options={{
-					title: translate('SettingsCategoryPrivacy'),
-					iconProvider: FontAwesome5,
-					iconName: 'lock',
-				}}
-			/>
-			<TabRow.Screen
-				name="changePassword"
-				component={ChangePasswordView}
-				options={{
-					title: translate('SettingsCategorySecurity'),
-					iconProvider: FontAwesome5,
-					iconName: 'key',
-				}}
-			/>
-			<TabRow.Screen
-				name="changeEmail"
-				component={ChangeEmailView}
-				options={{
-					title: translate('SettingsCategoryEmail'),
-					iconProvider: FontAwesome5,
-					iconName: 'envelope',
-				}}
-			/>
-			<TabRow.Screen
-				name="googleAccount"
-				component={GoogleAccountView}
-				options={{
-					title: translate('SettingsCategoryGoogle'),
-					iconProvider: FontAwesome5,
-					iconName: 'google',
-				}}
-			/>
-			<TabRow.Screen
-				name="pianoSettings"
-				component={PianoSettingsView}
-				options={{
-					title: translate('SettingsCategoryPiano'),
-					iconProvider: MaterialCommunityIcons,
-					iconName: 'piano',
-				}}
-			/>
-		</TabRow.Navigator>
+		</View>
 	);
 };
 

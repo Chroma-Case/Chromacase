@@ -1,3 +1,9 @@
+networks:
+  loki:
+
+volumes:
+  scoro_logs:
+
 services:
   back:
     image: ghcr.io/chroma-case/back:main
@@ -16,13 +22,14 @@ services:
     ports:
       - "6543:6543"
     volumes:
+      - scoro_logs:/logs
       - ./assets:/assets
   db:
     container_name: db
     image: postgres:alpine3.14
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORDgrafana}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5432:5432"

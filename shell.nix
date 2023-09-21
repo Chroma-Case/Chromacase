@@ -5,9 +5,10 @@ pkgs.mkShell {
     nodePackages.prisma
     nodePackages."@nestjs/cli"
     nodePackages.npm
+    eslint_d
     nodejs_16
     yarn
-    python3
+    (python3.withPackages (ps: with ps; [requests]))
     pkg-config
   ];
   shellHook = with pkgs; ''

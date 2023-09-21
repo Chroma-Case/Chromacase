@@ -1,7 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 // Inspired from OSMD example project
 // https://github.com/opensheetmusicdisplay/react-opensheetmusicdisplay/blob/master/src/lib/OpenSheetMusicDisplay.jsx
-import React, { useEffect } from 'react';
+import React, { MutableRefObject, useEffect } from 'react';
 import {
 	CursorType,
 	Fraction,
@@ -10,12 +10,16 @@ import {
 	Note,
 } from 'opensheetmusicdisplay';
 import useColorScheme from '../hooks/colorScheme';
-import { PianoCursorPosition } from './PartitionVisualizer/PhaserCanvas';
-
+import { PianoCursorPosition } from '../models/PianoGame';
 type PartitionViewProps = {
 	// The Buffer of the MusicXML file retreived from the API
 	file: string;
-	onPartitionReady: (base64data: string, cursorInfos: PianoCursorPosition[]) => void;
+	onPartitionReady: (
+		dims: [number, number],
+		base64data: string,
+		cursorInfos: PianoCursorPosition[]
+	) => void;
+	bpmRef: MutableRefObject<number>;
 	onEndReached: () => void;
 	// Timestamp of the play session, in milisecond
 	timestamp: number;
@@ -59,6 +63,7 @@ const PartitionView = (props: PartitionViewProps) => {
 			_osmd.render();
 			_osmd.cursor.show();
 			const bpm = _osmd.Sheet.HasBPMInfo ? _osmd.Sheet.getExpressionsStartTempoInBPM() : 60;
+			props.bpmRef.current = bpm;
 			const wholeNoteLength = Math.round((60 / bpm) * 4000);
 			const curPos = [];
 			while (!_osmd.cursor.iterator.EndReached) {
@@ -97,7 +102,6 @@ const PartitionView = (props: PartitionViewProps) => {
 				});
 				_osmd.cursor.next();
 			}
-			// console.log('curPos', curPos);
 			_osmd.cursor.reset();
 			_osmd.cursor.hide();
 			// console.log('timestamp cursor', _osmd.cursor.iterator.CurrentSourceTimestamp);
@@ -110,12 +114,18 @@ const PartitionView = (props: PartitionViewProps) => {
 			if (!osmdCanvas) {
 				throw new Error('No canvas found');
 			}
+			let scale = osmdCanvas.width / parseFloat(osmdCanvas.style.width);
+			if (Number.isNaN(scale)) {
+				console.error('Scale is NaN setting it to 1');
+				scale = 1;
+			}
 			// Ty https://github.com/jimutt/osmd-audio-player/blob/ec205a6e46ee50002c1fa8f5999389447bba7bbf/src/PlaybackEngine.ts#LL77C12-L77C63
 			props.onPartitionReady(
+				[osmdCanvas.width, osmdCanvas.height],
 				osmdCanvas.toDataURL(),
 				curPos.map((pos) => {
 					return {
-						x: pos.offset,
+						x: pos.offset * scale,
 						timing: pos.sNinfos.sNL,
 						timestamp: pos.sNinfos.ts,
 						notes: pos.notes,

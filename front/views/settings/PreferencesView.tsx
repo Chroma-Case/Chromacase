@@ -1,22 +1,26 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Center, Heading } from 'native-base';
+import { Flex } from 'native-base';
 import { useLanguage } from '../../state/LanguageSlice';
-import { AvailableLanguages, DefaultLanguage, translate, Translate } from '../../i18n/i18n';
+import { AvailableLanguages, DefaultLanguage, translate } from '../../i18n/i18n';
 import { useSelector } from '../../state/Store';
 import { updateSettings } from '../../state/SettingsSlice';
 import ElementList from '../../components/GtkUI/ElementList';
 import LocalSettings from '../../models/LocalSettings';
+import { Brush2, Colorfilter, LanguageSquare, Rank, Sound } from 'iconsax-react-native';
 
 const PreferencesView = () => {
 	const dispatch = useDispatch();
 	const language = useSelector((state) => state.language.value);
 	const settings = useSelector((state) => state.settings.local);
 	return (
-		<Center style={{ flex: 1 }}>
-			<Heading style={{ textAlign: 'center' }}>
-				<Translate translationKey="prefBtn" />
-			</Heading>
+		<Flex
+			style={{
+				flex: 1,
+				alignItems: 'center',
+				paddingTop: 32,
+			}}
+		>
 			<ElementList
 				style={{
 					marginTop: 20,
@@ -25,8 +29,10 @@ const PreferencesView = () => {
 				}}
 				elements={[
 					{
+						icon: <Brush2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesTheme'),
+						description: 'Définissez le theme (Dark ou Light) de votre application',
 						data: {
 							value: settings.colorScheme,
 							defaultValue: 'system',
@@ -45,8 +51,10 @@ const PreferencesView = () => {
 						},
 					},
 					{
+						icon: <LanguageSquare size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesLanguage'),
+						description: 'Définissez la langue de votre application',
 						data: {
 							value: language,
 							defaultValue: DefaultLanguage,
@@ -61,8 +69,10 @@ const PreferencesView = () => {
 						},
 					},
 					{
+						icon: <Rank size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesDifficulty'),
+						description: 'La précision du tempo est de plus en plus élevée',
 						data: {
 							value: settings.difficulty,
 							defaultValue: 'medium',
@@ -90,8 +100,10 @@ const PreferencesView = () => {
 				}}
 				elements={[
 					{
+						icon: <Colorfilter size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'toggle',
 						title: translate('SettingsPreferencesColorblindMode'),
+						description: 'Augmente le contraste',
 						data: {
 							value: settings.colorBlind,
 							onToggle: () => {
@@ -109,8 +121,10 @@ const PreferencesView = () => {
 				}}
 				elements={[
 					{
+						icon: <Sound size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						type: 'range',
 						title: translate('SettingsPreferencesMicVolume'),
+						description: 'Régler le volume de votre micro selon vos preference',
 						data: {
 							value: settings.micVolume,
 							min: 0,
@@ -139,7 +153,7 @@ const PreferencesView = () => {
 					},*/
 				]}
 			/>
-		</Center>
+		</Flex>
 	);
 };
 

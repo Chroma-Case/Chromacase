@@ -13,4 +13,6 @@ log.html
 node_modules/
 ./front/coverage
 .venv
+.data
 .DS_Store
+_gen

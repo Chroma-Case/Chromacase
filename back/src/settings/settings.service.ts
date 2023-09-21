@@ -20,10 +20,10 @@ export class SettingsService {
 				user: {
 					connect: {
 						id: userId,
-					}
-				}
-			}
-		})
+					},
+				},
+			},
+		});
 	}
 
 	async updateUserSettings(params: {
@@ -37,7 +37,9 @@ export class SettingsService {
 		});
 	}
 
-	async deleteUserSettings(where: Prisma.UserSettingsWhereUniqueInput): Promise<UserSettings> {
+	async deleteUserSettings(
+		where: Prisma.UserSettingsWhereUniqueInput,
+	): Promise<UserSettings> {
 		return this.prisma.userSettings.delete({
 			where,
 		});

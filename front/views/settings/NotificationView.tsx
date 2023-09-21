@@ -1,9 +1,10 @@
 import React from 'react';
-import { Center, Heading } from 'native-base';
-import { translate, Translate } from '../../i18n/i18n';
+import { Flex } from 'native-base';
+import { translate } from '../../i18n/i18n';
 import ElementList from '../../components/GtkUI/ElementList';
 import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';
+import { Calendar1, MonitorMobbile, Send2, Warning2 } from 'iconsax-react-native';
 
 const NotificationsView = () => {
 	const { settings, updateSettings } = useUserSettings();
@@ -12,10 +13,13 @@ const NotificationsView = () => {
 		return <LoadingView />;
 	}
 	return (
-		<Center style={{ flex: 1, justifyContent: 'center' }}>
-			<Heading style={{ textAlign: 'center' }}>
-				<Translate translationKey="notifBtn" />
-			</Heading>
+		<Flex
+			style={{
+				flex: 1,
+				alignItems: 'center',
+				paddingTop: 32,
+			}}
+		>
 			<ElementList
 				style={{
 					marginTop: 20,
@@ -25,7 +29,9 @@ const NotificationsView = () => {
 				elements={[
 					{
 						type: 'toggle',
+						icon: <MonitorMobbile size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsPushNotifications'),
+						description: 'Cette notification apparaitra sur votre apparail en pop-up',
 						data: {
 							value: settings.data.notifications.pushNotif,
 							onToggle: () => {
@@ -39,7 +45,9 @@ const NotificationsView = () => {
 					},
 					{
 						type: 'toggle',
+						icon: <Send2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsEmailNotifications'),
+						description: 'Recevez des mails pour atteindre vos objectifs',
 						data: {
 							value: settings.data.notifications.emailNotif,
 							onToggle: () => {
@@ -53,7 +61,9 @@ const NotificationsView = () => {
 					},
 					{
 						type: 'toggle',
+						icon: <Calendar1 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsTrainingReminder'),
+						description: 'Un apprentissage régulier est la clé',
 						data: {
 							value: settings.data.notifications.trainNotif,
 							onToggle: () => {
@@ -67,7 +77,9 @@ const NotificationsView = () => {
 					},
 					{
 						type: 'toggle',
+						icon: <Warning2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
 						title: translate('SettingsNotificationsReleaseAlert'),
+						description: 'Restez informé de nos mises à jour',
 						data: {
 							value: settings.data.notifications.newSongNotif,
 							onToggle: () => {
@@ -81,7 +93,7 @@ const NotificationsView = () => {
 					},
 				]}
 			/>
-		</Center>
+		</Flex>
 	);
 };
 

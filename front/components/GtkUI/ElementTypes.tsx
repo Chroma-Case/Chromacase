@@ -1,5 +1,6 @@
 import { Select, Switch, Text, Icon, Row, Slider } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useWindowDimensions } from 'react-native';
 
 export type ElementProps = {
 	title: string;
@@ -12,6 +13,7 @@ export type ElementProps = {
 	| { type: 'toggle'; data: ElementToggleProps }
 	| { type: 'dropdown'; data: ElementDropdownProps }
 	| { type: 'range'; data: ElementRangeProps }
+	| { type: 'sectionDropdown'; data: SectionDropdownProps }
 	| { type: 'custom'; data: React.ReactNode }
 );
 
@@ -29,6 +31,11 @@ export type ElementToggleProps = {
 	onToggle: () => void;
 	value: boolean;
 	defaultValue?: boolean;
+};
+
+export type SectionDropdownProps = {
+	value: boolean;
+	section: React.ReactNode[];
 };
 
 export type ElementDropdownProps = {
@@ -93,13 +100,16 @@ export const getElementDropdownNode = (
 	{ options, onSelect, value, defaultValue }: ElementDropdownProps,
 	disabled: boolean
 ) => {
+	const layout = useWindowDimensions();
 	return (
 		<Select
 			selectedValue={value}
 			onValueChange={onSelect}
 			defaultValue={defaultValue}
+			bgColor={'rgba(16,16,20,0.5)'}
 			variant="filled"
 			isDisabled={disabled}
+			width={layout.width > 650 ? '200' : '100'}
 		>
 			{options.map((option) => (
 				<Select.Item key={option.label} label={option.label} value={option.value} />
@@ -113,6 +123,7 @@ export const getElementRangeNode = (
 	disabled: boolean,
 	title: string
 ) => {
+	const layout = useWindowDimensions();
 	return (
 		<Slider
 			// this is a hot fix for now but ideally this input should be managed
@@ -126,7 +137,7 @@ export const getElementRangeNode = (
 			isDisabled={disabled}
 			onChangeEnd={onChange}
 			accessibilityLabel={`Slider for ${title}`}
-			width="200"
+			width={layout.width > 650 ? '200' : '100'}
 		>
 			<Slider.Track>
 				<Slider.FilledTrack />
