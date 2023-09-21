@@ -18,15 +18,17 @@ const ForgotPasswordView = () => {
 				method: 'PUT',
 			});
 			navigation.navigate('Home');
-			return "email sent"
+			return 'email sent';
 		} catch {
 			setFailed(true);
-			return "Error with email, please contact support"
+			return 'Error with email, please contact support';
 		}
 	}
-	return (<div>
-		<ForgotPasswordForm onSubmit={handleSubmit}/>
-	</div>)
+	return (
+		<div>
+			<ForgotPasswordForm onSubmit={handleSubmit} />
+		</div>
+	);
 };
 
 export default ForgotPasswordView;

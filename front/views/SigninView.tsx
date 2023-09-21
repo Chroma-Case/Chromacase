@@ -100,7 +100,7 @@ const SigninView = () => {
 					}}
 					isRequired
 				/>,
-				<LinkBase key={'signin-link'} onPress={() => navigation.navigate("ForgotPassword")}>
+				<LinkBase key={'signin-link'} onPress={() => navigation.navigate('ForgotPassword')}>
 					{translate('forgottenPassword')}
 				</LinkBase>,
 			]}

@@ -10,32 +10,29 @@ const PasswordResetView = () => {
 	const route = useRoute();
 	const [failed, setFailed] = useState(false);
 
-	const handlePasswordReset = async (
-		password: string
-	) => {
+	const handlePasswordReset = async (password: string) => {
 		try {
 			await API.fetch({
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				route: `/auth/password-reset?token=${(route.params as any).token}`,
 				method: 'PUT',
 				body: {
-					password
-				}
+					password,
+				},
 			});
 			navigation.navigate('Home');
-			return "password succesfully reset"
+			return 'password succesfully reset';
 		} catch {
 			setFailed(true);
-			return "password reset failed"
+			return 'password reset failed';
 		}
-	}
-	
-	return (<div>
-		<PasswordResetForm
-			onSubmit={(password) =>
-				handlePasswordReset(password)
-			}/>
-	</div>)
+	};
+
+	return (
+		<div>
+			<PasswordResetForm onSubmit={(password) => handlePasswordReset(password)} />
+		</div>
+	);
 };
 
 export default PasswordResetView;

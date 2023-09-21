@@ -134,8 +134,7 @@ const publicRoutes = () =>
 			component: ForgotPasswordView,
 			options: { title: 'Password reset form', headerShown: false },
 			link: '/forgot_password',
-		
-		}
+		},
 	} as const);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

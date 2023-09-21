@@ -94,9 +94,7 @@ const PasswordResetForm = ({ onSubmit }: PasswordResetFormProps) => {
 						onPress={async () => {
 							setSubmittingForm(true);
 							try {
-								const resp = await onSubmit(
-									formData.newPassword.value
-								);
+								const resp = await onSubmit(formData.newPassword.value);
 								toast.show({ description: resp });
 							} catch (e) {
 								toast.show({ description: e as string });

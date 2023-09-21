@@ -25,10 +25,7 @@ const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
 	return (
 		<Box>
 			<Stack mx="4" style={{ width: '80%', maxWidth: 400 }}>
-				<FormControl
-					isRequired
-					isInvalid={formData.newEmail.error !== null}
-				>
+				<FormControl isRequired isInvalid={formData.newEmail.error !== null}>
 					<FormControl.Label>{translate('newEmail')}</FormControl.Label>
 					<Input
 						isRequired
@@ -56,9 +53,7 @@ const ForgotPasswordForm = ({ onSubmit }: ForgotPasswordFormProps) => {
 						onPress={async () => {
 							setSubmittingForm(true);
 							try {
-								const resp = await onSubmit(
-									formData.newEmail.value
-								);
+								const resp = await onSubmit(formData.newEmail.value);
 								toast.show({ description: resp });
 							} catch (e) {
 								toast.show({ description: e as string });

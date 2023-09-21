@@ -192,9 +192,7 @@ const StartPageView = () => {
 							alignItems: 'center',
 						}}
 					>
-						<Link href="/forgot_password">
-							I forgot my password
-						</Link>
+						<Link href="/forgot_password">I forgot my password</Link>
 					</Box>
 				</Box>
 			</Column>
