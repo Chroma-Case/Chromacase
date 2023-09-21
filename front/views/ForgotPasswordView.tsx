@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import API from '../API';
-import { Text } from 'native-base';
 import { useNavigation } from '../Navigation';
 import { useRoute } from '@react-navigation/native';
 import ForgotPasswordForm from '../components/forms/forgotPasswordForm';
 
 const ForgotPasswordView = () => {
 	const navigation = useNavigation();
-	const route = useRoute();
-	const [failed, setFailed] = useState(false);
-
+	
 	async function handleSubmit(email: string) {
 		try {
 			await API.fetch({
@@ -20,7 +17,6 @@ const ForgotPasswordView = () => {
 			navigation.navigate('Home');
 			return 'email sent';
 		} catch {
-			setFailed(true);
 			return 'Error with email, please contact support';
 		}
 	}

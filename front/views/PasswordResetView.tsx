@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import API from '../API';
-import { Text } from 'native-base';
 import { useNavigation } from '../Navigation';
 import { useRoute } from '@react-navigation/native';
 import PasswordResetForm from '../components/forms/passwordResetForm';
@@ -8,7 +7,6 @@ import PasswordResetForm from '../components/forms/passwordResetForm';
 const PasswordResetView = () => {
 	const navigation = useNavigation();
 	const route = useRoute();
-	const [failed, setFailed] = useState(false);
 
 	const handlePasswordReset = async (password: string) => {
 		try {
@@ -23,7 +21,6 @@ const PasswordResetView = () => {
 			navigation.navigate('Home');
 			return 'password succesfully reset';
 		} catch {
-			setFailed(true);
 			return 'password reset failed';
 		}
 	};
