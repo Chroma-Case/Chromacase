@@ -1,6 +1,7 @@
 import {
 	Injectable,
 	InternalServerErrorException,
+	NotFoundException,
 } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -53,7 +54,7 @@ export class UsersService {
 				username: `Guest ${randomUUID()}`,
 				isGuest: true,
 				// Not realyl clean but better than a separate table or breaking the api by adding nulls.
-				email: '',
+				email: null,
 				password: '',
 			},
 		});
@@ -89,6 +90,7 @@ export class UsersService {
 		// We could not find a profile icon locally, using gravatar instead.
 		const user = await this.user({ id: userId });
 		if (!user) throw new InternalServerErrorException();
+		if (!user.email) throw new NotFoundException();
 		const hash = createHash('md5')
 			.update(user.email.trim().toLowerCase())
 			.digest('hex');
