@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import API from '../API';
 import { useNavigation } from '../Navigation';
 import { useRoute } from '@react-navigation/native';
