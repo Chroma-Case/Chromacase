@@ -6,7 +6,7 @@ import ForgotPasswordForm from '../components/forms/forgotPasswordForm';
 
 const ForgotPasswordView = () => {
 	const navigation = useNavigation();
-	
+
 	async function handleSubmit(email: string) {
 		try {
 			await API.fetch({
