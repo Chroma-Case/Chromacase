@@ -37,6 +37,7 @@ export class AuthService {
 
 	async sendVerifyMail(user: User) {
 		if (process.env.IGNORE_MAILS === 'true') return;
+		if (user.email == null) return;
 		console.log('Sending verification mail to', user.email);
 		const token = await this.jwtService.signAsync(
 			{
@@ -54,6 +55,7 @@ export class AuthService {
 
 	async sendPasswordResetMail(user: User) {
 		if (process.env.IGNORE_MAILS === 'true') return;
+		if (user.email == null) return;
 		console.log('Sending password reset mail to', user.email);
 		const token = await this.jwtService.signAsync(
 			{
