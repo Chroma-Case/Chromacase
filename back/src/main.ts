@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { RequestLogger, RequestLoggerOptions } from 'json-logger-service';
 import { tap } from 'rxjs';
-import { PrismaModel } from './_gen/prisma-class'
+import { PrismaModel } from './_gen/prisma-class';
 import { PrismaService } from './prisma/prisma.service';
 
 @Injectable()
@@ -32,15 +32,14 @@ export class AspectLogger implements NestInterceptor {
 		};
 
 		return next.handle().pipe(
-			tap((data) =>
+			tap((/* data */) =>
 				console.log(
 					JSON.stringify({
 						...toPrint,
 						statusCode,
-						data,
+						//data, //TODO: Data crashed with images
 					}),
-				),
-			),
+				),),
 		);
 	}
 }
@@ -59,7 +58,9 @@ async function bootstrap() {
 		.setDescription('The chromacase API')
 		.setVersion('1.0')
 		.build();
-	const document = SwaggerModule.createDocument(app, config, { extraModels: [...PrismaModel.extraModels]});
+	const document = SwaggerModule.createDocument(app, config, {
+		extraModels: [...PrismaModel.extraModels],
+	});
 	SwaggerModule.setup('api', app, document);
 
 	app.useGlobalPipes(new ValidationPipe());
