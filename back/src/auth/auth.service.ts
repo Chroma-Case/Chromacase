@@ -67,7 +67,7 @@ export class AuthService {
 			to: user.email,
 			from: 'chromacase@octohub.app',
 			subject: 'Password reset for Chromacase',
-			html: `To reset your password, please click on this <a href="{${process.env.PUBLIC_URL}/password_reset?token=${token}">link</a>.`,
+			html: `To reset your password, please click on this <a href="${process.env.PUBLIC_URL}/password_reset?token=${token}">link</a>.`,
 		});
 	}
 
