@@ -159,7 +159,7 @@ const ScoreGraph = (props: ScoreGraphProps) => {
 						<View key={skill.value} style={{ padding: 10 }}>
 							<CheckboxBase
 								title={skill.title}
-								value={skill.value}
+								color={skill.color}
 								check={skill.check}
 								setCheck={skill.setCheck}
 							/>
