@@ -6,7 +6,7 @@ export class User {
 	@ApiProperty()
 	username: string;
 	@ApiProperty()
-	email: string;
+	email: string | null;
 	@ApiProperty()
 	isGuest: boolean;
 	@ApiProperty()
