@@ -12,24 +12,24 @@ type SongRowProps = {
 };
 
 type DurationInfoProps = {
-    length: number;
-}
+	length: number;
+};
 
-const DurationInfo = ({length}: DurationInfoProps) => {
-    const minutes = Math.floor(length / 60);
-    const seconds = Math.round(length - minutes * 60);
+const DurationInfo = ({ length }: DurationInfoProps) => {
+	const minutes = Math.floor(length / 60);
+	const seconds = Math.round(length - minutes * 60);
 
-    return (
-        <Text
-        style={{
-            flexShrink: 0,
-        }}
-        fontSize={'sm'}
-    >
-        {`${minutes}'${seconds}` ?? '--.--'}
-    </Text>
-    );
-}
+	return (
+		<Text
+			style={{
+				flexShrink: 0,
+			}}
+			fontSize={'sm'}
+		>
+			{`${minutes}'${seconds}` ?? '--.--'}
+		</Text>
+	);
+};
 
 const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 	return (
@@ -75,7 +75,7 @@ const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 					>
 						{song.artistId ?? 'artist'}
 					</Text>
-					<DurationInfo length={song.details.length}/>
+					<DurationInfo length={song.details.length} />
 				</HStack>
 				<IconButton
 					colorScheme="rose"
