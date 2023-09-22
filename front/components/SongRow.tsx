@@ -55,6 +55,14 @@ const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 					>
 						{song.artistId ?? 'artist'}
 					</Text>
+					<Text
+						style={{
+							flexShrink: 0,
+						}}
+						fontSize={'sm'}
+					>
+						{song.details.length ?? '--.--'}
+					</Text>
 				</HStack>
 				<IconButton
 					colorScheme="rose"
