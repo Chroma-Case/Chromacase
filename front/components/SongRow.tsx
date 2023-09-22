@@ -11,6 +11,26 @@ type SongRowProps = {
 	handleLike: (state: boolean, songId: number) => Promise<void>;
 };
 
+type DurationInfoProps = {
+    length: number;
+}
+
+const DurationInfo = ({length}: DurationInfoProps) => {
+    const minutes = Math.floor(length / 60);
+    const seconds = Math.round(length - minutes * 60);
+
+    return (
+        <Text
+        style={{
+            flexShrink: 0,
+        }}
+        fontSize={'sm'}
+    >
+        {`${minutes}'${seconds}` ?? '--.--'}
+    </Text>
+    );
+}
+
 const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 	return (
 		<RowCustom width={'100%'}>
@@ -55,14 +75,7 @@ const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 					>
 						{song.artistId ?? 'artist'}
 					</Text>
-					<Text
-						style={{
-							flexShrink: 0,
-						}}
-						fontSize={'sm'}
-					>
-						{song.details.length ?? '--.--'}
-					</Text>
+					<DurationInfo length={song.details.length}/>
 				</HStack>
 				<IconButton
 					colorScheme="rose"
