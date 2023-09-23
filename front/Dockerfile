@@ -1,10 +1,6 @@
-# a Dockerfile to build the expo web app and serve it with nginx
-#
 # Build the app
 FROM node:16-alpine as build
 WORKDIR /app
-# install expo cli
-RUN yarn global add expo-cli@6.0.5
 # add sharp-cli (^2.1.0) for faster image processing
 RUN yarn global add sharp-cli@^2.1.0
 
