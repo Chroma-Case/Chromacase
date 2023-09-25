@@ -2,12 +2,12 @@ import { HStack, Icon, Text } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 
 type DurationComponentProps = {
-	length: number;
+	length: number | undefined;
 };
 
 const DurationComponent = ({ length }: DurationComponentProps) => {
-	const minutes = Math.floor(length / 60);
-	const seconds = Math.round(length - minutes * 60);
+	const minutes = Math.floor((length ?? 0) / 60);
+	const seconds = Math.round((length ?? 0) - minutes * 60);
 
 	return (
 		<HStack space={3}>
@@ -26,7 +26,7 @@ const DurationComponent = ({ length }: DurationComponentProps) => {
 				}}
 				fontSize={'16px'}
 			>
-				{`${minutes}'${seconds}` ?? "--'--"}
+				{length ? `${minutes}'${seconds}` : "--'--"}
 			</Text>
 		</HStack>
 	);
