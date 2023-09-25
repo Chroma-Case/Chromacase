@@ -61,12 +61,6 @@ def populateFile(path, midi, mxl):
 	})
 	print(res.json())
 
-def addLenghtToIni(path):
-	mid = MidiFile(file)
-	lenght = round((mid.length), 2)
-	print(f"song file: {file}   lenght: {lenght}")
-
-
 def main():
 	global url
 	if url == None:
