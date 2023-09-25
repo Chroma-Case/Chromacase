@@ -6,4 +6,9 @@ export class ScoresService {
 	constructor(
 		private prisma: PrismaService,
 	) {}
+
+    async topThree(): Promise<any> {
+        // return this.prisma.
+        return [];
+    }
 }

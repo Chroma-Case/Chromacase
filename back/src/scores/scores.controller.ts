@@ -1,16 +1,6 @@
 import {
-	BadRequestException,
-	Body,
 	Controller,
 	Get,
-	HttpCode,
-	InternalServerErrorException,
-	NotFoundException,
-	Param,
-	ParseIntPipe,
-	Post,
-	Request,
-	UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ScoresService } from './scores.service';
@@ -18,6 +8,12 @@ import { ScoresService } from './scores.service';
 @ApiTags('scores')
 @Controller('scores')
 export class ScoresController {
-	constructor(private readonly searchService: ScoresService) {}
+	constructor(private readonly scoresService: ScoresService) {}
     
+
+    @ApiOkResponse({ description: 'Successfully sent the Top 3 players'})
+    @Get('scores/top/3')
+    getTopThree(): Promise<any> {
+        return await this.scoresService.topThree();
+    }
 }
