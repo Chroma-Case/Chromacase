@@ -1,4 +1,4 @@
-import { Box, Icon, Text } from 'native-base';
+import { HStack, Icon, Text } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 
 type DurationComponentProps = {
@@ -10,19 +10,25 @@ const DurationComponent = ({ length }: DurationComponentProps) => {
 	const seconds = Math.round(length - minutes * 60);
 
 	return (
-		<Box flexDirection={'row'} >
-			<Icon as={MaterialIcons} name="timer" color="coolGray.800" _dark={{
-		color: "warmGray.50"
-		}} />
+		<HStack space={3}>
+			<Icon
+				as={MaterialIcons}
+				name="timer"
+				size={'20px'}
+				color="coolGray.800"
+				_dark={{
+					color: 'warmGray.50',
+				}}
+			/>
 			<Text
 				style={{
 					flexShrink: 0,
 				}}
-				fontSize={'sm'}
+				fontSize={'16px'}
 			>
-				{`${minutes}'${seconds}` ?? '--\'--'}
+				{`${minutes}'${seconds}` ?? "--'--"}
 			</Text>
-		</Box>
+		</HStack>
 	);
 };
 

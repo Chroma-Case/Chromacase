@@ -67,7 +67,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 								}
 							/>
 						</Text>
-                        <DurationComponent length={songQuery.data?.details.length} />
+						<DurationComponent length={songQuery.data?.details.length} />
 						<TextButton
 							translate={{ translationKey: 'playBtn' }}
 							width="auto"
