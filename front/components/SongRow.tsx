@@ -3,6 +3,7 @@ import Song, { SongWithArtist } from '../models/Song';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
 import { MaterialIcons } from '@expo/vector-icons';
+import DurationComponent from './DurationComponent';
 
 type SongRowProps = {
 	song: Song | SongWithArtist; // TODO: remove Song
@@ -55,6 +56,8 @@ const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 					>
 						{song.artistId ?? 'artist'}
 					</Text>
+					{/* <DurationInfo length={song.details.length} /> */}
+					<DurationComponent length={song.details.length} />
 				</HStack>
 				<IconButton
 					colorScheme="rose"

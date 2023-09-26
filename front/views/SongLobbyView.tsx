@@ -7,6 +7,7 @@ import API from '../API';
 import TextButton from '../components/TextButton';
 import { RouteProps, useNavigation } from '../Navigation';
 import ScoreGraph from '../components/ScoreGraph';
+import DurationComponent from '../components/DurationComponent';
 
 interface SongLobbyProps {
 	// The unique identifier to find a song
@@ -66,6 +67,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 								}
 							/>
 						</Text>
+						<DurationComponent length={songQuery.data?.details.length} />
 						<TextButton
 							translate={{ translationKey: 'playBtn' }}
 							width="auto"
