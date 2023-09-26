@@ -4,6 +4,7 @@ import TextButton from './TextButton';
 import { LikedSongWithDetails } from '../models/LikedSong';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../API';
+import DurationComponent from './DurationComponent';
 
 type FavSongRowProps = {
 	FavSong: LikedSongWithDetails; // TODO: remove Song
@@ -54,6 +55,7 @@ const FavSongRow = ({ FavSong, onPress }: FavSongRowProps) => {
 					>
 						{FavSong.addedDate.toLocaleDateString()}
 					</Text>
+					<DurationComponent length={FavSong.details.details.length} />
 				</HStack>
 				<IconButton
 					colorScheme="primary"
