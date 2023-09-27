@@ -2,7 +2,7 @@ import React from 'react';
 import { useQueries, useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
-import { Box, ScrollView, Flex, Stack, Heading, VStack, HStack } from 'native-base';
+import { Box, Flex, Stack, Heading, VStack, HStack } from 'native-base';
 import { useNavigation } from '../Navigation';
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable';
@@ -39,7 +39,7 @@ const HomeView = () => {
 		return <LoadingView />;
 	}
 	return (
-		<ScrollView p={10}>
+		<Flex>
 			<Flex>
 				<Stack
 					space={4}
@@ -59,7 +59,7 @@ const HomeView = () => {
 					</Box>
 				</Stack>
 			</Flex>
-			<Stack direction={{ base: 'column', lg: 'row' }} height="100%" space={5} paddingTop={5}>
+			<Stack direction={{ base: 'column', lg: 'row' }} space={5} paddingTop={5}>
 				<VStack flex={{ lg: 2 }} space={5}>
 					<SongCardGrid
 						heading={<Translate translationKey="goNextStep" />}
@@ -182,7 +182,7 @@ const HomeView = () => {
 					</Box>
 				</VStack>
 			</Stack>
-		</ScrollView>
+		</Flex>
 	);
 };
 

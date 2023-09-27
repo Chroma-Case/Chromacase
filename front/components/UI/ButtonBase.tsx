@@ -10,6 +10,7 @@ interface ButtonProps {
 	onPress?: () => Promise<void>;
 	isDisabled?: boolean;
 	icon?: Icon;
+	iconVariant?: 'Bold' | 'Outline';
 	iconImage?: string;
 	type?: 'filled' | 'outlined' | 'menu';
 }
@@ -22,6 +23,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	icon,
 	iconImage,
 	type = 'filled',
+	iconVariant = 'Outline',
 }) => {
 	const { colors } = useTheme();
 	const [loading, setLoading] = useState(false);
@@ -60,10 +62,10 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	const styleMenu = StyleSheet.create({
 		Default: {
 			scale: 1,
-			shadowOpacity: 0.3,
-			shadowRadius: 4.65,
-			elevation: 8,
-			backgroundColor: 'rgba(16,16,20,0.5)',
+			shadowOpacity: 0,
+			shadowRadius: 0,
+			elevation: 0,
+			backgroundColor: 'transparent',
 		},
 		onHover: {
 			scale: 1.01,
@@ -112,9 +114,18 @@ const ButtonBase: React.FC<ButtonProps> = ({
 					color={type === 'outlined' ? '#6075F9' : '#FFFFFF'}
 				/>
 			) : (
-				<View style={styles.content}>
+				<View
+					style={[
+						styles.content,
+						type === 'menu' ? { justifyContent: 'flex-start' } : {},
+					]}
+				>
 					{icon && (
-						<MyIcon size={'18'} color={type === 'outlined' ? '#6075F9' : '#FFFFFF'} />
+						<MyIcon
+							size={'18'}
+							color={type === 'outlined' ? '#6075F9' : '#FFFFFF'}
+							variant={iconVariant}
+						/>
 					)}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
 					{title && <Text style={styles.text}>{title}</Text>}

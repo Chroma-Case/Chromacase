@@ -32,9 +32,10 @@ import GoogleView from './views/GoogleView';
 import VerifiedView from './views/VerifiedView';
 import SigninView from './views/SigninView';
 import SignupView from './views/SignupView';
-import TabNavigation from './components/V2/TabNavigation';
 import PasswordResetView from './views/PasswordResetView';
 import ForgotPasswordView from './views/ForgotPasswordView';
+import ScaffoldCC from './components/UI/Scaffold';
+import DiscoveryView from './views/V2/DiscoveryView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -43,18 +44,18 @@ const protectedRoutes = () =>
 	({
 		Home: {
 			component: HomeView,
-			options: { title: translate('welcome'), headerLeft: null },
+			options: { headerShown: false },
 			link: '/',
 		},
 		HomeNew: {
-			component: TabNavigation,
+			component: DiscoveryView,
 			options: { headerShown: false },
 			link: '/V2',
 		},
 		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
 		Settings: {
 			component: SetttingsNavigator,
-			options: { title: 'Settings' },
+			options: { headerShown: false },
 			link: '/settings/:screen?',
 			stringify: {
 				screen: removeMe,
@@ -82,7 +83,7 @@ const protectedRoutes = () =>
 		},
 		Search: {
 			component: SearchView,
-			options: { title: translate('search') },
+			options: { headerShown: false },
 			link: '/search/:query?',
 		},
 		Error: {
@@ -90,7 +91,7 @@ const protectedRoutes = () =>
 			options: { title: translate('error'), headerLeft: null },
 			link: undefined,
 		},
-		User: { component: ProfileView, options: { title: translate('user') }, link: '/user' },
+		User: { component: ProfileView, options: { headerShown: false }, link: '/user' },
 		Verified: {
 			component: VerifiedView,
 			options: { title: 'Verify email', headerShown: false },
@@ -164,9 +165,13 @@ const RouteToScreen =
 	(props: NativeStackScreenProps<T & ParamListBase>) =>
 		(
 			<>
-				{component({ ...props.route.params, route: props.route } as Parameters<
-					Route<T>['component']
-				>[0])}
+				<ScaffoldCC routeName={props.route.name}>
+					<>
+						{component({ ...props.route.params, route: props.route } as Parameters<
+							Route<T>['component']
+						>[0])}
+					</>
+				</ScaffoldCC>
 			</>
 		);
 

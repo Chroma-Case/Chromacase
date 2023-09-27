@@ -23,7 +23,6 @@ import {
 	FolderCross,
 } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import { LinearGradient } from 'expo-linear-gradient';
 import PremiumSettings from './SettingsPremiumView';
 
 export const PianoSettingsView = () => {
@@ -100,7 +99,7 @@ const SetttingsNavigator = () => {
 				);
 			}}
 			renderLabel={({ route, color }) =>
-				layout.width > 750 ? (
+				layout.width > 1100 ? (
 					<Text style={{ color, paddingLeft: 10, overflow: 'hidden' }}>
 						{route.title}
 					</Text>
@@ -111,31 +110,14 @@ const SetttingsNavigator = () => {
 	);
 
 	return (
-		<View>
+		<View style={{ width: '100%' }}>
 			<TabView
-				style={{ minHeight: layout.height, height: '100%', paddingBottom: 32 }}
+				style={{ height: 'fit-content' }}
 				renderTabBar={renderTabBar}
 				navigationState={{ index, routes }}
 				renderScene={renderScene}
 				onIndexChange={setIndex}
 				initialLayout={{ width: layout.width }}
-			/>
-			<LinearGradient
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
-				colors={['#101014', '#6075F9']}
-				style={{
-					top: 0,
-					bottom: 0,
-					right: 0,
-					left: 0,
-					width: '100%',
-					height: '100%',
-					margin: 0,
-					padding: 0,
-					position: 'absolute',
-					zIndex: -2,
-				}}
 			/>
 		</View>
 	);

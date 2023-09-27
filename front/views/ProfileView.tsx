@@ -6,7 +6,6 @@ import UserAvatar from '../components/UserAvatar';
 import { LoadingView } from '../components/Loading';
 import { useQuery } from '../Queries';
 import API from '../API';
-import { LinearGradient } from 'expo-linear-gradient';
 import ButtonBase from '../components/UI/ButtonBase';
 import { translate } from '../i18n/i18n';
 import ScoreGraph from '../components/ScoreGraph';
@@ -737,7 +736,7 @@ const ProfileView = () => {
 	const level = xpToLevel(userQuery.data.data.xp);
 
 	return (
-		<Flex style={{ minHeight: layout.height, height: '100%', padding: 20 }}>
+		<Flex>
 			<Wrap
 				style={{
 					flexDirection: layout.width > 650 ? 'row' : 'column',
@@ -797,23 +796,6 @@ const ProfileView = () => {
 				songHistory={{
 					history: fakeData,
 					best: 200,
-				}}
-			/>
-			<LinearGradient
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
-				colors={['#101014', '#6075F9']}
-				style={{
-					top: 0,
-					bottom: 0,
-					right: 0,
-					left: 0,
-					width: '100%',
-					height: '180%', // TODO Need to fixe the background
-					margin: 0,
-					padding: 0,
-					position: 'absolute',
-					zIndex: -2,
 				}}
 			/>
 		</Flex>

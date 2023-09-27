@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native';
 import InteractiveBase from './InteractiveBase';
-import { Checkbox, useTheme, Text } from 'native-base';
+import { useTheme, Text } from 'native-base';
 import { AddSquare, TickSquare } from 'iconsax-react-native';
 
 interface CheckboxProps {
@@ -12,13 +12,7 @@ interface CheckboxProps {
 	style?: StyleProp<ViewStyle>;
 }
 
-const CheckboxBase: React.FC<CheckboxProps> = ({
-	title,
-	color,
-	style,
-	check,
-	setCheck,
-}) => {
+const CheckboxBase: React.FC<CheckboxProps> = ({ title, color, style, check, setCheck }) => {
 	const theme = useTheme();
 	return (
 		<InteractiveBase
@@ -29,13 +23,22 @@ const CheckboxBase: React.FC<CheckboxProps> = ({
 			}}
 		>
 			<View style={styles.content}>
-				{
-					check ?
-					<TickSquare size="24" color={color ? color : theme.colors.primary[400]} variant="Bold"/>
-					: <AddSquare size="24" color={color ? color : theme.colors.primary[400]} variant="Outline"/>
-
-				}
-				<Text style={styles.text} selectable={false}>{title}</Text>
+				{check ? (
+					<TickSquare
+						size="24"
+						color={color ? color : theme.colors.primary[400]}
+						variant="Bold"
+					/>
+				) : (
+					<AddSquare
+						size="24"
+						color={color ? color : theme.colors.primary[400]}
+						variant="Outline"
+					/>
+				)}
+				<Text style={styles.text} selectable={false}>
+					{title}
+				</Text>
 			</View>
 		</InteractiveBase>
 	);
@@ -84,8 +87,8 @@ const styles = StyleSheet.create({
 		paddingVertical: 5,
 	},
 	text: {
-		paddingLeft: 10
-	}
+		paddingLeft: 10,
+	},
 });
 
 export default CheckboxBase;

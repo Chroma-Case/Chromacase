@@ -5,7 +5,7 @@ import TabNavigationPhone from './TabNavigationPhone';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import useColorScheme from '../../hooks/colorScheme';
-import HomeView from '../../views/V2/HomeView';
+import HomeView from '../../views/V2/DiscoveryView';
 
 export type NaviTab = {
 	id: string;
