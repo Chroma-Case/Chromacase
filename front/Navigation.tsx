@@ -34,7 +34,7 @@ import SigninView from './views/SigninView';
 import SignupView from './views/SignupView';
 import PasswordResetView from './views/PasswordResetView';
 import ForgotPasswordView from './views/ForgotPasswordView';
-import ScaffoldCC from './components/UI/Scaffold';
+import ScaffoldCC from './components/UI/ScaffoldCC';
 import DiscoveryView from './views/V2/DiscoveryView';
 
 // Util function to hide route props in URL

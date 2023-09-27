@@ -1,10 +1,10 @@
 import React from 'react';
-import { Center, Text } from 'native-base';
+import { Center, Flex, Text } from 'native-base';
 import ProfileSettings from './SettingsProfileView';
 import NotificationsView from './NotificationView';
 import PrivacyView from './PrivacyView';
 import PreferencesView from './PreferencesView';
-import { View, useWindowDimensions } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
 	SceneMap,
@@ -110,7 +110,7 @@ const SetttingsNavigator = () => {
 	);
 
 	return (
-		<View style={{ width: '100%' }}>
+		<Flex style={{ flex: 1 }}>
 			<TabView
 				style={{ height: 'fit-content' }}
 				renderTabBar={renderTabBar}
@@ -119,7 +119,7 @@ const SetttingsNavigator = () => {
 				onIndexChange={setIndex}
 				initialLayout={{ width: layout.width }}
 			/>
-		</View>
+		</Flex>
 	);
 };
 

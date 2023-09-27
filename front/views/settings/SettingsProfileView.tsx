@@ -40,7 +40,7 @@ const ProfileSettings = () => {
 			<ElementList
 				style={{
 					marginTop: 20,
-					width: '90%',
+					width: '100%',
 					maxWidth: 850,
 				}}
 				elements={[
