@@ -1,7 +1,7 @@
 {
 	"expo": {
 		"name": "Chromacase",
-		"slug": "Chromacase",
+		"slug": "chromacase",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
@@ -11,15 +11,17 @@
 			"resizeMode": "cover",
 			"backgroundColor": "#ffffff"
 		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
+		"assetBundlePatterns": [
+			"**/*"
+		],
 		"ios": {
 			"supportsTablet": true
 		},
 		"android": {
-			"package": "build.apk"
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/icon.png",
+				"backgroundColor": "#ffffff"
+			}
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
