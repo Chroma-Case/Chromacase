@@ -19,7 +19,7 @@
 	},
 	"dependencies": {
 		"@expo/webpack-config": "^19.0.0",
-		"@motiz88/react-native-midi": "^0.0.5",
+		"@arthi-chaud/react-native-midi": "^0.0.6",
 		"@react-native-async-storage/async-storage": "1.18.2",
 		"@react-native-community/async-storage": "^1.12.1",
 		"@react-navigation/native": "^6.1.8",

@@ -20,6 +20,13 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
+"@arthi-chaud/react-native-midi@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@arthi-chaud/react-native-midi/-/react-native-midi-0.0.6.tgz#7f17cc72799aff2c040198191dfec7308d67dc9a"
+  integrity sha512-U4+DKie+AINcWEPlKXglaB7AEOZSfjA1p6xy/M9JGZBQpgYGEwMkA6WEbfaycGeB3+17Be8jR6LclLweSBdayw==
+  dependencies:
+    event-target-shim "^6.0.2"
+
 "@babel/code-frame@7.10.4", "@babel/code-frame@~7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -2052,13 +2059,6 @@
     "@motionone/types" "^10.16.3"
     hey-listen "^1.0.8"
     tslib "^2.3.1"
-
-"@motiz88/react-native-midi@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@motiz88/react-native-midi/-/react-native-midi-0.0.5.tgz#8162850a6ad501436376edef43889550e133986a"
-  integrity sha512-9IZeYqX1BEpI9iJZzoerEjHH4SM1whMls96A0/8dHxHydr35DkUzXxT0N99FibMT/32iRqF6cZgaPnS/duXNvw==
-  dependencies:
-    event-target-shim "^6.0.2"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

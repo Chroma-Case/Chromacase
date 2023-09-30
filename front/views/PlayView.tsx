@@ -29,7 +29,7 @@ import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
 import PartitionCoord from '../components/PartitionCoord';
 import TextButton from '../components/TextButton';
-import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
+import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
