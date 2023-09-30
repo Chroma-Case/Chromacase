@@ -9,6 +9,7 @@ import {
 	getElementRangeNode,
 } from './ElementTypes';
 import { ArrowDown2 } from 'iconsax-react-native';
+import { useWindowDimensions } from 'react-native';
 
 type RawElementProps = {
 	element: ElementProps;
@@ -18,6 +19,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 	const { title, icon, type, helperText, description, disabled, data } = element;
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';
+	const { width: screenWidth } = useWindowDimensions();
 	return (
 		<Column
 			style={{
@@ -97,7 +99,9 @@ export const RawElement = ({ element }: RawElementProps) => {
 								<Popover.Content
 									accessibilityLabel={`Additionnal information for ${title}`}
 									style={{
-										maxWidth: isSmallScreen ? '90vw' : '20vw',
+										maxWidth: isSmallScreen
+											? 0.9 * screenWidth
+											: 0.2 * screenWidth,
 									}}
 								>
 									<Popover.Arrow />

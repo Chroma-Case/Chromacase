@@ -1,3 +1,4 @@
+// @ts-expect-error Who does tests anyway?
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import Loading from './Loading';
 

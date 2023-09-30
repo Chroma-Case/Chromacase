@@ -22,8 +22,8 @@ const TabNavigationPhone = (props: TabNavigationPhoneProps) => {
 		>
 			<View
 				style={{
-					padding: '16px',
-					height: '90px',
+					padding: 16,
+					height: 90,
 					width: '100%',
 				}}
 			>
@@ -31,7 +31,7 @@ const TabNavigationPhone = (props: TabNavigationPhoneProps) => {
 					<View
 						style={{
 							display: 'flex',
-							padding: '8px',
+							padding: 8,
 							justifyContent: 'space-evenly',
 							flexDirection: 'row',
 							alignItems: 'center',
@@ -56,6 +56,7 @@ const TabNavigationPhone = (props: TabNavigationPhoneProps) => {
 				</Center>
 			</View>
 			<ScrollView
+				// @ts-expect-error Raw CSS
 				style={{
 					width: '100%',
 					height: 'calc(100% - 90px)',

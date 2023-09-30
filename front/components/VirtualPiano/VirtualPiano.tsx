@@ -43,6 +43,7 @@ const VirtualPiano = ({
 			{octaveList.map((octaveNum) => {
 				return (
 					<Octave
+						// @ts-expect-error Raw CSS
 						style={{ width: octaveWidthExpr, height: '100%' }}
 						key={octaveNum}
 						number={octaveNum}

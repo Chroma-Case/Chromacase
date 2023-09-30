@@ -79,6 +79,7 @@ const Octave = (props: OctaveProps) => {
 							bgHovered={isHighlighted ? highlightColor : whiteKeyBgHovered}
 							onKeyDown={() => onNoteDown(key)}
 							onKeyUp={() => onNoteUp(key)}
+							// @ts-expect-error Raw CSS
 							style={{
 								width: whiteKeyWidthExpr,
 								height: whiteKeyHeightExpr,
@@ -100,6 +101,7 @@ const Octave = (props: OctaveProps) => {
 							bgHovered={isHighlighted ? highlightColor : blackKeyBgHovered}
 							onKeyDown={() => onNoteDown(key)}
 							onKeyUp={() => onNoteUp(key)}
+							// @ts-expect-error Raw CSS
 							style={{
 								width: blackKeyWidthExpr,
 								height: blackKeyHeightExpr,
@@ -107,7 +109,7 @@ const Octave = (props: OctaveProps) => {
 								left: `calc(calc(${whiteKeyWidthExpr} * ${
 									i + ((i > 1) as unknown as number) + 1
 								}) - calc(${blackKeyWidthExpr} / 2))`,
-								top: '0px',
+								top: 0,
 							}}
 							text={{
 								color: 'white',
