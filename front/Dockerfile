@@ -4,12 +4,12 @@
 FROM node:16-alpine as build
 WORKDIR /app
 # install expo cli
-RUN yarn global add expo-cli@6.0.5
+RUN yarn global add expo-cli
 # add sharp-cli (^2.1.0) for faster image processing
-RUN yarn global add sharp-cli@^2.1.0
+RUN yarn global add sharp-cli
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN expo install
 
 COPY . .
 ARG API_URL
