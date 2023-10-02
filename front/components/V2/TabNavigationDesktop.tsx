@@ -50,16 +50,16 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 							alignItems: 'center',
 							justifyContent: 'flex-start',
 							flexShrink: 0,
-							padding: '10px',
+							padding: 10,
 						}}
 					>
 						<Image
 							source={{ uri: icon?.at(0)?.uri }}
 							style={{
 								aspectRatio: 1,
-								width: '40px',
+								width: 40,
 								height: 'auto',
-								marginRight: '10px',
+								marginRight: 10,
 							}}
 						/>
 						<Text fontSize={'2xl'} selectable={false}>
@@ -70,9 +70,9 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 				<View
 					style={{
 						display: 'flex',
-						width: '300px',
+						width: 300,
 						height: 'auto',
-						padding: '32px',
+						padding: 32,
 						flexDirection: 'column',
 						justifyContent: 'space-between',
 						alignItems: 'flex-start',
@@ -82,8 +82,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 					<TabNavigationList
 						style={{
 							flexShrink: 0,
-							// @ts-expect-error gap is not in the types because we have an old version of react-native
-							gap: '20px',
+							gap: 20,
 						}}
 					>
 						{buttons.map((button, index) => (
@@ -104,8 +103,8 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 							<Text
 								bold
 								style={{
-									paddingHorizontal: '16px',
-									paddingVertical: '10px',
+									paddingHorizontal: 16,
+									paddingVertical: 10,
 									fontSize: 20,
 								}}
 							>
@@ -114,8 +113,8 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 							{songHistory.length === 0 && (
 								<Text
 									style={{
-										paddingHorizontal: '16px',
-										paddingVertical: '10px',
+										paddingHorizontal: 16,
+										paddingVertical: 10,
 									}}
 								>
 									No songs played yet
@@ -133,8 +132,8 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 									<View
 										key={'tab-navigation-other-' + index}
 										style={{
-											paddingHorizontal: '16px',
-											paddingVertical: '10px',
+											paddingHorizontal: 16,
+											paddingVertical: 10,
 										}}
 									>
 										<Text numberOfLines={1}>{histoItem.name}</Text>
@@ -144,8 +143,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 						<Divider />
 						<TabNavigationList
 							style={{
-								// @ts-expect-error gap is not in the types because we have an old version of react-native
-								gap: '20px',
+								gap: 20,
 							}}
 						>
 							{([props.tabs.find((t) => t.id === 'settings')] as NaviTab[]).map(
@@ -166,6 +164,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 				</View>
 			</View>
 			<ScrollView
+				// @ts-expect-error Raw CSS
 				style={{
 					height: '100%',
 					width: 'calc(100% - 300px)',

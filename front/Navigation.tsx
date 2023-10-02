@@ -96,7 +96,7 @@ const protectedRoutes = () =>
 			options: { title: 'Verify email', headerShown: false },
 			link: '/verify',
 		},
-	} as const);
+	}) as const;
 
 const publicRoutes = () =>
 	({
@@ -135,7 +135,7 @@ const publicRoutes = () =>
 			options: { title: 'Password reset form', headerShown: false },
 			link: '/forgot_password',
 		},
-	} as const);
+	}) as const;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Route<Props = any> = {
@@ -161,14 +161,13 @@ const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never }>();
 const RouteToScreen =
 	<T extends {}>(component: Route<T>['component']) =>
 	// eslint-disable-next-line react/display-name
-	(props: NativeStackScreenProps<T & ParamListBase>) =>
-		(
-			<>
-				{component({ ...props.route.params, route: props.route } as Parameters<
-					Route<T>['component']
-				>[0])}
-			</>
-		);
+	(props: NativeStackScreenProps<T & ParamListBase>) => (
+		<>
+			{component({ ...props.route.params, route: props.route } as Parameters<
+				Route<T>['component']
+			>[0])}
+		</>
+	);
 
 const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =>
 	Object.entries(routes).map(([name, route], routeIndex) => (
