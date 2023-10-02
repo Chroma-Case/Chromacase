@@ -23,7 +23,6 @@ import { AccessTokenResponseHandler } from './models/AccessTokenResponse';
 import * as yup from 'yup';
 import { base64ToBlob } from './utils/base64ToBlob';
 import { ImagePickerAsset } from 'expo-image-picker';
-import Constant from 'expo-constants';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -69,7 +68,7 @@ export default class API {
 	public static readonly baseUrl =
 		process.env.NODE_ENV != 'development' && Platform.OS === 'web'
 			? '/api'
-			: Constant.manifest?.extra?.apiUrl;
+			: process.env.EXPO_PUBLIC_API_URL!;
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>

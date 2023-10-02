@@ -21,7 +21,6 @@ import { RouteProps, useNavigation } from '../Navigation';
 import { transformQuery, useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
-import Constants from 'expo-constants';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
@@ -46,7 +45,7 @@ type ScoreMessage = {
 };
 
 // this a hot fix this should be reverted soon
-let scoroBaseApiUrl = Constants.manifest?.extra?.scoroUrl;
+let scoroBaseApiUrl = process.env.EXPO_PUBLIC_SCORO_URL!;
 
 if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	Linking.getInitialURL().then((initUrl) => {
