@@ -23,6 +23,7 @@ import { AccessTokenResponseHandler } from './models/AccessTokenResponse';
 import * as yup from 'yup';
 import { base64ToBlob } from './utils/base64ToBlob';
 import { ImagePickerAsset } from 'expo-image-picker';
+import Constants from 'expo-constants';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
