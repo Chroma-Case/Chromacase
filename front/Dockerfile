@@ -9,7 +9,7 @@ RUN yarn global add expo-cli
 RUN yarn global add sharp-cli
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --immutable
 RUN expo install
 
 COPY . .
