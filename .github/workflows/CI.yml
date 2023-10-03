@@ -35,6 +35,8 @@ jobs:
     environment: Staging
     steps:
       - uses: actions/checkout@v3
+      - name: Install Yarn
+        run: npm install -g yarn
       - name: Install dependencies
         run: yarn install
       - name: Type Check
