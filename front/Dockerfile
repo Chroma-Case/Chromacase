@@ -9,6 +9,7 @@ RUN yarn global add expo-cli
 RUN yarn global add sharp-cli
 
 COPY package.json yarn.lock ./
+RUN yarn install
 RUN expo install
 
 COPY . .
@@ -17,7 +18,7 @@ ENV EXPO_PUBLIC_API_URL=$API_URL
 ARG SCORO_URL
 ENV EXPO_PUBLIC_API_URL=$SCORO_URL
 
-RUN yarn tsc && expo build:web
+RUN yarn tsc && npx expo export:web
 
 # Serve the app
 FROM nginx:1.21-alpine
