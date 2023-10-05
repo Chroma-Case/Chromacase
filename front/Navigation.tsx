@@ -115,11 +115,6 @@ const publicRoutes = () =>
 			options: { title: translate('signUpBtn'), headerShown: false },
 			link: '/signup',
 		},
-		Oops: {
-			component: ProfileErrorView,
-			options: { title: 'Oops', headerShown: false },
-			link: undefined,
-		},
 		Google: {
 			component: GoogleView,
 			options: { title: 'Google signin', headerShown: false },
@@ -156,7 +151,7 @@ type PrivateRoutesParams = RouteParams<ReturnType<typeof protectedRoutes>>;
 type PublicRoutesParams = RouteParams<ReturnType<typeof publicRoutes>>;
 type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
 
-const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never }>();
+const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 
 const RouteToScreen =
 	<T extends {}>(component: Route<T>['component']) =>
@@ -204,6 +199,8 @@ const routesToLinkingConfig = (
 
 const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 	const dispatch = useDispatch();
+	const navigation = useNavigation();
+
 	return (
 		<Center style={{ flexGrow: 1 }}>
 			<VStack space={3}>
@@ -212,7 +209,10 @@ const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 					<Translate translationKey="tryAgain" />
 				</Button>
 				<TextButton
-					onPress={() => dispatch(unsetAccessToken())}
+					onPress={() => {
+						dispatch(unsetAccessToken());
+						navigation.navigate('Start');
+					}}
 					colorScheme="error"
 					variant="outline"
 					translate={{ translationKey: 'signOutBtn' }}
@@ -273,12 +273,15 @@ export const Router = () => {
 		>
 			<Stack.Navigator>
 				{authStatus == 'error' ? (
-					<Stack.Screen
-						name="Oops"
-						component={RouteToScreen(() => (
-							<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
-						))}
-					/>
+					<>
+						<Stack.Screen
+							name="Oops"
+							component={RouteToScreen(() => (
+								<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
+							))}
+						/>
+						{routesToScreens(publicRoutes())}
+					</>
 				) : (
 					routesToScreens(routes)
 				)}
