@@ -149,7 +149,7 @@ export const en = {
 	SettingsCategoryGuest: 'Guest',
 
 	transformGuestToUserExplanations:
-		'You can transform your guest account to a user account by providing a username and a password. You will then be able to save your progress and access your profile.',
+		'You are currently logged in with a guest account. Logging out will result in the loss of your data. To save your progress, please register.',
 	SettingsNotificationsPushNotifications: 'Push',
 	SettingsNotificationsEmailNotifications: 'Email',
 	SettingsNotificationsTrainingReminder: 'Training reminder',
@@ -334,7 +334,7 @@ export const fr: typeof en = {
 	SettingsCategoryPiano: 'Piano',
 
 	transformGuestToUserExplanations:
-		"Vous êtes actuellement connecté en tant qu'invité. Vous pouvez créer un compte pour sauvegarder vos données et profiter de toutes les fonctionnalités de Chromacase.",
+		"Vous êtes actuellement connecté avec un compte invité. La déconnexion entraînera la perte de vos données. Pour sauvegarder votre progression, veuillez vous inscrire.",
 	SettingsCategoryGuest: 'Invité',
 	SettingsNotificationsEmailNotifications: 'Email',
 	SettingsNotificationsPushNotifications: 'Notifications push',
@@ -523,7 +523,7 @@ export const sp: typeof en = {
 	SettingsCategoryPiano: 'Piano',
 
 	transformGuestToUserExplanations:
-		'Actualmente estás conectado como invitado. Puedes crear una cuenta para guardar tus datos y disfrutar de todas las funciones de Chromacase.',
+		'Actualmente está conectado con una cuenta de invitado. Si cierra la sesión, perderá sus datos. Para guardar su progreso, regístrese.',
 	SettingsCategoryGuest: 'Invitado',
 	SettingsNotificationsEmailNotifications: 'Email',
 	SettingsNotificationsPushNotifications: 'Notificaciones push',

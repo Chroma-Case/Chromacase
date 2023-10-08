@@ -1,9 +1,9 @@
 import React from 'react';
 import { Center, Flex, Text } from 'native-base';
-import ProfileSettings from './SettingsProfileView';
-import NotificationsView from './NotificationView';
-import PrivacyView from './PrivacyView';
-import PreferencesView from './PreferencesView';
+import ProfileSettings from './SettingsProfile';
+import NotificationsSettings from './NotificationsSettings';
+import PrivacySettings from './PrivacySettings';
+import PreferencesSettings from './PreferencesSettings';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -23,9 +23,11 @@ import {
 	FolderCross,
 } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import PremiumSettings from './SettingsPremiumView';
+import PremiumSettings from './SettingsPremium';
+import { RouteProps } from '../../Navigation';
+import ScaffoldCC from '../../components/UI/ScaffoldCC';
 
-export const PianoSettingsView = () => {
+export const PianoSettings = () => {
 	return (
 		<Center style={{ flex: 1 }}>
 			<Text>Global settings for the virtual piano</Text>
@@ -36,10 +38,10 @@ export const PianoSettingsView = () => {
 const renderScene = SceneMap({
 	profile: ProfileSettings,
 	premium: PremiumSettings,
-	preferences: PreferencesView,
-	notifications: NotificationsView,
-	privacy: PrivacyView,
-	piano: PianoSettingsView,
+	preferences: PreferencesSettings,
+	notifications: NotificationsSettings,
+	privacy: PrivacySettings,
+	piano: PianoSettings,
 });
 
 const getTabData = (key: string) => {
@@ -61,9 +63,8 @@ const getTabData = (key: string) => {
 	}
 };
 
-const SetttingsNavigator = () => {
+const SetttingsNavigator = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
-
 	const [index, setIndex] = React.useState(0);
 	const [routes] = React.useState<Route[]>([
 		{ key: 'profile', title: 'Profile' },
@@ -73,7 +74,6 @@ const SetttingsNavigator = () => {
 		{ key: 'privacy', title: 'Privacy' },
 		{ key: 'piano', title: 'Piano' },
 	]);
-
 	const renderTabBar = (
 		props: SceneRendererProps & { navigationState: NavigationState<Route> }
 	) => (
@@ -110,8 +110,16 @@ const SetttingsNavigator = () => {
 	);
 
 	return (
-		<Flex style={{ flex: 1 }}>
+		<ScaffoldCC routeName={props.route.name} withPadding={false}>
 			<TabView
+				sceneContainerStyle={{
+					flex: 1,
+					alignSelf: 'center',
+					paddingTop: 32,
+					padding: 20,
+					maxWidth: 850,
+					width: '100%'
+				}}
 				style={{ height: 'fit-content' }}
 				renderTabBar={renderTabBar}
 				navigationState={{ index, routes }}
@@ -119,7 +127,7 @@ const SetttingsNavigator = () => {
 				onIndexChange={setIndex}
 				initialLayout={{ width: layout.width }}
 			/>
-		</Flex>
+		</ScaffoldCC>
 	);
 };
 

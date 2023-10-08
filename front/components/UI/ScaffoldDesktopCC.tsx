@@ -1,20 +1,21 @@
 import { View, Image } from 'react-native';
-import { Divider, Text, ScrollView, Flex, Row, Popover, Heading, Button } from 'native-base';
+import { Divider, Text, ScrollView, Flex, Row } from 'native-base';
 import { useQuery, useQueries } from '../../Queries';
 import API from '../../API';
 import Song from '../../models/Song';
 import { LinearGradient } from 'expo-linear-gradient';
 import ButtonBase from './ButtonBase';
-import { Icon, LogoutCurve } from 'iconsax-react-native';
-import { useDispatch } from 'react-redux';
+import { Icon } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
 import { translate } from '../../i18n/i18n';
-import { unsetAccessToken } from '../../state/UserSlice';
 import { useNavigation } from '../../Navigation';
 import Spacer from './Spacer';
 import User from '../../models/User';
+import LogoutButtonCC from './LogoutButtonCC';
+import GlassmorphismCC from './Glassmorphism';
 
 type ScaffoldDesktopCCProps = {
+	widthPadding: boolean,
 	children?: React.ReactNode;
 	user: User;
 	logo: string;
@@ -30,7 +31,6 @@ type ScaffoldDesktopCCProps = {
 const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
-	const dispatch = useDispatch();
 
 	if (!userQuery.data || userQuery.isLoading) {
 		return <LoadingView />;
@@ -160,75 +160,25 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 							/>
 						))}
 						<Spacer />
-						{!props.user.isGuest && (
-							<ButtonBase
-								style={{ width: '100%' }}
-								icon={LogoutCurve}
-								title={translate('signOutBtn')}
-								type="menu"
-								onPress={async () => {
-									dispatch(unsetAccessToken());
-								}}
-							/>
-						)}
-
-						{props.user.isGuest && (
-							<Popover
-								trigger={(triggerProps) => (
-									<ButtonBase {...triggerProps}>
-										{translate('signOutBtn')}
-									</ButtonBase>
-								)}
-							>
-								<Popover.Content>
-									<Popover.Arrow />
-									<Popover.Body>
-										<Heading size="md" mb={2}>
-											{translate('Attention')}
-										</Heading>
-										<Text>
-											{translate(
-												'YouAreCurrentlyConnectedWithAGuestAccountWarning'
-											)}
-										</Text>
-										<Button.Group variant="ghost" space={2}>
-											<Button
-												onPress={() => dispatch(unsetAccessToken())}
-												colorScheme="red"
-											>
-												{translate('signOutBtn')}
-											</Button>
-											<Button
-												onPress={() => {
-													navigation.navigate('Login');
-												}}
-												colorScheme="green"
-											>
-												{translate('signUpBtn')}
-											</Button>
-										</Button.Group>
-									</Popover.Body>
-								</Popover.Content>
-							</Popover>
-						)}
+						<LogoutButtonCC isGuest={props.user.isGuest} style={{with: '100%'}} buttonType={'menu'}/>
 					</View>
 				</View>
 				<ScrollView
 					style={{ flex: 1, maxHeight: '100vh' }}
 					contentContainerStyle={{ flex: 1 }}
 				>
-					<View
+					<GlassmorphismCC
 						style={{
 							backgroundColor: 'rgba(16,16,20,0.5)',
 							flex: 1,
 							margin: 8,
-							padding: 20,
+							padding: props.widthPadding ? 20 : 0,
 							borderRadius: 12,
 							minHeight: 'fit-content',
 						}}
 					>
 						{props.children}
-					</View>
+					</GlassmorphismCC>
 					<Spacer/>
 				</ScrollView>
 			</View>

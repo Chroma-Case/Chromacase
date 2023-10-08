@@ -1,7 +1,7 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
 import { Column, Flex, Progress, Row, Text, Wrap } from 'native-base';
-import { useNavigation } from '../Navigation';
+import { RouteProps, useNavigation } from '../Navigation';
 import UserAvatar from '../components/UserAvatar';
 import { LoadingView } from '../components/Loading';
 import { useQuery } from '../Queries';
@@ -9,6 +9,7 @@ import API from '../API';
 import ButtonBase from '../components/UI/ButtonBase';
 import { translate } from '../i18n/i18n';
 import ScoreGraph from '../components/ScoreGraph';
+import ScaffoldCC from '../components/UI/ScaffoldCC';
 
 const fakeData = [
 	{
@@ -721,7 +722,7 @@ function xpToProgressBarValue(xp: number): number {
 	return Math.floor(xp / 10);
 }
 
-const ProfileView = () => {
+const ProfileView = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
@@ -736,69 +737,71 @@ const ProfileView = () => {
 	const level = xpToLevel(userQuery.data.data.xp);
 
 	return (
-		<Flex>
-			<Wrap
-				style={{
-					flexDirection: layout.width > 650 ? 'row' : 'column',
-					alignItems: 'center',
-					paddingBottom: 20,
-					justifyContent: 'space-between',
-				}}
-			>
-				<UserAvatar size={layout.width > 650 ? 'xl' : '2xl'} />
-				<Column
+		<ScaffoldCC routeName={props.route.name}>
+			<Flex>
+				<Wrap
 					style={{
-						paddingLeft: layout.width > 650 ? 20 : 0,
-						paddingTop: layout.width > 650 ? 0 : 20,
-						flex: 1,
-						width: '100%',
+						flexDirection: layout.width > 650 ? 'row' : 'column',
+						alignItems: 'center',
+						paddingBottom: 20,
+						justifyContent: 'space-between',
 					}}
 				>
-					<Wrap
+					<UserAvatar size={layout.width > 650 ? 'xl' : '2xl'} />
+					<Column
 						style={{
-							flexDirection: 'row',
-							alignItems: 'center',
-							paddingBottom: 20,
-							justifyContent: 'space-between',
+							paddingLeft: layout.width > 650 ? 20 : 0,
+							paddingTop: layout.width > 650 ? 0 : 20,
+							flex: 1,
+							width: '100%',
 						}}
 					>
-						<Text fontSize={'xl'} style={{ paddingRight: 'auto' }}>
-							{userQuery.data.name}
+						<Wrap
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								paddingBottom: 20,
+								justifyContent: 'space-between',
+							}}
+						>
+							<Text fontSize={'xl'} style={{ paddingRight: 'auto' }}>
+								{userQuery.data.name}
+							</Text>
+							<ButtonBase
+								title="Modifier profil"
+								style={{ width: 'fit-content' }}
+								type={'filled'}
+								onPress={async () => navigation.navigate('Settings')}
+							/>
+						</Wrap>
+						<Text style={{ paddingBottom: 10, fontWeight: 'bold' }}>
+							Account created on {userQuery.data.data.createdAt.toLocaleDateString()}
 						</Text>
-						<ButtonBase
-							title="Modifier profil"
-							style={{ width: 'fit-content' }}
-							type={'filled'}
-							onPress={async () => navigation.navigate('Settings')}
-						/>
-					</Wrap>
-					<Text style={{ paddingBottom: 10, fontWeight: 'bold' }}>
-						Account created on {userQuery.data.data.createdAt.toLocaleDateString()}
-					</Text>
-					<Wrap style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
-						<Text style={{ paddingRight: 20 }}>
-							Your client ID is {userQuery.data.id}
-						</Text>
-						<Text>{userQuery.data.data.gamesPlayed} Games played</Text>
-					</Wrap>
-				</Column>
-			</Wrap>
-			<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
-				<Text style={{ paddingRight: 20 }}>{`${translate('level')} ${level}`}</Text>
-				<Progress
-					bgColor={'#rgba(16,16,20,0.5)'}
-					value={progessValue}
-					w={'2/3'}
-					maxW={'400'}
+						<Wrap style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
+							<Text style={{ paddingRight: 20 }}>
+								Your client ID is {userQuery.data.id}
+							</Text>
+							<Text>{userQuery.data.data.gamesPlayed} Games played</Text>
+						</Wrap>
+					</Column>
+				</Wrap>
+				<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
+					<Text style={{ paddingRight: 20 }}>{`${translate('level')} ${level}`}</Text>
+					<Progress
+						bgColor={'#rgba(16,16,20,0.5)'}
+						value={progessValue}
+						w={'2/3'}
+						maxW={'400'}
+					/>
+				</Row>
+				<ScoreGraph
+					songHistory={{
+						history: fakeData,
+						best: 200,
+					}}
 				/>
-			</Row>
-			<ScoreGraph
-				songHistory={{
-					history: fakeData,
-					best: 200,
-				}}
-			/>
-		</Flex>
+			</Flex>
+		</ScaffoldCC>
 	);
 };
 

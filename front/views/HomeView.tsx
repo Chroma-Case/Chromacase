@@ -3,7 +3,7 @@ import { useQueries, useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import { Box, Flex, Stack, Heading, VStack, HStack } from 'native-base';
-import { useNavigation } from '../Navigation';
+import { RouteProps, useNavigation } from '../Navigation';
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable';
 import ProgressBar from '../components/ProgressBar';
@@ -11,8 +11,9 @@ import Translate from '../components/Translate';
 import TextButton from '../components/TextButton';
 import Song from '../models/Song';
 import { FontAwesome5 } from '@expo/vector-icons';
+import ScaffoldCC from '../components/UI/ScaffoldCC';
 
-const HomeView = () => {
+const HomeView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
 	const playHistoryQuery = useQuery(API.getUserPlayHistory);
@@ -39,7 +40,7 @@ const HomeView = () => {
 		return <LoadingView />;
 	}
 	return (
-		<Flex>
+		<ScaffoldCC routeName={props.route.name}>
 			<Flex>
 				<Stack
 					space={4}
@@ -182,7 +183,7 @@ const HomeView = () => {
 					</Box>
 				</VStack>
 			</Stack>
-		</Flex>
+		</ScaffoldCC>
 	);
 };
 

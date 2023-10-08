@@ -4,6 +4,8 @@ import InteractiveBase from './InteractiveBase';
 import { Text, useTheme } from 'native-base';
 import { Icon } from 'iconsax-react-native';
 
+export type ButtonType = 'filled' | 'outlined' | 'menu';
+
 interface ButtonProps {
 	title?: string;
 	style?: StyleProp<ViewStyle>;
@@ -12,7 +14,7 @@ interface ButtonProps {
 	icon?: Icon;
 	iconVariant?: 'Bold' | 'Outline';
 	iconImage?: string;
-	type?: 'filled' | 'outlined' | 'menu';
+	type?: ButtonType;
 }
 
 const ButtonBase: React.FC<ButtonProps> = ({
@@ -128,7 +130,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 						/>
 					)}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
-					{title && <Text style={styles.text}>{title}</Text>}
+					{title && <Text style={styles.text} selectable={false}>{title}</Text>}
 				</View>
 			)}
 		</InteractiveBase>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Flex } from 'native-base';
+import { Column, Flex } from 'native-base';
 import { useLanguage } from '../../state/LanguageSlice';
 import { AvailableLanguages, DefaultLanguage, translate } from '../../i18n/i18n';
 import { useSelector } from '../../state/Store';
@@ -9,24 +9,13 @@ import ElementList from '../../components/GtkUI/ElementList';
 import LocalSettings from '../../models/LocalSettings';
 import { Brush2, Colorfilter, LanguageSquare, Rank, Sound } from 'iconsax-react-native';
 
-const PreferencesView = () => {
+const PreferencesSettings = () => {
 	const dispatch = useDispatch();
 	const language = useSelector((state) => state.language.value);
 	const settings = useSelector((state) => state.settings.local);
 	return (
-		<Flex
-			style={{
-				flex: 1,
-				alignItems: 'center',
-				paddingTop: 32,
-			}}
-		>
+		<Column space={4} style={{width: '100%'}}>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '90%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
 						icon: <Brush2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
@@ -93,11 +82,6 @@ const PreferencesView = () => {
 				]}
 			/>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '90%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
 						icon: <Colorfilter size="24" color="#FFF" style={{ minWidth: 24 }} />,
@@ -114,11 +98,6 @@ const PreferencesView = () => {
 				]}
 			/>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '90%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
 						icon: <Sound size="24" color="#FFF" style={{ minWidth: 24 }} />,
@@ -153,8 +132,8 @@ const PreferencesView = () => {
 					},*/
 				]}
 			/>
-		</Flex>
+		</Column>
 	);
 };
 
-export default PreferencesView;
+export default PreferencesSettings;

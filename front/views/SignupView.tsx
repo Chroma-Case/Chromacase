@@ -163,15 +163,15 @@ const SignupView = () => {
 			submitButton={
 				<ButtonBase
 					style={{ width: '100%' }}
-					title="Signin"
+					title={translate('signUpBtn')}
 					isDisabled={
-						formData.password.error !== null ||
 						formData.username.error !== null ||
-						formData.repeatPassword.error !== null ||
 						formData.email.error !== null ||
+						formData.password.error !== null ||
+						formData.repeatPassword.error !== null ||
 						formData.username.value === '' ||
+						formData.email.value === '' ||
 						formData.password.value === '' ||
-						formData.repeatPassword.value === '' ||
 						formData.repeatPassword.value === ''
 					}
 					onPress={async () => {

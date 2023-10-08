@@ -10,7 +10,6 @@ import {
 	Cup,
 	Discover,
 	Icon,
-	LogoutCurve,
 	Music,
 	SearchNormal1,
 	Setting2,
@@ -42,9 +41,10 @@ const menu: {
 type ScaffoldCCProps = {
 	children?: React.ReactNode;
 	routeName: string;
+	withPadding?: boolean;
 };
 
-const ScaffoldCC = (props: ScaffoldCCProps) => {
+const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 
 	const userQuery = useQuery(API.getUserInfo);
@@ -53,19 +53,20 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 		return <LoadingView />;
 	}
 	const colorScheme = useColorScheme();
+	const logo = colorScheme == 'light'
+	? require('../../assets/icon_light.png')
+	: require('../../assets/icon_dark.png');
 
 
 	if (screenSize === 'small') {
 		return (
 			<ScaffoldMobileCC
 				user={userQuery.data}
-				logo={colorScheme == 'light'
-				? require('../../assets/icon_light.png')
-				: require('../../assets/icon_dark.png')}
-				routeName={props.routeName}
+				logo={logo}
+				routeName={routeName}
 				menu={menu}
 			>
-				{props.children}
+				{children}
 			</ScaffoldMobileCC>
 		);
 	}
@@ -73,13 +74,12 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 	return (
 		<ScaffoldDesktopCC
 			user={userQuery.data}
-			logo={colorScheme == 'light'
-			? require('../../assets/icon_light.png')
-			: require('../../assets/icon_dark.png')}
-			routeName={props.routeName}
+			logo={logo}
+			routeName={routeName}
 			menu={menu}
+			widthPadding={withPadding}
 		>
-			{props.children}
+			{children}
 		</ScaffoldDesktopCC>
 	);
 };

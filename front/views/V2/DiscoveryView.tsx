@@ -5,7 +5,8 @@ import { useQuery, useQueries } from '../../Queries';
 import HomeMainSongCard from '../../components/V2/HomeMainSongCard';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
-import { useNavigation } from '../../Navigation';
+import { RouteProps, useNavigation } from '../../Navigation';
+import ScaffoldCC from '../../components/UI/ScaffoldCC';
 
 const bigSideRatio = 1000;
 const smallSideRatio = 618;
@@ -45,7 +46,7 @@ const cards = [
 	},
 ] as [HomeCardProps, HomeCardProps, HomeCardProps, HomeCardProps];
 
-const HomeView = () => {
+const HomeView = (props: RouteProps<{}>) => {
 	const songsQuery = useQuery(API.getSongSuggestions);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
@@ -76,36 +77,22 @@ const HomeView = () => {
 	}, [artistsQueries]);
 
 	return (
-		<View
-			style={{
-				width: '100%',
-				height: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-			}}
-		>
-			<View>
-				<View
-					style={{
-						alignSelf: 'stretch',
-						maxWidth: '1100px',
-						alignItems: 'stretch',
-						flexDirection: isPhone ? 'column' : 'row',
-					}}
-				>
+		<ScaffoldCC routeName={props.route.name}>
+			<View
+				style={{
+					width: '100%',
+					height: '100%',
+					display: 'flex',
+					flexDirection: 'column',
+				}}
+			>
+				<View>
 					<View
 						style={{
-							flexGrow: bigSideRatio,
-						}}
-					>
-						<HomeMainSongCard {...cards[0]} />
-					</View>
-					<View
-						style={{
-							flexGrow: smallSideRatio,
-							display: 'flex',
-							flexDirection: isPhone ? 'row' : 'column',
+							alignSelf: 'stretch',
+							maxWidth: '1100px',
 							alignItems: 'stretch',
+							flexDirection: isPhone ? 'column' : 'row',
 						}}
 					>
 						<View
@@ -113,13 +100,13 @@ const HomeView = () => {
 								flexGrow: bigSideRatio,
 							}}
 						>
-							<HomeMainSongCard {...cards[1]} />
+							<HomeMainSongCard {...cards[0]} />
 						</View>
 						<View
 							style={{
 								flexGrow: smallSideRatio,
 								display: 'flex',
-								flexDirection: isPhone ? 'column-reverse' : 'row-reverse',
+								flexDirection: isPhone ? 'row' : 'column',
 								alignItems: 'stretch',
 							}}
 						>
@@ -128,83 +115,99 @@ const HomeView = () => {
 									flexGrow: bigSideRatio,
 								}}
 							>
-								<HomeMainSongCard {...cards[2]} />
+								<HomeMainSongCard {...cards[1]} />
 							</View>
 							<View
 								style={{
 									flexGrow: smallSideRatio,
 									display: 'flex',
-									flexDirection: isPhone ? 'row-reverse' : 'column-reverse',
+									flexDirection: isPhone ? 'column-reverse' : 'row-reverse',
 									alignItems: 'stretch',
 								}}
 							>
 								<View
 									style={{
 										flexGrow: bigSideRatio,
-										display: 'flex',
-										flexDirection: 'column',
-										alignItems: 'stretch',
-										justifyContent: 'flex-end',
 									}}
 								>
-									<HomeMainSongCard {...cards[3]} />
+									<HomeMainSongCard {...cards[2]} />
 								</View>
 								<View
 									style={{
 										flexGrow: smallSideRatio,
+										display: 'flex',
+										flexDirection: isPhone ? 'row-reverse' : 'column-reverse',
+										alignItems: 'stretch',
 									}}
-								></View>
+								>
+									<View
+										style={{
+											flexGrow: bigSideRatio,
+											display: 'flex',
+											flexDirection: 'column',
+											alignItems: 'stretch',
+											justifyContent: 'flex-end',
+										}}
+									>
+										<HomeMainSongCard {...cards[3]} />
+									</View>
+									<View
+										style={{
+											flexGrow: smallSideRatio,
+										}}
+									></View>
+								</View>
 							</View>
 						</View>
 					</View>
 				</View>
-			</View>
-			<View
-				style={{
-					flexShrink: 0,
-					flexGrow: 0,
-					flexBasis: '15%',
-					width: '100%',
-				}}
-			>
-				<Text
-					style={{
-						color: 'white',
-						fontSize: 24,
-						fontWeight: 'bold',
-						marginLeft: 16,
-						marginBottom: 16,
-						marginTop: 24,
-					}}
-				>
-					{'Suggestions'}
-				</Text>
-				{songsQuery.isLoading && <Text>Loading...</Text>}
 				<View
 					style={{
-						flexDirection: 'row',
-						flexWrap: 'wrap',
-						justifyContent: 'flex-start',
-						alignItems: 'flex-start',
-						// @ts-expect-error - gap is not in the typings
-						gap: 16,
+						flexShrink: 0,
+						flexGrow: 0,
+						flexBasis: '15%',
+						width: '100%',
 					}}
 				>
-					{songsQuery.data?.map((song) => (
-						<SongCardInfo
-							key={song.id}
-							song={song}
-							onPress={() => {
-								navigation.navigate('Song', { songId: song.id });
-							}}
-							onPlay={() => {
-								console.log('play');
-							}}
-						/>
-					))}
+					<Text
+						style={{
+							color: 'white',
+							fontSize: 24,
+							fontWeight: 'bold',
+							marginLeft: 16,
+							marginBottom: 16,
+							marginTop: 24,
+						}}
+					>
+						{'Suggestions'}
+					</Text>
+					{songsQuery.isLoading && <Text>Loading...</Text>}
+					<View
+						style={{
+							flexDirection: 'row',
+							flexWrap: 'wrap',
+							justifyContent: 'flex-start',
+							alignItems: 'flex-start',
+							// @ts-expect-error - gap is not in the typings
+							gap: 16,
+						}}
+					>
+						{songsQuery.data?.map((song) => (
+							<SongCardInfo
+								key={song.id}
+								song={song}
+								onPress={() => {
+									navigation.navigate('Song', { songId: song.id });
+								}}
+								onPlay={() => {
+									console.log('play');
+								}}
+							/>
+						))}
+					</View>
 				</View>
 			</View>
-		</View>
+		</ScaffoldCC>
 	);
 };
 

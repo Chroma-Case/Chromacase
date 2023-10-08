@@ -1,6 +1,6 @@
 import API from '../../API';
 import React from 'react';
-import { Flex, Toast } from 'native-base';
+import { Column, Flex, Toast } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
@@ -9,6 +9,8 @@ import * as ImagePicker from 'expo-image-picker';
 import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-react-native';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
+import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
+import Spacer from '../../components/UI/Spacer';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	await API.updateUserEmail(newEmail);
@@ -30,19 +32,8 @@ const ProfileSettings = () => {
 	}
 	const user = userQuery.data;
 	return (
-		<Flex
-			style={{
-				flex: 1,
-				alignItems: 'center',
-				paddingTop: 32,
-			}}
-		>
+		<Column space={4} style={{width: '100%'}}>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '100%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
 						icon: <Google size="24" color="#FFF" style={{ minWidth: 24 }} />,
@@ -147,7 +138,8 @@ const ProfileSettings = () => {
 					},
 				]}
 			/>
-		</Flex>
+			<LogoutButtonCC isGuest={user.isGuest} style={{with: 'fit-content'}} buttonType={'filled'}/>
+		</Column>
 	);
 };
 

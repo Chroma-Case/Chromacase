@@ -11,7 +11,6 @@ import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
 import { Translate, translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
-import StartPageView from './views/StartPageView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SetttingsNavigator from './views/settings/SettingsView';
@@ -34,7 +33,6 @@ import SigninView from './views/SigninView';
 import SignupView from './views/SignupView';
 import PasswordResetView from './views/PasswordResetView';
 import ForgotPasswordView from './views/ForgotPasswordView';
-import ScaffoldCC from './components/UI/ScaffoldCC';
 import DiscoveryView from './views/V2/DiscoveryView';
 
 // Util function to hide route props in URL
@@ -101,11 +99,11 @@ const protectedRoutes = () =>
 
 const publicRoutes = () =>
 	({
-		Start: {
-			component: StartPageView,
-			options: { title: 'Chromacase', headerShown: false },
-			link: '/',
-		},
+		// Start: {
+		// 	component: StartPageView,
+		// 	options: { title: 'Chromacase', headerShown: false },
+		// 	link: '/',
+		// },
 		Login: {
 			component: SigninView,
 			options: { title: translate('signInBtn'), headerShown: false },
@@ -165,13 +163,9 @@ const RouteToScreen =
 	(props: NativeStackScreenProps<T & ParamListBase>) =>
 		(
 			<>
-				<ScaffoldCC routeName={props.route.name}>
-					<>
-						{component({ ...props.route.params, route: props.route } as Parameters<
-							Route<T>['component']
-						>[0])}
-					</>
-				</ScaffoldCC>
+				{component({ ...props.route.params, route: props.route } as Parameters<
+					Route<T>['component']
+				>[0])}
 			</>
 		);
 
