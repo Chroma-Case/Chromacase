@@ -1,14 +1,9 @@
 import {
-	BadRequestException,
-	Body,
 	Controller,
 	Get,
-	HttpCode,
 	InternalServerErrorException,
 	NotFoundException,
 	Param,
-	ParseIntPipe,
-	Post,
 	Query,
 	Request,
 	UseGuards,
@@ -16,13 +11,11 @@ import {
 import {
 	ApiOkResponse,
 	ApiOperation,
-	ApiParam,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Artist, Genre, Song } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { SearchSongDto } from './dto/search-song.dto';
 import { SearchService } from './search.service';
 import { Song as _Song } from 'src/_gen/prisma-class/song';
 import { Genre as _Genre } from 'src/_gen/prisma-class/genre';
