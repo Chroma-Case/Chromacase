@@ -18,7 +18,7 @@ import { LessonService } from './lesson.service';
 import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Prisma, Skill } from '@prisma/client';
 import { FilterQuery } from 'src/utils/filter.pipe';
-import { Lesson as _Lesson} from 'src/_gen/prisma-class/lesson';
+import { Lesson as _Lesson } from 'src/_gen/prisma-class/lesson';
 
 export class Lesson {
 	@ApiProperty()
