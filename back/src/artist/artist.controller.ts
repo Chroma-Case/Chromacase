@@ -20,10 +20,15 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { Request } from 'express';
 import { ArtistService } from './artist.service';
 import { Prisma, Artist } from '@prisma/client';
-import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+	ApiNotFoundResponse,
+	ApiOkResponse,
+	ApiOperation,
+	ApiTags,
+} from '@nestjs/swagger';
 import { createReadStream, existsSync } from 'fs';
 import { FilterQuery } from 'src/utils/filter.pipe';
-import { Artist as _Artist} from 'src/_gen/prisma-class/artist';
+import { Artist as _Artist } from 'src/_gen/prisma-class/artist';
 
 @Controller('artist')
 @ApiTags('artist')
@@ -33,7 +38,9 @@ export class ArtistController {
 	constructor(private readonly service: ArtistService) {}
 
 	@Post()
-	@ApiOperation({ description: "Register a new artist, should not be used by frontend"})
+	@ApiOperation({
+		description: 'Register a new artist, should not be used by frontend',
+	})
 	async create(@Body() dto: CreateArtistDto) {
 		try {
 			return await this.service.create(dto);
@@ -43,7 +50,7 @@ export class ArtistController {
 	}
 
 	@Delete(':id')
-	@ApiOperation({ description: "Delete an artist by id"})
+	@ApiOperation({ description: 'Delete an artist by id' })
 	async remove(@Param('id', ParseIntPipe) id: number) {
 		try {
 			return await this.service.delete({ id });
@@ -53,8 +60,8 @@ export class ArtistController {
 	}
 
 	@Get(':id/illustration')
-	@ApiOperation({ description: "Get an artist's illustration"})
-	@ApiNotFoundResponse({ description: "Artist or illustration not found"})
+	@ApiOperation({ description: "Get an artist's illustration" })
+	@ApiNotFoundResponse({ description: 'Artist or illustration not found' })
 	async getIllustration(@Param('id', ParseIntPipe) id: number) {
 		const artist = await this.service.get({ id });
 		if (!artist) throw new NotFoundException('Artist not found');
@@ -71,7 +78,7 @@ export class ArtistController {
 	}
 
 	@Get()
-	@ApiOperation({ description: "Get all artists paginated"})
+	@ApiOperation({ description: 'Get all artists paginated' })
 	@ApiOkResponsePlaginated(_Artist)
 	async findAll(
 		@Req() req: Request,
@@ -89,8 +96,8 @@ export class ArtistController {
 	}
 
 	@Get(':id')
-	@ApiOperation({ description: "Get an artist by id"})
-	@ApiOkResponse({ type: _Artist})
+	@ApiOperation({ description: 'Get an artist by id' })
+	@ApiOkResponse({ type: _Artist })
 	async findOne(@Param('id', ParseIntPipe) id: number) {
 		const res = await this.service.get({ id });
 
