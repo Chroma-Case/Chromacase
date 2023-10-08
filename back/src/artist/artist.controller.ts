@@ -1,5 +1,4 @@
 import {
-	BadRequestException,
 	Body,
 	ConflictException,
 	Controller,
@@ -14,7 +13,7 @@ import {
 	Query,
 	Req,
 	StreamableFile,
-    UseGuards,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { CreateArtistDto } from './dto/create-artist.dto';

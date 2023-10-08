@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Album, Artist, Prisma, Song, Genre } from '@prisma/client';
+import { Artist, Prisma, Song, Genre } from '@prisma/client';
 import { HistoryService } from 'src/history/history.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
