@@ -311,4 +311,19 @@ export class AuthController {
 			mapInclude(include, req, SongController.includableFields),
 		);
 	}
+
+	@UseGuards(JwtAuthGuard)
+	@ApiBearerAuth()
+	@ApiOkResponse({ description: 'Successfully added score'})
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@Get('me/score/:score')
+	addScore(
+		@Request() req: any,
+		@Param('id') score: number,
+	) {
+		return this.usersService.addScore(
+				+req.user.id,
+				score,
+			);
+	}
 }

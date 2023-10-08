@@ -7,8 +7,9 @@ export class ScoresService {
 		private prisma: PrismaService,
 	) {}
 
-    async topThree(): Promise<any> {
-        // return this.prisma.
-        return [];
-    }
+    // // async topThree(): Promise<any> {
+    // //     return this.prisma.user.findMany(
+    // //         // {orderBy: }
+    // //     )
+    // }
 }
