@@ -46,6 +46,7 @@ class SongHistoryResult {
 
 @Controller('song')
 @ApiTags('song')
+@UseGuards(JwtAuthGuard)
 export class SongController {
 	static filterableFields: string[] = [
 		'+id',
@@ -54,7 +55,7 @@ export class SongController {
 		'+albumId',
 		'+genreId',
 	];
-	static includableFileds: IncludeMap<Prisma.SongInclude> = {
+	static includableFields: IncludeMap<Prisma.SongInclude> = {
 		artist: true,
 		album: true,
 		genre: true,
@@ -168,13 +169,12 @@ export class SongController {
 			skip,
 			take,
 			where,
-			include: mapInclude(include, req, SongController.includableFileds),
+			include: mapInclude(include, req, SongController.includableFields),
 		});
 		return new Plage(ret, req);
 	}
 
 	@Get(':id')
-	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ description: 'Get a specific song data' })
 	@ApiNotFoundResponse({ description: 'Song not found' })
 	@ApiOkResponse({ type: _Song, description: 'Requested song' })
@@ -187,7 +187,7 @@ export class SongController {
 			{
 				id,
 			},
-			mapInclude(include, req, SongController.includableFileds),
+			mapInclude(include, req, SongController.includableFields),
 		);
 
 		if (res === null) throw new NotFoundException('Song not found');
@@ -196,7 +196,6 @@ export class SongController {
 
 	@Get(':id/history')
 	@HttpCode(200)
-	@UseGuards(JwtAuthGuard)
 	@ApiOperation({
 		description: 'get the history of the connected user on a specific song',
 	})

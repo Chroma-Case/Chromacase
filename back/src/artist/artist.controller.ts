@@ -14,6 +14,7 @@ import {
 	Query,
 	Req,
 	StreamableFile,
+    UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -29,11 +30,18 @@ import {
 import { createReadStream, existsSync } from 'fs';
 import { FilterQuery } from 'src/utils/filter.pipe';
 import { Artist as _Artist } from 'src/_gen/prisma-class/artist';
+import { IncludeMap, mapInclude } from 'src/utils/include';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('artist')
 @ApiTags('artist')
+@UseGuards(JwtAuthGuard)
 export class ArtistController {
 	static filterableFields = ['+id', 'name'];
+	static includableFields: IncludeMap<Prisma.ArtistInclude> = {
+		Song: true,
+		Album: true,
+	};
 
 	constructor(private readonly service: ArtistService) {}
 
@@ -84,6 +92,7 @@ export class ArtistController {
 		@Req() req: Request,
 		@FilterQuery(ArtistController.filterableFields)
 		where: Prisma.ArtistWhereInput,
+		@Query('include') include: string,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Artist>> {
@@ -91,6 +100,7 @@ export class ArtistController {
 			skip,
 			take,
 			where,
+			include: mapInclude(include, req, ArtistController.includableFields),
 		});
 		return new Plage(ret, req);
 	}
@@ -98,8 +108,15 @@ export class ArtistController {
 	@Get(':id')
 	@ApiOperation({ description: 'Get an artist by id' })
 	@ApiOkResponse({ type: _Artist })
-	async findOne(@Param('id', ParseIntPipe) id: number) {
-		const res = await this.service.get({ id });
+	async findOne(
+		@Req() req: Request,
+		@Query('include') include: string,
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		const res = await this.service.get(
+			{ id },
+			mapInclude(include, req, ArtistController.includableFields),
+		);
 
 		if (res === null) throw new NotFoundException('Artist not found');
 		return res;
