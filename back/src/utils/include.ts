@@ -18,11 +18,10 @@ export function mapInclude<IncludeType>(
 	for (const key of include.split(',')) {
 		const value =
 			typeof fields[key] === 'function'
-				? // @ts-expect-error typescript is dumb, once again
-				  fields[key]({ user: req.user })
+				? fields[key]({ user: req.user })
 				: fields[key];
-		if (value === true) include[key] = true;
-		else if (value !== false) {
+		if (value !== false && value !== undefined) ret[key] = value;
+		else {
 			throw new BadRequestException(
 				`Invalid include, ${key} is not valid. Valid includes are: ${Object.keys(
 					fields,

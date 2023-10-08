@@ -3,6 +3,7 @@ Documentation       Tests of the /song route.
 ...                 Ensures that the songs CRUD works corectly.
 
 Resource            ../rest.resource
+Resource            ../auth/auth.resource
 
 
 *** Test Cases ***
@@ -133,5 +134,47 @@ Get midi file
     Integer    response status    201
     GET    /song/${res.body.id}/midi
     Integer    response status    200
-    #Output
+    # Output
     [Teardown]    DELETE    /song/${res.body.id}
+
+Find a song with artist
+    [Documentation]    Create a song and find it with it's artist
+    &{res2}=    POST    /artist    { "name": "Tghjmk"}
+    Output
+    Integer    response status    201
+    &{res}=    POST
+    ...    /song
+    ...    {"name": "Mama miaeyi", "artistId": ${res2.body.id}, "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl"}
+    Output
+    Integer    response status    201
+    &{get}=    GET    /song/${res.body.id}?include=artist
+    Output
+    Integer    response status    200
+    Should Be Equal    ${res2.body}    ${get.body.artist}
+    [Teardown]    Run Keywords    DELETE    /song/${res.body.id}
+    ...    AND    DELETE    /artist/${res2.body.id}
+
+Find a song with artist and history
+    [Documentation]    Create a song and find it with it's artist
+    ${userID}=    RegisterLogin    wowusersfkj
+    &{res2}=    POST    /artist    { "name": "Tghjmk"}
+    Output
+    Integer    response status    201
+    &{res}=    POST
+    ...    /song
+    ...    {"name": "Mama miaeyi", "artistId": ${res2.body.id}, "difficulties": {}, "midiPath": "/musics/Beethoven-125-4.midi", "musicXmlPath": "/musics/Beethoven-125-4.mxl"}
+    Output
+    Integer    response status    201
+    &{res3}=    POST
+    ...    /history
+    ...    { "songID": ${res.body.id}, "userID": ${userID}, "score": 12, "difficulties": {}, "info": {} }
+    Output
+    Integer    response status    201
+    &{get}=    GET    /song/${res.body.id}?include=artist,SongHistory
+    Output
+    Integer    response status    200
+    Should Be Equal    ${res2.body}    ${get.body.artist}
+    Should Be Equal    ${res3.body}    ${get.body.SongHistory[0]}
+    [Teardown]    Run Keywords    DELETE    /auth/me
+    ...    AND    DELETE    /song/${res.body.id}
+    ...    AND    DELETE    /artist/${res2.body.id}

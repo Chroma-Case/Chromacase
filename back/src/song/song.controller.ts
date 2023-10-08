@@ -174,6 +174,7 @@ export class SongController {
 	}
 
 	@Get(':id')
+	@UseGuards(JwtAuthGuard)
 	@ApiOperation({ description: 'Get a specific song data' })
 	@ApiNotFoundResponse({ description: 'Song not found' })
 	@ApiOkResponse({ type: _Song, description: 'Requested song' })
