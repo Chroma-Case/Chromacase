@@ -130,4 +130,18 @@ export class UsersService {
 			}
 		)
 	}
+
+	async addScore(
+		where: Prisma.UserWhereUniqueInput,
+		score: number,
+	) {
+		return this.prisma.user.update({
+				where,
+				data: {
+					score: {
+						increment: score,
+					},
+				},
+			});
+	}
 }

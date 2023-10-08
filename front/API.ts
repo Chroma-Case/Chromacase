@@ -697,4 +697,11 @@ export default class API {
 				),
 		};
 	}
+
+	public static async updateUserTotalScore(score: number): Promise<void> {
+		await API.fetch({
+			route: `/auth/me/score/${score}`,
+			method: 'PATCH',
+		});
+	}
 }
