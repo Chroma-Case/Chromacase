@@ -12,9 +12,13 @@ export class ArtistService {
 		});
 	}
 
-	async get(where: Prisma.ArtistWhereUniqueInput): Promise<Artist | null> {
+	async get(
+		where: Prisma.ArtistWhereUniqueInput,
+		include?: Prisma.ArtistInclude,
+	): Promise<Artist | null> {
 		return this.prisma.artist.findUnique({
 			where,
+			include,
 		});
 	}
 
@@ -24,14 +28,16 @@ export class ArtistService {
 		cursor?: Prisma.ArtistWhereUniqueInput;
 		where?: Prisma.ArtistWhereInput;
 		orderBy?: Prisma.ArtistOrderByWithRelationInput;
+		include?: Prisma.ArtistInclude;
 	}): Promise<Artist[]> {
-		const { skip, take, cursor, where, orderBy } = params;
+		const { skip, take, cursor, where, orderBy, include } = params;
 		return this.prisma.artist.findMany({
 			skip,
 			take,
 			cursor,
 			where,
 			orderBy,
+			include,
 		});
 	}
 

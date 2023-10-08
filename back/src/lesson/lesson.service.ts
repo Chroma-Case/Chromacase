@@ -12,22 +12,28 @@ export class LessonService {
 		cursor?: Prisma.LessonWhereUniqueInput;
 		where?: Prisma.LessonWhereInput;
 		orderBy?: Prisma.LessonOrderByWithRelationInput;
+		include?: Prisma.LessonInclude;
 	}): Promise<Lesson[]> {
-		const { skip, take, cursor, where, orderBy } = params;
+		const { skip, take, cursor, where, orderBy, include } = params;
 		return this.prisma.lesson.findMany({
 			skip,
 			take,
 			cursor,
 			where,
 			orderBy,
+			include,
 		});
 	}
 
-	async get(id: number): Promise<Lesson | null> {
+	async get(
+		id: number,
+		include?: Prisma.LessonInclude,
+	): Promise<Lesson | null> {
 		return this.prisma.lesson.findFirst({
 			where: {
 				id: id,
 			},
+			include,
 		});
 	}
 

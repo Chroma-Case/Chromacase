@@ -14,9 +14,11 @@ export class AlbumService {
 
 	async album(
 		albumWhereUniqueInput: Prisma.AlbumWhereUniqueInput,
+		include?: Prisma.AlbumInclude,
 	): Promise<Album | null> {
 		return this.prisma.album.findUnique({
 			where: albumWhereUniqueInput,
+			include,
 		});
 	}
 
@@ -26,14 +28,16 @@ export class AlbumService {
 		cursor?: Prisma.AlbumWhereUniqueInput;
 		where?: Prisma.AlbumWhereInput;
 		orderBy?: Prisma.AlbumOrderByWithRelationInput;
+		include?: Prisma.AlbumInclude;
 	}): Promise<Album[]> {
-		const { skip, take, cursor, where, orderBy } = params;
+		const { skip, take, cursor, where, orderBy, include } = params;
 		return this.prisma.album.findMany({
 			skip,
 			take,
 			cursor,
 			where,
 			orderBy,
+			include,
 		});
 	}
 

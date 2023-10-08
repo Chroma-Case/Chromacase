@@ -12,6 +12,7 @@ import {
 	Post,
 	Query,
 	Req,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -21,11 +22,18 @@ import { Prisma, Album } from '@prisma/client';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { FilterQuery } from 'src/utils/filter.pipe';
 import { Album as _Album } from 'src/_gen/prisma-class/album';
+import { IncludeMap, mapInclude } from 'src/utils/include';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('album')
 @ApiTags('album')
+@UseGuards(JwtAuthGuard)
 export class AlbumController {
 	static filterableFields: string[] = ['+id', 'name', '+artistId'];
+	static includableFields: IncludeMap<Prisma.AlbumInclude> = {
+		artist: true,
+		Song: true,
+	};
 
 	constructor(private readonly albumService: AlbumService) {}
 
@@ -65,6 +73,7 @@ export class AlbumController {
 		@Req() req: Request,
 		@FilterQuery(AlbumController.filterableFields)
 		where: Prisma.AlbumWhereInput,
+		@Query('include') include: string,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Album>> {
@@ -72,6 +81,7 @@ export class AlbumController {
 			skip,
 			take,
 			where,
+			include: mapInclude(include, req, AlbumController.includableFields),
 		});
 		return new Plage(ret, req);
 	}
@@ -79,8 +89,15 @@ export class AlbumController {
 	@Get(':id')
 	@ApiOperation({ description: 'Get an album by id' })
 	@ApiOkResponse({ type: _Album })
-	async findOne(@Param('id', ParseIntPipe) id: number) {
-		const res = await this.albumService.album({ id });
+	async findOne(
+		@Req() req: Request,
+		@Query('include') include: string,
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		const res = await this.albumService.album(
+			{ id },
+			mapInclude(include, req, AlbumController.includableFields),
+		);
 
 		if (res === null) throw new NotFoundException('Album not found');
 		return res;
