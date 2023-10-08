@@ -117,4 +117,18 @@ export class UsersService {
 			where: { userId: userId, songId: songId },
 		});
 	}
+
+	async addScore(
+		where: Prisma.UserWhereUniqueInput,
+		score: number,
+	) {
+		return this.prisma.user.update({
+				where,
+				data: {
+					score: {
+						increment: score,
+					},
+				},
+			});
+	}
 }

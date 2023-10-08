@@ -316,7 +316,7 @@ export class AuthController {
 	@ApiBearerAuth()
 	@ApiOkResponse({ description: 'Successfully added score'})
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
-	@Get('me/score/:score')
+	@Patch('me/score/:score')
 	addScore(
 		@Request() req: any,
 		@Param('id') score: number,
