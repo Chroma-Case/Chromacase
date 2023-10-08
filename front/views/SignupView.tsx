@@ -178,8 +178,8 @@ const SignupView = () => {
 						try {
 							const resp = await onSubmit(
 								formData.username.value,
-								formData.password.value,
-								formData.email.value
+								formData.email.value,
+								formData.password.value
 							);
 							toast.show({ description: resp, colorScheme: 'secondary' });
 						} catch (e) {

@@ -4,6 +4,7 @@ import sys
 import os
 import requests
 import glob
+from mido import MidiFile
 from configparser import ConfigParser
 
 url = os.environ.get("API_URL")
@@ -20,16 +21,16 @@ def getOrCreateAlbum(name, artistId):
 	return out["id"]
 
 def getOrCreateGenre(names):
-    ids = []
-    for name in names.split(","):
-        res = requests.post(f"{url}/genre", json={
-    	    "name": name,
-        })
-        out = res.json()
-        print(out)
-        ids += [out["id"]]
-    #TODO handle multiple genres
-    return ids[0]
+	ids = []
+	for name in names.split(","):
+		res = requests.post(f"{url}/genre", json={
+			"name": name,
+		})
+		out = res.json()
+		print(out)
+		ids += [out["id"]]
+	#TODO handle multiple genres
+	return ids[0]
 
 def getOrCreateArtist(name):
 	res = requests.post(f"{url}/artist", json={
@@ -42,8 +43,10 @@ def getOrCreateArtist(name):
 def populateFile(path, midi, mxl):
 	config = ConfigParser()
 	config.read(path)
+	mid = MidiFile(midi)
 	metadata = config["Metadata"];
 	difficulties = dict(config["Difficulties"])
+	difficulties["length"] = round((mid.length), 2)
 	artistId = getOrCreateArtist(metadata["Artist"])
 	print(f"Populating {metadata['Name']}")
 	res = requests.post(f"{url}/song", json={
@@ -57,7 +60,6 @@ def populateFile(path, midi, mxl):
 		"illustrationPath": f"/assets/{os.path.commonpath([midi, mxl])}/illustration.png"
 	})
 	print(res.json())
-
 
 def main():
 	global url

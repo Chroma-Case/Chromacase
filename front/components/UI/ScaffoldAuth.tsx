@@ -7,7 +7,7 @@ import { translate } from '../../i18n/i18n';
 import API from '../../API';
 import SeparatorBase from './SeparatorBase';
 import LinkBase from './LinkBase';
-import ImageBanner from '../../assets/banner.jpg';
+import { useAssets } from 'expo-asset';
 
 interface ScaffoldAuthProps {
 	title: string;
@@ -25,6 +25,8 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	link,
 }) => {
 	const layout = useWindowDimensions();
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const [banner] = useAssets(require('../../assets/banner.jpg'));
 
 	return (
 		<Flex
@@ -83,7 +85,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 			{layout.width > 650 ? (
 				<View style={{ width: '50%', height: '100%', padding: 16 }}>
 					<Image
-						source={ImageBanner}
+						source={{ uri: banner?.at(0)?.uri }}
 						alt="banner page"
 						style={{ width: '100%', height: '100%', borderRadius: 8 }}
 					/>

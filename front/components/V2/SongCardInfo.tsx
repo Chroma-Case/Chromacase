@@ -92,7 +92,6 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 										display: 'flex',
 										flexDirection: 'row',
 										alignItems: 'center',
-										// @ts-expect-error gap isn't yet supported by react native
 										gap: 5,
 										paddingHorizontal: 10,
 									}}

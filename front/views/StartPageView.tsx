@@ -91,9 +91,10 @@ const StartPageView = () => {
 					iconName="user"
 					iconProvider={FontAwesome5}
 					onPress={() => navigation.navigate('Login')}
+					// @ts-expect-error Raw CSS
 					style={{
 						width: isSmallScreen ? '90%' : 'clamp(100px, 33.3%, 600px)',
-						height: '300px',
+						height: 300,
 						margin: 'clamp(10px, 2%, 50px)',
 					}}
 				/>
@@ -116,9 +117,10 @@ const StartPageView = () => {
 							toast.show({ description: error as string });
 						}
 					}}
+					// @ts-expect-error Raw CSS
 					style={{
 						width: isSmallScreen ? '90%' : 'clamp(100px, 33.3%, 600px)',
-						height: '300px',
+						height: 300,
 						margin: 'clamp(10px, 2%, 50px)',
 					}}
 				/>
@@ -131,8 +133,9 @@ const StartPageView = () => {
 					iconProvider={FontAwesome5}
 					iconName="user-plus"
 					onPress={() => navigation.navigate('Signup')}
+					// @ts-expect-error Raw CSS
 					style={{
-						height: '150px',
+						height: 150,
 						width: isSmallScreen ? '90%' : 'clamp(150px, 50%, 600px)',
 					}}
 				/>
@@ -176,6 +179,23 @@ const StartPageView = () => {
 						<Link href="http://eip.epitech.eu/2024/chromacase" isExternal>
 							Click here for more info
 						</Link>
+					</Box>
+				</Box>
+				<Box
+					style={{
+						width: '90%',
+						marginTop: 20,
+					}}
+				>
+					<Box
+						style={{
+							width: '100%',
+							height: '100%',
+							display: 'flex',
+							alignItems: 'center',
+						}}
+					>
+						<Link href="/forgot_password">I forgot my password</Link>
 					</Box>
 				</Box>
 			</Column>

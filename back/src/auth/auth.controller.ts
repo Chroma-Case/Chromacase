@@ -19,8 +19,8 @@ import {
 	HttpStatus,
 	ParseFilePipeBuilder,
 	Response,
-	Param,
 	Query,
+	Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -50,6 +50,7 @@ import { SettingsService } from 'src/settings/settings.service';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { writeFile } from 'fs';
+import { PasswordResetDto } from './dto/password_reset.dto ';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -115,11 +116,31 @@ export class AuthController {
 	@ApiOperation({description: 'Resend the verification email'})
 	async reverify(@Request() req: any): Promise<void> {
 		const user = await this.usersService.user({ id: req.user.id });
-		if (!user) throw new BadRequestException("Invalid user");
+		if (!user) throw new BadRequestException('Invalid user');
 		await this.authService.sendVerifyMail(user);
 	}
 
+	@HttpCode(200)
+	@Put('password-reset')
+	async password_reset(
+		@Body() resetDto: PasswordResetDto,
+		@Query('token') token: string,
+	): Promise<void> {
+		if (await this.authService.changePassword(resetDto.password, token)) return;
+		throw new BadRequestException('Invalid token. Expired or invalid.');
+	}
+
+	@HttpCode(200)
+	@Put('forgot-password')
+	async forgot_password(@Query('email') email: string): Promise<void> {
+		console.log(email);
+		const user = await this.usersService.user({ email: email });
+		if (!user) throw new BadRequestException('Invalid user');
+		await this.authService.sendPasswordResetMail(user);
+	}
+
 	@Post('login')
+	@ApiBody({ type: LoginDto })
 	@HttpCode(200)
 	@UseGuards(LocalAuthGuard)
 	@ApiBody({ type: LoginDto })

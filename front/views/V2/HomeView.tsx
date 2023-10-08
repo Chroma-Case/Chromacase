@@ -88,7 +88,7 @@ const HomeView = () => {
 				<View
 					style={{
 						alignSelf: 'stretch',
-						maxWidth: '1100px',
+						maxWidth: 1100,
 						alignItems: 'stretch',
 						flexDirection: isPhone ? 'column' : 'row',
 					}}
@@ -186,7 +186,6 @@ const HomeView = () => {
 						flexWrap: 'wrap',
 						justifyContent: 'flex-start',
 						alignItems: 'flex-start',
-						// @ts-expect-error - gap is not in the typings
 						gap: 16,
 					}}
 				>

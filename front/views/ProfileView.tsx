@@ -768,6 +768,7 @@ const ProfileView = () => {
 						</Text>
 						<ButtonBase
 							title="Modifier profil"
+							// @ts-expect-error Raw CSS
 							style={{ width: 'fit-content' }}
 							type={'filled'}
 							onPress={async () => navigation.navigate('Settings')}
