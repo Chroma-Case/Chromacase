@@ -11,13 +11,13 @@ Pensez à remplir un `.env` (à la racine du projet), en se basant sur le `.env.
 ### Development
 
 ```bash
-docker-compose -f docker-compose.dev.yml
+docker-compose -f docker-compose.dev.yml up --build
 ```
 
 ### Production
 
 ```bash
-docker-compose -f docker-compose.yml
+docker-compose up --build
 ```
 
 ## Liens Utiles
@@ -31,7 +31,7 @@ docker-compose -f docker-compose.yml
 
 | Nom                      | Role                                 | Contact                                            |
 |--------------------------|--------------------------------------|----------------------------------------------------|
-|  Zoé Roux                | CEO, Responsable Back-end            | [GitHub](https://github.com/zoriya)                |
+| Zoé Roux                | CEO, Responsable Back-end            | [GitHub](https://github.com/zoriya)                |
 | Clément Le-Bihan         | CTO, Responsable Front-end           | [GitHub](https://github.com/Octopus773)            |
 | Arthur Jamet             | Manager, Développeur Front-end       | [GitHub](https://github.com/Arthi-chaud)           |
 | Louis Auzuret            | Développeur Back-end, Responsable CI | [Github](https://github.com/GitBluub)              |
