@@ -21,7 +21,8 @@ server {
 		proxy_set_header X-Forwarded-Scheme $scheme;
 		proxy_set_header X-Forwarded-Proto  $scheme;
 		proxy_set_header X-Forwarded-For    $remote_addr;
-		proxy_pass ${SCOROMETER_URL};
+		set $upstream ${SCOROMETER_URL};
+		proxy_pass $upstream;
 		proxy_set_header Upgrade $http_upgrade;
 		proxy_set_header Connection $http_connection;
 		proxy_http_version 1.1;
