@@ -31,6 +31,7 @@ import { FilterQuery } from 'src/utils/filter.pipe';
 import { Artist as _Artist } from 'src/_gen/prisma-class/artist';
 import { IncludeMap, mapInclude } from 'src/utils/include';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Public } from 'src/auth/public';
 
 @Controller('artist')
 @ApiTags('artist')
@@ -69,6 +70,7 @@ export class ArtistController {
 	@Get(':id/illustration')
 	@ApiOperation({ description: "Get an artist's illustration" })
 	@ApiNotFoundResponse({ description: 'Artist or illustration not found' })
+	@Public()
 	async getIllustration(@Param('id', ParseIntPipe) id: number) {
 		const artist = await this.service.get({ id });
 		if (!artist) throw new NotFoundException('Artist not found');

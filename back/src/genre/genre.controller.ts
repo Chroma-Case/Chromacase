@@ -26,6 +26,7 @@ import { FilterQuery } from 'src/utils/filter.pipe';
 import { Genre as _Genre } from 'src/_gen/prisma-class/genre';
 import { IncludeMap, mapInclude } from 'src/utils/include';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Public } from 'src/auth/public';
 
 @Controller('genre')
 @ApiTags('genre')
@@ -57,6 +58,7 @@ export class GenreController {
 	}
 
 	@Get(':id/illustration')
+	@Public()
 	async getIllustration(@Param('id', ParseIntPipe) id: number) {
 		const genre = await this.service.get({ id });
 		if (!genre) throw new NotFoundException('Genre not found');
