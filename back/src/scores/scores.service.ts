@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -7,9 +8,12 @@ export class ScoresService {
 		private prisma: PrismaService,
 	) {}
 
-    // // async topThree(): Promise<any> {
-    // //     return this.prisma.user.findMany(
-    // //         // {orderBy: }
-    // //     )
-    // }
+	async topTwenty(): Promise<User[]> {
+		return this.prisma.user.findMany({
+			orderBy: {
+				partyPlayed: 'desc',
+			},
+			take: 20,
+		});
+	}
 }

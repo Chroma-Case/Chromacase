@@ -704,4 +704,18 @@ export default class API {
 			method: 'PATCH',
 		});
 	}
+
+	public static getTopTwentyPlayers(): Query<User[]> {
+		return {
+			key: ['score'],
+			exec: () =>
+				API.fetch(
+					{
+						route: '/scores/top/20',
+						method: 'GET',
+					},
+					{ handler: ListHandler(UserHandler) }
+				),
+		};
+	}
 }
