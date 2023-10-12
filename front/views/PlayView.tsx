@@ -33,6 +33,7 @@ import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
 import { Metronome } from '../components/Metronome';
+import PartitionMagic from '../components/Play/PartitionMagic';
 
 type PlayViewProps = {
 	songId: number;
@@ -347,14 +348,21 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						messages: pianoMsgs,
 					}}
 				>
-					<PartitionCoord
+					<PartitionMagic
+						songID={song.data.id}
+						paused={paused}
+						onReady={() => setPartitionRendered(true)}
+						onEndReached={() => {}}
+						onError={() => {}}
+					/>
+					{/* <PartitionCoord
 						file={musixml.data}
 						bpmRef={bpm}
 						onEndReached={onEnd}
 						onPause={onPause}
 						onResume={onResume}
 						onPartitionReady={() => setPartitionRendered(true)}
-					/>
+					/> */}
 				</PianoCC.Provider>
 				{!partitionRendered && <LoadingComponent />}
 			</View>
