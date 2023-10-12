@@ -119,13 +119,13 @@ export class UsersService {
 	}
 
 	async addScore(
-		where: Prisma.UserWhereUniqueInput,
+		where: number,
 		score: number,
 	) {
 		return this.prisma.user.update({
-				where,
+				where: { id: where },
 				data: {
-					score: {
+					partyPlayed: {
 						increment: score,
 					},
 				},

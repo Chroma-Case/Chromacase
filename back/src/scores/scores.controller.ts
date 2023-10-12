@@ -2,19 +2,19 @@ import {
 	Controller,
 	Get,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ScoresService } from './scores.service';
+import { User } from '@prisma/client';
 
 @ApiTags('scores')
 @Controller('scores')
 export class ScoresController {
 	constructor(private readonly scoresService: ScoresService) {}
-    
 
-    // @ApiOkResponse({ description: 'Successfully sent the Top 3 players'})
-    // @Get('scores/top/3')
-    // getTopThree(): Promise<any> {
-    //     // return await this.scoresService.topThree();
-    //     return [] as any[];
-    // }
+
+	@ApiOkResponse({ description: 'Successfully sent the Top 20 players'})
+	@Get('scores/top/20')
+	getTopTwenty(): Promise<User[]> {
+		return this.scoresService.topTwenty();
+	}
 }
