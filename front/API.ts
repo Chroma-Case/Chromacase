@@ -66,9 +66,7 @@ export class ValidationError extends Error {
 
 export default class API {
 	public static readonly baseUrl =
-		process.env.NODE_ENV != 'development' && Platform.OS === 'web'
-			? '/api'
-			: process.env.EXPO_PUBLIC_API_URL!;
+		Platform.OS === 'web' ? '/api' : process.env.EXPO_PUBLIC_API_URL!;
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>

@@ -8,7 +8,7 @@ pkgs.mkShell {
     eslint_d
     nodejs_16
     yarn
-    (python3.withPackages (ps: with ps; [requests]))
+    (python3.withPackages (ps: with ps; [requests mido]))
     pkg-config
   ];
   shellHook = with pkgs; ''
