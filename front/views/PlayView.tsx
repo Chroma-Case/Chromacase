@@ -350,19 +350,12 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				>
 					<PartitionMagic
 						songID={song.data.id}
-						paused={paused}
 						onReady={() => setPartitionRendered(true)}
-						onEndReached={() => {}}
-						onError={() => {}}
-					/>
-					{/* <PartitionCoord
-						file={musixml.data}
-						bpmRef={bpm}
 						onEndReached={onEnd}
-						onPause={onPause}
-						onResume={onResume}
-						onPartitionReady={() => setPartitionRendered(true)}
-					/> */}
+						onError={() => {
+							console.log('error from partition magic');
+						}}
+					/>
 				</PianoCC.Provider>
 				{!partitionRendered && <LoadingComponent />}
 			</View>

@@ -9004,9 +9004,128 @@ export default class API {
 			  }
 			]
 		  }`);
+		const res2 = JSON.parse(`{
+			"pageWidth": 37.01052279999999,
+			"cursors": [
+			  {
+				"x": 112.48751999999999,
+				"y": 105,
+				"width": 30,
+				"height": 120,
+				"notes": [
+				  {
+					"note": 62,
+					"gain": 1,
+					"duration": 1000
+				  },
+				  {
+					"note": 45,
+					"gain": 1,
+					"duration": 2000
+				  }
+				],
+				"timestamp": 0,
+				"timing": 1000
+			  },
+			  {
+				"x": 152.87370140000002,
+				"y": 105,
+				"width": 30,
+				"height": 120,
+				"notes": [
+				  {
+					"note": 65,
+					"gain": 1,
+					"duration": 1000
+				  }
+				],
+				"timestamp": 1000,
+				"timing": 1000
+			  },
+			  {
+				"x": 193.5266428,
+				"y": 105,
+				"width": 30,
+				"height": 120,
+				"notes": [],
+				"timestamp": 2000,
+				"timing": 2000
+			  },
+			  {
+				"x": 271.5475256,
+				"y": 105,
+				"width": 30,
+				"height": 120,
+				"notes": [
+				  {
+					"note": 62,
+					"gain": 1,
+					"duration": 1000
+				  },
+				  {
+					"note": 45,
+					"gain": 1,
+					"duration": 2000
+				  }
+				],
+				"timestamp": 4000,
+				"timing": 1000
+			  },
+			  {
+				"x": 306.93923119999994,
+				"y": 105,
+				"width": 30,
+				"height": 120,
+				"notes": [
+				  {
+					"note": 65,
+					"gain": 1,
+					"duration": 1000
+				  }
+				],
+				"timestamp": 5000,
+				"timing": 1000
+			  },
+			  {
+				"x": 342.33093679999996,
+				"y": 105,
+				"width": 30,
+				"height": 120,
+				"notes": [
+				  {
+					"note": 64,
+					"gain": 1,
+					"duration": 1000
+				  },
+				  {
+					"note": 45,
+					"gain": 1,
+					"duration": 2000
+				  }
+				],
+				"timestamp": 6000,
+				"timing": 1000
+			  },
+			  {
+				"x": 377.7226423999999,
+				"y": 105,
+				"width": 30,
+				"height": 120,
+				"notes": [
+				  {
+					"note": 62,
+					"gain": 1,
+					"duration": 1000
+				  }
+				],
+				"timestamp": 7000,
+				"timing": 1000
+			  }
+			]
+		  }`);
 		return {
 			key: ['cursorInfos', songId],
-			exec: async () => res as SongCursorInfos,
+			exec: async () => res2 as SongCursorInfos,
 		}
 	}
 }

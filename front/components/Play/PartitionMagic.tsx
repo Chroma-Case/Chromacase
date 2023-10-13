@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, ImageBackground, Platform } from 'react-native';
+import { View, ImageBackground, Platform, Image } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
 import { SvgCssUri } from 'react-native-svg';
@@ -10,13 +10,13 @@ import { CursorInfoItem } from '../../models/SongCursorInfos';
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
 	songID: number;
-	paused: boolean;
 	onEndReached: () => void;
 	onError: (err: string) => void;
 	onReady: () => void;
 };
 
 const getSVGURL = (songID: number) => {
+	return 'https://cdn.discordapp.com/attachments/717080637038788731/1162519992722530354/Short.mxl_1.svg?ex=653c3c1c&is=6529c71c&hm=1788e4abe532f4a2af8c24cae6dadcfde369eaf58322f051ecd1d9110d8b699a&';
 	return 'https://cdn.discordapp.com/attachments/717080637038788731/1161704545785757816/4.svg?ex=653944ab&is=6526cfab&hm=2416ee2cb414cc42fa9de8af58b8db544479d35f13393d76f02e8d9fe27aff45&';
 };
 
@@ -61,13 +61,15 @@ const getCursorToPlay = (
 	}
 };
 
-const PartitionMagic = ({ songID, paused, onEndReached, onError, onReady }: ParitionMagicProps) => {
+const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const [currentCurIdx, setCurrentCurIdx] = React.useState(0);
 	const partitionOffset = useSharedValue(0);
+	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 0]);
 	const pianoCC = React.useContext(PianoCC);
-	const partitionWidth = 16573;
-	const partitionHeight = 402;
+
+	// const partitionWidth = 16573;
+	// const partitionDims[1] = 402;
 
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
@@ -78,13 +80,44 @@ const PartitionMagic = ({ songID, paused, onEndReached, onError, onReady }: Pari
 	const cursorTop = (data?.cursors[currentCurIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
-	getCursorToPlay(data?.cursors ?? [], currentCurIdx, pianoCC.timestamp, (cursor, idx) => {
-		partitionOffset.value = withTiming(-(cursor.x - data!.cursors[0]!.x) / partitionWidth, {
-			duration: 75,
-			easing: Easing.inOut(Easing.ease),
+	React.useEffect(() => {
+		Image.getSize(getSVGURL(songID), (w, h) => {
+			setPartitionDims([w, h]);
 		});
-		setCurrentCurIdx(idx);
-	});
+	}, []);
+
+	React.useEffect(() => {
+		if (isLoading) {
+			return;
+		}
+		if (isError) {
+			onError('Error while loading partition');
+			return;
+		}
+	}, [isLoading, isError]);
+
+	const transitionDuration = 75;
+
+	getCursorToPlay(
+		data?.cursors ?? [],
+		currentCurIdx,
+		pianoCC.timestamp - transitionDuration,
+		(cursor, idx) => {
+			partitionOffset.value = withTiming(
+				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
+				{
+					duration: transitionDuration,
+					easing: Easing.inOut(Easing.ease),
+				},
+				() => {
+					if (idx === data!.cursors.length - 1) {
+						onEndReached();
+					}
+				}
+			);
+			setCurrentCurIdx(idx);
+		}
+	);
 
 	return (
 		<>
@@ -98,7 +131,7 @@ const PartitionMagic = ({ songID, paused, onEndReached, onError, onReady }: Pari
 				<View
 					style={{
 						position: 'absolute',
-						aspectRatio: partitionWidth / partitionHeight,
+						aspectRatio: partitionDims[0] / partitionDims[1],
 						height: '100%',
 					}}
 				>
@@ -106,7 +139,7 @@ const PartitionMagic = ({ songID, paused, onEndReached, onError, onReady }: Pari
 						style={{
 							position: 'absolute',
 							height: '100%',
-							aspectRatio: partitionWidth / partitionHeight,
+							aspectRatio: partitionDims[0] / partitionDims[1],
 							left: `${partitionOffset.value * 100}%`,
 						}}
 					>
@@ -114,7 +147,7 @@ const PartitionMagic = ({ songID, paused, onEndReached, onError, onReady }: Pari
 							source={{ uri: getSVGURL(songID) }}
 							onLoad={onReady}
 							style={{
-								aspectRatio: partitionWidth / partitionHeight,
+								aspectRatio: partitionDims[0] / partitionDims[1],
 								height: '100%',
 								position: 'relative',
 							}}
@@ -123,11 +156,11 @@ const PartitionMagic = ({ songID, paused, onEndReached, onError, onReady }: Pari
 					<Animated.View
 						style={{
 							position: 'absolute',
-							left: `${(cursorLeft / partitionWidth) * 100}%`,
-							top: `${(cursorTop / partitionHeight) * 100}%`,
+							left: `${(cursorLeft / partitionDims[0]) * 100}%`,
+							top: `${(cursorTop / partitionDims[1]) * 100}%`,
 							backgroundColor: 'rgba(96, 117, 249, 0.33)',
-							width: `${(cursorWidth / partitionWidth) * 100}%`,
-							height: `${(cursorHeight / partitionHeight) * 100}%`,
+							width: `${(cursorWidth / partitionDims[0]) * 100}%`,
+							height: `${(cursorHeight / partitionDims[1]) * 100}%`,
 							borderWidth: cursorBorderWidth,
 							borderColor: '#101014',
 							borderStyle: 'solid',
