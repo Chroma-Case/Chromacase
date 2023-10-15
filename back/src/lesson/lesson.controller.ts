@@ -3,7 +3,6 @@ import {
 	Get,
 	Query,
 	Req,
-	Request,
 	Param,
 	ParseIntPipe,
 	DefaultValuePipe,
@@ -12,13 +11,17 @@ import {
 	Body,
 	Delete,
 	NotFoundException,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { LessonService } from './lesson.service';
 import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Prisma, Skill } from '@prisma/client';
 import { FilterQuery } from 'src/utils/filter.pipe';
-import { Lesson as _Lesson} from 'src/_gen/prisma-class/lesson';
+import { Lesson as _Lesson } from 'src/_gen/prisma-class/lesson';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { IncludeMap, mapInclude } from 'src/utils/include';
+import { Request } from 'express';
 
 export class Lesson {
 	@ApiProperty()
@@ -35,6 +38,7 @@ export class Lesson {
 
 @ApiTags('lessons')
 @Controller('lesson')
+@UseGuards(JwtAuthGuard)
 export class LessonController {
 	static filterableFields: string[] = [
 		'+id',
@@ -42,6 +46,9 @@ export class LessonController {
 		'+requiredLevel',
 		'mainSkill',
 	];
+	static includableFields: IncludeMap<Prisma.LessonInclude> = {
+		LessonHistory: true,
+	};
 
 	constructor(private lessonService: LessonService) {}
 
@@ -54,6 +61,7 @@ export class LessonController {
 		@Req() request: Request,
 		@FilterQuery(LessonController.filterableFields)
 		where: Prisma.LessonWhereInput,
+		@Query('include') include: string,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Lesson>> {
@@ -61,6 +69,7 @@ export class LessonController {
 			skip,
 			take,
 			where,
+			include: mapInclude(include, request, LessonController.includableFields),
 		});
 		return new Plage(ret, request);
 	}
@@ -69,8 +78,15 @@ export class LessonController {
 		summary: 'Get a particular lessons',
 	})
 	@Get(':id')
-	async get(@Param('id', ParseIntPipe) id: number): Promise<Lesson> {
-		const ret = await this.lessonService.get(id);
+	async get(
+		@Req() req: Request,
+		@Query('include') include: string,
+		@Param('id', ParseIntPipe) id: number,
+	): Promise<Lesson> {
+		const ret = await this.lessonService.get(
+			id,
+			mapInclude(include, req, LessonController.includableFields),
+		);
 		if (!ret) throw new NotFoundException();
 		return ret;
 	}

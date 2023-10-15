@@ -10,14 +10,20 @@ import {
 	Request,
 	UseGuards,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+	ApiCreatedResponse,
+	ApiOkResponse,
+	ApiOperation,
+	ApiTags,
+	ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { SearchHistory, SongHistory } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { SongHistoryDto } from './dto/SongHistoryDto';
 import { HistoryService } from './history.service';
 import { SearchHistoryDto } from './dto/SearchHistoryDto';
 import { SongHistory as _SongHistory } from 'src/_gen/prisma-class/song_history';
-import { SearchHistory as _SearchHistory} from 'src/_gen/prisma-class/search_history';
+import { SearchHistory as _SearchHistory } from 'src/_gen/prisma-class/search_history';
 
 @Controller('history')
 @ApiTags('history')
@@ -26,9 +32,9 @@ export class HistoryController {
 
 	@Get()
 	@HttpCode(200)
-	@ApiOperation({ description: "Get song history of connected user"})
+	@ApiOperation({ description: 'Get song history of connected user' })
 	@UseGuards(JwtAuthGuard)
-	@ApiOkResponse({ type: _SongHistory, isArray: true})
+	@ApiOkResponse({ type: _SongHistory, isArray: true })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	async getHistory(
 		@Request() req: any,
@@ -40,9 +46,9 @@ export class HistoryController {
 
 	@Get('search')
 	@HttpCode(200)
-	@ApiOperation({ description: "Get search history of connected user"})
+	@ApiOperation({ description: 'Get search history of connected user' })
 	@UseGuards(JwtAuthGuard)
-	@ApiOkResponse({ type: _SearchHistory, isArray: true})
+	@ApiOkResponse({ type: _SearchHistory, isArray: true })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	async getSearchHistory(
 		@Request() req: any,
@@ -54,15 +60,15 @@ export class HistoryController {
 
 	@Post()
 	@HttpCode(201)
-	@ApiOperation({ description: "Create a record of a song played by a user"})
-	@ApiCreatedResponse({ description: "Succesfully created a record"})
+	@ApiOperation({ description: 'Create a record of a song played by a user' })
+	@ApiCreatedResponse({ description: 'Succesfully created a record' })
 	async create(@Body() record: SongHistoryDto): Promise<SongHistory> {
 		return this.historyService.createSongHistoryRecord(record);
 	}
 
 	@Post('search')
 	@HttpCode(201)
-	@ApiOperation({ description: "Creates a search record in the users history"})
+	@ApiOperation({ description: 'Creates a search record in the users history' })
 	@UseGuards(JwtAuthGuard)
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	async createSearchHistory(

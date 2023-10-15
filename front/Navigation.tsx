@@ -95,7 +95,7 @@ const protectedRoutes = () =>
 			options: { title: 'Verify email', headerShown: false },
 			link: '/verify',
 		},
-	} as const);
+	}) as const;
 
 const publicRoutes = () =>
 	({
@@ -114,11 +114,6 @@ const publicRoutes = () =>
 			options: { title: translate('signUpBtn'), headerShown: false },
 			link: '/signup',
 		},
-		Oops: {
-			component: ProfileErrorView,
-			options: { title: 'Oops', headerShown: false },
-			link: undefined,
-		},
 		Google: {
 			component: GoogleView,
 			options: { title: 'Google signin', headerShown: false },
@@ -134,7 +129,7 @@ const publicRoutes = () =>
 			options: { title: 'Password reset form', headerShown: false },
 			link: '/forgot_password',
 		},
-	} as const);
+	}) as const;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Route<Props = any> = {
@@ -155,19 +150,18 @@ type PrivateRoutesParams = RouteParams<ReturnType<typeof protectedRoutes>>;
 type PublicRoutesParams = RouteParams<ReturnType<typeof publicRoutes>>;
 type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
 
-const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never }>();
+const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 
 const RouteToScreen =
 	<T extends {}>(component: Route<T>['component']) =>
 	// eslint-disable-next-line react/display-name
-	(props: NativeStackScreenProps<T & ParamListBase>) =>
-		(
-			<>
-				{component({ ...props.route.params, route: props.route } as Parameters<
-					Route<T>['component']
-				>[0])}
-			</>
-		);
+	(props: NativeStackScreenProps<T & ParamListBase>) => (
+		<>
+			{component({ ...props.route.params, route: props.route } as Parameters<
+				Route<T>['component']
+			>[0])}
+		</>
+	);
 
 const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =>
 	Object.entries(routes).map(([name, route], routeIndex) => (
@@ -204,6 +198,8 @@ const routesToLinkingConfig = (
 
 const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 	const dispatch = useDispatch();
+	const navigation = useNavigation();
+
 	return (
 		<Center style={{ flexGrow: 1 }}>
 			<VStack space={3}>
@@ -212,7 +208,10 @@ const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 					<Translate translationKey="tryAgain" />
 				</Button>
 				<TextButton
-					onPress={() => dispatch(unsetAccessToken())}
+					onPress={() => {
+						dispatch(unsetAccessToken());
+						navigation.navigate('Start');
+					}}
 					colorScheme="error"
 					variant="outline"
 					translate={{ translationKey: 'signOutBtn' }}
@@ -273,12 +272,15 @@ export const Router = () => {
 		>
 			<Stack.Navigator>
 				{authStatus == 'error' ? (
-					<Stack.Screen
-						name="Oops"
-						component={RouteToScreen(() => (
-							<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
-						))}
-					/>
+					<>
+						<Stack.Screen
+							name="Oops"
+							component={RouteToScreen(() => (
+								<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
+							))}
+						/>
+						{routesToScreens(publicRoutes())}
+					</>
 				) : (
 					routesToScreens(routes)
 				)}

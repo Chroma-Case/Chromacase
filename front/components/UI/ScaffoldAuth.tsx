@@ -7,7 +7,6 @@ import { translate } from '../../i18n/i18n';
 import API, { APIError } from '../../API';
 import SeparatorBase from './SeparatorBase';
 import LinkBase from './LinkBase';
-import ImageBanner from '../../assets/banner.jpg';
 import { useDispatch } from '../../state/Store';
 import { setAccessToken } from '../../state/UserSlice';
 import useColorScheme from '../../hooks/colorScheme';
@@ -17,6 +16,7 @@ const handleGuestLogin = async (apiSetter: (accessToken: string) => void): Promi
 	apiSetter(apiAccess);
 	return translate('loggedIn');
 };
+import { useAssets } from 'expo-asset';
 
 interface ScaffoldAuthProps {
 	title: string;
@@ -40,6 +40,8 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	const logo = colorScheme == 'light'
 	? require('../../assets/icon_light.png')
 	: require('../../assets/icon_dark.png');
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const [banner] = useAssets(require('../../assets/banner.jpg'));
 
 	return (
 		<Flex
@@ -54,8 +56,8 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							source={{ uri: logo }}
 							style={{
 								aspectRatio: 1,
-								width: '32px',
-								height: '32px',
+								width: 32,
+								height: 32,
 							}}
 						/>
 						{layout.width > 650 &&
@@ -133,7 +135,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 			{layout.width > 650 ? (
 				<View style={{ width: '50%', height: '100%', padding: 16 }}>
 					<Image
-						source={ImageBanner}
+						source={{ uri: banner?.at(0)?.uri }}
 						alt="banner page"
 						style={{ width: '100%', height: '100%', borderRadius: 8 }}
 					/>

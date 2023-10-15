@@ -70,9 +70,9 @@ services:
   nginx:
     image: nginx
     environment:
-      - API_URL=http://back:3000
-      - SCOROMETER_URL=http://scorometer:6543
-      - FRONT_URL=http://front:19006
+      - API_URL=${API_URL:-http://back:3000}
+      - SCOROMETER_URL=${SCOROMETER_URL:-http://scorometer:6543}
+      - FRONT_URL=${FRONT_URL:-http://front:19006}
       - PORT=4567
     depends_on:
       - back

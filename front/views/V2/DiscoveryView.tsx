@@ -86,13 +86,27 @@ const HomeView = (props: RouteProps<{}>) => {
 					flexDirection: 'column',
 				}}
 			>
-				<View>
+				<View
+					style={{
+						alignSelf: 'stretch',
+						maxWidth: 1100,
+						alignItems: 'stretch',
+						flexDirection: isPhone ? 'column' : 'row',
+					}}
+				>
 					<View
 						style={{
-							alignSelf: 'stretch',
-							maxWidth: '1100px',
+							flexGrow: bigSideRatio,
+						}}
+					>
+						<HomeMainSongCard {...cards[0]} />
+					</View>
+					<View
+						style={{
+							flexGrow: smallSideRatio,
+							display: 'flex',
+							flexDirection: isPhone ? 'row' : 'column',
 							alignItems: 'stretch',
-							flexDirection: isPhone ? 'column' : 'row',
 						}}
 					>
 						<View
@@ -100,13 +114,13 @@ const HomeView = (props: RouteProps<{}>) => {
 								flexGrow: bigSideRatio,
 							}}
 						>
-							<HomeMainSongCard {...cards[0]} />
+							<HomeMainSongCard {...cards[1]} />
 						</View>
 						<View
 							style={{
 								flexGrow: smallSideRatio,
 								display: 'flex',
-								flexDirection: isPhone ? 'row' : 'column',
+								flexDirection: isPhone ? 'column-reverse' : 'row-reverse',
 								alignItems: 'stretch',
 							}}
 						>
@@ -115,58 +129,43 @@ const HomeView = (props: RouteProps<{}>) => {
 									flexGrow: bigSideRatio,
 								}}
 							>
-								<HomeMainSongCard {...cards[1]} />
+								<HomeMainSongCard {...cards[2]} />
 							</View>
 							<View
 								style={{
 									flexGrow: smallSideRatio,
 									display: 'flex',
-									flexDirection: isPhone ? 'column-reverse' : 'row-reverse',
+									flexDirection: isPhone ? 'row-reverse' : 'column-reverse',
 									alignItems: 'stretch',
 								}}
 							>
 								<View
 									style={{
 										flexGrow: bigSideRatio,
+										display: 'flex',
+										flexDirection: 'column',
+										alignItems: 'stretch',
+										justifyContent: 'flex-end',
 									}}
 								>
-									<HomeMainSongCard {...cards[2]} />
+									<HomeMainSongCard {...cards[3]} />
 								</View>
 								<View
 									style={{
 										flexGrow: smallSideRatio,
-										display: 'flex',
-										flexDirection: isPhone ? 'row-reverse' : 'column-reverse',
-										alignItems: 'stretch',
 									}}
-								>
-									<View
-										style={{
-											flexGrow: bigSideRatio,
-											display: 'flex',
-											flexDirection: 'column',
-											alignItems: 'stretch',
-											justifyContent: 'flex-end',
-										}}
-									>
-										<HomeMainSongCard {...cards[3]} />
-									</View>
-									<View
-										style={{
-											flexGrow: smallSideRatio,
-										}}
-									></View>
-								</View>
+								></View>
 							</View>
 						</View>
 					</View>
 				</View>
 				<View
 					style={{
-						flexShrink: 0,
-						flexGrow: 0,
-						flexBasis: '15%',
-						width: '100%',
+						flexDirection: 'row',
+						flexWrap: 'wrap',
+						justifyContent: 'flex-start',
+						alignItems: 'flex-start',
+						gap: 16,
 					}}
 				>
 					<Text
@@ -188,7 +187,6 @@ const HomeView = (props: RouteProps<{}>) => {
 							flexWrap: 'wrap',
 							justifyContent: 'flex-start',
 							alignItems: 'flex-start',
-							// @ts-expect-error - gap is not in the typings
 							gap: 16,
 						}}
 					>

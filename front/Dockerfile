@@ -4,20 +4,21 @@
 FROM node:16-alpine as build
 WORKDIR /app
 # install expo cli
-RUN yarn global add expo-cli@6.0.5
+RUN yarn global add expo-cli
 # add sharp-cli (^2.1.0) for faster image processing
-RUN yarn global add sharp-cli@^2.1.0
+RUN yarn global add sharp-cli
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --immutable
+RUN expo install
 
 COPY . .
 ARG API_URL
-ENV API_URL=$API_URL
+ENV EXPO_PUBLIC_API_URL=$API_URL
 ARG SCORO_URL
-ENV SCORO_URL=$SCORO_URL
+ENV EXPO_PUBLIC_API_URL=$SCORO_URL
 
-RUN yarn tsc && expo build:web
+RUN yarn tsc && npx expo export:web
 
 # Serve the app
 FROM nginx:1.21-alpine

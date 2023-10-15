@@ -103,6 +103,7 @@ function TabNavigator({
 				{(!isMobileView || isPanelView) && (
 					<View
 						style={[
+							// @ts-expect-error Raw CSS
 							{
 								display: 'flex',
 								flexDirection: 'row',
@@ -153,8 +154,8 @@ function TabNavigator({
 									}
 									style={{
 										justifyContent: 'flex-start',
-										padding: '10px',
-										height: '50px',
+										padding: 10,
+										height: 50,
 										width: '100%',
 									}}
 									leftIcon={
@@ -177,15 +178,13 @@ function TabNavigator({
 					</View>
 				)}
 				{(!isMobileView || !isPanelView) && (
-					<View
-						style={[{ flex: 1, width: isMobileView ? '100%' : '700px' }, contentStyle]}
-					>
+					<View style={[{ flex: 1, width: isMobileView ? '100%' : 700 }, contentStyle]}>
 						{isMobileView && (
 							<Button
 								style={{
 									position: 'absolute',
-									top: '10px',
-									left: '10px',
+									top: 10,
+									left: 10,
 									zIndex: 100,
 								}}
 								onPress={() => setIsPanelView(true)}

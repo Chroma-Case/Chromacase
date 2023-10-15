@@ -12,9 +12,7 @@ import fetch from 'node-fetch';
 
 @Injectable()
 export class UsersService {
-	constructor(
-		private prisma: PrismaService,
-	) {}
+	constructor(private prisma: PrismaService) {}
 
 	async user(
 		userWhereUniqueInput: Prisma.UserWhereUniqueInput,
@@ -101,35 +99,21 @@ export class UsersService {
 		resp.body!.pipe(res);
 	}
 
-	async addLikedSong(
-		userId: number,
-		songId: number,
-	) {
-		return this.prisma.likedSongs.create(
-			{
-				data: { songId: songId, userId: userId }
-			}
-		)
+	async addLikedSong(userId: number, songId: number) {
+		return this.prisma.likedSongs.create({
+			data: { songId: songId, userId: userId },
+		});
 	}
 
-	async getLikedSongs(
-		userId: number,
-	) {
-		return this.prisma.likedSongs.findMany(
-			{
-				where: { userId: userId },
-			}
-		)
+	async getLikedSongs(userId: number) {
+		return this.prisma.likedSongs.findMany({
+			where: { userId: userId },
+		});
 	}
 
-	async removeLikedSong(
-		userId: number,
-		songId: number,
-	) {
-		return this.prisma.likedSongs.deleteMany(
-			{
-				where: { userId: userId, songId: songId },
-			}
-		)
+	async removeLikedSong(userId: number, songId: number) {
+		return this.prisma.likedSongs.deleteMany({
+			where: { userId: userId, songId: songId },
+		});
 	}
 }

@@ -27,6 +27,25 @@ jobs:
 
 ## Build App ##
 
+  Check_Front:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front
+    environment: Staging
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Yarn
+        run: npm install -g yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Type Check
+        run: yarn tsc
+      - name: Check Prettier
+        run: yarn pretty:check .
+      - name: Run Linter
+        run: yarn lint
+
   Build_Front:
     runs-on: ubuntu-latest
     defaults:
@@ -43,19 +62,21 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Type Check
-        run: yarn tsc
-      - name: Check Prettier
-        run: yarn pretty:check .
-      - name: Run Linter
-        run: yarn lint
-
       - name: 🏗 Setup Expo
         uses: expo/expo-github-action@v7
         with:
           expo-version: latest
           eas-version: 3.3.1
           token: ${{ secrets.EXPO_TOKEN }}
+      - name: Build Web App
+        uses: docker/build-push-action@v3
+        with:
+          context: ./front
+          push: false
+          tags: ${{steps.meta_front.outputs.tags}}
+          build-args: |
+            API_URL=${{secrets.API_URL}}
+            SCORO_URL=${{secrets.SCORO_URL}}
 
       - name: Build Android APK
         run: |

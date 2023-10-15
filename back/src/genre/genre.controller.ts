@@ -13,6 +13,7 @@ import {
 	Query,
 	Req,
 	StreamableFile,
+	UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
 import { CreateGenreDto } from './dto/create-genre.dto';
@@ -23,11 +24,18 @@ import { ApiTags } from '@nestjs/swagger';
 import { createReadStream, existsSync } from 'fs';
 import { FilterQuery } from 'src/utils/filter.pipe';
 import { Genre as _Genre } from 'src/_gen/prisma-class/genre';
+import { IncludeMap, mapInclude } from 'src/utils/include';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Public } from 'src/auth/public';
 
 @Controller('genre')
 @ApiTags('genre')
+@UseGuards(JwtAuthGuard)
 export class GenreController {
 	static filterableFields: string[] = ['+id', 'name'];
+	static includableFields: IncludeMap<Prisma.GenreInclude> = {
+		Song: true,
+	};
 
 	constructor(private readonly service: GenreService) {}
 
@@ -50,6 +58,7 @@ export class GenreController {
 	}
 
 	@Get(':id/illustration')
+	@Public()
 	async getIllustration(@Param('id', ParseIntPipe) id: number) {
 		const genre = await this.service.get({ id });
 		if (!genre) throw new NotFoundException('Genre not found');
@@ -71,6 +80,7 @@ export class GenreController {
 		@Req() req: Request,
 		@FilterQuery(GenreController.filterableFields)
 		where: Prisma.GenreWhereInput,
+		@Query('include') include: string,
 		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Genre>> {
@@ -78,13 +88,21 @@ export class GenreController {
 			skip,
 			take,
 			where,
+			include: mapInclude(include, req, GenreController.includableFields),
 		});
 		return new Plage(ret, req);
 	}
 
 	@Get(':id')
-	async findOne(@Param('id', ParseIntPipe) id: number) {
-		const res = await this.service.get({ id });
+	async findOne(
+		@Req() req: Request,
+		@Query('include') include: string,
+		@Param('id', ParseIntPipe) id: number,
+	) {
+		const res = await this.service.get(
+			{ id },
+			mapInclude(include, req, GenreController.includableFields),
+		);
 
 		if (res === null) throw new NotFoundException('Genre not found');
 		return res;

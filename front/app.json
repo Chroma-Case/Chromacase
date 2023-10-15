@@ -11,15 +11,15 @@
 			"resizeMode": "cover",
 			"backgroundColor": "#ffffff"
 		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
 			"supportsTablet": true
 		},
 		"android": {
-			"package": "build.apk"
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/icon.png",
+				"backgroundColor": "#ffffff"
+			}
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
