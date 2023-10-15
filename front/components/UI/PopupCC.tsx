@@ -18,7 +18,7 @@ type PopupCCProps = {
 const PopupCC = ({ title, description, children, isVisible, setIsVisible }: PopupCCProps) => {
 	return (
         <Modal
-            backdropOpacity={0.3}
+            backdropOpacity={0.75}
             isVisible={isVisible}
             style={{
                 display: 'flex',

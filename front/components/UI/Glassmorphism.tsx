@@ -16,7 +16,7 @@ const GlassmorphismCC = ({ children, style }: GlassmorphismCCProps) => {
     return (
         <BlurView
             style={[{borderRadius: 12}, style]}
-            intensity={70}
+            intensity={80}
             tint={colorScheme === 'light' ? 'light' : 'dark'}
         >
             {children}

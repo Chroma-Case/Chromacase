@@ -100,7 +100,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 	});
 
 	return (
-		<InteractiveBase style={[style, { borderRadius: 12 }]} styleAnimate={styleAnimate}>
+		<InteractiveBase style={[style, { borderRadius: 12 }]} styleAnimate={styleAnimate} focusable={false}>
 			<View style={styles.container}>
 				<View style={styles.iconContainerLeft}>
 					{icon && (

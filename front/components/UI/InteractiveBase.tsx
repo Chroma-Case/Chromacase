@@ -7,6 +7,7 @@ interface InteractiveBaseProps {
 	onPress?: () => Promise<void>;
 	isDisabled?: boolean;
 	isOutlined?: boolean;
+	focusable?: boolean;
 	style?: StyleProp<ViewStyle>;
 	styleAnimate: {
 		Default: {
@@ -47,6 +48,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	styleAnimate,
 	isDisabled = false,
 	isOutlined = false,
+	focusable = true,
 }) => {
 	const scaleAnimator = useRef(new Animated.Value(1)).current;
 	const scaleValue = scaleAnimator.interpolate({
@@ -238,6 +240,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	return (
 		<Animated.View style={[style, isDisabled ? disableStyle : animatedStyle]}>
 			<Pressable
+				focusable={focusable}
 				disabled={isDisabled}
 				onHoverIn={handleMouseEnter}
 				onPressIn={handlePressIn}
