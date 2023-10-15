@@ -9,18 +9,8 @@ const LoadingComponent = () => {
 };
 
 const LoadingView = () => {
-	const colorScheme = useColorScheme();
-	const bgColor = useMemo(() => {
-		switch (colorScheme) {
-			case 'light':
-				return DefaultTheme.colors.background;
-			case 'dark':
-				return DarkTheme.colors.background;
-		}
-	}, [colorScheme]);
-
 	return (
-		<Center style={{ flexGrow: 1, backgroundColor: bgColor }}>
+		<Center flex={1}>
 			<LoadingComponent />
 		</Center>
 	);
