@@ -14,6 +14,7 @@ import {
 	useToast,
 	Icon,
 	HStack,
+	Image,
 } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons } from '@expo/vector-icons';
@@ -34,6 +35,7 @@ import url from 'url';
 import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
 import { Metronome } from '../components/Metronome';
 import PartitionMagic from '../components/Play/PartitionMagic';
+import StarProgress from '../components/StarProgress';
 
 type PlayViewProps = {
 	songId: number;
@@ -324,23 +326,50 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		return <LoadingView />;
 	}
 	return (
-		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
-			<HStack
-				width="100%"
-				justifyContent="center"
-				p={3}
-				style={{ position: 'absolute', top: 1 }}
+		<SafeAreaView
+			style={{
+				flexGrow: 1,
+				flexDirection: 'column',
+				padding: 20,
+			}}
+		>
+			<View
+				style={{
+					width: '100%',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+					gap: 3,
+				}}
 			>
-				<Animated.View style={{ opacity: fadeAnim }}>
+				{/* <Animated.View style={{ opacity: fadeAnim }}>
 					<TextButton
 						disabled
 						label={lastScoreMessage?.content ?? ''}
 						colorScheme={lastScoreMessage?.color}
 						rounded="sm"
 					/>
-				</Animated.View>
-			</HStack>
-			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
+				</Animated.View> */}
+				<View>
+					<Text fontSize={32}>{score}</Text>
+				</View>
+				<View>
+					<Text fontSize={30}>Cool</Text>
+					<Text fontSize={25} bold>
+						x1
+					</Text>
+				</View>
+			</View>
+			<View
+				style={{
+					flexGrow: 1,
+					justifyContent: 'center',
+					borderRadius: 10,
+					overflow: 'hidden',
+					backgroundColor: 'white',
+				}}
+			>
 				<PianoCC.Provider
 					value={{
 						pressedKeys: pressedKeys,
@@ -361,78 +390,121 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			</View>
 
 			<Metronome paused={paused} bpm={bpm.current} />
-
-			<Box
-				shadow={4}
+			<Row
+				justifyContent="space-between"
 				style={{
-					height: '12%',
-					width: '100%',
-					borderWidth: 0.5,
-					margin: 5,
-					display: !partitionRendered ? 'none' : undefined,
+					flexGrow: 0,
+					flexShrink: 0,
+					alignItems: 'center',
+					borderRadius: 12,
+					backgroundColor: 'rgba(16, 16, 20, 0.5)',
+					//@ts-expect-error backdropFilter is not in the types
+					backdropFilter: 'blur(2px)',
+					padding: 10,
+					marginTop: 20,
 				}}
 			>
-				<Row justifyContent="space-between" style={{ flexGrow: 1, alignItems: 'center' }}>
-					<Column
-						space={2}
-						style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
-					>
-						<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
-						<Progress value={score} style={{ width: '90%' }} />
-					</Column>
-					<Center style={{ flex: 1, alignItems: 'center' }}>
-						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
-					</Center>
-					<Row
+				<View
+					style={{
+						flexGrow: 0,
+						flexShrink: 0,
+						justifyContent: 'center',
+						alignItems: 'center',
+						marginRight: 40,
+					}}
+				>
+					<View
 						style={{
-							flex: 1,
-							height: '100%',
-							justifyContent: 'space-evenly',
-							alignItems: 'center',
+							display: 'flex',
+							flexDirection: 'row',
+							gap: 20,
 						}}
 					>
-						{midiKeyboardFound && (
-							<>
-								<IconButton
-									size="sm"
-									variant="solid"
-									icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
-									onPress={() => {
-										if (paused) {
-											onResume();
-										} else {
-											onPause();
-										}
-									}}
-								/>
-								<Text>
-									{time < 0
-										? paused
-											? '0:00'
-											: Math.floor((time % 60000) / 1000)
-													.toFixed(0)
-													.toString()
-										: `${Math.floor(time / 60000)}:${Math.floor(
-												(time % 60000) / 1000
-										  )
-												.toFixed(0)
-												.toString()
-												.padStart(2, '0')}`}
-								</Text>
-								<IconButton
-									size="sm"
-									colorScheme="coolGray"
-									variant="solid"
-									icon={<Icon as={Ionicons} name="stop" />}
-									onPress={() => {
-										onEnd();
-									}}
-								/>
-							</>
-						)}
-					</Row>
-				</Row>
-			</Box>
+						<Image src={song.data.cover} alt="cover" size={'md'} borderRadius={8} />
+						<View
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								gap: 8,
+							}}
+						>
+							<Text fontSize={14}>{song.data.name}</Text>
+							<Text fontSize={12}>{song.data.artistId}</Text>
+						</View>
+					</View>
+				</View>
+				<View
+					style={{
+						flexGrow: 1,
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+						gap: 25,
+					}}
+				>
+					<IconButton
+						size="sm"
+						variant="solid"
+						icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
+						onPress={() => {
+							if (paused) {
+								onResume();
+							} else {
+								onPause();
+							}
+						}}
+					/>
+					<Text>
+						{time < 0
+							? paused
+								? '0:00'
+								: Math.floor((time % 60000) / 1000)
+										.toFixed(0)
+										.toString()
+							: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000)
+									.toFixed(0)
+									.toString()
+									.padStart(2, '0')}`}
+					</Text>
+					<StarProgress
+						value={60}
+						max={100}
+						starSteps={[50, 75, 90]}
+						style={{
+							flexGrow: 1,
+							flexShrink: 1,
+							marginTop: 10,
+							marginBottom: 10,
+						}}
+					/>
+					<Text>2:30</Text>
+				</View>
+				<View
+					style={{
+						flexGrow: 0,
+						flexShrink: 0,
+						justifyContent: 'space-evenly',
+						alignItems: 'center',
+						marginLeft: 40,
+					}}
+				>
+					{midiKeyboardFound && (
+						<>
+							<IconButton
+								size="sm"
+								colorScheme="coolGray"
+								variant="solid"
+								icon={<Icon as={Ionicons} name="stop" />}
+								onPress={() => {
+									onEnd();
+								}}
+							/>
+						</>
+					)}
+				</View>
+			</Row>
 		</SafeAreaView>
 	);
 };
