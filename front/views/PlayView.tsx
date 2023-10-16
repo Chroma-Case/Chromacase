@@ -109,6 +109,27 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		[]
 	);
 
+	const infoCardInfos = [
+		{
+			icon: <Ionicons name="timer-outline" size={18} color="#6075F9" />,
+			label: 'Last Score',
+			id: 'lastScore',
+			value: 60,
+		},
+		{
+			icon: <Ionicons name="trophy-outline" size={18} color="#6075F9" />,
+			label: 'Best Score',
+			id: 'bestScore',
+			value: 60,
+		},
+		{
+			icon: <Ionicons name="bar-chart-outline" size={18} color="#6075F9" />,
+			label: 'Level',
+			id: 'level',
+			value: 3,
+		},
+	] as const;
+
 	const onPause = () => {
 		stopwatch.pause();
 		setPause(true);
@@ -331,8 +352,49 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				flexGrow: 1,
 				flexDirection: 'column',
 				padding: 20,
+				position: 'relative',
 			}}
 		>
+			<View
+				style={{
+					position: 'absolute',
+					top: 10,
+					right: 10,
+					display: 'flex',
+					flexDirection: 'row',
+					gap: 20,
+					borderRadius: 12,
+					backgroundColor: 'rgba(16, 16, 20, 0.5)',
+					padding: 10,
+					paddingHorizontal: 20,
+				}}
+			>
+				{infoCardInfos.map((info) => (
+					<View
+						key={info.id}
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<Text fontSize={12}>{info.label}</Text>
+						<View
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								gap: 5,
+							}}
+						>
+							{info.icon}
+							<Text fontSize={12} bold>
+								{info.value}
+							</Text>
+						</View>
+					</View>
+				))}
+			</View>
 			<View
 				style={{
 					width: '100%',
@@ -343,20 +405,20 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					gap: 3,
 				}}
 			>
-				{/* <Animated.View style={{ opacity: fadeAnim }}>
-					<TextButton
-						disabled
-						label={lastScoreMessage?.content ?? ''}
-						colorScheme={lastScoreMessage?.color}
-						rounded="sm"
-					/>
-				</Animated.View> */}
 				<View>
-					<Text fontSize={32}>{score}</Text>
+					<Text fontSize={24}>{score}</Text>
 				</View>
-				<View>
-					<Text fontSize={30}>Cool</Text>
-					<Text fontSize={25} bold>
+				<View
+					style={{
+						display: 'flex',
+						flexDirection: 'row',
+						gap: 7,
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<Text fontSize={20}>Cool</Text>
+					<Text fontSize={15} bold>
 						x1
 					</Text>
 				</View>
@@ -420,7 +482,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							gap: 20,
 						}}
 					>
-						<Image src={song.data.cover} alt="cover" size={'md'} borderRadius={8} />
+						<Image src={song.data.cover} alt="cover" size={'sm'} borderRadius={8} />
 						<View
 							style={{
 								display: 'flex',
