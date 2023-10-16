@@ -9125,7 +9125,7 @@ export default class API {
 		  }`);
 		return {
 			key: ['cursorInfos', songId],
-			exec: async () => res2 as SongCursorInfos,
+			exec: async () => res as SongCursorInfos,
 		}
 	}
 }
