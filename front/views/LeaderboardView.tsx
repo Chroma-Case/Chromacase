@@ -9,7 +9,7 @@ const PodiumUserCardComponent = () => {
 		<View
 			style={{
 				display: 'flex',
-				paddingTop: '60px',
+				paddingTop: 60,
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -18,8 +18,8 @@ const PodiumUserCardComponent = () => {
 
 			<View
 				style={{
-					width: '140px',
-					height: '140px',
+					width: 140,
+					height: 140,
 					flexShrink: 0,
 					borderRadius: 12,
 				}}
@@ -59,7 +59,8 @@ const boardRowComponent = () => {
 	);
 }
 
-const Leaderboardiew = () => {
+const Leaderboardiew = () => {st 
+	con
 	return (
 		<View
 			style={{
@@ -72,7 +73,7 @@ const Leaderboardiew = () => {
 			<View
 				style={{
 					display: 'flex',
-					paddingBottom: '0px',
+					paddingBottom: 0,
 					justifyContent: 'center',
 					alignItems: 'center',
 					alignSelf: 'stretch',
