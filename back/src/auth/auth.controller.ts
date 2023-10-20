@@ -32,11 +32,8 @@ import {
 	ApiBearerAuth,
 	ApiBody,
 	ApiConflictResponse,
-	ApiCreatedResponse,
-	ApiNoContentResponse,
 	ApiOkResponse,
 	ApiOperation,
-	ApiResponse,
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -63,11 +60,14 @@ export class AuthController {
 
 	@Get('login/google')
 	@UseGuards(AuthGuard('google'))
-	@ApiOperation({description: 'Redirect to google login page'})
+	@ApiOperation({ description: 'Redirect to google login page' })
 	googleLogin() {}
 
 	@Get('logged/google')
-	@ApiOperation({description: 'Redirect to the front page after connecting to the google account'})
+	@ApiOperation({
+		description:
+			'Redirect to the front page after connecting to the google account',
+	})
 	@UseGuards(AuthGuard('google'))
 	async googleLoginCallbakc(@Req() req: any) {
 		let user = await this.usersService.user({ googleID: req.user.googleID });
@@ -79,9 +79,11 @@ export class AuthController {
 	}
 
 	@Post('register')
-	@ApiOperation({description: 'Register a new user'})
+	@ApiOperation({ description: 'Register a new user' })
 	@ApiConflictResponse({ description: 'Username or email already taken' })
-	@ApiOkResponse({ description: 'Successfully registered, email sent to verify' })
+	@ApiOkResponse({
+		description: 'Successfully registered, email sent to verify',
+	})
 	@ApiBadRequestResponse({ description: 'Invalid data or database error' })
 	async register(@Body() registerDto: RegisterDto): Promise<void> {
 		try {
@@ -101,19 +103,21 @@ export class AuthController {
 	@Put('verify')
 	@HttpCode(200)
 	@UseGuards(JwtAuthGuard)
-	@ApiOperation({description: 'Verify the email of the user'})
+	@ApiOperation({ description: 'Verify the email of the user' })
 	@ApiOkResponse({ description: 'Successfully verified' })
 	@ApiBadRequestResponse({ description: 'Invalid or expired token' })
-	async verify(@Request() req: any, @Query('token') token: string): Promise<void> {
-		if (await this.authService.verifyMail(req.user.id, token))
-			return;
-		throw new BadRequestException("Invalid token. Expired or invalid.");
+	async verify(
+		@Request() req: any,
+		@Query('token') token: string,
+	): Promise<void> {
+		if (await this.authService.verifyMail(req.user.id, token)) return;
+		throw new BadRequestException('Invalid token. Expired or invalid.');
 	}
 
 	@Put('reverify')
 	@UseGuards(JwtAuthGuard)
 	@HttpCode(200)
-	@ApiOperation({description: 'Resend the verification email'})
+	@ApiOperation({ description: 'Resend the verification email' })
 	async reverify(@Request() req: any): Promise<void> {
 		const user = await this.usersService.user({ id: req.user.id });
 		if (!user) throw new BadRequestException('Invalid user');
@@ -277,43 +281,29 @@ export class AuthController {
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({ description: 'Successfully added liked song'})
+	@ApiOkResponse({ description: 'Successfully added liked song' })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Post('me/likes/:id')
-	addLikedSong(
-		@Request() req: any,
-		@Param('id') songId: number
-	) {
-		return this.usersService.addLikedSong(
-			+req.user.id,
-			+songId,
-		);
+	addLikedSong(@Request() req: any, @Param('id') songId: number) {
+		return this.usersService.addLikedSong(+req.user.id, +songId);
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({ description: 'Successfully removed liked song'})
+	@ApiOkResponse({ description: 'Successfully removed liked song' })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Delete('me/likes/:id')
-	removeLikedSong(
-		@Request() req: any,
-		@Param('id') songId: number,
-	) {
-		return this.usersService.removeLikedSong(
-			+req.user.id,
-			+songId,
-		);
+	removeLikedSong(@Request() req: any, @Param('id') songId: number) {
+		return this.usersService.removeLikedSong(+req.user.id, +songId);
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@ApiBearerAuth()
-	@ApiOkResponse({ description: 'Successfully retrieved liked song'})
+	@ApiOkResponse({ description: 'Successfully retrieved liked song' })
 	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	@Get('me/likes')
-	getLikedSongs(
-		@Request() req: any,
-	) {
-		return this.usersService.getLikedSongs(+req.user.id)
+	getLikedSongs(@Request() req: any) {
+		return this.usersService.getLikedSongs(+req.user.id);
 	}
 
 	@UseGuards(JwtAuthGuard)

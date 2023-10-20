@@ -12,9 +12,13 @@ export class GenreService {
 		});
 	}
 
-	async get(where: Prisma.GenreWhereUniqueInput): Promise<Genre | null> {
+	async get(
+		where: Prisma.GenreWhereUniqueInput,
+		include?: Prisma.GenreInclude,
+	): Promise<Genre | null> {
 		return this.prisma.genre.findUnique({
 			where,
+			include,
 		});
 	}
 
@@ -24,14 +28,16 @@ export class GenreService {
 		cursor?: Prisma.GenreWhereUniqueInput;
 		where?: Prisma.GenreWhereInput;
 		orderBy?: Prisma.GenreOrderByWithRelationInput;
+		include?: Prisma.GenreInclude;
 	}): Promise<Genre[]> {
-		const { skip, take, cursor, where, orderBy } = params;
+		const { skip, take, cursor, where, orderBy, include } = params;
 		return this.prisma.genre.findMany({
 			skip,
 			take,
 			cursor,
 			where,
 			orderBy,
+			include,
 		});
 	}
 

@@ -7,7 +7,9 @@ export class AppController {
 	constructor(private readonly appService: AppService) {}
 
 	@Get()
-	@ApiOkResponse({ description: 'Return a hello world message, used as a health route' })
+	@ApiOkResponse({
+		description: 'Return a hello world message, used as a health route',
+	})
 	getHello(): string {
 		return this.appService.getHello();
 	}

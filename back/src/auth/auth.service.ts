@@ -79,7 +79,7 @@ export class AuthService {
 			console.log('Password reset token failure', e);
 			return false;
 		}
-		console.log(verified)
+		console.log(verified);
 		await this.userService.updateUser({
 			where: { id: verified.userId },
 			data: { password: new_password },
