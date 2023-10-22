@@ -12,14 +12,13 @@ export const Metronome = ({ paused = false, bpm }: { paused?: boolean; bpm: numb
 		if (!enabled) {
 			return;
 		} else if (!audio.current) {
-			Audio.Sound.createAsync(require('../assets/metronome.mp3'))
-			.then((a) => {
+			Audio.Sound.createAsync(require('../assets/metronome.mp3')).then((a) => {
 				audio.current = a.sound;
-			})
+			});
 		}
 		return () => {
 			audio.current?.unloadAsync();
-		}
+		};
 	}, [enabled]);
 	useEffect(() => {
 		if (paused) return;
