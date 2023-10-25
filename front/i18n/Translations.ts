@@ -32,6 +32,7 @@ export const en = {
 	goNextStep: 'Step Up!',
 	mySkillsToImprove: 'My Competencies to work on',
 	recentlyPlayed: 'Recently played',
+	leaderboardTitle: 'Leaderboard',
 
 	songsToGetBetter: 'Recommendations',
 	lastSearched: 'Last searched',
@@ -323,6 +324,7 @@ export const fr: typeof en = {
 	lastScore: 'Dernier',
 	bestStreak: 'Meilleure série',
 	precision: 'Précision',
+	leaderboardTitle: 'Tableau d\'honneur',
 
 	langBtn: 'Langage',
 	backBtn: 'Retour',
@@ -646,6 +648,7 @@ export const sp: typeof en = {
 	mySkillsToImprove: 'Mis habilidades para mejorar',
 	recentlyPlayed: 'Recientemente jugado',
 	lastSearched: 'Ultimas búsquedas',
+	leaderboardTitle: 'tabla de clasificación',
 
 	welcome: 'Benvenido a Chromacase',
 	langBtn: 'Langua',
