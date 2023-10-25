@@ -44,6 +44,12 @@ const tabs = [
 		iconName: 'search',
 	},
 	{
+		id: 'leaderboard',
+		label: 'Leaderboard',
+		icon: <Ionicons name='medal' size={24} color='black' />,
+		iconName: 'medal',
+	},
+	{
 		id: 'notifications',
 		label: 'Notifications',
 		icon: <Ionicons name="notifications" size={24} color="black" />,

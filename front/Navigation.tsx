@@ -35,6 +35,7 @@ import SignupView from './views/SignupView';
 import TabNavigation from './components/V2/TabNavigation';
 import PasswordResetView from './views/PasswordResetView';
 import ForgotPasswordView from './views/ForgotPasswordView';
+import Leaderboardiew from './views/LeaderboardView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -84,6 +85,11 @@ const protectedRoutes = () =>
 			component: SearchView,
 			options: { title: translate('search') },
 			link: '/search/:query?',
+		},
+		Leaderboard: {
+			component: Leaderboardiew,
+			options: { title: translate('leaderboardTitle') },
+			link: '/leaderboard',
 		},
 		Error: {
 			component: ErrorView,
