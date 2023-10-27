@@ -8,9 +8,9 @@ import { Ionicons } from '@expo/vector-icons';
 type PodiumCardProps = {
 	offset: number;
 	medalColor: string;
-}
+};
 
-const PodiumCardComponent = ({offset, medalColor}: PodiumCardProps) => {
+const PodiumCardComponent = ({ offset, medalColor }: PodiumCardProps) => {
 	return (
 		<View
 			style={{
@@ -19,7 +19,7 @@ const PodiumCardComponent = ({offset, medalColor}: PodiumCardProps) => {
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-				marginLeft: 32
+				marginLeft: 32,
 			}}
 		>
 			<View /** image + medal container*/
@@ -40,9 +40,16 @@ const PodiumCardComponent = ({offset, medalColor}: PodiumCardProps) => {
 						borderRadius: 12,
 					}}
 				/>
-				<Ionicons style={{position: 'absolute', top: 106, left: 106}} name='medal' size={24} color={medalColor} />
+				<Ionicons
+					style={{ position: 'absolute', top: 106, left: 106 }}
+					name="medal"
+					size={24}
+					color={medalColor}
+				/>
 			</View>
-			<Text mt={4} style={{
+			<Text
+				mt={4}
+				style={{
 					fontSize: 16,
 					fontStyle: 'normal',
 					fontWeight: '500',
@@ -50,7 +57,9 @@ const PodiumCardComponent = ({offset, medalColor}: PodiumCardProps) => {
 			>
 				Momo
 			</Text>
-			<Text mt={1} style={{
+			<Text
+				mt={1}
+				style={{
 					fontSize: 16,
 					fontStyle: 'normal',
 					fontWeight: '500',
@@ -60,11 +69,12 @@ const PodiumCardComponent = ({offset, medalColor}: PodiumCardProps) => {
 			</Text>
 		</View>
 	);
-}
+};
 
 const BoardRowComponent = () => {
 	return (
-		<View style={{
+		<View
+			style={{
 				margin: 5,
 				display: 'flex',
 				flexDirection: 'row',
@@ -76,20 +86,20 @@ const BoardRowComponent = () => {
 				shadowOffset: { width: 0, height: 4 },
 				shadowOpacity: 1,
 				shadowRadius: 4,
-				marginTop: 10
+				marginTop: 10,
 			}}
 		>
 			<View
 				style={{
-						width: 50,
-						height: 50,
+					width: 50,
+					height: 50,
 				}}
 			>
 				<Image
 					source={{
 						uri: 'https://picsum.photos/50/50',
 					}}
-					style={{width: '100%', height: '100%'}}
+					style={{ width: '100%', height: '100%' }}
 				/>
 			</View>
 
@@ -109,7 +119,7 @@ const BoardRowComponent = () => {
 					fontSize: 16,
 					fontStyle: 'normal',
 					fontWeight: '500',
-					marginHorizontal: 10
+					marginHorizontal: 10,
 				}}
 			>
 				200 LVL
@@ -117,6 +127,9 @@ const BoardRowComponent = () => {
 			<View
 				style={{
 					backgroundColor: 'rgba(255, 255, 255, 0.50)',
+					// borderRadius: 8,
+					borderTopRightRadius: 8,
+					borderBottomRightRadius: 8,
 					width: 50,
 					height: '100%',
 					flexDirection: 'column',
@@ -136,47 +149,51 @@ const BoardRowComponent = () => {
 			</View>
 		</View>
 	);
-}
+};
 
 const dummyScores = [
 	{
-		id: 1
+		id: 1,
 	},
 	{
-		id: 2
+		id: 2,
 	},
 	{
-		id: 3
+		id: 3,
 	},
 	{
-		id: 4
+		id: 4,
 	},
 	{
-		id: 5
+		id: 5,
 	},
 	{
-		id: 6
+		id: 6,
 	},
 	{
-		id: 7
+		id: 7,
 	},
 	{
-		id: 8
+		id: 8,
 	},
 	{
-		id: 9
+		id: 9,
 	},
-]
+];
 
 const Leaderboardiew = () => {
+	// const scoresQuery = useQuery(API.getTopTwentyPlayers())
 	return (
-		<ScrollView>
+		<ScrollView style={{ marginBottom: 5 }}>
 			<View
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'flex-start',
-					flex: 1, flexGrow: 1, flexShrink: 0, flexBasis: 0,
+					flex: 1,
+					flexGrow: 1,
+					flexShrink: 0,
+					flexBasis: 0,
 					alignSelf: 'stretch',
 				}}
 			>
@@ -188,19 +205,19 @@ const Leaderboardiew = () => {
 						alignItems: 'center',
 						alignSelf: 'stretch',
 						flexDirection: 'row',
-						marginBottom: 20
+						marginBottom: 20,
 					}}
 				>
-					<PodiumCardComponent medalColor='#AE84FB' offset={80}/>
-					<PodiumCardComponent medalColor='#EAD93C' offset={0}/>
-					<PodiumCardComponent medalColor='#5F74F7' offset={60}/>
+					<PodiumCardComponent medalColor="#AE84FB" offset={80} />
+					<PodiumCardComponent medalColor="#EAD93C" offset={0} />
+					<PodiumCardComponent medalColor="#5F74F7" offset={60} />
 				</View>
 				{dummyScores.map((comp, index) => (
-					<BoardRowComponent/>
+					<BoardRowComponent />
 				))}
 			</View>
 		</ScrollView>
 	);
-}
+};
 
 export default Leaderboardiew;

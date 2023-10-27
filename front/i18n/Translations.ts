@@ -324,7 +324,7 @@ export const fr: typeof en = {
 	lastScore: 'Dernier',
 	bestStreak: 'Meilleure série',
 	precision: 'Précision',
-	leaderboardTitle: 'Tableau d\'honneur',
+	leaderboardTitle: "Tableau d'honneur",
 
 	langBtn: 'Langage',
 	backBtn: 'Retour',
