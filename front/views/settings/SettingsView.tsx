@@ -28,6 +28,7 @@ import { RouteProps } from '../../Navigation';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import { ColorSchemeProvider } from '../../Theme';
 import useColorScheme from '../../hooks/colorScheme';
+import { translate } from '../../i18n/i18n';
 
 export const PianoSettings = () => {
 	return (
@@ -71,12 +72,12 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
 	const [routes] = React.useState<Route[]>([
-		{ key: 'profile', title: 'Profile' },
-		{ key: 'premium', title: 'Premium' },
-		{ key: 'preferences', title: 'Preferences' },
-		{ key: 'notifications', title: 'Notifications' },
-		{ key: 'privacy', title: 'Privacy' },
-		{ key: 'piano', title: 'Piano' },
+		{ key: 'profile', title: 'settingsTabProfile' },
+		{ key: 'premium', title: 'settingsTabPremium' },
+		{ key: 'preferences', title: 'settingsTabPreferences' },
+		{ key: 'notifications', title: 'settingsTabNotifications' },
+		{ key: 'privacy', title: 'settingsTabPrivacy' },
+		{ key: 'piano', title: 'settingsTabPiano' },
 	]);
 	const renderTabBar = (
 		props: SceneRendererProps & { navigationState: NavigationState<Route> }
@@ -103,11 +104,11 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 				);
 			}}
 			renderLabel={({ route, color }) =>
-				layout.width > 1100 ? (
+				layout.width > 1100 && (
 					<Text style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}>
-						{route.title}
+						{translate(route.title as 'settingsTabProfile' | 'settingsTabPremium' | 'settingsTabPreferences' | 'settingsTabNotifications' | 'settingsTabPrivacy' | 'settingsTabPiano')}
 					</Text>
-				) : null
+				)
 			}
 			tabStyle={{ flexDirection: 'row' }}
 		/>

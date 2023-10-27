@@ -1,11 +1,8 @@
-import { View, Image } from 'react-native';
-import { Divider, Text, ScrollView, Flex, Row, Popover, Heading, Button, useBreakpointValue } from 'native-base';
+import { Flex, useBreakpointValue } from 'native-base';
 import useColorScheme from '../../hooks/colorScheme';
-import { useQuery, useQueries } from '../../Queries';
+import { useQuery } from '../../Queries';
 import API from '../../API';
-import Song from '../../models/Song';
 import { LinearGradient } from 'expo-linear-gradient';
-import ButtonBase from './ButtonBase';
 import {
 	Cup,
 	Discover,
@@ -15,12 +12,7 @@ import {
 	Setting2,
 	User,
 } from 'iconsax-react-native';
-import { useDispatch } from 'react-redux';
 import { LoadingView } from '../Loading';
-import { translate } from '../../i18n/i18n';
-import { unsetAccessToken } from '../../state/UserSlice';
-import { useNavigation } from '../../Navigation';
-import Spacer from './Spacer';
 import ScaffoldDesktopCC from './ScaffoldDesktopCC';
 import ScaffoldMobileCC from './ScaffoldMobileCC';
 
@@ -30,12 +22,12 @@ const menu: {
 	icon: Icon;
 	link: string;
 }[] = [
-	{ type: "main", title: 'Discovery', icon: Discover, link: 'HomeNew' },
-	{ type: "main", title: 'Profile', icon: User, link: 'User' },
-	{ type: "main", title: 'Music', icon: Music, link: 'Home' },
-	{ type: "main", title: 'Search', icon: SearchNormal1, link: 'Search' },
-	{ type: "main", title: 'LeaderBoard', icon: Cup, link: 'Score' },
-	{ type: "sub", title: 'Settings', icon: Setting2, link: 'Settings' },
+	{ type: "main", title: 'menuDiscovery', icon: Discover, link: 'HomeNew' },
+	{ type: "main", title: 'menuProfile', icon: User, link: 'User' },
+	{ type: "main", title: 'menuMusic', icon: Music, link: 'Home' },
+	{ type: "main", title: 'menuSearch', icon: SearchNormal1, link: 'Search' },
+	{ type: "main", title: 'menuLeaderBoard', icon: Cup, link: 'Score' },
+	{ type: "sub", title: 'menuSettings', icon: Setting2, link: 'Settings' },
 ];
 
 type ScaffoldCCProps = {

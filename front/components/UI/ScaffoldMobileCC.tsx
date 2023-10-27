@@ -1,11 +1,11 @@
-import { View, useWindowDimensions } from 'react-native';
-import {  ScrollView, Flex, useBreakpointValue, useMediaQuery, useTheme } from 'native-base';
-import { LinearGradient } from 'expo-linear-gradient';
+import { View } from 'react-native';
+import {  ScrollView, Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { useNavigation } from '../../Navigation';
 import Spacer from './Spacer';
 import User from '../../models/User';
+import { translate } from '../../i18n/i18n';
 
 type ScaffoldMobileCCProps = {
 	children?: React.ReactNode;
@@ -61,7 +61,7 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 							key={'key-menu-link-' + value.title}
 							type="menu"
 							icon={value.icon}
-							title={props.routeName === value.link && !isSmallScreen ? value.title : undefined}
+							title={props.routeName === value.link && !isSmallScreen ? translate(value.title as 'menuDiscovery' | 'menuProfile' | 'menuMusic' | 'menuSearch' | 'menuLeaderBoard' | 'menuSettings') : undefined}
 							isDisabled={props.routeName === value.link}
 							iconVariant={
 								props.routeName === value.link ? 'Bold' : 'Outline'

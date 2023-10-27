@@ -24,12 +24,13 @@ const handleSubmit = async (username: string, password: string, email: string) =
 };
 
 type LogoutButtonCCProps = {
+	collapse?: boolean;
 	isGuest?: boolean;
     style: any;
     buttonType: ButtonType
 };
 
-const LogoutButtonCC = ({isGuest = false, buttonType = 'menu', style}: LogoutButtonCCProps) => {
+const LogoutButtonCC = ({collapse = false, isGuest = false, buttonType = 'menu', style}: LogoutButtonCCProps) => {
 	const dispatch = useDispatch();
 	const [isVisible, setIsVisible] = useState(false);
 
@@ -38,7 +39,7 @@ const LogoutButtonCC = ({isGuest = false, buttonType = 'menu', style}: LogoutBut
             <ButtonBase
                 style={style}
                 icon={LogoutCurve}
-                title={translate('signOutBtn')}
+                title={collapse ? translate('signOutBtn') : undefined}
                 type={buttonType}
                 onPress={async () => {isGuest ? setIsVisible(true) : dispatch(unsetAccessToken());}}
             />
@@ -50,7 +51,7 @@ const LogoutButtonCC = ({isGuest = false, buttonType = 'menu', style}: LogoutBut
             >
                 <SignUpForm onSubmit={handleSubmit} />
                 <ButtonBase
-                    style={{width: '100%'}}
+                    style={!collapse ? { width: '100%' } : {}}
                     type="outlined"
                     icon={LogoutCurve}
                     title={translate('signOutBtn')}

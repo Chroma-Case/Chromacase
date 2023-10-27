@@ -38,6 +38,17 @@ export const en = {
 	levelProgress: 'good notes',
 	score: 'Score',
 
+	// Menu
+	menuDiscovery: 'Discovery',
+	menuProfile: 'Profile',
+	menuMusic: 'Music',
+	menuSearch: 'Search',
+	menuLeaderBoard: 'LeaderBoard',
+	menuSettings: 'Settings',
+
+	menuRecentlyPlayed: 'Recently played',
+	menuNoSongsPlayedYet: 'No songs played yet',
+
 	//signup
 	signupPageTitle: "Create an account",
 	signupPageParagraph: "Learn to play the piano in an enjoyable and free way.",
@@ -151,6 +162,12 @@ export const en = {
 	emailUpdated: 'Email updated',
 
 	//Settings
+	settingsTabProfile: 'Profile',
+	settingsTabPremium: 'Premium',
+	settingsTabPreferences: 'Preferences',
+	settingsTabNotifications: 'Notifications',
+	settingsTabPrivacy: 'Privacy',
+	settingsTabPiano: 'Piano',
 	//  Profile Tab
 	settingsProfileTabGoogleSectionTitle: 'Google account',
 	settingsProfileTabGoogleSectionDescription: 'Link your Google account to ChromaCase',
@@ -297,13 +314,24 @@ export const fr: typeof en = {
 	longestCombo: 'Combo le plus long : ',
 	favoriteGenre: 'Genre favori : ',
 
+	// Menu
+	menuDiscovery: 'Découverte',
+	menuProfile: 'Profil',
+	menuMusic: 'Musique',
+	menuSearch: 'Recherche',
+	menuLeaderBoard: 'Classement',
+	menuSettings: 'Paramètres',
+
+	menuRecentlyPlayed : 'Récemment jouée',
+	menuNoSongsPlayedYet : 'Aucune chanson jouée pour l\'instant',
+
 	//signup
 	signupPageTitle: "Créer un compte",
 	signupPageParagraph: "Apprendre le piano gratuitement et de manière ludique",
 	signupLinkLabel: "Vous avez déjà un compte ? ",
 	signupLinkText: "S'identifier",
 
-	//signup
+	//signin
 	signinPageTitle: "Bienvenue !",
 	signinPageParagraph: "Continuez avec Google ou entrez vos coordonnées.",
 	signinLinkLabel: "Vous n'avez pas de compte ? ",
@@ -406,6 +434,12 @@ export const fr: typeof en = {
 	emailUpdated: 'Email mis à jour',
 
 	//Settings
+	settingsTabProfile: 'Profil',
+	settingsTabPremium: 'Premium',
+	settingsTabPreferences: 'Preferences',
+	settingsTabNotifications: 'Notifications',
+	settingsTabPrivacy: "Confidentialité",
+	settingsTabPiano: "Piano",
 	//  Profile Tab
 	settingsProfileTabGoogleSectionTitle: 'Compte Google',
 	settingsProfileTabGoogleSectionDescription: 'Liez votre compte Google à ChromaCase',
@@ -565,6 +599,17 @@ export const sp: typeof en = {
 	longestCombo: 'combo más largo : ',
 	favoriteGenre: 'genero favorito : ',
 
+	// Menu
+	menuDiscovery: 'Descubrimiento',
+	menuProfile: 'Perfil',
+	menuMusic: 'Música',
+	menuSearch: 'Búsqueda',
+	menuLeaderBoard: 'Clasificación',
+	menuSettings: 'Configuración',
+
+	menuRecentlyPlayed: 'Reproducidas recientemente',
+	menuNoSongsPlayedYet: 'No hay canciones reproducidas todavía',
+
 	//signup
 	signupPageTitle: "Crear una cuenta",
 	signupPageParagraph: "Aprende a tocar el piano de forma amena y gratuita.",
@@ -664,6 +709,12 @@ export const sp: typeof en = {
 	emailUpdated: 'Email actualizado',
 
 	//Settings
+	settingsTabProfile: 'Perfil',
+	settingsTabPremium: 'Premium',
+	settingsTabPreferences: 'Preferencias',
+	settingsTabNotifications: 'Notificaciones',
+	settingsTabPrivacy: 'Privacidad',
+	settingsTabPiano: 'Piano',
 	//  Profile Tab
 	settingsProfileTabGoogleSectionTitle: 'Cuenta de Google',
 	settingsProfileTabGoogleSectionDescription: 'Vincula tu cuenta de Google con ChromaCase',

@@ -30,61 +30,95 @@ type ScaffoldDesktopCCProps = {
 	}[]
 };
 
-const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
-	const navigation = useNavigation();
-	const userQuery = useQuery(API.getUserInfo);
-	const [isSmallScreen] = useMediaQuery({ maxWidth: 400 });
-	const layout = useWindowDimensions();
-	const colorScheme = useColorScheme();
-
-	if (!userQuery.data || userQuery.isLoading) {
-		return <LoadingView />;
-	}
+const SongHistory = (props: {quantity: number}) => {
 	const playHistoryQuery = useQuery(API.getUserPlayHistory);
 	const songHistory = useQueries(
 		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
 	);
+
+	if (!playHistoryQuery.data || playHistoryQuery.isLoading) {
+		return <LoadingView />;
+	}
+
+	return (
+		<View>
+			{songHistory.length === 0 ?
+				<Text style={{ paddingHorizontal: 16 }}>{translate('menuNoSongsPlayedYet')}</Text>
+				: songHistory
+					.map((h) => h.data)
+					.filter((data): data is Song => data !== undefined)
+					.filter(
+						(song, i, array) =>
+							array.map((s) => s.id).findIndex((id) => id == song.id) == i
+					)
+					.slice(0, props.quantity + 1)
+					.map((histoItem, index) => (
+						<View
+							key={'tab-navigation-other-' + index}
+							style={{
+								paddingHorizontal: 16,
+								paddingVertical: 10,
+							}}
+						>
+							<Text numberOfLines={1}>{histoItem.name}</Text>
+						</View>
+					)
+				)
+			}
+		</View>
+	);
+}
+
+const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
+	const navigation = useNavigation();
+	const userQuery = useQuery(API.getUserInfo);
+	const [isSmallScreen] = useMediaQuery({ maxWidth: 1100 });
 	const { colors } = useTheme();
+
+	if (!userQuery.data || userQuery.isLoading) {
+		return <LoadingView />;
+	}
 
 	return (
 		<View style={{ height: '100%', flexDirection: 'row', overflow: 'hidden' }}>
 			<View
 				style={{
 					display: 'flex',
-					width: 300,
+					width: !isSmallScreen ? 300 : undefined,
 					padding: 20,
 					flexDirection: 'column',
 					justifyContent: 'space-between',
-					alignItems: 'flex-start',
+					alignItems: isSmallScreen ? 'center' : 'flex-start',
 					flexShrink: 0,
 				}}
 			>
-				<View style={{ width: '100%' }}>
-					<Row space={2} flex={1}>
+				<View style={!isSmallScreen ? { width: '100%' } : {}}>
+					<Row space={2} flex={1} style={{ justifyContent: 'center' }}>
 						<Image
 							source={{ uri: props.logo }}
 							style={{
 								aspectRatio: 1,
 								width: 32,
 								height: 32,
+								alignItems: isSmallScreen ? 'center' : 'flex-start',
 							}}
 						/>
-						{layout.width > 650 &&
+						{!isSmallScreen &&
 							<Text fontSize={'xl'} selectable={false}>
 								Chromacase
 							</Text>
 						}
 					</Row>
 					<Spacer height="lg" />
-					<View style={{ width: '100%' }}>
+					<View>
 						{props.menu.map((value) => (
 							value.type === "main" &&
 							<View key={'key-menu-link-' + value.title}>
 								<ButtonBase
-									style={{ width: '100%' }}
+									style={!isSmallScreen ? { width: '100%' } : {}}
 									type="menu"
 									icon={value.icon}
-									title={value.title}
+									title={!isSmallScreen ? translate(value.title as 'menuDiscovery' | 'menuProfile' | 'menuMusic' | 'menuSearch' | 'menuLeaderBoard' | 'menuSettings') : undefined}
 									isDisabled={props.routeName === value.link}
 									iconVariant={
 										props.routeName === value.link ? 'Bold' : 'Outline'
@@ -98,61 +132,35 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 						))}
 					</View>
 				</View>
-				<View style={{ width: '100%' }}>
-					<Divider my="2" _light={{bg: colors.black[500]}} _dark={{bg:'#FFF'}}/>
-					<Spacer height='xs'/>
-					<Text
-						bold
-						style={{
-							paddingHorizontal: 16,
-							paddingVertical: 10,
-							fontSize: 20,
-						}}
-					>
-						Recently played
-					</Text>
-					{songHistory.length === 0 && (
+				{!isSmallScreen && 
+					<View>
+						<Divider my="2" _light={{bg: colors.black[500]}} _dark={{bg:'#FFF'}}/>
+						<Spacer height='xs'/>
 						<Text
+							bold
 							style={{
 								paddingHorizontal: 16,
-								paddingVertical: 10,
+								paddingBottom: 10,
+								fontSize: 20,
 							}}
 						>
-							No songs played yet
+							{translate('menuRecentlyPlayed')}
 						</Text>
-					)}
-					{songHistory
-						.map((h) => h.data)
-						.filter((data): data is Song => data !== undefined)
-						.filter(
-							(song, i, array) =>
-								array.map((s) => s.id).findIndex((id) => id == song.id) == i
-						)
-						.slice(0, 4)
-						.map((histoItem, index) => (
-							<View
-								key={'tab-navigation-other-' + index}
-								style={{
-									paddingHorizontal: 16,
-									paddingVertical: 10,
-								}}
-							>
-								<Text numberOfLines={1}>{histoItem.name}</Text>
-							</View>
-						))}
-				</View>
+						<SongHistory quantity={3}/>
+					</View>
+				}
 				<Spacer height='xs'/>
-				<View style={{ width: '100%' }}>
+				<View style={!isSmallScreen ? { width: '100%' } : {}}>
 					<Divider my="2" _light={{bg: colors.black[500]}} _dark={{bg: '#FFF'}}/>
 					<Spacer height='xs'/>
 					{props.menu.map((value) => (
 						value.type === "sub" &&
 						<ButtonBase
 							key={'key-menu-link-' + value.title}
-							style={{ width: '100%' }}
+							style={!isSmallScreen ? { width: '100%' } : {}}
 							type="menu"
 							icon={value.icon}
-							title={!isSmallScreen ? value.title : undefined}
+							title={!isSmallScreen ? translate(value.title as 'menuDiscovery' | 'menuProfile' | 'menuMusic' | 'menuSearch' | 'menuLeaderBoard' | 'menuSettings') : undefined}
 							isDisabled={props.routeName === value.link}
 							iconVariant={
 								props.routeName === value.link ? 'Bold' : 'Outline'
@@ -163,7 +171,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 						/>
 					))}
 					<Spacer height='xs'/>
-					<LogoutButtonCC isGuest={props.user.isGuest} style={{with: '100%'}} buttonType={'menu'}/>
+					<LogoutButtonCC collapse={!isSmallScreen} isGuest={props.user.isGuest} style={!isSmallScreen ? { width: '100%' } : {}} buttonType={'menu'}/>
 				</View>
 			</View>
 			<ScrollView
@@ -176,6 +184,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 						flex: 1,
 						margin: 8,
 						marginBottom: 0,
+						marginLeft: 0,
 						padding: props.widthPadding ? 20 : 0,
 						borderRadius: 12,
 						minHeight: 'fit-content',
