@@ -26,9 +26,8 @@ const PremiumSettings = () => {
 				{
 					icon: <Star1 size="24" color={color} style={{ minWidth: 24 }} />,
 					type: 'text',
-					title: translate('premiumAccount'),
-					description:
-						'Personalisation premium et outils vous permetant de passer au niveau supperieur',
+					title: translate('settingsPremiumTabPremiumAccountSectionTitle'),
+					description: translate('settingsPremiumTabPremiumAccountSectionDescription'),
 					data: {
 						text: translate(user.premium ? 'yes' : 'no'),
 					},
@@ -36,11 +35,9 @@ const PremiumSettings = () => {
 				{
 					icon: <Magicpen size="24" color={color} style={{ minWidth: 24 }} />,
 					type: 'toggle',
-					title: 'Piano Magique',
-					description:
-						'Fait apparaître de la lumière sur le piano pendant les parties',
-					helperText:
-						'Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité',
+					title: translate('settingsPremiumTabPianoMagiqueSectionTitle'),
+					description: translate('settingsPremiumTabPianoMagiqueSectionDescription'),
+					helperText: translate('settingsPremiumTabPianoMagiqueSectionHelper'),
 					disabled: true,
 					data: {
 						value: false,
@@ -50,8 +47,8 @@ const PremiumSettings = () => {
 				{
 					icon: <Designtools size="24" color={color} style={{ minWidth: 24 }} />,
 					type: 'dropdown',
-					title: 'Thème de piano',
-					description: 'Définissez le theme de votre piano',
+					title: translate('settingsPremiumTabThemePianoSectionTitle'),
+					description: translate('settingsPremiumTabThemePianoSectionDescription'),
 					disabled: true,
 					data: {
 						value: 'default',

@@ -23,8 +23,8 @@ const PreferencesSettings = () => {
 					{
 						icon: <Brush2 size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'dropdown',
-						title: translate('SettingsPreferencesTheme'),
-						description: 'Définissez le theme (Dark ou Light) de votre application',
+						title: translate('SettingsPreferencesTabThemeSectionTitle'),
+						description: translate('SettingsPreferencesTabThemeSectionDescription'),
 						data: {
 							value: settings.colorScheme,
 							defaultValue: 'system',
@@ -45,8 +45,8 @@ const PreferencesSettings = () => {
 					{
 						icon: <LanguageSquare size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'dropdown',
-						title: translate('SettingsPreferencesLanguage'),
-						description: 'Définissez la langue de votre application',
+						title: translate('SettingsPreferencesTabLanguageSectionTitle'),
+						description: translate('SettingsPreferencesTabLanguageSectionDescription'),
 						data: {
 							value: language,
 							defaultValue: DefaultLanguage,
@@ -63,8 +63,8 @@ const PreferencesSettings = () => {
 					{
 						icon: <Rank size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'dropdown',
-						title: translate('SettingsPreferencesDifficulty'),
-						description: 'La précision du tempo est de plus en plus élevée',
+						title: translate('SettingsPreferencesTabDifficultySectionTitle'),
+						description: translate('SettingsPreferencesTabDifficultySectionDescription'),
 						data: {
 							value: settings.difficulty,
 							defaultValue: 'medium',
@@ -89,8 +89,8 @@ const PreferencesSettings = () => {
 					{
 						icon: <Colorfilter size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'toggle',
-						title: translate('SettingsPreferencesColorblindMode'),
-						description: 'Augmente le contraste',
+						title: translate('SettingsPreferencesTabColorblindModeSectionTitle'),
+						description: translate('SettingsPreferencesTabColorblindModeSectionDescription'),
 						data: {
 							value: settings.colorBlind,
 							onToggle: () => {
@@ -105,8 +105,8 @@ const PreferencesSettings = () => {
 					{
 						icon: <Sound size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'range',
-						title: translate('SettingsPreferencesMicVolume'),
-						description: 'Régler le volume de votre micro selon vos preference',
+						title: translate('SettingsPreferencesTabMicVolumeSectionTitle'),
+						description: translate('SettingsPreferencesTabMicVolumeSectionDescription'),
 						data: {
 							value: settings.micVolume,
 							min: 0,

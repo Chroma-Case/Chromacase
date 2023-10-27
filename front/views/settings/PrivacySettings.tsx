@@ -27,9 +27,8 @@ const PrivacySettings = () => {
 				{
 					type: 'toggle',
 					icon: <Driver size="24" color={color} style={{ minWidth: 24 }} />,
-					title: translate('dataCollection'),
-					description:
-						"Acceptez-vous la récupération de vos données pour l'amélioration de Chromacase ?",
+					title: translate('SettingsPrivacyTabDataCollectionSectionTitle'),
+					description: translate('SettingsPrivacyTabDataCollectionSectionDescription'),
 					data: {
 						value: settings.dataCollection,
 						onToggle: () =>
@@ -41,8 +40,8 @@ const PrivacySettings = () => {
 				{
 					type: 'toggle',
 					icon: <Shop size="24" color={color} style={{ minWidth: 24 }} />,
-					title: translate('customAds'),
-					description: 'Afficher les suggestions dans la section des recommandations',
+					title: translate('SettingsPrivacyTabCustomAdsSectionTitle'),
+					description: translate('SettingsPrivacyTabCustomAdsSectionDescription'),
 					data: {
 						value: settings.customAds,
 						onToggle: () =>
@@ -52,8 +51,8 @@ const PrivacySettings = () => {
 				{
 					type: 'toggle',
 					icon: <Like1 size="24" color={color} style={{ minWidth: 24 }} />,
-					title: translate('recommendations'),
-					description: 'Souhaitez-vous recevoir nos conseils et recommandations ?',
+					title: translate('SettingsPrivacyTabRecommendationsSectionTitle'),
+					description: translate('SettingsPrivacyTabRecommendationsSectionDescription'),
 					data: {
 						value: userSettings.data.recommendations,
 						onToggle: () =>

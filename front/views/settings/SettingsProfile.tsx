@@ -42,32 +42,32 @@ const ProfileSettings = () => {
 					{
 						icon: <Google size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'text',
-						title: 'Google account', // TODO translate
-						description: 'Liez votre compte Google à ChromaCase', // TODO translate
+						title: translate('settingsProfileTabGoogleSectionTitle'),
+						description: translate('settingsProfileTabGoogleSectionDescription'),
 						data: {
-							text: user.googleID ? 'Linked' : 'Not linked',
+							text: translate(user.googleID ? 'settingsProfileTabGoogleSectionLinkedText' : 'settingsProfileTabGoogleSectionNotLinkedText')
 						},
 					},
 					{
 						icon: <Verify size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'text',
-						description: 'Vérifiez votre adresse e-mail', // TODO translate
-						title: translate('verified'),
+						title: translate('settingsProfileTabVerifiedSectionTitle'),
+						description: translate('settingsProfileTabVerifiedSectionDescription'),
 						data: {
-							text: user.emailVerified ? 'verified' : 'not verified',
+							text: translate(user.emailVerified ? 'settingsProfileTabVerifiedSectionVerifiedText' : 'settingsProfileTabVerifiedSectionNotVerifiedText'),
 							onPress: user.emailVerified
 								? undefined
 								: () =>
 										API.fetch({ route: '/auth/reverify', method: 'PUT' })
 											.then(() =>
 												Toast.show({
-													description: 'Verification mail sent',
+													description: translate('settingsProfileTabVerifiedSectionVerificationToast')
 												})
 											)
 											.catch((e) => {
 												console.error(e);
 												Toast.show({
-													description: 'Verification mail send error',
+													description: translate('settingsProfileTabVerifiedSectionVerificationToastError')
 												});
 											}),
 						},
@@ -75,10 +75,10 @@ const ProfileSettings = () => {
 					{
 						icon: <UserSquare size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'text',
-						title: translate('avatar'),
-						description: 'Changer votre photo de profile', // TODO translate
+						title: translate('settingsProfileTabAvatarSectionTitle'),
+						description: translate('settingsProfileTabAvatarSectionDescription'),
 						data: {
-							text: translate('changeIt'),
+							text: translate('settingsProfileTabAvatarSectionChangeItText'),
 							onPress: () => {
 								ImagePicker.launchImageLibraryAsync({
 									mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -94,12 +94,12 @@ const ProfileSettings = () => {
 											.then(() => {
 												userQuery.refetch();
 												Toast.show({
-													description: 'Update successful',
+													description: translate('settingsProfileTabAvatarSectionUpdateToast'),
 												});
 											})
 											.catch((e) => {
 												console.error(e);
-												Toast.show({ description: 'Update failed' });
+												Toast.show({ description: translate('settingsProfileTabAvatarSectionUpdateToastError')});
 											});
 									}
 								});
@@ -109,9 +109,8 @@ const ProfileSettings = () => {
 					{
 						icon: <SmsEdit size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
-						title: 'Change email', // TODO translate
-						description:
-							'Saisissez votre adresse électronique actuelle et définissez votre nouvelle adresse électroniquetion', // TODO translate
+						title: translate('settingsProfileTabChangeEmailSectionTitle'),
+						description: translate('settingsProfileTabChangeEmailSectionDescription'),
 						data: {
 							value: true,
 							section: [
@@ -125,9 +124,8 @@ const ProfileSettings = () => {
 					{
 						icon: <PasswordCheck size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
-						title: 'Change password', // TODO translate
-						description:
-							'Saisissez votre mot de passe actuel et définissez votre nouveau mot de passe', // TODO translate
+						title: translate('settingsProfileTabChangePasswordSectionTitle'),
+						description: translate('settingsProfileTabChangePasswordSectionDescription'),
 						data: {
 							value: true,
 							section: [
