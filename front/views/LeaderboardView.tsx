@@ -97,6 +97,8 @@ const BoardRowComponent = () => {
 				style={{
 					fontSize: 16,
 					fontStyle: 'normal',
+					flex: '1 1 0',
+					marginHorizontal: 10,
 					fontWeight: '500',
 				}}
 			>
@@ -107,10 +109,31 @@ const BoardRowComponent = () => {
 					fontSize: 16,
 					fontStyle: 'normal',
 					fontWeight: '500',
+					marginHorizontal: 10
 				}}
 			>
 				200 LVL
 			</Text>
+			<View
+				style={{
+					backgroundColor: 'rgba(255, 255, 255, 0.50)',
+					width: 50,
+					height: '100%',
+					flexDirection: 'column',
+					justifyContent: 'center',
+				}}
+			>
+				<Text
+					style={{
+						fontSize: 16,
+						fontStyle: 'normal',
+						fontWeight: '500',
+						textAlign: 'center',
+					}}
+				>
+					8
+				</Text>
+			</View>
 		</View>
 	);
 }
@@ -131,38 +154,52 @@ const dummyScores = [
 	{
 		id: 5
 	},
+	{
+		id: 6
+	},
+	{
+		id: 7
+	},
+	{
+		id: 8
+	},
+	{
+		id: 9
+	},
 ]
 
 const Leaderboardiew = () => {
 	return (
-		<View
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'flex-start',
-				flex: 1, flexGrow: 1, flexShrink: 0, flexBasis: 0,
-				alignSelf: 'stretch',
-			}}
-		>
-			<View /** podium view */
+		<ScrollView>
+			<View
 				style={{
 					display: 'flex',
-					paddingBottom: 0,
-					justifyContent: 'center',
-					alignItems: 'center',
+					flexDirection: 'column',
+					alignItems: 'flex-start',
+					flex: 1, flexGrow: 1, flexShrink: 0, flexBasis: 0,
 					alignSelf: 'stretch',
-					flexDirection: 'row',
-					marginBottom: 20
 				}}
 			>
-				<PodiumCardComponent medalColor='#AE84FB' offset={80}/>
-				<PodiumCardComponent medalColor='#EAD93C' offset={0}/>
-				<PodiumCardComponent medalColor='#5F74F7' offset={60}/>
+				<View /** podium view */
+					style={{
+						display: 'flex',
+						paddingBottom: 0,
+						justifyContent: 'center',
+						alignItems: 'center',
+						alignSelf: 'stretch',
+						flexDirection: 'row',
+						marginBottom: 20
+					}}
+				>
+					<PodiumCardComponent medalColor='#AE84FB' offset={80}/>
+					<PodiumCardComponent medalColor='#EAD93C' offset={0}/>
+					<PodiumCardComponent medalColor='#5F74F7' offset={60}/>
+				</View>
+				{dummyScores.map((comp, index) => (
+					<BoardRowComponent/>
+				))}
 			</View>
-			{dummyScores.map((comp, index) => (
-				<BoardRowComponent/>
-			))}
-		</View>
+		</ScrollView>
 	);
 }
 
