@@ -25,27 +25,23 @@ import { SongController } from "src/song/song.controller";
 import { GenreController } from "src/genre/genre.controller";
 import { ArtistController } from "src/artist/artist.controller";
 
-@ApiTags("search")
-@Controller("search")
+@ApiTags('search')
+@Controller('search')
+@UseGuards(JwtAuthGuard)
 export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
 	@Get("songs/:query")
 	@ApiOkResponse({ type: _Song, isArray: true })
-	@ApiOperation({ description: "Search a song" })
-	@ApiUnauthorizedResponse({ description: "Invalid token" })
-	@UseGuards(JwtAuthGuard)
+	@ApiOperation({ description: 'Search a song' })
+	@ApiUnauthorizedResponse({ description: 'Invalid token' })
 	async searchSong(
 		@Request() req: any,
-		@Query("include") include: string,
-		@Param("query") query: string,
+		@Param('query') query: string,
+		@Param('artistId') artistId: number,
 	): Promise<Song[] | null> {
 		try {
-			const ret = await this.searchService.songByGuess(
-				query,
-				req.user?.id,
-				mapInclude(include, req, SongController.includableFields),
-			);
+			const ret = await this.searchService.searchSong(query, artistId);
 			if (!ret.length) throw new NotFoundException();
 			else return ret;
 		} catch (error) {
