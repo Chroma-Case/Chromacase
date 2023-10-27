@@ -137,6 +137,12 @@ const HomeView = () => {
 							onPress={() => navigation.navigate('Settings')}
 						/>
 						<TextButton
+							translate={{ translationKey: 'leaderboardTitle' }}
+							colorScheme="primary"
+							size="sm"
+							onPress={() => navigation.navigate('Leaderboard')}
+						/>
+						<TextButton
 							label={'V2'}
 							colorScheme="gray"
 							size="sm"
