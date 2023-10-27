@@ -58,8 +58,6 @@ services:
 
   meilisearch:
     image: getmeili/meilisearch:v1.4
-    ports:
-      - "7000:7000"
     volumes:
       - meilisearch:/meili_data
     env_file:
