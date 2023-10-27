@@ -5,6 +5,10 @@ import { useQuery } from '../../Queries';
 import { PianoCC } from '../../views/PlayView';
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
+import { useDispatch, useSelector } from '../../state/Store';
+import { PianoNotes, setSounds } from '../../state/SoundPlayerSlice';
+import { Audio } from 'expo-av';
+import { Sounds } from '../../hooks/piano';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -51,6 +55,22 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		Image.getSize(getSVGURL(songID), (w, h) => {
 			setPartitionDims([w, h]);
 		});
+		if (!pianoSounds.sounds) {
+			Promise.all(
+				PianoNotes.map((note) =>
+					// eslint-disable-next-line @typescript-eslint/no-var-requires
+					Audio.Sound.createAsync(require(`../assets/${note}.mp3`)).then(
+						(sound) => [note, sound] as const
+					)
+				)
+			).then((res) =>
+				dispatch(
+					setSounds(
+						res.reduce((prev, curr) => ({ ...prev, [curr[0]]: curr[1] }), {} as Sounds)
+					)
+				)
+			);
+		}
 	}, []);
 
 	React.useEffect(() => {

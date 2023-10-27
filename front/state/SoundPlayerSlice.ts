@@ -1,19 +1,113 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SplendidGrandPiano } from 'smplr';
+import { Audio } from 'expo-av';
+
+export const PianoNotes = [
+	'a0',
+	'a1',
+	'a2',
+	'a3',
+	'a4',
+	'a5',
+	'a6',
+	'a7',
+	'ab1',
+	'ab2',
+	'ab3',
+	'ab4',
+	'ab5',
+	'ab6',
+	'ab7',
+	'b0',
+	'b1',
+	'b2',
+	'b3',
+	'b4',
+	'b5',
+	'b6',
+	'b7',
+	'bb0',
+	'bb1',
+	'bb2',
+	'bb3',
+	'bb4',
+	'bb5',
+	'bb6',
+	'bb7',
+	'c1',
+	'c2',
+	'c3',
+	'c4',
+	'c5',
+	'c6',
+	'c7',
+	'c8',
+	'd1',
+	'd2',
+	'd3',
+	'd4',
+	'd5',
+	'd6',
+	'd7',
+	'db1',
+	'db2',
+	'db3',
+	'db4',
+	'db5',
+	'db6',
+	'db7',
+	'e1',
+	'e2',
+	'e3',
+	'e4',
+	'e5',
+	'e6',
+	'e7',
+	'eb1',
+	'eb2',
+	'eb3',
+	'eb4',
+	'eb5',
+	'eb6',
+	'eb7',
+	'f1',
+	'f2',
+	'f3',
+	'f4',
+	'f5',
+	'f6',
+	'f7',
+	'g1',
+	'g2',
+	'g3',
+	'g4',
+	'g5',
+	'g6',
+	'g7',
+	'gb1',
+	'gb2',
+	'gb3',
+	'gb4',
+	'gb5',
+	'gb6',
+	'gb7',
+] as const;
+
+type Sounds = Record<(typeof PianoNotes)[number], Audio.Sound>;
 
 export const soundPlayerSlice = createSlice({
 	name: 'soundPlayer',
 	initialState: {
-		soundPlayer: undefined as SplendidGrandPiano | undefined,
+		sounds: undefined as Sounds | undefined,
 	},
 	reducers: {
-		setSoundPlayer: (state, action: PayloadAction<SplendidGrandPiano>) => {
-			state.soundPlayer = action.payload;
+		setSounds: (state, action: PayloadAction<Sounds>) => {
+			state.sounds = action.payload;
 		},
-		unsetSoundPlayer: (state) => {
-			state.soundPlayer = undefined;
+		unsetSounds: (state) => {
+			Object.entries(state.sounds ?? {}).map((sound) => sound[1].unloadAsync());
+			state.sounds = undefined;
 		},
 	},
 });
-export const { setSoundPlayer, unsetSoundPlayer } = soundPlayerSlice.actions;
+export const { setSounds, unsetSounds } = soundPlayerSlice.actions;
 export default soundPlayerSlice.reducer;

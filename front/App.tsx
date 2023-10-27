@@ -11,7 +11,6 @@ import ThemeProvider, { ColorSchemeProvider } from './Theme';
 import 'react-native-url-polyfill/auto';
 import { QueryRules } from './Queries';
 import { useFonts } from 'expo-font';
-import { SoundContextProvider } from './hooks/piano';
 
 const queryClient = new QueryClient(QueryRules);
 
@@ -30,19 +29,17 @@ export default function App() {
 
 	return (
 		<Provider store={store}>
-			<SoundContextProvider>
-				<PersistGate loading={null} persistor={persistor}>
-					<QueryClientProvider client={queryClient}>
-						<ThemeProvider>
-							<ColorSchemeProvider>
-								<LanguageGate>
-									<Router />
-								</LanguageGate>
-							</ColorSchemeProvider>
-						</ThemeProvider>
-					</QueryClientProvider>
-				</PersistGate>
-			</SoundContextProvider>
+			<PersistGate loading={null} persistor={persistor}>
+				<QueryClientProvider client={queryClient}>
+					<ThemeProvider>
+						<ColorSchemeProvider>
+							<LanguageGate>
+								<Router />
+							</LanguageGate>
+						</ColorSchemeProvider>
+					</ThemeProvider>
+				</QueryClientProvider>
+			</PersistGate>
 		</Provider>
 	);
 }
