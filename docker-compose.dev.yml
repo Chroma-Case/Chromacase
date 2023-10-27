@@ -3,6 +3,7 @@ networks:
 
 volumes:
   scoro_logs:
+  meilisearch:
 
 
 services:
@@ -86,3 +87,12 @@ services:
       - "./front/nginx.conf.template.dev:/etc/nginx/templates/default.conf.template:ro"
     ports:
       - "4567:4567"
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.4
+    ports:
+      - "7000:7000"
+    volumes:
+      - meilisearch:/meili_data
+    env_file:
+      - .env

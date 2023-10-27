@@ -1,15 +1,21 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma, Artist } from "@prisma/client";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { Prisma, Artist } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { MeiliService } from 'src/search/meilisearch.service';
 
 @Injectable()
 export class ArtistService {
-	constructor(private prisma: PrismaService) {}
+	constructor(
+		private prisma: PrismaService,
+		private search: MeiliService,
+	) {}
 
 	async create(data: Prisma.ArtistCreateInput): Promise<Artist> {
-		return this.prisma.artist.create({
+		const ret = await this.prisma.artist.create({
 			data,
 		});
+		await this.search.index('artists').addDocuments([ret]);
+		return ret;
 	}
 
 	async get(
@@ -42,8 +48,10 @@ export class ArtistService {
 	}
 
 	async delete(where: Prisma.ArtistWhereUniqueInput): Promise<Artist> {
-		return this.prisma.artist.delete({
+		const ret = await this.prisma.artist.delete({
 			where,
 		});
+		await this.search.index('artists').deleteDocument(ret.id);
+		return ret
 	}
 }
