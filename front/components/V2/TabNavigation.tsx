@@ -46,7 +46,7 @@ const tabs = [
 	{
 		id: 'leaderboard',
 		label: 'Leaderboard',
-		icon: <Ionicons name='medal' size={24} color='black' />,
+		icon: <Ionicons name="medal" size={24} color="black" />,
 		iconName: 'medal',
 	},
 	{
