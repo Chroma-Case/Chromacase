@@ -90,6 +90,11 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		currentCurIdx,
 		pianoCC.timestamp - transitionDuration,
 		(cursor, idx) => {
+			const note = undefined as Audio.Sound;
+			note.playAsync();
+			setTimeout(() => {
+				note.stopAsync();
+			}, cursor.note.duration)
 			partitionOffset.value = withTiming(
 				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
 				{
