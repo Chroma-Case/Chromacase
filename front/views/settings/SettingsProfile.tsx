@@ -11,6 +11,8 @@ import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
 import Spacer from '../../components/UI/Spacer';
+import { ColorSchemeProvider } from '../../Theme';
+import useColorScheme from '../../hooks/colorScheme';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	await API.updateUserEmail(newEmail);
@@ -31,12 +33,14 @@ const ProfileSettings = () => {
 		return <LoadingView />;
 	}
 	const user = userQuery.data;
+	const colorScheme = useColorScheme();
+	const color = colorScheme === 'light' ? '#000' : '#fff';
 	return (
 		<Column space={4} style={{width: '100%'}}>
 			<ElementList
 				elements={[
 					{
-						icon: <Google size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <Google size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'text',
 						title: 'Google account', // TODO translate
 						description: 'Liez votre compte Google à ChromaCase', // TODO translate
@@ -45,7 +49,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <Verify size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <Verify size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'text',
 						description: 'Vérifiez votre adresse e-mail', // TODO translate
 						title: translate('verified'),
@@ -69,7 +73,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <UserSquare size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <UserSquare size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'text',
 						title: translate('avatar'),
 						description: 'Changer votre photo de profile', // TODO translate
@@ -103,7 +107,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <SmsEdit size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <SmsEdit size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
 						title: 'Change email', // TODO translate
 						description:
@@ -119,7 +123,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <PasswordCheck size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <PasswordCheck size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
 						title: 'Change password', // TODO translate
 						description:

@@ -12,7 +12,7 @@ type PopupCCProps = {
     description?: string,
     children?: ReactNode,
     isVisible: boolean,
-    setIsVisible: (isVisible: boolean) => void,
+    setIsVisible?: (isVisible: boolean) => void,
 };
 
 const PopupCC = ({ title, description, children, isVisible, setIsVisible }: PopupCCProps) => {
@@ -41,18 +41,20 @@ const PopupCC = ({ title, description, children, isVisible, setIsVisible }: Popu
                             <Text style={{flex: 1,width: '100%'}}>
                                 {title}
                             </Text>
-                            <ButtonBase
-                                type='menu'
-                                style={{width: 'fit-content'}}
-                                icon={CloseSquare}
-                                onPress={async () => setIsVisible(false)}
-                            />
+                            {setIsVisible !== undefined &&
+                                <ButtonBase
+                                    type='menu'
+                                    style={{width: 'fit-content'}}
+                                    icon={CloseSquare}
+                                    onPress={async () => setIsVisible(false)}
+                                />
+                            }
                         </Row>
                     </Heading>
-                    {description &&
+                    {description !== undefined &&
                         <Text>{description}</Text>
                     }
-                    {children}
+                    {children !== undefined && children}
                 </Column>
             </GlassmorphismCC>
         </Modal>

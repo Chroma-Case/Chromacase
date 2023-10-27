@@ -8,17 +8,20 @@ import { updateSettings } from '../../state/SettingsSlice';
 import ElementList from '../../components/GtkUI/ElementList';
 import LocalSettings from '../../models/LocalSettings';
 import { Brush2, Colorfilter, LanguageSquare, Rank, Sound } from 'iconsax-react-native';
+import useColorScheme from '../../hooks/colorScheme';
 
 const PreferencesSettings = () => {
 	const dispatch = useDispatch();
 	const language = useSelector((state) => state.language.value);
 	const settings = useSelector((state) => state.settings.local);
+	const colorScheme = useColorScheme();
+	const color = colorScheme === 'light' ? '#000' : '#fff';
 	return (
 		<Column space={4} style={{width: '100%'}}>
 			<ElementList
 				elements={[
 					{
-						icon: <Brush2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <Brush2 size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesTheme'),
 						description: 'Définissez le theme (Dark ou Light) de votre application',
@@ -40,7 +43,7 @@ const PreferencesSettings = () => {
 						},
 					},
 					{
-						icon: <LanguageSquare size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <LanguageSquare size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesLanguage'),
 						description: 'Définissez la langue de votre application',
@@ -58,7 +61,7 @@ const PreferencesSettings = () => {
 						},
 					},
 					{
-						icon: <Rank size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <Rank size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesDifficulty'),
 						description: 'La précision du tempo est de plus en plus élevée',
@@ -84,7 +87,7 @@ const PreferencesSettings = () => {
 			<ElementList
 				elements={[
 					{
-						icon: <Colorfilter size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <Colorfilter size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'toggle',
 						title: translate('SettingsPreferencesColorblindMode'),
 						description: 'Augmente le contraste',
@@ -100,7 +103,7 @@ const PreferencesSettings = () => {
 			<ElementList
 				elements={[
 					{
-						icon: <Sound size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: <Sound size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'range',
 						title: translate('SettingsPreferencesMicVolume'),
 						description: 'Régler le volume de votre micro selon vos preference',

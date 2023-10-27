@@ -76,8 +76,8 @@ const SignupView = () => {
 
 	return (
 		<ScaffoldAuth
-			title="Créer un compte"
-			description="Apprendre le piano gratuitement et de manière ludique"
+			title={translate("signupPageTitle")}
+			description={translate("signupPageParagraph")}
 			form={[
 				<TextFormField
 					key={'signup-form-1'}
@@ -193,8 +193,8 @@ const SignupView = () => {
 				/>
 			}
 			link={{
-				text: "S'identifier",
-				description: 'Vous avez déjà un compte ? ',
+				label: translate('signupLinkLabel'),
+				text: translate('signupLinkText'),
 				onPress: () => navigation.navigate('Login'),
 			}}
 		/>

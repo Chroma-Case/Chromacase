@@ -23,7 +23,7 @@ interface ScaffoldAuthProps {
 	description: string;
 	form: React.ReactNode[];
 	submitButton: React.ReactNode;
-	link: { text: string; description: string; onPress: () => void };
+	link: { text: string; label: string; onPress: () => void };
 }
 
 const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
@@ -40,14 +40,13 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	const logo = colorScheme == 'light'
 	? require('../../assets/icon_light.png')
 	: require('../../assets/icon_dark.png');
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
 
 	return (
 		<Flex
 			direction="row"
 			justifyContent="space-between"
-			style={{ flex: 1, backgroundColor: '#101014' }}
+			style={{ flex: 1, backgroundColor: '#cdd4fd' }}
 		>
 			<Column style={{ flex: 1 }}>
 				<Wrap space={4} direction='row' style={{padding: 16, paddingBottom: 0}}>
@@ -125,14 +124,17 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							</Stack>
 							{submitButton}
 							<Wrap style={{ flexDirection: 'row', justifyContent: 'center' }}>
-								<Text>{link.description}</Text>
-								<LinkBase onPress={link.onPress}>{link.text}</LinkBase>
+								<Text>{link.label}</Text>
+								<LinkBase
+									text={link.text}
+									onPress={link.onPress}
+								/>
 							</Wrap>
 						</Stack>
 					</View>
 				</ScrollView>
 			</Column>
-			{layout.width > 650 ? (
+			{layout.width > 650 &&
 				<View style={{ width: '50%', height: '100%', padding: 16 }}>
 					<Image
 						source={{ uri: banner?.at(0)?.uri }}
@@ -140,24 +142,18 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 						style={{ width: '100%', height: '100%', borderRadius: 8 }}
 					/>
 				</View>
-			) : (
-				<></>
-			)}
-			<LinearGradient
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
-				colors={['#101014', '#6075F9']}
-				style={{
-					top: 0,
-					bottom: 0,
-					right: 0,
-					left: 0,
-					width: '100%',
-					height: '100%',
-					position: 'absolute',
-					zIndex: -2,
-				}}
-			/>
+			}
+			{colorScheme === 'dark' &&
+				<LinearGradient
+					colors={['#101014', '#6075F9']}
+					style={{
+						width: '100%',
+						height: '100%',
+						position: 'absolute',
+						zIndex: -2,
+					}}
+				/>
+			}
 		</Flex>
 	);
 };

@@ -38,6 +38,18 @@ export const en = {
 	levelProgress: 'good notes',
 	score: 'Score',
 
+	//signup
+	signupPageTitle: "Create an account",
+	signupPageParagraph: "Learn to play the piano in an enjoyable and free way.",
+	signupLinkLabel: "Already have an account? ",
+	signupLinkText: "Sign in.",
+
+	//signin
+	signinPageTitle: "Welcome !",
+	signinPageParagraph: "Continue with Google or enter your details.",
+	signinLinkLabel: "You don't have an account? ",
+	signinLinkText: 'Sign up for free.',
+
 	//search
 	allFilter: 'All',
 	artistFilter: 'Artists',
@@ -227,6 +239,18 @@ export const fr: typeof en = {
 	goodNotesPlayed: 'Bonnes notes jouées : ',
 	longestCombo: 'Combo le plus long : ',
 	favoriteGenre: 'Genre favori : ',
+
+	//signup
+	signupPageTitle: "Créer un compte",
+	signupPageParagraph: "Apprendre le piano gratuitement et de manière ludique",
+	signupLinkLabel: "Vous avez déjà un compte ? ",
+	signupLinkText: "S'identifier",
+
+	//signup
+	signinPageTitle: "Bienvenue !",
+	signinPageParagraph: "Continuez avec Google ou entrez vos coordonnées.",
+	signinLinkLabel: "Vous n'avez pas de compte ? ",
+	signinLinkText: 'Inscrivez-vous gratuitement',
 
 	//search
 	allFilter: 'Tout',
@@ -426,6 +450,18 @@ export const sp: typeof en = {
 	goodNotesPlayed: 'Buenas notas tocadas : ',
 	longestCombo: 'combo más largo : ',
 	favoriteGenre: 'genero favorito : ',
+
+	//signup
+	signupPageTitle: "Crear una cuenta",
+	signupPageParagraph: "Aprende a tocar el piano de forma amena y gratuita.",
+	signupLinkLabel: "¿Ya tienes una cuenta? ",
+	signupLinkText: "Iniciar sesión.",
+
+	//signin
+	signinPageTitle: "Bienvenido !",
+	signinPageParagraph: "Continúa con Google o introduce tus datos.",
+	signinLinkLabel: "¿No tienes una cuenta? ",
+	signinLinkText: "Regístrate gratis.",
 
 	//search
 	allFilter: 'Todos',

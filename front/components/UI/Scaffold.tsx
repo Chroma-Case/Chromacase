@@ -49,8 +49,9 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 		return <LoadingView />;
 	}
 	const user = userQuery.data;
+	const layout = useWindowDimensions();
 	const colorScheme = useColorScheme();
-	const icon =
+	const logo =
 		colorScheme == 'light'
 			? require('../../assets/icon_light.png')
 			: require('../../assets/icon_dark.png');
@@ -78,18 +79,18 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 					<View style={{ width: '100%' }}>
 						<Row>
 							<Image
-								source={{ uri: icon }}
+								source={{ uri: logo }}
 								style={{
 									aspectRatio: 1,
-									width: '40px',
-									height: 'auto',
-									marginRight: '10px',
+									width: 32,
+									height: 32,
 								}}
 							/>
-							<Spacer width="xs" />
-							<Text fontSize={'2xl'} selectable={false}>
-								Chromacase
-							</Text>
+							{layout.width > 650 &&
+								<Text fontSize={'xl'} selectable={false}>
+									Chromacase
+								</Text>
+							}
 						</Row>
 						<Spacer height="xl" />
 						<View style={{ width: '100%' }}>
@@ -242,19 +243,10 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 				</ScrollView>
 			</View>
 			<LinearGradient
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
 				colors={['#101014', '#6075F9']}
 				style={{
-					top: 0,
-					bottom: 0,
-					right: 0,
-					left: 0,
 					width: '100%',
 					height: '100%',
-					minHeight: 'fit-content',
-					minWidth: 'fit-content',
-					flex: 1,
 					position: 'absolute',
 					zIndex: -2,
 				}}

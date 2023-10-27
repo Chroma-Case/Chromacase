@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Flex, Text } from 'native-base';
+import { Center, Flex, Text, useTheme } from 'native-base';
 import ProfileSettings from './SettingsProfile';
 import NotificationsSettings from './NotificationsSettings';
 import PrivacySettings from './PrivacySettings';
@@ -26,6 +26,8 @@ import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import PremiumSettings from './SettingsPremium';
 import { RouteProps } from '../../Navigation';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
+import { ColorSchemeProvider } from '../../Theme';
+import useColorScheme from '../../hooks/colorScheme';
 
 export const PianoSettings = () => {
 	return (
@@ -66,6 +68,8 @@ const getTabData = (key: string) => {
 const SetttingsNavigator = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
+	const colorScheme = useColorScheme();
+	const { colors } = useTheme();
 	const [routes] = React.useState<Route[]>([
 		{ key: 'profile', title: 'Profile' },
 		{ key: 'premium', title: 'Premium' },
@@ -80,11 +84,13 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 		<TabBar
 			{...props}
 			style={{
-				backgroundColor: 'rgba(0, 0, 0, 0)',
-				borderBottomWidth: 2,
-				borderColor: 'rgba(255,255,255,0.5)',
+				backgroundColor: 'transparent',
+				borderBottomWidth: 1,
+				borderColor: colors.primary[500],
 			}}
-			indicatorStyle={{ backgroundColor: 'white' }}
+			activeColor={ colorScheme === 'light' ? '#000' : '#fff'}
+			inactiveColor={ colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
+			indicatorStyle={{ backgroundColor: colors.primary[500] }}
 			renderIcon={(
 				scene: Scene<Route> & {
 					focused: boolean;
@@ -92,15 +98,13 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 				}
 			) => {
 				const tabHeader = getTabData(scene.route!.key);
-				return tabHeader.index == index ? (
-					<tabHeader.icon size="18" color="#6075F9" variant="Bold" />
-				) : (
-					<tabHeader.icon size="18" color="#6075F9" />
+				return (
+					<tabHeader.icon size="18" color="#6075F9" variant={scene.focused ? "Bold" : "Outline"} />
 				);
 			}}
 			renderLabel={({ route, color }) =>
 				layout.width > 1100 ? (
-					<Text style={{ color, paddingLeft: 10, overflow: 'hidden' }}>
+					<Text style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}>
 						{route.title}
 					</Text>
 				) : null

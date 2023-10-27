@@ -1,4 +1,4 @@
-import { Pressable } from 'native-base';
+import { Pressable, useTheme } from 'native-base';
 import React, { useRef } from 'react';
 import { Animated, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 
@@ -50,6 +50,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	isOutlined = false,
 	focusable = true,
 }) => {
+	const { colors } = useTheme();
 	const scaleAnimator = useRef(new Animated.Value(1)).current;
 	const scaleValue = scaleAnimator.interpolate({
 		inputRange: [0, 1, 2],
@@ -218,7 +219,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	};
 
 	const animatedStyle = {
-		backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : backgroundColorValue,
+		backgroundColor: isOutlined ? colors.coolGray[200] : backgroundColorValue,
 		borderColor: isOutlined ? backgroundColorValue : 'transparent',
 		borderWidth: 2,
 		transform: [{ scale: scaleValue }],
@@ -228,7 +229,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	};
 
 	const disableStyle = {
-		backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : styleAnimate.Disabled.backgroundColor,
+		backgroundColor: isOutlined ? colors.coolGray[200] : styleAnimate.Disabled.backgroundColor,
 		borderColor: isOutlined ? styleAnimate.Disabled.backgroundColor : 'transparent',
 		borderWidth: 2,
 		scale: styleAnimate.Disabled.scale,

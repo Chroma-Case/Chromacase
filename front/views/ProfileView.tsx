@@ -1,6 +1,6 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
-import { Column, Flex, Progress, Row, Text, Wrap } from 'native-base';
+import { Column, Flex, Progress, Row, Text, Wrap, useTheme } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
 import UserAvatar from '../components/UserAvatar';
 import { LoadingView } from '../components/Loading';
@@ -34,6 +34,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 
 	const progessValue = xpToProgressBarValue(userQuery.data.data.xp);
 	const level = xpToLevel(userQuery.data.data.xp);
+	const { colors } = useTheme();
 
 	return (
 		<ScaffoldCC routeName={props.route.name}>
@@ -41,7 +42,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 				<Wrap
 					style={{
 						flexDirection: layout.width > 650 ? 'row' : 'column',
-						alignItems: 'center',
+						alignItems: layout.width > 650 ? 'flex-start' : 'center',
 						paddingBottom: 20,
 						justifyContent: 'space-between',
 					}}
@@ -59,7 +60,6 @@ const ProfileView = (props: RouteProps<{}>) => {
 							style={{
 								flexDirection: 'row',
 								alignItems: 'center',
-								paddingBottom: 20,
 								justifyContent: 'space-between',
 							}}
 						>
@@ -87,7 +87,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 				<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
 					<Text style={{ paddingRight: 20 }}>{`${translate('level')} ${level}`}</Text>
 					<Progress
-						bgColor={'#rgba(16,16,20,0.5)'}
+						bgColor={colors.coolGray[500]}
 						value={progessValue}
 						maxW={'800'}
 						flex={1}

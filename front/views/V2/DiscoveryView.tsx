@@ -170,7 +170,6 @@ const HomeView = (props: RouteProps<{}>) => {
 				>
 					<Text
 						style={{
-							color: 'white',
 							fontSize: 24,
 							fontWeight: 'bold',
 							marginLeft: 16,

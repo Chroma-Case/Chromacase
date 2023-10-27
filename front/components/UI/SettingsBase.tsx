@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import InteractiveBase from './InteractiveBase';
-import { Text } from 'native-base';
+import { Text, useTheme } from 'native-base';
 
 interface SettingProps {
 	icon: (size: number, color: string) => React.ReactNode;
@@ -12,40 +12,41 @@ interface SettingProps {
 }
 
 const SettingBase: React.FC<SettingProps> = ({ title, description, onPress, icon, children }) => {
+	const { colors } = useTheme();
 	const styleSetting = StyleSheet.create({
 		Default: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: 'rgba(16, 16, 20, 0.50)',
+			backgroundColor: colors.coolGray[500],
 		},
 		onHover: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: 'rgba(32, 32, 40, 0.50)',
+			backgroundColor: colors.coolGray[700],
 		},
 		onPressed: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: 'rgba(16, 16, 20, 0.50)',
+			backgroundColor: colors.coolGray[500],
 		},
 		Disabled: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: 'rgba(16, 16, 20, 0.50)',
+			backgroundColor: colors.coolGray[500],
 		},
 	});
 
 	return (
 		<InteractiveBase
-			style={[styles.container, { width: '100%' }]}
+			style={[styles.container, { backgroundColor: colors.coolGray[500] }]}
 			styleAnimate={styleSetting}
 			onPress={async () => {
 				if (onPress) {
@@ -67,8 +68,8 @@ const SettingBase: React.FC<SettingProps> = ({ title, description, onPress, icon
 
 const styles = StyleSheet.create({
 	container: {
+		width: '100%',
 		borderRadius: 8,
-		backgroundColor: 'rgba(16, 16, 20, 0.50)',
 	},
 	content: {
 		paddingVertical: 10,

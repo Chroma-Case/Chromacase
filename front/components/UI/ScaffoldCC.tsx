@@ -45,9 +45,8 @@ type ScaffoldCCProps = {
 };
 
 const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) => {
-	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
-
 	const userQuery = useQuery(API.getUserInfo);
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 
 	if (!userQuery.data || userQuery.isLoading) {
 		return <LoadingView />;
@@ -57,30 +56,39 @@ const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) 
 	? require('../../assets/icon_light.png')
 	: require('../../assets/icon_dark.png');
 
-
-	if (screenSize === 'small') {
-		return (
-			<ScaffoldMobileCC
-				user={userQuery.data}
-				logo={logo}
-				routeName={routeName}
-				menu={menu}
-			>
-				{children}
-			</ScaffoldMobileCC>
-		);
-	}
-
 	return (
-		<ScaffoldDesktopCC
-			user={userQuery.data}
-			logo={logo}
-			routeName={routeName}
-			menu={menu}
-			widthPadding={withPadding}
-		>
-			{children}
-		</ScaffoldDesktopCC>
+		<Flex style={{ flex: 1, backgroundColor: '#cdd4fd' }}>
+			{screenSize === 'small' ?
+				<ScaffoldMobileCC
+					user={userQuery.data}
+					logo={logo}
+					routeName={routeName}
+					menu={menu}
+				>
+					{children}
+				</ScaffoldMobileCC>
+				: <ScaffoldDesktopCC
+					user={userQuery.data}
+					logo={logo}
+					routeName={routeName}
+					menu={menu}
+					widthPadding={withPadding}
+				>
+					{children}
+				</ScaffoldDesktopCC>
+			}
+			{colorScheme === 'dark' &&
+				<LinearGradient
+					colors={['#101014', '#6075F9']}
+					style={{
+						width: '100%',
+						height: '100%',
+						position: 'absolute',
+						zIndex: -2,
+					}}
+				/>
+			}
+		</Flex>
 	);
 };
 
