@@ -15,6 +15,7 @@ export class SearchService {
 	async searchSong(
 		query: string,
 		artistId?: number,
+		genreId?: number,
 		include?: Prisma.SongInclude,
 		skip?: number,
 		take?: number,
@@ -23,6 +24,7 @@ export class SearchService {
 			return await this.prisma.song.findMany({
 				where: {
 					artistId,
+					genreId,
 				},
 				take,
 				skip,
@@ -33,7 +35,10 @@ export class SearchService {
 			await this.search.index("songs").search(query, {
 				limit: take,
 				offset: skip,
-				...(artistId ? { filter: `artistId = ${artistId}` } : {}),
+				filter: [
+					...(artistId ? [`artistId = ${artistId}`] : []),
+					...(genreId ? [`genreId = ${genreId}`] : []),
+				].join(' AND '),
 			})
 		).hits.map((x) => x.id);
 
