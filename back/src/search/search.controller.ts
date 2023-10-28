@@ -39,15 +39,17 @@ export class SearchController {
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	async searchSong(
 		@Request() req: any,
-		@Param("query") query: string,
-		@Param("artistId") artistId: number,
-		@Query("include") include: string,
-		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
+		@Param('query') query: string,
+		@Query('artistId') artistId: number,
+		@Query('genreId') genreId: number,
+		@Query('include') include: string,
+		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
+		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Song[] | null> {
 		return await this.searchService.searchSong(
 			query,
 			artistId,
+			genreId,
 			mapInclude(include, req, SongController.includableFields),
 			skip,
 			take,
