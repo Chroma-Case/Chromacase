@@ -50,14 +50,14 @@ export const en = {
 	menuNoSongsPlayedYet: 'No songs played yet',
 
 	//signup
-	signupPageTitle: "Create an account",
-	signupPageParagraph: "Learn to play the piano in an enjoyable and free way.",
-	signupLinkLabel: "Already have an account? ",
-	signupLinkText: "Sign in.",
+	signupPageTitle: 'Create an account',
+	signupPageParagraph: 'Learn to play the piano in an enjoyable and free way.',
+	signupLinkLabel: 'Already have an account? ',
+	signupLinkText: 'Sign in.',
 
 	//signin
-	signinPageTitle: "Welcome !",
-	signinPageParagraph: "Continue with Google or enter your details.",
+	signinPageTitle: 'Welcome !',
+	signinPageParagraph: 'Continue with Google or enter your details.',
 	signinLinkLabel: "You don't have an account? ",
 	signinLinkText: 'Sign up for free.',
 
@@ -185,20 +185,25 @@ export const en = {
 	settingsProfileTabAvatarSectionUpdateToast: 'Update successful',
 	settingsProfileTabAvatarSectionUpdateToastError: 'Update failed',
 	settingsProfileTabChangeEmailSectionTitle: 'Change email',
-	settingsProfileTabChangeEmailSectionDescription: 'Enter your current email and set your new email',
+	settingsProfileTabChangeEmailSectionDescription:
+		'Enter your current email and set your new email',
 	settingsProfileTabChangePasswordSectionTitle: 'Change password',
-	settingsProfileTabChangePasswordSectionDescription: 'Enter your current password and set your new password',
+	settingsProfileTabChangePasswordSectionDescription:
+		'Enter your current password and set your new password',
 	//  Premium Tab
 	settingsPremiumTabPremiumAccountSectionTitle: 'Premium account',
-	settingsPremiumTabPremiumAccountSectionDescription: 'Premium customization and tools to take you to the next level',
+	settingsPremiumTabPremiumAccountSectionDescription:
+		'Premium customization and tools to take you to the next level',
 	settingsPremiumTabPianoMagiqueSectionTitle: 'Magic Piano',
 	settingsPremiumTabPianoMagiqueSectionDescription: 'Brings light to the piano during games',
-	settingsPremiumTabPianoMagiqueSectionHelper: 'You must own the Chromacase light module to use this feature',
+	settingsPremiumTabPianoMagiqueSectionHelper:
+		'You must own the Chromacase light module to use this feature',
 	settingsPremiumTabThemePianoSectionTitle: 'Piano Theme',
 	settingsPremiumTabThemePianoSectionDescription: 'Set your piano theme',
 	//  Preferences Tab
 	SettingsPreferencesTabThemeSectionTitle: 'Theme',
-	SettingsPreferencesTabThemeSectionDescription: 'Set the theme (Dark or Light) of your application',
+	SettingsPreferencesTabThemeSectionDescription:
+		'Set the theme (Dark or Light) of your application',
 	SettingsPreferencesTabLanguageSectionTitle: 'Language',
 	SettingsPreferencesTabLanguageSectionDescription: 'Set the language of your application',
 	SettingsPreferencesTabDifficultySectionTitle: 'Difficulty',
@@ -206,23 +211,29 @@ export const en = {
 	SettingsPreferencesTabColorblindModeSectionTitle: 'Colorblind Mode',
 	SettingsPreferencesTabColorblindModeSectionDescription: 'Increases contrast',
 	SettingsPreferencesTabMicVolumeSectionTitle: 'Mic Volume',
-	SettingsPreferencesTabMicVolumeSectionDescription: 'Adjust the volume of your microphone according to your preference',
+	SettingsPreferencesTabMicVolumeSectionDescription:
+		'Adjust the volume of your microphone according to your preference',
 	// Notifications Tab
 	SettingsNotificationsTabPushNotificationsSectionTitle: 'Push Notifications',
-	SettingsNotificationsTabPushNotificationsSectionDescription: 'This notification will appear on your device as a pop-up',
+	SettingsNotificationsTabPushNotificationsSectionDescription:
+		'This notification will appear on your device as a pop-up',
 	SettingsNotificationsTabEmailNotificationsSectionTitle: 'Email',
-	SettingsNotificationsTabEmailNotificationsSectionDescription: 'Receive emails to reach your goals',
+	SettingsNotificationsTabEmailNotificationsSectionDescription:
+		'Receive emails to reach your goals',
 	SettingsNotificationsTabTrainingReminderSectionTitle: 'Training Reminder',
 	SettingsNotificationsTabTrainingReminderSectionDescription: 'Regular training is the key',
 	SettingsNotificationsTabReleaseAlertSectionTitle: 'New Release Alerts',
 	SettingsNotificationsTabReleaseAlertSectionDescription: 'Stay informed of our updates',
 	// Privacy Tab
 	SettingsPrivacyTabDataCollectionSectionTitle: 'Data Collection',
-	SettingsPrivacyTabDataCollectionSectionDescription: 'Do you accept the collection of your data for the improvement of Chromacase?',
+	SettingsPrivacyTabDataCollectionSectionDescription:
+		'Do you accept the collection of your data for the improvement of Chromacase?',
 	SettingsPrivacyTabCustomAdsSectionTitle: 'Customized Ads',
-	SettingsPrivacyTabCustomAdsSectionDescription: 'Display suggestions in the recommendations section',
+	SettingsPrivacyTabCustomAdsSectionDescription:
+		'Display suggestions in the recommendations section',
 	SettingsPrivacyTabRecommendationsSectionTitle: 'Recommendations',
-	SettingsPrivacyTabRecommendationsSectionDescription: 'Would you like to receive our advice and recommendations?',
+	SettingsPrivacyTabRecommendationsSectionDescription:
+		'Would you like to receive our advice and recommendations?',
 
 	SettingsCategoryProfile: 'Profile',
 	SettingsCategoryPreferences: 'Preferences',
@@ -322,18 +333,18 @@ export const fr: typeof en = {
 	menuLeaderBoard: 'Classement',
 	menuSettings: 'Paramètres',
 
-	menuRecentlyPlayed : 'Récemment jouée',
-	menuNoSongsPlayedYet : 'Aucune chanson jouée pour l\'instant',
+	menuRecentlyPlayed: 'Récemment jouée',
+	menuNoSongsPlayedYet: "Aucune chanson jouée pour l'instant",
 
 	//signup
-	signupPageTitle: "Créer un compte",
-	signupPageParagraph: "Apprendre le piano gratuitement et de manière ludique",
-	signupLinkLabel: "Vous avez déjà un compte ? ",
+	signupPageTitle: 'Créer un compte',
+	signupPageParagraph: 'Apprendre le piano gratuitement et de manière ludique',
+	signupLinkLabel: 'Vous avez déjà un compte ? ',
 	signupLinkText: "S'identifier",
 
 	//signin
-	signinPageTitle: "Bienvenue !",
-	signinPageParagraph: "Continuez avec Google ou entrez vos coordonnées.",
+	signinPageTitle: 'Bienvenue !',
+	signinPageParagraph: 'Continuez avec Google ou entrez vos coordonnées.',
 	signinLinkLabel: "Vous n'avez pas de compte ? ",
 	signinLinkText: 'Inscrivez-vous gratuitement',
 
@@ -438,8 +449,8 @@ export const fr: typeof en = {
 	settingsTabPremium: 'Premium',
 	settingsTabPreferences: 'Preferences',
 	settingsTabNotifications: 'Notifications',
-	settingsTabPrivacy: "Confidentialité",
-	settingsTabPiano: "Piano",
+	settingsTabPrivacy: 'Confidentialité',
+	settingsTabPiano: 'Piano',
 	//  Profile Tab
 	settingsProfileTabGoogleSectionTitle: 'Compte Google',
 	settingsProfileTabGoogleSectionDescription: 'Liez votre compte Google à ChromaCase',
@@ -450,51 +461,66 @@ export const fr: typeof en = {
 	settingsProfileTabVerifiedSectionVerifiedText: 'vérifié',
 	settingsProfileTabVerifiedSectionNotVerifiedText: 'non vérifié',
 	settingsProfileTabVerifiedSectionVerificationToast: 'Courrier de vérification envoyé',
-	settingsProfileTabVerifiedSectionVerificationToastError: 'Erreur d\'envoi du courrier de vérification',
+	settingsProfileTabVerifiedSectionVerificationToastError:
+		"Erreur d'envoi du courrier de vérification",
 	settingsProfileTabAvatarSectionTitle: 'Avatar',
 	settingsProfileTabAvatarSectionDescription: 'Changez votre photo de profil',
 	settingsProfileTabAvatarSectionChangeItText: 'Modifier',
 	settingsProfileTabAvatarSectionUpdateToast: 'Mise à jour réussie',
 	settingsProfileTabAvatarSectionUpdateToastError: 'Échec de la mise à jour',
-	settingsProfileTabChangeEmailSectionTitle: 'Changer l\'email',
-	settingsProfileTabChangeEmailSectionDescription: 'Saisissez votre adresse électronique actuelle et définissez votre nouvelle adresse électronique',
+	settingsProfileTabChangeEmailSectionTitle: "Changer l'email",
+	settingsProfileTabChangeEmailSectionDescription:
+		'Saisissez votre adresse électronique actuelle et définissez votre nouvelle adresse électronique',
 	settingsProfileTabChangePasswordSectionTitle: 'Changer le mot de passe',
-	settingsProfileTabChangePasswordSectionDescription: 'Saisissez votre mot de passe actuel et définissez votre nouveau mot de passe',
+	settingsProfileTabChangePasswordSectionDescription:
+		'Saisissez votre mot de passe actuel et définissez votre nouveau mot de passe',
 	//  Premium Tab
 	settingsPremiumTabPremiumAccountSectionTitle: 'Compte premium',
-	settingsPremiumTabPremiumAccountSectionDescription: 'Personnalisation premium et outils vous permettant de passer au niveau supérieur',
+	settingsPremiumTabPremiumAccountSectionDescription:
+		'Personnalisation premium et outils vous permettant de passer au niveau supérieur',
 	settingsPremiumTabPianoMagiqueSectionTitle: 'Piano Magique',
-	settingsPremiumTabPianoMagiqueSectionDescription: 'Fait apparaître de la lumière sur le piano pendant les parties',
-	settingsPremiumTabPianoMagiqueSectionHelper: 'Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité',
+	settingsPremiumTabPianoMagiqueSectionDescription:
+		'Fait apparaître de la lumière sur le piano pendant les parties',
+	settingsPremiumTabPianoMagiqueSectionHelper:
+		'Vous devez posséder le module physique lumineux Chromacase pour pouvoir utiliser cette fonctionnalité',
 	settingsPremiumTabThemePianoSectionTitle: 'Thème de piano',
 	settingsPremiumTabThemePianoSectionDescription: 'Définissez le thème de votre piano',
 	//  Preferences Tab
 	SettingsPreferencesTabThemeSectionTitle: 'Thème',
-	SettingsPreferencesTabThemeSectionDescription: 'Définissez le thème (Sombre ou Clair) de votre application',
+	SettingsPreferencesTabThemeSectionDescription:
+		'Définissez le thème (Sombre ou Clair) de votre application',
 	SettingsPreferencesTabLanguageSectionTitle: 'Langue',
 	SettingsPreferencesTabLanguageSectionDescription: 'Définissez la langue de votre application',
 	SettingsPreferencesTabDifficultySectionTitle: 'Difficulté',
-	SettingsPreferencesTabDifficultySectionDescription: 'La précision du tempo est de plus en plus élevée',
+	SettingsPreferencesTabDifficultySectionDescription:
+		'La précision du tempo est de plus en plus élevée',
 	SettingsPreferencesTabColorblindModeSectionTitle: 'Mode daltonien',
 	SettingsPreferencesTabColorblindModeSectionDescription: 'Augmente le contraste',
 	SettingsPreferencesTabMicVolumeSectionTitle: 'Volume du micro',
-	SettingsPreferencesTabMicVolumeSectionDescription: 'Réglez le volume de votre micro selon vos préférences',
+	SettingsPreferencesTabMicVolumeSectionDescription:
+		'Réglez le volume de votre micro selon vos préférences',
 	// Notifications Tab
 	SettingsNotificationsTabPushNotificationsSectionTitle: 'Notifications push',
-	SettingsNotificationsTabPushNotificationsSectionDescription: 'Cette notification apparaîtra sur votre appareil en pop-up',
+	SettingsNotificationsTabPushNotificationsSectionDescription:
+		'Cette notification apparaîtra sur votre appareil en pop-up',
 	SettingsNotificationsTabEmailNotificationsSectionTitle: 'Email',
-	SettingsNotificationsTabEmailNotificationsSectionDescription: 'Recevez des mails pour atteindre vos objectifs',
-	SettingsNotificationsTabTrainingReminderSectionTitle: 'Rappel d\'entraînement',
-	SettingsNotificationsTabTrainingReminderSectionDescription: 'Un apprentissage régulier est la clé',
+	SettingsNotificationsTabEmailNotificationsSectionDescription:
+		'Recevez des mails pour atteindre vos objectifs',
+	SettingsNotificationsTabTrainingReminderSectionTitle: "Rappel d'entraînement",
+	SettingsNotificationsTabTrainingReminderSectionDescription:
+		'Un apprentissage régulier est la clé',
 	SettingsNotificationsTabReleaseAlertSectionTitle: 'Alertes de nouvelles sorties',
 	SettingsNotificationsTabReleaseAlertSectionDescription: 'Restez informé de nos mises à jour',
 	// Privacy Tab
 	SettingsPrivacyTabDataCollectionSectionTitle: 'Collecte de données',
-	SettingsPrivacyTabDataCollectionSectionDescription: 'Acceptez-vous la récupération de vos données pour l\'amélioration de Chromacase ?',
+	SettingsPrivacyTabDataCollectionSectionDescription:
+		"Acceptez-vous la récupération de vos données pour l'amélioration de Chromacase ?",
 	SettingsPrivacyTabCustomAdsSectionTitle: 'Publicités personnalisées',
-	SettingsPrivacyTabCustomAdsSectionDescription: 'Afficher les suggestions dans la section des recommandations',
+	SettingsPrivacyTabCustomAdsSectionDescription:
+		'Afficher les suggestions dans la section des recommandations',
 	SettingsPrivacyTabRecommendationsSectionTitle: 'Recommandations',
-	SettingsPrivacyTabRecommendationsSectionDescription: 'Souhaitez-vous recevoir nos conseils et recommandations ?',
+	SettingsPrivacyTabRecommendationsSectionDescription:
+		'Souhaitez-vous recevoir nos conseils et recommandations ?',
 
 	SettingsCategoryProfile: 'Profil',
 	SettingsCategoryPreferences: 'Préférences',
@@ -506,7 +532,7 @@ export const fr: typeof en = {
 	SettingsCategoryPiano: 'Piano',
 
 	transformGuestToUserExplanations:
-		"Vous êtes actuellement connecté avec un compte invité. La déconnexion entraînera la perte de vos données. Pour sauvegarder votre progression, veuillez vous inscrire.",
+		'Vous êtes actuellement connecté avec un compte invité. La déconnexion entraînera la perte de vos données. Pour sauvegarder votre progression, veuillez vous inscrire.',
 	SettingsCategoryGuest: 'Invité',
 	SettingsNotificationsEmailNotifications: 'Email',
 	SettingsNotificationsPushNotifications: 'Notifications push',
@@ -611,16 +637,16 @@ export const sp: typeof en = {
 	menuNoSongsPlayedYet: 'No hay canciones reproducidas todavía',
 
 	//signup
-	signupPageTitle: "Crear una cuenta",
-	signupPageParagraph: "Aprende a tocar el piano de forma amena y gratuita.",
-	signupLinkLabel: "¿Ya tienes una cuenta? ",
-	signupLinkText: "Iniciar sesión.",
+	signupPageTitle: 'Crear una cuenta',
+	signupPageParagraph: 'Aprende a tocar el piano de forma amena y gratuita.',
+	signupLinkLabel: '¿Ya tienes una cuenta? ',
+	signupLinkText: 'Iniciar sesión.',
 
 	//signin
-	signinPageTitle: "Bienvenido !",
-	signinPageParagraph: "Continúa con Google o introduce tus datos.",
-	signinLinkLabel: "¿No tienes una cuenta? ",
-	signinLinkText: "Regístrate gratis.",
+	signinPageTitle: 'Bienvenido !',
+	signinPageParagraph: 'Continúa con Google o introduce tus datos.',
+	signinLinkLabel: '¿No tienes una cuenta? ',
+	signinLinkText: 'Regístrate gratis.',
 
 	//search
 	allFilter: 'Todos',
@@ -725,27 +751,34 @@ export const sp: typeof en = {
 	settingsProfileTabVerifiedSectionVerifiedText: 'verificado',
 	settingsProfileTabVerifiedSectionNotVerifiedText: 'no verificado',
 	settingsProfileTabVerifiedSectionVerificationToast: 'Correo de verificación enviado',
-	settingsProfileTabVerifiedSectionVerificationToastError: 'Error de envío del correo de verificación',
+	settingsProfileTabVerifiedSectionVerificationToastError:
+		'Error de envío del correo de verificación',
 	settingsProfileTabAvatarSectionTitle: 'Avatar',
 	settingsProfileTabAvatarSectionDescription: 'Cambia tu foto de perfil',
 	settingsProfileTabAvatarSectionChangeItText: 'Cambiar',
 	settingsProfileTabAvatarSectionUpdateToast: 'Actualización correcta',
 	settingsProfileTabAvatarSectionUpdateToastError: 'Actualización fallida',
 	settingsProfileTabChangeEmailSectionTitle: 'Cambiar correo electrónico',
-	settingsProfileTabChangeEmailSectionDescription: 'Introduce tu correo electrónico actual y establece tu nuevo correo electrónico',
+	settingsProfileTabChangeEmailSectionDescription:
+		'Introduce tu correo electrónico actual y establece tu nuevo correo electrónico',
 	settingsProfileTabChangePasswordSectionTitle: 'Cambiar contraseña',
-	settingsProfileTabChangePasswordSectionDescription: 'Introduce tu contraseña actual y establece tu nueva contraseña',
+	settingsProfileTabChangePasswordSectionDescription:
+		'Introduce tu contraseña actual y establece tu nueva contraseña',
 	//  Premium Tab
 	settingsPremiumTabPremiumAccountSectionTitle: 'Cuenta premium',
-	settingsPremiumTabPremiumAccountSectionDescription: 'Personalización premium y herramientas para llevarte al siguiente nivel',
+	settingsPremiumTabPremiumAccountSectionDescription:
+		'Personalización premium y herramientas para llevarte al siguiente nivel',
 	settingsPremiumTabPianoMagiqueSectionTitle: 'Piano Mágico',
-	settingsPremiumTabPianoMagiqueSectionDescription: 'Hace aparecer luz en el piano durante los juegos',
-	settingsPremiumTabPianoMagiqueSectionHelper: 'Debes poseer el módulo de luz Chromacase para usar esta función',
+	settingsPremiumTabPianoMagiqueSectionDescription:
+		'Hace aparecer luz en el piano durante los juegos',
+	settingsPremiumTabPianoMagiqueSectionHelper:
+		'Debes poseer el módulo de luz Chromacase para usar esta función',
 	settingsPremiumTabThemePianoSectionTitle: 'Tema de piano',
 	settingsPremiumTabThemePianoSectionDescription: 'Establece el tema de tu piano',
 	//  Preferences Tab
 	SettingsPreferencesTabThemeSectionTitle: 'Tema',
-	SettingsPreferencesTabThemeSectionDescription: 'Establece el tema (Oscuro o Claro) de tu aplicación',
+	SettingsPreferencesTabThemeSectionDescription:
+		'Establece el tema (Oscuro o Claro) de tu aplicación',
 	SettingsPreferencesTabLanguageSectionTitle: 'Idioma',
 	SettingsPreferencesTabLanguageSectionDescription: 'Establece el idioma de tu aplicación',
 	SettingsPreferencesTabDifficultySectionTitle: 'Dificultad',
@@ -753,23 +786,31 @@ export const sp: typeof en = {
 	SettingsPreferencesTabColorblindModeSectionTitle: 'Modo para daltónicos',
 	SettingsPreferencesTabColorblindModeSectionDescription: 'Aumenta el contraste',
 	SettingsPreferencesTabMicVolumeSectionTitle: 'Volumen del micrófono',
-	SettingsPreferencesTabMicVolumeSectionDescription: 'Ajusta el volumen de tu micrófono según tus preferencias',
+	SettingsPreferencesTabMicVolumeSectionDescription:
+		'Ajusta el volumen de tu micrófono según tus preferencias',
 	// Notifications Tab
 	SettingsNotificationsTabPushNotificationsSectionTitle: 'Notificaciones push',
-	SettingsNotificationsTabPushNotificationsSectionDescription: 'Esta notificación aparecerá en tu dispositivo como un pop-up',
+	SettingsNotificationsTabPushNotificationsSectionDescription:
+		'Esta notificación aparecerá en tu dispositivo como un pop-up',
 	SettingsNotificationsTabEmailNotificationsSectionTitle: 'Correo electrónico',
-	SettingsNotificationsTabEmailNotificationsSectionDescription: 'Recibe correos electrónicos para alcanzar tus objetivos',
+	SettingsNotificationsTabEmailNotificationsSectionDescription:
+		'Recibe correos electrónicos para alcanzar tus objetivos',
 	SettingsNotificationsTabTrainingReminderSectionTitle: 'Recordatorio de entrenamiento',
-	SettingsNotificationsTabTrainingReminderSectionDescription: 'El entrenamiento regular es la clave',
+	SettingsNotificationsTabTrainingReminderSectionDescription:
+		'El entrenamiento regular es la clave',
 	SettingsNotificationsTabReleaseAlertSectionTitle: 'Alertas de nuevos lanzamientos',
-	SettingsNotificationsTabReleaseAlertSectionDescription: 'Mantente informado de nuestras actualizaciones',
+	SettingsNotificationsTabReleaseAlertSectionDescription:
+		'Mantente informado de nuestras actualizaciones',
 	// Privacy Tab
 	SettingsPrivacyTabDataCollectionSectionTitle: 'Recolección de datos',
-	SettingsPrivacyTabDataCollectionSectionDescription: '¿Aceptas la recopilación de tus datos para la mejora de Chromacase?',
+	SettingsPrivacyTabDataCollectionSectionDescription:
+		'¿Aceptas la recopilación de tus datos para la mejora de Chromacase?',
 	SettingsPrivacyTabCustomAdsSectionTitle: 'Anuncios personalizados',
-	SettingsPrivacyTabCustomAdsSectionDescription: 'Muestra sugerencias en la sección de recomendaciones',
+	SettingsPrivacyTabCustomAdsSectionDescription:
+		'Muestra sugerencias en la sección de recomendaciones',
 	SettingsPrivacyTabRecommendationsSectionTitle: 'Recomendaciones',
-	SettingsPrivacyTabRecommendationsSectionDescription: '¿Deseas recibir nuestros consejos y recomendaciones?',
+	SettingsPrivacyTabRecommendationsSectionDescription:
+		'¿Deseas recibir nuestros consejos y recomendaciones?',
 
 	SettingsCategoryProfile: 'Perfil',
 	SettingsCategoryPreferences: 'Preferencias',

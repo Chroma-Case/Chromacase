@@ -3,31 +3,23 @@ import useColorScheme from '../../hooks/colorScheme';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import { LinearGradient } from 'expo-linear-gradient';
-import {
-	Cup,
-	Discover,
-	Icon,
-	Music,
-	SearchNormal1,
-	Setting2,
-	User,
-} from 'iconsax-react-native';
+import { Cup, Discover, Icon, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
 import ScaffoldDesktopCC from './ScaffoldDesktopCC';
 import ScaffoldMobileCC from './ScaffoldMobileCC';
 
 const menu: {
-	type: "main" | "sub";
+	type: 'main' | 'sub';
 	title: string;
 	icon: Icon;
 	link: string;
 }[] = [
-	{ type: "main", title: 'menuDiscovery', icon: Discover, link: 'HomeNew' },
-	{ type: "main", title: 'menuProfile', icon: User, link: 'User' },
-	{ type: "main", title: 'menuMusic', icon: Music, link: 'Home' },
-	{ type: "main", title: 'menuSearch', icon: SearchNormal1, link: 'Search' },
-	{ type: "main", title: 'menuLeaderBoard', icon: Cup, link: 'Score' },
-	{ type: "sub", title: 'menuSettings', icon: Setting2, link: 'Settings' },
+	{ type: 'main', title: 'menuDiscovery', icon: Discover, link: 'HomeNew' },
+	{ type: 'main', title: 'menuProfile', icon: User, link: 'User' },
+	{ type: 'main', title: 'menuMusic', icon: Music, link: 'Home' },
+	{ type: 'main', title: 'menuSearch', icon: SearchNormal1, link: 'Search' },
+	{ type: 'main', title: 'menuLeaderBoard', icon: Cup, link: 'Score' },
+	{ type: 'sub', title: 'menuSettings', icon: Setting2, link: 'Settings' },
 ];
 
 type ScaffoldCCProps = {
@@ -36,7 +28,7 @@ type ScaffoldCCProps = {
 	withPadding?: boolean;
 };
 
-const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) => {
+const ScaffoldCC = ({ children, routeName, withPadding = true }: ScaffoldCCProps) => {
 	const userQuery = useQuery(API.getUserInfo);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 
@@ -44,13 +36,14 @@ const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) 
 		return <LoadingView />;
 	}
 	const colorScheme = useColorScheme();
-	const logo = colorScheme == 'light'
-	? require('../../assets/icon_light.png')
-	: require('../../assets/icon_dark.png');
+	const logo =
+		colorScheme == 'light'
+			? require('../../assets/icon_light.png')
+			: require('../../assets/icon_dark.png');
 
 	return (
 		<Flex style={{ flex: 1, backgroundColor: '#cdd4fd' }}>
-			{screenSize === 'small' ?
+			{screenSize === 'small' ? (
 				<ScaffoldMobileCC
 					user={userQuery.data}
 					logo={logo}
@@ -59,7 +52,8 @@ const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) 
 				>
 					{children}
 				</ScaffoldMobileCC>
-				: <ScaffoldDesktopCC
+			) : (
+				<ScaffoldDesktopCC
 					user={userQuery.data}
 					logo={logo}
 					routeName={routeName}
@@ -68,8 +62,8 @@ const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) 
 				>
 					{children}
 				</ScaffoldDesktopCC>
-			}
-			{colorScheme === 'dark' &&
+			)}
+			{colorScheme === 'dark' && (
 				<LinearGradient
 					colors={['#101014', '#6075F9']}
 					style={{
@@ -79,7 +73,7 @@ const ScaffoldCC = ({children, routeName, withPadding = true}: ScaffoldCCProps) 
 						zIndex: -2,
 					}}
 				/>
-			}
+			)}
 		</Flex>
 	);
 };

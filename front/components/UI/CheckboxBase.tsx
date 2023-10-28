@@ -54,17 +54,9 @@ const CheckboxBase: React.FC<CheckboxProps> = ({ title, color, style, check, set
 		>
 			<View style={styles.content}>
 				{check ? (
-					<TickSquare
-						size="24"
-						color={color ?? colors.primary[400]}
-						variant="Bold"
-					/>
+					<TickSquare size="24" color={color ?? colors.primary[400]} variant="Bold" />
 				) : (
-					<AddSquare
-						size="24"
-						color={color ?? colors.primary[400]}
-						variant="Outline"
-					/>
+					<AddSquare size="24" color={color ?? colors.primary[400]} variant="Outline" />
 				)}
 				<Text style={styles.text} selectable={false}>
 					{title}

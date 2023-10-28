@@ -22,7 +22,7 @@ const PrivacySettings = () => {
 	}
 	return (
 		<ElementList
-			style={{width: '100%'}}
+			style={{ width: '100%' }}
 			elements={[
 				{
 					type: 'toggle',
@@ -32,9 +32,7 @@ const PrivacySettings = () => {
 					data: {
 						value: settings.dataCollection,
 						onToggle: () =>
-							dispatch(
-								updateSettings({ dataCollection: !settings.dataCollection })
-							),
+							dispatch(updateSettings({ dataCollection: !settings.dataCollection })),
 					},
 				},
 				{

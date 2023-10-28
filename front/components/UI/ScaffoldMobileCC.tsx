@@ -1,5 +1,5 @@
 import { View } from 'react-native';
-import {  ScrollView, Flex, useMediaQuery, useTheme } from 'native-base';
+import { ScrollView, Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { useNavigation } from '../../Navigation';
@@ -13,11 +13,11 @@ type ScaffoldMobileCCProps = {
 	logo: string;
 	routeName: string;
 	menu: {
-		type: "main" | "sub";
+		type: 'main' | 'sub';
 		title: string;
 		icon: Icon;
 		link: string;
-	}[]
+	}[];
 };
 
 const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
@@ -35,16 +35,14 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 					maxHeight: '100vh',
 					flexDirection: 'column',
 					flexShrink: 0,
-					padding: 16
+					padding: 16,
 				}}
 				contentContainerStyle={{ flex: 1 }}
 			>
-				<View style={{ flex: 1, minHeight: 'fit-content' }}>
-					{props.children}
-				</View>
-				<Spacer/>
+				<View style={{ flex: 1, minHeight: 'fit-content' }}>{props.children}</View>
+				<Spacer />
 			</ScrollView>
-			<View style={{padding: 8, paddingTop: 0}}>
+			<View style={{ padding: 8, paddingTop: 0 }}>
 				<Flex
 					style={{
 						width: '100%',
@@ -61,14 +59,22 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 							key={'key-menu-link-' + value.title}
 							type="menu"
 							icon={value.icon}
-							title={props.routeName === value.link && !isSmallScreen ? translate(value.title as 'menuDiscovery' | 'menuProfile' | 'menuMusic' | 'menuSearch' | 'menuLeaderBoard' | 'menuSettings') : undefined}
+							title={
+								props.routeName === value.link && !isSmallScreen
+									? translate(
+											value.title as
+												| 'menuDiscovery'
+												| 'menuProfile'
+												| 'menuMusic'
+												| 'menuSearch'
+												| 'menuLeaderBoard'
+												| 'menuSettings'
+									  )
+									: undefined
+							}
 							isDisabled={props.routeName === value.link}
-							iconVariant={
-								props.routeName === value.link ? 'Bold' : 'Outline'
-							}
-							onPress={async () =>
-								navigation.navigate(value.link as never)
-							}
+							iconVariant={props.routeName === value.link ? 'Bold' : 'Outline'}
+							onPress={async () => navigation.navigate(value.link as never)}
 						/>
 					))}
 				</Flex>

@@ -29,9 +29,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 		900: 'rgba(16,16,20,0.9)',
 	};
 
-	const glassmorphism = colorScheme === 'light'
-		? lightGlassmorphism
-		: darkGlassmorphism
+	const glassmorphism = colorScheme === 'light' ? lightGlassmorphism : darkGlassmorphism;
 
 	return (
 		<NativeBaseProvider

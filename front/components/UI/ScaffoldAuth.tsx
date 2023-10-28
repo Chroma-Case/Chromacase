@@ -1,5 +1,16 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Flex, Stack, View, Text, Wrap, Image, Row, Column, ScrollView, useToast } from 'native-base';
+import {
+	Flex,
+	Stack,
+	View,
+	Text,
+	Wrap,
+	Image,
+	Row,
+	Column,
+	ScrollView,
+	useToast,
+} from 'native-base';
 import { FunctionComponent } from 'react';
 import { Linking, useWindowDimensions } from 'react-native';
 import ButtonBase from './ButtonBase';
@@ -37,9 +48,10 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const colorScheme = useColorScheme();
-	const logo = colorScheme == 'light'
-	? require('../../assets/icon_light.png')
-	: require('../../assets/icon_dark.png');
+	const logo =
+		colorScheme == 'light'
+			? require('../../assets/icon_light.png')
+			: require('../../assets/icon_dark.png');
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
 
 	return (
@@ -49,7 +61,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 			style={{ flex: 1, backgroundColor: '#cdd4fd' }}
 		>
 			<Column style={{ flex: 1 }}>
-				<Wrap space={4} direction='row' style={{padding: 16, paddingBottom: 0}}>
+				<Wrap space={4} direction="row" style={{ padding: 16, paddingBottom: 0 }}>
 					<Row space={2} flex={1}>
 						<Image
 							source={{ uri: logo }}
@@ -59,14 +71,14 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 								height: 32,
 							}}
 						/>
-						{layout.width > 650 &&
+						{layout.width > 650 && (
 							<Text fontSize={'xl'} selectable={false}>
 								Chromacase
 							</Text>
-						}
+						)}
 					</Row>
 					<ButtonBase
-						title='guest mode'
+						title="guest mode"
 						onPress={async () => {
 							try {
 								handleGuestLogin((accessToken: string) => {
@@ -79,10 +91,17 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 								}
 								toast.show({ description: error as string });
 							}
-						}}	
+						}}
 					/>
 				</Wrap>
-				<ScrollView contentContainerStyle={{ padding: 16, flexGrow: 1, justifyContent: 'center', alignSelf: 'center' }}>
+				<ScrollView
+					contentContainerStyle={{
+						padding: 16,
+						flexGrow: 1,
+						justifyContent: 'center',
+						alignSelf: 'center',
+					}}
+				>
 					<View style={{ width: '100%', maxWidth: 420 }}>
 						<Stack
 							space={8}
@@ -125,16 +144,13 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							{submitButton}
 							<Wrap style={{ flexDirection: 'row', justifyContent: 'center' }}>
 								<Text>{link.label}</Text>
-								<LinkBase
-									text={link.text}
-									onPress={link.onPress}
-								/>
+								<LinkBase text={link.text} onPress={link.onPress} />
 							</Wrap>
 						</Stack>
 					</View>
 				</ScrollView>
 			</Column>
-			{layout.width > 650 &&
+			{layout.width > 650 && (
 				<View style={{ width: '50%', height: '100%', padding: 16 }}>
 					<Image
 						source={{ uri: banner?.at(0)?.uri }}
@@ -142,8 +158,8 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 						style={{ width: '100%', height: '100%', borderRadius: 8 }}
 					/>
 				</View>
-			}
-			{colorScheme === 'dark' &&
+			)}
+			{colorScheme === 'dark' && (
 				<LinearGradient
 					colors={['#101014', '#6075F9']}
 					style={{
@@ -153,7 +169,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 						zIndex: -2,
 					}}
 				/>
-			}
+			)}
 		</Flex>
 	);
 };

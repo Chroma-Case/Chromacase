@@ -76,8 +76,8 @@ const SignupView = () => {
 
 	return (
 		<ScaffoldAuth
-			title={translate("signupPageTitle")}
-			description={translate("signupPageParagraph")}
+			title={translate('signupPageTitle')}
+			description={translate('signupPageParagraph')}
 			form={[
 				<TextFormField
 					key={'signup-form-1'}

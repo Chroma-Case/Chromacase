@@ -104,7 +104,11 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 	});
 
 	return (
-		<InteractiveBase style={[style, { borderRadius: 12 }]} styleAnimate={styleAnimate} focusable={false}>
+		<InteractiveBase
+			style={[style, { borderRadius: 12 }]}
+			styleAnimate={styleAnimate}
+			focusable={false}
+		>
 			<View style={styles.container}>
 				<View style={styles.iconContainerLeft}>
 					{icon && (
@@ -121,7 +125,9 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 					style={[styles.input, icon ? {} : { paddingLeft: 12 }]}
 					autoComplete={autoComplete}
 					placeholder={placeholder + (isRequired ? '*' : '')}
-					placeholderTextColor={colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
+					placeholderTextColor={
+						colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
+					}
 					secureTextEntry={isSecret ? !isPasswordVisible : false}
 					onFocus={() => setFocused(true)}
 					onBlur={() => setFocused(false)}

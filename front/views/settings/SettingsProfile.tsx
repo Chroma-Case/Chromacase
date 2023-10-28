@@ -36,7 +36,7 @@ const ProfileSettings = () => {
 	const colorScheme = useColorScheme();
 	const color = colorScheme === 'light' ? '#000' : '#fff';
 	return (
-		<Column space={4} style={{width: '100%'}}>
+		<Column space={4} style={{ width: '100%' }}>
 			<ElementList
 				elements={[
 					{
@@ -45,7 +45,11 @@ const ProfileSettings = () => {
 						title: translate('settingsProfileTabGoogleSectionTitle'),
 						description: translate('settingsProfileTabGoogleSectionDescription'),
 						data: {
-							text: translate(user.googleID ? 'settingsProfileTabGoogleSectionLinkedText' : 'settingsProfileTabGoogleSectionNotLinkedText')
+							text: translate(
+								user.googleID
+									? 'settingsProfileTabGoogleSectionLinkedText'
+									: 'settingsProfileTabGoogleSectionNotLinkedText'
+							),
 						},
 					},
 					{
@@ -54,20 +58,28 @@ const ProfileSettings = () => {
 						title: translate('settingsProfileTabVerifiedSectionTitle'),
 						description: translate('settingsProfileTabVerifiedSectionDescription'),
 						data: {
-							text: translate(user.emailVerified ? 'settingsProfileTabVerifiedSectionVerifiedText' : 'settingsProfileTabVerifiedSectionNotVerifiedText'),
+							text: translate(
+								user.emailVerified
+									? 'settingsProfileTabVerifiedSectionVerifiedText'
+									: 'settingsProfileTabVerifiedSectionNotVerifiedText'
+							),
 							onPress: user.emailVerified
 								? undefined
 								: () =>
 										API.fetch({ route: '/auth/reverify', method: 'PUT' })
 											.then(() =>
 												Toast.show({
-													description: translate('settingsProfileTabVerifiedSectionVerificationToast')
+													description: translate(
+														'settingsProfileTabVerifiedSectionVerificationToast'
+													),
 												})
 											)
 											.catch((e) => {
 												console.error(e);
 												Toast.show({
-													description: translate('settingsProfileTabVerifiedSectionVerificationToastError')
+													description: translate(
+														'settingsProfileTabVerifiedSectionVerificationToastError'
+													),
 												});
 											}),
 						},
@@ -94,12 +106,18 @@ const ProfileSettings = () => {
 											.then(() => {
 												userQuery.refetch();
 												Toast.show({
-													description: translate('settingsProfileTabAvatarSectionUpdateToast'),
+													description: translate(
+														'settingsProfileTabAvatarSectionUpdateToast'
+													),
 												});
 											})
 											.catch((e) => {
 												console.error(e);
-												Toast.show({ description: translate('settingsProfileTabAvatarSectionUpdateToastError')});
+												Toast.show({
+													description: translate(
+														'settingsProfileTabAvatarSectionUpdateToastError'
+													),
+												});
 											});
 									}
 								});
@@ -125,7 +143,9 @@ const ProfileSettings = () => {
 						icon: <PasswordCheck size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
 						title: translate('settingsProfileTabChangePasswordSectionTitle'),
-						description: translate('settingsProfileTabChangePasswordSectionDescription'),
+						description: translate(
+							'settingsProfileTabChangePasswordSectionDescription'
+						),
 						data: {
 							value: true,
 							section: [
@@ -140,7 +160,11 @@ const ProfileSettings = () => {
 					},
 				]}
 			/>
-			<LogoutButtonCC isGuest={user.isGuest} style={{with: 'fit-content'}} buttonType={'filled'}/>
+			<LogoutButtonCC
+				isGuest={user.isGuest}
+				style={{ with: 'fit-content' }}
+				buttonType={'filled'}
+			/>
 		</Column>
 	);
 };

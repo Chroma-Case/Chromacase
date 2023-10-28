@@ -61,11 +61,11 @@ const SigninView = () => {
 
 	return (
 		<ScaffoldAuth
-			title={translate("signinPageTitle")}
-			description={translate("signinPageParagraph")}
+			title={translate('signinPageTitle')}
+			description={translate('signinPageParagraph')}
 			form={[
 				<TextFormField
-					style={{width: '100%', flex: 1}}
+					style={{ width: '100%', flex: 1 }}
 					key={'signin-form-1'}
 					error={formData.username.error}
 					icon={User}

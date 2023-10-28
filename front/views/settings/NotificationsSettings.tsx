@@ -17,13 +17,15 @@ const NotificationsSettings = () => {
 	}
 	return (
 		<ElementList
-			style={{width: '100%'}}
+			style={{ width: '100%' }}
 			elements={[
 				{
 					type: 'toggle',
 					icon: <MonitorMobbile size="24" color={color} style={{ minWidth: 24 }} />,
 					title: translate('SettingsNotificationsTabPushNotificationsSectionTitle'),
-					description: translate('SettingsNotificationsTabPushNotificationsSectionDescription'),
+					description: translate(
+						'SettingsNotificationsTabPushNotificationsSectionDescription'
+					),
 					data: {
 						value: settings.data.notifications.pushNotif,
 						onToggle: () => {
@@ -39,7 +41,9 @@ const NotificationsSettings = () => {
 					type: 'toggle',
 					icon: <Send2 size="24" color={color} style={{ minWidth: 24 }} />,
 					title: translate('SettingsNotificationsTabEmailNotificationsSectionTitle'),
-					description: translate('SettingsNotificationsTabEmailNotificationsSectionDescription'),
+					description: translate(
+						'SettingsNotificationsTabEmailNotificationsSectionDescription'
+					),
 					data: {
 						value: settings.data.notifications.emailNotif,
 						onToggle: () => {
@@ -55,7 +59,9 @@ const NotificationsSettings = () => {
 					type: 'toggle',
 					icon: <Calendar1 size="24" color={color} style={{ minWidth: 24 }} />,
 					title: translate('SettingsNotificationsTabTrainingReminderSectionTitle'),
-					description: translate('SettingsNotificationsTabTrainingReminderSectionDescription'),
+					description: translate(
+						'SettingsNotificationsTabTrainingReminderSectionDescription'
+					),
 					data: {
 						value: settings.data.notifications.trainNotif,
 						onToggle: () => {
@@ -71,7 +77,9 @@ const NotificationsSettings = () => {
 					type: 'toggle',
 					icon: <Warning2 size="24" color={color} style={{ minWidth: 24 }} />,
 					title: translate('SettingsNotificationsTabReleaseAlertSectionTitle'),
-					description: translate('SettingsNotificationsTabReleaseAlertSectionDescription'),
+					description: translate(
+						'SettingsNotificationsTabReleaseAlertSectionDescription'
+					),
 					data: {
 						value: settings.data.notifications.newSongNotif,
 						onToggle: () => {

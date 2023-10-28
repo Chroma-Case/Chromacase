@@ -21,7 +21,7 @@ const PremiumSettings = () => {
 	const color = colorScheme === 'light' ? '#000' : '#fff';
 	return (
 		<ElementList
-			style={{width: '100%'}}
+			style={{ width: '100%' }}
 			elements={[
 				{
 					icon: <Star1 size="24" color={color} style={{ minWidth: 24 }} />,

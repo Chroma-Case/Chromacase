@@ -127,12 +127,25 @@ const ButtonBase: React.FC<ButtonProps> = ({
 					{icon && (
 						<MyIcon
 							size={'18'}
-							color={type === 'outlined' ? '#6075F9' : colorScheme === 'dark' || type === 'filled' ? '#FFFFFF' : colors.black[500] }
+							color={
+								type === 'outlined'
+									? '#6075F9'
+									: colorScheme === 'dark' || type === 'filled'
+									? '#FFFFFF'
+									: colors.black[500]
+							}
 							variant={iconVariant}
 						/>
 					)}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
-					{title && <Text style={[styles.text, type === 'filled' ? {color: '#fff'} : {}]} selectable={false}>{title}</Text>}
+					{title && (
+						<Text
+							style={[styles.text, type === 'filled' ? { color: '#fff' } : {}]}
+							selectable={false}
+						>
+							{title}
+						</Text>
+					)}
 				</View>
 			)}
 		</InteractiveBase>

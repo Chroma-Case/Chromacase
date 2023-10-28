@@ -89,8 +89,8 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 				borderBottomWidth: 1,
 				borderColor: colors.primary[500],
 			}}
-			activeColor={ colorScheme === 'light' ? '#000' : '#fff'}
-			inactiveColor={ colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
+			activeColor={colorScheme === 'light' ? '#000' : '#fff'}
+			inactiveColor={colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
 			indicatorStyle={{ backgroundColor: colors.primary[500] }}
 			renderIcon={(
 				scene: Scene<Route> & {
@@ -100,13 +100,25 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 			) => {
 				const tabHeader = getTabData(scene.route!.key);
 				return (
-					<tabHeader.icon size="18" color="#6075F9" variant={scene.focused ? "Bold" : "Outline"} />
+					<tabHeader.icon
+						size="18"
+						color="#6075F9"
+						variant={scene.focused ? 'Bold' : 'Outline'}
+					/>
 				);
 			}}
 			renderLabel={({ route, color }) =>
 				layout.width > 1100 && (
 					<Text style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}>
-						{translate(route.title as 'settingsTabProfile' | 'settingsTabPremium' | 'settingsTabPreferences' | 'settingsTabNotifications' | 'settingsTabPrivacy' | 'settingsTabPiano')}
+						{translate(
+							route.title as
+								| 'settingsTabProfile'
+								| 'settingsTabPremium'
+								| 'settingsTabPreferences'
+								| 'settingsTabNotifications'
+								| 'settingsTabPrivacy'
+								| 'settingsTabPiano'
+						)}
 					</Text>
 				)
 			}
@@ -123,7 +135,7 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 					paddingTop: 32,
 					padding: 20,
 					maxWidth: 850,
-					width: '100%'
+					width: '100%',
 				}}
 				style={{ height: 'fit-content' }}
 				renderTabBar={renderTabBar}
