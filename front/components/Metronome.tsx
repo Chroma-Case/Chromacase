@@ -1,7 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Slider, Switch, Text, View } from 'native-base';
 import { Audio } from 'expo-av';
+
+const MetronomeToggle = (props: { enabled: boolean, onToggle: (stateAfterToggle: boolean) => void }) => {
+	const [isEnabled, setEnabled] = useState(false);
+
+	useEffect(() => {
+		setEnabled(props.enabled)
+	}, [props.enabled])
+	return <Switch value={isEnabled} onToggle={() => {
+		console.log(isEnabled);
+		props.onToggle(!isEnabled);
+		setEnabled(!isEnabled);
+	}} />
+}
 
 export const Metronome = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
 	const audio = useRef<Audio.Sound | null>(null);
@@ -37,7 +50,7 @@ export const Metronome = ({ paused = false, bpm }: { paused?: boolean; bpm: numb
 		<View>
 			<Text>Metronome Settings</Text>
 			<Text>Enabled:</Text>
-			<Switch value={enabled.current} onToggle={() => (enabled.current = !enabled.current)} />
+			<MetronomeToggle enabled={enabled.current} onToggle={(e) => (enabled.current = e)} />
 			<Text>Volume:</Text>
 			<Slider
 				maxWidth={'500px'}
