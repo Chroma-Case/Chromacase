@@ -8,7 +8,7 @@ import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { useDispatch, useSelector } from '../../state/Store';
 import { PianoNotes, setSounds } from '../../state/SoundPlayerSlice';
 import { Audio } from 'expo-av';
-import { Sounds } from '../../hooks/piano';
+import { Sounds } from '../../state/SoundPlayerSlice';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -55,21 +55,15 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		Image.getSize(getSVGURL(songID), (w, h) => {
 			setPartitionDims([w, h]);
 		});
-		if (!pianoSounds.sounds) {
+		if (!pianoSounds.current) {
 			Promise.all(
-				PianoNotes.map((note) =>
+				Object.entries(PianoNotes).map(([midiNumber, note]) =>
 					// eslint-disable-next-line @typescript-eslint/no-var-requires
-					Audio.Sound.createAsync(require(`../assets/${note}.mp3`)).then(
-						(sound) => [note, sound] as const
+					Audio.Sound.createAsync(require(`../../assets/piano/${note}.mp3`)).then(
+						(sound) => [midiNumber, sound.sound] as const
 					)
 				)
-			).then((res) =>
-				dispatch(
-					setSounds(
-						res.reduce((prev, curr) => ({ ...prev, [curr[0]]: curr[1] }), {} as Sounds)
-					)
-				)
-			);
+			).then((res) => pianoSounds.current = res.reduce((prev, curr) => ({ ...prev, [curr[0]]: curr[1] }), {}));
 		}
 	}, []);
 
@@ -90,11 +84,16 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		currentCurIdx,
 		pianoCC.timestamp - transitionDuration,
 		(cursor, idx) => {
-			const note = undefined as Audio.Sound;
-			note.playAsync();
-			setTimeout(() => {
-				note.stopAsync();
-			}, cursor.note.duration)
+			// TODO: The type of cursor is wrong
+			try {
+				console.log(cursor.notes.at(0).note);
+				const note = pianoSounds.current![cursor.notes.at(0)!.note]!;
+				note.playAsync();
+				console.log('Got note ' + cursor.notes.at(0)?.note);
+				setTimeout(() => {
+					note.stopAsync();
+				}, cursor.notes.at(0)!.duration)
+			} catch (e) { console.log(e) }
 			partitionOffset.value = withTiming(
 				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
 				{
