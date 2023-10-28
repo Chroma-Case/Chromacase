@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import InteractiveBase from './InteractiveBase';
 import { Input, useTheme } from 'native-base';
-import { ColorSchemeProvider } from '../../Theme';
 import useColorScheme from '../../hooks/colorScheme';
 
 export interface TextFieldBaseProps {

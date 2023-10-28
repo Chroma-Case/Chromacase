@@ -13,6 +13,7 @@ import Song from '../models/Song';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const HomeView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
@@ -135,13 +136,13 @@ const HomeView = (props: RouteProps<{}>) => {
 							translate={{ translationKey: 'settingsBtn' }}
 							colorScheme="gray"
 							size="sm"
-							onPress={() => navigation.navigate('Settings')}
+							onPress={() => navigation.navigate('Settings', {})}
 						/>
 						<TextButton
 							label={'V2'}
 							colorScheme="gray"
 							size="sm"
-							onPress={() => navigation.navigate('HomeNew')}
+							onPress={() => navigation.navigate('HomeNew', {})}
 						/>
 					</HStack>
 					<Box style={{ width: '100%' }}>

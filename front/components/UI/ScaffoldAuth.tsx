@@ -52,6 +52,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 		colorScheme == 'light'
 			? require('../../assets/icon_light.png')
 			: require('../../assets/icon_dark.png');
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
 
 	return (

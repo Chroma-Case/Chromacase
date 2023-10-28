@@ -168,7 +168,7 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 							type="menu"
 							isDisabled={props.routeName === 'Settings'}
 							iconVariant={props.routeName === 'Settings' ? 'Bold' : 'Outline'}
-							onPress={async () => navigation.navigate('Settings')}
+							onPress={async () => navigation.navigate('Settings', {})}
 						/>
 						<Spacer />
 						{!user.isGuest && (

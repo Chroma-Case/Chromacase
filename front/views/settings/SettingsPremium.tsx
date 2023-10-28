@@ -1,6 +1,5 @@
 import API from '../../API';
 import React from 'react';
-import { Flex } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';

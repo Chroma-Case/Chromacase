@@ -1,6 +1,6 @@
 import API from '../../API';
 import React from 'react';
-import { Column, Flex, Toast } from 'native-base';
+import { Column, Toast } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
@@ -10,8 +10,6 @@ import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-reac
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
-import Spacer from '../../components/UI/Spacer';
-import { ColorSchemeProvider } from '../../Theme';
 import useColorScheme from '../../hooks/colorScheme';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {

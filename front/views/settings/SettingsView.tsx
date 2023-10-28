@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Flex, Text, useTheme } from 'native-base';
+import { Center, Text, useTheme } from 'native-base';
 import ProfileSettings from './SettingsProfile';
 import NotificationsSettings from './NotificationsSettings';
 import PrivacySettings from './PrivacySettings';
@@ -26,7 +26,6 @@ import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import PremiumSettings from './SettingsPremium';
 import { RouteProps } from '../../Navigation';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
-import { ColorSchemeProvider } from '../../Theme';
 import useColorScheme from '../../hooks/colorScheme';
 import { translate } from '../../i18n/i18n';
 
@@ -66,6 +65,7 @@ const getTabData = (key: string) => {
 	}
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const SetttingsNavigator = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);

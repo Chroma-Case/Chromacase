@@ -1,9 +1,9 @@
-import { View, Image, useWindowDimensions } from 'react-native';
-import { Divider, Text, ScrollView, Flex, Row, useMediaQuery, useTheme } from 'native-base';
+/* eslint-disable no-mixed-spaces-and-tabs */
+import { View, Image } from 'react-native';
+import { Divider, Text, ScrollView, Row, useMediaQuery, useTheme } from 'native-base';
 import { useQuery, useQueries } from '../../Queries';
 import API from '../../API';
 import Song from '../../models/Song';
-import { LinearGradient } from 'expo-linear-gradient';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
@@ -13,8 +13,6 @@ import Spacer from './Spacer';
 import User from '../../models/User';
 import LogoutButtonCC from './LogoutButtonCC';
 import GlassmorphismCC from './Glassmorphism';
-import { ColorSchemeProvider } from '../../Theme';
-import useColorScheme from '../../hooks/colorScheme';
 
 type ScaffoldDesktopCCProps = {
 	widthPadding: boolean;

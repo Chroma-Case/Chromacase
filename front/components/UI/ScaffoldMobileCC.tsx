@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { View } from 'react-native';
 import { ScrollView, Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';

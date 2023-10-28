@@ -19,6 +19,7 @@ function xpToProgressBarValue(xp: number): number {
 	return Math.floor(xp / 10);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const ProfileView = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const navigation = useNavigation();
@@ -70,7 +71,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 								title="Modifier profil"
 								style={{ width: 'fit-content' }}
 								type={'filled'}
-								onPress={async () => navigation.navigate('Settings')}
+								onPress={async () => navigation.navigate('Settings', {})}
 							/>
 						</Wrap>
 						<Text style={{ paddingBottom: 10, fontWeight: 'bold' }}>

@@ -1,7 +1,6 @@
 import { Text, Row, Heading, Column } from 'native-base';
 import ButtonBase from './ButtonBase';
 import { CloseSquare } from 'iconsax-react-native';
-import { BlurView } from 'expo-blur';
 import { ReactNode } from 'react';
 import Modal from 'react-native-modal';
 import React from 'react';

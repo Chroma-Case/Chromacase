@@ -210,7 +210,7 @@ const ProfileErrorView = (props: { onTryAgain: () => void }) => {
 				<TextButton
 					onPress={() => {
 						dispatch(unsetAccessToken());
-						navigation.navigate('Start');
+						navigation.navigate('Login');
 					}}
 					colorScheme="error"
 					variant="outline"

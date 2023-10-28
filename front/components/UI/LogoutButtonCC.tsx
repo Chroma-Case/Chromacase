@@ -1,16 +1,14 @@
-import { Text, Row, Heading, Column, Center } from 'native-base';
 import ButtonBase, { ButtonType } from './ButtonBase';
-import { CloseSquare, LoginCurve, LogoutCurve } from 'iconsax-react-native';
+import { LogoutCurve } from 'iconsax-react-native';
 import { useDispatch } from 'react-redux';
 import { translate } from '../../i18n/i18n';
 import { unsetAccessToken } from '../../state/UserSlice';
-import { BlurView } from 'expo-blur';
 import { useState } from 'react';
-import Modal from 'react-native-modal';
 import React from 'react';
 import SignUpForm from '../../components/forms/signupform';
 import API, { APIError } from '../../API';
 import PopupCC from './PopupCC';
+import { StyleProp, ViewStyle } from 'react-native';
 
 const handleSubmit = async (username: string, password: string, email: string) => {
 	try {
@@ -26,7 +24,7 @@ const handleSubmit = async (username: string, password: string, email: string) =
 type LogoutButtonCCProps = {
 	collapse?: boolean;
 	isGuest?: boolean;
-	style: any;
+	style: StyleProp<ViewStyle>;
 	buttonType: ButtonType;
 };
 

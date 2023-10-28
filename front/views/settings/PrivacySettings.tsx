@@ -1,5 +1,4 @@
 import React from 'react';
-import { Flex } from 'native-base';
 import { translate } from '../../i18n/i18n';
 import ElementList from '../../components/GtkUI/ElementList';
 import { useDispatch } from 'react-redux';

@@ -10,7 +10,6 @@ interface LinkBaseProps {
 const LinkBase: React.FC<LinkBaseProps> = ({ text, onPress }) => {
 	const underlineHeight = useRef(new Animated.Value(4)).current;
 	const opacity = useRef(new Animated.Value(1)).current;
-	const color = useRef(new Animated.Value(1)).current;
 	const theme = useTheme();
 
 	const handleMouseEnter = () => {
