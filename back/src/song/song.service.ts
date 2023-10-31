@@ -1,10 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, Song } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { Prisma, Song } from "@prisma/client";
+import { PrismaService } from "src/prisma/prisma.service";
+import { generateSongAssets } from "src/assetsgenerator/generateImages_browserless";
 
 @Injectable()
 export class SongService {
 	constructor(private prisma: PrismaService) {}
+
+	async createAssets(mxlPath: string, songId: number): Promise<void> {
+		// mxlPath can the path to an archive to an xml file or the path to the xml file directly
+		// const generateSongAssets = (await import("src/assetsgenerator/generateImages_browserless.mjs")).default;
+		return generateSongAssets(songId, mxlPath, "/data/cache/songs", "svg");
+	}
 
 	async songByArtist(data: number): Promise<Song[]> {
 		return this.prisma.song.findMany({
