@@ -84,9 +84,8 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		currentCurIdx,
 		pianoCC.timestamp - transitionDuration,
 		(cursor, idx) => {
-			// TODO: The type of cursor is wrong
 			try {
-				console.log(cursor.notes.at(0).note);
+				console.log(cursor.notes.at(0)!.note);
 				const note = pianoSounds.current![cursor.notes.at(0)!.note]!;
 				note.playAsync();
 				console.log('Got note ' + cursor.notes.at(0)?.note);
