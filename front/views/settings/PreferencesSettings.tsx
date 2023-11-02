@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Column, Flex } from 'native-base';
+import { Column } from 'native-base';
 import { useLanguage } from '../../state/LanguageSlice';
 import { AvailableLanguages, DefaultLanguage, translate } from '../../i18n/i18n';
 import { useSelector } from '../../state/Store';
@@ -17,7 +17,7 @@ const PreferencesSettings = () => {
 	const colorScheme = useColorScheme();
 	const color = colorScheme === 'light' ? '#000' : '#fff';
 	return (
-		<Column space={4} style={{width: '100%'}}>
+		<Column space={4} style={{ width: '100%' }}>
 			<ElementList
 				elements={[
 					{
@@ -64,7 +64,9 @@ const PreferencesSettings = () => {
 						icon: <Rank size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesTabDifficultySectionTitle'),
-						description: translate('SettingsPreferencesTabDifficultySectionDescription'),
+						description: translate(
+							'SettingsPreferencesTabDifficultySectionDescription'
+						),
 						data: {
 							value: settings.difficulty,
 							defaultValue: 'medium',
@@ -90,7 +92,9 @@ const PreferencesSettings = () => {
 						icon: <Colorfilter size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'toggle',
 						title: translate('SettingsPreferencesTabColorblindModeSectionTitle'),
-						description: translate('SettingsPreferencesTabColorblindModeSectionDescription'),
+						description: translate(
+							'SettingsPreferencesTabColorblindModeSectionDescription'
+						),
 						data: {
 							value: settings.colorBlind,
 							onToggle: () => {

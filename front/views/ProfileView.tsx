@@ -19,6 +19,7 @@ function xpToProgressBarValue(xp: number): number {
 	return Math.floor(xp / 10);
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const ProfileView = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const navigation = useNavigation();
@@ -70,13 +71,19 @@ const ProfileView = (props: RouteProps<{}>) => {
 								title="Modifier profil"
 								style={{ width: 'fit-content' }}
 								type={'filled'}
-								onPress={async () => navigation.navigate('Settings')}
+								onPress={async () => navigation.navigate('Settings', {})}
 							/>
 						</Wrap>
 						<Text style={{ paddingBottom: 10, fontWeight: 'bold' }}>
 							Account created on {userQuery.data.data.createdAt.toLocaleDateString()}
 						</Text>
-						<Wrap style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 10 }}>
+						<Wrap
+							style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								paddingBottom: 10,
+							}}
+						>
 							<Text style={{ paddingRight: 20 }}>
 								Your client ID is {userQuery.data.id}
 							</Text>
@@ -93,7 +100,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 						flex={1}
 					/>
 				</Row>
-				<ScoreGraph/>
+				<ScoreGraph />
 			</Flex>
 		</ScaffoldCC>
 	);

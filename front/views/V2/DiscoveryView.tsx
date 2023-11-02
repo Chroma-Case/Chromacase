@@ -46,6 +46,7 @@ const cards = [
 	},
 ] as [HomeCardProps, HomeCardProps, HomeCardProps, HomeCardProps];
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const HomeView = (props: RouteProps<{}>) => {
 	const songsQuery = useQuery(API.getSongSuggestions);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });

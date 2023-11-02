@@ -132,7 +132,14 @@ const ButtonBase: React.FC<ButtonProps> = ({
 						/>
 					)}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
-					{title && <Text style={[styles.text, type === 'filled' ? {color: '#fff'} : {}]} selectable={false}>{title}</Text>}
+					{title && (
+						<Text
+							style={[styles.text, type === 'filled' ? { color: '#fff' } : {}]}
+							selectable={false}
+						>
+							{title}
+						</Text>
+					)}
 				</View>
 			)}
 		</InteractiveBase>

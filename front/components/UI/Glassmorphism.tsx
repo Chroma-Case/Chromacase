@@ -5,22 +5,22 @@ import { StyleProp, ViewStyle } from 'react-native';
 import useColorScheme from '../../hooks/colorScheme';
 
 type GlassmorphismCCProps = {
-    children?: ReactNode,
+	children?: ReactNode;
 	style?: StyleProp<ViewStyle>;
 };
 
 const GlassmorphismCC = ({ children, style }: GlassmorphismCCProps) => {
-    const colorScheme = useColorScheme();
-    console.log(colorScheme);
+	const colorScheme = useColorScheme();
+	console.log(colorScheme);
 
-    return (
-        <BlurView
-            style={[{borderRadius: 12}, style]}
-            intensity={60}
-            tint={colorScheme === 'light' ? 'light' : 'dark'}
-        >
-            {children}
-        </BlurView>
+	return (
+		<BlurView
+			style={[{ borderRadius: 12 }, style]}
+			intensity={60}
+			tint={colorScheme === 'light' ? 'light' : 'dark'}
+		>
+			{children}
+		</BlurView>
 	);
 };
 

@@ -1,5 +1,6 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { View } from 'react-native';
-import {  ScrollView, Flex, useMediaQuery, useTheme } from 'native-base';
+import { ScrollView, Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { useNavigation } from '../../Navigation';
@@ -12,13 +13,13 @@ type ScaffoldMobileCCProps = {
 	user: User;
 	logo: string;
 	routeName: string;
-	widthPadding: number;
+	widthPadding: boolean;
 	menu: {
-		type: "main" | "sub";
+		type: 'main' | 'sub';
 		title: string;
 		icon: Icon;
 		link: string;
-	}[]
+	}[];
 };
 
 const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
@@ -45,7 +46,7 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 				</View>
 				<Spacer/>
 			</ScrollView>
-			<View style={{padding: 8, paddingTop: 0}}>
+			<View style={{ padding: 8, paddingTop: 0 }}>
 				<Flex
 					style={{
 						width: '100%',
@@ -62,14 +63,22 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 							key={'key-menu-link-' + value.title}
 							type="menu"
 							icon={value.icon}
-							title={props.routeName === value.link && !isSmallScreen ? translate(value.title as 'menuDiscovery' | 'menuProfile' | 'menuMusic' | 'menuSearch' | 'menuLeaderBoard' | 'menuSettings') : undefined}
+							title={
+								props.routeName === value.link && !isSmallScreen
+									? translate(
+											value.title as
+												| 'menuDiscovery'
+												| 'menuProfile'
+												| 'menuMusic'
+												| 'menuSearch'
+												| 'menuLeaderBoard'
+												| 'menuSettings'
+									  )
+									: undefined
+							}
 							isDisabled={props.routeName === value.link}
-							iconVariant={
-								props.routeName === value.link ? 'Bold' : 'Outline'
-							}
-							onPress={async () =>
-								navigation.navigate(value.link as never)
-							}
+							iconVariant={props.routeName === value.link ? 'Bold' : 'Outline'}
+							onPress={async () => navigation.navigate(value.link as never)}
 						/>
 					))}
 				</Flex>

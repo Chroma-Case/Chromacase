@@ -86,11 +86,11 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 									height: 32,
 								}}
 							/>
-							{layout.width > 650 &&
+							{layout.width > 650 && (
 								<Text fontSize={'xl'} selectable={false}>
 									Chromacase
 								</Text>
-							}
+							)}
 						</Row>
 						<Spacer height="xl" />
 						<View style={{ width: '100%' }}>
@@ -168,7 +168,7 @@ const ScaffoldCC = (props: ScaffoldCCProps) => {
 							type="menu"
 							isDisabled={props.routeName === 'Settings'}
 							iconVariant={props.routeName === 'Settings' ? 'Bold' : 'Outline'}
-							onPress={async () => navigation.navigate('Settings')}
+							onPress={async () => navigation.navigate('Settings', {})}
 						/>
 						<Spacer />
 						{!user.isGuest && (

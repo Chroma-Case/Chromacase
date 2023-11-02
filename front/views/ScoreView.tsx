@@ -163,7 +163,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 					<TextButton
 						colorScheme="gray"
 						translate={{ translationKey: 'backBtn' }}
-						onPress={() => navigation.navigate('Home')}
+						onPress={() => navigation.navigate('Home', {})}
 					/>
 					<TextButton
 						onPress={() => navigation.navigate('Song', { songId })}

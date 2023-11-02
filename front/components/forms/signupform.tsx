@@ -130,7 +130,7 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 						});
 				}}
 			/>
-			<Spacer height='xs'/>
+			<Spacer height="xs" />
 			<ButtonBase
 				style={{ width: '100%' }}
 				title={translate('signUpBtn')}

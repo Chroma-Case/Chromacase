@@ -1,11 +1,4 @@
-import {
-	Box,
-	Flex,
-	Select,
-	useBreakpointValue,
-	useTheme,
-	Wrap,
-} from 'native-base';
+import { Box, Flex, Select, useBreakpointValue, useTheme, Wrap } from 'native-base';
 import { LineChart } from 'react-native-chart-kit';
 import { useState } from 'react';
 import { useWindowDimensions } from 'react-native';
@@ -16,43 +9,46 @@ import { LoadingView } from './Loading';
 const formatScoreDate = (playDate: Date): string => {
 	// const formattedDate = `${pad(playDate.getDay())}/${pad(playDate.getMonth())}`;
 	// const formattedTime = `${pad(playDate.getHours())}:${pad(playDate.getMinutes())}`;
-	
+
 	// console.log(playDate.toDateString());
 	// console.log(`${playDate.getDate()}/${playDate.getMonth() + 1}`);
 	return `${playDate.getDate()}`;
 };
 
 type GraphProps = {
-	songId: number,
-	since: Date
+	songId: number;
+	since: Date;
 };
 
-const calculateDailyAverages = (scores: { playDate: Date, score: number }[]): { playDate: Date, score: number }[] => {
-    const dailyScores: { [key: string]: number[] } = {};
+const calculateDailyAverages = (
+	scores: { playDate: Date; score: number }[]
+): { playDate: Date; score: number }[] => {
+	const dailyScores: { [key: string]: number[] } = {};
 
-    // Regroupez les scores par date
-    scores.forEach((score) => {
-        const date = score.playDate.toISOString().split('T')[0] as string; // Obtenez la date au format 'YYYY-MM-DD'
-        if (!dailyScores[date]) {
-            dailyScores[date] = [];
-        }
-        dailyScores[date]!.push(score.score);
-    });
+	// Regroupez les scores par date
+	scores.forEach((score) => {
+		const date = score.playDate.toISOString().split('T')[0] as string; // Obtenez la date au format 'YYYY-MM-DD'
+		if (!dailyScores[date]) {
+			dailyScores[date] = [];
+		}
+		dailyScores[date]!.push(score.score);
+	});
 
-    // Calculez la moyenne des scores par jour et créez un tableau d'objets avec le format final
-    const dailyAverages: { playDate: Date, score: number }[] = [];
-    Object.keys(dailyScores).forEach((date) => {
-        const oneDayScore = dailyScores[date];
+	// Calculez la moyenne des scores par jour et créez un tableau d'objets avec le format final
+	const dailyAverages: { playDate: Date; score: number }[] = [];
+	Object.keys(dailyScores).forEach((date) => {
+		const oneDayScore = dailyScores[date];
 		if (oneDayScore) {
-			const average = oneDayScore.reduce((total, score) => total + score, 0) / oneDayScore.length;
+			const average =
+				oneDayScore.reduce((total, score) => total + score, 0) / oneDayScore.length;
 			dailyAverages.push({ playDate: new Date(date), score: average });
 		}
-    });
+	});
 
-    return dailyAverages;
+	return dailyAverages;
 };
 
-const Graph = ({songId, since}: GraphProps) => {
+const Graph = ({ songId, since }: GraphProps) => {
 	const isSmall = useBreakpointValue({ base: true, md: false });
 	const theme = useTheme();
 	const [containerWidth, setContainerWidth] = useState(0);
@@ -63,8 +59,7 @@ const Graph = ({songId, since}: GraphProps) => {
 	}
 
 	const dailyScore = calculateDailyAverages(scoresQuery.data.history);
-	const scoresToSort = dailyScore
-		.filter((item: { playDate: Date; }) => item.playDate >= since);
+	const scoresToSort = dailyScore.filter((item: { playDate: Date }) => item.playDate >= since);
 
 	const scores = scoresToSort.sort((a, b) => {
 		if (a.playDate < b.playDate) {
@@ -81,10 +76,12 @@ const Graph = ({songId, since}: GraphProps) => {
 			style={{ width: '100%', marginTop: 20 }}
 			onLayout={(event) => setContainerWidth(event.nativeEvent.layout.width)}
 		>
-			{scores && scores.length > 0 &&
+			{scores && scores.length > 0 && (
 				<LineChart
 					data={{
-						labels: isSmall ? [] : scores.map(({ playDate }) => formatScoreDate(playDate)),
+						labels: isSmall
+							? []
+							: scores.map(({ playDate }) => formatScoreDate(playDate)),
 						datasets: [
 							{
 								data: scores.map(({ score }) => score),
@@ -117,10 +114,10 @@ const Graph = ({songId, since}: GraphProps) => {
 					}}
 					bezier
 				/>
-			}
+			)}
 		</Box>
 	);
-}
+};
 
 const ScoreGraph = () => {
 	const layout = useWindowDimensions();
@@ -158,25 +155,25 @@ const ScoreGraph = () => {
 				setSelectedSinceDate(threeDaysAgo);
 				break;
 		}
-	}
+	};
 
 	return (
 		<Flex flex={1}>
-			<Wrap style={{gap: 16, flexDirection: 'row', justifyContent: 'flex-end'}}>
+			<Wrap style={{ gap: 16, flexDirection: 'row', justifyContent: 'flex-end' }}>
 				<Box>
 					<Select
-						onValueChange={(selectedValue) => setSelectedSong(songs.data.find(song => selectedValue === song.name)?.id)}
+						onValueChange={(selectedValue) =>
+							setSelectedSong(
+								songs.data.find((song) => selectedValue === song.name)?.id
+							)
+						}
 						defaultValue={songs.data.at(0)?.name}
 						bgColor={colors.coolGray[500]}
 						variant="filled"
 						width={layout.width > 650 ? '200' : '150'}
 					>
 						{songs.data.map((option) => (
-							<Select.Item
-								key={option.id}
-								label={option.name}
-								value={option.name}
-							/>
+							<Select.Item key={option.id} label={option.name} value={option.name} />
 						))}
 					</Select>
 				</Box>
@@ -198,12 +195,9 @@ const ScoreGraph = () => {
 					</Select>
 				</Box>
 			</Wrap>
-			{selectedSong !== undefined &&
-				<Graph
-					songId={selectedSong}
-					since={selectedSinceDate}
-				/>
-			}
+			{selectedSong !== undefined && (
+				<Graph songId={selectedSong} since={selectedSinceDate} />
+			)}
 		</Flex>
 	);
 };

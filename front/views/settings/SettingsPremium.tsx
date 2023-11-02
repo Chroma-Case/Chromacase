@@ -1,6 +1,5 @@
 import API from '../../API';
 import React from 'react';
-import { Flex } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
@@ -21,7 +20,7 @@ const PremiumSettings = () => {
 	const color = colorScheme === 'light' ? '#000' : '#fff';
 	return (
 		<ElementList
-			style={{width: '100%'}}
+			style={{ width: '100%' }}
 			elements={[
 				{
 					icon: <Star1 size="24" color={color} style={{ minWidth: 24 }} />,

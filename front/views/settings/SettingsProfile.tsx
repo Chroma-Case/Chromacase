@@ -1,6 +1,6 @@
 import API from '../../API';
 import React from 'react';
-import { Column, Flex, Toast } from 'native-base';
+import { Column, Toast } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
@@ -10,8 +10,6 @@ import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-reac
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
-import Spacer from '../../components/UI/Spacer';
-import { ColorSchemeProvider } from '../../Theme';
 import useColorScheme from '../../hooks/colorScheme';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
@@ -36,7 +34,7 @@ const ProfileSettings = () => {
 	const colorScheme = useColorScheme();
 	const color = colorScheme === 'light' ? '#000' : '#fff';
 	return (
-		<Column space={4} style={{width: '100%'}}>
+		<Column space={4} style={{ width: '100%' }}>
 			<ElementList
 				elements={[
 					{
@@ -45,7 +43,11 @@ const ProfileSettings = () => {
 						title: translate('settingsProfileTabGoogleSectionTitle'),
 						description: translate('settingsProfileTabGoogleSectionDescription'),
 						data: {
-							text: translate(user.googleID ? 'settingsProfileTabGoogleSectionLinkedText' : 'settingsProfileTabGoogleSectionNotLinkedText')
+							text: translate(
+								user.googleID
+									? 'settingsProfileTabGoogleSectionLinkedText'
+									: 'settingsProfileTabGoogleSectionNotLinkedText'
+							),
 						},
 					},
 					{
@@ -54,20 +56,28 @@ const ProfileSettings = () => {
 						title: translate('settingsProfileTabVerifiedSectionTitle'),
 						description: translate('settingsProfileTabVerifiedSectionDescription'),
 						data: {
-							text: translate(user.emailVerified ? 'settingsProfileTabVerifiedSectionVerifiedText' : 'settingsProfileTabVerifiedSectionNotVerifiedText'),
+							text: translate(
+								user.emailVerified
+									? 'settingsProfileTabVerifiedSectionVerifiedText'
+									: 'settingsProfileTabVerifiedSectionNotVerifiedText'
+							),
 							onPress: user.emailVerified
 								? undefined
 								: () =>
 										API.fetch({ route: '/auth/reverify', method: 'PUT' })
 											.then(() =>
 												Toast.show({
-													description: translate('settingsProfileTabVerifiedSectionVerificationToast')
+													description: translate(
+														'settingsProfileTabVerifiedSectionVerificationToast'
+													),
 												})
 											)
 											.catch((e) => {
 												console.error(e);
 												Toast.show({
-													description: translate('settingsProfileTabVerifiedSectionVerificationToastError')
+													description: translate(
+														'settingsProfileTabVerifiedSectionVerificationToastError'
+													),
 												});
 											}),
 						},
@@ -94,12 +104,18 @@ const ProfileSettings = () => {
 											.then(() => {
 												userQuery.refetch();
 												Toast.show({
-													description: translate('settingsProfileTabAvatarSectionUpdateToast'),
+													description: translate(
+														'settingsProfileTabAvatarSectionUpdateToast'
+													),
 												});
 											})
 											.catch((e) => {
 												console.error(e);
-												Toast.show({ description: translate('settingsProfileTabAvatarSectionUpdateToastError')});
+												Toast.show({
+													description: translate(
+														'settingsProfileTabAvatarSectionUpdateToastError'
+													),
+												});
 											});
 									}
 								});
@@ -125,7 +141,9 @@ const ProfileSettings = () => {
 						icon: <PasswordCheck size="24" color={color} style={{ minWidth: 24 }} />,
 						type: 'sectionDropdown',
 						title: translate('settingsProfileTabChangePasswordSectionTitle'),
-						description: translate('settingsProfileTabChangePasswordSectionDescription'),
+						description: translate(
+							'settingsProfileTabChangePasswordSectionDescription'
+						),
 						data: {
 							value: true,
 							section: [
@@ -140,7 +158,11 @@ const ProfileSettings = () => {
 					},
 				]}
 			/>
-			<LogoutButtonCC isGuest={user.isGuest} style={{with: 'fit-content'}} buttonType={'filled'}/>
+			<LogoutButtonCC
+				isGuest={user.isGuest}
+				style={{ with: 'fit-content' }}
+				buttonType={'filled'}
+			/>
 		</Column>
 	);
 };

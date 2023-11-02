@@ -15,7 +15,7 @@ type CompetenciesTableProps = {
 const CompetenciesTable = (props: CompetenciesTableProps) => {
 	const navigation = useNavigation();
 	return (
-		<Card padding={5} onPress={() => navigation.navigate('User')} shadow={3}>
+		<Card padding={5} onPress={() => navigation.navigate('User', {})} shadow={3}>
 			<HStack space={5} flex={1}>
 				<VStack space={5}>
 					{Object.keys(props).map((competencyName, i) => (
