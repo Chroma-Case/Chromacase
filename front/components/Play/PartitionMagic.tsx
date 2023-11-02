@@ -84,15 +84,17 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		currentCurIdx,
 		pianoCC.timestamp - transitionDuration,
 		(cursor, idx) => {
-			try {
-				console.log(cursor.notes.at(0)!.note);
-				const note = pianoSounds.current![cursor.notes.at(0)!.note]!;
-				note.playAsync();
-				console.log('Got note ' + cursor.notes.at(0)?.note);
-				setTimeout(() => {
-					note.stopAsync();
-				}, cursor.notes.at(0)!.duration)
-			} catch (e) { console.log(e) }
+			cursor.notes.forEach(({ note, duration }) => {
+				try {
+					const sound = pianoSounds.current![note]!;
+					sound.playAsync();
+					setTimeout(() => {
+						sound.stopAsync();
+					}, duration)
+				} catch (e) {
+					console.log(e)
+				}
+			})
 			partitionOffset.value = withTiming(
 				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
 				{
