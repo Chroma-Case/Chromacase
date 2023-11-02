@@ -32,7 +32,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	};
 
 	const glassmorphism = colorScheme === 'light' ? lightGlassmorphism : darkGlassmorphism;
-	const text = colorScheme === 'light' ? darkGlassmorphism : lightGlassmorphism
+	const text = colorScheme === 'light' ? darkGlassmorphism : lightGlassmorphism;
 
 	return (
 		<NativeBaseProvider

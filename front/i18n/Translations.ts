@@ -61,7 +61,6 @@ export const en = {
 	signinLinkLabel: "You don't have an account? ",
 	signinLinkText: 'Sign up for free.',
 
-
 	//music
 	musicTabFavorites: 'Favorites',
 	musicTabRecentlyPlayed: 'Recently Played',
@@ -355,10 +354,10 @@ export const fr: typeof en = {
 	signinLinkText: 'Inscrivez-vous gratuitement',
 
 	//music
-	musicTabFavorites : 'Favoris',
-	musicTabRecentlyPlayed : 'Récemment joué',
-	musicTabStepUp : 'Recommandation',
-	
+	musicTabFavorites: 'Favoris',
+	musicTabRecentlyPlayed: 'Récemment joué',
+	musicTabStepUp: 'Recommandation',
+
 	//search
 	allFilter: 'Tout',
 	artistFilter: 'Artistes',

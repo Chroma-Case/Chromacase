@@ -38,30 +38,34 @@ const LogoutButtonCC = ({
 	const [isVisible, setIsVisible] = useState(false);
 
 	return (
-        <>
-            <ButtonBase
-                style={style}
-                icon={LogoutCurve}
-                title={!collapse ? translate('signOutBtn') : undefined}
-                type={buttonType}
-                onPress={async () => {isGuest ? setIsVisible(true) : dispatch(unsetAccessToken());}}
-            />
-            <PopupCC
-                title={translate('Attention')}
-                description={translate('transformGuestToUserExplanations')}
-                isVisible={isVisible}
-                setIsVisible={setIsVisible}
-            >
-                <SignUpForm onSubmit={handleSubmit} />
-                <ButtonBase
-                    style={!collapse ? { width: '100%' } : {}}
-                    type="outlined"
-                    icon={LogoutCurve}
-                    title={translate('signOutBtn')}
-                    onPress={async () => { dispatch(unsetAccessToken()) }}
-                />  
-            </PopupCC>
-        </>
+		<>
+			<ButtonBase
+				style={style}
+				icon={LogoutCurve}
+				title={!collapse ? translate('signOutBtn') : undefined}
+				type={buttonType}
+				onPress={async () => {
+					isGuest ? setIsVisible(true) : dispatch(unsetAccessToken());
+				}}
+			/>
+			<PopupCC
+				title={translate('Attention')}
+				description={translate('transformGuestToUserExplanations')}
+				isVisible={isVisible}
+				setIsVisible={setIsVisible}
+			>
+				<SignUpForm onSubmit={handleSubmit} />
+				<ButtonBase
+					style={!collapse ? { width: '100%' } : {}}
+					type="outlined"
+					icon={LogoutCurve}
+					title={translate('signOutBtn')}
+					onPress={async () => {
+						dispatch(unsetAccessToken());
+					}}
+				/>
+			</PopupCC>
+		</>
 	);
 };
 

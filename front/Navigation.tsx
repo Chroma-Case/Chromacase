@@ -13,7 +13,7 @@ import { Translate, translate } from './i18n/i18n';
 import SongLobbyView from './views/SongLobbyView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
-import SetttingsNavigator from './views/settings/SettingsView';
+import SettingsTab from './views/settings/SettingsView';
 import { useQuery } from './Queries';
 import API, { APIError } from './API';
 import PlayView from './views/PlayView';
@@ -58,7 +58,7 @@ const protectedRoutes = () =>
 		},
 		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
 		Settings: {
-			component: SetttingsNavigator,
+			component: SettingsTab,
 			options: { headerShown: false },
 			link: '/settings/:screen?',
 			stringify: {

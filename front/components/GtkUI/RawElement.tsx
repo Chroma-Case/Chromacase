@@ -22,7 +22,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 	const isSmallScreen = screenSize === 'small';
 	const { width: screenWidth } = useWindowDimensions();
 	const colorScheme = useColorScheme();
-	const color = colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
+	const color = colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)';
 
 	return (
 		<Column

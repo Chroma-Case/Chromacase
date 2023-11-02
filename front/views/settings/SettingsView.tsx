@@ -66,7 +66,7 @@ const getTabData = (key: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const SetttingsNavigator = (props: RouteProps<{}>) => {
+const SettingsTab = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
 	const colorScheme = useColorScheme();
@@ -148,4 +148,4 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 	);
 };
 
-export default SetttingsNavigator;
+export default SettingsTab;

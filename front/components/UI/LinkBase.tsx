@@ -48,28 +48,30 @@ const LinkBase: React.FC<LinkBaseProps> = ({ text, onPress }) => {
 		}).start();
 	};
 
-    return (
-        <TouchableOpacity
-            style={styles.container}
-            onPress={onPress}
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-        >
-            <Column>
-                <Text>{text}</Text>
-                <Animated.View style={[
-                    styles.underline,
-                    {
-                        backgroundColor: theme.colors.primary[300],
-                        height: underlineHeight,
-                        opacity: opacity
-                    }
-                ]}/>
-            </Column>
-        </TouchableOpacity>
-    );
+	return (
+		<TouchableOpacity
+			style={styles.container}
+			onPress={onPress}
+			onPressIn={handlePressIn}
+			onPressOut={handlePressOut}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+		>
+			<Column>
+				<Text>{text}</Text>
+				<Animated.View
+					style={[
+						styles.underline,
+						{
+							backgroundColor: theme.colors.primary[300],
+							height: underlineHeight,
+							opacity: opacity,
+						},
+					]}
+				/>
+			</Column>
+		</TouchableOpacity>
+	);
 };
 
 const styles = StyleSheet.create({

@@ -91,7 +91,11 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 				}}
 			>
 				<View style={!isSmallScreen ? { width: '100%' } : {}}>
-					<Row space={2} flex={1} style={{ justifyContent: isSmallScreen ? 'center' : 'flex-start' }}>
+					<Row
+						space={2}
+						flex={1}
+						style={{ justifyContent: isSmallScreen ? 'center' : 'flex-start' }}
+					>
 						<Image
 							source={{ uri: props.logo }}
 							style={{

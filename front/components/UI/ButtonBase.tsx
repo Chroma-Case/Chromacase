@@ -127,7 +127,13 @@ const ButtonBase: React.FC<ButtonProps> = ({
 					{icon && (
 						<MyIcon
 							size={'18'}
-							color={type === 'outlined' ? colors.primary[300] : colorScheme === 'dark' || type === 'filled' ? '#FFFFFF' : colors.black[500] }
+							color={
+								type === 'outlined'
+									? colors.primary[300]
+									: colorScheme === 'dark' || type === 'filled'
+									? '#FFFFFF'
+									: colors.black[500]
+							}
 							variant={iconVariant}
 						/>
 					)}
