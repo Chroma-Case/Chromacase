@@ -15,6 +15,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 		700: 'rgba(255,255,255,0.7)',
 		800: 'rgba(255,255,255,0.8)',
 		900: 'rgba(255,255,255,0.9)',
+		1000: 'rgba(255,255,255,1)',
 	};
 	const darkGlassmorphism = {
 		50: 'rgba(16,16,20,0.05)',
@@ -27,11 +28,15 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 		700: 'rgba(16,16,20,0.7)',
 		800: 'rgba(16,16,20,0.8)',
 		900: 'rgba(16,16,20,0.9)',
+		1000: 'rgba(16,16,20,1)',
 	};
 
 	const glassmorphism = colorScheme === 'light'
 		? lightGlassmorphism
 		: darkGlassmorphism
+	const text = colorScheme === 'light'
+		? darkGlassmorphism
+		: lightGlassmorphism
 
 	return (
 		<NativeBaseProvider
@@ -46,6 +51,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 					mono: 'Lexend',
 				},
 				colors: {
+					text: text,
 					primary: {
 						50: '#eff1fe',
 						100: '#e7eafe',

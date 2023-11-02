@@ -61,6 +61,12 @@ export const en = {
 	signinLinkLabel: "You don't have an account? ",
 	signinLinkText: 'Sign up for free.',
 
+
+	//music
+	musicTabFavorites: 'Favorites',
+	musicTabRecentlyPlayed: 'Recently Played',
+	musicTabStepUp: 'Recommendation',
+
 	//search
 	allFilter: 'All',
 	artistFilter: 'Artists',
@@ -337,6 +343,11 @@ export const fr: typeof en = {
 	signinLinkLabel: "Vous n'avez pas de compte ? ",
 	signinLinkText: 'Inscrivez-vous gratuitement',
 
+	//music
+	musicTabFavorites : 'Favoris',
+	musicTabRecentlyPlayed : 'Récemment joué',
+	musicTabStepUp : 'Recommandation',
+	
 	//search
 	allFilter: 'Tout',
 	artistFilter: 'Artistes',
@@ -621,6 +632,11 @@ export const sp: typeof en = {
 	signinPageParagraph: "Continúa con Google o introduce tus datos.",
 	signinLinkLabel: "¿No tienes una cuenta? ",
 	signinLinkText: "Regístrate gratis.",
+
+	//music
+	musicTabFavorites: 'Favoritos',
+	musicTabRecentlyPlayed: 'Jugado recientemente',
+	musicTabStepUp: 'Recomendación',
 
 	//search
 	allFilter: 'Todos',

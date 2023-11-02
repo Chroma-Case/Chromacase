@@ -63,7 +63,7 @@ const LinkBase: React.FC<LinkBaseProps> = ({ text, onPress }) => {
                 <Animated.View style={[
                     styles.underline,
                     {
-                        backgroundColor: theme.colors.primary[400],
+                        backgroundColor: theme.colors.primary[300],
                         height: underlineHeight,
                         opacity: opacity
                     }

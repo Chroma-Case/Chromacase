@@ -12,6 +12,7 @@ type ScaffoldMobileCCProps = {
 	user: User;
 	logo: string;
 	routeName: string;
+	widthPadding: number;
 	menu: {
 		type: "main" | "sub";
 		title: string;
@@ -32,14 +33,14 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 			<ScrollView
 				style={{
 					flex: 1,
-					maxHeight: '100vh',
+					maxHeight: '100%',
 					flexDirection: 'column',
 					flexShrink: 0,
-					padding: 16
+					padding: props.widthPadding ? 8 : 0
 				}}
 				contentContainerStyle={{ flex: 1 }}
 			>
-				<View style={{ flex: 1, minHeight: 'fit-content' }}>
+				<View style={{ flex: 1 }}>
 					{props.children}
 				</View>
 				<Spacer/>

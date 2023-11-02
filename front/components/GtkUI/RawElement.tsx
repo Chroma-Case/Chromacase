@@ -10,6 +10,7 @@ import {
 } from './ElementTypes';
 import { ArrowDown2 } from 'iconsax-react-native';
 import { useWindowDimensions } from 'react-native';
+import useColorScheme from '../../hooks/colorScheme';
 
 type RawElementProps = {
 	element: ElementProps;
@@ -20,6 +21,9 @@ export const RawElement = ({ element }: RawElementProps) => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';
 	const { width: screenWidth } = useWindowDimensions();
+	const colorScheme = useColorScheme();
+	const color = colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
+
 	return (
 		<Column
 			style={{
@@ -122,7 +126,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 								case 'custom':
 									return data;
 								case 'sectionDropdown':
-									return <ArrowDown2 size="24" color="#fff" variant="Outline" />;
+									return <ArrowDown2 size="24" color={color} variant="Outline" />;
 								default:
 									return <Text>Unknown type</Text>;
 							}

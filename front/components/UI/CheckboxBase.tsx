@@ -56,13 +56,13 @@ const CheckboxBase: React.FC<CheckboxProps> = ({ title, color, style, check, set
 				{check ? (
 					<TickSquare
 						size="24"
-						color={color ?? colors.primary[400]}
+						color={color ?? colors.primary[300]}
 						variant="Bold"
 					/>
 				) : (
 					<AddSquare
 						size="24"
-						color={color ?? colors.primary[400]}
+						color={color ?? colors.primary[300]}
 						variant="Outline"
 					/>
 				)}

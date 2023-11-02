@@ -87,11 +87,11 @@ const SetttingsNavigator = (props: RouteProps<{}>) => {
 			style={{
 				backgroundColor: 'transparent',
 				borderBottomWidth: 1,
-				borderColor: colors.primary[500],
+				borderColor: colors.primary[300],
 			}}
 			activeColor={ colorScheme === 'light' ? '#000' : '#fff'}
 			inactiveColor={ colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
-			indicatorStyle={{ backgroundColor: colors.primary[500] }}
+			indicatorStyle={{ backgroundColor: colors.primary[300] }}
 			renderIcon={(
 				scene: Scene<Route> & {
 					focused: boolean;

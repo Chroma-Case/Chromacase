@@ -93,14 +93,13 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 				}}
 			>
 				<View style={!isSmallScreen ? { width: '100%' } : {}}>
-					<Row space={2} flex={1} style={{ justifyContent: 'center' }}>
+					<Row space={2} flex={1} style={{ justifyContent: isSmallScreen ? 'center' : 'flex-start' }}>
 						<Image
 							source={{ uri: props.logo }}
 							style={{
 								aspectRatio: 1,
 								width: 32,
 								height: 32,
-								alignItems: isSmallScreen ? 'center' : 'flex-start',
 							}}
 						/>
 						{!isSmallScreen &&
@@ -171,7 +170,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 						/>
 					))}
 					<Spacer height='xs'/>
-					<LogoutButtonCC collapse={!isSmallScreen} isGuest={props.user.isGuest} style={!isSmallScreen ? { width: '100%' } : {}} buttonType={'menu'}/>
+					<LogoutButtonCC collapse={isSmallScreen} isGuest={props.user.isGuest} style={!isSmallScreen ? { width: '100%' } : {}} buttonType={'menu'}/>
 				</View>
 			</View>
 			<ScrollView

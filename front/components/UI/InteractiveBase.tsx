@@ -219,7 +219,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	};
 
 	const animatedStyle = {
-		backgroundColor: isOutlined ? colors.coolGray[200] : backgroundColorValue,
+		backgroundColor: isOutlined ? colors.coolGray[100] : backgroundColorValue,
 		borderColor: isOutlined ? backgroundColorValue : 'transparent',
 		borderWidth: 2,
 		transform: [{ scale: scaleValue }],
@@ -229,7 +229,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	};
 
 	const disableStyle = {
-		backgroundColor: isOutlined ? colors.coolGray[200] : styleAnimate.Disabled.backgroundColor,
+		backgroundColor: isOutlined ? colors.coolGray[100] : styleAnimate.Disabled.backgroundColor,
 		borderColor: isOutlined ? styleAnimate.Disabled.backgroundColor : 'transparent',
 		borderWidth: 2,
 		scale: styleAnimate.Disabled.scale,

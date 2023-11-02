@@ -34,6 +34,7 @@ import SignupView from './views/SignupView';
 import PasswordResetView from './views/PasswordResetView';
 import ForgotPasswordView from './views/ForgotPasswordView';
 import DiscoveryView from './views/V2/DiscoveryView';
+import MusicView from './views/MusicView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -44,6 +45,11 @@ const protectedRoutes = () =>
 			component: HomeView,
 			options: { headerShown: false },
 			link: '/',
+		},
+		Music: {
+			component: MusicView,
+			options: { headerShown: false },
+			link: '/music',
 		},
 		HomeNew: {
 			component: DiscoveryView,
@@ -99,11 +105,6 @@ const protectedRoutes = () =>
 
 const publicRoutes = () =>
 	({
-		// Start: {
-		// 	component: StartPageView,
-		// 	options: { title: 'Chromacase', headerShown: false },
-		// 	link: '/',
-		// },
 		Login: {
 			component: SigninView,
 			options: { title: translate('signInBtn'), headerShown: false },

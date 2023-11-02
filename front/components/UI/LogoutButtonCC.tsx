@@ -39,7 +39,7 @@ const LogoutButtonCC = ({collapse = false, isGuest = false, buttonType = 'menu',
             <ButtonBase
                 style={style}
                 icon={LogoutCurve}
-                title={collapse ? translate('signOutBtn') : undefined}
+                title={!collapse ? translate('signOutBtn') : undefined}
                 type={buttonType}
                 onPress={async () => {isGuest ? setIsVisible(true) : dispatch(unsetAccessToken());}}
             />

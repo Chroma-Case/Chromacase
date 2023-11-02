@@ -38,28 +38,28 @@ const ButtonBase: React.FC<ButtonProps> = ({
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: colors.primary[400],
+			backgroundColor: colors.primary[300],
 		},
 		onHover: {
 			scale: 1.02,
 			shadowOpacity: 0.37,
 			shadowRadius: 7.49,
 			elevation: 12,
-			backgroundColor: colors.primary[500],
+			backgroundColor: colors.primary[400],
 		},
 		onPressed: {
 			scale: 0.98,
 			shadowOpacity: 0.23,
 			shadowRadius: 2.62,
 			elevation: 4,
-			backgroundColor: colors.primary[600],
+			backgroundColor: colors.primary[500],
 		},
 		Disabled: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: colors.primary[400],
+			backgroundColor: colors.primary[300],
 		},
 	});
 
@@ -115,7 +115,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 				<ActivityIndicator
 					style={styles.content}
 					size="small"
-					color={type === 'outlined' ? '#6075F9' : '#FFFFFF'}
+					color={type === 'outlined' ? colors.primary[300] : '#FFFFFF'}
 				/>
 			) : (
 				<View
@@ -127,7 +127,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 					{icon && (
 						<MyIcon
 							size={'18'}
-							color={type === 'outlined' ? '#6075F9' : colorScheme === 'dark' || type === 'filled' ? '#FFFFFF' : colors.black[500] }
+							color={type === 'outlined' ? colors.primary[300] : colorScheme === 'dark' || type === 'filled' ? '#FFFFFF' : colors.black[500] }
 							variant={iconVariant}
 						/>
 					)}
