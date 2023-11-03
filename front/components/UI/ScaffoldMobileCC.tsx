@@ -36,6 +36,7 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 					flex: 1,
 					maxHeight: '100%',
 					flexDirection: 'column',
+					backgroundColor: '#f00',
 					flexShrink: 0,
 					padding: props.widthPadding ? 8 : 0,
 				}}

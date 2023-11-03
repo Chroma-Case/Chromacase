@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 /**
  * Props for the MusicItem component.
  */
-interface MusicItemProps {
+export interface MusicItemType {
 	/** The artist's name. */
 	artist: string;
 
@@ -90,7 +90,7 @@ function useNumberFormatter() {
  * - The number formatting for `level`, `lastScore`, and `bestScore` adapts automatically based on the user's language preference using the i18n module.
  * - Given its optimized performance characteristics, this component is suitable for rendering in lists with potentially hundreds of items.
  */
-function MusicItemComponent(props: MusicItemProps) {
+function MusicItemComponent(props: MusicItemType) {
 	// Accessing theme colors and breakpoint values for responsive design
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'md', xl: 'xl' });
