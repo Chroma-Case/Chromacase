@@ -43,7 +43,7 @@ import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/re
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
-import { Metronome } from '../components/Metronome';
+import { MetronomeControls } from '../components/Metronome';
 import PartitionMagic from '../components/Play/PartitionMagic';
 import StarProgress from '../components/StarProgress';
 
@@ -378,6 +378,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				flexDirection: 'column',
 				padding: 20,
 				position: 'relative',
+				backgroundColor: 'rgb(26, 36, 74)',
 			}}
 		>
 			<View
@@ -480,10 +481,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				{!partitionRendered && <LoadingComponent />}
 			</View>
 
-			<Metronome paused={paused} bpm={bpm.current} />
 			<Row
 				justifyContent="space-between"
 				style={{
+					display: 'flex',
 					flexGrow: 0,
 					flexShrink: 0,
 					alignItems: 'center',
@@ -498,7 +499,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				<View
 					style={{
 						flexGrow: 0,
-						flexShrink: 0,
+						flexShrink: 3,
 						justifyContent: 'center',
 						alignItems: 'center',
 						marginRight: 40,
@@ -509,25 +510,40 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							display: 'flex',
 							flexDirection: 'row',
 							gap: 20,
+							maxWidth: '100%',
 						}}
 					>
-						<Image src={song.data.cover} alt="cover" size={'sm'} borderRadius={8} />
+						<Image
+							src={song.data.cover}
+							alt="cover"
+							size={'sm'}
+							borderRadius={8}
+							style={{
+								flexShrink: 0,
+							}}
+						/>
 						<View
 							style={{
 								display: 'flex',
 								flexDirection: 'column',
 								justifyContent: 'center',
 								gap: 8,
+								flex: 1,
 							}}
 						>
-							<Text fontSize={14}>{song.data.name}</Text>
-							<Text fontSize={12}>{song.data.artistId}</Text>
+							<Text fontSize={14} maxW={'100%'} isTruncated>
+								{song.data.name}
+							</Text>
+							<Text fontSize={12} maxW={'100%'} isTruncated>
+								{song.data.artistId}
+							</Text>
 						</View>
 					</View>
 				</View>
 				<View
 					style={{
 						flexGrow: 1,
+						flexShrink: 0,
 						display: 'flex',
 						flexDirection: 'row',
 						justifyContent: 'center',
@@ -547,6 +563,19 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							}
 						}}
 					/>
+					{midiKeyboardFound && (
+						<>
+							<IconButton
+								size="sm"
+								colorScheme="coolGray"
+								variant="solid"
+								icon={<Icon as={Ionicons} name="stop" />}
+								onPress={() => {
+									onEnd();
+								}}
+							/>
+						</>
+					)}
 					<Text>
 						{time < 0
 							? paused
@@ -568,31 +597,22 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							flexShrink: 1,
 							marginTop: 10,
 							marginBottom: 10,
+							minWidth: 200,
 						}}
 					/>
 				</View>
 				<View
 					style={{
-						flexGrow: 0,
-						flexShrink: 0,
+						flex: 1,
 						justifyContent: 'space-evenly',
 						alignItems: 'center',
+						flexDirection: 'row',
 						marginLeft: 40,
+						maxWidth: 250,
+						minWidth: 120,
 					}}
 				>
-					{midiKeyboardFound && (
-						<>
-							<IconButton
-								size="sm"
-								colorScheme="coolGray"
-								variant="solid"
-								icon={<Icon as={Ionicons} name="stop" />}
-								onPress={() => {
-									onEnd();
-								}}
-							/>
-						</>
-					)}
+					<MetronomeControls paused={paused} bpm={bpm.current} />
 				</View>
 			</Row>
 		</SafeAreaView>

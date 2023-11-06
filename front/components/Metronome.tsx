@@ -1,37 +1,63 @@
-import { useEffect, useRef } from 'react';
-import { Slider, Switch, Text, View } from 'native-base';
+import { useEffect, useRef, useState } from 'react';
+import { Slider, Text, View, IconButton, Icon } from 'native-base';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export const Metronome = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
+export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
 	const ref = useRef<HTMLAudioElement | null>(null);
-	const enabled = useRef<boolean>(false);
-	const volume = useRef<number>(50);
+	const [enabled, setEnabled] = useState<boolean>(false);
+	const [volume, setVolume] = useState<number>(50);
 
 	useEffect(() => {
 		if (paused) return;
 		const int = setInterval(() => {
-			if (!enabled.current) return;
+			if (!enabled) return;
 			if (!ref.current) ref.current = new Audio('/assets/metronome.mp3');
-			ref.current.volume = volume.current / 100;
+			ref.current.volume = volume / 100;
 			ref.current.play();
 		}, 60000 / bpm);
 		return () => clearInterval(int);
 	}, [bpm, paused]);
 	return (
-		<View>
-			<Text>Metronome Settings</Text>
-			<Text>Enabled:</Text>
-			<Switch value={enabled.current} onToggle={() => (enabled.current = !enabled.current)} />
-			<Text>Volume:</Text>
-			<Slider
-				maxWidth={'500px'}
-				value={volume.current}
-				onChange={(x) => (volume.current = x)}
+		<View flex={1}>
+			<View
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+				}}
 			>
-				<Slider.Track>
-					<Slider.FilledTrack />
-				</Slider.Track>
-				<Slider.Thumb />
-			</Slider>
+				<Text>Métronome</Text>
+				<Icon as={<MaterialCommunityIcons name="metronome" size={24} color="white" />} />
+			</View>
+			<View
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+				}}
+			>
+				<IconButton
+					icon={
+						<Ionicons
+							name={enabled ? 'volume-high-outline' : 'volume-mute-outline'}
+							size={24}
+							color="white"
+						/>
+					}
+					onPress={() => setEnabled(!enabled)}
+				/>
+				<Slider
+					maxWidth={'500px'}
+					flex={1}
+					defaultValue={volume}
+					onChange={(x) => setVolume(x)}
+				>
+					<Slider.Track>
+						<Slider.FilledTrack />
+					</Slider.Track>
+					<Slider.Thumb />
+				</Slider>
+			</View>
 		</View>
 	);
 };
