@@ -17,7 +17,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 			ref.current.play();
 		}, 60000 / bpm);
 		return () => clearInterval(int);
-	}, [bpm, paused]);
+	}, [bpm, paused, enabled, volume]);
 	return (
 		<View flex={1}>
 			<View
