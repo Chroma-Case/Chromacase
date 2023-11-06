@@ -13,12 +13,15 @@ export const SongCursorInfosValidator = yup.object({
 				height: yup.number().required(),
 				timestamp: yup.number().required(),
 				timing: yup.number().required(),
-				note: yup
-					.object({
-						note: yup.number().required(),
-						gain: yup.number().required(),
-						duration: yup.number().required(),
-					})
+				notes: yup
+					.array()
+					.of(
+						yup.object({
+							note: yup.number().required(),
+							gain: yup.number().required(),
+							duration: yup.number().required(),
+						})
+					)
 					.required(),
 			})
 		)
@@ -39,11 +42,11 @@ export const SongCursorInfosHandler: ResponseHandler<
 			height: cursor.height,
 			timestamp: cursor.timestamp,
 			timing: cursor.timing,
-			note: {
-				note: cursor.note.note,
-				gain: cursor.note.gain,
-				duration: cursor.note.duration,
-			},
+			notes: cursor.notes.map((n) => ({
+				note: n.note,
+				gain: n.gain,
+				duration: n.duration,
+			})),
 		})),
 	}),
 };
@@ -55,11 +58,11 @@ export interface CursorInfoItem {
 	height: number;
 	timestamp: number;
 	timing: number;
-	note: {
+	notes: {
 		note: number;
 		gain: number;
 		duration: number;
-	};
+	}[];
 }
 
 export interface SongCursorInfos {
