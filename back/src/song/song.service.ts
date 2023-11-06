@@ -6,7 +6,7 @@ import { generateSongAssets } from "src/assetsgenerator/generateImages_browserle
 @Injectable()
 export class SongService {
 	// number is the song id
-	private readonly assetCreationTasks: Map<number, Promise<void>>;
+	private assetCreationTasks: Map<number, Promise<void>>;
 	constructor(private prisma: PrismaService) {
 		this.assetCreationTasks = new Map();
 	}
