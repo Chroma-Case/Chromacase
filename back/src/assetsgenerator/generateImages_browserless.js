@@ -157,12 +157,6 @@ export async function generateSongAssets(
 	eval(`import("cross-blob")`).then((module) => {
 		Blob = module.default;
 	});
-	try {
-		let e = require("canvas")
-		console.log(e, "pass");
-	} catch (e) {
-		console.log(e);
-	}
 	debug("" + sampleDir + " " + imageDir + " " + imageFormat);
 
 	if (!mode) {

@@ -16,8 +16,9 @@ export type ParitionMagicProps = {
 };
 
 const getSVGURL = (songID: number) => {
-	// return 'https://cdn.discordapp.com/attachments/717080637038788731/1162519992722530354/Short.mxl_1.svg?ex=653c3c1c&is=6529c71c&hm=1788e4abe532f4a2af8c24cae6dadcfde369eaf58322f051ecd1d9110d8b699a&';
-	return 'https://cdn.discordapp.com/attachments/717080637038788731/1161704545785757816/4.svg?ex=653944ab&is=6526cfab&hm=2416ee2cb414cc42fa9de8af58b8db544479d35f13393d76f02e8d9fe27aff45&';
+	return API.getPartitionSvgUrl(songID);
+	return 'https://cdn.discordapp.com/attachments/717080637038788731/1162519992722530354/Short.mxl_1.svg?ex=653c3c1c&is=6529c71c&hm=1788e4abe532f4a2af8c24cae6dadcfde369eaf58322f051ecd1d9110d8b699a&';
+	// return 'https://cdn.discordapp.com/attachments/717080637038788731/1161704545785757816/4.svg?ex=653944ab&is=6526cfab&hm=2416ee2cb414cc42fa9de8af58b8db544479d35f13393d76f02e8d9fe27aff45&';
 };
 
 const SVGContainer = ({
@@ -96,7 +97,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		}
 	}, [isLoading, isError]);
 
-	const transitionDuration = 75;
+	const transitionDuration = 200;
 
 	getCursorToPlay(
 		data?.cursors ?? [],
@@ -144,6 +145,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 							left: `${partitionOffset.value * 100}%`,
 						}}
 					>
+						{!isLoading && !isError && (
 						<ImageBackground
 							source={{ uri: getSVGURL(songID) }}
 							onLoad={onReady}
@@ -153,6 +155,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 								position: 'relative',
 							}}
 						/>
+						)}
 					</Animated.View>
 					<Animated.View
 						style={{

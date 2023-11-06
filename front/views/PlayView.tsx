@@ -1,7 +1,16 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useRef, useState, createContext, useReducer } from 'react';
-import { SafeAreaView, Platform, Animated } from 'react-native';
+import { SafeAreaView, Platform } from 'react-native';
+import Animated, {
+	BounceIn,
+	useSharedValue,
+	withTiming,
+	Easing,
+	useAnimatedStyle,
+	withSequence,
+	withDelay,
+} from 'react-native-reanimated';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {
 	Box,
@@ -15,6 +24,7 @@ import {
 	Icon,
 	HStack,
 	Image,
+	PresenceTransition,
 } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons } from '@expo/vector-icons';
@@ -79,6 +89,27 @@ export const PianoCC = createContext<PianoCanvasContext>({
 	messages: [],
 });
 
+const infoCardInfos = [
+	{
+		icon: <Ionicons name="timer-outline" size={18} color="#6075F9" />,
+		label: 'Last Score',
+		id: 'lastScore',
+		value: 60,
+	},
+	{
+		icon: <Ionicons name="trophy-outline" size={18} color="#6075F9" />,
+		label: 'Best Score',
+		id: 'bestScore',
+		value: 60,
+	},
+	{
+		icon: <Ionicons name="bar-chart-outline" size={18} color="#6075F9" />,
+		label: 'Level',
+		id: 'level',
+		value: 3,
+	},
+] as const;
+
 const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -92,7 +123,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [time, setTime] = useState(0);
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
-	const fadeAnim = useRef(new Animated.Value(0)).current;
+	// const fadeAnim = useRef(new Animated.Value(0)).current;
 	const musixml = useQuery(
 		transformQuery(API.getSongMusicXML(songId), (data) => new TextDecoder().decode(data)),
 		{ staleTime: Infinity }
@@ -108,27 +139,14 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		},
 		[]
 	);
-
-	const infoCardInfos = [
-		{
-			icon: <Ionicons name="timer-outline" size={18} color="#6075F9" />,
-			label: 'Last Score',
-			id: 'lastScore',
-			value: 60,
-		},
-		{
-			icon: <Ionicons name="trophy-outline" size={18} color="#6075F9" />,
-			label: 'Best Score',
-			id: 'bestScore',
-			value: 60,
-		},
-		{
-			icon: <Ionicons name="bar-chart-outline" size={18} color="#6075F9" />,
-			label: 'Level',
-			id: 'level',
-			value: 3,
-		},
-	] as const;
+	const [streak, setStreak] = useState(0);
+	const scoreMessageScale = useSharedValue(0);
+	// this style should bounce in on enter and fade away
+	const scoreMsgStyle = useAnimatedStyle(() => {
+		return {
+			transform: [{ scale: scoreMessageScale.value }],
+		};
+	});
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -234,7 +252,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						type: 'noteTiming',
 						data: NoteTiming.Missed,
 					});
-					messageColor = 'black';
+					messageColor = 'white';
 				} else if (data.type == 'timing' || data.type == 'duration') {
 					formattedMessage = translate(data[data.type]);
 					switch (data[data.type]) {
@@ -324,12 +342,19 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}, []);
 	useEffect(() => {
 		if (lastScoreMessage) {
-			fadeAnim.setValue(1);
-			Animated.timing(fadeAnim, {
-				toValue: 0,
-				duration: 3000,
-				useNativeDriver: true,
-			}).start();
+			scoreMessageScale.value = withSequence(
+				withTiming(1, {
+					duration: 400,
+					easing: Easing.elastic(3),
+				}),
+				withDelay(
+					700,
+					withTiming(0, {
+						duration: 300,
+						easing: Easing.out(Easing.cubic),
+					})
+				)
+			);
 		}
 	}, [lastScoreMessage]);
 	useEffect(() => {
@@ -408,20 +433,24 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 				<View>
 					<Text fontSize={24}>{score}</Text>
 				</View>
-				<View
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						gap: 7,
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}
-				>
-					<Text fontSize={20}>Cool</Text>
-					<Text fontSize={15} bold>
-						x1
-					</Text>
-				</View>
+				<Animated.View style={[scoreMsgStyle]}>
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							gap: 7,
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<Text fontSize={20} color={'white'}>
+							{lastScoreMessage?.content}
+						</Text>
+						<Text fontSize={15} bold>
+							{streak > 0 && `x${streak}`}
+						</Text>
+					</View>
+				</Animated.View>
 			</View>
 			<View
 				style={{
@@ -531,7 +560,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 									.padStart(2, '0')}`}
 					</Text>
 					<StarProgress
-						value={60}
+						value={score}
 						max={100}
 						starSteps={[50, 75, 90]}
 						style={{
@@ -541,7 +570,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							marginBottom: 10,
 						}}
 					/>
-					<Text>2:30</Text>
 				</View>
 				<View
 					style={{
