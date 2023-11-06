@@ -390,9 +390,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					flexDirection: 'row',
 					gap: 20,
 					borderRadius: 12,
-					backgroundColor: 'rgba(16, 16, 20, 0.5)',
+					backgroundColor: 'rgba(16, 16, 20, 0.7)',
 					padding: 10,
 					paddingHorizontal: 20,
+					zIndex: 100,
 				}}
 			>
 				{infoCardInfos.map((info) => (
@@ -423,15 +424,26 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			</View>
 			<View
 				style={{
+					top: "5%",
+					left: 0,
+					zIndex: 100,
 					width: '100%',
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'center',
 					alignItems: 'center',
 					gap: 3,
+					position: 'absolute',
 				}}
 			>
-				<View>
+				<View
+					style={{
+						backgroundColor: 'rgba(16, 16, 20, 0.8)',
+						paddingHorizontal: 20,
+						paddingVertical: 5,
+						borderRadius: 12,
+					}}
+				>
 					<Text fontSize={24}>{score}</Text>
 				</View>
 				<Animated.View style={[scoreMsgStyle]}>
@@ -442,6 +454,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							gap: 7,
 							justifyContent: 'center',
 							alignItems: 'center',
+							backgroundColor: 'rgba(16, 16, 20, 0.8)',
+							paddingHorizontal: 20,
+							paddingVertical: 5,
+							borderRadius: 12,
 						}}
 					>
 						<Text fontSize={20} color={'white'}>
