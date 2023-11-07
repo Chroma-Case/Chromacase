@@ -10,7 +10,7 @@ export type ButtonType = 'filled' | 'outlined' | 'menu';
 interface ButtonProps {
 	title?: string;
 	style?: StyleProp<ViewStyle>;
-	onPress?: () => Promise<void>;
+	onPress?: () => void | Promise<void>;
 	isDisabled?: boolean;
 	icon?: Icon;
 	iconVariant?: 'Bold' | 'Outline';

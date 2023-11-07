@@ -36,13 +36,12 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 					flex: 1,
 					maxHeight: '100%',
 					flexDirection: 'column',
-					backgroundColor: '#f00',
 					flexShrink: 0,
 					padding: props.widthPadding ? 8 : 0,
 				}}
 				contentContainerStyle={{ flex: 1 }}
 			>
-				<View style={{ flex: 1 }}>{props.children}</View>
+				<View>{props.children}</View>
 				<Spacer />
 			</ScrollView>
 			<View style={{ padding: 8, paddingTop: 0 }}>

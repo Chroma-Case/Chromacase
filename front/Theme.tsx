@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	const colorScheme = useColorScheme();
 	const lightGlassmorphism = {
-		50: 'rgba(255,255,255,0.05)',
+		50: 'rgba(255,255,255,0.9)',
 		100: 'rgba(255,255,255,0.1)',
 		200: 'rgba(255,255,255,0.2)',
 		300: 'rgba(255,255,255,0.3)',
@@ -18,7 +18,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 		1000: 'rgba(255,255,255,1)',
 	};
 	const darkGlassmorphism = {
-		50: 'rgba(16,16,20,0.05)',
+		50: 'rgba(16,16,20,0.9)',
 		100: 'rgba(16,16,20,0.1)',
 		200: 'rgba(16,16,20,0.2)',
 		300: 'rgba(16,16,20,0.3)',

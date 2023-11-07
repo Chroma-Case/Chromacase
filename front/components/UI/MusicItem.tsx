@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useMemo, memo } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ViewStyle, Image } from 'react-native';
 import { Column, HStack, Row, Stack, Text, useBreakpointValue, useTheme } from 'native-base';
 import { HeartAdd, HeartRemove, Play } from 'iconsax-react-native';
-import { Image } from 'react-native';
 import IconButton from './IconButton';
 import Spacer from '../../components/UI/Spacer';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +31,9 @@ export interface MusicItemType {
 
 	/** Indicates whether the song is liked/favorited by the user. */
 	liked: boolean;
+
+	/** Custom style for the container.  */
+	style?: ViewStyle | ViewStyle[];
 
 	/** Callback function triggered when the like button is pressed. */
 	onLike: () => void;
@@ -144,7 +146,7 @@ function MusicItemComponent(props: MusicItemType) {
 	const formattedBestScore = useMemo(() => formatNumber(props.bestScore), [props.bestScore]);
 
 	return (
-		<HStack space={screenSize === 'xl' ? 2 : 1} style={styles.container}>
+		<HStack space={screenSize === 'xl' ? 2 : 1} style={[styles.container, props.style]}>
 			<Stack style={{ position: 'relative', overflow: 'hidden' }}>
 				<IconButton
 					containerStyle={styles.playButtonContainer}

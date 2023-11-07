@@ -24,41 +24,8 @@ import useColorScheme from '../hooks/colorScheme';
 import { RouteProps } from '../Navigation';
 import { translate } from '../i18n/i18n';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
-import MusicItem from '../components/UI/MusicItem';
+import MusicItem, { MusicItemType } from '../components/UI/MusicItem';
 import MusicList from '../components/UI/MusicList';
-
-interface MusicItemTitleProps {
-	text: string;
-	icon: Icon;
-	isBigScreen: boolean;
-}
-
-const MusicItemTitle = (props: MusicItemTitleProps) => {
-	const colorScheme = useColorScheme();
-
-	return (
-		<Row
-			style={{
-				display: 'flex',
-				flex: 1,
-				maxWidth: props.isBigScreen ? 150 : 50,
-				height: '100%',
-				alignItems: 'center',
-				justifyContent: props.isBigScreen ? 'flex-end' : 'center',
-			}}
-		>
-			{props.isBigScreen && (
-				<Text fontSize="lg" style={{ paddingRight: 8 }}>
-					{props.text}
-				</Text>
-			)}
-			<props.icon
-				size={18}
-				color={colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
-			/>
-		</Row>
-	);
-};
 
 // Fichier de données fictives, par exemple MusicData.ts
 export const fakeMusicData = [
@@ -208,35 +175,14 @@ export const FavoritesMusic = () => {
 	const isBigScreen = screenSize === 'xl';
 
 	return (
-		<Stack style={{ gap: 2, borderRadius: 10, overflow: 'hidden' }}>
-			<HStack
-				space={isSmallScreen ? 1 : 2}
-				style={{
-					backgroundColor: colors.coolGray[500],
-					paddingHorizontal: isSmallScreen ? 8 : 16,
-					paddingVertical: 12,
+		<>
+			<MusicList
+				initialMusics={fakeMusicData}
+				loadMoreMusics={async (page: number) => {
+					console.log(page, 'Function not implemented.');
+					return [];
 				}}
-			>
-				<Text
-					fontSize="lg"
-					style={{ flex: 4, width: '100%', justifyContent: 'center', paddingRight: 60 }}
-				>
-					Song
-				</Text>
-				{[
-					{ text: 'level', icon: Chart2 },
-					{ text: 'lastScore', icon: ArrowRotateLeft },
-					{ text: 'BastScore', icon: Cup },
-				].map((value) => (
-					<MusicItemTitle
-						key={value.text + 'key'}
-						text={value.text}
-						icon={value.icon}
-						isBigScreen={isBigScreen}
-					/>
-				))}
-			</HStack>
-			<MusicList musics={fakeMusicData}/>
+			/>
 			{/* <MusicItem
 				image={
 					'https://static.vecteezy.com/system/resources/previews/016/552/335/non_2x/luffy-kawai-chibi-cute-onepiece-anime-design-and-doodle-art-for-icon-logo-collection-and-others-free-vector.jpg'
@@ -265,7 +211,7 @@ export const FavoritesMusic = () => {
 				artist={'Ludwig van Beethoven'}
 				song={'Sonata for Piano no. 20 in G major, op. 49 no. 2'}
 			/> */}
-		</Stack>
+		</>
 	);
 };
 
