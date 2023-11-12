@@ -169,49 +169,23 @@ export const fakeMusicData = [
   
 
 export const FavoritesMusic = () => {
-	const { colors } = useTheme();
-	const screenSize = useBreakpointValue({ base: 'small', md: 'md', xl: 'xl' });
-	const isSmallScreen = screenSize === 'small';
-	const isBigScreen = screenSize === 'xl';
-
 	return (
-		<>
-			<MusicList
-				initialMusics={fakeMusicData}
-				loadMoreMusics={async (page: number) => {
-					console.log(page, 'Function not implemented.');
-					return [];
-				}}
-			/>
-			{/* <MusicItem
-				image={
-					'https://static.vecteezy.com/system/resources/previews/016/552/335/non_2x/luffy-kawai-chibi-cute-onepiece-anime-design-and-doodle-art-for-icon-logo-collection-and-others-free-vector.jpg'
-				}
-				liked={false}
-				onLike={() => {
-					console.log('Liked !');
-				}}
-				level={3}
-				lastScore={25550}
-				bestScore={420}
-				artist={'Ludwig van Beethoven'}
-				song={'Piano Sonata No. 8'}
-			/>
-			<MusicItem
-				image={
-					'https://static.vecteezy.com/system/resources/previews/016/552/335/non_2x/luffy-kawai-chibi-cute-onepiece-anime-design-and-doodle-art-for-icon-logo-collection-and-others-free-vector.jpg'
-				}
-				liked={true}
-				onLike={() => {
-					console.log('Liked !');
-				}}
-				level={3}
-				lastScore={255500000}
-				bestScore={42000}
-				artist={'Ludwig van Beethoven'}
-				song={'Sonata for Piano no. 20 in G major, op. 49 no. 2'}
-			/> */}
-		</>
+		<MusicList
+			initialMusics={fakeMusicData.slice(0, 20)}
+			musicsPerPage={50}
+			loadMoreMusics={async (page: number, musics: MusicItemType[]) => {
+				console.log(page, 'Loading more musics.');
+				
+				// Calculer le début et la fin de la tranche à charger
+				const startIndex = musics.length;
+				const endIndex = startIndex + 15;
+				console.log('length:', fakeMusicData.length);
+				console.log('min:', Math.min(endIndex, fakeMusicData.length));
+				let tmp = fakeMusicData.slice(startIndex, Math.min(endIndex, fakeMusicData.length));
+				console.log('tmp:', tmp.length);
+				return tmp;
+			}}
+		/>
 	);
 };
 
