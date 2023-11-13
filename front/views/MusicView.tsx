@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Text, useBreakpointValue, useTheme } from 'native-base';
+import { Center, Text, View, useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -19,6 +19,8 @@ import { useQueries, useQuery } from '../Queries';
 import API from '../API';
 import Song from '../models/Song';
 import { LoadingView } from '../components/Loading';
+import InteractiveCC from '../components/UI/InteractiveCC';
+import ButtonBase from '../components/UI/ButtonBase';
 
 // Fichier de données fictives, par exemple MusicData.ts
 export const fakeMusicData = [
@@ -1203,14 +1205,64 @@ export const FavoritesMusic = () => {
 				},
 			})) ?? [];
 
+	const { colors } = useTheme();
+
 	if (isLoading) {
 		return <LoadingView />;
 	}
 	return (
-		<MusicList
-			initialMusics={musics}
-			// musicsPerPage={7}
-		/>
+		<>
+			<View style={{margin: 30}}>
+				<InteractiveCC
+					// duration={80}
+					styleContainer={{
+						width: 'fit-content',
+						borderRadius: 10,
+					}}
+					style={{
+						width: '100%',
+						paddingHorizontal: 20,
+						paddingVertical: 10,
+						// borderRadius: 10,
+					}}
+					defaultStyle={{
+						transform: [{ scale: 1,}],
+						shadowOpacity: 0.3,
+						shadowRadius: 4.65,
+						elevation: 8,
+						backgroundColor: colors.primary[300],
+					}}
+					hoverStyle={{
+						transform: [{ scale: 1.02,}],
+						shadowOpacity: 0.37,
+						shadowRadius: 7.49,
+						elevation: 12,
+						backgroundColor: colors.primary[400],
+					}}
+					pressStyle={{
+						transform: [{ scale: 0.98,}],
+						shadowOpacity: 0.23,
+						shadowRadius: 2.62,
+						elevation: 4,
+						backgroundColor: colors.primary[500],
+					}}
+					onPress={() => console.log("A que coucou!")}
+				>
+					<Text selectable={false} style={{color: '#fff'}}>
+						Coucou
+					</Text>
+				</InteractiveCC>
+				<ButtonBase
+					title="Coucou"
+					style={{ width: 'fit-content', marginTop: 20 }}
+					type={'filled'}
+				/>
+			</View>
+			<MusicList
+				initialMusics={musics}
+				// musicsPerPage={7}
+			/>
+		</>
 	);
 };
 
