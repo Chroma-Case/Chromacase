@@ -2,6 +2,7 @@ import { Dataset, createPlaywrightRouter } from "crawlee";
 import * as fs from "fs";
 import { sleep } from "crawlee";
 export const router = createPlaywrightRouter();
+import slug from "slug";
 
 router.addDefaultHandler(async ({ enqueueLinks }) => {
   const songs = await enqueueLinks({
@@ -18,13 +19,17 @@ router.addDefaultHandler(async ({ enqueueLinks }) => {
 router.addHandler("SONG", async ({ request, page }) => {
   await Dataset.pushData({ url: request.loadedUrl });
   await page.waitForSelector('aside div div section button[name="download"]');
-  const title = await page.locator("h1").textContent();
-  const artist = await page
+  let title = await page.locator("h1").textContent();
+  if (title == null) return
+  title = slug(title);
+  let artist = await page
     .locator(
       "body > div.js-page.react-container > div > section > aside > div:nth-child(5) > div > section > h3:nth-child(2) > a"
     )
     .first()
     .textContent();
+  if (artist == null) return
+  artist = slug(artist);
   const genres = await page
     .locator(
       "body > div.js-page.react-container > div > section > aside > div:nth-child(6) > div > table > tbody > tr:nth-child(5) > td > div > a"
