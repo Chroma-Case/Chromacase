@@ -38,10 +38,7 @@ function MusicItemTitleComponent(props: MusicItemTitleProps) {
 				</Text>
 			)}
 			{/* Icon with color based on the current color scheme. */}
-			<props.icon
-				size={18}
-				color={colors.text[700]}
-			/>
+			<props.icon size={18} color={colors.text[700]} />
 		</Row>
 	);
 }
@@ -100,7 +97,11 @@ type MusicListProps = {
  *   making it suitable for use cases where the list of items is expected to grow over time.
  * - The layout and styling are optimized for performance and responsiveness.
  */
-function MusicListComponent({ initialMusics, loadMoreMusics, musicsPerPage = loadMoreMusics ? 50 : initialMusics.length }: MusicListProps) {
+function MusicListComponent({
+	initialMusics,
+	loadMoreMusics,
+	musicsPerPage = loadMoreMusics ? 50 : initialMusics.length,
+}: MusicListProps) {
 	// State initialization for MusicList.
 	// 'allMusics': all music items.
 	// 'displayedMusics': items displayed per page.
@@ -113,7 +114,7 @@ function MusicListComponent({ initialMusics, loadMoreMusics, musicsPerPage = loa
 		displayedMusics: initialMusics.slice(0, musicsPerPage),
 		currentPage: 1,
 		loading: false,
-        hasMoreMusics: initialMusics.length > musicsPerPage || !!loadMoreMusics,
+		hasMoreMusics: initialMusics.length > musicsPerPage || !!loadMoreMusics,
 	});
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'md', xl: 'xl' });
@@ -138,8 +139,8 @@ function MusicListComponent({ initialMusics, loadMoreMusics, musicsPerPage = loa
 			updatedAllMusics = [...updatedAllMusics, ...newMusics];
 			hasMoreMusics = newMusics.length > 0;
 		} else {
-            hasMoreMusics = updatedAllMusics.length > nextEndIndex;
-        }
+			hasMoreMusics = updatedAllMusics.length > nextEndIndex;
+		}
 
 		setMusicListState((prevState) => ({
 			...prevState,

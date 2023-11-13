@@ -1,6 +1,6 @@
 import API from '../../API';
 import React from 'react';
-import { Column, Toast, useTheme } from 'native-base';
+import { Column, Toast } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
@@ -10,7 +10,6 @@ import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-reac
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
-import useColorScheme from '../../hooks/colorScheme';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	await API.updateUserEmail(newEmail);
@@ -31,7 +30,7 @@ const ProfileSettings = () => {
 		return <LoadingView />;
 	}
 	const user = userQuery.data;
-	const { colors } = useTheme();
+
 	return (
 		<Column space={4} style={{ width: '100%' }}>
 			<ElementList

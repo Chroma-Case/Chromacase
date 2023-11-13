@@ -4,8 +4,6 @@ import ElementList from '../../components/GtkUI/ElementList';
 import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';
 import { Calendar1, MonitorMobbile, Send2, Warning2 } from 'iconsax-react-native';
-import useColorScheme from '../../hooks/colorScheme';
-import { useTheme } from 'native-base';
 
 const NotificationsSettings = () => {
 	const { settings, updateSettings } = useUserSettings();

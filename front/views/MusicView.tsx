@@ -1174,29 +1174,34 @@ export const FavoritesMusic = () => {
 			.map((song) => API.getArtist(song.artistId))
 	);
 
-	const isLoading = playHistoryQuery.isLoading || nextStepQuery.isLoading || 
-	songHistory.some(query => query.isLoading) || 
-	artistsQueries.some(query => query.isLoading);
+	const isLoading =
+		playHistoryQuery.isLoading ||
+		nextStepQuery.isLoading ||
+		songHistory.some((query) => query.isLoading) ||
+		artistsQueries.some((query) => query.isLoading);
 
-	const musics = nextStepQuery.data
-	?.filter((song) =>
-		artistsQueries.find(
-			(artistQuery) => artistQuery.data?.id === song.artistId
-		)
-	)
-	.map((song) => ({
-		artist: artistsQueries.find(
-			(artistQuery) => artistQuery.data?.id === song.artistId
-		)!.data!.name,
-		song: song.name,
-		image: song.cover,
-		level: 42,
-		lastScore: 42,
-		bestScore: 42,
-		liked: false,
-		onLike: () => {console.log("onLike")},
-		onPlay: () => {console.log("onPlay")},
-	})) ?? []
+	const musics =
+		nextStepQuery.data
+			?.filter((song) =>
+				artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)
+			)
+			.map((song) => ({
+				artist: artistsQueries.find(
+					(artistQuery) => artistQuery.data?.id === song.artistId
+				)!.data!.name,
+				song: song.name,
+				image: song.cover,
+				level: 42,
+				lastScore: 42,
+				bestScore: 42,
+				liked: false,
+				onLike: () => {
+					console.log('onLike');
+				},
+				onPlay: () => {
+					console.log('onPlay');
+				},
+			})) ?? [];
 
 	if (isLoading) {
 		return <LoadingView />;

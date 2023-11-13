@@ -7,13 +7,11 @@ import { updateSettings } from '../../state/SettingsSlice';
 import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';
 import { Driver, Like1, Shop } from 'iconsax-react-native';
-import { useTheme } from 'native-base';
 
 const PrivacySettings = () => {
 	const dispatch = useDispatch();
 	const settings = useSelector((state: RootState) => state.settings.local);
 	const { settings: userSettings, updateSettings: updateUserSettings } = useUserSettings();
-	const { colors } = useTheme();
 
 	if (!userSettings.data) {
 		return <LoadingView />;

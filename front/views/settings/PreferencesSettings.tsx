@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Column, useTheme } from 'native-base';
+import { Column } from 'native-base';
 import { useLanguage } from '../../state/LanguageSlice';
 import { AvailableLanguages, DefaultLanguage, translate } from '../../i18n/i18n';
 import { useSelector } from '../../state/Store';
@@ -13,7 +13,6 @@ const PreferencesSettings = () => {
 	const dispatch = useDispatch();
 	const language = useSelector((state) => state.language.value);
 	const settings = useSelector((state) => state.settings.local);
-	const { colors } = useTheme();
 
 	return (
 		<Column space={4} style={{ width: '100%' }}>

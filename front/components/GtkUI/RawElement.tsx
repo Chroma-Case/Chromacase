@@ -1,5 +1,15 @@
 import React from 'react';
-import { Box, Button, Column, Icon, Popover, Row, Text, useBreakpointValue, useTheme } from 'native-base';
+import {
+	Box,
+	Button,
+	Column,
+	Icon,
+	Popover,
+	Row,
+	Text,
+	useBreakpointValue,
+	useTheme,
+} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { ElementProps } from './ElementTypes';
 import {
@@ -43,9 +53,13 @@ export const RawElement = ({ element }: RawElementProps) => {
 					alignItems: 'center',
 				}}
 			>
-				{IconElement && 
-					<IconElement size={isSmallScreen ? 18 : 24} color={colors.text[900]} style={{ minWidth: 24 }} />
-				}
+				{IconElement && (
+					<IconElement
+						size={isSmallScreen ? 18 : 24}
+						color={colors.text[900]}
+						style={{ minWidth: 24 }}
+					/>
+				)}
 				<Box
 					style={{
 						flexGrow: 1,
@@ -127,7 +141,13 @@ export const RawElement = ({ element }: RawElementProps) => {
 								case 'custom':
 									return data;
 								case 'sectionDropdown':
-									return <ArrowDown2 size="24" color={colors.text[700]} variant="Outline" />;
+									return (
+										<ArrowDown2
+											size="24"
+											color={colors.text[700]}
+											variant="Outline"
+										/>
+									);
 								default:
 									return <Text>Unknown type</Text>;
 							}
