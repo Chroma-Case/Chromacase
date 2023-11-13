@@ -5,11 +5,10 @@ import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';
 import { Calendar1, MonitorMobbile, Send2, Warning2 } from 'iconsax-react-native';
 import useColorScheme from '../../hooks/colorScheme';
+import { useTheme } from 'native-base';
 
 const NotificationsSettings = () => {
 	const { settings, updateSettings } = useUserSettings();
-	const colorScheme = useColorScheme();
-	const color = colorScheme === 'light' ? '#000' : '#fff';
 
 	if (!settings.data) {
 		return <LoadingView />;
@@ -20,7 +19,7 @@ const NotificationsSettings = () => {
 			elements={[
 				{
 					type: 'toggle',
-					icon: <MonitorMobbile size="24" color={color} style={{ minWidth: 24 }} />,
+					icon: MonitorMobbile,
 					title: translate('SettingsNotificationsTabPushNotificationsSectionTitle'),
 					description: translate(
 						'SettingsNotificationsTabPushNotificationsSectionDescription'
@@ -38,7 +37,7 @@ const NotificationsSettings = () => {
 				},
 				{
 					type: 'toggle',
-					icon: <Send2 size="24" color={color} style={{ minWidth: 24 }} />,
+					icon: Send2,
 					title: translate('SettingsNotificationsTabEmailNotificationsSectionTitle'),
 					description: translate(
 						'SettingsNotificationsTabEmailNotificationsSectionDescription'
@@ -56,7 +55,7 @@ const NotificationsSettings = () => {
 				},
 				{
 					type: 'toggle',
-					icon: <Calendar1 size="24" color={color} style={{ minWidth: 24 }} />,
+					icon: Calendar1,
 					title: translate('SettingsNotificationsTabTrainingReminderSectionTitle'),
 					description: translate(
 						'SettingsNotificationsTabTrainingReminderSectionDescription'
@@ -74,7 +73,7 @@ const NotificationsSettings = () => {
 				},
 				{
 					type: 'toggle',
-					icon: <Warning2 size="24" color={color} style={{ minWidth: 24 }} />,
+					icon: Warning2,
 					title: translate('SettingsNotificationsTabReleaseAlertSectionTitle'),
 					description: translate(
 						'SettingsNotificationsTabReleaseAlertSectionDescription'

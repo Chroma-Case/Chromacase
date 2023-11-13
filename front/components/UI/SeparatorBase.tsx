@@ -1,7 +1,6 @@
 import React, { FunctionComponent, ReactNode } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, useTheme } from 'native-base';
-import useColorScheme from '../../hooks/colorScheme';
 
 const styles = StyleSheet.create({
 	line: {
@@ -24,15 +23,13 @@ interface SeparatorBaseProps {
 }
 
 const SeparatorBase: FunctionComponent<SeparatorBaseProps> = ({ children }) => {
-	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
-	const color = colorScheme === 'light' ? colors.black[500] : '#FFFFFF';
 
 	return (
 		<View style={styles.container}>
-			<View style={[styles.line, { backgroundColor: color }]} />
+			<View style={[styles.line, { backgroundColor: colors.text[700] }]} />
 			<Text style={styles.text}>{children}</Text>
-			<View style={[styles.line, { backgroundColor: color }]} />
+			<View style={[styles.line, { backgroundColor: colors.text[700] }]} />
 		</View>
 	);
 };

@@ -11,12 +11,14 @@ import {
 } from 'react-native-tab-view';
 import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import useColorScheme from '../hooks/colorScheme';
 import { RouteProps } from '../Navigation';
 import { translate } from '../i18n/i18n';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
-import { MusicItemType } from '../components/UI/MusicItem';
 import MusicList from '../components/UI/MusicList';
+import { useQueries, useQuery } from '../Queries';
+import API from '../API';
+import Song from '../models/Song';
+import { LoadingView } from '../components/Loading';
 
 // Fichier de données fictives, par exemple MusicData.ts
 export const fakeMusicData = [
@@ -1159,15 +1161,50 @@ export const fakeMusicData = [
 ];
 
 export const FavoritesMusic = () => {
+	const playHistoryQuery = useQuery(API.getUserPlayHistory);
+	const nextStepQuery = useQuery(API.getSongSuggestions);
+	const songHistory = useQueries(
+		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
+	);
+	const artistsQueries = useQueries(
+		songHistory
+			.map((entry) => entry.data)
+			.concat(nextStepQuery.data ?? [])
+			.filter((s): s is Song => s !== undefined)
+			.map((song) => API.getArtist(song.artistId))
+	);
+
+	const isLoading = playHistoryQuery.isLoading || nextStepQuery.isLoading || 
+	songHistory.some(query => query.isLoading) || 
+	artistsQueries.some(query => query.isLoading);
+
+	const musics = nextStepQuery.data
+	?.filter((song) =>
+		artistsQueries.find(
+			(artistQuery) => artistQuery.data?.id === song.artistId
+		)
+	)
+	.map((song) => ({
+		artist: artistsQueries.find(
+			(artistQuery) => artistQuery.data?.id === song.artistId
+		)!.data!.name,
+		song: song.name,
+		image: song.cover,
+		level: 42,
+		lastScore: 42,
+		bestScore: 42,
+		liked: false,
+		onLike: () => {console.log("onLike")},
+		onPlay: () => {console.log("onPlay")},
+	})) ?? []
+
+	if (isLoading) {
+		return <LoadingView />;
+	}
 	return (
 		<MusicList
-			initialMusics={fakeMusicData.slice(0, 20)}
-			musicsPerPage={50}
-			loadMoreMusics={async (page: number, musics: MusicItemType[]) => {
-				const startIndex = musics.length;
-				const endIndex = startIndex + 15;
-				return fakeMusicData.slice(startIndex, Math.min(endIndex, fakeMusicData.length));
-			}}
+			initialMusics={musics}
+			// musicsPerPage={7}
 		/>
 	);
 };
@@ -1210,7 +1247,6 @@ const getTabData = (key: string) => {
 const MusicTab = (props: RouteProps<object>) => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
-	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';
@@ -1229,8 +1265,8 @@ const MusicTab = (props: RouteProps<object>) => {
 				borderBottomWidth: 1,
 				borderColor: colors.primary[300],
 			}}
-			activeColor={colorScheme === 'light' ? '#000' : '#fff'}
-			inactiveColor={colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
+			activeColor={colors.text[900]}
+			inactiveColor={colors.text[700]}
 			indicatorStyle={{ backgroundColor: colors.primary[300] }}
 			renderIcon={(
 				scene: Scene<Route> & {
@@ -1269,12 +1305,10 @@ const MusicTab = (props: RouteProps<object>) => {
 				sceneContainerStyle={{
 					flex: 1,
 					alignSelf: 'center',
-					padding: isSmallScreen ? 4 : 20,
+					padding: isSmallScreen ? 8 : 20,
 					paddingTop: 32,
-					// maxWidth: 850,
 					width: '100%',
 				}}
-				// style={{ height: 'fit-content' }}
 				renderTabBar={renderTabBar}
 				navigationState={{ index, routes }}
 				renderScene={renderScene}

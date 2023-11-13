@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Text, useTheme } from 'native-base';
+import { Center, Text, useBreakpointValue, useTheme } from 'native-base';
 import ProfileSettings from './SettingsProfile';
 import NotificationsSettings from './NotificationsSettings';
 import PrivacySettings from './PrivacySettings';
@@ -26,7 +26,6 @@ import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import PremiumSettings from './SettingsPremium';
 import { RouteProps } from '../../Navigation';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
-import useColorScheme from '../../hooks/colorScheme';
 import { translate } from '../../i18n/i18n';
 
 export const PianoSettings = () => {
@@ -69,7 +68,6 @@ const getTabData = (key: string) => {
 const SettingsTab = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
-	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
 	const [routes] = React.useState<Route[]>([
 		{ key: 'profile', title: 'settingsTabProfile' },
@@ -79,6 +77,8 @@ const SettingsTab = (props: RouteProps<{}>) => {
 		{ key: 'privacy', title: 'settingsTabPrivacy' },
 		{ key: 'piano', title: 'settingsTabPiano' },
 	]);
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isSmallScreen = screenSize === 'small';
 	const renderTabBar = (
 		props: SceneRendererProps & { navigationState: NavigationState<Route> }
 	) => (
@@ -89,8 +89,8 @@ const SettingsTab = (props: RouteProps<{}>) => {
 				borderBottomWidth: 1,
 				borderColor: colors.primary[300],
 			}}
-			activeColor={colorScheme === 'light' ? '#000' : '#fff'}
-			inactiveColor={colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
+			activeColor={colors.text[900]}
+			inactiveColor={colors.text[700]}
 			indicatorStyle={{ backgroundColor: colors.primary[300] }}
 			renderIcon={(
 				scene: Scene<Route> & {
@@ -133,7 +133,7 @@ const SettingsTab = (props: RouteProps<{}>) => {
 					flex: 1,
 					alignSelf: 'center',
 					paddingTop: 32,
-					padding: 20,
+					padding: isSmallScreen ? 8 : 20,
 					maxWidth: 850,
 					width: '100%',
 				}}

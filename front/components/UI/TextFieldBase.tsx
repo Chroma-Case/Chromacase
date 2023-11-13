@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import InteractiveBase from './InteractiveBase';
 import { Input, useTheme } from 'native-base';
-import useColorScheme from '../../hooks/colorScheme';
 
 export interface TextFieldBaseProps {
 	style?: StyleProp<ViewStyle>;
@@ -69,7 +68,6 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 	const [isFocused, setFocused] = useState(false);
 	const MyIcon: Icon = icon as Icon;
 	const { colors } = useTheme();
-	const colorScheme = useColorScheme();
 
 	const styleAnimate = StyleSheet.create({
 		Default: {
@@ -124,9 +122,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 					style={[styles.input, icon ? {} : { paddingLeft: 12 }]}
 					autoComplete={autoComplete}
 					placeholder={placeholder + (isRequired ? '*' : '')}
-					placeholderTextColor={
-						colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
-					}
+					placeholderTextColor={colors.text[700]}
 					secureTextEntry={isSecret ? !isPasswordVisible : false}
 					onFocus={() => setFocused(true)}
 					onBlur={() => setFocused(false)}

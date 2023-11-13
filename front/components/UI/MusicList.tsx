@@ -4,7 +4,6 @@ import { ActivityIndicator, StyleSheet } from 'react-native';
 import MusicItem, { MusicItemType } from './MusicItem';
 import ButtonBase from './ButtonBase';
 import { ArrowDown2, Chart2, ArrowRotateLeft, Cup, Icon } from 'iconsax-react-native';
-import useColorScheme from '../../hooks/colorScheme';
 
 // Props type definition for MusicItemTitle.
 interface MusicItemTitleProps {
@@ -19,7 +18,7 @@ interface MusicItemTitleProps {
 }
 
 function MusicItemTitleComponent(props: MusicItemTitleProps) {
-	const colorScheme = useColorScheme();
+	const { colors } = useTheme();
 
 	return (
 		<Row
@@ -41,7 +40,7 @@ function MusicItemTitleComponent(props: MusicItemTitleProps) {
 			{/* Icon with color based on the current color scheme. */}
 			<props.icon
 				size={18}
-				color={colorScheme === 'light' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'}
+				color={colors.text[700]}
 			/>
 		</Row>
 	);
@@ -64,12 +63,12 @@ type MusicListProps = {
 	 * Function to load more music items asynchronously. Called with current page number
 	 * and the list of all music items. Should return a Promise with additional music items.
 	 */
-	loadMoreMusics: (page: number, musics: MusicItemType[]) => Promise<MusicItemType[]>;
+	loadMoreMusics?: (page: number, musics: MusicItemType[]) => Promise<MusicItemType[]>;
 
 	/**
 	 * Number of music items to display per page. Determines initial and additional items displayed.
 	 */
-	musicsPerPage: number;
+	musicsPerPage?: number;
 };
 
 /**
@@ -101,23 +100,25 @@ type MusicListProps = {
  *   making it suitable for use cases where the list of items is expected to grow over time.
  * - The layout and styling are optimized for performance and responsiveness.
  */
-function MusicListComponent({ initialMusics, loadMoreMusics, musicsPerPage }: MusicListProps) {
+function MusicListComponent({ initialMusics, loadMoreMusics, musicsPerPage = loadMoreMusics ? 50 : initialMusics.length }: MusicListProps) {
 	// State initialization for MusicList.
 	// 'allMusics': all music items.
 	// 'displayedMusics': items displayed per page.
 	// 'currentPage': current page in pagination.
 	// 'loading': indicates if more items are being loaded.
 	// 'hasMoreMusics': flag for more items availability.
+	console.log('initialMusics', initialMusics.length);
 	const [musicListState, setMusicListState] = useState({
 		allMusics: initialMusics,
 		displayedMusics: initialMusics.slice(0, musicsPerPage),
 		currentPage: 1,
 		loading: false,
-		hasMoreMusics: true,
+        hasMoreMusics: initialMusics.length > musicsPerPage || !!loadMoreMusics,
 	});
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'md', xl: 'xl' });
 	const isBigScreen = screenSize === 'xl';
+	console.log('coucou', initialMusics.length);
 
 	// Loads additional music items.
 	// Uses useCallback to avoid unnecessary redefinitions on re-renders.
@@ -132,11 +133,13 @@ function MusicListComponent({ initialMusics, loadMoreMusics, musicsPerPage }: Mu
 		const nextEndIndex = (musicListState.currentPage + 1) * musicsPerPage;
 		let updatedAllMusics = musicListState.allMusics;
 
-		if (updatedAllMusics.length <= nextEndIndex) {
+		if (loadMoreMusics && updatedAllMusics.length <= nextEndIndex) {
 			const newMusics = await loadMoreMusics(musicListState.currentPage, updatedAllMusics);
 			updatedAllMusics = [...updatedAllMusics, ...newMusics];
 			hasMoreMusics = newMusics.length > 0;
-		}
+		} else {
+            hasMoreMusics = updatedAllMusics.length > nextEndIndex;
+        }
 
 		setMusicListState((prevState) => ({
 			...prevState,

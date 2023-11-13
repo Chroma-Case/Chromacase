@@ -1,6 +1,6 @@
 import API from '../../API';
 import React from 'react';
-import { Column, Toast } from 'native-base';
+import { Column, Toast, useTheme } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
@@ -31,14 +31,13 @@ const ProfileSettings = () => {
 		return <LoadingView />;
 	}
 	const user = userQuery.data;
-	const colorScheme = useColorScheme();
-	const color = colorScheme === 'light' ? '#000' : '#fff';
+	const { colors } = useTheme();
 	return (
 		<Column space={4} style={{ width: '100%' }}>
 			<ElementList
 				elements={[
 					{
-						icon: <Google size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: Google,
 						type: 'text',
 						title: translate('settingsProfileTabGoogleSectionTitle'),
 						description: translate('settingsProfileTabGoogleSectionDescription'),
@@ -51,7 +50,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <Verify size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: Verify,
 						type: 'text',
 						title: translate('settingsProfileTabVerifiedSectionTitle'),
 						description: translate('settingsProfileTabVerifiedSectionDescription'),
@@ -83,7 +82,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <UserSquare size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: UserSquare,
 						type: 'text',
 						title: translate('settingsProfileTabAvatarSectionTitle'),
 						description: translate('settingsProfileTabAvatarSectionDescription'),
@@ -123,7 +122,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <SmsEdit size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: SmsEdit,
 						type: 'sectionDropdown',
 						title: translate('settingsProfileTabChangeEmailSectionTitle'),
 						description: translate('settingsProfileTabChangeEmailSectionDescription'),
@@ -138,7 +137,7 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <PasswordCheck size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: PasswordCheck,
 						type: 'sectionDropdown',
 						title: translate('settingsProfileTabChangePasswordSectionTitle'),
 						description: translate(

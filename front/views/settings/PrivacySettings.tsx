@@ -7,14 +7,13 @@ import { updateSettings } from '../../state/SettingsSlice';
 import useUserSettings from '../../hooks/userSettings';
 import { LoadingView } from '../../components/Loading';
 import { Driver, Like1, Shop } from 'iconsax-react-native';
-import useColorScheme from '../../hooks/colorScheme';
+import { useTheme } from 'native-base';
 
 const PrivacySettings = () => {
 	const dispatch = useDispatch();
 	const settings = useSelector((state: RootState) => state.settings.local);
 	const { settings: userSettings, updateSettings: updateUserSettings } = useUserSettings();
-	const colorScheme = useColorScheme();
-	const color = colorScheme === 'light' ? '#000' : '#fff';
+	const { colors } = useTheme();
 
 	if (!userSettings.data) {
 		return <LoadingView />;
@@ -25,7 +24,7 @@ const PrivacySettings = () => {
 			elements={[
 				{
 					type: 'toggle',
-					icon: <Driver size="24" color={color} style={{ minWidth: 24 }} />,
+					icon: Driver,
 					title: translate('SettingsPrivacyTabDataCollectionSectionTitle'),
 					description: translate('SettingsPrivacyTabDataCollectionSectionDescription'),
 					data: {
@@ -36,7 +35,7 @@ const PrivacySettings = () => {
 				},
 				{
 					type: 'toggle',
-					icon: <Shop size="24" color={color} style={{ minWidth: 24 }} />,
+					icon: Shop,
 					title: translate('SettingsPrivacyTabCustomAdsSectionTitle'),
 					description: translate('SettingsPrivacyTabCustomAdsSectionDescription'),
 					data: {
@@ -47,7 +46,7 @@ const PrivacySettings = () => {
 				},
 				{
 					type: 'toggle',
-					icon: <Like1 size="24" color={color} style={{ minWidth: 24 }} />,
+					icon: Like1,
 					title: translate('SettingsPrivacyTabRecommendationsSectionTitle'),
 					description: translate('SettingsPrivacyTabRecommendationsSectionDescription'),
 					data: {

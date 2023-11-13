@@ -1,10 +1,10 @@
-import { Select, Switch, Text, Icon, Row, Slider, useTheme } from 'native-base';
+import { Select, Switch, Text, Row, Slider, Icon, useTheme } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useWindowDimensions } from 'react-native';
-
+import { Icon as IconSax } from 'iconsax-react-native';
 export type ElementProps = {
 	title: string;
-	icon?: React.ReactNode;
+	icon?: IconSax;
 	helperText?: string;
 	description?: string;
 	disabled?: boolean;

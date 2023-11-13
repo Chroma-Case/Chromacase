@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Column } from 'native-base';
+import { Column, useTheme } from 'native-base';
 import { useLanguage } from '../../state/LanguageSlice';
 import { AvailableLanguages, DefaultLanguage, translate } from '../../i18n/i18n';
 import { useSelector } from '../../state/Store';
@@ -8,20 +8,19 @@ import { updateSettings } from '../../state/SettingsSlice';
 import ElementList from '../../components/GtkUI/ElementList';
 import LocalSettings from '../../models/LocalSettings';
 import { Brush2, Colorfilter, LanguageSquare, Rank, Sound } from 'iconsax-react-native';
-import useColorScheme from '../../hooks/colorScheme';
 
 const PreferencesSettings = () => {
 	const dispatch = useDispatch();
 	const language = useSelector((state) => state.language.value);
 	const settings = useSelector((state) => state.settings.local);
-	const colorScheme = useColorScheme();
-	const color = colorScheme === 'light' ? '#000' : '#fff';
+	const { colors } = useTheme();
+
 	return (
 		<Column space={4} style={{ width: '100%' }}>
 			<ElementList
 				elements={[
 					{
-						icon: <Brush2 size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: Brush2,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesTabThemeSectionTitle'),
 						description: translate('SettingsPreferencesTabThemeSectionDescription'),
@@ -43,7 +42,7 @@ const PreferencesSettings = () => {
 						},
 					},
 					{
-						icon: <LanguageSquare size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: LanguageSquare,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesTabLanguageSectionTitle'),
 						description: translate('SettingsPreferencesTabLanguageSectionDescription'),
@@ -61,7 +60,7 @@ const PreferencesSettings = () => {
 						},
 					},
 					{
-						icon: <Rank size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: Rank,
 						type: 'dropdown',
 						title: translate('SettingsPreferencesTabDifficultySectionTitle'),
 						description: translate(
@@ -89,7 +88,7 @@ const PreferencesSettings = () => {
 			<ElementList
 				elements={[
 					{
-						icon: <Colorfilter size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: Colorfilter,
 						type: 'toggle',
 						title: translate('SettingsPreferencesTabColorblindModeSectionTitle'),
 						description: translate(
@@ -107,7 +106,7 @@ const PreferencesSettings = () => {
 			<ElementList
 				elements={[
 					{
-						icon: <Sound size="24" color={color} style={{ minWidth: 24 }} />,
+						icon: Sound,
 						type: 'range',
 						title: translate('SettingsPreferencesTabMicVolumeSectionTitle'),
 						description: translate('SettingsPreferencesTabMicVolumeSectionDescription'),
