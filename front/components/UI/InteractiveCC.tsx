@@ -95,7 +95,7 @@ const InteractiveCC: React.FC<InteractiveCCProps> = ({ defaultStyle, hoverStyle,
             Animated.timing(animatedValues[key], {
                 toValue: stateValue,
                 duration: duration,
-                useNativeDriver: true, // Ajustez en fonction des propriétés animées
+                useNativeDriver: true,
             }).start();
         });
     };
