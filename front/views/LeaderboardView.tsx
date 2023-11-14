@@ -1,16 +1,19 @@
 import { Box, Heading, useBreakpointValue, ScrollView, Text } from 'native-base';
 import { View, Image } from 'react-native';
-import { useQuery } from 'react-query';
-import User from '../models/User';
+import { useQuery } from '../Queries';
 import API from '../API';
 import { Ionicons } from '@expo/vector-icons';
+import User from '../models/User';
 
 type PodiumCardProps = {
 	offset: number;
 	medalColor: string;
+	userAvatarUrl: string;
+	userPseudo: string;
+	userXp: number;
 };
 
-const PodiumCardComponent = ({ offset, medalColor }: PodiumCardProps) => {
+const PodiumCardComponent = ({ offset, medalColor, userAvatarUrl, userPseudo, userXp }: PodiumCardProps) => {
 	return (
 		<View
 			style={{
@@ -30,7 +33,7 @@ const PodiumCardComponent = ({ offset, medalColor }: PodiumCardProps) => {
 			>
 				<Image
 					source={{
-						uri: 'https://picsum.photos/140/140',
+						uri: userAvatarUrl,
 					}}
 					style={{
 						aspectRatio: 1,
@@ -55,7 +58,7 @@ const PodiumCardComponent = ({ offset, medalColor }: PodiumCardProps) => {
 					fontWeight: '500',
 				}}
 			>
-				Momo
+				{userPseudo}
 			</Text>
 			<Text
 				mt={1}
@@ -65,11 +68,16 @@ const PodiumCardComponent = ({ offset, medalColor }: PodiumCardProps) => {
 					fontWeight: '500',
 				}}
 			>
-				2400 LVL
+				{userXp} LVL
 			</Text>
 		</View>
 	);
 };
+
+type BoardRowProps = {
+	userPseudo: string;
+	userXp: number;
+}
 
 const BoardRowComponent = () => {
 	return (
@@ -127,7 +135,6 @@ const BoardRowComponent = () => {
 			<View
 				style={{
 					backgroundColor: 'rgba(255, 255, 255, 0.50)',
-					// borderRadius: 8,
 					borderTopRightRadius: 8,
 					borderBottomRightRadius: 8,
 					width: 50,
@@ -182,7 +189,8 @@ const dummyScores = [
 ];
 
 const Leaderboardiew = () => {
-	// const scoresQuery = useQuery(API.getTopTwentyPlayers())
+	const scoresQuery = useQuery(API.getTopTwentyPlayers);
+
 	return (
 		<ScrollView style={{ marginBottom: 5 }}>
 			<View
@@ -208,9 +216,27 @@ const Leaderboardiew = () => {
 						marginBottom: 20,
 					}}
 				>
-					<PodiumCardComponent medalColor="#AE84FB" offset={80} />
-					<PodiumCardComponent medalColor="#EAD93C" offset={0} />
-					<PodiumCardComponent medalColor="#5F74F7" offset={60} />
+					<PodiumCardComponent
+						medalColor="#AE84FB"
+						offset={80}
+						userAvatarUrl={scoresQuery.data?.at(2)?.data.avatar ?? "fake image"}
+						userPseudo={scoresQuery.data?.at(2)?.name ?? "Momo"}
+						userXp={scoresQuery.data?.at(2)?.data.xp ?? 0}
+					/>
+					<PodiumCardComponent
+						medalColor="#EAD93C"
+						offset={0}
+						userAvatarUrl={scoresQuery.data?.at(0)?.data.avatar ?? "fake image"}
+						userPseudo={scoresQuery.data?.at(0)?.name ?? "Momo"}
+						userXp={scoresQuery.data?.at(0)?.data.xp ?? 0}
+					/>
+					<PodiumCardComponent
+						medalColor="#5F74F7"
+						offset={60}
+						userAvatarUrl={scoresQuery.data?.at(1)?.data.avatar ?? "fake image"}
+						userPseudo={scoresQuery.data?.at(1)?.name ?? "Momo"}
+						userXp={scoresQuery.data?.at(1)?.data.xp ?? 0}
+					/>
 				</View>
 				{dummyScores.map((comp, index) => (
 					<BoardRowComponent />

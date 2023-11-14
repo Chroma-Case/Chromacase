@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import SearchBar from '../components/SearchBar';
+import SearchBarComponent from '../components/V2/SearchBar'
 import Artist from '../models/Artist';
 import Song from '../models/Song';
 import Genre from '../models/Genre';
 import API from '../API';
 import { useQuery } from '../Queries';
 import { SearchResultComponent } from '../components/SearchResult';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { Filter } from '../components/SearchBar';
 import { ScrollView } from 'native-base';
 import { RouteProps } from '../Navigation';
@@ -99,8 +100,10 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 						updateStringQuery,
 					}}
 				>
-					<SearchBar />
-					<SearchResultComponent />
+					<View style={{ display: 'flex' }}>
+						<SearchBarComponent />
+						<SearchResultComponent />
+					</View>
 				</SearchContext.Provider>
 			</SafeAreaView>
 		</ScrollView>
