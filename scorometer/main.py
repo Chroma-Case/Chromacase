@@ -25,6 +25,11 @@ from chroma_case.song_check import getPartition
 from mido import MidiFile
 import uuid
 
+r = requests.post(f"{BACK_URL}/auth/guest")
+token = r.json()["access_token"]
+auth_header = {
+        "Authorization": f"Bearer {token}"
+        }
 game_uuid = uuid.uuid4()
 
 testing = os.environ.get("SCORO_TEST")
@@ -41,7 +46,7 @@ if not testing:
 Logging to loki directly
 
 handler = logging_loki.LokiHandler(
-    url="http://gateway:3100/loki/api/v1/push", 
+    url="http://gateway:3100/loki/api/v1/push",
     tags={"application": "scorometer"},
     version="1",
 )
@@ -338,6 +343,7 @@ class Scorometer:
 					"info": self.info,
 					"difficulties": self.difficulties,
 				},
+				headers=auth_header
 			)
 		exit()
 
@@ -360,8 +366,10 @@ def handleStartMessage(start_message: StartMessage):
 		exit()
 
 	try:
-		r = requests.get(f"{BACK_URL}/song/{song_id}")
+		r = requests.get(f"{BACK_URL}/song/{song_id}", headers=auth_header)
 		r.raise_for_status()
+        # Delete the guest account after getting song
+        requests.delete(f"{BACK_URL}/auth/me", headers=auth_header)
 		song_path = r.json()["midiPath"]
 		song_path = song_path.replace("/assets/musics/", MUSICS_FOLDER)
 	except Exception as e:
