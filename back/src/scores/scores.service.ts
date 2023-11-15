@@ -11,7 +11,7 @@ export class ScoresService {
 	async topTwenty(): Promise<User[]> {
 		return this.prisma.user.findMany({
 			orderBy: {
-				partyPlayed: 'desc',
+				totalScore: 'desc',
 			},
 			take: 20,
 		});

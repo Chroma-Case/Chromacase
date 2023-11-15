@@ -13,7 +13,7 @@ export class ScoresController {
 
 
 	@ApiOkResponse({ description: 'Successfully sent the Top 20 players'})
-	@Get('scores/top/20')
+	@Get('top/20')
 	getTopTwenty(): Promise<User[]> {
 		return this.scoresService.topTwenty();
 	}

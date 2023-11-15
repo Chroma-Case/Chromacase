@@ -5,6 +5,8 @@ import ButtonBase from "../UI/ButtonBase";
 import Artist from "../../models/Artist";
 import Song from "../../models/Song";
 import { AddSquare } from 'iconsax-react-native';
+import { useQuery } from "../../Queries";
+import API from "../../API";
 
 const artistsDummy = [
 	{
@@ -44,8 +46,12 @@ const genreDummy = [
 	},
 ];
 
+type SearchBarComponentProps = {
+	query: string;
+};
 
-const SearchBarComponent = () => {
+
+const SearchBarComponent = (props: SearchBarComponentProps) => {
 	const [isTriggered, setIsTriggered] = React.useState(false);
 	const [genre, setGenre] = React.useState('')
 	const [query, setQuery] = React.useState('')
