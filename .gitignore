@@ -16,3 +16,4 @@ node_modules/
 .data
 .DS_Store
 _gen
+venv
