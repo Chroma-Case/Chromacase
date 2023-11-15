@@ -25,6 +25,7 @@ from chroma_case.song_check import getPartition
 from mido import MidiFile
 import uuid
 
+BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
 r = requests.post(f"{BACK_URL}/auth/guest")
 token = r.json()["access_token"]
 auth_header = {
@@ -55,7 +56,6 @@ logger = logging.getLogger()
 logger.addHandler(handler)
 '''
 
-BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
 MUSICS_FOLDER = os.environ.get("MUSICS_FOLDER") or "/assets/musics/"
 
 RATIO = float(sys.argv[2] if len(sys.argv) > 2 else 1)
@@ -368,8 +368,8 @@ def handleStartMessage(start_message: StartMessage):
 	try:
 		r = requests.get(f"{BACK_URL}/song/{song_id}", headers=auth_header)
 		r.raise_for_status()
-        # Delete the guest account after getting song
-        requests.delete(f"{BACK_URL}/auth/me", headers=auth_header)
+		# Delete the guest account after getting song
+		requests.delete(f"{BACK_URL}/auth/me", headers=auth_header)
 		song_path = r.json()["midiPath"]
 		song_path = song_path.replace("/assets/musics/", MUSICS_FOLDER)
 	except Exception as e:
