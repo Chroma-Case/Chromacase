@@ -40,10 +40,16 @@ def getOrCreateArtist(name):
 	print(out)
 	return out["id"]
 
+def gen_cover():
+
 def populateFile(path, midi, mxl):
 	config = ConfigParser()
 	config.read(path)
 	mid = MidiFile(midi)
+    common = os.path.commonpath([midi, mxl])
+    png_path = f"{common}/illustration.png"
+    if not os.path.exists(png_path):
+        gen_cover(common)
 	metadata = config["Metadata"];
 	difficulties = dict(config["Difficulties"])
 	difficulties["length"] = round((mid.length), 2)
@@ -57,7 +63,7 @@ def populateFile(path, midi, mxl):
 		"artist": artistId,
 		"album": getOrCreateAlbum(metadata["Album"], artistId),
 		"genre": getOrCreateGenre(metadata["Genre"]),
-		"illustrationPath": f"/assets/{os.path.commonpath([midi, mxl])}/illustration.png"
+		"illustrationPath": f"/assets/{png_path}"
 	})
 	print(res.json())
 
