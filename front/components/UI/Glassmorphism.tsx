@@ -13,11 +13,7 @@ const GlassmorphismCC = ({ children, style }: GlassmorphismCCProps) => {
 	const colorScheme = useColorScheme();
 
 	return (
-		<BlurView
-			style={[{ borderRadius: 12 }, style]}
-			intensity={60}
-			tint={colorScheme}
-		>
+		<BlurView style={[{ borderRadius: 12 }, style]} intensity={60} tint={colorScheme}>
 			{children}
 		</BlurView>
 	);

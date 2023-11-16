@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Text, View, useBreakpointValue, useTheme } from 'native-base';
+import { Center, Text, useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -19,8 +19,6 @@ import { useQueries, useQuery } from '../Queries';
 import API from '../API';
 import Song from '../models/Song';
 import { LoadingView } from '../components/Loading';
-import InteractiveCC from '../components/UI/InteractiveCC';
-import ButtonBase from '../components/UI/ButtonBase';
 
 export const FavoritesMusic = () => {
 	const navigation = useNavigation();
@@ -63,8 +61,6 @@ export const FavoritesMusic = () => {
 				},
 				onPlay: () => navigation.navigate('Song', { songId: song.id }),
 			})) ?? [];
-
-	const { colors } = useTheme();
 
 	if (isLoading) {
 		return <LoadingView />;
@@ -202,9 +198,7 @@ const MusicTab = (props: RouteProps<object>) => {
 			renderLabel={({ route, color }) =>
 				layout.width > 800 && (
 					<Text style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}>
-						{translate(
-							route.title as TranslationKey
-						)}
+						{translate(route.title as TranslationKey)}
 					</Text>
 				)
 			}

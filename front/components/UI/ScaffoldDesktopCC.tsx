@@ -20,7 +20,7 @@ type ScaffoldDesktopCCProps = {
 	user: User;
 	logo: string;
 	routeName: string;
-	menu: readonly{
+	menu: readonly {
 		type: 'main' | 'sub';
 		title: TranslationKey;
 		icon: Icon;
@@ -36,31 +36,25 @@ const SongHistory = (props: { quantity: number }) => {
 	);
 	const navigation = useNavigation();
 
-	const musics =
-		songHistory
-			.map((h) => h.data)
-			.filter((data): data is Song => data !== undefined)
-			.filter(
-				(song, i, array) =>
-					array.map((s) => s.id).findIndex((id) => id == song.id) == i
-			)
-			?.slice(0, props.quantity)
-			.map((song: Song) => (
-				<View
-					key={'short-history-tab' + song.id}
-					style={{
-						paddingHorizontal: 16,
-						paddingVertical: 10,
-						flex: 1,
-					}}
-				>
-					<TouchableOpacity
-						onPress={() => navigation.navigate('Song', { songId: song.id })}
-					>
-						<Text numberOfLines={1}>{song.name}</Text>
-					</TouchableOpacity>
-				</View>
-			))
+	const musics = songHistory
+		.map((h) => h.data)
+		.filter((data): data is Song => data !== undefined)
+		.filter((song, i, array) => array.map((s) => s.id).findIndex((id) => id == song.id) == i)
+		?.slice(0, props.quantity)
+		.map((song: Song) => (
+			<View
+				key={'short-history-tab' + song.id}
+				style={{
+					paddingHorizontal: 16,
+					paddingVertical: 10,
+					flex: 1,
+				}}
+			>
+				<TouchableOpacity onPress={() => navigation.navigate('Song', { songId: song.id })}>
+					<Text numberOfLines={1}>{song.name}</Text>
+				</TouchableOpacity>
+			</View>
+		));
 
 	if (!playHistoryQuery.data || playHistoryQuery.isLoading || !songHistory) {
 		return <LoadingView />;
@@ -158,7 +152,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 					</View>
 				</View>
 				{!isSmallScreen && (
-					<View style={{width: '100%'}}>
+					<View style={{ width: '100%' }}>
 						<Divider my="2" _light={{ bg: colors.black[500] }} _dark={{ bg: '#FFF' }} />
 						<Spacer height="xs" />
 						<Text

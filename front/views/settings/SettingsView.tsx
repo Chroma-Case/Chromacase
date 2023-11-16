@@ -27,7 +27,6 @@ import PremiumSettings from './SettingsPremium';
 import { RouteProps } from '../../Navigation';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import { translate } from '../../i18n/i18n';
-import { useLanguage } from '../../state/LanguageSlice';
 
 export const PianoSettings = () => {
 	return (
@@ -70,14 +69,14 @@ const SettingsTab = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
 	const { colors } = useTheme();
-	const routes = ([
+	const routes = [
 		{ key: 'profile', title: 'settingsTabProfile' },
 		{ key: 'premium', title: 'settingsTabPremium' },
 		{ key: 'preferences', title: 'settingsTabPreferences' },
 		{ key: 'notifications', title: 'settingsTabNotifications' },
 		{ key: 'privacy', title: 'settingsTabPrivacy' },
 		{ key: 'piano', title: 'settingsTabPiano' },
-	]);
+	];
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';
 	const renderTabBar = (

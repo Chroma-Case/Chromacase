@@ -3,7 +3,7 @@ import useColorScheme from '../../hooks/colorScheme';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Cup, Discover, Icon, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
+import { Cup, Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
 import ScaffoldDesktopCC from './ScaffoldDesktopCC';
 import ScaffoldMobileCC from './ScaffoldMobileCC';

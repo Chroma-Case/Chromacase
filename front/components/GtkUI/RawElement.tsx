@@ -18,7 +18,7 @@ import {
 	getElementToggleNode,
 	getElementRangeNode,
 } from './ElementTypes';
-import { ArrowDown2, Icon as IconSax } from 'iconsax-react-native';
+import { ArrowDown2 } from 'iconsax-react-native';
 import { useWindowDimensions } from 'react-native';
 
 type RawElementProps = {

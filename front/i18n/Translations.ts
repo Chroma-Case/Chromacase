@@ -40,12 +40,12 @@ export const en = {
 
 	// Form
 	formPlaceholderUsername: 'Username',
-	formPlaceholderEmail: "Email",
+	formPlaceholderEmail: 'Email',
 	formPlaceholderPassword: 'Password',
 	formPlaceholderRepeatPassword: 'Repeat password',
 
 	// MusicListTitle
-	musicListTitleSong : "Song",
+	musicListTitleSong: 'Song',
 	musicListTitleLevel: 'Level',
 	musicListTitleLastScore: 'Last Score',
 	musicListTitleBestScore: 'Best Score',
@@ -342,15 +342,15 @@ export const fr: typeof en = {
 	favoriteGenre: 'Genre favori : ',
 
 	// Form
-	formPlaceholderUsername : "Nom d'utilisateur",
-	formPlaceholderEmail : "Email",
-	formPlaceholderPassword : 'Mot de passe',
-	formPlaceholderRepeatPassword : 'Répéter le mot de passe',
+	formPlaceholderUsername: "Nom d'utilisateur",
+	formPlaceholderEmail: 'Email',
+	formPlaceholderPassword: 'Mot de passe',
+	formPlaceholderRepeatPassword: 'Répéter le mot de passe',
 	// MusicListTitle
-	musicListTitleSong : "Musique",
-	musicListTitleLevel : "Niveau",
-	musicListTitleLastScore : "Dernier",
-	musicListTitleBestScore : "Meilleur",
+	musicListTitleSong: 'Musique',
+	musicListTitleLevel: 'Niveau',
+	musicListTitleLastScore: 'Dernier',
+	musicListTitleBestScore: 'Meilleur',
 	// Menu
 	menuDiscovery: 'Découverte',
 	menuProfile: 'Profil',
@@ -658,12 +658,12 @@ export const sp: typeof en = {
 
 	// Form
 	formPlaceholderUsername: 'NombreUsuario',
-	formPlaceholderEmail: "Email",
+	formPlaceholderEmail: 'Email',
 	formPlaceholderPassword: 'Contraseña',
 	formPlaceholderRepeatPassword: 'Repetir contraseña',
-	
+
 	// MusicListTitle
-	musicListTitleSong : "Canción",
+	musicListTitleSong: 'Canción',
 	musicListTitleLevel: 'Nivel',
 	musicListTitleLastScore: 'Última',
 	musicListTitleBestScore: 'Mejor',

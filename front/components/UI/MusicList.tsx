@@ -173,7 +173,7 @@ function MusicListComponent({
 						paddingRight: 60,
 					}}
 				>
-					{ translate('musicListTitleSong') }
+					{translate('musicListTitleSong')}
 				</Text>
 				{[
 					{ text: translate('musicListTitleLevel'), icon: Chart2 },
