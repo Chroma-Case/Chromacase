@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet } from 'react-native';
 import MusicItem, { MusicItemType } from './MusicItem';
 import ButtonBase from './ButtonBase';
 import { ArrowDown2, Chart2, ArrowRotateLeft, Cup, Icon } from 'iconsax-react-native';
+import { translate } from '../../i18n/i18n';
 
 // Props type definition for MusicItemTitle.
 interface MusicItemTitleProps {
@@ -108,7 +109,6 @@ function MusicListComponent({
 	// 'currentPage': current page in pagination.
 	// 'loading': indicates if more items are being loaded.
 	// 'hasMoreMusics': flag for more items availability.
-	console.log('initialMusics', initialMusics.length);
 	const [musicListState, setMusicListState] = useState({
 		allMusics: initialMusics,
 		displayedMusics: initialMusics.slice(0, musicsPerPage),
@@ -119,7 +119,6 @@ function MusicListComponent({
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'md', xl: 'xl' });
 	const isBigScreen = screenSize === 'xl';
-	console.log('coucou', initialMusics.length);
 
 	// Loads additional music items.
 	// Uses useCallback to avoid unnecessary redefinitions on re-renders.
@@ -174,12 +173,12 @@ function MusicListComponent({
 						paddingRight: 60,
 					}}
 				>
-					Song
+					{ translate('musicListTitleSong') }
 				</Text>
 				{[
-					{ text: 'level', icon: Chart2 },
-					{ text: 'lastScore', icon: ArrowRotateLeft },
-					{ text: 'BastScore', icon: Cup },
+					{ text: translate('musicListTitleLevel'), icon: Chart2 },
+					{ text: translate('musicListTitleLastScore'), icon: ArrowRotateLeft },
+					{ text: translate('musicListTitleBestScore'), icon: Cup },
 				].map((value) => (
 					<MusicItemTitle
 						key={value.text + 'key'}

@@ -95,7 +95,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	});
 
 	const typeToStyleAnimator = { filled: styleButton, outlined: styleButton, menu: styleMenu };
-	const MyIcon: Icon = icon as Icon;
+	const MyIcon = icon;
 
 	return (
 		<InteractiveBase
@@ -104,8 +104,13 @@ const ButtonBase: React.FC<ButtonProps> = ({
 			onPress={async () => {
 				if (onPress && !isDisabled) {
 					setLoading(true);
-					await onPress();
-					setLoading(false);
+					try {
+						await onPress();
+					} catch (error) {
+						console.error(error);
+					} finally {
+						setLoading(false);
+					}
 				}
 			}}
 			isDisabled={isDisabled}
@@ -124,7 +129,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 						type === 'menu' ? { justifyContent: 'flex-start' } : {},
 					]}
 				>
-					{icon && (
+					{MyIcon && (
 						<MyIcon
 							size={'18'}
 							color={

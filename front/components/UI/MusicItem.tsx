@@ -39,7 +39,7 @@ export interface MusicItemType {
 	onLike: () => void;
 
 	/** Callback function triggered when the song is played. */
-	onPlay?: () => void;
+	onPlay: () => void;
 }
 
 // Custom hook to handle the number formatting based on the current user's language.

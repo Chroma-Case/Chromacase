@@ -83,7 +83,7 @@ const SignupView = () => {
 					key={'signup-form-1'}
 					error={formData.username.error}
 					icon={User}
-					placeholder="Username"
+					placeholder={translate('formPlaceholderUsername')}
 					autoComplete="username"
 					value={formData.username.value}
 					onChangeText={(t) => {
@@ -101,7 +101,7 @@ const SignupView = () => {
 					key={'signup-form-2'}
 					error={formData.email.error}
 					icon={Sms}
-					placeholder="Email"
+					placeholder={translate('formPlaceholderEmail')}
 					autoComplete="email"
 					value={formData.email.value}
 					onChangeText={(t) => {
@@ -121,7 +121,7 @@ const SignupView = () => {
 					isSecret
 					error={formData.password.error}
 					icon={Lock1}
-					placeholder="Password"
+					placeholder={translate('formPlaceholderPassword')}
 					autoComplete="password-new"
 					value={formData.password.value}
 					onChangeText={(t) => {
@@ -140,7 +140,7 @@ const SignupView = () => {
 					isSecret
 					error={formData.repeatPassword.error}
 					icon={Lock1}
-					placeholder="Repeat password"
+					placeholder={translate('formPlaceholderRepeatPassword')}
 					autoComplete="password-new"
 					value={formData.repeatPassword.value}
 					onChangeText={(t) => {

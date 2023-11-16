@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { View, Image } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { Divider, Text, ScrollView, Row, useMediaQuery, useTheme } from 'native-base';
 import { useQuery, useQueries } from '../../Queries';
 import API from '../../API';
@@ -7,7 +7,7 @@ import Song from '../../models/Song';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
-import { translate } from '../../i18n/i18n';
+import { TranslationKey, translate } from '../../i18n/i18n';
 import { useNavigation } from '../../Navigation';
 import Spacer from './Spacer';
 import User from '../../models/User';
@@ -20,48 +20,58 @@ type ScaffoldDesktopCCProps = {
 	user: User;
 	logo: string;
 	routeName: string;
-	menu: {
+	menu: readonly{
 		type: 'main' | 'sub';
-		title: string;
+		title: TranslationKey;
 		icon: Icon;
 		link: string;
 	}[];
 };
 
+// TODO a tester avec un historique de plus de 3 musics différente mdr !!
 const SongHistory = (props: { quantity: number }) => {
 	const playHistoryQuery = useQuery(API.getUserPlayHistory);
 	const songHistory = useQueries(
 		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
 	);
+	const navigation = useNavigation();
 
-	if (!playHistoryQuery.data || playHistoryQuery.isLoading) {
+	const musics =
+		songHistory
+			.map((h) => h.data)
+			.filter((data): data is Song => data !== undefined)
+			.filter(
+				(song, i, array) =>
+					array.map((s) => s.id).findIndex((id) => id == song.id) == i
+			)
+			?.slice(0, props.quantity)
+			.map((song: Song) => (
+				<View
+					key={'short-history-tab' + song.id}
+					style={{
+						paddingHorizontal: 16,
+						paddingVertical: 10,
+						flex: 1,
+					}}
+				>
+					<TouchableOpacity
+						onPress={() => navigation.navigate('Song', { songId: song.id })}
+					>
+						<Text numberOfLines={1}>{song.name}</Text>
+					</TouchableOpacity>
+				</View>
+			))
+
+	if (!playHistoryQuery.data || playHistoryQuery.isLoading || !songHistory) {
 		return <LoadingView />;
 	}
 
 	return (
 		<View>
-			{songHistory.length === 0 ? (
+			{musics.length === 0 ? (
 				<Text style={{ paddingHorizontal: 16 }}>{translate('menuNoSongsPlayedYet')}</Text>
 			) : (
-				songHistory
-					.map((h) => h.data)
-					.filter((data): data is Song => data !== undefined)
-					.filter(
-						(song, i, array) =>
-							array.map((s) => s.id).findIndex((id) => id == song.id) == i
-					)
-					.slice(0, props.quantity + 1)
-					.map((histoItem, index) => (
-						<View
-							key={'tab-navigation-other-' + index}
-							style={{
-								paddingHorizontal: 16,
-								paddingVertical: 10,
-							}}
-						>
-							<Text numberOfLines={1}>{histoItem.name}</Text>
-						</View>
-					))
+				musics
 			)}
 		</View>
 	);
@@ -148,7 +158,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 					</View>
 				</View>
 				{!isSmallScreen && (
-					<View>
+					<View style={{width: '100%'}}>
 						<Divider my="2" _light={{ bg: colors.black[500] }} _dark={{ bg: '#FFF' }} />
 						<Spacer height="xs" />
 						<Text

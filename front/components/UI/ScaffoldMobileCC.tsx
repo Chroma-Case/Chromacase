@@ -14,7 +14,7 @@ type ScaffoldMobileCCProps = {
 	logo: string;
 	routeName: string;
 	widthPadding: boolean;
-	menu: {
+	menu: readonly {
 		type: 'main' | 'sub';
 		title: string;
 		icon: Icon;
@@ -26,8 +26,6 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 	const navigation = useNavigation();
 	const [isSmallScreen] = useMediaQuery({ maxWidth: 400 });
 	const { colors } = useTheme();
-
-	console.log(isSmallScreen);
 
 	return (
 		<View style={{ height: '100%', flexDirection: 'column', overflow: 'hidden' }}>

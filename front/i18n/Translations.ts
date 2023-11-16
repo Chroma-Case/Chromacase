@@ -38,6 +38,17 @@ export const en = {
 	levelProgress: 'good notes',
 	score: 'Score',
 
+	// Form
+	formPlaceholderUsername: 'Username',
+	formPlaceholderEmail: "Email",
+	formPlaceholderPassword: 'Password',
+	formPlaceholderRepeatPassword: 'Repeat password',
+
+	// MusicListTitle
+	musicListTitleSong : "Song",
+	musicListTitleLevel: 'Level',
+	musicListTitleLastScore: 'Last Score',
+	musicListTitleBestScore: 'Best Score',
 	// Menu
 	menuDiscovery: 'Discovery',
 	menuProfile: 'Profile',
@@ -58,7 +69,7 @@ export const en = {
 	//signin
 	signinPageTitle: 'Welcome !',
 	signinPageParagraph: 'Continue with Google or enter your details.',
-	signinLinkLabel: "You don't have an account? ",
+	signinLinkLabel: "You don't have an account?",
 	signinLinkText: 'Sign up for free.',
 
 	//music
@@ -305,8 +316,8 @@ export const fr: typeof en = {
 	songPageBtn: 'Aller sur la page de la chanson',
 	level: 'Niveau',
 	chapters: 'Chapitres',
-	bestScore: 'Meilleur Score',
-	lastScore: 'Dernier Score',
+	bestScore: 'Meilleur',
+	lastScore: 'Dernier',
 	bestStreak: 'Meilleure série',
 	precision: 'Précision',
 
@@ -330,6 +341,16 @@ export const fr: typeof en = {
 	longestCombo: 'Combo le plus long : ',
 	favoriteGenre: 'Genre favori : ',
 
+	// Form
+	formPlaceholderUsername : "Nom d'utilisateur",
+	formPlaceholderEmail : "Email",
+	formPlaceholderPassword : 'Mot de passe',
+	formPlaceholderRepeatPassword : 'Répéter le mot de passe',
+	// MusicListTitle
+	musicListTitleSong : "Musique",
+	musicListTitleLevel : "Niveau",
+	musicListTitleLastScore : "Dernier",
+	musicListTitleBestScore : "Meilleur",
 	// Menu
 	menuDiscovery: 'Découverte',
 	menuProfile: 'Profil',
@@ -350,7 +371,7 @@ export const fr: typeof en = {
 	//signin
 	signinPageTitle: 'Bienvenue !',
 	signinPageParagraph: 'Continuez avec Google ou entrez vos coordonnées.',
-	signinLinkLabel: "Vous n'avez pas de compte ? ",
+	signinLinkLabel: "Vous n'avez pas de compte ?",
 	signinLinkText: 'Inscrivez-vous gratuitement',
 
 	//music
@@ -635,6 +656,17 @@ export const sp: typeof en = {
 	longestCombo: 'combo más largo : ',
 	favoriteGenre: 'genero favorito : ',
 
+	// Form
+	formPlaceholderUsername: 'NombreUsuario',
+	formPlaceholderEmail: "Email",
+	formPlaceholderPassword: 'Contraseña',
+	formPlaceholderRepeatPassword: 'Repetir contraseña',
+	
+	// MusicListTitle
+	musicListTitleSong : "Canción",
+	musicListTitleLevel: 'Nivel',
+	musicListTitleLastScore: 'Última',
+	musicListTitleBestScore: 'Mejor',
 	// Menu
 	menuDiscovery: 'Descubrimiento',
 	menuProfile: 'Perfil',
@@ -655,7 +687,7 @@ export const sp: typeof en = {
 	//signin
 	signinPageTitle: 'Bienvenido !',
 	signinPageParagraph: 'Continúa con Google o introduce tus datos.',
-	signinLinkLabel: '¿No tienes una cuenta? ',
+	signinLinkLabel: '¿No tienes una cuenta?',
 	signinLinkText: 'Regístrate gratis.',
 
 	//music

@@ -24,7 +24,7 @@
 		"@react-navigation/native": "^6.1.8",
 		"@react-navigation/native-stack": "^6.9.14",
 		"@reduxjs/toolkit": "^1.9.6",
-		"expo": "^49.0.16",
+		"expo": "~49.0.13",
 		"expo-blur": "~12.4.1",
 		"expo-image-picker": "~14.3.2",
 		"expo-linear-gradient": "~12.3.0",

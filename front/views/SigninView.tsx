@@ -69,7 +69,7 @@ const SigninView = () => {
 					key={'signin-form-1'}
 					error={formData.username.error}
 					icon={User}
-					placeholder="Username"
+					placeholder={translate('formPlaceholderUsername')}
 					autoComplete="username"
 					value={formData.username.value}
 					onChangeText={(t) => {
@@ -87,7 +87,7 @@ const SigninView = () => {
 					key={'signin-form-2'}
 					error={formData.password.error}
 					icon={Lock1}
-					placeholder="Password"
+					placeholder={translate('formPlaceholderPassword')}
 					autoComplete="password"
 					value={formData.password.value}
 					onChangeText={(t) => {
@@ -136,7 +136,7 @@ const SigninView = () => {
 				/>
 			}
 			link={{
-				label: translate('signinLinkLabel'),
+				label: translate('signinLinkLabel') + ' ',
 				text: translate('signinLinkText'),
 				onPress: () => navigation.navigate('Signup'),
 			}}

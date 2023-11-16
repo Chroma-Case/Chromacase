@@ -58,7 +58,7 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 				isRequired
 				icon={User}
 				error={formData.username.error}
-				placeholder="Username"
+				placeholder={translate('formPlaceholderUsername')}
 				autoComplete="username-new"
 				value={formData.username.value}
 				onChangeText={(t) => {
@@ -75,7 +75,7 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 				isRequired
 				icon={Sms}
 				error={formData.email.error}
-				placeholder="Email"
+				placeholder={translate('formPlaceholderEmail')}
 				autoComplete="email"
 				value={formData.email.value}
 				onChangeText={(t) => {
@@ -93,7 +93,7 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 				isSecret
 				icon={Lock1}
 				error={formData.password.error}
-				placeholder="Password"
+				placeholder={translate('formPlaceholderPassword')}
 				autoComplete="password-new"
 				value={formData.password.value}
 				onChangeText={(t) => {
@@ -111,7 +111,7 @@ const SignUpForm = ({ onSubmit }: SignupFormProps) => {
 				isSecret
 				error={formData.repeatPassword.error}
 				icon={Lock1}
-				placeholder="Repeat password"
+				placeholder={translate('formPlaceholderRepeatPassword')}
 				autoComplete="password-new"
 				value={formData.repeatPassword.value}
 				onChangeText={(t) => {

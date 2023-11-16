@@ -31,7 +31,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 	const isSmallScreen = screenSize === 'small';
 	const { width: screenWidth } = useWindowDimensions();
 	const { colors } = useTheme();
-	const IconElement = icon as IconSax;
+	const IconElement = icon;
 
 	return (
 		<Column

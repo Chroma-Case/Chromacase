@@ -74,7 +74,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 						/>
 						{layout.width > 650 && (
 							<Text fontSize={'xl'} selectable={false}>
-								Chromacase
+								ChromaCase
 							</Text>
 						)}
 					</Row>

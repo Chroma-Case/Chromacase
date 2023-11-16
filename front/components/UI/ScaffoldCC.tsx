@@ -8,19 +8,14 @@ import { LoadingView } from '../Loading';
 import ScaffoldDesktopCC from './ScaffoldDesktopCC';
 import ScaffoldMobileCC from './ScaffoldMobileCC';
 
-const menu: {
-	type: 'main' | 'sub';
-	title: string;
-	icon: Icon;
-	link: string;
-}[] = [
+const menu = [
 	{ type: 'main', title: 'menuDiscovery', icon: Discover, link: 'HomeNew' },
 	{ type: 'main', title: 'menuProfile', icon: User, link: 'User' },
 	{ type: 'main', title: 'menuMusic', icon: Music, link: 'Music' },
 	{ type: 'main', title: 'menuSearch', icon: SearchNormal1, link: 'Search' },
 	{ type: 'main', title: 'menuLeaderBoard', icon: Cup, link: 'Score' },
 	{ type: 'sub', title: 'menuSettings', icon: Setting2, link: 'Settings' },
-];
+] as const;
 
 type ScaffoldCCProps = {
 	children?: React.ReactNode;
