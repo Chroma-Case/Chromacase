@@ -38,6 +38,7 @@ import { Song as _Song } from "src/_gen/prisma-class/song";
 import { SongHistory } from "src/_gen/prisma-class/song_history";
 import { IncludeMap, mapInclude } from "src/utils/include";
 import { Public } from "src/auth/public";
+import { ApiKeyAuthGuard } from "src/auth/apikey-auth.guard";
 
 class SongHistoryResult {
 	@ApiProperty()
@@ -48,7 +49,7 @@ class SongHistoryResult {
 
 @Controller("song")
 @ApiTags("song")
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, ApiKeyAuthGuard)
 export class SongController {
 	static filterableFields: string[] = [
 		"+id",
