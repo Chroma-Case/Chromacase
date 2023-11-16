@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@jimp/plugin-circle": "^0.22.10",
     "@nestjs-modules/mailer": "^1.9.1",
     "@nestjs/common": "^10.1.0",
     "@nestjs/config": "^3.0.0",
@@ -36,9 +37,9 @@
     "@types/passport": "^1.0.12",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
-    "json-logger-service": "^9.0.1",
     "class-validator": "^0.14.0",
+    "jimp": "^0.22.10",
+    "json-logger-service": "^9.0.1",
     "node-fetch": "^2.6.12",
     "nodemailer": "^6.9.5",
     "passport-google-oauth20": "^2.0.0",

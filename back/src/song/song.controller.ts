@@ -37,6 +37,7 @@ import { Song as _Song } from 'src/_gen/prisma-class/song';
 import { SongHistory } from 'src/_gen/prisma-class/song_history';
 import { IncludeMap, mapInclude } from 'src/utils/include';
 import { Public } from 'src/auth/public';
+import Jimp from 'jimp';
 
 class SongHistoryResult {
 	@ApiProperty()
@@ -44,6 +45,9 @@ class SongHistoryResult {
 	@ApiProperty({ type: SongHistory, isArray: true })
 	history: SongHistory[];
 }
+
+const BACKGROUND_COVER = 'radioart3.jpeg';
+const ICON = 'icon_dark.png';
 
 @Controller('song')
 @ApiTags('song')
@@ -85,6 +89,21 @@ export class SongController {
 		}
 	}
 
+	async gen_illustration(song: Song) {
+		const img = await Jimp.read(BACKGROUND_COVER);
+		// @ts-ignore
+		const artist_img = await Jimp.read(`/assets/artists/${song.artist.name}/illustration.png`);
+		const logo = await Jimp.read(ICON);
+		img.cover(600, 600);
+		artist_img.cover(400, 400);
+		logo.cover(70, 70);
+		artist_img.circle();
+		img.composite(artist_img, 100, 100);
+		img.composite(logo, 10, 10);
+		return img;
+
+	}
+
 	@Get(':id/illustration')
 	@ApiOperation({
 		description: 'Streams the illustration of the requested song',
@@ -93,13 +112,16 @@ export class SongController {
 	@ApiOkResponse({ description: 'Returns the illustration succesfully' })
 	@Public()
 	async getIllustration(@Param('id', ParseIntPipe) id: number) {
-		const song = await this.songService.song({ id });
+		
+		const song = await this.songService.song({ id }, { artist: true } );
 		if (!song) throw new NotFoundException('Song not found');
-
+		//await this.gen_illustration(song);
+		
 		if (song.illustrationPath === null) throw new NotFoundException();
-		if (!existsSync(song.illustrationPath))
-			throw new NotFoundException('Illustration not found');
-
+		if (!existsSync(song.illustrationPath)) {
+			let img = await this.gen_illustration(song);
+			img.write(song.illustrationPath);
+		}
 		try {
 			const file = createReadStream(song.illustrationPath);
 			return new StreamableFile(file);
