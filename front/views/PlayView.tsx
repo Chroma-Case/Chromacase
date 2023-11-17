@@ -1,9 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { StackActions } from '@react-navigation/native';
-import React, { useEffect, useRef, useState, createContext, useReducer } from 'react';
+import React, { useEffect, useRef, useState, createContext } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
 import Animated, {
-	BounceIn,
 	useSharedValue,
 	withTiming,
 	Easing,
@@ -12,24 +11,11 @@ import Animated, {
 	withDelay,
 } from 'react-native-reanimated';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {
-	Box,
-	Center,
-	Column,
-	Progress,
-	Text,
-	Row,
-	View,
-	useToast,
-	Icon,
-	HStack,
-	Image,
-	PresenceTransition,
-} from 'native-base';
+import { Text, Row, View, useToast, Icon, Image } from 'native-base';
 import IconButton from '../components/IconButton';
 import { Ionicons } from '@expo/vector-icons';
 import { RouteProps, useNavigation } from '../Navigation';
-import { transformQuery, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import { useSelector } from 'react-redux';
@@ -37,15 +23,16 @@ import { RootState } from '../state/Store';
 import { translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import PartitionCoord from '../components/PartitionCoord';
-import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
-import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
+import { PianoCanvasContext } from '../models/PianoGame';
 import { MetronomeControls } from '../components/Metronome';
 import PartitionMagic from '../components/Play/PartitionMagic';
 import StarProgress from '../components/StarProgress';
+import useColorScheme from '../hooks/colorScheme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme } from 'native-base';
 
 type PlayViewProps = {
 	songId: number;
@@ -124,10 +111,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
 	// const fadeAnim = useRef(new Animated.Value(0)).current;
-	const musixml = useQuery(
-		transformQuery(API.getSongMusicXML(songId), (data) => new TextDecoder().decode(data)),
-		{ staleTime: Infinity }
-	);
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
@@ -140,6 +123,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 			transform: [{ scale: scoreMessageScale.value }],
 		};
 	});
+	const colorScheme = useColorScheme();
+	const { colors } = useTheme();
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -333,270 +318,296 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, [song.data, partitionRendered]);
 
-	if (!song.data || !musixml.data) {
+	if (!song.data) {
 		return <LoadingView />;
 	}
 	return (
-		<SafeAreaView
-			style={{
-				flexGrow: 1,
-				flexDirection: 'column',
-				padding: 20,
-				position: 'relative',
-				backgroundColor: 'rgb(26, 36, 74)',
-			}}
-		>
-			<View
+		<View style={{ display: 'flex', flex: 1, backgroundColor: '#cdd4fd' }}>
+			<SafeAreaView
 				style={{
-					position: 'absolute',
-					top: 10,
-					right: 10,
-					display: 'flex',
-					flexDirection: 'row',
-					gap: 20,
-					borderRadius: 12,
-					backgroundColor: 'rgba(16, 16, 20, 0.7)',
-					padding: 10,
-					paddingHorizontal: 20,
-					zIndex: 100,
-				}}
-			>
-				{infoCardInfos.map((info) => (
-					<View
-						key={info.id}
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}
-					>
-						<Text fontSize={12}>{info.label}</Text>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								gap: 5,
-							}}
-						>
-							{info.icon}
-							<Text fontSize={12} bold>
-								{info.value}
-							</Text>
-						</View>
-					</View>
-				))}
-			</View>
-			<View
-				style={{
-					top: "5%",
-					left: 0,
-					zIndex: 100,
-					width: '100%',
-					display: 'flex',
+					flexGrow: 1,
 					flexDirection: 'column',
-					justifyContent: 'center',
-					alignItems: 'center',
-					gap: 3,
-					position: 'absolute',
+					padding: 20,
+					position: 'relative',
 				}}
 			>
 				<View
 					style={{
-						backgroundColor: 'rgba(16, 16, 20, 0.8)',
-						paddingHorizontal: 20,
-						paddingVertical: 5,
+						position: 'absolute',
+						top: 10,
+						right: 10,
+						display: 'flex',
+						flexDirection: 'row',
+						gap: 20,
 						borderRadius: 12,
+						backgroundColor: 'rgba(16, 16, 20, 0.7)',
+						padding: 10,
+						paddingHorizontal: 20,
+						zIndex: 100,
 					}}
 				>
-					<Text fontSize={24}>{score}</Text>
+					{infoCardInfos.map((info) => (
+						<View
+							key={info.id}
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Text color={colors.coolGray[700]} fontSize={12}>
+								{info.label}
+							</Text>
+							<View
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									gap: 5,
+								}}
+							>
+								{info.icon}
+								<Text color={colors.coolGray[800]} fontSize={12} bold>
+									{info.value}
+								</Text>
+							</View>
+						</View>
+					))}
 				</View>
-				<Animated.View style={[scoreMsgStyle]}>
+				<View
+					style={{
+						top: '5%',
+						left: 0,
+						zIndex: 100,
+						width: '100%',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'center',
+						gap: 3,
+						position: 'absolute',
+					}}
+				>
 					<View
 						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							gap: 7,
-							justifyContent: 'center',
-							alignItems: 'center',
 							backgroundColor: 'rgba(16, 16, 20, 0.8)',
 							paddingHorizontal: 20,
 							paddingVertical: 5,
 							borderRadius: 12,
 						}}
 					>
-						<Text fontSize={20} color={'white'}>
-							{lastScoreMessage?.content}
-						</Text>
-						<Text fontSize={15} bold>
-							{streak > 0 && `x${streak}`}
+						<Text color={colors.coolGray[900]} fontSize={24}>
+							{score}
 						</Text>
 					</View>
-				</Animated.View>
-			</View>
-			<View
-				style={{
-					flexGrow: 1,
-					justifyContent: 'center',
-					borderRadius: 10,
-					overflow: 'hidden',
-					backgroundColor: 'white',
-				}}
-			>
-				<PianoCC.Provider
-					value={{
-						pressedKeys: pressedKeys,
-						timestamp: time,
-						messages: [],
-					}}
-				>
-					<PartitionMagic
-						songID={song.data.id}
-						onReady={() => setPartitionRendered(true)}
-						onEndReached={onEnd}
-						onError={() => {
-							console.log('error from partition magic');
-						}}
-					/>
-				</PianoCC.Provider>
-				{!partitionRendered && <LoadingComponent />}
-			</View>
-
-			<Row
-				justifyContent="space-between"
-				style={{
-					display: 'flex',
-					flexGrow: 0,
-					flexShrink: 0,
-					alignItems: 'center',
-					borderRadius: 12,
-					backgroundColor: 'rgba(16, 16, 20, 0.5)',
-					//@ts-expect-error backdropFilter is not in the types
-					backdropFilter: 'blur(2px)',
-					padding: 10,
-					marginTop: 20,
-				}}
-			>
-				<View
-					style={{
-						flexGrow: 0,
-						flexShrink: 3,
-						justifyContent: 'center',
-						alignItems: 'center',
-						marginRight: 40,
-					}}
-				>
-					<View
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							gap: 20,
-							maxWidth: '100%',
-						}}
-					>
-						<Image
-							src={song.data.cover}
-							alt="cover"
-							size={'sm'}
-							borderRadius={8}
-							style={{
-								flexShrink: 0,
-							}}
-						/>
+					<Animated.View style={[scoreMsgStyle]}>
 						<View
 							style={{
 								display: 'flex',
-								flexDirection: 'column',
+								flexDirection: 'row',
+								gap: 7,
 								justifyContent: 'center',
-								gap: 8,
-								flex: 1,
+								alignItems: 'center',
+								backgroundColor: 'rgba(16, 16, 20, 0.8)',
+								paddingHorizontal: 20,
+								paddingVertical: 5,
+								borderRadius: 12,
 							}}
 						>
-							<Text fontSize={14} maxW={'100%'} isTruncated>
-								{song.data.name}
+							<Text color={colors.coolGray[900]} fontSize={20}>
+								{lastScoreMessage?.content}
 							</Text>
-							<Text fontSize={12} maxW={'100%'} isTruncated>
-								{song.data.artistId}
+							<Text color={colors.coolGray[900]} fontSize={15} bold>
+								{streak > 0 && `x${streak}`}
 							</Text>
 						</View>
-					</View>
+					</Animated.View>
 				</View>
 				<View
 					style={{
 						flexGrow: 1,
-						flexShrink: 0,
-						display: 'flex',
-						flexDirection: 'row',
 						justifyContent: 'center',
-						alignItems: 'center',
-						gap: 25,
+						borderRadius: 10,
+						overflow: 'hidden',
+						backgroundColor: 'white',
 					}}
 				>
-					<IconButton
-						size="sm"
-						variant="solid"
-						icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
-						onPress={() => {
-							if (paused) {
-								onResume();
-							} else {
-								onPause();
-							}
+					<PianoCC.Provider
+						value={{
+							pressedKeys: pressedKeys,
+							timestamp: time,
+							messages: [],
 						}}
-					/>
-					{midiKeyboardFound && (
-						<>
-							<IconButton
-								size="sm"
-								colorScheme="coolGray"
-								variant="solid"
-								icon={<Icon as={Ionicons} name="stop" />}
-								onPress={() => {
-									onEnd();
+					>
+						<PartitionMagic
+							songID={song.data.id}
+							onReady={() => setPartitionRendered(true)}
+							onEndReached={onEnd}
+							onError={() => {
+								console.log('error from partition magic');
+							}}
+						/>
+					</PianoCC.Provider>
+					{!partitionRendered && <LoadingComponent />}
+				</View>
+
+				<Row
+					justifyContent="space-between"
+					style={{
+						display: 'flex',
+						flexGrow: 0,
+						flexShrink: 0,
+						alignItems: 'center',
+						borderRadius: 12,
+						backgroundColor: 'rgba(16, 16, 20, 0.5)',
+						//@ts-expect-error backdropFilter is not in the types
+						backdropFilter: 'blur(2px)',
+						padding: 10,
+						marginTop: 20,
+					}}
+				>
+					<View
+						style={{
+							flexGrow: 0,
+							flexShrink: 3,
+							justifyContent: 'center',
+							alignItems: 'center',
+							marginRight: 40,
+						}}
+					>
+						<View
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								gap: 20,
+								maxWidth: '100%',
+							}}
+						>
+							<Image
+								src={song.data.cover}
+								alt="cover"
+								size={'sm'}
+								borderRadius={8}
+								style={{
+									flexShrink: 0,
 								}}
 							/>
-						</>
-					)}
-					<Text>
-						{time < 0
-							? paused
-								? '0:00'
-								: Math.floor((time % 60000) / 1000)
-										.toFixed(0)
-										.toString()
-							: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000)
-									.toFixed(0)
-									.toString()
-									.padStart(2, '0')}`}
-					</Text>
-					<StarProgress
-						value={score}
-						max={100}
-						starSteps={[50, 75, 90]}
+							<View
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									justifyContent: 'center',
+									gap: 8,
+									flex: 1,
+								}}
+							>
+								<Text
+									color={colors.coolGray[800]}
+									fontSize={14}
+									maxW={'100%'}
+									isTruncated
+								>
+									{song.data.name}
+								</Text>
+								<Text
+									color={colors.coolGray[900]}
+									fontSize={12}
+									maxW={'100%'}
+									isTruncated
+								>
+									{song.data.artistId}
+								</Text>
+							</View>
+						</View>
+					</View>
+					<View
 						style={{
 							flexGrow: 1,
-							flexShrink: 1,
-							marginTop: 10,
-							marginBottom: 10,
-							minWidth: 200,
+							flexShrink: 0,
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+							gap: 25,
 						}}
-					/>
-				</View>
-				<View
+					>
+						<IconButton
+							size="sm"
+							variant="solid"
+							icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
+							onPress={() => {
+								if (paused) {
+									onResume();
+								} else {
+									onPause();
+								}
+							}}
+						/>
+						{midiKeyboardFound && (
+							<>
+								<IconButton
+									size="sm"
+									colorScheme="coolGray"
+									variant="solid"
+									icon={<Icon as={Ionicons} name="stop" />}
+									onPress={() => {
+										onEnd();
+									}}
+								/>
+							</>
+						)}
+						<Text color={colors.coolGray[900]}>
+							{time < 0
+								? paused
+									? '0:00'
+									: Math.floor((time % 60000) / 1000)
+											.toFixed(0)
+											.toString()
+								: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000)
+										.toFixed(0)
+										.toString()
+										.padStart(2, '0')}`}
+						</Text>
+						<StarProgress
+							value={score}
+							max={100}
+							starSteps={[50, 75, 90]}
+							style={{
+								flexGrow: 1,
+								flexShrink: 1,
+								marginTop: 10,
+								marginBottom: 10,
+								minWidth: 200,
+							}}
+						/>
+					</View>
+					<View
+						style={{
+							flex: 1,
+							justifyContent: 'space-evenly',
+							alignItems: 'center',
+							flexDirection: 'row',
+							marginLeft: 40,
+							maxWidth: 250,
+							minWidth: 120,
+						}}
+					>
+						<MetronomeControls paused={paused} bpm={bpm.current} />
+					</View>
+				</Row>
+			</SafeAreaView>
+			{colorScheme === 'dark' && (
+				<LinearGradient
+					colors={['#101014', '#6075F9']}
 					style={{
-						flex: 1,
-						justifyContent: 'space-evenly',
-						alignItems: 'center',
-						flexDirection: 'row',
-						marginLeft: 40,
-						maxWidth: 250,
-						minWidth: 120,
+						width: '100%',
+						height: '100%',
+						position: 'absolute',
+						zIndex: -2,
 					}}
-				>
-					<MetronomeControls paused={paused} bpm={bpm.current} />
-				</View>
-			</Row>
-		</SafeAreaView>
+				/>
+			)}
+		</View>
 	);
 };
 

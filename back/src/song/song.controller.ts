@@ -37,6 +37,7 @@ import { FilterQuery } from "src/utils/filter.pipe";
 import { Song as _Song } from "src/_gen/prisma-class/song";
 import { SongHistory } from "src/_gen/prisma-class/song_history";
 import { IncludeMap, mapInclude } from "src/utils/include";
+import { Public } from "src/auth/public";
 
 class SongHistoryResult {
 	@ApiProperty()
@@ -91,6 +92,8 @@ export class SongController {
 	})
 	@ApiNotFoundResponse({ description: "Song not found" })
 	@ApiOkResponse({ description: "Returns the illustration succesfully" })
+	@Header("Cache-Control", "max-age=86400")
+	@Public()
 	async getIllustration(@Param("id", ParseIntPipe) id: number) {
 		const song = await this.songService.song({ id });
 		if (!song) throw new NotFoundException("Song not found");
@@ -129,6 +132,7 @@ export class SongController {
 	@ApiOkResponse({ description: "Returns the svg partition succesfully" })
 	@Header("Cache-Control", "max-age=86400")
 	@Header("Content-Type", "image/svg+xml")
+	@Public()
 	async getPartition(@Param("id", ParseIntPipe) id: number) {
 		const song = await this.songService.song({ id });
 		if (!song) throw new NotFoundException("Song not found");
