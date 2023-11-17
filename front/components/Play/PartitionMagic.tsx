@@ -143,15 +143,15 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 						}}
 					>
 						{!isLoading && !isError && (
-						<ImageBackground
-							source={{ uri: getSVGURL(songID) }}
-							onLoad={onReady}
-							style={{
-								aspectRatio: partitionDims[0] / partitionDims[1],
-								height: '100%',
-								position: 'relative',
-							}}
-						/>
+							<ImageBackground
+								source={{ uri: getSVGURL(songID) }}
+								onLoad={onReady}
+								style={{
+									aspectRatio: partitionDims[0] / partitionDims[1],
+									height: '100%',
+									position: 'relative',
+								}}
+							/>
 						)}
 					</Animated.View>
 					<Animated.View
