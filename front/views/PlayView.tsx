@@ -115,6 +115,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [streak, setStreak] = useState(0);
 	const scoreMessageScale = useSharedValue(0);
 	// this style should bounce in on enter and fade away
