@@ -36,7 +36,7 @@ const SVGContainer = ({
 		return (
 			<img
 				src={getSVGURL(songID)}
-				onLoad={(e) => onReady()}
+				onLoad={() => onReady()}
 				style={{
 					height: '100%',
 					// aspectRatio: w / h,
@@ -68,9 +68,6 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const partitionOffset = useSharedValue(0);
 	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 0]);
 	const pianoCC = React.useContext(PianoCC);
-
-	// const partitionWidth = 16573;
-	// const partitionDims[1] = 402;
 
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;

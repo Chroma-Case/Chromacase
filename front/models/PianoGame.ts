@@ -1,19 +1,3 @@
-import { Note } from 'opensheetmusicdisplay';
-
-export type PianoCursorNote = {
-	note: Note;
-	duration: number;
-};
-
-export type PianoCursorPosition = {
-	// offset in pixels
-	x: number;
-	// timestamp in ms
-	timing: number;
-	timestamp: number;
-	notes: PianoCursorNote[];
-};
-
 export type UpdateInfo = {
 	currentTimestamp: number;
 	status: 'playing' | 'paused' | 'stopped';
