@@ -222,7 +222,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 	return (
 		<TouchableOpacity activeOpacity={1} onPress={toggleState} style={combinedContainerStyle}>
 			{IconActive && (
-				<Animated.View
+				<Animated.Text
 					style={[
 						{
 							padding: padding,
@@ -238,9 +238,9 @@ const IconButton: React.FC<IconButtonProps> = ({
 					]}
 				>
 					<IconActive size={size} variant={activeVariant} />
-				</Animated.View>
+				</Animated.Text>
 			)}
-			<Animated.View
+			<Animated.Text
 				style={[
 					{
 						padding: padding,
@@ -253,7 +253,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 				]}
 			>
 				<Icon size={size} variant={variant} />
-			</Animated.View>
+			</Animated.Text>
 		</TouchableOpacity>
 	);
 };

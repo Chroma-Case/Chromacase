@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { TouchableOpacity, Animated, StyleSheet, Platform } from 'react-native';
-import { Column, Text, useTheme } from 'native-base';
+import { Animated, StyleSheet, Platform } from 'react-native';
+import { Column, Pressable, Text, useTheme } from 'native-base';
 
 interface LinkBaseProps {
 	text: string;
@@ -49,13 +49,13 @@ const LinkBase: React.FC<LinkBaseProps> = ({ text, onPress }) => {
 	};
 
 	return (
-		<TouchableOpacity
+		<Pressable
 			style={styles.container}
 			onPress={onPress}
 			onPressIn={handlePressIn}
 			onPressOut={handlePressOut}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
+			onHoverIn={handleMouseEnter}
+			onHoverOut={handleMouseLeave}
 		>
 			<Column>
 				<Text>{text}</Text>
@@ -70,7 +70,7 @@ const LinkBase: React.FC<LinkBaseProps> = ({ text, onPress }) => {
 					]}
 				/>
 			</Column>
-		</TouchableOpacity>
+		</Pressable>
 	);
 };
 

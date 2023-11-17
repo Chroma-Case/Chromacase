@@ -4,6 +4,19 @@ import { Animated, StyleSheet, Pressable, ViewStyle, StyleProp } from 'react-nat
 type StyleObject = Record<string, any>;
 type InterpolatedStyleObject = Record<string, Animated.AnimatedInterpolation<any>>;
 
+const TRANSFORM_WHITELIST = {
+	translateX: true,
+	translateY: true,
+	scale: true,
+	scaleX: true,
+	scaleY: true,
+	rotate: true,
+	rotateX: true,
+	rotateY: true,
+	rotateZ: true,
+	perspective: true,
+};
+
 interface InteractiveCCProps {
 	defaultStyle: StyleObject;
 	hoverStyle: StyleObject;

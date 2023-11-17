@@ -156,10 +156,7 @@ const ProfileSettings = () => {
 					},
 				]}
 			/>
-			<LogoutButtonCC
-				isGuest={user.isGuest}
-				buttonType={'filled'}
-			/>
+			<LogoutButtonCC isGuest={user.isGuest} buttonType={'filled'} />
 		</Column>
 	);
 };
