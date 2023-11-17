@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { View, ImageBackground, Platform, Image } from 'react-native';
+import { View, ImageBackground, Image } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
-import { SvgCssUri } from 'react-native-svg';
 import { PianoCC } from '../../views/PlayView';
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
@@ -17,37 +16,7 @@ export type ParitionMagicProps = {
 
 const getSVGURL = (songID: number) => {
 	return API.getPartitionSvgUrl(songID);
-	return 'https://cdn.discordapp.com/attachments/717080637038788731/1162519992722530354/Short.mxl_1.svg?ex=653c3c1c&is=6529c71c&hm=1788e4abe532f4a2af8c24cae6dadcfde369eaf58322f051ecd1d9110d8b699a&';
-	// return 'https://cdn.discordapp.com/attachments/717080637038788731/1161704545785757816/4.svg?ex=653944ab&is=6526cfab&hm=2416ee2cb414cc42fa9de8af58b8db544479d35f13393d76f02e8d9fe27aff45&';
 };
-
-const SVGContainer = ({
-	songID,
-	onReady,
-	w,
-	h,
-}: {
-	songID: number;
-	onReady: () => void;
-	w: number;
-	h: number;
-}) => {
-	if (Platform.OS === 'web') {
-		return (
-			<img
-				src={getSVGURL(songID)}
-				onLoad={() => onReady()}
-				style={{
-					height: '100%',
-					// aspectRatio: w / h,
-				}}
-			/>
-		);
-	} else {
-		return <SvgCssUri uri={getSVGURL(songID)} />;
-	}
-};
-
 const getCursorToPlay = (
 	cursorInfos: CursorInfoItem[],
 	currentCurIdx: number,
