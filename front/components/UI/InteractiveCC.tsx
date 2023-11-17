@@ -82,7 +82,7 @@ const InteractiveCC: React.FC<InteractiveCCProps> = ({
 				const hoverValue = getTransformValue(key, hoverStyle);
 				const pressValue = getTransformValue(key, pressStyle);
 
-				const interpolated = animatedValues[key].interpolate({
+				const interpolated = animatedValues[key]!.interpolate({
 					inputRange: [0, 1, 2],
 					outputRange: [defaultValue, hoverValue, pressValue],
 				});
@@ -94,7 +94,7 @@ const InteractiveCC: React.FC<InteractiveCCProps> = ({
 				const hoverValue = hoverStyle[key] !== undefined ? hoverStyle[key] : defaultValue;
 				const pressValue = pressStyle[key] !== undefined ? pressStyle[key] : defaultValue;
 
-				interpolatedStyle[key] = animatedValues[key].interpolate({
+				interpolatedStyle[key] = animatedValues[key]!.interpolate({
 					inputRange: [0, 1, 2],
 					outputRange: [defaultValue, hoverValue, pressValue],
 				});
@@ -107,7 +107,7 @@ const InteractiveCC: React.FC<InteractiveCCProps> = ({
 
 	const animateToState = (stateValue: number) => {
 		Object.keys(animatedValues).forEach((key) => {
-			Animated.timing(animatedValues[key], {
+			Animated.timing(animatedValues[key]!, {
 				toValue: stateValue,
 				duration: duration,
 				useNativeDriver: true,

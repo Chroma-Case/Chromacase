@@ -24,7 +24,7 @@ const handleSubmit = async (username: string, password: string, email: string) =
 type LogoutButtonCCProps = {
 	collapse?: boolean;
 	isGuest?: boolean;
-	style: StyleProp<ViewStyle>;
+	style?: StyleProp<ViewStyle>;
 	buttonType: ButtonType;
 };
 

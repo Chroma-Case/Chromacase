@@ -150,9 +150,6 @@ const IconButton: React.FC<IconButtonProps> = ({
 	const scaleValue: Animated.Value = useRef(new Animated.Value(1)).current;
 	const animateValue: Animated.Value = useRef(new Animated.Value(isActive ? 0 : 1)).current;
 
-	// Check for active icon.
-	const hasActiveIcon: boolean = !!IconActive;
-
 	// Interpolation for icon colors between active and inactive states.
 	const colorValue: Animated.AnimatedInterpolation<string | number> = animateValue.interpolate({
 		inputRange: [0, 1],
@@ -208,7 +205,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 			]),
 		];
 
-		if (hasActiveIcon || colorActive) {
+		if (IconActive || colorActive) {
 			animations.push(
 				Animated.timing(animateValue, {
 					toValue: isActiveState ? 1 : 0,
@@ -224,7 +221,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 
 	return (
 		<TouchableOpacity activeOpacity={1} onPress={toggleState} style={combinedContainerStyle}>
-			{hasActiveIcon && (
+			{IconActive && (
 				<Animated.View
 					style={[
 						{

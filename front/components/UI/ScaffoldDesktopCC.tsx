@@ -210,7 +210,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 					/>
 				</View>
 			</View>
-			<ScrollView style={{ flex: 1, maxHeight: '100vh' }} contentContainerStyle={{ flex: 1 }}>
+			<ScrollView style={{ flex: 1, maxHeight: '100%' }} contentContainerStyle={{ flex: 1 }}>
 				<GlassmorphismCC
 					style={{
 						backgroundColor: colors.coolGray[500],
@@ -220,6 +220,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 						marginLeft: 0,
 						padding: props.widthPadding ? 20 : 0,
 						borderRadius: 12,
+						minHeight: 'auto',
 					}}
 				>
 					{props.children}
