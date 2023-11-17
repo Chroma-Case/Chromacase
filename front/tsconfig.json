@@ -114,6 +114,6 @@
 		"app.config.ts",
 		"*/*.test.tsx",
 		"web-build",
-		"dist",
+		"dist"
 	]
 }
