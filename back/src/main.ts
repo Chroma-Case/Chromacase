@@ -65,7 +65,7 @@ async function bootstrap() {
 
 	app.useGlobalPipes(new ValidationPipe());
 	app.enableCors();
-	app.useGlobalInterceptors(new AspectLogger());
+	//app.useGlobalInterceptors(new AspectLogger());
 
 	await app.listen(3000);
 }
