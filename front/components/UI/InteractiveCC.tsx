@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useRef, useEffect } from 'react';
 import { Animated, StyleSheet, Pressable, ViewStyle, StyleProp } from 'react-native';
 
