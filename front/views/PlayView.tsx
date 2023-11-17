@@ -132,13 +132,6 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
-	const [pianoMsgs, setPianoMsgs] = useReducer(
-		(state: PianoCanvasMsg[], action: PianoCanvasMsg) => {
-			state.push(action);
-			return state;
-		},
-		[]
-	);
 	const [streak, setStreak] = useState(0);
 	const scoreMessageScale = useSharedValue(0);
 	// this style should bounce in on enter and fade away
@@ -230,16 +223,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					return;
 				}
 
-				const currentStreak = data.info.current_streak;
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
-
-				if (currentStreak !== undefined && points !== undefined) {
-					setPianoMsgs({
-						type: 'scoreInfo',
-						data: { streak: currentStreak, score: points },
-					});
-				}
 
 				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
@@ -248,45 +233,25 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 				if (data.type == 'miss') {
 					formattedMessage = translate('missed');
-					setPianoMsgs({
-						type: 'noteTiming',
-						data: NoteTiming.Missed,
-					});
 					messageColor = 'white';
 				} else if (data.type == 'timing' || data.type == 'duration') {
 					formattedMessage = translate(data[data.type]);
 					switch (data[data.type]) {
 						case 'perfect':
 							messageColor = 'green';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Perfect,
-							});
 							break;
 						case 'great':
 							messageColor = 'blue';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Great,
-							});
 							break;
 						case 'short':
 						case 'long':
 						case 'good':
 							messageColor = 'lightBlue';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Good,
-							});
 							break;
 						case 'too short':
 						case 'too long':
 						case 'wrong':
 							messageColor = 'trueGray';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Wrong,
-							});
 							break;
 						default:
 							break;
@@ -482,7 +447,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					value={{
 						pressedKeys: pressedKeys,
 						timestamp: time,
-						messages: pianoMsgs,
+						messages: [],
 					}}
 				>
 					<PartitionMagic
