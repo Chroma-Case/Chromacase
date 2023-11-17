@@ -10,6 +10,7 @@ interface SigninFormProps {
 	onSubmit: (username: string, password: string) => Promise<string>;
 }
 
+// TODO not use !!
 const LoginForm = ({ onSubmit }: SigninFormProps) => {
 	const [formData, setFormData] = React.useState({
 		username: {
@@ -47,7 +48,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 					<Input
 						isRequired
 						type="text"
-						placeholder="Username"
+						placeholder={translate('formPlaceholderUsername')}
 						autoComplete="username"
 						value={formData.username.value}
 						onChangeText={(t) => {
@@ -68,6 +69,7 @@ const LoginForm = ({ onSubmit }: SigninFormProps) => {
 					</FormControl.Label>
 					<Input
 						isRequired
+						placeholder={translate('formPlaceholderPassword')}
 						type="password"
 						autoComplete="password"
 						value={formData.password.value}

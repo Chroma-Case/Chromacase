@@ -1,10 +1,10 @@
 import React from 'react';
-import { Center, Text } from 'native-base';
-import ProfileSettings from './SettingsProfileView';
-import NotificationsView from './NotificationView';
-import PrivacyView from './PrivacyView';
-import PreferencesView from './PreferencesView';
-import { View, useWindowDimensions } from 'react-native';
+import { Center, Text, useBreakpointValue, useTheme } from 'native-base';
+import ProfileSettings from './SettingsProfile';
+import NotificationsSettings from './NotificationsSettings';
+import PrivacySettings from './PrivacySettings';
+import PreferencesSettings from './PreferencesSettings';
+import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
 	SceneMap,
@@ -23,10 +23,12 @@ import {
 	FolderCross,
 } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import { LinearGradient } from 'expo-linear-gradient';
-import PremiumSettings from './SettingsPremiumView';
+import PremiumSettings from './SettingsPremium';
+import { RouteProps } from '../../Navigation';
+import ScaffoldCC from '../../components/UI/ScaffoldCC';
+import { translate } from '../../i18n/i18n';
 
-export const PianoSettingsView = () => {
+export const PianoSettings = () => {
 	return (
 		<Center style={{ flex: 1 }}>
 			<Text>Global settings for the virtual piano</Text>
@@ -37,10 +39,10 @@ export const PianoSettingsView = () => {
 const renderScene = SceneMap({
 	profile: ProfileSettings,
 	premium: PremiumSettings,
-	preferences: PreferencesView,
-	notifications: NotificationsView,
-	privacy: PrivacyView,
-	piano: PianoSettingsView,
+	preferences: PreferencesSettings,
+	notifications: NotificationsSettings,
+	privacy: PrivacySettings,
+	piano: PianoSettings,
 });
 
 const getTabData = (key: string) => {
@@ -62,30 +64,34 @@ const getTabData = (key: string) => {
 	}
 };
 
-const SetttingsNavigator = () => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+const SettingsTab = (props: RouteProps<{}>) => {
 	const layout = useWindowDimensions();
-
 	const [index, setIndex] = React.useState(0);
-	const [routes] = React.useState<Route[]>([
-		{ key: 'profile', title: 'Profile' },
-		{ key: 'premium', title: 'Premium' },
-		{ key: 'preferences', title: 'Preferences' },
-		{ key: 'notifications', title: 'Notifications' },
-		{ key: 'privacy', title: 'Privacy' },
-		{ key: 'piano', title: 'Piano' },
-	]);
-
+	const { colors } = useTheme();
+	const routes = [
+		{ key: 'profile', title: 'settingsTabProfile' },
+		{ key: 'premium', title: 'settingsTabPremium' },
+		{ key: 'preferences', title: 'settingsTabPreferences' },
+		{ key: 'notifications', title: 'settingsTabNotifications' },
+		{ key: 'privacy', title: 'settingsTabPrivacy' },
+		{ key: 'piano', title: 'settingsTabPiano' },
+	];
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isSmallScreen = screenSize === 'small';
 	const renderTabBar = (
 		props: SceneRendererProps & { navigationState: NavigationState<Route> }
 	) => (
 		<TabBar
 			{...props}
 			style={{
-				backgroundColor: 'rgba(0, 0, 0, 0)',
-				borderBottomWidth: 2,
-				borderColor: 'rgba(255,255,255,0.5)',
+				backgroundColor: 'transparent',
+				borderBottomWidth: 1,
+				borderColor: colors.primary[300],
 			}}
-			indicatorStyle={{ backgroundColor: 'white' }}
+			activeColor={colors.text[900]}
+			inactiveColor={colors.text[700]}
+			indicatorStyle={{ backgroundColor: colors.primary[300] }}
 			renderIcon={(
 				scene: Scene<Route> & {
 					focused: boolean;
@@ -93,52 +99,52 @@ const SetttingsNavigator = () => {
 				}
 			) => {
 				const tabHeader = getTabData(scene.route!.key);
-				return tabHeader.index == index ? (
-					<tabHeader.icon size="18" color="#6075F9" variant="Bold" />
-				) : (
-					<tabHeader.icon size="18" color="#6075F9" />
+				return (
+					<tabHeader.icon
+						size="18"
+						color="#6075F9"
+						variant={scene.focused ? 'Bold' : 'Outline'}
+					/>
 				);
 			}}
 			renderLabel={({ route, color }) =>
-				layout.width > 750 ? (
-					<Text style={{ color, paddingLeft: 10, overflow: 'hidden' }}>
-						{route.title}
+				layout.width > 1100 && (
+					<Text style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}>
+						{translate(
+							route.title as
+								| 'settingsTabProfile'
+								| 'settingsTabPremium'
+								| 'settingsTabPreferences'
+								| 'settingsTabNotifications'
+								| 'settingsTabPrivacy'
+								| 'settingsTabPiano'
+						)}
 					</Text>
-				) : null
+				)
 			}
 			tabStyle={{ flexDirection: 'row' }}
 		/>
 	);
 
 	return (
-		<View>
+		<ScaffoldCC routeName={props.route.name} withPadding={false}>
 			<TabView
-				style={{ minHeight: layout.height, height: '100%', paddingBottom: 32 }}
+				sceneContainerStyle={{
+					flex: 1,
+					alignSelf: 'center',
+					paddingTop: 32,
+					padding: isSmallScreen ? 8 : 20,
+					maxWidth: 850,
+					width: '100%',
+				}}
 				renderTabBar={renderTabBar}
 				navigationState={{ index, routes }}
 				renderScene={renderScene}
 				onIndexChange={setIndex}
 				initialLayout={{ width: layout.width }}
 			/>
-			<LinearGradient
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
-				colors={['#101014', '#6075F9']}
-				style={{
-					top: 0,
-					bottom: 0,
-					right: 0,
-					left: 0,
-					width: '100%',
-					height: '100%',
-					margin: 0,
-					padding: 0,
-					position: 'absolute',
-					zIndex: -2,
-				}}
-			/>
-		</View>
+		</ScaffoldCC>
 	);
 };
 
-export default SetttingsNavigator;
+export default SettingsTab;

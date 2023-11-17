@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Flex } from 'native-base';
+import { Column } from 'native-base';
 import { useLanguage } from '../../state/LanguageSlice';
 import { AvailableLanguages, DefaultLanguage, translate } from '../../i18n/i18n';
 import { useSelector } from '../../state/Store';
@@ -9,30 +9,20 @@ import ElementList from '../../components/GtkUI/ElementList';
 import LocalSettings from '../../models/LocalSettings';
 import { Brush2, Colorfilter, LanguageSquare, Rank, Sound } from 'iconsax-react-native';
 
-const PreferencesView = () => {
+const PreferencesSettings = () => {
 	const dispatch = useDispatch();
 	const language = useSelector((state) => state.language.value);
 	const settings = useSelector((state) => state.settings.local);
+
 	return (
-		<Flex
-			style={{
-				flex: 1,
-				alignItems: 'center',
-				paddingTop: 32,
-			}}
-		>
+		<Column space={4} style={{ width: '100%' }}>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '90%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
-						icon: <Brush2 size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: Brush2,
 						type: 'dropdown',
-						title: translate('SettingsPreferencesTheme'),
-						description: 'Définissez le theme (Dark ou Light) de votre application',
+						title: translate('SettingsPreferencesTabThemeSectionTitle'),
+						description: translate('SettingsPreferencesTabThemeSectionDescription'),
 						data: {
 							value: settings.colorScheme,
 							defaultValue: 'system',
@@ -51,10 +41,10 @@ const PreferencesView = () => {
 						},
 					},
 					{
-						icon: <LanguageSquare size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: LanguageSquare,
 						type: 'dropdown',
-						title: translate('SettingsPreferencesLanguage'),
-						description: 'Définissez la langue de votre application',
+						title: translate('SettingsPreferencesTabLanguageSectionTitle'),
+						description: translate('SettingsPreferencesTabLanguageSectionDescription'),
 						data: {
 							value: language,
 							defaultValue: DefaultLanguage,
@@ -69,10 +59,12 @@ const PreferencesView = () => {
 						},
 					},
 					{
-						icon: <Rank size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: Rank,
 						type: 'dropdown',
-						title: translate('SettingsPreferencesDifficulty'),
-						description: 'La précision du tempo est de plus en plus élevée',
+						title: translate('SettingsPreferencesTabDifficultySectionTitle'),
+						description: translate(
+							'SettingsPreferencesTabDifficultySectionDescription'
+						),
 						data: {
 							value: settings.difficulty,
 							defaultValue: 'medium',
@@ -93,17 +85,14 @@ const PreferencesView = () => {
 				]}
 			/>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '90%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
-						icon: <Colorfilter size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: Colorfilter,
 						type: 'toggle',
-						title: translate('SettingsPreferencesColorblindMode'),
-						description: 'Augmente le contraste',
+						title: translate('SettingsPreferencesTabColorblindModeSectionTitle'),
+						description: translate(
+							'SettingsPreferencesTabColorblindModeSectionDescription'
+						),
 						data: {
 							value: settings.colorBlind,
 							onToggle: () => {
@@ -114,17 +103,12 @@ const PreferencesView = () => {
 				]}
 			/>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '90%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
-						icon: <Sound size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: Sound,
 						type: 'range',
-						title: translate('SettingsPreferencesMicVolume'),
-						description: 'Régler le volume de votre micro selon vos preference',
+						title: translate('SettingsPreferencesTabMicVolumeSectionTitle'),
+						description: translate('SettingsPreferencesTabMicVolumeSectionDescription'),
 						data: {
 							value: settings.micVolume,
 							min: 0,
@@ -153,8 +137,8 @@ const PreferencesView = () => {
 					},*/
 				]}
 			/>
-		</Flex>
+		</Column>
 	);
 };
 
-export default PreferencesView;
+export default PreferencesSettings;

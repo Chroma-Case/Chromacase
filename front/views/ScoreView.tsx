@@ -33,7 +33,6 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 	const artistQuery = useQuery(() => API.getArtist(songQuery.data!.artistId!), {
 		enabled: songQuery.data !== undefined,
 	});
-	const scoresQuery = useQuery(API.getSongHistory(props.songId), { refetchOnWindowFocus: true });
 	const recommendations = useQuery(API.getSongSuggestions);
 	const artistRecommendations = useQueries(
 		recommendations.data
@@ -139,9 +138,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 						</Column>
 					</Card>
 				</Row>
-				{scoresQuery.data && (scoresQuery.data?.history?.length ?? 0) > 1 && (
-					<ScoreGraph songHistory={scoresQuery.data} />
-				)}
+				<ScoreGraph />
 				<CardGridCustom
 					style={{ justifyContent: 'space-evenly' }}
 					content={recommendations.data.map((i) => ({
@@ -163,7 +160,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 					<TextButton
 						colorScheme="gray"
 						translate={{ translationKey: 'backBtn' }}
-						onPress={() => navigation.navigate('Home')}
+						onPress={() => navigation.navigate('Home', {})}
 					/>
 					<TextButton
 						onPress={() => navigation.navigate('Song', { songId })}

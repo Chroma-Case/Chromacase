@@ -1,10 +1,10 @@
-import { Select, Switch, Text, Icon, Row, Slider } from 'native-base';
+import { Select, Switch, Text, Row, Slider, Icon, useTheme } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useWindowDimensions } from 'react-native';
-
+import { Icon as IconSax } from 'iconsax-react-native';
 export type ElementProps = {
 	title: string;
-	icon?: React.ReactNode;
+	icon?: IconSax;
 	helperText?: string;
 	description?: string;
 	disabled?: boolean;
@@ -101,12 +101,13 @@ export const getElementDropdownNode = (
 	disabled: boolean
 ) => {
 	const layout = useWindowDimensions();
+	const { colors } = useTheme();
 	return (
 		<Select
 			selectedValue={value}
 			onValueChange={onSelect}
 			defaultValue={defaultValue}
-			bgColor={'rgba(16,16,20,0.5)'}
+			bgColor={colors.coolGray[500]}
 			variant="filled"
 			isDisabled={disabled}
 			width={layout.width > 650 ? '200' : '100'}

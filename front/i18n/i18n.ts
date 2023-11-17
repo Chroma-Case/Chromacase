@@ -39,4 +39,6 @@ export const translate = (key: keyof typeof en, language?: AvailableLanguages) =
 	});
 };
 
+export type TranslationKey = keyof typeof en;
+
 export { Translate };

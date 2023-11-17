@@ -5,7 +5,8 @@ import { useQuery, useQueries } from '../../Queries';
 import HomeMainSongCard from '../../components/V2/HomeMainSongCard';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
-import { useNavigation } from '../../Navigation';
+import { RouteProps, useNavigation } from '../../Navigation';
+import ScaffoldCC from '../../components/UI/ScaffoldCC';
 
 const bigSideRatio = 1000;
 const smallSideRatio = 618;
@@ -45,7 +46,8 @@ const cards = [
 	},
 ] as [HomeCardProps, HomeCardProps, HomeCardProps, HomeCardProps];
 
-const HomeView = () => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+const HomeView = (props: RouteProps<{}>) => {
 	const songsQuery = useQuery(API.getSongSuggestions);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
@@ -76,15 +78,15 @@ const HomeView = () => {
 	}, [artistsQueries]);
 
 	return (
-		<View
-			style={{
-				width: '100%',
-				height: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-			}}
-		>
-			<View>
+		<ScaffoldCC routeName={props.route.name}>
+			<View
+				style={{
+					width: '100%',
+					height: '100%',
+					display: 'flex',
+					flexDirection: 'column',
+				}}
+			>
 				<View
 					style={{
 						alignSelf: 'stretch',
@@ -158,28 +160,6 @@ const HomeView = () => {
 						</View>
 					</View>
 				</View>
-			</View>
-			<View
-				style={{
-					flexShrink: 0,
-					flexGrow: 0,
-					flexBasis: '15%',
-					width: '100%',
-				}}
-			>
-				<Text
-					style={{
-						color: 'white',
-						fontSize: 24,
-						fontWeight: 'bold',
-						marginLeft: 16,
-						marginBottom: 16,
-						marginTop: 24,
-					}}
-				>
-					{'Suggestions'}
-				</Text>
-				{songsQuery.isLoading && <Text>Loading...</Text>}
 				<View
 					style={{
 						flexDirection: 'row',
@@ -189,21 +169,43 @@ const HomeView = () => {
 						gap: 16,
 					}}
 				>
-					{songsQuery.data?.map((song) => (
-						<SongCardInfo
-							key={song.id}
-							song={song}
-							onPress={() => {
-								navigation.navigate('Song', { songId: song.id });
-							}}
-							onPlay={() => {
-								console.log('play');
-							}}
-						/>
-					))}
+					<Text
+						style={{
+							fontSize: 24,
+							fontWeight: 'bold',
+							marginLeft: 16,
+							marginBottom: 16,
+							marginTop: 24,
+						}}
+					>
+						{'Suggestions'}
+					</Text>
+					{songsQuery.isLoading && <Text>Loading...</Text>}
+					<View
+						style={{
+							flexDirection: 'row',
+							flexWrap: 'wrap',
+							justifyContent: 'flex-start',
+							alignItems: 'flex-start',
+							gap: 16,
+						}}
+					>
+						{songsQuery.data?.map((song) => (
+							<SongCardInfo
+								key={song.id}
+								song={song}
+								onPress={() => {
+									navigation.navigate('Song', { songId: song.id });
+								}}
+								onPlay={() => {
+									console.log('play');
+								}}
+							/>
+						))}
+					</View>
 				</View>
 			</View>
-		</View>
+		</ScaffoldCC>
 	);
 };
 

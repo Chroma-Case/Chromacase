@@ -114,9 +114,7 @@ const SongLobbyView = (props: RouteProps<SongLobbyProps>) => {
 					<Text>{scoresQuery.data?.history.at(0)?.score ?? 0}</Text>
 				</Box>
 			</Box>
-			{scoresQuery.data && (scoresQuery.data?.history?.length ?? 0) > 0 && (
-				<ScoreGraph songHistory={scoresQuery.data} />
-			)}
+			<ScoreGraph />
 		</Box>
 	);
 };

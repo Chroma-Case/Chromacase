@@ -3,15 +3,19 @@ import { StyleSheet, ActivityIndicator, View, Image, StyleProp, ViewStyle } from
 import InteractiveBase from './InteractiveBase';
 import { Text, useTheme } from 'native-base';
 import { Icon } from 'iconsax-react-native';
+import useColorScheme from '../../hooks/colorScheme';
+
+export type ButtonType = 'filled' | 'outlined' | 'menu';
 
 interface ButtonProps {
 	title?: string;
 	style?: StyleProp<ViewStyle>;
-	onPress?: () => Promise<void>;
+	onPress?: () => void | Promise<void>;
 	isDisabled?: boolean;
 	icon?: Icon;
+	iconVariant?: 'Bold' | 'Outline';
 	iconImage?: string;
-	type?: 'filled' | 'outlined' | 'menu';
+	type?: ButtonType;
 }
 
 const ButtonBase: React.FC<ButtonProps> = ({
@@ -22,9 +26,11 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	icon,
 	iconImage,
 	type = 'filled',
+	iconVariant = 'Outline',
 }) => {
 	const { colors } = useTheme();
 	const [loading, setLoading] = useState(false);
+	const colorScheme = useColorScheme();
 
 	const styleButton = StyleSheet.create({
 		Default: {
@@ -32,64 +38,64 @@ const ButtonBase: React.FC<ButtonProps> = ({
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: colors.primary[400],
+			backgroundColor: colors.primary[300],
 		},
 		onHover: {
 			scale: 1.02,
 			shadowOpacity: 0.37,
 			shadowRadius: 7.49,
 			elevation: 12,
-			backgroundColor: colors.primary[500],
+			backgroundColor: colors.primary[400],
 		},
 		onPressed: {
 			scale: 0.98,
 			shadowOpacity: 0.23,
 			shadowRadius: 2.62,
 			elevation: 4,
-			backgroundColor: colors.primary[600],
+			backgroundColor: colors.primary[500],
 		},
 		Disabled: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: colors.primary[400],
+			backgroundColor: colors.primary[300],
 		},
 	});
 
 	const styleMenu = StyleSheet.create({
 		Default: {
 			scale: 1,
-			shadowOpacity: 0.3,
-			shadowRadius: 4.65,
-			elevation: 8,
-			backgroundColor: 'rgba(16,16,20,0.5)',
+			shadowOpacity: 0,
+			shadowRadius: 0,
+			elevation: 0,
+			backgroundColor: 'transparent',
 		},
 		onHover: {
 			scale: 1.01,
 			shadowOpacity: 0.37,
 			shadowRadius: 7.49,
 			elevation: 12,
-			backgroundColor: 'rgba(16,16,20,0.4)',
+			backgroundColor: colors.coolGray[400],
 		},
 		onPressed: {
 			scale: 0.99,
 			shadowOpacity: 0.23,
 			shadowRadius: 2.62,
 			elevation: 4,
-			backgroundColor: 'rgba(16,16,20,0.6)',
+			backgroundColor: colors.coolGray[600],
 		},
 		Disabled: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: 'rgba(16,16,20,0.5)',
+			backgroundColor: colors.coolGray[500],
 		},
 	});
 
 	const typeToStyleAnimator = { filled: styleButton, outlined: styleButton, menu: styleMenu };
-	const MyIcon: Icon = icon as Icon;
+	const MyIcon = icon;
 
 	return (
 		<InteractiveBase
@@ -98,8 +104,13 @@ const ButtonBase: React.FC<ButtonProps> = ({
 			onPress={async () => {
 				if (onPress && !isDisabled) {
 					setLoading(true);
-					await onPress();
-					setLoading(false);
+					try {
+						await onPress();
+					} catch (error) {
+						console.error(error);
+					} finally {
+						setLoading(false);
+					}
 				}
 			}}
 			isDisabled={isDisabled}
@@ -109,15 +120,37 @@ const ButtonBase: React.FC<ButtonProps> = ({
 				<ActivityIndicator
 					style={styles.content}
 					size="small"
-					color={type === 'outlined' ? '#6075F9' : '#FFFFFF'}
+					color={type === 'outlined' ? colors.primary[300] : '#FFFFFF'}
 				/>
 			) : (
-				<View style={styles.content}>
-					{icon && (
-						<MyIcon size={'18'} color={type === 'outlined' ? '#6075F9' : '#FFFFFF'} />
+				<View
+					style={[
+						styles.content,
+						type === 'menu' ? { justifyContent: 'flex-start' } : {},
+					]}
+				>
+					{MyIcon && (
+						<MyIcon
+							size={'18'}
+							color={
+								type === 'outlined'
+									? colors.primary[300]
+									: colorScheme === 'dark' || type === 'filled'
+									? '#FFFFFF'
+									: colors.black[500]
+							}
+							variant={iconVariant}
+						/>
 					)}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
-					{title && <Text style={styles.text}>{title}</Text>}
+					{title && (
+						<Text
+							style={[styles.text, type === 'filled' ? { color: '#fff' } : {}]}
+							selectable={false}
+						>
+							{title}
+						</Text>
+					)}
 				</View>
 			)}
 		</InteractiveBase>
@@ -139,7 +172,6 @@ const styles = StyleSheet.create({
 		height: 18,
 	},
 	text: {
-		color: '#fff',
 		marginHorizontal: 8,
 	},
 });

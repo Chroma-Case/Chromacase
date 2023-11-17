@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { ElementProps } from './ElementTypes';
 import { RawElement } from './RawElement';
-import { View, Column } from 'native-base';
+import { View, Column, useTheme } from 'native-base';
 import { StyleSheet } from 'react-native';
 import InteractiveBase from '../UI/InteractiveBase';
 
 export const Element = <T extends ElementProps>(props: T) => {
 	let actionFunction: (() => void) | null | undefined = null;
 	const [dropdownValue, setDropdownValue] = useState(false);
+	const { colors } = useTheme();
 
 	switch (props.type) {
 		case 'text':
@@ -32,28 +33,28 @@ export const Element = <T extends ElementProps>(props: T) => {
 			shadowOpacity: 0,
 			shadowRadius: 0,
 			elevation: 0,
-			backgroundColor: 'rgba(16, 16, 20, 0.50)',
+			backgroundColor: colors.coolGray[500],
 		},
 		onHover: {
 			scale: 1,
 			shadowOpacity: 0,
 			shadowRadius: 0,
 			elevation: 0,
-			backgroundColor: 'rgba(32, 32, 40, 0.50)',
+			backgroundColor: colors.coolGray[700],
 		},
 		onPressed: {
 			scale: 1,
 			shadowOpacity: 0,
 			shadowRadius: 0,
 			elevation: 0,
-			backgroundColor: 'rgba(16, 16, 20, 0.50)',
+			backgroundColor: colors.coolGray[500],
 		},
 		Disabled: {
 			scale: 1,
 			shadowOpacity: 0,
 			shadowRadius: 0,
 			elevation: 0,
-			backgroundColor: 'rgba(16, 16, 20, 0.50)',
+			backgroundColor: colors.coolGray[500],
 		},
 	});
 
@@ -70,7 +71,7 @@ export const Element = <T extends ElementProps>(props: T) => {
 					<RawElement element={props} />
 				</InteractiveBase>
 				{props.type === 'sectionDropdown' && dropdownValue && (
-					<View backgroundColor={'rgba(16,16,20,0.3)'}>
+					<View>
 						{props.data.section.map((value, index) => (
 							<View
 								key={value?.toString() + index.toString()}
@@ -89,7 +90,7 @@ export const Element = <T extends ElementProps>(props: T) => {
 		);
 	}
 	return (
-		<View style={{ backgroundColor: 'rgba(16, 16, 20, 0.50)' }}>
+		<View style={{ backgroundColor: colors.coolGray[500] }}>
 			<RawElement element={props} />
 		</View>
 	);

@@ -2,7 +2,7 @@ import { Eye, EyeSlash, Icon } from 'iconsax-react-native';
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
 import InteractiveBase from './InteractiveBase';
-import { Input } from 'native-base';
+import { Input, useTheme } from 'native-base';
 
 export interface TextFieldBaseProps {
 	style?: StyleProp<ViewStyle>;
@@ -67,6 +67,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 	const [isPasswordVisible, setPasswordVisible] = useState(!isSecret);
 	const [isFocused, setFocused] = useState(false);
 	const MyIcon: Icon = icon as Icon;
+	const { colors } = useTheme();
 
 	const styleAnimate = StyleSheet.create({
 		Default: {
@@ -74,33 +75,37 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: 'rgba(16,16,20,0.5)',
+			backgroundColor: colors.coolGray[500],
 		},
 		onHover: {
 			scale: 1,
 			shadowOpacity: 0.37,
 			shadowRadius: 7.49,
 			elevation: 12,
-			backgroundColor: 'rgba(16,16,20,0.45)',
+			backgroundColor: colors.coolGray[400],
 		},
 		onPressed: {
 			scale: 1,
 			shadowOpacity: 0.23,
 			shadowRadius: 2.62,
 			elevation: 4,
-			backgroundColor: 'rgba(16,16,20,0.55)',
+			backgroundColor: colors.coolGray[600],
 		},
 		Disabled: {
 			scale: 1,
 			shadowOpacity: 0.3,
 			shadowRadius: 4.65,
 			elevation: 8,
-			backgroundColor: 'rgba(16,16,20,0.5)',
+			backgroundColor: colors.coolGray[500],
 		},
 	});
 
 	return (
-		<InteractiveBase style={[style, { borderRadius: 12 }]} styleAnimate={styleAnimate}>
+		<InteractiveBase
+			style={[style, { borderRadius: 12 }]}
+			styleAnimate={styleAnimate}
+			focusable={false}
+		>
 			<View style={styles.container}>
 				<View style={styles.iconContainerLeft}>
 					{icon && (
@@ -117,7 +122,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 					style={[styles.input, icon ? {} : { paddingLeft: 12 }]}
 					autoComplete={autoComplete}
 					placeholder={placeholder + (isRequired ? '*' : '')}
-					placeholderTextColor="rgba(255, 255, 255, 0.7)"
+					placeholderTextColor={colors.text[700]}
 					secureTextEntry={isSecret ? !isPasswordVisible : false}
 					onFocus={() => setFocused(true)}
 					onBlur={() => setFocused(false)}
@@ -157,7 +162,6 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		flex: 1,
-		color: '#ffffff',
 		paddingHorizontal: 12 + 20 + 12,
 		paddingVertical: 12,
 		outlineStyle: 'none',

@@ -2,8 +2,8 @@ import React from 'react';
 import { useQueries, useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
-import { Box, ScrollView, Flex, Stack, Heading, VStack, HStack } from 'native-base';
-import { useNavigation } from '../Navigation';
+import { Box, Flex, Stack, Heading, VStack, HStack } from 'native-base';
+import { RouteProps, useNavigation } from '../Navigation';
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable';
 import ProgressBar from '../components/ProgressBar';
@@ -11,8 +11,10 @@ import Translate from '../components/Translate';
 import TextButton from '../components/TextButton';
 import Song from '../models/Song';
 import { FontAwesome5 } from '@expo/vector-icons';
+import ScaffoldCC from '../components/UI/ScaffoldCC';
 
-const HomeView = () => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+const HomeView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
 	const playHistoryQuery = useQuery(API.getUserPlayHistory);
@@ -39,7 +41,7 @@ const HomeView = () => {
 		return <LoadingView />;
 	}
 	return (
-		<ScrollView p={10}>
+		<ScaffoldCC routeName={props.route.name}>
 			<Flex>
 				<Stack
 					space={4}
@@ -59,7 +61,7 @@ const HomeView = () => {
 					</Box>
 				</Stack>
 			</Flex>
-			<Stack direction={{ base: 'column', lg: 'row' }} height="100%" space={5} paddingTop={5}>
+			<Stack direction={{ base: 'column', lg: 'row' }} space={5} paddingTop={5}>
 				<VStack flex={{ lg: 2 }} space={5}>
 					<SongCardGrid
 						heading={<Translate translationKey="goNextStep" />}
@@ -134,13 +136,13 @@ const HomeView = () => {
 							translate={{ translationKey: 'settingsBtn' }}
 							colorScheme="gray"
 							size="sm"
-							onPress={() => navigation.navigate('Settings')}
+							onPress={() => navigation.navigate('Settings', {})}
 						/>
 						<TextButton
 							label={'V2'}
 							colorScheme="gray"
 							size="sm"
-							onPress={() => navigation.navigate('HomeNew')}
+							onPress={() => navigation.navigate('HomeNew', {})}
 						/>
 					</HStack>
 					<Box style={{ width: '100%' }}>
@@ -182,7 +184,7 @@ const HomeView = () => {
 					</Box>
 				</VStack>
 			</Stack>
-		</ScrollView>
+		</ScaffoldCC>
 	);
 };
 

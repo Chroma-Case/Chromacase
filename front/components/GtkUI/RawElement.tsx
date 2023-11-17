@@ -1,5 +1,15 @@
 import React from 'react';
-import { Box, Button, Column, Icon, Popover, Row, Text, useBreakpointValue } from 'native-base';
+import {
+	Box,
+	Button,
+	Column,
+	Icon,
+	Popover,
+	Row,
+	Text,
+	useBreakpointValue,
+	useTheme,
+} from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { ElementProps } from './ElementTypes';
 import {
@@ -20,12 +30,15 @@ export const RawElement = ({ element }: RawElementProps) => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';
 	const { width: screenWidth } = useWindowDimensions();
+	const { colors } = useTheme();
+	const IconElement = icon;
+
 	return (
 		<Column
 			style={{
 				width: '100%',
 				paddingVertical: 10,
-				paddingHorizontal: 20,
+				paddingHorizontal: isSmallScreen ? 10 : 20,
 				justifyContent: 'space-between',
 				alignContent: 'stretch',
 				alignItems: 'center',
@@ -40,7 +53,13 @@ export const RawElement = ({ element }: RawElementProps) => {
 					alignItems: 'center',
 				}}
 			>
-				{icon}
+				{IconElement && (
+					<IconElement
+						size={isSmallScreen ? 18 : 24}
+						color={colors.text[900]}
+						style={{ minWidth: 24 }}
+					/>
+				)}
 				<Box
 					style={{
 						flexGrow: 1,
@@ -122,7 +141,13 @@ export const RawElement = ({ element }: RawElementProps) => {
 								case 'custom':
 									return data;
 								case 'sectionDropdown':
-									return <ArrowDown2 size="24" color="#fff" variant="Outline" />;
+									return (
+										<ArrowDown2
+											size="24"
+											color={colors.text[700]}
+											variant="Outline"
+										/>
+									);
 								default:
 									return <Text>Unknown type</Text>;
 							}

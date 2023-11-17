@@ -1,6 +1,6 @@
 import API from '../../API';
 import React from 'react';
-import { Flex, Toast } from 'native-base';
+import { Column, Toast } from 'native-base';
 import { LoadingView } from '../../components/Loading';
 import ElementList from '../../components/GtkUI/ElementList';
 import { translate } from '../../i18n/i18n';
@@ -9,6 +9,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-react-native';
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
+import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	await API.updateUserEmail(newEmail);
@@ -29,61 +30,63 @@ const ProfileSettings = () => {
 		return <LoadingView />;
 	}
 	const user = userQuery.data;
+
 	return (
-		<Flex
-			style={{
-				flex: 1,
-				alignItems: 'center',
-				paddingTop: 32,
-			}}
-		>
+		<Column space={4} style={{ width: '100%' }}>
 			<ElementList
-				style={{
-					marginTop: 20,
-					width: '90%',
-					maxWidth: 850,
-				}}
 				elements={[
 					{
-						icon: <Google size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: Google,
 						type: 'text',
-						title: 'Google account', // TODO translate
-						description: 'Liez votre compte Google à ChromaCase', // TODO translate
+						title: translate('settingsProfileTabGoogleSectionTitle'),
+						description: translate('settingsProfileTabGoogleSectionDescription'),
 						data: {
-							text: user.googleID ? 'Linked' : 'Not linked',
+							text: translate(
+								user.googleID
+									? 'settingsProfileTabGoogleSectionLinkedText'
+									: 'settingsProfileTabGoogleSectionNotLinkedText'
+							),
 						},
 					},
 					{
-						icon: <Verify size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: Verify,
 						type: 'text',
-						description: 'Vérifiez votre adresse e-mail', // TODO translate
-						title: translate('verified'),
+						title: translate('settingsProfileTabVerifiedSectionTitle'),
+						description: translate('settingsProfileTabVerifiedSectionDescription'),
 						data: {
-							text: user.emailVerified ? 'verified' : 'not verified',
+							text: translate(
+								user.emailVerified
+									? 'settingsProfileTabVerifiedSectionVerifiedText'
+									: 'settingsProfileTabVerifiedSectionNotVerifiedText'
+							),
 							onPress: user.emailVerified
 								? undefined
 								: () =>
 										API.fetch({ route: '/auth/reverify', method: 'PUT' })
 											.then(() =>
 												Toast.show({
-													description: 'Verification mail sent',
+													description: translate(
+														'settingsProfileTabVerifiedSectionVerificationToast'
+													),
 												})
 											)
 											.catch((e) => {
 												console.error(e);
 												Toast.show({
-													description: 'Verification mail send error',
+													description: translate(
+														'settingsProfileTabVerifiedSectionVerificationToastError'
+													),
 												});
 											}),
 						},
 					},
 					{
-						icon: <UserSquare size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: UserSquare,
 						type: 'text',
-						title: translate('avatar'),
-						description: 'Changer votre photo de profile', // TODO translate
+						title: translate('settingsProfileTabAvatarSectionTitle'),
+						description: translate('settingsProfileTabAvatarSectionDescription'),
 						data: {
-							text: translate('changeIt'),
+							text: translate('settingsProfileTabAvatarSectionChangeItText'),
 							onPress: () => {
 								ImagePicker.launchImageLibraryAsync({
 									mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -99,12 +102,18 @@ const ProfileSettings = () => {
 											.then(() => {
 												userQuery.refetch();
 												Toast.show({
-													description: 'Update successful',
+													description: translate(
+														'settingsProfileTabAvatarSectionUpdateToast'
+													),
 												});
 											})
 											.catch((e) => {
 												console.error(e);
-												Toast.show({ description: 'Update failed' });
+												Toast.show({
+													description: translate(
+														'settingsProfileTabAvatarSectionUpdateToastError'
+													),
+												});
 											});
 									}
 								});
@@ -112,11 +121,27 @@ const ProfileSettings = () => {
 						},
 					},
 					{
-						icon: <SmsEdit size="24" color="#FFF" style={{ minWidth: 24 }} />,
+						icon: SmsEdit,
 						type: 'sectionDropdown',
-						title: 'Change email', // TODO translate
-						description:
-							'Saisissez votre adresse électronique actuelle et définissez votre nouvelle adresse électroniquetion', // TODO translate
+						title: translate('settingsProfileTabChangeEmailSectionTitle'),
+						description: translate('settingsProfileTabChangeEmailSectionDescription'),
+						data: {
+							value: true,
+							section: [
+								<ChangeEmailForm
+									key={'ChangeEmailForm'}
+									onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}
+								/>,
+							],
+						},
+					},
+					{
+						icon: PasswordCheck,
+						type: 'sectionDropdown',
+						title: translate('settingsProfileTabChangePasswordSectionTitle'),
+						description: translate(
+							'settingsProfileTabChangePasswordSectionDescription'
+						),
 						data: {
 							value: true,
 							section: [
@@ -129,25 +154,10 @@ const ProfileSettings = () => {
 							],
 						},
 					},
-					{
-						icon: <PasswordCheck size="24" color="#FFF" style={{ minWidth: 24 }} />,
-						type: 'sectionDropdown',
-						title: 'Change password', // TODO translate
-						description:
-							'Saisissez votre mot de passe actuel et définissez votre nouveau mot de passe', // TODO translate
-						data: {
-							value: true,
-							section: [
-								<ChangeEmailForm
-									key={'ChangeEmailForm'}
-									onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}
-								/>,
-							],
-						},
-					},
 				]}
 			/>
-		</Flex>
+			<LogoutButtonCC isGuest={user.isGuest} buttonType={'filled'} />
+		</Column>
 	);
 };
 

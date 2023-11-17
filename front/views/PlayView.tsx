@@ -136,7 +136,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
 			console.warn('onEnd: Websocket not open');
-			navigation.dispatch(StackActions.replace('Home'));
+			navigation.dispatch(StackActions.replace('Home', {}));
 			return;
 		}
 		webSocket.current?.send(

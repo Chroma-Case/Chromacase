@@ -76,14 +76,14 @@ const SignupView = () => {
 
 	return (
 		<ScaffoldAuth
-			title="Créer un compte"
-			description="Apprendre le piano gratuitement et de manière ludique"
+			title={translate('signupPageTitle')}
+			description={translate('signupPageParagraph')}
 			form={[
 				<TextFormField
 					key={'signup-form-1'}
 					error={formData.username.error}
 					icon={User}
-					placeholder="Username"
+					placeholder={translate('formPlaceholderUsername')}
 					autoComplete="username"
 					value={formData.username.value}
 					onChangeText={(t) => {
@@ -101,7 +101,7 @@ const SignupView = () => {
 					key={'signup-form-2'}
 					error={formData.email.error}
 					icon={Sms}
-					placeholder="Email"
+					placeholder={translate('formPlaceholderEmail')}
 					autoComplete="email"
 					value={formData.email.value}
 					onChangeText={(t) => {
@@ -121,7 +121,7 @@ const SignupView = () => {
 					isSecret
 					error={formData.password.error}
 					icon={Lock1}
-					placeholder="Password"
+					placeholder={translate('formPlaceholderPassword')}
 					autoComplete="password-new"
 					value={formData.password.value}
 					onChangeText={(t) => {
@@ -140,7 +140,7 @@ const SignupView = () => {
 					isSecret
 					error={formData.repeatPassword.error}
 					icon={Lock1}
-					placeholder="Repeat password"
+					placeholder={translate('formPlaceholderRepeatPassword')}
 					autoComplete="password-new"
 					value={formData.repeatPassword.value}
 					onChangeText={(t) => {
@@ -163,15 +163,15 @@ const SignupView = () => {
 			submitButton={
 				<ButtonBase
 					style={{ width: '100%' }}
-					title="Signin"
+					title={translate('signUpBtn')}
 					isDisabled={
-						formData.password.error !== null ||
 						formData.username.error !== null ||
-						formData.repeatPassword.error !== null ||
 						formData.email.error !== null ||
+						formData.password.error !== null ||
+						formData.repeatPassword.error !== null ||
 						formData.username.value === '' ||
+						formData.email.value === '' ||
 						formData.password.value === '' ||
-						formData.repeatPassword.value === '' ||
 						formData.repeatPassword.value === ''
 					}
 					onPress={async () => {
@@ -193,8 +193,8 @@ const SignupView = () => {
 				/>
 			}
 			link={{
-				text: "S'identifier",
-				description: 'Vous avez déjà un compte ? ',
+				label: translate('signupLinkLabel'),
+				text: translate('signupLinkText'),
 				onPress: () => navigation.navigate('Login'),
 			}}
 		/>
