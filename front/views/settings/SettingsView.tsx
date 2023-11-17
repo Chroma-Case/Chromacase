@@ -137,7 +137,6 @@ const SettingsTab = (props: RouteProps<{}>) => {
 					maxWidth: 850,
 					width: '100%',
 				}}
-				style={{ height: 'fit-content' }}
 				renderTabBar={renderTabBar}
 				navigationState={{ index, routes }}
 				renderScene={renderScene}

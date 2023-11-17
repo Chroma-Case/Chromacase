@@ -71,7 +71,6 @@ export const FavoritesMusic = () => {
 				<InteractiveCC
 					// duration={80}
 					styleContainer={{
-						width: 'fit-content',
 						borderRadius: 10,
 					}}
 					style={{
@@ -109,7 +108,7 @@ export const FavoritesMusic = () => {
 				</InteractiveCC>
 				<ButtonBase
 					title="Coucou"
-					style={{ width: 'fit-content', marginTop: 20 }}
+					style={{ marginTop: 20 }}
 					type={'filled'}
 				/>
 			</View> */}

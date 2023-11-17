@@ -158,7 +158,6 @@ const ProfileSettings = () => {
 			/>
 			<LogoutButtonCC
 				isGuest={user.isGuest}
-				style={{ with: 'fit-content' }}
 				buttonType={'filled'}
 			/>
 		</Column>

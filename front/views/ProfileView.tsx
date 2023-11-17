@@ -69,7 +69,6 @@ const ProfileView = (props: RouteProps<{}>) => {
 							</Text>
 							<ButtonBase
 								title="Modifier profil"
-								style={{ width: 'fit-content' }}
 								type={'filled'}
 								onPress={async () => navigation.navigate('Settings', {})}
 							/>

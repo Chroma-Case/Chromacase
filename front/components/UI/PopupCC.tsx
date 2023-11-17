@@ -29,9 +29,8 @@ const PopupCC = ({ title, description, children, isVisible, setIsVisible }: Popu
 			<GlassmorphismCC>
 				<Column
 					style={{
-						maxWidth: '800px',
-						maxHeight: 'fit-content',
-						padding: '20px',
+						maxWidth: 800,
+						padding: 20,
 					}}
 					space={4}
 				>
@@ -41,7 +40,6 @@ const PopupCC = ({ title, description, children, isVisible, setIsVisible }: Popu
 							{setIsVisible !== undefined && (
 								<ButtonBase
 									type="menu"
-									style={{ width: 'fit-content' }}
 									icon={CloseSquare}
 									onPress={async () => setIsVisible(false)}
 								/>

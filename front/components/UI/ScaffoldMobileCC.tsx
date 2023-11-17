@@ -46,7 +46,6 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 				<Flex
 					style={{
 						width: '100%',
-						height: 'fit-content',
 						flexDirection: 'row',
 						backgroundColor: colors.coolGray[500],
 						padding: 8,

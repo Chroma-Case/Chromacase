@@ -220,7 +220,6 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 						marginLeft: 0,
 						padding: props.widthPadding ? 20 : 0,
 						borderRadius: 12,
-						minHeight: 'fit-content',
 					}}
 				>
 					{props.children}
