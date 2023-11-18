@@ -16,6 +16,25 @@ type CardProps = Parameters<typeof Box>[0] & {
 	onPress: () => void;
 };
 
+const getBgColor = (isPressed: boolean, isHovered: boolean, colorScheme: 'light' | 'dark') => {
+	if (colorScheme === 'dark') {
+		if (isPressed) {
+			return 'gray.800';
+		}
+		if (isHovered) {
+			return 'gray.700';
+		}
+		return undefined;
+	}
+	if (isPressed) {
+		return 'coolGray.200';
+	}
+	if (isHovered) {
+		return 'coolGray.100';
+	}
+	return undefined;
+};
+
 const Card = (props: CardProps) => {
 	const theme = useTheme();
 	const colorScheme = useSelector((state: RootState) => state.settings.local.colorScheme);
@@ -27,15 +46,11 @@ const Card = (props: CardProps) => {
 				<Box
 					{...props}
 					style={[props.style, cardBorder(theme)]}
-					bg={
-						(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
-							? isHovered || isPressed
-								? 'gray.800'
-								: undefined
-							: isHovered || isPressed
-							? 'coolGray.200'
-							: undefined
-					}
+					bg={getBgColor(
+						isPressed,
+						isHovered,
+						(colorScheme === 'system' ? systemColorMode : colorScheme) ?? 'light'
+					)}
 				>
 					{props.children}
 				</Box>
