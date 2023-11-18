@@ -32,6 +32,16 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	const [loading, setLoading] = useState(false);
 	const colorScheme = useColorScheme();
 
+	const getColor = (colorScheme: 'light' | 'dark', type: ButtonType) => {
+		if (type === 'outlined') {
+			return colors.primary[300];
+		}
+		if (colorScheme === 'dark' || type === 'filled') {
+			return '#FFFFFF';
+		}
+		return colors.black[500];
+	};
+
 	const styleButton = StyleSheet.create({
 		Default: {
 			scale: 1,
@@ -132,13 +142,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 					{MyIcon && (
 						<MyIcon
 							size={'18'}
-							color={
-								type === 'outlined'
-									? colors.primary[300]
-									: colorScheme === 'dark' || type === 'filled'
-									? '#FFFFFF'
-									: colors.black[500]
-							}
+							color={getColor(colorScheme, type)}
 							variant={iconVariant}
 						/>
 					)}
