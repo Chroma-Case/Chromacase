@@ -33,6 +33,8 @@ import StarProgress from '../components/StarProgress';
 import useColorScheme from '../hooks/colorScheme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from 'native-base';
+import PopupCC from '../components/UI/PopupCC';
+import ButtonBase from '../components/UI/ButtonBase';
 
 type PlayViewProps = {
 	songId: number;
@@ -97,7 +99,7 @@ const infoCardInfos = [
 ] as const;
 
 const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
-	const [type, setType] = useState<'practice' | 'normal'>('normal');
+	const [type, setType] = useState<'practice' | 'normal'>();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
@@ -347,6 +349,32 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
+					<PopupCC
+						title={translate('selectPlayMode')}
+						description={translate('selectPlayModeExplaination')}
+						isVisible={type === undefined}
+						setIsVisible={navigation.canGoBack() ? (isVisible) => {
+							if (!isVisible) {
+								// If we dismiss the popup, Go to previous page
+								navigation.goBack();
+							}
+						} : undefined}
+					>
+						<Row style={{ justifyContent: 'space-between' }}>
+							<ButtonBase
+								style={{}}
+								type="outlined"
+								title={translate('practiceBtn')}
+								onPress={async () => setType('practice')}
+							/>
+							<ButtonBase
+								style={{}}
+								type='filled'
+								title={translate('playBtn')}
+								onPress={async () => setType('normal')}
+							/>
+						</Row>
+					</PopupCC>
 					{infoCardInfos.map((info) => (
 						<View
 							key={info.id}
