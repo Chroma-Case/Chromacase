@@ -50,7 +50,7 @@ const SongHistory = (props: { quantity: number }) => {
 					flex: 1,
 				}}
 			>
-				<TouchableOpacity onPress={() => navigation.navigate('Song', { songId: song.id })}>
+				<TouchableOpacity onPress={() => navigation.navigate('Play', { songId: song.id })}>
 					<Text numberOfLines={1}>{song.name}</Text>
 				</TouchableOpacity>
 			</View>

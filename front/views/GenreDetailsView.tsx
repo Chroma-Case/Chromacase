@@ -61,7 +61,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 						songId: songData.id,
 						onPress: () => {
 							API.createSearchHistoryEntry(songData.name, 'song');
-							navigation.navigate('Song', { songId: songData.id });
+							navigation.navigate('Play', { songId: songData.id });
 						},
 					}))}
 					cardComponent={SongCard}

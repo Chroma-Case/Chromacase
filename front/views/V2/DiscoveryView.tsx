@@ -72,7 +72,7 @@ const HomeView = (props: RouteProps<{}>) => {
 					(artistQuery) => artistQuery.data?.id === song.artistId
 				)!.data!.name;
 				cards[index]!.onPress = () => {
-					navigation.navigate('Song', { songId: song.id });
+					navigation.navigate('Play', { songId: song.id });
 				};
 			});
 	}, [artistsQueries]);
@@ -195,7 +195,7 @@ const HomeView = (props: RouteProps<{}>) => {
 								key={song.id}
 								song={song}
 								onPress={() => {
-									navigation.navigate('Song', { songId: song.id });
+									navigation.navigate('Play', { songId: song.id });
 								}}
 								onPlay={() => {
 									console.log('play');

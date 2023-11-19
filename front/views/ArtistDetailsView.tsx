@@ -58,7 +58,7 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 								}
 								onPress={() => {
 									API.createSearchHistoryEntry(comp.name, 'song');
-									navigation.navigate('Song', { songId: comp.id });
+									navigation.navigate('Play', { songId: comp.id });
 								}}
 							/>
 						))}

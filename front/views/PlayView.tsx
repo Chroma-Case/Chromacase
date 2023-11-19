@@ -36,7 +36,6 @@ import { useTheme } from 'native-base';
 
 type PlayViewProps = {
 	songId: number;
-	type: 'practice' | 'normal';
 };
 
 type ScoreMessage = {
@@ -97,7 +96,8 @@ const infoCardInfos = [
 	},
 ] as const;
 
-const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
+const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
+	const [type, setType] = useState<'practice' | 'normal'>('normal');
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
