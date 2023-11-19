@@ -20,7 +20,7 @@ import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
@@ -35,6 +35,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from 'native-base';
 import PopupCC from '../components/UI/PopupCC';
 import ButtonBase from '../components/UI/ButtonBase';
+import { Clock, Cup } from 'iconsax-react-native';
 
 type PlayViewProps = {
 	songId: number;
@@ -77,27 +78,6 @@ export const PianoCC = createContext<PianoCanvasContext>({
 	messages: [],
 });
 
-const infoCardInfos = [
-	{
-		icon: <Ionicons name="timer-outline" size={18} color="#6075F9" />,
-		label: 'Last Score',
-		id: 'lastScore',
-		value: 60,
-	},
-	{
-		icon: <Ionicons name="trophy-outline" size={18} color="#6075F9" />,
-		label: 'Best Score',
-		id: 'bestScore',
-		value: 60,
-	},
-	{
-		icon: <Ionicons name="bar-chart-outline" size={18} color="#6075F9" />,
-		label: 'Level',
-		id: 'level',
-		value: 3,
-	},
-] as const;
-
 const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const [type, setType] = useState<'practice' | 'normal'>();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
@@ -110,6 +90,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
+	const songHistory = useQuery(API.getSongHistory(songId), { refetchOnWindowFocus: true });
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
 	// const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -128,7 +109,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	});
 	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
-	const textColor = colorScheme == 'dark' ? colors.lightText : colors.coolGray;
+	const textColor = colorScheme == 'dark' ? colors.lightText : colors.coolGray[800];
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -322,7 +303,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, [song.data, partitionRendered]);
 
-	if (!song.data) {
+	if (!song.data || !songHistory.data) {
 		return <LoadingView />;
 	}
 	return (
@@ -376,9 +357,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 							/>
 						</Row>
 					</PopupCC>
-					{infoCardInfos.map((info) => (
+					
+					{/* eslint-disable-next-line react/jsx-key*/}
+					{([['lastScore', songHistory.data.best ?? 0, <Clock color={textColor.toString()}/>], ['bestScore', songHistory.data.history.at(0)?.score ?? 0, <Cup color={textColor.toString()}/>]] as const)
+						.map(([label, value, icon]) => (
 						<View
-							key={info.id}
+							key={label}
 							style={{
 								display: 'flex',
 								flexDirection: 'column',
@@ -386,8 +370,8 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								alignItems: 'center',
 							}}
 						>
-							<Text color={textColor[700]} fontSize={12}>
-								{info.label}
+							<Text color={textColor} fontSize={12}>
+								<Translate translationKey={label}/>
 							</Text>
 							<View
 								style={{
@@ -396,9 +380,9 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 									gap: 5,
 								}}
 							>
-								{info.icon}
-								<Text color={textColor[800]} fontSize={12} bold>
-									{info.value}
+								{icon}
+								<Text color={textColor} fontSize={12} bold>
+									{value}
 								</Text>
 							</View>
 						</View>
@@ -426,7 +410,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 							borderRadius: 12,
 						}}
 					>
-						<Text color={textColor[900]} fontSize={24}>
+						<Text color={textColor} fontSize={24}>
 							{score}
 						</Text>
 					</View>
@@ -444,10 +428,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								borderRadius: 12,
 							}}
 						>
-							<Text color={textColor[900]} fontSize={20}>
+							<Text color={textColor} fontSize={20}>
 								{lastScoreMessage?.content}
 							</Text>
-							<Text color={textColor[900]} fontSize={15} bold>
+							<Text color={textColor} fontSize={15} bold>
 								{streak > 0 && `x${streak}`}
 							</Text>
 						</View>
@@ -532,7 +516,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								}}
 							>
 								<Text
-									color={textColor[800]}
+									color={textColor}
 									fontSize={14}
 									maxW={'100%'}
 									isTruncated
@@ -540,7 +524,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 									{song.data.name}
 								</Text>
 								<Text
-									color={textColor[900]}
+									color={textColor}
 									fontSize={12}
 									maxW={'100%'}
 									isTruncated
@@ -586,7 +570,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								/>
 							</>
 						)}
-						<Text color={textColor[900]}>
+						<Text color={textColor}>
 							{time < 0
 								? paused
 									? '0:00'
