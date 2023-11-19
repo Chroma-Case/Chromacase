@@ -298,7 +298,8 @@ export const en = {
 	changeIt: 'Change It',
 	verified: 'Verified',
 	selectPlayMode: 'Select a play mode',
-	selectPlayModeExplaination: "'Practice' only considers the notes you play, while 'Play' mode also takes rhythm into account."
+	selectPlayModeExplaination:
+		"'Practice' only considers the notes you play, while 'Play' mode also takes rhythm into account.",
 };
 
 export const fr: typeof en = {
@@ -602,7 +603,8 @@ export const fr: typeof en = {
 	changeIt: 'Modifier',
 	verified: 'Verifié',
 	selectPlayMode: 'Sélectionnez un mode de jeu',
-	selectPlayModeExplaination: "Le mode 'S'entrainer' ne compte que les notes, tandis que le mode 'Jouer' prend en compte à la fois les notes et le rythme."
+	selectPlayModeExplaination:
+		"Le mode 'S'entrainer' ne compte que les notes, tandis que le mode 'Jouer' prend en compte à la fois les notes et le rythme.",
 };
 
 export const sp: typeof en = {
@@ -912,5 +914,6 @@ export const sp: typeof en = {
 	changeIt: 'Cambialo',
 	verified: 'Verified',
 	selectPlayMode: 'Selecciona un modo de juego',
-	selectPlayModeExplaination: "El modo 'práctica' solo cuenta notas, mientras que el modo 'reproducir' tiene en cuenta tanto las notas como el ritmo."
+	selectPlayModeExplaination:
+		"El modo 'práctica' solo cuenta notas, mientras que el modo 'reproducir' tiene en cuenta tanto las notas como el ritmo.",
 };
