@@ -128,6 +128,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	});
 	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
+	const textColor = colorScheme == 'dark' ? colors.lightText : colors.coolGray;
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -385,7 +386,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								alignItems: 'center',
 							}}
 						>
-							<Text color={colors.coolGray[700]} fontSize={12}>
+							<Text color={textColor[700]} fontSize={12}>
 								{info.label}
 							</Text>
 							<View
@@ -396,7 +397,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								}}
 							>
 								{info.icon}
-								<Text color={colors.coolGray[800]} fontSize={12} bold>
+								<Text color={textColor[800]} fontSize={12} bold>
 									{info.value}
 								</Text>
 							</View>
@@ -425,7 +426,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 							borderRadius: 12,
 						}}
 					>
-						<Text color={colors.coolGray[900]} fontSize={24}>
+						<Text color={textColor[900]} fontSize={24}>
 							{score}
 						</Text>
 					</View>
@@ -443,10 +444,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								borderRadius: 12,
 							}}
 						>
-							<Text color={colors.coolGray[900]} fontSize={20}>
+							<Text color={textColor[900]} fontSize={20}>
 								{lastScoreMessage?.content}
 							</Text>
-							<Text color={colors.coolGray[900]} fontSize={15} bold>
+							<Text color={textColor[900]} fontSize={15} bold>
 								{streak > 0 && `x${streak}`}
 							</Text>
 						</View>
@@ -531,7 +532,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								}}
 							>
 								<Text
-									color={colors.coolGray[800]}
+									color={textColor[800]}
 									fontSize={14}
 									maxW={'100%'}
 									isTruncated
@@ -539,7 +540,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 									{song.data.name}
 								</Text>
 								<Text
-									color={colors.coolGray[900]}
+									color={textColor[900]}
 									fontSize={12}
 									maxW={'100%'}
 									isTruncated
@@ -585,7 +586,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								/>
 							</>
 						)}
-						<Text color={colors.coolGray[900]}>
+						<Text color={textColor[900]}>
 							{time < 0
 								? paused
 									? '0:00'
