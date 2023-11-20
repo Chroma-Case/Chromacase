@@ -163,7 +163,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 						onPress={() => navigation.navigate('Home', {})}
 					/>
 					<TextButton
-						onPress={() => navigation.navigate('Song', { songId })}
+						onPress={() => navigation.navigate('Play', { songId })}
 						translate={{ translationKey: 'playAgain' }}
 					/>
 				</Row>

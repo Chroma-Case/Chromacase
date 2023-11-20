@@ -10,7 +10,6 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
 import { Translate, translate } from './i18n/i18n';
-import SongLobbyView from './views/SongLobbyView';
 import HomeView from './views/HomeView';
 import SearchView from './views/SearchView';
 import SettingsTab from './views/settings/SettingsView';
@@ -64,11 +63,6 @@ const protectedRoutes = () =>
 			stringify: {
 				screen: removeMe,
 			},
-		},
-		Song: {
-			component: SongLobbyView,
-			options: { title: translate('play') },
-			link: '/song/:songId',
 		},
 		Artist: {
 			component: ArtistDetailsView,

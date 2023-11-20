@@ -59,7 +59,7 @@ export const FavoritesMusic = () => {
 				onLike: () => {
 					console.log('onLike');
 				},
-				onPlay: () => navigation.navigate('Song', { songId: song.id }),
+				onPlay: () => navigation.navigate('Play', { songId: song.id }),
 			})) ?? [];
 
 	if (isLoading) {

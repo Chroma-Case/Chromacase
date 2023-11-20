@@ -20,7 +20,7 @@ import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
@@ -33,10 +33,12 @@ import StarProgress from '../components/StarProgress';
 import useColorScheme from '../hooks/colorScheme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from 'native-base';
+import PopupCC from '../components/UI/PopupCC';
+import ButtonBase from '../components/UI/ButtonBase';
+import { Clock, Cup } from 'iconsax-react-native';
 
 type PlayViewProps = {
 	songId: number;
-	type: 'practice' | 'normal';
 };
 
 type ScoreMessage = {
@@ -76,28 +78,8 @@ export const PianoCC = createContext<PianoCanvasContext>({
 	messages: [],
 });
 
-const infoCardInfos = [
-	{
-		icon: <Ionicons name="timer-outline" size={18} color="#6075F9" />,
-		label: 'Last Score',
-		id: 'lastScore',
-		value: 60,
-	},
-	{
-		icon: <Ionicons name="trophy-outline" size={18} color="#6075F9" />,
-		label: 'Best Score',
-		id: 'bestScore',
-		value: 60,
-	},
-	{
-		icon: <Ionicons name="bar-chart-outline" size={18} color="#6075F9" />,
-		label: 'Level',
-		id: 'level',
-		value: 3,
-	},
-] as const;
-
-const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
+const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
+	const [type, setType] = useState<'practice' | 'normal'>();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
@@ -108,6 +90,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
+	const songHistory = useQuery(API.getSongHistory(songId));
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
 	// const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -126,6 +109,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	});
 	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
+	const textColor = colors.text;
+	const statColor = colors.lightText;
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -347,9 +332,52 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
-					{infoCardInfos.map((info) => (
+					<PopupCC
+						title={translate('selectPlayMode')}
+						description={translate('selectPlayModeExplaination')}
+						isVisible={type === undefined}
+						setIsVisible={
+							navigation.canGoBack()
+								? (isVisible) => {
+										if (!isVisible) {
+											// If we dismiss the popup, Go to previous page
+											navigation.goBack();
+										}
+								  }
+								: undefined
+						}
+					>
+						<Row style={{ justifyContent: 'space-between' }}>
+							<ButtonBase
+								style={{}}
+								type="outlined"
+								title={translate('practiceBtn')}
+								onPress={async () => setType('practice')}
+							/>
+							<ButtonBase
+								style={{}}
+								type="filled"
+								title={translate('playBtn')}
+								onPress={async () => setType('normal')}
+							/>
+						</Row>
+					</PopupCC>
+					{(
+						[
+							[
+								'lastScore',
+								songHistory.data?.best ?? 0,
+								() => <Clock color={statColor} />,
+							] as const,
+							[
+								'bestScore',
+								songHistory.data?.history.at(0)?.score ?? 0,
+								() => <Cup color={statColor} />,
+							],
+						] as const
+					).map(([label, value, icon]) => (
 						<View
-							key={info.id}
+							key={label}
 							style={{
 								display: 'flex',
 								flexDirection: 'column',
@@ -357,8 +385,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 								alignItems: 'center',
 							}}
 						>
-							<Text color={colors.coolGray[700]} fontSize={12}>
-								{info.label}
+							<Text color={statColor} fontSize={12}>
+								<Translate translationKey={label} />
 							</Text>
 							<View
 								style={{
@@ -367,9 +395,9 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 									gap: 5,
 								}}
 							>
-								{info.icon}
-								<Text color={colors.coolGray[800]} fontSize={12} bold>
-									{info.value}
+								{icon()}
+								<Text color={statColor} fontSize={12} bold>
+									{value}
 								</Text>
 							</View>
 						</View>
@@ -397,7 +425,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 							borderRadius: 12,
 						}}
 					>
-						<Text color={colors.coolGray[900]} fontSize={24}>
+						<Text color={textColor[900]} fontSize={24}>
 							{score}
 						</Text>
 					</View>
@@ -415,10 +443,10 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 								borderRadius: 12,
 							}}
 						>
-							<Text color={colors.coolGray[900]} fontSize={20}>
+							<Text color={textColor[900]} fontSize={20}>
 								{lastScoreMessage?.content}
 							</Text>
-							<Text color={colors.coolGray[900]} fontSize={15} bold>
+							<Text color={textColor[900]} fontSize={15} bold>
 								{streak > 0 && `x${streak}`}
 							</Text>
 						</View>
@@ -503,7 +531,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 								}}
 							>
 								<Text
-									color={colors.coolGray[800]}
+									color={textColor[800]}
 									fontSize={14}
 									maxW={'100%'}
 									isTruncated
@@ -511,7 +539,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 									{song.data.name}
 								</Text>
 								<Text
-									color={colors.coolGray[900]}
+									color={textColor[900]}
 									fontSize={12}
 									maxW={'100%'}
 									isTruncated
@@ -535,7 +563,13 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 						<IconButton
 							size="sm"
 							variant="solid"
-							icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
+							icon={
+								<Icon
+									as={Ionicons}
+									color={colors.coolGray[900]}
+									name={paused ? 'play' : 'pause'}
+								/>
+							}
 							onPress={() => {
 								if (paused) {
 									onResume();
@@ -557,7 +591,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 								/>
 							</>
 						)}
-						<Text color={colors.coolGray[900]}>
+						<Text color={textColor[900]}>
 							{time < 0
 								? paused
 									? '0:00'
