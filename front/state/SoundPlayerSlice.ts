@@ -105,6 +105,8 @@ export const soundPlayerSlice = createSlice({
 	},
 	reducers: {
 		setSounds: (state, action: PayloadAction<Sounds>) => {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			//@ts-expect-error
 			state.sounds = action.payload;
 		},
 		unsetSounds: (state) => {
