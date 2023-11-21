@@ -5,10 +5,8 @@ import { useQuery } from '../../Queries';
 import { PianoCC } from '../../views/PlayView';
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
-import { useDispatch, useSelector } from '../../state/Store';
-import { PianoNotes, setSounds } from '../../state/SoundPlayerSlice';
+import { PianoNotes } from '../../state/SoundPlayerSlice';
 import { Audio } from 'expo-av';
-import { Sounds } from '../../state/SoundPlayerSlice';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -63,7 +61,13 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 						(sound) => [midiNumber, sound.sound] as const
 					)
 				)
-			).then((res) => pianoSounds.current = res.reduce((prev, curr) => ({ ...prev, [curr[0]]: curr[1] }), {}));
+			).then(
+				(res) =>
+					(pianoSounds.current = res.reduce(
+						(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
+						{}
+					))
+			);
 		}
 	}, []);
 
@@ -90,11 +94,11 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 					sound.playAsync();
 					setTimeout(() => {
 						sound.stopAsync();
-					}, duration)
+					}, duration);
 				} catch (e) {
-					console.log(e)
+					console.log(e);
 				}
-			})
+			});
 			partitionOffset.value = withTiming(
 				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
 				{

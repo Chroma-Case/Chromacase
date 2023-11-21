@@ -1,21 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import { Slider, Text, View, IconButton, Icon, Switch } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useRef } from 'react';
+import { Slider, Text, View, IconButton, Icon } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
-
-
-const MetronomeToggle = (props: { enabled: boolean, onToggle: (stateAfterToggle: boolean) => void }) => {
-	const [isEnabled, setEnabled] = useState(false);
-
-	useEffect(() => {
-		setEnabled(props.enabled)
-	}, [props.enabled])
-	return <Switch value={isEnabled} onToggle={() => {
-		props.onToggle(!isEnabled);
-		setEnabled(!isEnabled);
-	}} />
-}
+import { VolumeHigh, VolumeSlash } from 'iconsax-react-native';
 
 export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
 	const audio = useRef<Audio.Sound | null>(null);
@@ -26,6 +13,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 		if (!enabled) {
 			return;
 		} else if (!audio.current) {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			Audio.Sound.createAsync(require('../assets/metronome.mp3')).then((a) => {
 				audio.current = a.sound;
 			});
@@ -55,7 +43,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 					justifyContent: 'space-between',
 				}}
 			>
-				<Text>Métronome</Text>
+				<Text>Metronome</Text>
 				<Icon as={<MaterialCommunityIcons name="metronome" size={24} color="white" />} />
 			</View>
 			<View
@@ -66,19 +54,19 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 			>
 				<IconButton
 					icon={
-						<Ionicons
-							name={enabled ? 'volume-high-outline' : 'volume-mute-outline'}
-							size={24}
-							color="white"
-						/>
+						enabled ? (
+							<VolumeSlash size={24} color="white" />
+						) : (
+							<VolumeHigh size={24} color="white" />
+						)
 					}
-					onPress={() => enabled.current = !enabled.current}
+					onPress={() => (enabled.current = !enabled.current)}
 				/>
 				<Slider
 					maxWidth={'500px'}
 					flex={1}
 					defaultValue={volume.current}
-					onChange={(x) => volume.current = x}
+					onChange={(x) => (volume.current = x)}
 				>
 					<Slider.Track>
 						<Slider.FilledTrack />
