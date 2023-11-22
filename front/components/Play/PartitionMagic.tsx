@@ -25,6 +25,9 @@ const getCursorToPlay = (
 	timestamp: number,
 	onCursorMove: (cursor: CursorInfoItem, idx: number) => void
 ) => {
+	if (timestamp <= 0) {
+		return;
+	}
 	for (let i = cursorInfos.length - 1; i > currentCurIdx; i--) {
 		const cursorInfo = cursorInfos[i]!;
 		if (cursorInfo.timestamp <= timestamp) {
@@ -35,7 +38,7 @@ const getCursorToPlay = (
 
 const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
-	const [currentCurIdx, setCurrentCurIdx] = React.useState(0);
+	const [currentCurIdx, setCurrentCurIdx] = React.useState(-1);
 	const partitionOffset = useSharedValue(0);
 	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 0]);
 	const pianoCC = React.useContext(PianoCC);
@@ -43,10 +46,12 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
-	const cursorBorderWidth = (data?.cursors[currentCurIdx]?.width ?? 0) / 6;
-	const cursorWidth = (data?.cursors[currentCurIdx]?.width ?? 0) + cursorPaddingHorizontal * 2;
-	const cursorHeight = (data?.cursors[currentCurIdx]?.height ?? 0) + cursorPaddingVertical * 2;
-	const cursorTop = (data?.cursors[currentCurIdx]?.y ?? 0) - cursorPaddingVertical;
+	const cursorDisplayIdx = currentCurIdx === -1 ? 0 : currentCurIdx;
+
+	const cursorBorderWidth = (data?.cursors[cursorDisplayIdx]?.width ?? 0) / 6;
+	const cursorWidth = (data?.cursors[cursorDisplayIdx]?.width ?? 0) + cursorPaddingHorizontal * 2;
+	const cursorHeight = (data?.cursors[cursorDisplayIdx]?.height ?? 0) + cursorPaddingVertical * 2;
+	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
 	React.useEffect(() => {
