@@ -39,7 +39,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const partitionOffset = useSharedValue(0);
 	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 0]);
 	const pianoCC = React.useContext(PianoCC);
-
+	const pianoSounds = React.useRef<Record<string, Audio.Sound>>();
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
