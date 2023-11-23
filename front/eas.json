@@ -8,8 +8,8 @@
 				"distribution": "internal"
 			},
 			"env": {
-				"EXPO_PUBLIC_API_URL": "https://chroma.octohub.app/api",
-				"EXPO_PUBLIC_SCORO_URL": "wss://chroma.octohub.app/ws"
+				"EXPO_PUBLIC_API_URL": "https://nightly.chroma.octohub.app/api",
+				"EXPO_PUBLIC_SCORO_URL": "wss://nightly.chroma.octohub.app/ws"
 			}
 		},
 		"production": {
@@ -20,8 +20,8 @@
 				"distribution": "internal"
 			},
 			"env": {
-				"EXPO_PUBLIC_API_URL": "https://chroma.octohub.app/api",
-				"EXPO_PUBLIC_SCORO_URL": "wss://chroma.octohub.app/ws"
+				"EXPO_PUBLIC_API_URL": "https://nightly.chroma.octohub.app/api",
+				"EXPO_PUBLIC_SCORO_URL": "wss://nightly.chroma.octohub.app/ws"
 			}
 		}
 	}
