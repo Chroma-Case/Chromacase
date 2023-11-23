@@ -19,9 +19,9 @@ import { ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
 import { Prisma, Skill } from "@prisma/client";
 import { FilterQuery } from "src/utils/filter.pipe";
 import { Lesson as _Lesson } from "src/_gen/prisma-class/lesson";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { IncludeMap, mapInclude } from "src/utils/include";
 import { Request } from "express";
+import { AuthGuard } from "@nestjs/passport";
 
 export class Lesson {
 	@ApiProperty()
@@ -38,7 +38,7 @@ export class Lesson {
 
 @ApiTags("lessons")
 @Controller("lesson")
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard(["jwt", "api-key"]))
 export class LessonController {
 	static filterableFields: string[] = [
 		"+id",

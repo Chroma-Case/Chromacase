@@ -167,7 +167,7 @@ export class AuthController {
 		return this.authService.login(user);
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(AuthGuard(["jwt", "api-key"]))
 	@ApiBearerAuth()
 	@ApiOperation({ description: "Get the profile picture of connected user" })
 	@ApiOkResponse({ description: "The user profile picture" })
@@ -177,7 +177,7 @@ export class AuthController {
 		return await this.usersService.getProfilePicture(req.user.id, res);
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(AuthGuard(["jwt", "api-key"]))
 	@ApiBearerAuth()
 	@ApiOkResponse({ description: "The user profile picture" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
@@ -215,7 +215,7 @@ export class AuthController {
 		return user;
 	}
 
-	@UseGuards(JwtAuthGuard)
+	@UseGuards(AuthGuard(["jwt", "api-key"]))
 	@ApiBearerAuth()
 	@ApiOkResponse({ description: "Successfully edited profile", type: User })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
