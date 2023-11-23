@@ -10,6 +10,7 @@ import { ConfigService } from "@nestjs/config";
 import { JwtStrategy } from "./jwt.strategy";
 import { SettingsModule } from "src/settings/settings.module";
 import { GoogleStrategy } from "./google.strategy";
+import { HeaderApiKeyStrategy } from "./apikey.strategy";
 
 @Module({
 	imports: [
@@ -26,7 +27,13 @@ import { GoogleStrategy } from "./google.strategy";
 			inject: [ConfigService],
 		}),
 	],
-	providers: [AuthService, LocalStrategy, JwtStrategy, GoogleStrategy],
+	providers: [
+		AuthService,
+		LocalStrategy,
+		JwtStrategy,
+		GoogleStrategy,
+		HeaderApiKeyStrategy,
+	],
 	controllers: [AuthController],
 })
 export class AuthModule {}

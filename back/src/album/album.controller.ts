@@ -22,11 +22,11 @@ import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FilterQuery } from "src/utils/filter.pipe";
 import { Album as _Album } from "src/_gen/prisma-class/album";
 import { IncludeMap, mapInclude } from "src/utils/include";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("album")
 @ApiTags("album")
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard(["jwt", "api-key"]))
 export class AlbumController {
 	static filterableFields: string[] = ["+id", "name", "+artistId"];
 	static includableFields: IncludeMap<Prisma.AlbumInclude> = {

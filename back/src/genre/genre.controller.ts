@@ -25,12 +25,12 @@ import { createReadStream, existsSync } from "fs";
 import { FilterQuery } from "src/utils/filter.pipe";
 import { Genre as _Genre } from "src/_gen/prisma-class/genre";
 import { IncludeMap, mapInclude } from "src/utils/include";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { Public } from "src/auth/public";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("genre")
 @ApiTags("genre")
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard(["jwt", "api-key"]))
 export class GenreController {
 	static filterableFields: string[] = ["+id", "name"];
 	static includableFields: IncludeMap<Prisma.GenreInclude> = {

@@ -38,8 +38,7 @@ import { Song as _Song } from "src/_gen/prisma-class/song";
 import { SongHistory } from "src/_gen/prisma-class/song_history";
 import { IncludeMap, mapInclude } from "src/utils/include";
 import { Public } from "src/auth/public";
-import { ApiKeyAuthGuard } from "src/auth/apikey-auth.guard";
-
+import { AuthGuard } from "@nestjs/passport";
 class SongHistoryResult {
 	@ApiProperty()
 	best: number;
@@ -49,7 +48,7 @@ class SongHistoryResult {
 
 @Controller("song")
 @ApiTags("song")
-@UseGuards(JwtAuthGuard, ApiKeyAuthGuard)
+@UseGuards(AuthGuard(["jwt", "api-key"]))
 export class SongController {
 	static filterableFields: string[] = [
 		"+id",

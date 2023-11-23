@@ -30,12 +30,12 @@ import { createReadStream, existsSync } from "fs";
 import { FilterQuery } from "src/utils/filter.pipe";
 import { Artist as _Artist } from "src/_gen/prisma-class/artist";
 import { IncludeMap, mapInclude } from "src/utils/include";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { Public } from "src/auth/public";
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller("artist")
 @ApiTags("artist")
-@UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard(["jwt", "api-key"]))
 export class ArtistController {
 	static filterableFields = ["+id", "name"];
 	static includableFields: IncludeMap<Prisma.ArtistInclude> = {
