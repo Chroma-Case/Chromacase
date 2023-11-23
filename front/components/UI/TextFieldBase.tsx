@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingHorizontal: 12 + 20 + 12,
 		paddingVertical: 12,
-		outlineStyle: 'none',
+		// outlineStyle: 'none',
 	},
 	iconContainerLeft: {
 		position: 'absolute',
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
 	},
 	iconContainerRight: {
 		position: 'absolute',
-		outlineStyle: 'none',
+		// outlineStyle: 'none',
 		right: 12,
 		zIndex: 1,
 	},

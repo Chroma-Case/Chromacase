@@ -65,7 +65,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 				<Wrap space={4} direction="row" style={{ padding: 16, paddingBottom: 0 }}>
 					<Row space={2} flex={1}>
 						<Image
-							source={{ uri: logo }}
+							// source={{ uri: logo }}
 							style={{
 								aspectRatio: 1,
 								width: 32,

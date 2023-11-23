@@ -195,6 +195,7 @@ function MusicListComponent({
 	// FlatList: Renders list efficiently, only rendering visible items.
 	return (
 		<FlatList
+			nestedScrollEnabled
 			style={styles.container}
 			ListHeaderComponent={headerComponent}
 			data={musicListState.displayedMusics}
