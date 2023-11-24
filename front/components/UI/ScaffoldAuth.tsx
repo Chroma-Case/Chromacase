@@ -56,22 +56,27 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
 
 	return (
-		<Flex
-			direction="row"
-			justifyContent="space-between"
-			style={{ flex: 1, backgroundColor: '#cdd4fd' }}
+		<View
+			style={{
+				backgroundColor: '#cdd4fd',
+				display: 'flex',
+				flexDirection: 'row',
+				justifyContent: 'space-between',
+				width: '100%',
+				height: '100%',
+			}}
 		>
 			<Column style={{ flex: 1 }}>
 				<Wrap space={4} direction="row" style={{ padding: 16, paddingBottom: 0 }}>
 					<Row space={2} flex={1}>
-						<Image
-							// source={{ uri: logo }}
+						{/* <Image
+							source={{ uri: logo }}
 							style={{
 								aspectRatio: 1,
 								width: 32,
 								height: 32,
 							}}
-						/>
+						/> */}
 						{layout.width > 650 && (
 							<Text fontSize={'xl'} selectable={false}>
 								ChromaCase
@@ -99,17 +104,32 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 					contentContainerStyle={{
 						padding: 16,
 						flexGrow: 1,
+						width: '100%',
 						justifyContent: 'center',
 						alignSelf: 'center',
+						alignItems: 'center',
 					}}
 				>
-					<View style={{ width: '100%', maxWidth: 420 }}>
-						<Stack
-							space={8}
-							justifyContent="center"
-							alignContent="center"
-							alignItems="center"
-							style={{ width: '100%', paddingBottom: 40 }}
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+							width: '100%',
+							maxWidth: 420,
+							gap: 40,
+						}}
+					>
+						<View
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+								width: '100%',
+								gap: 8,
+							}}
 						>
 							<Text fontSize="4xl" textAlign="center">
 								{title}
@@ -117,7 +137,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							<Text fontSize="lg" textAlign="center">
 								{description}
 							</Text>
-						</Stack>
+						</View>
 						<Stack
 							space={5}
 							justifyContent="center"
@@ -171,7 +191,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 					}}
 				/>
 			)}
-		</Flex>
+		</View>
 	);
 };
 
