@@ -102,7 +102,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 1,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 1,
@@ -131,7 +131,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 2,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 2,
@@ -160,7 +160,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 1,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 1,
@@ -193,7 +193,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 0,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 0,
@@ -213,7 +213,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 			Animated.timing(elevationAnimator, {
 				toValue: 0,
 				duration: 250,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 		]).start();
 	};
@@ -247,7 +247,6 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 				onPressIn={handlePressIn}
 				onPressOut={handlePressOut}
 				onHoverOut={handleMouseLeave}
-				style={styles.container}
 			>
 				{children}
 			</Pressable>
@@ -255,11 +254,5 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	);
 };
 
-const styles = StyleSheet.create({
-	container: {
-		width: '100%',
-		height: '100%',
-	},
-});
 
 export default InteractiveBase;

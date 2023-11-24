@@ -15,7 +15,7 @@ const SongCardGrid = (props: SongCardGrid) => {
 		<VStack space={5}>
 			<Heading>{props.heading}</Heading>
 			<FlatGrid
-				nestedScrollEnabled
+				scrollEnabled={false}
 				maxItemsPerRow={props.maxItemsPerRow}
 				additionalRowStyle={props.style ?? { justifyContent: 'flex-start' }}
 				data={props.songs}
