@@ -1,6 +1,6 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
-import { Column, Flex, Progress, Row, Text, Wrap, useTheme } from 'native-base';
+import { Column, Flex, Progress, Row, Text, View, Wrap, useTheme } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
 import UserAvatar from '../components/UserAvatar';
 import { LoadingView } from '../components/Loading';
@@ -37,28 +37,41 @@ const ProfileView = (props: RouteProps<{}>) => {
 	const level = xpToLevel(userQuery.data.data.xp);
 	const { colors } = useTheme();
 
+	const isBigScreen = layout.width > 650;
+
 	return (
 		<ScaffoldCC routeName={props.route.name}>
 			<Flex flex={1}>
-				<Wrap
+				<View
 					style={{
-						flexDirection: layout.width > 650 ? 'row' : 'column',
-						alignItems: layout.width > 650 ? 'flex-start' : 'center',
+						display: 'flex',
+						flexDirection: isBigScreen ? 'row' : 'column',
+						alignItems: isBigScreen ? 'flex-start' : 'center',
 						paddingBottom: 20,
+						gap: 5,
 						justifyContent: 'space-between',
 					}}
 				>
-					<UserAvatar size={layout.width > 650 ? 'xl' : '2xl'} />
+					<View
+						style={{
+							flexGrow: 0,
+							flexShrink: 0,
+						}}
+					>
+						<UserAvatar size={isBigScreen ? 'xl' : '2xl'} />
+					</View>
 					<Column
 						style={{
-							paddingLeft: layout.width > 650 ? 20 : 0,
-							paddingTop: layout.width > 650 ? 0 : 20,
-							flex: 1,
+							paddingLeft: isBigScreen ? 20 : 0,
+							paddingTop: isBigScreen ? 0 : 20,
+							flexGrow: 1,
+							flexShrink: 1,
 							width: '100%',
 						}}
 					>
-						<Wrap
+						<View
 							style={{
+								display: 'flex',
 								flexDirection: 'row',
 								alignItems: 'center',
 								justifyContent: 'space-between',
@@ -72,11 +85,11 @@ const ProfileView = (props: RouteProps<{}>) => {
 								type={'filled'}
 								onPress={async () => navigation.navigate('Settings', {})}
 							/>
-						</Wrap>
+						</View>
 						<Text style={{ paddingBottom: 10, fontWeight: 'bold' }}>
 							Account created on {userQuery.data.data.createdAt.toLocaleDateString()}
 						</Text>
-						<Wrap
+						<Flex
 							style={{
 								flexDirection: 'row',
 								alignItems: 'center',
@@ -87,9 +100,9 @@ const ProfileView = (props: RouteProps<{}>) => {
 								Your client ID is {userQuery.data.id}
 							</Text>
 							<Text>{userQuery.data.data.gamesPlayed} Games played</Text>
-						</Wrap>
+						</Flex>
 					</Column>
-				</Wrap>
+				</View>
 				<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
 					<Text style={{ paddingRight: 20 }}>{`${translate('level')} ${level}`}</Text>
 					<Progress
