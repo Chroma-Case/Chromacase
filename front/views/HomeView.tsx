@@ -42,25 +42,6 @@ const HomeView = (props: RouteProps<{}>) => {
 	}
 	return (
 		<ScaffoldCC routeName={props.route.name}>
-			<Flex>
-				<Stack
-					space={4}
-					display={{ base: 'block', md: 'flex' }}
-					direction={{ base: 'column', md: 'row' }}
-					textAlign={{ base: 'center', md: 'inherit' }}
-					justifyContent="space-evenly"
-				>
-					<Translate
-						fontSize="xl"
-						flex={2}
-						translationKey="welcome"
-						format={(welcome) => `${welcome} ${userQuery.data.name}!`}
-					/>
-					<Box flex={1}>
-						<ProgressBar xp={userQuery.data.data.xp} />
-					</Box>
-				</Stack>
-			</Flex>
 			<Stack direction={{ base: 'column', lg: 'row' }} space={5} paddingTop={5}>
 				<VStack flex={{ lg: 2 }} space={5}>
 					<SongCardGrid

@@ -84,6 +84,7 @@ const SigninView = () => {
 					isRequired
 				/>,
 				<TextFormField
+					style={{ width: '100%', flex: 1 }}
 					key={'signin-form-2'}
 					error={formData.password.error}
 					icon={Lock1}

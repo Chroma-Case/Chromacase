@@ -1,6 +1,6 @@
 import { Eye, EyeSlash, Icon } from 'iconsax-react-native';
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleSheet, StyleProp, ViewStyle, Pressable } from 'react-native';
 import InteractiveBase from './InteractiveBase';
 import { Input, useTheme } from 'native-base';
 
@@ -102,7 +102,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 
 	return (
 		<InteractiveBase
-			style={[style, { borderRadius: 12 }]}
+			style={[style, { borderRadius: 12, width: '100%' }]}
 			styleAnimate={styleAnimate}
 			focusable={false}
 		>
@@ -116,20 +116,23 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 						/>
 					)}
 				</View>
-				<Input
-					variant="unstyled"
-					w="100%"
-					style={[styles.input, icon ? {} : { paddingLeft: 12 }]}
-					autoComplete={autoComplete}
-					placeholder={placeholder + (isRequired ? '*' : '')}
-					placeholderTextColor={colors.text[700]}
-					secureTextEntry={isSecret ? !isPasswordVisible : false}
-					onFocus={() => setFocused(true)}
-					onBlur={() => setFocused(false)}
-					{...props}
-				/>
+				<View style={styles.input}>
+					<Input
+						variant="unstyled"
+						style={{
+							width: 0,
+						}}
+						autoComplete={autoComplete}
+						placeholder={placeholder + (isRequired ? '*' : '')}
+						placeholderTextColor={colors.text[700]}
+						secureTextEntry={isSecret ? !isPasswordVisible : false}
+						onFocus={() => setFocused(true)}
+						onBlur={() => setFocused(false)}
+						{...props}
+					/>
+				</View>
 				{isSecret && (
-					<TouchableOpacity
+					<Pressable
 						style={styles.iconContainerRight}
 						onPress={() => setPasswordVisible((prevState) => !prevState)}
 					>
@@ -146,7 +149,7 @@ const TextFieldBase: React.FC<TextFieldBaseProps> = ({
 								variant="Bold"
 							/>
 						)}
-					</TouchableOpacity>
+					</Pressable>
 				)}
 			</View>
 		</InteractiveBase>
@@ -157,25 +160,29 @@ const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'space-between',
 		flexDirection: 'row',
+		gap: 5,
+		width: '100%',
+		paddingHorizontal: 12,
 	},
 	input: {
-		flex: 1,
-		paddingHorizontal: 12 + 20 + 12,
-		paddingVertical: 12,
+		flexGrow: 1,
+		flexShrink: 1,
+		paddingVertical: 8,
 		// outlineStyle: 'none',
+		width: 0,
 	},
 	iconContainerLeft: {
-		position: 'absolute',
-		left: 12,
-		zIndex: 1,
+		flexGrow: 0,
+		flexShrink: 0,
+		width: 20,
 	},
 	iconContainerRight: {
-		position: 'absolute',
 		// outlineStyle: 'none',
-		right: 12,
-		zIndex: 1,
+		flexGrow: 0,
+		flexShrink: 0,
+		width: 20,
 	},
 });
 
