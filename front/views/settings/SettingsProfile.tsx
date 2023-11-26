@@ -10,6 +10,7 @@ import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-reac
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
+import { ScrollView } from 'react-native';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	await API.updateUserEmail(newEmail);
@@ -32,132 +33,138 @@ const ProfileSettings = () => {
 	const user = userQuery.data;
 
 	return (
-		<Column space={4} style={{ width: '100%' }}>
-			<ElementList
-				elements={[
-					{
-						icon: Google,
-						type: 'text',
-						title: translate('settingsProfileTabGoogleSectionTitle'),
-						description: translate('settingsProfileTabGoogleSectionDescription'),
-						data: {
-							text: translate(
-								user.googleID
-									? 'settingsProfileTabGoogleSectionLinkedText'
-									: 'settingsProfileTabGoogleSectionNotLinkedText'
-							),
-						},
-					},
-					{
-						icon: Verify,
-						type: 'text',
-						title: translate('settingsProfileTabVerifiedSectionTitle'),
-						description: translate('settingsProfileTabVerifiedSectionDescription'),
-						data: {
-							text: translate(
-								user.emailVerified
-									? 'settingsProfileTabVerifiedSectionVerifiedText'
-									: 'settingsProfileTabVerifiedSectionNotVerifiedText'
-							),
-							onPress: user.emailVerified
-								? undefined
-								: () =>
-										API.fetch({ route: '/auth/reverify', method: 'PUT' })
-											.then(() =>
-												Toast.show({
-													description: translate(
-														'settingsProfileTabVerifiedSectionVerificationToast'
-													),
-												})
-											)
-											.catch((e) => {
-												console.error(e);
-												Toast.show({
-													description: translate(
-														'settingsProfileTabVerifiedSectionVerificationToastError'
-													),
-												});
-											}),
-						},
-					},
-					{
-						icon: UserSquare,
-						type: 'text',
-						title: translate('settingsProfileTabAvatarSectionTitle'),
-						description: translate('settingsProfileTabAvatarSectionDescription'),
-						data: {
-							text: translate('settingsProfileTabAvatarSectionChangeItText'),
-							onPress: () => {
-								ImagePicker.launchImageLibraryAsync({
-									mediaTypes: ImagePicker.MediaTypeOptions.Images,
-									aspect: [1, 1],
-									quality: 1,
-									base64: true,
-								}).then((result) => {
-									console.log(result);
-									const image = result.assets?.at(0);
-
-									if (!result.canceled && image) {
-										API.updateProfileAvatar(image)
-											.then(() => {
-												userQuery.refetch();
-												Toast.show({
-													description: translate(
-														'settingsProfileTabAvatarSectionUpdateToast'
-													),
-												});
-											})
-											.catch((e) => {
-												console.error(e);
-												Toast.show({
-													description: translate(
-														'settingsProfileTabAvatarSectionUpdateToastError'
-													),
-												});
-											});
-									}
-								});
+		<ScrollView>
+			<Column space={4} style={{ width: '100%' }}>
+				<ElementList
+					elements={[
+						{
+							icon: Google,
+							type: 'text',
+							title: translate('settingsProfileTabGoogleSectionTitle'),
+							description: translate('settingsProfileTabGoogleSectionDescription'),
+							data: {
+								text: translate(
+									user.googleID
+										? 'settingsProfileTabGoogleSectionLinkedText'
+										: 'settingsProfileTabGoogleSectionNotLinkedText'
+								),
 							},
 						},
-					},
-					{
-						icon: SmsEdit,
-						type: 'sectionDropdown',
-						title: translate('settingsProfileTabChangeEmailSectionTitle'),
-						description: translate('settingsProfileTabChangeEmailSectionDescription'),
-						data: {
-							value: true,
-							section: [
-								<ChangeEmailForm
-									key={'ChangeEmailForm'}
-									onSubmit={(oldEmail, newEmail) => handleChangeEmail(newEmail)}
-								/>,
-							],
+						{
+							icon: Verify,
+							type: 'text',
+							title: translate('settingsProfileTabVerifiedSectionTitle'),
+							description: translate('settingsProfileTabVerifiedSectionDescription'),
+							data: {
+								text: translate(
+									user.emailVerified
+										? 'settingsProfileTabVerifiedSectionVerifiedText'
+										: 'settingsProfileTabVerifiedSectionNotVerifiedText'
+								),
+								onPress: user.emailVerified
+									? undefined
+									: () =>
+											API.fetch({ route: '/auth/reverify', method: 'PUT' })
+												.then(() =>
+													Toast.show({
+														description: translate(
+															'settingsProfileTabVerifiedSectionVerificationToast'
+														),
+													})
+												)
+												.catch((e) => {
+													console.error(e);
+													Toast.show({
+														description: translate(
+															'settingsProfileTabVerifiedSectionVerificationToastError'
+														),
+													});
+												}),
+							},
 						},
-					},
-					{
-						icon: PasswordCheck,
-						type: 'sectionDropdown',
-						title: translate('settingsProfileTabChangePasswordSectionTitle'),
-						description: translate(
-							'settingsProfileTabChangePasswordSectionDescription'
-						),
-						data: {
-							value: true,
-							section: [
-								<ChangePasswordForm
-									key={'ChangePasswordForm'}
-									onSubmit={(oldPassword, newPassword) =>
-										handleChangePassword(oldPassword, newPassword)
-									}
-								/>,
-							],
+						{
+							icon: UserSquare,
+							type: 'text',
+							title: translate('settingsProfileTabAvatarSectionTitle'),
+							description: translate('settingsProfileTabAvatarSectionDescription'),
+							data: {
+								text: translate('settingsProfileTabAvatarSectionChangeItText'),
+								onPress: () => {
+									ImagePicker.launchImageLibraryAsync({
+										mediaTypes: ImagePicker.MediaTypeOptions.Images,
+										aspect: [1, 1],
+										quality: 1,
+										base64: true,
+									}).then((result) => {
+										console.log(result);
+										const image = result.assets?.at(0);
+
+										if (!result.canceled && image) {
+											API.updateProfileAvatar(image)
+												.then(() => {
+													userQuery.refetch();
+													Toast.show({
+														description: translate(
+															'settingsProfileTabAvatarSectionUpdateToast'
+														),
+													});
+												})
+												.catch((e) => {
+													console.error(e);
+													Toast.show({
+														description: translate(
+															'settingsProfileTabAvatarSectionUpdateToastError'
+														),
+													});
+												});
+										}
+									});
+								},
+							},
 						},
-					},
-				]}
-			/>
-			<LogoutButtonCC isGuest={user.isGuest} buttonType={'filled'} />
-		</Column>
+						{
+							icon: SmsEdit,
+							type: 'sectionDropdown',
+							title: translate('settingsProfileTabChangeEmailSectionTitle'),
+							description: translate(
+								'settingsProfileTabChangeEmailSectionDescription'
+							),
+							data: {
+								value: true,
+								section: [
+									<ChangeEmailForm
+										key={'ChangeEmailForm'}
+										onSubmit={(oldEmail, newEmail) =>
+											handleChangeEmail(newEmail)
+										}
+									/>,
+								],
+							},
+						},
+						{
+							icon: PasswordCheck,
+							type: 'sectionDropdown',
+							title: translate('settingsProfileTabChangePasswordSectionTitle'),
+							description: translate(
+								'settingsProfileTabChangePasswordSectionDescription'
+							),
+							data: {
+								value: true,
+								section: [
+									<ChangePasswordForm
+										key={'ChangePasswordForm'}
+										onSubmit={(oldPassword, newPassword) =>
+											handleChangePassword(oldPassword, newPassword)
+										}
+									/>,
+								],
+							},
+						},
+					]}
+				/>
+				<LogoutButtonCC isGuest={user.isGuest} buttonType={'filled'} />
+			</Column>
+		</ScrollView>
 	);
 };
 
