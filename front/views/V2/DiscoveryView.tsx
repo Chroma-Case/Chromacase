@@ -12,6 +12,8 @@ import GoldenRatio from '../../components/V2/GoldenRatio';
 const HomeView = (props: RouteProps<{}>) => {
 	const songsQuery = useQuery(API.getSongSuggestions);
 	const navigation = useNavigation();
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isPhone = screenSize === 'small';
 	const artistsQueries = useQueries(
 		(songsQuery.data ?? []).map((song) => API.getArtist(song.artistId))
 	);
@@ -52,10 +54,7 @@ const HomeView = (props: RouteProps<{}>) => {
 						style={{
 							width: '100%',
 							maxWidth: 1100,
-							// maxHeight: 500,
-							// aspectRatio: 1.618,
-							// golden ratio in vertical
-							aspectRatio: 0.618,
+							aspectRatio: isPhone ? 0.618 : 1.618,
 						}}
 					>
 						<GoldenRatio />
@@ -80,12 +79,11 @@ const HomeView = (props: RouteProps<{}>) => {
 						>
 							{'Suggestions'}
 						</Text>
-						{songsQuery.isLoading && <Text>Loading...</Text>}
 						<View
 							style={{
 								flexDirection: 'row',
 								flexWrap: 'wrap',
-								justifyContent: 'center',
+								justifyContent: isPhone ? 'center' : 'flex-start',
 								alignItems: 'flex-start',
 								gap: 16,
 							}}
