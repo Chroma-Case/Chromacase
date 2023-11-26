@@ -27,12 +27,10 @@ import { useStopwatch } from 'react-use-precision-timer';
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext } from '../models/PianoGame';
-import { MetronomeControls } from '../components/Metronome';
 import PartitionMagic from '../components/Play/PartitionMagic';
-import StarProgress from '../components/StarProgress';
 import useColorScheme from '../hooks/colorScheme';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useTheme } from 'native-base';
+import { useTheme, useBreakpointValue } from 'native-base';
 import PopupCC from '../components/UI/PopupCC';
 import ButtonBase from '../components/UI/ButtonBase';
 import { Clock, Cup } from 'iconsax-react-native';
@@ -85,11 +83,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const [type, setType] = useState<'practice' | 'normal'>();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isPhone = screenSize === 'small';
 	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
 	const toast = useToast();
 	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
-	const bpm = useRef<number>(60);
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
@@ -316,7 +315,9 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 				style={{
 					flexGrow: 1,
 					flexDirection: 'column',
-					padding: 20,
+					alignItems: 'stretch',
+					padding: isPhone ? 7 : 20,
+					gap: isPhone ? 7 : 20,
 					position: 'relative',
 				}}
 			>
