@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { View } from 'react-native';
-import { ScrollView, Flex, useMediaQuery, useTheme } from 'native-base';
+import { Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { useNavigation } from '../../Navigation';
@@ -14,9 +14,16 @@ type ScaffoldMobileCCProps = {
 	logo: string;
 	routeName: string;
 	widthPadding: boolean;
+	enableScroll: boolean;
 	menu: readonly {
 		type: 'main' | 'sub';
-		title: string;
+		title:
+			| 'menuDiscovery'
+			| 'menuProfile'
+			| 'menuMusic'
+			| 'menuSearch'
+			| 'menuLeaderBoard'
+			| 'menuSettings';
 		icon: Icon;
 		link: string;
 	}[];
@@ -29,19 +36,15 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 
 	return (
 		<View style={{ height: '100%', flexDirection: 'column', overflow: 'hidden' }}>
-			<ScrollView
+			<View
 				style={{
 					flex: 1,
 					maxHeight: '100%',
-					flexDirection: 'column',
-					flexShrink: 0,
 					padding: props.widthPadding ? 8 : 0,
 				}}
-				contentContainerStyle={{ flex: 1 }}
 			>
-				<View>{props.children}</View>
-				<Spacer />
-			</ScrollView>
+				{props.children}
+			</View>
 			<View style={{ padding: 8, paddingTop: 0 }}>
 				<Flex
 					style={{
@@ -60,15 +63,7 @@ const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
 							icon={value.icon}
 							title={
 								props.routeName === value.link && !isSmallScreen
-									? translate(
-											value.title as
-												| 'menuDiscovery'
-												| 'menuProfile'
-												| 'menuMusic'
-												| 'menuSearch'
-												| 'menuLeaderBoard'
-												| 'menuSettings'
-									  )
+									? translate(value.title)
 									: undefined
 							}
 							isDisabled={props.routeName === value.link}
