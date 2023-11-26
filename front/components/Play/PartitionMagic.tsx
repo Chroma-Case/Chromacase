@@ -60,9 +60,8 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		});
 		if (!pianoSounds.current) {
 			Promise.all(
-				Object.entries(PianoNotes).map(([midiNumber, note]) =>
-					// eslint-disable-next-line @typescript-eslint/no-var-requires
-					Audio.Sound.createAsync(require(`../../assets/piano/${note}.mp3`)).then(
+				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
+					Audio.Sound.createAsync(noteResource).then(
 						(sound) => [midiNumber, sound.sound] as const
 					)
 				)
@@ -96,7 +95,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 			cursor.notes.forEach(({ note, duration }) => {
 				try {
 					const sound = pianoSounds.current![note]!;
-					sound.playAsync();
+					sound.playAsync().catch(console.error);
 					setTimeout(() => {
 						sound.stopAsync();
 					}, duration);
