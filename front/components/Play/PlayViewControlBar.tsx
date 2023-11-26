@@ -14,6 +14,7 @@ type PlayViewControlBarProps = {
 	time: number;
 	paused: boolean;
 	score: number;
+	disabled: boolean;
 	onResume: () => void;
 	onPause: () => void;
 	onEnd: () => void;
@@ -24,6 +25,7 @@ const PlayViewControlBar = ({
 	time,
 	paused,
 	score,
+	disabled,
 	onResume,
 	onPause,
 	onEnd,
@@ -112,6 +114,7 @@ const PlayViewControlBar = ({
 				<IconButton
 					size="sm"
 					variant="solid"
+					disabled={disabled}
 					icon={
 						<Icon
 							as={Ionicons}
@@ -127,19 +130,16 @@ const PlayViewControlBar = ({
 						}
 					}}
 				/>
-				{true && (
-					<>
-						<IconButton
-							size="sm"
-							colorScheme="coolGray"
-							variant="solid"
-							icon={<Icon as={Ionicons} name="stop" />}
-							onPress={() => {
-								onEnd();
-							}}
-						/>
-					</>
-				)}
+				<IconButton
+					size="sm"
+					colorScheme="coolGray"
+					variant="solid"
+					disabled={disabled}
+					icon={<Icon as={Ionicons} name="stop" />}
+					onPress={() => {
+						onEnd();
+					}}
+				/>
 				<Text color={textColor[900]}>
 					{time < 0
 						? paused
@@ -178,6 +178,13 @@ const PlayViewControlBar = ({
 			</View>
 		</Row>
 	);
+};
+
+PlayViewControlBar.defaultProps = {
+	onResume: () => {},
+	onPause: () => {},
+	onEnd: () => {},
+	disabled: false,
 };
 
 export default PlayViewControlBar;
