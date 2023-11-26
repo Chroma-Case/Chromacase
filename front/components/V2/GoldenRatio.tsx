@@ -1,10 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useBreakpointValue } from 'native-base';
+import { useBreakpointValue, Text } from 'native-base';
 import HomeMainSongCard from './HomeMainSongCard';
-
-const bigSideRatio = 1000;
-const smallSideRatio = 618;
+import GoldenRatioPanel from './GoldenRatioPanel';
 
 type HomeCardProps = {
 	image: string;
@@ -44,80 +42,30 @@ const cards = [
 const GoldenRatio = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
+	// return (<GoldenRatioPanel direction='column' header={<>r</>}>test</GoldenRatioPanel>)
 	return (
-		<View
-			style={{
-				alignSelf: 'stretch',
-				maxWidth: 1100,
-				alignItems: 'stretch',
-				flexDirection: isPhone ? 'column' : 'row',
-			}}
+		<GoldenRatioPanel
+			direction={isPhone ? 'column' : 'row'}
+			header={<HomeMainSongCard {...cards[0]} />}
 		>
-			<View
-				style={{
-					flexGrow: bigSideRatio,
-				}}
+			<GoldenRatioPanel
+				direction={isPhone ? 'row' : 'column'}
+				header={<HomeMainSongCard {...cards[1]} />}
 			>
-				<HomeMainSongCard {...cards[0]} />
-			</View>
-			<View
-				style={{
-					flexGrow: smallSideRatio,
-					display: 'flex',
-					flexDirection: isPhone ? 'row' : 'column',
-					alignItems: 'stretch',
-				}}
-			>
-				<View
-					style={{
-						flexGrow: bigSideRatio,
-					}}
+				<GoldenRatioPanel
+					direction={isPhone ? 'column-reverse' : 'row-reverse'}
+					header={<HomeMainSongCard {...cards[2]} />}
 				>
-					<HomeMainSongCard {...cards[1]} />
-				</View>
-				<View
-					style={{
-						flexGrow: smallSideRatio,
-						display: 'flex',
-						flexDirection: isPhone ? 'column-reverse' : 'row-reverse',
-						alignItems: 'stretch',
-					}}
-				>
-					<View
-						style={{
-							flexGrow: bigSideRatio,
-						}}
+					<GoldenRatioPanel
+						direction={isPhone ? 'row-reverse' : 'column-reverse'}
+						header={<HomeMainSongCard {...cards[3]} />}
 					>
-						<HomeMainSongCard {...cards[2]} />
-					</View>
-					<View
-						style={{
-							flexGrow: smallSideRatio,
-							display: 'flex',
-							flexDirection: isPhone ? 'row-reverse' : 'column-reverse',
-							alignItems: 'stretch',
-						}}
-					>
-						<View
-							style={{
-								flexGrow: bigSideRatio,
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'stretch',
-								justifyContent: 'flex-end',
-							}}
-						>
-							<HomeMainSongCard {...cards[3]} />
+						<View style={{ display: 'flex', width: '100%', height: '100%', backgroundColor: 'red' }}>
 						</View>
-						<View
-							style={{
-								flexGrow: smallSideRatio,
-							}}
-						></View>
-					</View>
-				</View>
-			</View>
-		</View>
+					</GoldenRatioPanel>
+				</GoldenRatioPanel>
+			</GoldenRatioPanel>
+		</GoldenRatioPanel>
 	);
 };
 

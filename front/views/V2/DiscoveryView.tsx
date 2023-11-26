@@ -38,17 +38,49 @@ const HomeView = (props: RouteProps<{}>) => {
 	// }, [artistsQueries]);
 
 	return (
-		<ScaffoldCC routeName={props.route.name}>
+		// <ScaffoldCC routeName={props.route.name}>
+		<View
+			style={{
+				width: '100%',
+				height: '100%',
+				display: 'flex',
+				flexDirection: 'column',
+			}}
+		>
 			<View
 				style={{
 					width: '100%',
-					height: '100%',
-					display: 'flex',
-					flexDirection: 'column',
+					maxWidth: 1100,
+					// maxHeight: 500,
+					// aspectRatio: 1.618,
+					// golden ratio in vertical
+					aspectRatio: 0.618,
 				}}
 			>
 				<GoldenRatio />
-				<View
+			</View>
+			<View
+				style={{
+					flexDirection: 'column',
+					flexWrap: 'wrap',
+					justifyContent: 'flex-start',
+					alignItems: 'flex-start',
+					gap: 16,
+				}}
+			>
+				<Text
+					style={{
+						fontSize: 24,
+						fontWeight: 'bold',
+						marginLeft: 16,
+						marginBottom: 16,
+						marginTop: 24,
+					}}
+				>
+					{'Suggestions'}
+				</Text>
+				{songsQuery.isLoading && <Text>Loading...</Text>}
+				{/* <View
 					style={{
 						flexDirection: 'row',
 						flexWrap: 'wrap',
@@ -57,43 +89,22 @@ const HomeView = (props: RouteProps<{}>) => {
 						gap: 16,
 					}}
 				>
-					<Text
-						style={{
-							fontSize: 24,
-							fontWeight: 'bold',
-							marginLeft: 16,
-							marginBottom: 16,
-							marginTop: 24,
-						}}
-					>
-						{'Suggestions'}
-					</Text>
-					{songsQuery.isLoading && <Text>Loading...</Text>}
-					<View
-						style={{
-							flexDirection: 'row',
-							flexWrap: 'wrap',
-							justifyContent: 'flex-start',
-							alignItems: 'flex-start',
-							gap: 16,
-						}}
-					>
-						{songsQuery.data?.map((song) => (
-							<SongCardInfo
-								key={song.id}
-								song={song}
-								onPress={() => {
-									navigation.navigate('Play', { songId: song.id });
-								}}
-								onPlay={() => {
-									console.log('play');
-								}}
-							/>
-						))}
-					</View>
-				</View>
+					{songsQuery.data?.map((song) => (
+						<SongCardInfo
+							key={song.id}
+							song={song}
+							onPress={() => {
+								navigation.navigate('Play', { songId: song.id });
+							}}
+							onPlay={() => {
+								console.log('play');
+							}}
+						/>
+					))}
+				</View> */}
 			</View>
-		</ScaffoldCC>
+		</View>
+		// </ScaffoldCC>
 	);
 };
 
