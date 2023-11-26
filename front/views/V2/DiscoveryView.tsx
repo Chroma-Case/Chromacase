@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Text, useBreakpointValue } from 'native-base';
 import React from 'react';
 import { useQuery, useQueries } from '../../Queries';
@@ -39,71 +39,76 @@ const HomeView = (props: RouteProps<{}>) => {
 
 	return (
 		// <ScaffoldCC routeName={props.route.name}>
-		<View
-			style={{
-				width: '100%',
-				height: '100%',
-				display: 'flex',
-				flexDirection: 'column',
-			}}
-		>
+		<ScrollView>
 			<View
 				style={{
 					width: '100%',
-					maxWidth: 1100,
-					// maxHeight: 500,
-					// aspectRatio: 1.618,
-					// golden ratio in vertical
-					aspectRatio: 0.618,
-				}}
-			>
-				<GoldenRatio />
-			</View>
-			<View
-				style={{
+					height: '100%',
+					display: 'flex',
 					flexDirection: 'column',
-					flexWrap: 'wrap',
-					justifyContent: 'flex-start',
-					alignItems: 'flex-start',
 					gap: 16,
 				}}
 			>
-				<Text
+				<View
 					style={{
-						fontSize: 24,
-						fontWeight: 'bold',
-						marginLeft: 16,
-						marginBottom: 16,
-						marginTop: 24,
+						width: '100%',
+						maxWidth: 1100,
+						// maxHeight: 500,
+						// aspectRatio: 1.618,
+						// golden ratio in vertical
+						aspectRatio: 0.618,
 					}}
 				>
-					{'Suggestions'}
-				</Text>
-				{songsQuery.isLoading && <Text>Loading...</Text>}
-				{/* <View
+					<GoldenRatio />
+				</View>
+				<View
 					style={{
-						flexDirection: 'row',
+						width: '100%',
+						flexDirection: 'column',
 						flexWrap: 'wrap',
-						justifyContent: 'flex-start',
-						alignItems: 'flex-start',
+						justifyContent: 'center',
+						alignItems: 'center',
 						gap: 16,
 					}}
 				>
-					{songsQuery.data?.map((song) => (
-						<SongCardInfo
-							key={song.id}
-							song={song}
-							onPress={() => {
-								navigation.navigate('Play', { songId: song.id });
-							}}
-							onPlay={() => {
-								console.log('play');
-							}}
-						/>
-					))}
-				</View> */}
+					<Text
+						style={{
+							fontSize: 24,
+							fontWeight: 'bold',
+							marginLeft: 16,
+							marginBottom: 16,
+							marginTop: 24,
+						}}
+					>
+						{'Suggestions'}
+					</Text>
+					{songsQuery.isLoading && <Text>Loading...</Text>}
+					<View
+						style={{
+							width: '100%',
+							flexDirection: 'row',
+							flexWrap: 'wrap',
+							justifyContent: 'center',
+							alignItems: 'flex-start',
+							gap: 16,
+						}}
+					>
+						{songsQuery.data?.map((song) => (
+							<SongCardInfo
+								key={song.id}
+								song={song}
+								onPress={() => {
+									navigation.navigate('Play', { songId: song.id });
+								}}
+								onPlay={() => {
+									console.log('play');
+								}}
+							/>
+						))}
+					</View>
+				</View>
 			</View>
-		</View>
+		</ScrollView>
 		// </ScaffoldCC>
 	);
 };

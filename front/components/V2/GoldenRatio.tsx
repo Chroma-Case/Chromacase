@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useBreakpointValue, Text } from 'native-base';
+import { useBreakpointValue } from 'native-base';
 import HomeMainSongCard from './HomeMainSongCard';
 import GoldenRatioPanel from './GoldenRatioPanel';
 
