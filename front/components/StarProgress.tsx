@@ -14,20 +14,20 @@ const StarProgress = (props: StarProgressProps) => {
 	return (
 		<View
 			style={[
-				props.style,
 				{
 					position: 'relative',
-					flex: 1,
 					maxWidth: 600,
-					justifyContent: 'center',
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
 				},
+				props.style,
 			]}
 		>
 			<Progress
 				color={'#6075F9'}
 				style={{
-					position: 'absolute',
-					width: '100%',
+					flex: 1,
 				}}
 				value={props.value}
 				max={props.max}
@@ -42,8 +42,8 @@ const StarProgress = (props: StarProgressProps) => {
 						style={{
 							position: 'absolute',
 							left: `${(step / props.max) * 100}%`,
-							top: '45%',
-							transform: 'translate(-50%, -55%)',
+							// top: '50%',
+							// transform: 'translate(-50%, -55%)',
 						}}
 					/>
 				);
