@@ -36,6 +36,8 @@ import { useTheme } from 'native-base';
 import PopupCC from '../components/UI/PopupCC';
 import ButtonBase from '../components/UI/ButtonBase';
 import { Clock, Cup } from 'iconsax-react-native';
+import PlayViewControlBar from '../components/Play/PlayViewControlBar';
+import { PlageHandler } from '../models/Plage';
 
 type PlayViewProps = {
 	songId: number;
@@ -79,6 +81,7 @@ export const PianoCC = createContext<PianoCanvasContext>({
 });
 
 const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
+	songId = 1;
 	const [type, setType] = useState<'practice' | 'normal'>();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -332,7 +335,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
-					<PopupCC
+					{/* <PopupCC
 						title={translate('selectPlayMode')}
 						description={translate('selectPlayModeExplaination')}
 						isVisible={type === undefined}
@@ -361,7 +364,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								onPress={async () => setType('normal')}
 							/>
 						</Row>
-					</PopupCC>
+					</PopupCC> */}
 					{(
 						[
 							[
@@ -479,10 +482,21 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					</PianoCC.Provider>
 					{!partitionRendered && <LoadingComponent />}
 				</View>
+				<PlayViewControlBar
+					score={score}
+					time={time}
+					paused={paused}
+					song={song.data}
+					onEnd={() => {}}
+					onPause={() => {}}
+					onResume={() => {}}
+				/>
 
-				<Row
+				{/* <Row
 					justifyContent="space-between"
 					style={{
+						maxHeight: 100,
+						width: '100%',
 						display: 'flex',
 						flexGrow: 0,
 						flexShrink: 0,
@@ -614,7 +628,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								marginBottom: 10,
 								minWidth: 200,
 							}}
-						/>
+						/> 
 					</View>
 					<View
 						style={{
@@ -629,7 +643,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					>
 						<MetronomeControls paused={paused} bpm={bpm.current} />
 					</View>
-				</Row>
+				</Row> */}
 			</SafeAreaView>
 			{colorScheme === 'dark' && (
 				<LinearGradient
