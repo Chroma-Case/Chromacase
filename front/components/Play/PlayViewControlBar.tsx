@@ -40,7 +40,6 @@ const PlayViewControlBar = ({
 	return (
 		<Row
 			style={{
-				width: '100%',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'space-between',
@@ -50,7 +49,6 @@ const PlayViewControlBar = ({
 				//@ts-expect-error backdropFilter is not in the types
 				backdropFilter: 'blur(2px)',
 				padding: isPhone ? 5 : 10,
-				marginTop: 20,
 			}}
 		>
 			<View
