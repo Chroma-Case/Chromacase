@@ -151,11 +151,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 					{!isLoading && !isError && (
 						<SvgContainer
 							url={getSVGURL(songID)}
-							onReady={() => {
-								console.log('ready');
-								console.log(partitionDims);
-								onReady();
-							}}
+							onReady={onReady}
 							style={{
 								aspectRatio: partitionDims[0] / partitionDims[1],
 							}}
