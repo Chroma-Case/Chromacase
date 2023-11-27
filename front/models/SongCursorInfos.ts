@@ -3,6 +3,7 @@ import ResponseHandler from './ResponseHandler';
 
 export const SongCursorInfosValidator = yup.object({
 	pageWidth: yup.number().required(),
+	pageHeight: yup.number().required(),
 	cursors: yup
 		.array()
 		.of(
@@ -35,6 +36,7 @@ export const SongCursorInfosHandler: ResponseHandler<
 	validator: SongCursorInfosValidator,
 	transformer: (songCursorInfos: yup.InferType<typeof SongCursorInfosValidator>) => ({
 		pageWidth: songCursorInfos.pageWidth,
+		pageHeight: songCursorInfos.pageHeight,
 		cursors: songCursorInfos.cursors.map((cursor) => ({
 			x: cursor.x,
 			y: cursor.y,
@@ -67,5 +69,6 @@ export interface CursorInfoItem {
 
 export interface SongCursorInfos {
 	pageWidth: number;
+	pageHeight: number;
 	cursors: CursorInfoItem[];
 }

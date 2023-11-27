@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, ImageBackground, Image, Platform } from 'react-native';
+import { View } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
 import { PianoCC } from '../../views/PlayView';
@@ -7,7 +7,7 @@ import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reani
 import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { PianoNotes } from '../../state/SoundPlayerSlice';
 import { Audio } from 'expo-av';
-import { SvgContainer, GetSvgDims } from './SvgContainer';
+import { SvgContainer } from './SvgContainer';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -42,7 +42,6 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const [currentCurIdx, setCurrentCurIdx] = React.useState(-1);
 	const partitionOffset = useSharedValue(0);
-	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 1]);
 	const pianoCC = React.useContext(PianoCC);
 	const pianoSounds = React.useRef<Record<string, Audio.Sound>>();
 	const cursorPaddingVertical = 10;
@@ -57,9 +56,6 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
 	React.useEffect(() => {
-		GetSvgDims(getSVGURL(songID), (w, h) => {
-			setPartitionDims([w, h]);
-		});
 		if (!pianoSounds.current) {
 			Promise.all(
 				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
@@ -77,6 +73,9 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 			);
 		}
 	}, []);
+	const partitionDims = React.useMemo<[number, number]>(() => {
+		return [data?.pageWidth ?? 0, data?.pageHeight ?? 1];
+	}, [data]);
 
 	React.useEffect(() => {
 		if (isLoading) {
