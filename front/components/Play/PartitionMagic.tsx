@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, ImageBackground, Image } from 'react-native';
+import { View, ImageBackground, Image, Platform } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
 import { PianoCC } from '../../views/PlayView';
@@ -7,6 +7,7 @@ import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reani
 import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { PianoNotes } from '../../state/SoundPlayerSlice';
 import { Audio } from 'expo-av';
+import { SvgContainer, GetSvgDims } from './SvgContainer';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -17,8 +18,10 @@ export type ParitionMagicProps = {
 };
 
 const getSVGURL = (songID: number) => {
+	return 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/1x1/ad.svg';
 	return API.getPartitionSvgUrl(songID);
 };
+
 const getCursorToPlay = (
 	cursorInfos: CursorInfoItem[],
 	currentCurIdx: number,
@@ -40,7 +43,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const [currentCurIdx, setCurrentCurIdx] = React.useState(-1);
 	const partitionOffset = useSharedValue(0);
-	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 0]);
+	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 1]);
 	const pianoCC = React.useContext(PianoCC);
 	const pianoSounds = React.useRef<Record<string, Audio.Sound>>();
 	const cursorPaddingVertical = 10;
@@ -55,7 +58,13 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
 	React.useEffect(() => {
-		Image.getSize(getSVGURL(songID), (w, h) => {
+		if (Platform.OS === 'web') {
+			Image.getSize(getSVGURL(songID), (w, h) => {
+				setPartitionDims([w, h]);
+			});
+			return;
+		}
+		GetSvgDims(getSVGURL(songID), (w, h) => {
 			setPartitionDims([w, h]);
 		});
 		if (!pianoSounds.current) {
@@ -146,13 +155,19 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 						}}
 					>
 						{!isLoading && !isError && (
-							<ImageBackground
-								source={{ uri: getSVGURL(songID) }}
-								onLoad={onReady}
+							<SvgContainer
+								url={getSVGURL(songID)}
+								onReady={() => {
+									console.log('ready');
+									console.log(partitionDims);
+									onReady();
+								}}
 								style={{
-									aspectRatio: partitionDims[0] / partitionDims[1],
+									// check to avoid NaN
+									// aspectRatio: partitionDims[1]
+									// 	? partitionDims[0] / partitionDims[1]
+									// 	: undefined,
 									height: '100%',
-									position: 'relative',
 								}}
 							/>
 						)}
