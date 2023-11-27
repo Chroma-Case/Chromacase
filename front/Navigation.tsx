@@ -55,7 +55,7 @@ const protectedRoutes = () =>
 			options: { headerShown: false },
 			link: '/V2',
 		},
-		Play: { component: PlayView, options: { title: translate('play') }, link: '/play/:songId' },
+		Play: { component: PlayView, options: { headerShown: false, title: translate("play") }, link: '/play/:songId' },
 		Settings: {
 			component: SettingsTab,
 			options: { headerShown: false },
