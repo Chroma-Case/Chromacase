@@ -41,7 +41,7 @@ const removeMe = () => '';
 const protectedRoutes = () =>
 	({
 		Home: {
-			component: HomeView,
+			component: DiscoveryView,
 			options: { headerShown: false },
 			link: '/',
 		},

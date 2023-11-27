@@ -79,7 +79,6 @@ export const PianoCC = createContext<PianoCanvasContext>({
 });
 
 const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
-	songId = 4;
 	const [type, setType] = useState<'practice' | 'normal'>();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
