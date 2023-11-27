@@ -18,8 +18,6 @@ export type ParitionMagicProps = {
 };
 
 const getSVGURL = (songID: number) => {
-	// return 'https://www.svgrepo.com/show/148626/test.svg';
-	// return 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/1x1/ad.svg';
 	return API.getPartitionSvgUrl(songID);
 };
 
@@ -59,12 +57,6 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
 	React.useEffect(() => {
-		if (Platform.OS === 'web') {
-			Image.getSize(getSVGURL(songID), (w, h) => {
-				setPartitionDims([w, h]);
-			});
-			return;
-		}
 		GetSvgDims(getSVGURL(songID), (w, h) => {
 			setPartitionDims([w, h]);
 		});
@@ -131,65 +123,62 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	);
 
 	return (
-		<>
+		<View
+			style={{
+				flex: 1,
+				alignItems: 'flex-start',
+				position: 'relative',
+				overflow: 'hidden',
+			}}
+		>
 			<View
 				style={{
-					flex: 1,
-					alignItems: 'flex-start',
-					position: 'relative',
-					overflow: 'hidden',
+					position: 'absolute',
+					aspectRatio: partitionDims[0] / partitionDims[1],
+					height: '100%',
 				}}
 			>
-				<View
+				<Animated.View
 					style={{
 						position: 'absolute',
-						aspectRatio: partitionDims[0] / partitionDims[1],
 						height: '100%',
+						aspectRatio: partitionDims[0] / partitionDims[1],
+						left: `${partitionOffset.value * 100}%`,
+						display: 'flex',
+						alignItems: 'stretch',
+						justifyContent: 'flex-start',
 					}}
 				>
-					<Animated.View
-						style={{
-							position: 'absolute',
-							height: '100%',
-							aspectRatio: partitionDims[0] / partitionDims[1],
-							left: `${partitionOffset.value * 100}%`,
-						}}
-					>
-						{!isLoading && !isError && (
-							<SvgContainer
-								url={getSVGURL(songID)}
-								onReady={() => {
-									console.log('ready');
-									console.log(partitionDims);
-									onReady();
-								}}
-								style={{
-									// check to avoid NaN
-									// aspectRatio: partitionDims[1]
-									// 	? partitionDims[0] / partitionDims[1]
-									// 	: undefined,
-									height: '100%',
-								}}
-							/>
-						)}
-					</Animated.View>
-					<Animated.View
-						style={{
-							position: 'absolute',
-							left: `${(cursorLeft / partitionDims[0]) * 100}%`,
-							top: `${(cursorTop / partitionDims[1]) * 100}%`,
-							backgroundColor: 'rgba(96, 117, 249, 0.33)',
-							width: `${(cursorWidth / partitionDims[0]) * 100}%`,
-							height: `${(cursorHeight / partitionDims[1]) * 100}%`,
-							borderWidth: cursorBorderWidth,
-							borderColor: '#101014',
-							borderStyle: 'solid',
-							borderRadius: cursorBorderWidth * 2,
-						}}
-					/>
-				</View>
+					{!isLoading && !isError && (
+						<SvgContainer
+							url={getSVGURL(songID)}
+							onReady={() => {
+								console.log('ready');
+								console.log(partitionDims);
+								onReady();
+							}}
+							style={{
+								aspectRatio: partitionDims[0] / partitionDims[1],
+							}}
+						/>
+					)}
+				</Animated.View>
+				<Animated.View
+					style={{
+						position: 'absolute',
+						left: `${(cursorLeft / partitionDims[0]) * 100}%`,
+						top: `${(cursorTop / partitionDims[1]) * 100}%`,
+						backgroundColor: 'rgba(96, 117, 249, 0.33)',
+						width: `${(cursorWidth / partitionDims[0]) * 100}%`,
+						height: `${(cursorHeight / partitionDims[1]) * 100}%`,
+						borderWidth: cursorBorderWidth,
+						borderColor: '#101014',
+						borderStyle: 'solid',
+						borderRadius: cursorBorderWidth * 2,
+					}}
+				/>
 			</View>
-		</>
+		</View>
 	);
 };
 

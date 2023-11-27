@@ -1,7 +1,6 @@
 import React from 'react';
 import { ViewStyle, ImageBackground, Platform, Image } from 'react-native';
 import { SvgCssUri } from 'react-native-svg/css';
-import Svg, { Path, Text, G } from 'react-native-svg';
 
 type SvgContainerProps = {
 	url: string;
@@ -18,39 +17,21 @@ export const GetSvgDims = (url: string, success: (w: number, h: number) => void)
 		}, [url]);
 		return;
 	}
-	success(470.1052279999999, 275);
+	// success(470.1052279999999, 275);
+	success(6146.845969199998, 408.00000000000006);
 };
 
 export const SvgContainer = ({ url, onReady, style }: SvgContainerProps) => {
-
 	if (Platform.OS === 'web') {
-		return (
-			<ImageBackground
-				source={{ uri: url }}
-				onLoad={onReady}
-				style={[
-					{
-						// aspectRatio: dims[0] / dims[1],
-					},
-					style,
-				]}
-			/>
-		);
+		return <ImageBackground source={{ uri: url }} onLoad={onReady} style={style} />;
 	}
 	return (
 		<SvgCssUri
 			uri={url}
-			style={[
-				{
-					// aspectRatio: 2545.469353542076 / 193.5,
-					// aspectRatio: 470 / 275,
-				},
-				style,
-			]}
-			// onLayout={(e) => {
-			// 	const { width, height } = e.nativeEvent.layout;
-			// 	getDims(width, height);
-			// }}
+			style={style}
+			// force to not look at the width and height of the actual file
+			height={undefined}
+			width={undefined}
 			onLoad={onReady}
 		/>
 	);
