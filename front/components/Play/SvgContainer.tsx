@@ -1,6 +1,7 @@
 import React from 'react';
 import { ViewStyle, ImageBackground, Platform, Image } from 'react-native';
-import { SvgCssUri } from 'react-native-svg';
+import { SvgCssUri } from 'react-native-svg/css';
+import Svg, { Path, Text, G } from 'react-native-svg';
 
 type SvgContainerProps = {
 	url: string;
@@ -21,7 +22,6 @@ export const GetSvgDims = (url: string, success: (w: number, h: number) => void)
 };
 
 export const SvgContainer = ({ url, onReady, style }: SvgContainerProps) => {
-	// const [dims, setDims] = React.useState<[number, number]>([470.1052279999999, 0]);
 
 	if (Platform.OS === 'web') {
 		return (

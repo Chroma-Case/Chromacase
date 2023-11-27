@@ -18,7 +18,8 @@ export type ParitionMagicProps = {
 };
 
 const getSVGURL = (songID: number) => {
-	return 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/1x1/ad.svg';
+	// return 'https://www.svgrepo.com/show/148626/test.svg';
+	// return 'https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/flags/1x1/ad.svg';
 	return API.getPartitionSvgUrl(songID);
 };
 
