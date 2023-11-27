@@ -4,7 +4,6 @@ import jsdom from "jsdom";
 //import headless_gl from "gl"; // this is now imported dynamically in a try catch, in case gl install fails, see #1160
 import * as OSMD from "opensheetmusicdisplay"; // window needs to be available before we can require OSMD
 
-
 let Blob;
 
 /*
@@ -50,7 +49,7 @@ const getActualNoteLength = (note, wholeNoteLength) => {
 	return duration;
 };
 
-function getCursorPositions(osmd, filename) {
+function getCursorPositions(osmd, filename, partitionDims) {
 	osmd.cursor.show();
 	const bpm = osmd.Sheet.HasBPMInfo
 		? osmd.Sheet.getExpressionsStartTempoInBPM()
@@ -105,7 +104,8 @@ function getCursorPositions(osmd, filename) {
 	FS.writeFileSync(
 		cursorsFilename,
 		JSON.stringify({
-			pageWidth: osmd.Sheet.pageWidth,
+			pageWidth: partitionDims[0],
+			pageHeight: partitionDims[1],
 			cursors: curPos,
 		}),
 	);
@@ -671,7 +671,6 @@ async function generateSampleImage(
 	debug("xml loaded", DEBUG);
 	try {
 		osmdInstance.render();
-		getCursorPositions(osmdInstance, assetName);
 		// there were reports that await could help here, but render isn't a synchronous function, and it seems to work. see #932
 	} catch (ex) {
 		debug("renderError: " + ex);
@@ -681,6 +680,9 @@ async function generateSampleImage(
 	const markupStrings = []; // svg
 	const dataUrls = []; // png
 	let canvasImage;
+
+	// intended to use only for the chromacase partition use case (always 1 page in svg)
+	let partitionDims = [-1, -1];
 
 	for (
 		let pageNumber = 1;
@@ -708,9 +710,15 @@ async function generateSampleImage(
 			}
 			// The important xmlns attribute is not serialized unless we set it here
 			svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+			const width = svgElement.getAttribute("width");
+			const height = svgElement.getAttribute("height");
+			partitionDims = [width, height];
 			markupStrings.push(svgElement.outerHTML);
 		}
 	}
+
+	// create the cursor positions file
+	getCursorPositions(osmdInstance, assetName, partitionDims);
 
 	for (
 		let pageIndex = 0;
