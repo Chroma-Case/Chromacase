@@ -104,14 +104,10 @@ function getCursorPositions(osmd, filename) {
 	const cursorsFilename = `${imageDir}/${filename}.json`;
 	FS.writeFileSync(
 		cursorsFilename,
-		JSON.stringify(
-			{
-				pageWidth: osmd.Sheet.pageWidth,
-				cursors: curPos,
-			},
-			null,
-			2,
-		),
+		JSON.stringify({
+			pageWidth: osmd.Sheet.pageWidth,
+			cursors: curPos,
+		}),
 	);
 	console.log(`Saved cursor positions to ${cursorsFilename}`);
 }
@@ -756,7 +752,10 @@ async function generateSampleImage(
 			}
 
 			debug("got svg markup data, saving to: " + pageFilename, DEBUG);
-			FS.writeFileSync(pageFilename, markup, { encoding: "utf-8" });
+			// replace every bounding-box by none (react native doesn't support bounding-box)
+			FS.writeFileSync(pageFilename, markup.replace(/bounding-box/g, "none"), {
+				encoding: "utf-8",
+			});
 		}
 
 		// debug: log memory usage
