@@ -42,8 +42,6 @@ const StarProgress = (props: StarProgressProps) => {
 						style={{
 							position: 'absolute',
 							left: `${(step / props.max) * 100}%`,
-							// top: '50%',
-							// transform: 'translate(-50%, -55%)',
 						}}
 					/>
 				);

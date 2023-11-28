@@ -310,6 +310,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	}
 	return (
 		<View style={{ display: 'flex', flex: 1, backgroundColor: '#cdd4fd' }}>
+			
 			<SafeAreaView
 				style={{
 					flexGrow: 1,
@@ -335,36 +336,36 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
-					{/* <PopupCC
-						title={translate('selectPlayMode')}
-						description={translate('selectPlayModeExplaination')}
-						isVisible={type === undefined}
-						setIsVisible={
-							navigation.canGoBack()
-								? (isVisible) => {
-										if (!isVisible) {
-											// If we dismiss the popup, Go to previous page
-											navigation.goBack();
-										}
-								  }
-								: undefined
-						}
-					>
-						<Row style={{ justifyContent: 'space-between' }}>
-							<ButtonBase
-								style={{}}
-								type="outlined"
-								title={translate('practiceBtn')}
-								onPress={async () => setType('practice')}
-							/>
-							<ButtonBase
-								style={{}}
-								type="filled"
-								title={translate('playBtn')}
-								onPress={async () => setType('normal')}
-							/>
-						</Row>
-					</PopupCC> */}
+					<PopupCC
+				title={translate('selectPlayMode')}
+				description={translate('selectPlayModeExplaination')}
+				isVisible={type === undefined}
+				setIsVisible={
+					navigation.canGoBack()
+						? (isVisible) => {
+								if (!isVisible) {
+									// If we dismiss the popup, Go to previous page
+									navigation.goBack();
+								}
+						  }
+						: undefined
+				}
+			>
+				<Row style={{ justifyContent: 'space-between' }}>
+					<ButtonBase
+						style={{}}
+						type="outlined"
+						title={translate('practiceBtn')}
+						onPress={async () => setType('practice')}
+					/>
+					<ButtonBase
+						style={{}}
+						type="filled"
+						title={translate('playBtn')}
+						onPress={async () => setType('normal')}
+					/>
+				</Row>
+			</PopupCC>
 					{(
 						[
 							[

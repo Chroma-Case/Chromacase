@@ -42,7 +42,7 @@ const cards = [
 const GoldenRatio = () => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
-	// return (<GoldenRatioPanel direction='column' header={<>r</>}>test</GoldenRatioPanel>)
+
 	return (
 		<GoldenRatioPanel
 			direction={isPhone ? 'column' : 'row'}

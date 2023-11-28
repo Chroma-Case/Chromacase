@@ -14,30 +14,6 @@ const HomeView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
-	const artistsQueries = useQueries(
-		(songsQuery.data ?? []).map((song) => API.getArtist(song.artistId))
-	);
-
-	// React.useEffect(() => {
-	// 	if (!songsQuery.data) return;
-	// 	if (artistsQueries.every((query) => !query.isLoading)) return;
-
-	// 	(songsQuery.data ?? [])
-	// 		.filter((song) =>
-	// 			artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)
-	// 		)
-	// 		.forEach((song, index) => {
-	// 			if (index > 3) return;
-	// 			cards[index]!.image = song.cover;
-	// 			cards[index]!.title = song.name;
-	// 			cards[index]!.artist = artistsQueries.find(
-	// 				(artistQuery) => artistQuery.data?.id === song.artistId
-	// 			)!.data!.name;
-	// 			cards[index]!.onPress = () => {
-	// 				navigation.navigate('Play', { songId: song.id });
-	// 			};
-	// 		});
-	// }, [artistsQueries]);
 
 	return (
 		<ScaffoldCC routeName={props.route.name}>
