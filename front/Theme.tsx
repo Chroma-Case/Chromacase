@@ -36,6 +36,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 
 	return (
 		<NativeBaseProvider
+			isSSR={false}
 			theme={extendTheme({
 				config: {
 					useSystemColorMode: false,
