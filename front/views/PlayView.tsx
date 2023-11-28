@@ -11,9 +11,7 @@ import Animated, {
 	withDelay,
 } from 'react-native-reanimated';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { Text, Row, View, useToast, Icon, Image } from 'native-base';
-import IconButton from '../components/IconButton';
-import { Ionicons } from '@expo/vector-icons';
+import { Text, Row, View, useToast } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
 import { useQuery } from '../Queries';
 import API from '../API';
@@ -23,7 +21,7 @@ import { RootState } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-// import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
+import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext } from '../models/PianoGame';
@@ -62,14 +60,14 @@ if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	});
 }
 
-// function parseMidiMessage(message: MIDIMessageEvent) {
-// 	return {
-// 		command: message.data.at(0)! >> 4,
-// 		channel: message.data.at(0)! & 0xf,
-// 		note: message.data.at(1)!,
-// 		velocity: message.data.at(2)! / 127,
-// 	};
-// }
+function parseMidiMessage(message: MIDIMessageEvent) {
+	return {
+		command: message.data.at(0)! >> 4,
+		channel: message.data.at(0)! & 0xf,
+		note: message.data.at(1)!,
+		velocity: message.data.at(2)! / 127,
+	};
+}
 
 //create a context with an array of number
 export const PianoCC = createContext<PianoCanvasContext>({
@@ -301,7 +299,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 			return;
 		}
 		if (song.data && !webSocket.current && partitionRendered) {
-			// requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
+			requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
 		}
 	}, [song.data, partitionRendered]);
 
@@ -487,6 +485,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					score={score}
 					time={time}
 					paused={paused}
+					disabled={!midiKeyboardFound}
 					song={song.data}
 					onEnd={onEnd}
 					onPause={onPause}
