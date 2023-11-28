@@ -1,8 +1,5 @@
 import { View, ViewStyle } from 'react-native';
 
-const bigSideRatio = 1000;
-const smallSideRatio = 618;
-
 const bigSizePercent = '61.8%';
 const smallSizePercent = '38.2%';
 
