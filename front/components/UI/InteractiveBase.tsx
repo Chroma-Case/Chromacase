@@ -1,6 +1,6 @@
 import { Pressable, useTheme } from 'native-base';
 import React, { useRef } from 'react';
-import { Animated, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { Animated, StyleProp, ViewStyle } from 'react-native';
 
 interface InteractiveBaseProps {
 	children?: React.ReactNode;
@@ -253,6 +253,5 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		</Animated.View>
 	);
 };
-
 
 export default InteractiveBase;

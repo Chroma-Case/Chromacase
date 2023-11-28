@@ -24,7 +24,12 @@ type ScaffoldCCProps = {
 	enableScroll?: boolean;
 };
 
-const ScaffoldCC = ({ children, routeName, withPadding = true, enableScroll = true }: ScaffoldCCProps) => {
+const ScaffoldCC = ({
+	children,
+	routeName,
+	withPadding = true,
+	enableScroll = true,
+}: ScaffoldCCProps) => {
 	const userQuery = useQuery(API.getUserInfo);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 
