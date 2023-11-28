@@ -1,7 +1,7 @@
 import { ScrollView, View } from 'react-native';
 import { Text, useBreakpointValue } from 'native-base';
 import React from 'react';
-import { useQuery, useQueries } from '../../Queries';
+import { useQuery } from '../../Queries';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
 import { RouteProps, useNavigation } from '../../Navigation';

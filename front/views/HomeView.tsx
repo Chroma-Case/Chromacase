@@ -6,7 +6,6 @@ import { Box, Flex, Stack, Heading, VStack, HStack } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
 import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable';
-import ProgressBar from '../components/ProgressBar';
 import Translate from '../components/Translate';
 import TextButton from '../components/TextButton';
 import Song from '../models/Song';

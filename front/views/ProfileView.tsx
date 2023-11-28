@@ -1,6 +1,6 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
-import { Column, Flex, Progress, Row, Text, View, Wrap, useTheme } from 'native-base';
+import { Column, Flex, Progress, Row, Text, View, useTheme } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
 import UserAvatar from '../components/UserAvatar';
 import { LoadingView } from '../components/Loading';

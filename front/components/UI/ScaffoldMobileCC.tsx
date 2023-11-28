@@ -4,7 +4,6 @@ import { Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { useNavigation } from '../../Navigation';
-import Spacer from './Spacer';
 import User from '../../models/User';
 import { translate } from '../../i18n/i18n';
 

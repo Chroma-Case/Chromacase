@@ -33,7 +33,6 @@ import PopupCC from '../components/UI/PopupCC';
 import ButtonBase from '../components/UI/ButtonBase';
 import { Clock, Cup } from 'iconsax-react-native';
 import PlayViewControlBar from '../components/Play/PlayViewControlBar';
-import { PlageHandler } from '../models/Plage';
 
 type PlayViewProps = {
 	songId: number;
