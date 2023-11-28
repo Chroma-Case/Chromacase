@@ -5,6 +5,8 @@ import { useQuery } from '../../Queries';
 import { PianoCC } from '../../views/PlayView';
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
+import { PianoNotes } from '../../state/SoundPlayerSlice';
+import { Audio } from 'expo-av';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -23,6 +25,9 @@ const getCursorToPlay = (
 	timestamp: number,
 	onCursorMove: (cursor: CursorInfoItem, idx: number) => void
 ) => {
+	if (timestamp <= 0) {
+		return;
+	}
 	for (let i = cursorInfos.length - 1; i > currentCurIdx; i--) {
 		const cursorInfo = cursorInfos[i]!;
 		if (cursorInfo.timestamp <= timestamp) {
@@ -33,24 +38,42 @@ const getCursorToPlay = (
 
 const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
-	const [currentCurIdx, setCurrentCurIdx] = React.useState(0);
+	const [currentCurIdx, setCurrentCurIdx] = React.useState(-1);
 	const partitionOffset = useSharedValue(0);
 	const [partitionDims, setPartitionDims] = React.useState<[number, number]>([0, 0]);
 	const pianoCC = React.useContext(PianoCC);
-
+	const pianoSounds = React.useRef<Record<string, Audio.Sound>>();
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
-	const cursorBorderWidth = (data?.cursors[currentCurIdx]?.width ?? 0) / 6;
-	const cursorWidth = (data?.cursors[currentCurIdx]?.width ?? 0) + cursorPaddingHorizontal * 2;
-	const cursorHeight = (data?.cursors[currentCurIdx]?.height ?? 0) + cursorPaddingVertical * 2;
-	const cursorTop = (data?.cursors[currentCurIdx]?.y ?? 0) - cursorPaddingVertical;
+	const cursorDisplayIdx = currentCurIdx === -1 ? 0 : currentCurIdx;
+
+	const cursorBorderWidth = (data?.cursors[cursorDisplayIdx]?.width ?? 0) / 6;
+	const cursorWidth = (data?.cursors[cursorDisplayIdx]?.width ?? 0) + cursorPaddingHorizontal * 2;
+	const cursorHeight = (data?.cursors[cursorDisplayIdx]?.height ?? 0) + cursorPaddingVertical * 2;
+	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
 	React.useEffect(() => {
 		Image.getSize(getSVGURL(songID), (w, h) => {
 			setPartitionDims([w, h]);
 		});
+		if (!pianoSounds.current) {
+			Promise.all(
+				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
+					Audio.Sound.createAsync(noteResource, {
+						volume: 1,
+						progressUpdateIntervalMillis: 100,
+					}).then((sound) => [midiNumber, sound.sound] as const)
+				)
+			).then(
+				(res) =>
+					(pianoSounds.current = res.reduce(
+						(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
+						{}
+					))
+			);
+		}
 	}, []);
 
 	React.useEffect(() => {
@@ -70,6 +93,17 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		currentCurIdx,
 		pianoCC.timestamp - transitionDuration,
 		(cursor, idx) => {
+			cursor.notes.forEach(({ note, duration }) => {
+				try {
+					const sound = pianoSounds.current![note]!;
+					sound.playAsync().catch(console.error);
+					setTimeout(() => {
+						sound.stopAsync();
+					}, duration - 10);
+				} catch (e) {
+					console.log(e);
+				}
+			});
 			partitionOffset.value = withTiming(
 				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
 				{

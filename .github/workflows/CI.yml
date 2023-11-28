@@ -63,10 +63,10 @@ jobs:
         run: yarn install
 
       - name: 🏗 Setup Expo
-        uses: expo/expo-github-action@v7
+        uses: expo/expo-github-action@v8
         with:
           expo-version: latest
-          eas-version: 3.3.1
+          eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
       - name: Build Web App
         uses: docker/build-push-action@v3

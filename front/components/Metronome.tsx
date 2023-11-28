@@ -1,23 +1,39 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Slider, Text, View, IconButton, Icon } from 'native-base';
-import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
+import { VolumeHigh, VolumeSlash } from 'iconsax-react-native';
 
 export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
-	const ref = useRef<HTMLAudioElement | null>(null);
-	const [enabled, setEnabled] = useState<boolean>(false);
-	const [volume, setVolume] = useState<number>(50);
+	const audio = useRef<Audio.Sound | null>(null);
+	const enabled = useRef<boolean>(false);
+	const volume = useRef<number>(50);
 
+	useEffect(() => {
+		if (!enabled) {
+			return;
+		} else if (!audio.current) {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			Audio.Sound.createAsync(require('../assets/metronome.mp3')).then((a) => {
+				audio.current = a.sound;
+			});
+		}
+		return () => {
+			audio.current?.unloadAsync();
+		};
+	}, [enabled]);
 	useEffect(() => {
 		if (paused) return;
 		const int = setInterval(() => {
-			if (!enabled) return;
-			if (!ref.current) ref.current = new Audio('/assets/metronome.mp3');
-			ref.current.volume = volume / 100;
-			ref.current.play();
+			if (!enabled.current) return;
+			if (!audio.current) return;
+			audio.current?.playAsync();
 		}, 60000 / bpm);
 		return () => clearInterval(int);
-	}, [bpm, paused, enabled, volume]);
+	}, [bpm, paused]);
+	useEffect(() => {
+		audio.current?.setVolumeAsync(volume.current / 100);
+	}, [volume.current]);
 	return (
 		<View flex={1}>
 			<View
@@ -27,7 +43,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 					justifyContent: 'space-between',
 				}}
 			>
-				<Text>Métronome</Text>
+				<Text>Metronome</Text>
 				<Icon as={<MaterialCommunityIcons name="metronome" size={24} color="white" />} />
 			</View>
 			<View
@@ -38,19 +54,19 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 			>
 				<IconButton
 					icon={
-						<Ionicons
-							name={enabled ? 'volume-high-outline' : 'volume-mute-outline'}
-							size={24}
-							color="white"
-						/>
+						enabled ? (
+							<VolumeSlash size={24} color="white" />
+						) : (
+							<VolumeHigh size={24} color="white" />
+						)
 					}
-					onPress={() => setEnabled(!enabled)}
+					onPress={() => (enabled.current = !enabled.current)}
 				/>
 				<Slider
 					maxWidth={'500px'}
 					flex={1}
-					defaultValue={volume}
-					onChange={(x) => setVolume(x)}
+					defaultValue={volume.current}
+					onChange={(x) => (volume.current = x)}
 				>
 					<Slider.Track>
 						<Slider.FilledTrack />
