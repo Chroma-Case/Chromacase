@@ -1,16 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import {
-	Flex,
-	Stack,
-	View,
-	Text,
-	Wrap,
-	Image,
-	Row,
-	Column,
-	ScrollView,
-	useToast,
-} from 'native-base';
+import { Stack, View, Text, Wrap, Image, Row, Column, ScrollView, useToast } from 'native-base';
 import { FunctionComponent } from 'react';
 import { Linking, useWindowDimensions } from 'react-native';
 import ButtonBase from './ButtonBase';

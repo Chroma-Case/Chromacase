@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { MetronomeControls } from '../Metronome';
 import StarProgress from '../StarProgress';
 import Song from '../../models/Song';
-import useColorScheme from '../../hooks/colorScheme';
 import { useTheme } from 'native-base';
 
 type PlayViewControlBarProps = {
@@ -33,10 +32,8 @@ const PlayViewControlBar = ({
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
 	const bpm = React.useRef<number>(60);
-	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
 	const textColor = colors.text;
-	const statColor = colors.lightText;
 	return (
 		<Row
 			style={{
