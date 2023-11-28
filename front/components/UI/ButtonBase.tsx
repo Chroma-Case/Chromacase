@@ -148,10 +148,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 					)}
 					{iconImage && <Image source={{ uri: iconImage }} style={styles.icon} />}
 					{title && (
-						<Text
-							style={[styles.text, type === 'filled' ? { color: '#fff' } : {}]}
-							selectable={false}
-						>
+						<Text style={[styles.text, type === 'filled' ? { color: '#fff' } : {}]}>
 							{title}
 						</Text>
 					)}
@@ -176,6 +173,7 @@ const styles = StyleSheet.create({
 		height: 18,
 	},
 	text: {
+		userSelect: 'none',
 		marginHorizontal: 8,
 	},
 });

@@ -67,7 +67,9 @@ export class ValidationError extends Error {
 
 export default class API {
 	public static readonly baseUrl =
-		Platform.OS === 'web' && !process.env.EXPO_PUBLIC_API_URL ? '/api' : process.env.EXPO_PUBLIC_API_URL!;
+		Platform.OS === 'web' && !process.env.EXPO_PUBLIC_API_URL
+			? '/api'
+			: process.env.EXPO_PUBLIC_API_URL!;
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>
@@ -114,11 +116,11 @@ export default class API {
 		}
 		const handler = handle.handler;
 		const body = await response.text();
+		if (!response.ok) {
+			throw new APIError(response.statusText ?? body, response.status, 'unknownError');
+		}
 		try {
 			const jsonResponse = JSON.parse(body);
-			if (!response.ok) {
-				throw new APIError(response.statusText ?? body, response.status, 'unknownError');
-			}
 			const validated = await handler.validator.validate(jsonResponse).catch((e) => {
 				if (e instanceof yup.ValidationError) {
 					console.error(e, 'Got: ' + body);
@@ -151,7 +153,6 @@ export default class API {
 				/// We want that 401 error to be thrown, instead of the plain validation vone
 				if (e.status == 401)
 					throw new APIError('invalidCredentials', 401, 'invalidCredentials');
-				if (!(e instanceof APIError)) throw e;
 				throw e;
 			});
 	}

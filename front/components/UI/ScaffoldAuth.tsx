@@ -72,7 +72,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 					<Row space={2} flex={1}>
 						<Image
 							source={{ uri: logo?.at(0)?.uri }}
-							alt='Chromacase logo'
+							alt="Chromacase logo"
 							style={{
 								aspectRatio: 1,
 								width: 32,
@@ -80,7 +80,13 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							}}
 						/>
 						{layout.width > 650 && (
-							<Text fontSize={'xl'} selectable={false}>
+							<Text
+								fontSize={'xl'}
+								style={{
+									// @ts-expect-error - RNW does not have userSelect
+									userSelect: 'none',
+								}}
+							>
 								ChromaCase
 							</Text>
 						)}
