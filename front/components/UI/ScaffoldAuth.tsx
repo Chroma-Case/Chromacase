@@ -21,13 +21,13 @@ import LinkBase from './LinkBase';
 import { useDispatch } from '../../state/Store';
 import { setAccessToken } from '../../state/UserSlice';
 import useColorScheme from '../../hooks/colorScheme';
+import { useAssets } from 'expo-asset';
 
 const handleGuestLogin = async (apiSetter: (accessToken: string) => void): Promise<string> => {
 	const apiAccess = await API.createAndGetGuestAccount();
 	apiSetter(apiAccess);
 	return translate('loggedIn');
 };
-import { useAssets } from 'expo-asset';
 
 interface ScaffoldAuthProps {
 	title: string;
@@ -48,10 +48,11 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const colorScheme = useColorScheme();
-	const logo =
+	const [logo] = useAssets(
 		colorScheme == 'light'
 			? require('../../assets/icon_light.png')
-			: require('../../assets/icon_dark.png');
+			: require('../../assets/icon_dark.png')
+	);
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
 
@@ -69,14 +70,15 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 			<Column style={{ flex: 1 }}>
 				<Wrap space={4} direction="row" style={{ padding: 16, paddingBottom: 0 }}>
 					<Row space={2} flex={1}>
-						{/* <Image
-							source={{ uri: logo }}
+						<Image
+							source={{ uri: logo?.at(0)?.uri }}
+							alt='Chromacase logo'
 							style={{
 								aspectRatio: 1,
 								width: 32,
 								height: 32,
 							}}
-						/> */}
+						/>
 						{layout.width > 650 && (
 							<Text fontSize={'xl'} selectable={false}>
 								ChromaCase
