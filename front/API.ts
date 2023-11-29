@@ -4,7 +4,7 @@ import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
 import Genre, { GenreHandler } from './models/Genre';
 import LessonHistory from './models/LessonHistory';
-import likedSong, { LikedSongHandler } from './models/LikedSong';
+import likedSong, { LikedSong, LikedSongHandler } from './models/LikedSong';
 import Song, { SongHandler, SongInclude } from './models/Song';
 import { SongHistoryHandler, SongHistoryItem, SongHistoryItemHandler } from './models/SongHistory';
 import User, { UserHandler } from './models/User';
@@ -297,13 +297,14 @@ export default class API {
 	 * Retrieve a song
 	 * @param songId the id to find the song
 	 */
-	public static getSong(songId: number): Query<Song> {
+	public static getSong(songId: number, include?: SongInclude[]): Query<Song> {
+		include ??= [];
 		return {
-			key: ['song', songId],
+			key: ['song', songId, include],
 			exec: async () =>
 				API.fetch(
 					{
-						route: `/song/${songId}`,
+						route: `/song/${songId}?include=${include!.join(',')}`,
 					},
 					{ handler: SongHandler }
 				),
@@ -702,13 +703,14 @@ export default class API {
 		});
 	}
 
-	public static getLikedSongs(): Query<likedSong[]> {
+	public static getLikedSongs(include?: SongInclude[]): Query<LikedSong[]> {
+		include ??= [];
 		return {
-			key: ['liked songs'],
+			key: ['liked songs', include],
 			exec: () =>
 				API.fetch(
 					{
-						route: '/auth/me/likes',
+						route: `/auth/me/likes?include=${include!.join(',')}`,
 					},
 					{ handler: ListHandler(LikedSongHandler) }
 				),
