@@ -25,10 +25,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 			? require('../../assets/icon_light.png')
 			: require('../../assets/icon_dark.png')
 	);
-	const playHistoryQuery = useQuery(API.getUserPlayHistory);
-	const songHistory = useQueries(
-		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
-	);
+	const history = useQuery(API.getUserPlayHistory);
 	// settings is displayed separately (with logout)
 	const buttons = props.tabs.filter((tab) => tab.id !== 'settings');
 
@@ -110,7 +107,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 							>
 								Recently played
 							</Text>
-							{songHistory.length === 0 && (
+							{history.data?.length === 0 && (
 								<Text
 									style={{
 										paddingHorizontal: 16,
@@ -120,9 +117,8 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 									No songs played yet
 								</Text>
 							)}
-							{songHistory
-								.map((h) => h.data)
-								.filter((data): data is Song => data !== undefined)
+							{history.data
+								?.map(x => x.song)
 								.filter(
 									(song, i, array) =>
 										array.map((s) => s.id).findIndex((id) => id == song.id) == i

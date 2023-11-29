@@ -51,6 +51,7 @@ export class HistoryService {
 			orderBy: { playDate: 'desc' },
 			skip,
 			take,
+			include: { song: true }
 		});
 	}
 
