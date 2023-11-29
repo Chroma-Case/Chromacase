@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Slider, Text, View, IconButton, Icon } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
@@ -6,7 +6,7 @@ import { VolumeHigh, VolumeSlash } from 'iconsax-react-native';
 
 export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
 	const audio = useRef<Audio.Sound | null>(null);
-	const enabled = useRef<boolean>(false);
+	const [enabled, setEnabled] = useState<boolean>(false);
 	const volume = useRef<number>(50);
 
 	useEffect(() => {
@@ -25,7 +25,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 	useEffect(() => {
 		if (paused) return;
 		const int = setInterval(() => {
-			if (!enabled.current) return;
+			if (!enabled) return;
 			if (!audio.current) return;
 			audio.current?.playAsync();
 		}, 60000 / bpm);
@@ -60,7 +60,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 							<VolumeHigh size={24} color="white" />
 						)
 					}
-					onPress={() => (enabled.current = !enabled.current)}
+					onPress={() => setEnabled(!enabled)}
 				/>
 				<Slider
 					maxWidth={'500px'}
