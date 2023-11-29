@@ -15,41 +15,20 @@ import { RouteProps, useNavigation } from '../Navigation';
 import { TranslationKey, translate } from '../i18n/i18n';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
-import { useQueries, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import API from '../API';
 import Song from '../models/Song';
 import { LoadingView } from '../components/Loading';
 
 export const FavoritesMusic = () => {
 	const navigation = useNavigation();
-	const playHistoryQuery = useQuery(API.getUserPlayHistory);
-	const nextStepQuery = useQuery(API.getSongSuggestions);
-	const songHistory = useQueries(
-		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
-	);
-	const artistsQueries = useQueries(
-		songHistory
-			.map((entry) => entry.data)
-			.concat(nextStepQuery.data ?? [])
-			.filter((s): s is Song => s !== undefined)
-			.map((song) => API.getArtist(song.artistId))
-	);
-
-	const isLoading =
-		playHistoryQuery.isLoading ||
-		nextStepQuery.isLoading ||
-		songHistory.some((query) => query.isLoading) ||
-		artistsQueries.some((query) => query.isLoading);
+	const playHistoryQuery = useQuery(API.getUserPlayHistory(['artist']));
 
 	const musics =
-		nextStepQuery.data
-			?.filter((song: Song) =>
-				artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)
-			)
+		playHistoryQuery.data
+			?.map((x) => x.song)
 			.map((song: Song) => ({
-				artist: artistsQueries.find(
-					(artistQuery) => artistQuery.data?.id === song.artistId
-				)!.data!.name,
+				artist: song.artist!.name,
 				song: song.name,
 				image: song.cover,
 				level: 42,
@@ -62,7 +41,7 @@ export const FavoritesMusic = () => {
 				onPlay: () => navigation.navigate('Play', { songId: song.id }),
 			})) ?? [];
 
-	if (isLoading) {
+	if (playHistoryQuery.isLoading) {
 		return <LoadingView />;
 	}
 	return (
@@ -114,7 +93,7 @@ export const FavoritesMusic = () => {
 			</View> */}
 			<MusicList
 				initialMusics={musics}
-				// musicsPerPage={7}
+			// musicsPerPage={7}
 			/>
 		</>
 	);

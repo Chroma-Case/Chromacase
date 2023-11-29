@@ -21,17 +21,17 @@ import GenreCard from './GenreCard';
 import SongCard from './SongCard';
 import CardGridCustom from './CardGridCustom';
 import SearchHistoryCard from './HistoryCard';
-import Song, { SongWithArtist } from '../models/Song';
+import Song from '../models/Song';
 import { useNavigation } from '../Navigation';
 import Artist from '../models/Artist';
 import SongRow from '../components/SongRow';
 import FavSongRow from './FavSongRow';
 import { LikedSongWithDetails } from '../models/LikedSong';
 
-const swaToSongCardProps = (song: SongWithArtist) => ({
+const swaToSongCardProps = (song: Song) => ({
 	songId: song.id,
 	name: song.name,
-	artistName: song.artist.name,
+	artistName: song.artist!.name,
 	cover: song.cover ?? 'https://picsum.photos/200',
 });
 

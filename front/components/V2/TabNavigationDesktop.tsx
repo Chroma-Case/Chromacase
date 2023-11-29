@@ -4,7 +4,7 @@ import TabNavigationButton from './TabNavigationButton';
 import TabNavigationList from './TabNavigationList';
 import { useAssets } from 'expo-asset';
 import useColorScheme from '../../hooks/colorScheme';
-import { useQuery, useQueries } from '../../Queries';
+import { useQuery } from '../../Queries';
 import { NaviTab } from './TabNavigation';
 import API from '../../API';
 import Song from '../../models/Song';

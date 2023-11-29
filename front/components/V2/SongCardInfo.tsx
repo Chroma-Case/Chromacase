@@ -186,7 +186,7 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 											fontWeight: 'normal',
 										}}
 									>
-										{props.song.artistId}
+										{props.song.artist?.name}
 									</Text>
 								</View>
 								<Ionicons
