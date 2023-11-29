@@ -8,6 +8,7 @@ import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { PianoNotes } from '../../state/SoundPlayerSlice';
 import { Audio } from 'expo-av';
 import { SvgContainer } from './SvgContainer';
+import LoadingComponent from '../Loading';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -41,6 +42,7 @@ const getCursorToPlay = (
 const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const [currentCurIdx, setCurrentCurIdx] = React.useState(-1);
+	const [isPartitionSvgLoaded, setIsPartitionSvgLoaded] = React.useState(false);
 	const partitionOffset = useSharedValue(0);
 	const pianoCC = React.useContext(PianoCC);
 	const pianoSounds = React.useRef<Record<string, Audio.Sound>>();
@@ -55,37 +57,40 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
-	React.useEffect(() => {
-		if (!pianoSounds.current) {
-			Promise.all(
-				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
-					Audio.Sound.createAsync(noteResource, {
-						volume: 1,
-						progressUpdateIntervalMillis: 100,
-					}).then((sound) => [midiNumber, sound.sound] as const)
-				)
-			).then(
-				(res) =>
-					(pianoSounds.current = res.reduce(
-						(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
-						{}
-					))
-			);
-		}
-	}, []);
+	// React.useEffect(() => {
+	// 	if (!pianoSounds.current) {
+	// 		Promise.all(
+	// 			Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
+	// 				Audio.Sound.createAsync(noteResource, {
+	// 					volume: 1,
+	// 					progressUpdateIntervalMillis: 100,
+	// 				}).then((sound) => [midiNumber, sound.sound] as const)
+	// 			)
+	// 		).then(
+	// 			(res) =>
+	// 				(pianoSounds.current = res.reduce(
+	// 					(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
+	// 					{}
+	// 				))
+	// 		);
+	// 	}
+	// }, []);
 	const partitionDims = React.useMemo<[number, number]>(() => {
 		return [data?.pageWidth ?? 0, data?.pageHeight ?? 1];
 	}, [data]);
 
 	React.useEffect(() => {
-		if (isLoading) {
-			return;
-		}
 		if (isError) {
 			onError('Error while loading partition');
 			return;
 		}
-	}, [isLoading, isError]);
+	}, [isError]);
+
+	React.useEffect(() => {
+		if (isPartitionSvgLoaded && !isLoading) {
+			onReady();
+		}
+	}, [isPartitionSvgLoaded, isLoading]);
 
 	const transitionDuration = 200;
 
@@ -94,17 +99,17 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		currentCurIdx,
 		pianoCC.timestamp - transitionDuration,
 		(cursor, idx) => {
-			cursor.notes.forEach(({ note, duration }) => {
-				try {
-					const sound = pianoSounds.current![note]!;
-					sound.playAsync().catch(console.error);
-					setTimeout(() => {
-						sound.stopAsync();
-					}, duration - 10);
-				} catch (e) {
-					console.log(e);
-				}
-			});
+			// cursor.notes.forEach(({ note, duration }) => {
+			// 	try {
+			// 		const sound = pianoSounds.current![note]!;
+			// 		sound.playAsync().catch(console.error);
+			// 		setTimeout(() => {
+			// 			sound.stopAsync();
+			// 		}, duration - 10);
+			// 	} catch (e) {
+			// 		console.log(e);
+			// 	}
+			// });
 			partitionOffset.value = withTiming(
 				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
 				{
@@ -130,6 +135,22 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 				overflow: 'hidden',
 			}}
 		>
+			{(!isPartitionSvgLoaded || isLoading) && (
+				<View
+					style={{
+						position: 'absolute',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						width: '100%',
+						height: '100%',
+						zIndex: 50,
+						backgroundColor: 'rgba(0,0,0,0.5)',
+					}}
+				>
+					<LoadingComponent />
+				</View>
+			)}
 			<View
 				style={{
 					position: 'absolute',
@@ -148,15 +169,15 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 						justifyContent: 'flex-start',
 					}}
 				>
-					{!isLoading && !isError && (
-						<SvgContainer
-							url={getSVGURL(songID)}
-							onReady={onReady}
-							style={{
-								aspectRatio: partitionDims[0] / partitionDims[1],
-							}}
-						/>
-					)}
+					<SvgContainer
+						url={getSVGURL(songID)}
+						onReady={() => {
+							setIsPartitionSvgLoaded(true);
+						}}
+						style={{
+							aspectRatio: partitionDims[0] / partitionDims[1],
+						}}
+					/>
 				</Animated.View>
 				<Animated.View
 					style={{
