@@ -1,12 +1,12 @@
 import { HStack, IconButton, Image, Text } from 'native-base';
-import Song, { SongWithArtist } from '../models/Song';
+import Song  from '../models/Song';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
 import { MaterialIcons } from '@expo/vector-icons';
 import DurationComponent from './DurationComponent';
 
 type SongRowProps = {
-	song: Song | SongWithArtist; // TODO: remove Song
+	song: Song;
 	isLiked: boolean;
 	onPress: () => void;
 	handleLike: (state: boolean, songId: number) => Promise<void>;

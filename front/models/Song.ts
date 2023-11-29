@@ -18,6 +18,7 @@ export const SongValidator = yup
 		albumId: yup.number().required().nullable(),
 		genreId: yup.number().required().nullable(),
 		difficulties: SongDetailsValidator.required(),
+		details: SongDetailsValidator.required(),
 		cover: yup.string().required(),
 		artist: yup.lazy(() => ArtistValidator.default(undefined)).optional(),
 		album: yup.lazy(() => AlbumValidator.default(undefined)).optional(),
@@ -27,6 +28,7 @@ export const SongValidator = yup
 	.transform((song: Song) => ({
 		...song,
 		cover: `${API.baseUrl}/song/${song.id}/illustration`,
+		details: song.difficulties,
 	}));
 
 export type Song = yup.InferType<typeof SongValidator>;

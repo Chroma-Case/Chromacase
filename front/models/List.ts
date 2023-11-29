@@ -7,5 +7,5 @@ export const ListHandler = <A, R>(
 	itemHandler: ResponseHandler<A, R>
 ): ResponseHandler<A[], R[]> => ({
 	validator: ListValidator(itemHandler.validator),
-	transformer: (plage) => plage.map((item) => itemHandler.transformer(item)),
+	transformer: (plage) => plage.map((item) => itemHandler.transformer?.(item) ?? item as unknown as R),
 });
