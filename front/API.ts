@@ -139,6 +139,8 @@ export default class API {
 				}
 				throw e;
 			});
+			if (!handler.transformer)
+				return handler.validator.cast(validated);
 			return handler.transformer(handler.validator.cast(validated));
 		} catch (e) {
 			if (e instanceof SyntaxError) throw new Error("Error while parsing Server's response");

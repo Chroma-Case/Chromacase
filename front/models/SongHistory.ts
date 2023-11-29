@@ -1,23 +1,19 @@
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
+import { SongValidator } from './Song';
 
 export const SongHistoryItemValidator = yup.object({
 	songID: yup.number().required(),
+	song: SongValidator.required(),
 	userID: yup.number().required(),
 	score: yup.number().required(),
 	playDate: yup.date().required(),
 	difficulties: yup.mixed().required(),
 });
+export type SongHistoryItem = yup.InferType<typeof SongHistoryItemValidator>;
 
-export const SongHistoryItemHandler: ResponseHandler<
-	yup.InferType<typeof SongHistoryItemValidator>,
-	SongHistoryItem
-> = {
+export const SongHistoryItemHandler: ResponseHandler<SongHistoryItem> = {
 	validator: SongHistoryItemValidator,
-	transformer: (value) => ({
-		...value,
-		difficulties: value.difficulties,
-	}),
 };
 
 export const SongHistoryValidator = yup.object({
@@ -29,18 +25,6 @@ export type SongHistory = yup.InferType<typeof SongHistoryValidator>;
 
 export const SongHistoryHandler: ResponseHandler<SongHistory> = {
 	validator: SongHistoryValidator,
-	transformer: (value) => ({
-		...value,
-		history: value.history.map((item) => SongHistoryItemHandler.transformer(item)),
-	}),
-};
-
-export type SongHistoryItem = {
-	songID: number;
-	userID: number;
-	score: number;
-	playDate: Date;
-	difficulties: object;
 };
 
 export default SongHistory;
