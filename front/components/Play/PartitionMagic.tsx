@@ -41,21 +41,28 @@ const getCursorToPlay = (
 
 const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
-	const [currentCurIdx, setCurrentCurIdx] = React.useState(-1);
+	const currentCurIdx = React.useRef(-1);
+	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
 	const [isPartitionSvgLoaded, setIsPartitionSvgLoaded] = React.useState(false);
 	const partitionOffset = useSharedValue(0);
 	const pianoCC = React.useContext(PianoCC);
-	const pianoSounds = React.useRef<Record<string, Audio.Sound>>();
+	const pianoSounds = React.useRef<Record<string, Audio.Sound> | null>(null);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
-	const cursorDisplayIdx = currentCurIdx === -1 ? 0 : currentCurIdx;
+	const cursorDisplayIdx = currentCurIdx.current === -1 ? 0 : currentCurIdx.current;
 
 	const cursorBorderWidth = (data?.cursors[cursorDisplayIdx]?.width ?? 0) / 6;
 	const cursorWidth = (data?.cursors[cursorDisplayIdx]?.width ?? 0) + cursorPaddingHorizontal * 2;
 	const cursorHeight = (data?.cursors[cursorDisplayIdx]?.height ?? 0) + cursorPaddingVertical * 2;
 	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
+
+	if (!endPartitionReached && currentCurIdx.current + 1 === data?.cursors.length) {
+		// weird contraption but the mobile don't want classic functions to be called
+		// with the withTiming function :(
+		setEndPartitionReached(true);
+	}
 
 	// React.useEffect(() => {
 	// 	if (!pianoSounds.current) {
@@ -92,37 +99,40 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 		}
 	}, [isPartitionSvgLoaded, isLoading]);
 
+	React.useEffect(() => {
+		if (endPartitionReached) {
+			onEndReached();
+		}
+	}, [endPartitionReached]);
+
 	const transitionDuration = 200;
 
 	getCursorToPlay(
 		data?.cursors ?? [],
-		currentCurIdx,
+		currentCurIdx.current,
 		pianoCC.timestamp - transitionDuration,
 		(cursor, idx) => {
-			// cursor.notes.forEach(({ note, duration }) => {
-			// 	try {
-			// 		const sound = pianoSounds.current![note]!;
-			// 		sound.playAsync().catch(console.error);
-			// 		setTimeout(() => {
-			// 			sound.stopAsync();
-			// 		}, duration - 10);
-			// 	} catch (e) {
-			// 		console.log(e);
-			// 	}
-			// });
+			currentCurIdx.current = idx;
+			if (pianoSounds.current) {
+				cursor.notes.forEach(({ note, duration }) => {
+					try {
+						const sound = pianoSounds.current![note]!;
+						sound.playAsync().catch(console.error);
+						setTimeout(() => {
+							sound.stopAsync();
+						}, duration - 10);
+					} catch (e) {
+						console.log(e);
+					}
+				});
+			}
 			partitionOffset.value = withTiming(
 				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
 				{
 					duration: transitionDuration,
 					easing: Easing.inOut(Easing.ease),
-				},
-				() => {
-					if (idx === data!.cursors.length - 1) {
-						onEndReached();
-					}
 				}
 			);
-			setCurrentCurIdx(idx);
 		}
 	);
 
