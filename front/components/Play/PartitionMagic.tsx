@@ -12,6 +12,7 @@ import LoadingComponent from '../Loading';
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
+	timestamp: number;
 	songID: number;
 	onEndReached: () => void;
 	onError: (err: string) => void;
@@ -39,13 +40,13 @@ const getCursorToPlay = (
 	}
 };
 
-const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
+const PartitionMagic = ({ timestamp, songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const currentCurIdx = React.useRef(-1);
 	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
 	const [isPartitionSvgLoaded, setIsPartitionSvgLoaded] = React.useState(false);
 	const partitionOffset = useSharedValue(0);
-	const pianoCC = React.useContext(PianoCC);
+	// const pianoCC = React.useContext(PianoCC);
 	const pianoSounds = React.useRef<Record<string, Audio.Sound> | null>(null);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
@@ -110,7 +111,7 @@ const PartitionMagic = ({ songID, onEndReached, onError, onReady }: ParitionMagi
 	getCursorToPlay(
 		data?.cursors ?? [],
 		currentCurIdx.current,
-		pianoCC.timestamp - transitionDuration,
+		timestamp - transitionDuration,
 		(cursor, idx) => {
 			currentCurIdx.current = idx;
 			if (pianoSounds.current) {

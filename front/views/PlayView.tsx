@@ -21,7 +21,7 @@ import { RootState } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
+// import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext } from '../models/PianoGame';
@@ -68,15 +68,8 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
-//create a context with an array of number
-export const PianoCC = createContext<PianoCanvasContext>({
-	pressedKeys: new Map(),
-	timestamp: 0,
-	messages: [],
-});
-
 const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
-	const [type, setType] = useState<'practice' | 'normal'>();
+	const [playType, setPlayType] = useState<'practice' | 'normal' | null>(null);
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
@@ -111,6 +104,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const statColor = colors.lightText;
 
 	const onPause = () => {
+		console.log('onPause');
 		stopwatch.pause();
 		setPause(true);
 		webSocket.current?.send(
@@ -165,7 +159,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 				JSON.stringify({
 					type: 'start',
 					id: song.data!.id,
-					mode: type,
+					mode: playType,
 					bearer: accessToken,
 				})
 			);
@@ -266,7 +260,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
 			setTime(() => getElapsedTime()); // Countdown
-		}, 1);
+		}, 300);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
@@ -297,10 +291,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		if (navigation.getState().routes.at(-1)?.name != route.name) {
 			return;
 		}
-		if (song.data && !webSocket.current && partitionRendered) {
-			requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
+		if (song.data && !webSocket.current) {
+			// requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
 		}
-	}, [song.data, partitionRendered]);
+	}, [song.data]);
 
 	if (!song.data) {
 		return <LoadingView />;
@@ -332,36 +326,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
-					<PopupCC
-						title={translate('selectPlayMode')}
-						description={translate('selectPlayModeExplaination')}
-						isVisible={type === undefined}
-						setIsVisible={
-							navigation.canGoBack()
-								? (isVisible) => {
-										if (!isVisible) {
-											// If we dismiss the popup, Go to previous page
-											navigation.goBack();
-										}
-								  }
-								: undefined
-						}
-					>
-						<Row style={{ justifyContent: 'space-between' }}>
-							<ButtonBase
-								style={{}}
-								type="outlined"
-								title={translate('practiceBtn')}
-								onPress={async () => setType('practice')}
-							/>
-							<ButtonBase
-								style={{}}
-								type="filled"
-								title={translate('playBtn')}
-								onPress={async () => setType('normal')}
-							/>
-						</Row>
-					</PopupCC>
 					{(
 						[
 							[
@@ -461,34 +425,60 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						backgroundColor: 'white',
 					}}
 				>
-					<PianoCC.Provider
-						value={{
-							pressedKeys: pressedKeys,
-							timestamp: time,
-							messages: [],
+					<PartitionMagic
+						timestamp={time}
+						songID={song.data.id}
+						onReady={() => setPartitionRendered(true)}
+						onEndReached={() => {
+							setTimeout(() => {
+								onEnd();
+							}, 500);
 						}}
-					>
-						<PartitionMagic
-							songID={song.data.id}
-							onReady={() => setPartitionRendered(true)}
-							onEndReached={onEnd}
-							onError={() => {
-								console.log('error from partition magic');
-							}}
-						/>
-					</PianoCC.Provider>
-					{!partitionRendered && <LoadingComponent />}
+						onError={() => {
+							console.log('error from partition magic');
+						}}
+					/>
 				</View>
 				<PlayViewControlBar
 					score={score}
 					time={time}
 					paused={paused}
-					disabled={!midiKeyboardFound}
+					// disabled={!midiKeyboardFound}
 					song={song.data}
 					onEnd={onEnd}
 					onPause={onPause}
 					onResume={onResume}
 				/>
+				<PopupCC
+					title={translate('selectPlayMode')}
+					description={translate('selectPlayModeExplaination')}
+					isVisible={!playType}
+					setIsVisible={
+						navigation.canGoBack()
+							? (isVisible) => {
+									if (!isVisible) {
+										// If we dismiss the popup, Go to previous page
+										navigation.goBack();
+									}
+							  }
+							: undefined
+					}
+				>
+					<Row style={{ justifyContent: 'space-between' }}>
+						<ButtonBase
+							style={{}}
+							type="outlined"
+							title={translate('practiceBtn')}
+							onPress={async () => setPlayType('practice')}
+						/>
+						<ButtonBase
+							style={{}}
+							type="filled"
+							title={translate('playBtn')}
+							onPress={async () => setPlayType('normal')}
+						/>
+					</Row>
+				</PopupCC>
 			</SafeAreaView>
 			{colorScheme === 'dark' && (
 				<LinearGradient
