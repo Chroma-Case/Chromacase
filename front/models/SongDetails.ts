@@ -17,28 +17,10 @@ export const SongDetailsValidator = yup.object({
 	chordcomplexity: yup.number().required(),
 });
 
-export const SongDetailsHandler: ResponseHandler<
-	yup.InferType<typeof SongDetailsValidator>,
-	SongDetails
-> = {
-	validator: SongDetailsValidator,
-	transformer: (value) => value,
-};
+export type SongDetails = yup.InferType<typeof SongDetailsValidator>;
 
-interface SongDetails {
-	length: number;
-	rhythm: number;
-	arpeggio: number;
-	distance: number;
-	lefthand: number;
-	righthand: number;
-	twohands: number;
-	notecombo: number;
-	precision: number;
-	pedalpoint: number;
-	chordtiming: number;
-	leadhandchange: number;
-	chordcomplexity: number;
-}
+export const SongDetailsHandler: ResponseHandler<SongDetails> = {
+	validator: SongDetailsValidator,
+};
 
 export default SongDetails;

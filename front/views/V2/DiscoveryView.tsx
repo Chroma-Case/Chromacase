@@ -10,7 +10,7 @@ import GoldenRatio from '../../components/V2/GoldenRatio';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const HomeView = (props: RouteProps<{}>) => {
-	const songsQuery = useQuery(API.getSongSuggestions);
+	const songsQuery = useQuery(API.getSongSuggestions(["artist"]));
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';

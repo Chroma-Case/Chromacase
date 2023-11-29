@@ -1,5 +1,5 @@
 import { Flex, Heading, useBreakpointValue, ScrollView } from 'native-base';
-import { useQueries, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import { RouteProps, useNavigation } from '../Navigation';
 import API from '../API';
@@ -13,19 +13,7 @@ type GenreDetailsViewProps = {
 
 const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 	const genreQuery = useQuery(API.getGenre(genreId));
-	const songsQuery = useQuery(API.getSongsByGenre(genreId));
-	const artistQueries = useQueries(
-		songsQuery.data?.map((song) => song.artistId).map((artistId) => API.getArtist(artistId)) ??
-			[]
-	);
-	// Here, .artist will always be defined
-	const songWithArtist = songsQuery?.data
-		?.map((song) => ({
-			...song,
-			artist: artistQueries.find((query) => query.data?.id == song.artistId)?.data,
-		}))
-		.filter((song) => song.artist !== undefined);
-
+	const songsQuery = useQuery(API.getSongsByGenre(genreId, ["artist"]));
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isMobileView = screenSize == 'small';
 	const navigation = useNavigation();
@@ -34,7 +22,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 		navigation.navigate('Error');
 		return <></>;
 	}
-	if (!genreQuery.data || songsQuery.data === undefined || songWithArtist === undefined) {
+	if (!genreQuery.data || songsQuery.data === undefined) {
 		return <LoadingView />;
 	}
 
@@ -54,7 +42,7 @@ const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 				mt={4}
 			>
 				<CardGridCustom
-					content={songWithArtist.map((songData) => ({
+					content={songsQuery.data.map((songData) => ({
 						name: songData.name,
 						cover: songData.cover,
 						artistName: songData.artist!.name,

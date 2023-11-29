@@ -5,7 +5,7 @@ import Lesson from './models/Lesson';
 import Genre, { GenreHandler } from './models/Genre';
 import LessonHistory from './models/LessonHistory';
 import likedSong, { LikedSongHandler } from './models/LikedSong';
-import Song, { SongHandler } from './models/Song';
+import Song, { SongHandler, SongInclude } from './models/Song';
 import { SongHistoryHandler, SongHistoryItem, SongHistoryItemHandler } from './models/SongHistory';
 import User, { UserHandler } from './models/User';
 import store from './state/Store';
@@ -266,13 +266,14 @@ export default class API {
 		};
 	}
 
-	public static getAllSongs(): Query<Song[]> {
+	public static getAllSongs(include?: SongInclude[]): Query<Song[]> {
+		include ??= [];
 		return {
-			key: 'songs',
+			key: ['songs', include],
 			exec: () =>
 				API.fetch(
 					{
-						route: '/song',
+						route: `/song?include=${include!.join(',')}`,
 					},
 					{
 						handler: PlageHandler(SongHandler),
@@ -321,13 +322,15 @@ export default class API {
 	 * @param genreId the id of the genre we're aiming
 	 * @returns a promise of an array of Songs
 	 */
-	public static getSongsByGenre(genreId: number): Query<Song[]> {
+	public static getSongsByGenre(genreId: number, includes?: SongInclude[]): Query<Song[]> {
+		includes ??= [];
+
 		return {
-			key: ['genre', genreId, 'songs'],
+			key: ['genre', genreId, 'songs', includes],
 			exec: () =>
 				API.fetch(
 					{
-						route: `/song?genreId=${genreId}`,
+						route: `/song?genreId=${genreId}&includes=${includes!.join(',')}`,
 					},
 					{ handler: PlageHandler(SongHandler) }
 				).then(({ data }) => data),
@@ -594,21 +597,22 @@ export default class API {
 	 * Retrieve the authenticated user's recommendations
 	 * @returns an array of songs
 	 */
-	public static getSongSuggestions(): Query<Song[]> {
-		return API.getAllSongs();
+	public static getSongSuggestions(include?: SongInclude[]): Query<Song[]> {
+		return API.getAllSongs(include);
 	}
 
 	/**
 	 * Retrieve the authenticated user's play history
 	 * * @returns an array of songs
 	 */
-	public static getUserPlayHistory(): Query<SongHistoryItem[]> {
+	public static getUserPlayHistory(include?: SongInclude[]): Query<SongHistoryItem[]> {
+		include ??= [];
 		return {
-			key: ['history'],
+			key: ['history', include],
 			exec: () =>
 				API.fetch(
 					{
-						route: '/history',
+						route: `/history?include=${include!.join(',')}`,
 					},
 					{ handler: ListHandler(SongHistoryItemHandler) }
 				),
