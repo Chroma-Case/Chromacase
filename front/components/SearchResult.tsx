@@ -12,7 +12,7 @@ import {
 } from 'native-base';
 import { SafeAreaView } from 'react-native';
 import { SearchContext } from '../views/SearchView';
-import { useQueries, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import { translate } from '../i18n/i18n';
 import API from '../API';
 import LoadingComponent, { LoadingView } from './Loading';
@@ -26,7 +26,6 @@ import { useNavigation } from '../Navigation';
 import Artist from '../models/Artist';
 import SongRow from '../components/SongRow';
 import FavSongRow from './FavSongRow';
-import { LikedSongWithDetails } from '../models/LikedSong';
 
 const swaToSongCardProps = (song: Song) => ({
 	songId: song.id,
@@ -41,35 +40,7 @@ const HomeSearchComponent = () => {
 		API.getSearchHistory(0, 12),
 		{ enabled: true }
 	);
-	const songSuggestions = useQuery(API.getSongSuggestions);
-	const songArtistSuggestions = useQueries(
-		songSuggestions.data
-			?.filter((song) => song.artistId !== null)
-			.map(({ artistId }) => API.getArtist(artistId)) ?? []
-	);
-	const isLoadingSuggestions = useMemo(
-		() => songSuggestions.isLoading || songArtistSuggestions.some((q) => q.isLoading),
-		[songSuggestions, songArtistSuggestions]
-	);
-	const suggestionsData = useMemo(() => {
-		if (isLoadingSuggestions) {
-			return [];
-		}
-		return (
-			songSuggestions.data
-				?.map((song): [Song, Artist | undefined] => [
-					song,
-					songArtistSuggestions
-						.map((q) => q.data)
-						.filter((d) => d !== undefined)
-						.find((data) => data?.id === song.artistId),
-				])
-				// We do not need the song
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				.filter(([song, artist]) => artist !== undefined)
-				.map(([song, artist]) => ({ ...song, artist: artist! })) ?? []
-		);
-	}, [songSuggestions, songArtistSuggestions]);
+	const songSuggestions = useQuery(API.getSongSuggestions(['artist']));
 
 	return (
 		<VStack mt="5" style={{ overflow: 'hidden' }}>
@@ -94,11 +65,11 @@ const HomeSearchComponent = () => {
 			</Card>
 			<Card shadow={3} mt={5} mb={5}>
 				<Heading margin={5}>{translate('songsToGetBetter')}</Heading>
-				{isLoadingSuggestions ? (
+				{!songSuggestions.data ? (
 					<LoadingComponent />
 				) : (
 					<CardGridCustom
-						content={suggestionsData.map(swaToSongCardProps)}
+						content={songSuggestions.data.map(swaToSongCardProps)}
 						cardComponent={SongCard}
 					/>
 				)}
@@ -219,19 +190,6 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 const FavoritesComponent = () => {
 	const navigation = useNavigation();
 	const favoritesQuery = useQuery(API.getLikedSongs());
-	const songQueries = useQueries(
-		favoritesQuery.data
-			?.map((favorite) => favorite.songId)
-			.map((songId) => API.getSong(songId)) ?? []
-	);
-
-	const favSongWithDetails = favoritesQuery?.data
-		?.map((favorite) => ({
-			...favorite,
-			details: songQueries.find((query) => query.data?.id == favorite.songId)?.data,
-		}))
-		.filter((favorite) => favorite.details !== undefined)
-		.map((likedSong) => likedSong as LikedSongWithDetails);
 
 	if (favoritesQuery.isError) {
 		navigation.navigate('Error');
@@ -247,13 +205,14 @@ const FavoritesComponent = () => {
 				{translate('songsFilter')}
 			</Text>
 			<Box>
-				{favSongWithDetails?.map((songData) => (
+				{favoritesQuery.data?.map((songData) => (
 					<FavSongRow
 						key={songData.id}
-						FavSong={songData}
+						song={songData.song}
+						addedDate={songData.addedDate}
 						onPress={() => {
-							API.createSearchHistoryEntry(songData.details!.name, 'song'); //todo
-							navigation.navigate('Play', { songId: songData.details!.id });
+							API.createSearchHistoryEntry(songData.song.name, 'song'); //todo
+							navigation.navigate('Play', { songId: songData.song!.id });
 						}}
 					/>
 				))}

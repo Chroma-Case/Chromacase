@@ -6,7 +6,7 @@ import TextButton from '../components/TextButton';
 import API from '../API';
 import CardGridCustom from '../components/CardGridCustom';
 import SongCard from '../components/SongCard';
-import { useQueries, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
 import ScoreGraph from '../components/ScoreGraph';
 
@@ -29,23 +29,10 @@ type ScoreViewProps = {
 const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 	const { songId, overallScore, precision, score } = props;
 	const navigation = useNavigation();
-	const songQuery = useQuery(API.getSong(songId));
-	const artistQuery = useQuery(() => API.getArtist(songQuery.data!.artistId!), {
-		enabled: songQuery.data !== undefined,
-	});
-	const recommendations = useQuery(API.getSongSuggestions);
-	const artistRecommendations = useQueries(
-		recommendations.data
-			?.filter(({ artistId }) => artistId !== null)
-			.map((song) => API.getArtist(song.artistId)) ?? []
-	);
+	const songQuery = useQuery(API.getSong(songId, ['artist']));
+	const recommendations = useQuery(API.getSongSuggestions(['artist']));
 
-	if (
-		!recommendations.data ||
-		artistRecommendations.find(({ data }) => !data) ||
-		!songQuery.data ||
-		(songQuery.data.artistId && !artistQuery.data)
-	) {
+	if (!recommendations.data || !songQuery.data) {
 		return <LoadingView />;
 	}
 	if (songQuery.isError) {
@@ -59,7 +46,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 				<Text bold fontSize="lg">
 					{songQuery.data.name}
 				</Text>
-				<Text bold>{artistQuery.data?.name}</Text>
+				<Text bold>{songQuery.data.artist!.name}</Text>
 				<Row style={{ justifyContent: 'center', display: 'flex' }}>
 					<Card shadow={3} style={{ flex: 1 }}>
 						<Image
@@ -144,9 +131,7 @@ const ScoreView = (props: RouteProps<ScoreViewProps>) => {
 					content={recommendations.data.map((i) => ({
 						cover: i.cover,
 						name: i.name,
-						artistName:
-							artistRecommendations.find(({ data }) => data?.id == i.artistId)?.data
-								?.name ?? '',
+						artistName: i.artist!.name,
 						songId: i.id,
 					}))}
 					cardComponent={SongCard}

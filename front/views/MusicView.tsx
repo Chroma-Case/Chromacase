@@ -22,26 +22,25 @@ import { LoadingView } from '../components/Loading';
 
 export const FavoritesMusic = () => {
 	const navigation = useNavigation();
-	const playHistoryQuery = useQuery(API.getUserPlayHistory(['artist']));
+	const likedSongs = useQuery(API.getLikedSongs(['artist']));
 
 	const musics =
-		playHistoryQuery.data
-			?.map((x) => x.song)
-			.map((song: Song) => ({
-				artist: song.artist!.name,
-				song: song.name,
-				image: song.cover,
+		likedSongs.data
+			?.map((x) => ({
+				artist: x.song.artist!.name,
+				song: x.song.name,
+				image: x.song.cover,
 				level: 42,
 				lastScore: 42,
 				bestScore: 42,
-				liked: false,
+				liked: true,
 				onLike: () => {
 					console.log('onLike');
 				},
-				onPlay: () => navigation.navigate('Play', { songId: song.id }),
+				onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
 			})) ?? [];
 
-	if (playHistoryQuery.isLoading) {
+	if (likedSongs.isLoading) {
 		return <LoadingView />;
 	}
 	return (
