@@ -65,11 +65,22 @@ export class ValidationError extends Error {
 	}
 }
 
+function getBaseAPIUrl() {
+	if (Platform.OS === 'web') {
+		if (__DEV__ && process.env.EXPO_PUBLIC_API_URL) {
+			return process.env.EXPO_PUBLIC_API_URL;
+		}
+		return '/api';
+	}
+	if (process.env.EXPO_PUBLIC_API_URL) {
+		return process.env.EXPO_PUBLIC_API_URL;
+	}
+	// fallback since some mobile build seems to not have the env variable
+	return 'https://nightly.chroma.octohub.app/api';
+}
+
 export default class API {
-	public static readonly baseUrl =
-		Platform.OS === 'web' && !(__DEV__ && process.env.EXPO_PUBLIC_API_URL)
-			? '/api'
-			: process.env.EXPO_PUBLIC_API_URL!;
+	public static readonly baseUrl = getBaseAPIUrl();
 	public static async fetch(
 		params: FetchParams,
 		handle: Pick<Required<HandleParams>, 'raw'>

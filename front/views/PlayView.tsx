@@ -21,7 +21,7 @@ import { RootState } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-// import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
+import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
 import { PianoCanvasContext } from '../models/PianoGame';
@@ -260,7 +260,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
 			setTime(() => getElapsedTime()); // Countdown
-		}, 300);
+		}, 200);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
@@ -291,10 +291,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		if (navigation.getState().routes.at(-1)?.name != route.name) {
 			return;
 		}
-		if (song.data && !webSocket.current) {
-			// requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
+		if (playType && song.data && !webSocket.current) {
+			requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
 		}
-	}, [song.data]);
+	}, [song.data, playType]);
 
 	if (!song.data) {
 		return <LoadingView />;
