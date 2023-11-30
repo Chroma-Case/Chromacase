@@ -35,12 +35,16 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/passport": "^1.0.12",
     "bcryptjs": "^2.4.3",
+    "canvas": "^2.11.2",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
-    "json-logger-service": "^9.0.1",
     "class-validator": "^0.14.0",
+    "cross-blob": "^3.0.2",
+    "fs": "^0.0.1-security",
+    "jsdom": "^22.1.0",
+    "json-logger-service": "^9.0.1",
     "node-fetch": "^2.6.12",
     "nodemailer": "^6.9.5",
+    "opensheetmusicdisplay": "^1.8.4",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
@@ -81,7 +85,8 @@
     "moduleFileExtensions": [
       "js",
       "json",
-      "ts"
+      "ts",
+      "mjs"
     ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",

@@ -1,12 +1,13 @@
-import { Pressable } from 'native-base';
+import { Pressable, useTheme } from 'native-base';
 import React, { useRef } from 'react';
-import { Animated, StyleSheet, StyleProp, ViewStyle } from 'react-native';
+import { Animated, StyleProp, ViewStyle } from 'react-native';
 
 interface InteractiveBaseProps {
 	children?: React.ReactNode;
 	onPress?: () => Promise<void>;
 	isDisabled?: boolean;
 	isOutlined?: boolean;
+	focusable?: boolean;
 	style?: StyleProp<ViewStyle>;
 	styleAnimate: {
 		Default: {
@@ -47,7 +48,9 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	styleAnimate,
 	isDisabled = false,
 	isOutlined = false,
+	focusable = true,
 }) => {
+	const { colors } = useTheme();
 	const scaleAnimator = useRef(new Animated.Value(1)).current;
 	const scaleValue = scaleAnimator.interpolate({
 		inputRange: [0, 1, 2],
@@ -99,7 +102,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 1,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 1,
@@ -128,7 +131,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 2,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 2,
@@ -157,7 +160,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 1,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 1,
@@ -190,7 +193,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		Animated.parallel([
 			Animated.spring(scaleAnimator, {
 				toValue: 0,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 			Animated.timing(backgroundColorAnimator, {
 				toValue: 0,
@@ -210,13 +213,13 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 			Animated.timing(elevationAnimator, {
 				toValue: 0,
 				duration: 250,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}),
 		]).start();
 	};
 
 	const animatedStyle = {
-		backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : backgroundColorValue,
+		backgroundColor: isOutlined ? colors.coolGray[100] : backgroundColorValue,
 		borderColor: isOutlined ? backgroundColorValue : 'transparent',
 		borderWidth: 2,
 		transform: [{ scale: scaleValue }],
@@ -226,7 +229,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	};
 
 	const disableStyle = {
-		backgroundColor: isOutlined ? 'rgba(0,0,0,0.3)' : styleAnimate.Disabled.backgroundColor,
+		backgroundColor: isOutlined ? colors.coolGray[100] : styleAnimate.Disabled.backgroundColor,
 		borderColor: isOutlined ? styleAnimate.Disabled.backgroundColor : 'transparent',
 		borderWidth: 2,
 		scale: styleAnimate.Disabled.scale,
@@ -238,24 +241,17 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	return (
 		<Animated.View style={[style, isDisabled ? disableStyle : animatedStyle]}>
 			<Pressable
+				focusable={focusable}
 				disabled={isDisabled}
 				onHoverIn={handleMouseEnter}
 				onPressIn={handlePressIn}
 				onPressOut={handlePressOut}
 				onHoverOut={handleMouseLeave}
-				style={styles.container}
 			>
 				{children}
 			</Pressable>
 		</Animated.View>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		width: '100%',
-		height: '100%',
-	},
-});
 
 export default InteractiveBase;

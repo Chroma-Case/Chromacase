@@ -17,6 +17,7 @@ const CardGridCustom = <T extends Record<string, unknown>>(props: CardGridCustom
 		<VStack space={5}>
 			{heading && <Heading>{heading}</Heading>}
 			<FlatGrid
+				nestedScrollEnabled
 				maxItemsPerRow={maxItemsPerRow}
 				additionalRowStyle={style ?? { justifyContent: 'flex-start' }}
 				data={content}

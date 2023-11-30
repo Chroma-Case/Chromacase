@@ -1,10 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, Song } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { Prisma, Song } from "@prisma/client";
+import { PrismaService } from "src/prisma/prisma.service";
+import { generateSongAssets } from "src/assetsgenerator/generateImages_browserless";
 
 @Injectable()
 export class SongService {
-	constructor(private prisma: PrismaService) {}
+	// number is the song id
+	private assetCreationTasks: Map<number, Promise<void>>;
+	constructor(private prisma: PrismaService) {
+		this.assetCreationTasks = new Map();
+	}
+
+	async createAssets(mxlPath: string, songId: number): Promise<void> {
+		if (this.assetCreationTasks.has(songId)) {
+			await this.assetCreationTasks.get(songId);
+			this.assetCreationTasks.delete(songId);
+			return;
+		}
+		// mxlPath can the path to an archive to an xml file or the path to the xml file directly
+		this.assetCreationTasks.set(
+			songId,
+			generateSongAssets(songId, mxlPath, "/data/cache/songs", "svg"),
+		);
+		return await this.assetCreationTasks.get(songId);
+	}
 
 	async songByArtist(data: number): Promise<Song[]> {
 		return this.prisma.song.findMany({

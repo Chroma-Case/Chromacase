@@ -8,7 +8,7 @@ type IconButtonProps = {
 const IconButton = (props: IconButtonProps) => {
 	return (
 		<Box>
-			<Button {...props} leftIcon={props.icon} width="fit-content" rounded="sm" />
+			<Button {...props} leftIcon={props.icon} rounded="sm" />
 		</Box>
 	);
 };

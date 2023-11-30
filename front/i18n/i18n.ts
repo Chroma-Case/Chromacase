@@ -33,10 +33,12 @@ export default i18n;
  * @param textKey the key of th text to translate
  * @returns the translated text
  */
-export const translate = (key: keyof typeof en, language?: AvailableLanguages) => {
+export const translate = (key: TranslationKey, language?: AvailableLanguages) => {
 	return i18n.t(key, {
 		lng: language,
 	});
 };
+
+export type TranslationKey = keyof typeof en;
 
 export { Translate };

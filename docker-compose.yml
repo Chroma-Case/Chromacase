@@ -9,6 +9,7 @@ volumes:
 
 services:
   back:
+    #platform: linux/amd64
     build: ./back
     ports:
       - "3000:3000"

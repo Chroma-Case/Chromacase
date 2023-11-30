@@ -16,11 +16,12 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 			{({ isHovered }) => (
 				<View
 					style={{
-						width: '100%',
-						height: '100%',
+						maxWidth: '100%',
+						maxHeight: '100%',
 						borderRadius: 12,
 						overflow: 'hidden',
 						position: 'relative',
+						aspectRatio: 1,
 					}}
 				>
 					<Image
@@ -29,8 +30,8 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 						}}
 						style={{
 							aspectRatio: 1,
-							width: '100%',
-							height: '100%',
+							maxWidth: '100%',
+							maxHeight: '100%',
 							flexShrink: 1,
 						}}
 					/>

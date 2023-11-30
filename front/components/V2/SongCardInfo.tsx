@@ -1,18 +1,13 @@
 import Song from '../../models/Song';
 import React from 'react';
 import { Image, View } from 'react-native';
-import { Pressable, Text, PresenceTransition, Icon } from 'native-base';
+import { Pressable, Text, PresenceTransition, Icon, useBreakpointValue } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 
 type SongCardInfoProps = {
 	song: Song;
 	onPress: () => void;
 	onPlay: () => void;
-};
-
-const CardDims = {
-	height: 200,
-	width: 200,
 };
 
 const Scores = [
@@ -31,9 +26,16 @@ const Scores = [
 ];
 
 const SongCardInfo = (props: SongCardInfoProps) => {
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isPhone = screenSize === 'small';
 	const [isPlayHovered, setIsPlayHovered] = React.useState(false);
 	const [isHovered, setIsHovered] = React.useState(false);
 	const [isSlided, setIsSlided] = React.useState(false);
+
+	const CardDims = {
+		height: isPhone ? 160 : 200,
+		width: isPhone ? 160 : 200,
+	};
 
 	return (
 		<View

@@ -81,9 +81,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace 'build.apk'
+    namespace 'com.arthichaud.Chromacase'
     defaultConfig {
-        applicationId 'build.apk'
+        applicationId 'com.arthichaud.Chromacase'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
