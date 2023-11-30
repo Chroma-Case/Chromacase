@@ -74,12 +74,12 @@ const SigninView = () => {
 					value={formData.username.value}
 					onChangeText={(t) => {
 						let error: null | string = null;
-						validationSchemas.username
-							.validate(t)
-							.catch((e) => (error = e.message))
-							.finally(() => {
-								setFormData({ ...formData, username: { value: t, error } });
-							});
+						try {
+							validationSchemas.username.validateSync(t);
+						} catch (e: any) {
+							error = e.message;
+						}
+						setFormData({ ...formData, username: { value: t, error } });
 					}}
 					isRequired
 				/>,
@@ -93,12 +93,12 @@ const SigninView = () => {
 					value={formData.password.value}
 					onChangeText={(t) => {
 						let error: null | string = null;
-						validationSchemas.password
-							.validate(t)
-							.catch((e) => (error = e.message))
-							.finally(() => {
-								setFormData({ ...formData, password: { value: t, error } });
-							});
+						try {
+							validationSchemas.password.validateSync(t);
+						} catch (e: any) {
+							error = e.message;
+						}
+						setFormData({ ...formData, password: { value: t, error } });
 					}}
 					isRequired
 					isSecret
