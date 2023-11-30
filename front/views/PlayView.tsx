@@ -21,7 +21,7 @@ import { RootState } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
+import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
 import PartitionMagic from '../components/Play/PartitionMagic';
@@ -229,6 +229,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		};
 		inputs.forEach((input) => {
 			input.onmidimessage = (message) => {
+				console.log("onmessage");
 				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
 

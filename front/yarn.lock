@@ -20,13 +20,6 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@arthi-chaud/react-native-midi@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@arthi-chaud/react-native-midi/-/react-native-midi-0.0.6.tgz#7f17cc72799aff2c040198191dfec7308d67dc9a"
-  integrity sha512-U4+DKie+AINcWEPlKXglaB7AEOZSfjA1p6xy/M9JGZBQpgYGEwMkA6WEbfaycGeB3+17Be8jR6LclLweSBdayw==
-  dependencies:
-    event-target-shim "^6.0.2"
-
 "@babel/code-frame@7.10.4", "@babel/code-frame@~7.10.4":
   version "7.10.4"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -1990,6 +1983,13 @@
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
+
+"@motiz88/react-native-midi@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@motiz88/react-native-midi/-/react-native-midi-0.0.6.tgz#d212e9924dfa1168da82748cabe82a04437c6907"
+  integrity sha512-0cRYgTjWqjv74Gl94ruX8WBiGQBconU5j/Hy0P7NlsVTRmgnqME3cvW38JMdXb9MxYuA+7BLq0VKkE2DXswpEw==
+  dependencies:
+    event-target-shim "^6.0.2"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -5917,6 +5917,14 @@ expo-status-bar@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.6.0.tgz#e79ffdb9a84d2e0ec9a0dc7392d9ab364fefa9cf"
   integrity sha512-e//Oi2WPdomMlMDD3skE4+1ZarKCJ/suvcB4Jo/nO427niKug5oppcPNYO+csR6y3ZglGuypS+3pp/hJ+Xp6fQ==
+
+expo-system-ui@~2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/expo-system-ui/-/expo-system-ui-2.4.0.tgz#bf809172726cf661ab4f526129eb427bb5f6e4d4"
+  integrity sha512-uaBAYeQtFzyE8WVcch2V3G243xvOf7vJkLzrIJ3rJ8NA3uZRmxF0lMMe75oMrAaLVXyr1Z+ZE6UZwh7x49FuIg==
+  dependencies:
+    "@react-native/normalize-color" "^2.0.0"
+    debug "^4.3.2"
 
 expo-updates-interface@~0.10.0:
   version "0.10.1"
