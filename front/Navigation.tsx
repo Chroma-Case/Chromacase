@@ -15,7 +15,6 @@ import SettingsTab from './views/settings/SettingsView';
 import { useQuery } from './Queries';
 import API, { APIError } from './API';
 import PlayView from './views/PlayView';
-import ScoreView from './views/ScoreView';
 import { LoadingView } from './components/Loading';
 import ProfileView from './views/ProfileView';
 import useColorScheme from './hooks/colorScheme';
@@ -76,11 +75,6 @@ const protectedRoutes = () =>
 			component: GenreDetailsView,
 			options: { title: translate('genreFilter') },
 			link: '/genre/:genreId',
-		},
-		Score: {
-			component: ScoreView,
-			options: { title: translate('score'), headerLeft: null },
-			link: undefined,
 		},
 		Search: {
 			component: SearchView,

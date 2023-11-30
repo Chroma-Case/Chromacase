@@ -33,6 +33,7 @@ import PopupCC from '../components/UI/PopupCC';
 import ButtonBase from '../components/UI/ButtonBase';
 import { Clock, Cup } from 'iconsax-react-native';
 import PlayViewControlBar from '../components/Play/PlayViewControlBar';
+import ScoreModal from '../components/ScoreModal';
 
 type PlayViewProps = {
 	songId: number;
@@ -88,6 +89,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
+	const [endResult, setEndResult] = useState();
 	const songHistory = useQuery(API.getSongHistory(songId));
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
@@ -186,11 +188,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 				if (data.type == 'end') {
 					endMsgReceived = true;
 					webSocket.current?.close();
-					navigation.dispatch(
-						StackActions.replace('Score', { songId: song.data!.id, ...data })
-					);
+					setEndResult({ songId: song.data!.id, ...data });
 					return;
 				}
+				console.log(data);
 
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
@@ -333,9 +334,14 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					}}
 				>
 					<PopupCC
+						isVisible={endResult != undefined}
+					>{
+						(() => endResult ? <ScoreModal {...endResult}/> : <></>)()
+					}</PopupCC>
+					<PopupCC
 						title={translate('selectPlayMode')}
 						description={translate('selectPlayModeExplaination')}
-						isVisible={type === undefined}
+						isVisible={false}
 						setIsVisible={
 							navigation.canGoBack()
 								? (isVisible) => {
