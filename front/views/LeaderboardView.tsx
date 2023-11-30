@@ -15,12 +15,18 @@ type PodiumCardProps = {
 	userLvl: number;
 };
 
-const PodiumCardComponent = ({ offset, medalColor, userAvatarUrl, userPseudo, userLvl }: PodiumCardProps) => {
+const PodiumCardComponent = ({
+	offset,
+	medalColor,
+	userAvatarUrl,
+	userPseudo,
+	userLvl,
+}: PodiumCardProps) => {
 	return (
 		<View
 			style={{
 				display: 'flex',
-				paddingTop: 0 + offset,
+				paddingTop: offset,
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -80,10 +86,10 @@ type BoardRowProps = {
 	userAvatarUrl: string;
 	userPseudo: string;
 	userLvl: number;
-	index: number
-}
+	index: number;
+};
 
-const BoardRowComponent = ({userAvatarUrl, userPseudo, userLvl, index}: BoardRowProps) => {
+const BoardRowComponent = ({ userAvatarUrl, userPseudo, userLvl, index }: BoardRowProps) => {
 	return (
 		<View
 			style={{
@@ -112,7 +118,12 @@ const BoardRowComponent = ({userAvatarUrl, userPseudo, userLvl, index}: BoardRow
 					source={{
 						uri: userAvatarUrl,
 					}}
-					style={{ width: '100%', height: '100%', borderTopLeftRadius: 8, borderBottomLeftRadius: 8 }}
+					style={{
+						width: '100%',
+						height: '100%',
+						borderTopLeftRadius: 8,
+						borderBottomLeftRadius: 8,
+					}}
 				/>
 			</View>
 
@@ -135,7 +146,7 @@ const BoardRowComponent = ({userAvatarUrl, userPseudo, userLvl, index}: BoardRow
 					marginHorizontal: 10,
 				}}
 			>
-				{ userLvl } LVL
+				{userLvl} LVL
 			</Text>
 			<View
 				style={{
@@ -157,7 +168,7 @@ const BoardRowComponent = ({userAvatarUrl, userPseudo, userLvl, index}: BoardRow
 						textAlign: 'center',
 					}}
 				>
-					{ index + 4 }
+					{index + 4}
 				</Text>
 			</View>
 		</View>
@@ -167,6 +178,8 @@ const BoardRowComponent = ({userAvatarUrl, userPseudo, userLvl, index}: BoardRow
 const Leaderboardiew = () => {
 	const navigation = useNavigation();
 	const scoresQuery = useQuery(API.getTopTwentyPlayers());
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isPhone = screenSize === 'small';
 
 	if (scoresQuery.isError) {
 		navigation.navigate('Error');
@@ -190,46 +203,107 @@ const Leaderboardiew = () => {
 					alignSelf: 'stretch',
 				}}
 			>
-				<View /** podium view */
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'center',
-						alignItems: 'center',
-						alignSelf: 'stretch',
-						paddingBottom: 10,
-						marginBottom: 20,
-					}}
-				>
-					<PodiumCardComponent
-						medalColor="#AE84FB"
-						offset={80}
-						userAvatarUrl={scoresQuery.data?.at(2)?.data.avatar ?? "https://picsum.photos/140/140"}
-						userPseudo={scoresQuery.data?.at(2)?.name ?? "---"}
-						userLvl={scoresQuery.data?.at(2)?.data.totalScore ?? 42}
-					/>
-					<PodiumCardComponent
-						medalColor="#EAD93C"
-						offset={0}
-						userAvatarUrl={scoresQuery.data?.at(0)?.data.avatar ?? "https://picsum.photos/140/140"}
-						userPseudo={scoresQuery.data?.at(0)?.name ?? "---"}
-						userLvl={scoresQuery.data?.at(0)?.data.totalScore ?? 42}
-					/>
-					<PodiumCardComponent
-						medalColor="#5F74F7"
-						offset={60}
-						userAvatarUrl={scoresQuery.data?.at(1)?.data.avatar ?? "https://picsum.photos/140/140"}
-						userPseudo={scoresQuery.data?.at(1)?.name ?? "---"}
-						userLvl={scoresQuery.data?.at(1)?.data.totalScore ?? 42}
-					/>
-				</View>
+				{!isPhone ? (
+					<View /** podium view */
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+							alignSelf: 'stretch',
+							paddingBottom: 10,
+							marginBottom: 20,
+						}}
+					>
+						<PodiumCardComponent
+							medalColor="#AE84FB"
+							offset={80}
+							userAvatarUrl={
+								scoresQuery.data?.at(2)?.data.avatar ??
+								'https://picsum.photos/140/140'
+							}
+							userPseudo={scoresQuery.data?.at(2)?.name ?? '---'}
+							userLvl={scoresQuery.data?.at(2)?.data.totalScore ?? 42}
+						/>
+						<PodiumCardComponent
+							medalColor="#EAD93C"
+							offset={0}
+							userAvatarUrl={
+								scoresQuery.data?.at(0)?.data.avatar ??
+								'https://picsum.photos/140/140'
+							}
+							userPseudo={scoresQuery.data?.at(0)?.name ?? '---'}
+							userLvl={scoresQuery.data?.at(0)?.data.totalScore ?? 42}
+						/>
+						<PodiumCardComponent
+							medalColor="#5F74F7"
+							offset={60}
+							userAvatarUrl={
+								scoresQuery.data?.at(1)?.data.avatar ??
+								'https://picsum.photos/140/140'
+							}
+							userPseudo={scoresQuery.data?.at(1)?.name ?? '---'}
+							userLvl={scoresQuery.data?.at(1)?.data.totalScore ?? 42}
+						/>
+					</View>
+				) : (
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							justifyContent: 'center',
+							alignItems: 'center',
+							alignSelf: 'stretch',
+						}}
+					>
+						<PodiumCardComponent
+							medalColor="#AE84FB"
+							offset={80}
+							userAvatarUrl={
+								scoresQuery.data?.at(0)?.data.avatar ??
+								'https://picsum.photos/140/140'
+							}
+							userPseudo={scoresQuery.data?.at(0)?.name ?? '---'}
+							userLvl={scoresQuery.data?.at(0)?.data.totalScore ?? 42}
+						/>
+						<View
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<PodiumCardComponent
+								medalColor="#EAD93C"
+								offset={0}
+								userAvatarUrl={
+									scoresQuery.data?.at(1)?.data.avatar ??
+									'https://picsum.photos/140/140'
+								}
+								userPseudo={scoresQuery.data?.at(1)?.name ?? '---'}
+								userLvl={scoresQuery.data?.at(1)?.data.totalScore ?? 42}
+							/>
+							<PodiumCardComponent
+								medalColor="#5F74F7"
+								offset={60}
+								userAvatarUrl={
+									scoresQuery.data?.at(2)?.data.avatar ??
+									'https://picsum.photos/140/140'
+								}
+								userPseudo={scoresQuery.data?.at(2)?.name ?? '---'}
+								userLvl={scoresQuery.data?.at(2)?.data.totalScore ?? 42}
+							/>
+						</View>
+					</View>
+				)}
 				{scoresQuery.data.slice(3).map((comp: any, index: number) => (
 					<BoardRowComponent
 						index={index}
-						userAvatarUrl={comp?.avatar ?? "https://picsum.photos/50/50"}
+						userAvatarUrl={comp?.avatar ?? 'https://picsum.photos/50/50'}
 						userLvl={comp?.data.totalScore ?? 42}
-						userPseudo={comp?.name ?? "---"}
-						/>
+						userPseudo={comp?.name ?? '---'}
+					/>
 				))}
 			</View>
 		</ScrollView>
