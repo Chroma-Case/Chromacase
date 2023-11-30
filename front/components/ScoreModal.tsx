@@ -93,7 +93,10 @@ const ScoreModal = (props: ScoreModalProps) => {
 				icon={Play}
 				type="filled"
 				title={translate('menuMusic')}
-				onPress={() => navigation.goBack()}
+				onPress={() => navigation.canGoBack()
+					? navigation.goBack()
+					: navigation.navigate('HomeNew', {})
+				}
 			/>
 		</Row>
 	</Column>
