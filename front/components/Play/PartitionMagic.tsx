@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
-import { PianoCC } from '../../views/PlayView';
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { PianoNotes } from '../../state/SoundPlayerSlice';
@@ -15,8 +14,8 @@ export type ParitionMagicProps = {
 	timestamp: number;
 	songID: number;
 	onEndReached: () => void;
-	onError: (err: string) => void;
-	onReady: () => void;
+	onError?: (err: string) => void;
+	onReady?: () => void;
 };
 
 const getSVGURL = (songID: number) => {
@@ -52,7 +51,6 @@ const PartitionMagic = ({
 	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
 	const [isPartitionSvgLoaded, setIsPartitionSvgLoaded] = React.useState(false);
 	const partitionOffset = useSharedValue(0);
-	// const pianoCC = React.useContext(PianoCC);
 	const pianoSounds = React.useRef<Record<string, Audio.Sound> | null>(null);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
@@ -94,17 +92,17 @@ const PartitionMagic = ({
 	}, [data]);
 
 	React.useEffect(() => {
-		if (isError) {
+		if (onError && isError) {
 			onError('Error while loading partition');
 			return;
 		}
-	}, [isError]);
+	}, [onError, isError]);
 
 	React.useEffect(() => {
-		if (isPartitionSvgLoaded && !isLoading) {
+		if (onReady && isPartitionSvgLoaded && !isLoading) {
 			onReady();
 		}
-	}, [isPartitionSvgLoaded, isLoading]);
+	}, [onReady, isPartitionSvgLoaded, isLoading]);
 
 	React.useEffect(() => {
 		if (endPartitionReached) {

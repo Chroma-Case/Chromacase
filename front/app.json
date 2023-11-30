@@ -1,48 +1,44 @@
 {
-  "expo": {
-    "name": "Chromacase",
-    "slug": "Chromacase",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
-      "package": "com.arthichaud.Chromacase"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "dade8e5e-3e2c-49f7-98c5-cf8834c7ebb2"
-      }
-    },
-    "plugins": [
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "The app accesses your photos to let you set your personal avatar."
-        }
-      ]
-    ],
-    "owner": "arthi-chaud"
-  }
+	"expo": {
+		"name": "Chromacase",
+		"slug": "Chromacase",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/icon.png",
+		"userInterfaceStyle": "light",
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "cover",
+			"backgroundColor": "#ffffff"
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/icon.png",
+				"backgroundColor": "#ffffff"
+			},
+			"permissions": ["android.permission.RECORD_AUDIO"],
+			"package": "com.arthichaud.Chromacase"
+		},
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "dade8e5e-3e2c-49f7-98c5-cf8834c7ebb2"
+			}
+		},
+		"plugins": [
+			[
+				"expo-image-picker",
+				{
+					"photosPermission": "The app accesses your photos to let you set your personal avatar."
+				}
+			]
+		],
+		"owner": "arthi-chaud"
+	}
 }

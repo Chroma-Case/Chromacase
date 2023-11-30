@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { StackActions } from '@react-navigation/native';
-import React, { useEffect, useRef, useState, createContext } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
 import Animated, {
 	useSharedValue,
@@ -15,7 +15,7 @@ import { Text, Row, View, useToast } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
 import { useQuery } from '../Queries';
 import API from '../API';
-import LoadingComponent, { LoadingView } from '../components/Loading';
+import { LoadingView } from '../components/Loading';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
@@ -24,7 +24,6 @@ import { useStopwatch } from 'react-use-precision-timer';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
-import { PianoCanvasContext } from '../models/PianoGame';
 import PartitionMagic from '../components/Play/PartitionMagic';
 import useColorScheme from '../hooks/colorScheme';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -82,13 +81,11 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
 	const songHistory = useQuery(API.getSongHistory(songId));
-	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
 	// const fadeAnim = useRef(new Animated.Value(0)).current;
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
-	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [streak, setStreak] = useState(0);
 	const scoreMessageScale = useSharedValue(0);
@@ -177,6 +174,11 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current.onmessage = (message) => {
 			try {
 				const data = JSON.parse(message.data);
+				if (data.error) {
+					console.error('Scoro msg: ', data.error);
+					toast.show({ description: 'Scoro: ' + data.error });
+					return;
+				}
 				if (data.type == 'end') {
 					endMsgReceived = true;
 					webSocket.current?.close();
@@ -229,17 +231,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 			input.onmidimessage = (message) => {
 				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
-				if (keyIsPressed) {
-					setPressedKeys((prev) => {
-						prev.set(note, getElapsedTime());
-						return prev;
-					});
-				} else {
-					setPressedKeys((prev) => {
-						prev.delete(note);
-						return prev;
-					});
-				}
 
 				webSocket.current?.send(
 					JSON.stringify({
@@ -428,7 +419,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					<PartitionMagic
 						timestamp={time}
 						songID={song.data.id}
-						onReady={() => setPartitionRendered(true)}
 						onEndReached={() => {
 							setTimeout(() => {
 								onEnd();
@@ -443,7 +433,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					score={score}
 					time={time}
 					paused={paused}
-					// disabled={!midiKeyboardFound}
+					disabled={!midiKeyboardFound}
 					song={song.data}
 					onEnd={onEnd}
 					onPause={onPause}
