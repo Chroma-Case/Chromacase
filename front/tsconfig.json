@@ -112,6 +112,8 @@
 		"metro.config.js",
 		"jest.config.js",
 		"app.config.ts",
-		"*/*.test.tsx"
+		"*/*.test.tsx",
+		"web-build",
+		"dist"
 	]
 }

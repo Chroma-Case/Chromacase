@@ -2,6 +2,25 @@ import { useColorScheme } from 'react-native';
 import { RootState, useSelector } from '../state/Store';
 import { Box, Pressable } from 'native-base';
 
+const getBgColor = (isPressed: boolean, isHovered: boolean, colorScheme: 'light' | 'dark') => {
+	if (colorScheme === 'dark') {
+		if (isPressed) {
+			return 'gray.800';
+		}
+		if (isHovered) {
+			return 'gray.700';
+		}
+		return undefined;
+	}
+	if (isPressed) {
+		return 'coolGray.200';
+	}
+	if (isHovered) {
+		return 'coolGray.100';
+	}
+	return undefined;
+};
+
 const RowCustom = (props: Parameters<typeof Box>[0] & { onPress?: () => void }) => {
 	const settings = useSelector((state: RootState) => state.settings.local);
 	const systemColorMode = useColorScheme();
@@ -14,15 +33,11 @@ const RowCustom = (props: Parameters<typeof Box>[0] & { onPress?: () => void }) 
 					{...props}
 					py={3}
 					my={1}
-					bg={
-						(colorScheme == 'system' ? systemColorMode : colorScheme) == 'dark'
-							? isHovered || isPressed
-								? 'gray.800'
-								: undefined
-							: isHovered || isPressed
-							? 'coolGray.200'
-							: undefined
-					}
+					bg={getBgColor(
+						isPressed,
+						isHovered,
+						(colorScheme === 'system' ? systemColorMode : colorScheme) ?? 'light'
+					)}
 				>
 					{props.children}
 				</Box>

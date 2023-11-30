@@ -13,7 +13,7 @@ const SongCard = (props: SongCardProps) => {
 	const { cover, name, artistName, songId } = props;
 	const navigation = useNavigation();
 	return (
-		<Card shadow={3} onPress={() => navigation.navigate('Song', { songId })}>
+		<Card shadow={3} onPress={() => navigation.navigate('Play', { songId })}>
 			<VStack m={1.5} space={3}>
 				<Image
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: CardBorderRadius }}

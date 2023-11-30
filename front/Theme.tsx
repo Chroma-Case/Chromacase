@@ -4,9 +4,39 @@ import { useEffect } from 'react';
 
 const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	const colorScheme = useColorScheme();
+	const lightGlassmorphism = {
+		50: 'rgba(255,255,255,0.9)',
+		100: 'rgba(255,255,255,0.1)',
+		200: 'rgba(255,255,255,0.2)',
+		300: 'rgba(255,255,255,0.3)',
+		400: 'rgba(255,255,255,0.4)',
+		500: 'rgba(255,255,255,0.5)',
+		600: 'rgba(255,255,255,0.6)',
+		700: 'rgba(255,255,255,0.7)',
+		800: 'rgba(255,255,255,0.8)',
+		900: 'rgba(255,255,255,0.9)',
+		1000: 'rgba(255,255,255,1)',
+	};
+	const darkGlassmorphism = {
+		50: 'rgba(16,16,20,0.9)',
+		100: 'rgba(16,16,20,0.1)',
+		200: 'rgba(16,16,20,0.2)',
+		300: 'rgba(16,16,20,0.3)',
+		400: 'rgba(16,16,20,0.4)',
+		500: 'rgba(16,16,20,0.5)',
+		600: 'rgba(16,16,20,0.6)',
+		700: 'rgba(16,16,20,0.7)',
+		800: 'rgba(16,16,20,0.8)',
+		900: 'rgba(16,16,20,0.9)',
+		1000: 'rgba(16,16,20,1)',
+	};
+
+	const glassmorphism = colorScheme === 'light' ? lightGlassmorphism : darkGlassmorphism;
+	const text = colorScheme === 'light' ? darkGlassmorphism : lightGlassmorphism;
 
 	return (
 		<NativeBaseProvider
+			isSSR={false}
 			theme={extendTheme({
 				config: {
 					useSystemColorMode: false,
@@ -18,6 +48,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 					mono: 'Lexend',
 				},
 				colors: {
+					text: text,
 					primary: {
 						50: '#eff1fe',
 						100: '#e7eafe',
@@ -102,6 +133,7 @@ const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 						800: '#6b2124',
 						900: '#531a1c',
 					},
+					coolGray: glassmorphism,
 				},
 				components: {
 					Button: {

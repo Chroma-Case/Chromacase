@@ -11,6 +11,7 @@ import { Filter } from '../components/SearchBar';
 import { ScrollView } from 'native-base';
 import { RouteProps } from '../Navigation';
 import LikedSong from '../models/LikedSong';
+import ScaffoldCC from '../components/UI/ScaffoldCC';
 
 interface SearchContextType {
 	filter: 'artist' | 'song' | 'genre' | 'all' | 'favorites';
@@ -81,29 +82,31 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 	};
 
 	return (
-		<ScrollView>
-			<SafeAreaView>
-				<SearchContext.Provider
-					value={{
-						filter,
-						stringQuery,
-						songData,
-						artistData,
-						genreData,
-						favoriteData,
-						isLoadingSong,
-						isLoadingArtist,
-						isLoadingGenre,
-						isLoadingFavorite,
-						updateFilter,
-						updateStringQuery,
-					}}
-				>
-					<SearchBar />
-					<SearchResultComponent />
-				</SearchContext.Provider>
-			</SafeAreaView>
-		</ScrollView>
+		<ScaffoldCC routeName={props.route.name}>
+			<ScrollView>
+				<SafeAreaView>
+					<SearchContext.Provider
+						value={{
+							filter,
+							stringQuery,
+							songData,
+							artistData,
+							genreData,
+							favoriteData,
+							isLoadingSong,
+							isLoadingArtist,
+							isLoadingGenre,
+							isLoadingFavorite,
+							updateFilter,
+							updateStringQuery,
+						}}
+					>
+						<SearchBar />
+						<SearchResultComponent />
+					</SearchContext.Provider>
+				</SafeAreaView>
+			</ScrollView>
+		</ScaffoldCC>
 	);
 };
 

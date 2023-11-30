@@ -19,7 +19,9 @@
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/icon.png",
 				"backgroundColor": "#ffffff"
-			}
+			},
+			"permissions": ["android.permission.RECORD_AUDIO"],
+			"package": "com.arthichaud.Chromacase"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"

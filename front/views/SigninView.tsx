@@ -61,14 +61,15 @@ const SigninView = () => {
 
 	return (
 		<ScaffoldAuth
-			title="Bienvenue !"
-			description="Continuez avec Google ou entrez vos coordonnées."
+			title={translate('signinPageTitle')}
+			description={translate('signinPageParagraph')}
 			form={[
 				<TextFormField
+					style={{ width: '100%', flex: 1 }}
 					key={'signin-form-1'}
 					error={formData.username.error}
 					icon={User}
-					placeholder="Username"
+					placeholder={translate('formPlaceholderUsername')}
 					autoComplete="username"
 					value={formData.username.value}
 					onChangeText={(t) => {
@@ -83,10 +84,11 @@ const SigninView = () => {
 					isRequired
 				/>,
 				<TextFormField
+					style={{ width: '100%', flex: 1 }}
 					key={'signin-form-2'}
 					error={formData.password.error}
 					icon={Lock1}
-					placeholder="Password"
+					placeholder={translate('formPlaceholderPassword')}
 					autoComplete="password"
 					value={formData.password.value}
 					onChangeText={(t) => {
@@ -99,15 +101,18 @@ const SigninView = () => {
 							});
 					}}
 					isRequired
+					isSecret
 				/>,
-				<LinkBase key={'signin-link'} onPress={() => navigation.navigate('ForgotPassword')}>
-					{translate('forgottenPassword')}
-				</LinkBase>,
+				<LinkBase
+					key={'signin-link'}
+					text={translate('forgottenPassword')}
+					onPress={() => navigation.navigate('ForgotPassword')}
+				/>,
 			]}
 			submitButton={
 				<ButtonBase
 					style={{ width: '100%' }}
-					title="Signin"
+					title={translate('signInBtn')}
 					isDisabled={
 						formData.password.error !== null ||
 						formData.username.error !== null ||
@@ -132,8 +137,8 @@ const SigninView = () => {
 				/>
 			}
 			link={{
-				text: 'Inscrivez-vous gratuitement',
-				description: "Vous n'avez pas de compte ? ",
+				label: translate('signinLinkLabel') + ' ',
+				text: translate('signinLinkText'),
 				onPress: () => navigation.navigate('Signup'),
 			}}
 		/>

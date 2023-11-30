@@ -140,7 +140,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 							}
 							onPress={() => {
 								API.createSearchHistoryEntry(comp.name, 'song');
-								navigation.navigate('Song', { songId: comp.id });
+								navigation.navigate('Play', { songId: comp.id });
 							}}
 						/>
 					))
@@ -253,7 +253,7 @@ const FavoritesComponent = () => {
 						FavSong={songData}
 						onPress={() => {
 							API.createSearchHistoryEntry(songData.details!.name, 'song'); //todo
-							navigation.navigate('Song', { songId: songData.details!.id }); //todo
+							navigation.navigate('Play', { songId: songData.details!.id });
 						}}
 					/>
 				))}

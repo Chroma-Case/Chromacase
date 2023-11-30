@@ -18,7 +18,7 @@ const GenreCard = (props: GenreCardProps) => {
 		<Card shadow={3} onPress={props.onPress}>
 			<VStack m={1.5} space={3} alignItems="center">
 				<Box
-					bg={theme.colors.primary[400]}
+					bg={theme.colors.primary[300]}
 					w={20}
 					h={20}
 					borderRadius="full"

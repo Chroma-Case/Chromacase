@@ -1,42 +1,41 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { StackActions } from '@react-navigation/native';
-import React, { useEffect, useRef, useState, createContext, useReducer } from 'react';
-import { SafeAreaView, Platform, Animated } from 'react-native';
+import React, { useEffect, useRef, useState, createContext } from 'react';
+import { SafeAreaView, Platform } from 'react-native';
+import Animated, {
+	useSharedValue,
+	withTiming,
+	Easing,
+	useAnimatedStyle,
+	withSequence,
+	withDelay,
+} from 'react-native-reanimated';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import {
-	Box,
-	Center,
-	Column,
-	Progress,
-	Text,
-	Row,
-	View,
-	useToast,
-	Icon,
-	HStack,
-} from 'native-base';
-import IconButton from '../components/IconButton';
-import { Ionicons } from '@expo/vector-icons';
+import { Text, Row, View, useToast } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
-import { transformQuery, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import API from '../API';
 import LoadingComponent, { LoadingView } from '../components/Loading';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import PartitionCoord from '../components/PartitionCoord';
-import TextButton from '../components/TextButton';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
-import { PianoCanvasContext, PianoCanvasMsg, NoteTiming } from '../models/PianoGame';
-import { Metronome } from '../components/Metronome';
+import { PianoCanvasContext } from '../models/PianoGame';
+import PartitionMagic from '../components/Play/PartitionMagic';
+import useColorScheme from '../hooks/colorScheme';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme, useBreakpointValue } from 'native-base';
+import PopupCC from '../components/UI/PopupCC';
+import ButtonBase from '../components/UI/ButtonBase';
+import { Clock, Cup } from 'iconsax-react-native';
+import PlayViewControlBar from '../components/Play/PlayViewControlBar';
 
 type PlayViewProps = {
 	songId: number;
-	type: 'practice' | 'normal';
 };
 
 type ScoreMessage = {
@@ -76,35 +75,40 @@ export const PianoCC = createContext<PianoCanvasContext>({
 	messages: [],
 });
 
-const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
+const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
+	const [type, setType] = useState<'practice' | 'normal'>();
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isPhone = screenSize === 'small';
 	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
 	const toast = useToast();
 	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
-	const bpm = useRef<number>(60);
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
+	const songHistory = useQuery(API.getSongHistory(songId));
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
-	const fadeAnim = useRef(new Animated.Value(0)).current;
-	const musixml = useQuery(
-		transformQuery(API.getSongMusicXML(songId), (data) => new TextDecoder().decode(data)),
-		{ staleTime: Infinity }
-	);
+	// const fadeAnim = useRef(new Animated.Value(0)).current;
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
-	const [pianoMsgs, setPianoMsgs] = useReducer(
-		(state: PianoCanvasMsg[], action: PianoCanvasMsg) => {
-			state.push(action);
-			return state;
-		},
-		[]
-	);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [streak, setStreak] = useState(0);
+	const scoreMessageScale = useSharedValue(0);
+	// this style should bounce in on enter and fade away
+	const scoreMsgStyle = useAnimatedStyle(() => {
+		return {
+			transform: [{ scale: scoreMessageScale.value }],
+		};
+	});
+	const colorScheme = useColorScheme();
+	const { colors } = useTheme();
+	const textColor = colors.text;
+	const statColor = colors.lightText;
 
 	const onPause = () => {
 		stopwatch.pause();
@@ -136,7 +140,7 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
 			console.warn('onEnd: Websocket not open');
-			navigation.dispatch(StackActions.replace('Home'));
+			navigation.dispatch(StackActions.replace('Home', {}));
 			return;
 		}
 		webSocket.current?.send(
@@ -189,16 +193,8 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 					return;
 				}
 
-				const currentStreak = data.info.current_streak;
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
-
-				if (currentStreak !== undefined && points !== undefined) {
-					setPianoMsgs({
-						type: 'scoreInfo',
-						data: { streak: currentStreak, score: points },
-					});
-				}
 
 				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
@@ -207,45 +203,25 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 
 				if (data.type == 'miss') {
 					formattedMessage = translate('missed');
-					setPianoMsgs({
-						type: 'noteTiming',
-						data: NoteTiming.Missed,
-					});
-					messageColor = 'black';
+					messageColor = 'white';
 				} else if (data.type == 'timing' || data.type == 'duration') {
 					formattedMessage = translate(data[data.type]);
 					switch (data[data.type]) {
 						case 'perfect':
 							messageColor = 'green';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Perfect,
-							});
 							break;
 						case 'great':
 							messageColor = 'blue';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Great,
-							});
 							break;
 						case 'short':
 						case 'long':
 						case 'good':
 							messageColor = 'lightBlue';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Good,
-							});
 							break;
 						case 'too short':
 						case 'too long':
 						case 'wrong':
 							messageColor = 'trueGray';
-							setPianoMsgs({
-								type: 'noteTiming',
-								data: NoteTiming.Wrong,
-							});
 							break;
 						default:
 							break;
@@ -301,12 +277,19 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 	}, []);
 	useEffect(() => {
 		if (lastScoreMessage) {
-			fadeAnim.setValue(1);
-			Animated.timing(fadeAnim, {
-				toValue: 0,
-				duration: 3000,
-				useNativeDriver: true,
-			}).start();
+			scoreMessageScale.value = withSequence(
+				withTiming(1, {
+					duration: 400,
+					easing: Easing.elastic(3),
+				}),
+				withDelay(
+					700,
+					withTiming(0, {
+						duration: 300,
+						easing: Easing.out(Easing.cubic),
+					})
+				)
+			);
 		}
 	}, [lastScoreMessage]);
 	useEffect(() => {
@@ -320,120 +303,206 @@ const PlayView = ({ songId, type, route }: RouteProps<PlayViewProps>) => {
 		}
 	}, [song.data, partitionRendered]);
 
-	if (!song.data || !musixml.data) {
+	if (!song.data) {
 		return <LoadingView />;
 	}
 	return (
-		<SafeAreaView style={{ flexGrow: 1, flexDirection: 'column' }}>
-			<HStack
-				width="100%"
-				justifyContent="center"
-				p={3}
-				style={{ position: 'absolute', top: 1 }}
-			>
-				<Animated.View style={{ opacity: fadeAnim }}>
-					<TextButton
-						disabled
-						label={lastScoreMessage?.content ?? ''}
-						colorScheme={lastScoreMessage?.color}
-						rounded="sm"
-					/>
-				</Animated.View>
-			</HStack>
-			<View style={{ flexGrow: 1, justifyContent: 'center' }}>
-				<PianoCC.Provider
-					value={{
-						pressedKeys: pressedKeys,
-						timestamp: time,
-						messages: pianoMsgs,
-					}}
-				>
-					<PartitionCoord
-						file={musixml.data}
-						bpmRef={bpm}
-						onEndReached={onEnd}
-						onPause={onPause}
-						onResume={onResume}
-						onPartitionReady={() => setPartitionRendered(true)}
-					/>
-				</PianoCC.Provider>
-				{!partitionRendered && <LoadingComponent />}
-			</View>
-
-			<Metronome paused={paused} bpm={bpm.current} />
-
-			<Box
-				shadow={4}
+		<View style={{ display: 'flex', flex: 1, backgroundColor: '#cdd4fd' }}>
+			<SafeAreaView
 				style={{
-					height: '12%',
-					width: '100%',
-					borderWidth: 0.5,
-					margin: 5,
-					display: !partitionRendered ? 'none' : undefined,
+					flexGrow: 1,
+					flexDirection: 'column',
+					alignItems: 'stretch',
+					padding: isPhone ? 7 : 20,
+					gap: isPhone ? 7 : 20,
+					position: 'relative',
 				}}
 			>
-				<Row justifyContent="space-between" style={{ flexGrow: 1, alignItems: 'center' }}>
-					<Column
-						space={2}
-						style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+				<View
+					style={{
+						position: 'absolute',
+						top: 10,
+						right: 10,
+						display: 'flex',
+						flexDirection: 'row',
+						gap: 20,
+						borderRadius: 12,
+						backgroundColor: 'rgba(16, 16, 20, 0.7)',
+						padding: 10,
+						paddingHorizontal: 20,
+						zIndex: 100,
+					}}
+				>
+					<PopupCC
+						title={translate('selectPlayMode')}
+						description={translate('selectPlayModeExplaination')}
+						isVisible={type === undefined}
+						setIsVisible={
+							navigation.canGoBack()
+								? (isVisible) => {
+										if (!isVisible) {
+											// If we dismiss the popup, Go to previous page
+											navigation.goBack();
+										}
+								  }
+								: undefined
+						}
 					>
-						<Text style={{ fontWeight: 'bold' }}>Score: {score}%</Text>
-						<Progress value={score} style={{ width: '90%' }} />
-					</Column>
-					<Center style={{ flex: 1, alignItems: 'center' }}>
-						<Text style={{ fontWeight: '700' }}>{song.data.name}</Text>
-					</Center>
-					<Row
+						<Row style={{ justifyContent: 'space-between' }}>
+							<ButtonBase
+								style={{}}
+								type="outlined"
+								title={translate('practiceBtn')}
+								onPress={async () => setType('practice')}
+							/>
+							<ButtonBase
+								style={{}}
+								type="filled"
+								title={translate('playBtn')}
+								onPress={async () => setType('normal')}
+							/>
+						</Row>
+					</PopupCC>
+					{(
+						[
+							[
+								'lastScore',
+								songHistory.data?.best ?? 0,
+								() => <Clock color={statColor} />,
+							] as const,
+							[
+								'bestScore',
+								songHistory.data?.history.at(0)?.score ?? 0,
+								() => <Cup color={statColor} />,
+							],
+						] as const
+					).map(([label, value, icon]) => (
+						<View
+							key={label}
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Text color={statColor} fontSize={12}>
+								<Translate translationKey={label} />
+							</Text>
+							<View
+								style={{
+									display: 'flex',
+									flexDirection: 'row',
+									gap: 5,
+								}}
+							>
+								{icon()}
+								<Text color={statColor} fontSize={12} bold>
+									{value}
+								</Text>
+							</View>
+						</View>
+					))}
+				</View>
+				<View
+					style={{
+						top: '5%',
+						left: 0,
+						zIndex: 100,
+						width: '100%',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'center',
+						gap: 3,
+						position: 'absolute',
+					}}
+				>
+					<View
 						style={{
-							flex: 1,
-							height: '100%',
-							justifyContent: 'space-evenly',
-							alignItems: 'center',
+							backgroundColor: 'rgba(16, 16, 20, 0.8)',
+							paddingHorizontal: 20,
+							paddingVertical: 5,
+							borderRadius: 12,
 						}}
 					>
-						{midiKeyboardFound && (
-							<>
-								<IconButton
-									size="sm"
-									variant="solid"
-									icon={<Icon as={Ionicons} name={paused ? 'play' : 'pause'} />}
-									onPress={() => {
-										if (paused) {
-											onResume();
-										} else {
-											onPause();
-										}
-									}}
-								/>
-								<Text>
-									{time < 0
-										? paused
-											? '0:00'
-											: Math.floor((time % 60000) / 1000)
-													.toFixed(0)
-													.toString()
-										: `${Math.floor(time / 60000)}:${Math.floor(
-												(time % 60000) / 1000
-										  )
-												.toFixed(0)
-												.toString()
-												.padStart(2, '0')}`}
-								</Text>
-								<IconButton
-									size="sm"
-									colorScheme="coolGray"
-									variant="solid"
-									icon={<Icon as={Ionicons} name="stop" />}
-									onPress={() => {
-										onEnd();
-									}}
-								/>
-							</>
-						)}
-					</Row>
-				</Row>
-			</Box>
-		</SafeAreaView>
+						<Text color={textColor[900]} fontSize={24}>
+							{score}
+						</Text>
+					</View>
+					<Animated.View style={[scoreMsgStyle]}>
+						<View
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								gap: 7,
+								justifyContent: 'center',
+								alignItems: 'center',
+								backgroundColor: 'rgba(16, 16, 20, 0.8)',
+								paddingHorizontal: 20,
+								paddingVertical: 5,
+								borderRadius: 12,
+							}}
+						>
+							<Text color={textColor[900]} fontSize={20}>
+								{lastScoreMessage?.content}
+							</Text>
+							<Text color={textColor[900]} fontSize={15} bold>
+								{streak > 0 && `x${streak}`}
+							</Text>
+						</View>
+					</Animated.View>
+				</View>
+				<View
+					style={{
+						flexGrow: 1,
+						justifyContent: 'center',
+						borderRadius: 10,
+						overflow: 'hidden',
+						backgroundColor: 'white',
+					}}
+				>
+					<PianoCC.Provider
+						value={{
+							pressedKeys: pressedKeys,
+							timestamp: time,
+							messages: [],
+						}}
+					>
+						<PartitionMagic
+							songID={song.data.id}
+							onReady={() => setPartitionRendered(true)}
+							onEndReached={onEnd}
+							onError={() => {
+								console.log('error from partition magic');
+							}}
+						/>
+					</PianoCC.Provider>
+					{!partitionRendered && <LoadingComponent />}
+				</View>
+				<PlayViewControlBar
+					score={score}
+					time={time}
+					paused={paused}
+					disabled={!midiKeyboardFound}
+					song={song.data}
+					onEnd={onEnd}
+					onPause={onPause}
+					onResume={onResume}
+				/>
+			</SafeAreaView>
+			{colorScheme === 'dark' && (
+				<LinearGradient
+					colors={['#101014', '#6075F9']}
+					style={{
+						width: '100%',
+						height: '100%',
+						position: 'absolute',
+						zIndex: -2,
+					}}
+				/>
+			)}
+		</View>
 	);
 };
 

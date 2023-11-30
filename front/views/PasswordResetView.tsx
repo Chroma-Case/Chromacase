@@ -17,7 +17,7 @@ const PasswordResetView = () => {
 					password,
 				},
 			});
-			navigation.navigate('Home');
+			navigation.navigate('Home', {});
 			return 'password succesfully reset';
 		} catch {
 			return 'password reset failed';
