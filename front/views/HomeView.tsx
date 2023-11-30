@@ -87,7 +87,7 @@ const HomeView = (props: RouteProps<{}>) => {
 							translate={{ translationKey: 'leaderboardTitle' }}
 							colorScheme="primary"
 							size="sm"
-							onPress={() => navigation.navigate('Leaderboard')}
+							onPress={() => navigation.navigate('Leaderboard', {})}
 						/>
 						<TextButton
 							label={'V2'}
