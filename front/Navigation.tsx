@@ -10,7 +10,7 @@ import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/
 import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
 import { Translate, translate } from './i18n/i18n';
-import SearchView from './views/SearchView';
+import SearchView from './views/V2/SearchView';
 import SettingsTab from './views/settings/SettingsView';
 import { useQuery } from './Queries';
 import API, { APIError } from './API';

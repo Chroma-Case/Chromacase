@@ -384,6 +384,20 @@ export default class API {
 		};
 	}
 
+
+	public static getGenres(): Query<Genre[]> {
+		return {
+			key: ['genres'],
+			exec: () =>
+				API.fetch(
+					{
+						route: '/genre',
+					},
+					{ handler: PlageHandler(GenreHandler) }
+				).then(({ data }) => data),
+		}
+	}
+
 	/**
 	 * Retrive a song's musicXML partition
 	 * @param songId the id to find the song
@@ -415,6 +429,19 @@ export default class API {
 					{ handler: ArtistHandler }
 				),
 		};
+	}
+
+	public static getArtists(): Query<Artist[]> {
+		return {
+			key: ['artists'],
+			exec: () => 
+				API.fetch(
+					{
+						route: `/artist`,
+					},
+					{ handler: PlageHandler(ArtistHandler) }
+				).then(({ data }) => data)
+		}
 	}
 
 	/**
