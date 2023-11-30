@@ -40,7 +40,13 @@ const getCursorToPlay = (
 	}
 };
 
-const PartitionMagic = ({ timestamp, songID, onEndReached, onError, onReady }: ParitionMagicProps) => {
+const PartitionMagic = ({
+	timestamp,
+	songID,
+	onEndReached,
+	onError,
+	onReady,
+}: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const currentCurIdx = React.useRef(-1);
 	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
@@ -65,24 +71,24 @@ const PartitionMagic = ({ timestamp, songID, onEndReached, onError, onReady }: P
 		setEndPartitionReached(true);
 	}
 
-	// React.useEffect(() => {
-	// 	if (!pianoSounds.current) {
-	// 		Promise.all(
-	// 			Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
-	// 				Audio.Sound.createAsync(noteResource, {
-	// 					volume: 1,
-	// 					progressUpdateIntervalMillis: 100,
-	// 				}).then((sound) => [midiNumber, sound.sound] as const)
-	// 			)
-	// 		).then(
-	// 			(res) =>
-	// 				(pianoSounds.current = res.reduce(
-	// 					(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
-	// 					{}
-	// 				))
-	// 		);
-	// 	}
-	// }, []);
+	React.useEffect(() => {
+		if (!pianoSounds.current) {
+			Promise.all(
+				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
+					Audio.Sound.createAsync(noteResource, {
+						volume: 1,
+						progressUpdateIntervalMillis: 100,
+					}).then((sound) => [midiNumber, sound.sound] as const)
+				)
+			).then((res) => {
+				pianoSounds.current = res.reduce(
+					(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
+					{}
+				);
+				console.log('sound loaded');
+			});
+		}
+	}, []);
 	const partitionDims = React.useMemo<[number, number]>(() => {
 		return [data?.pageWidth ?? 0, data?.pageHeight ?? 1];
 	}, [data]);
