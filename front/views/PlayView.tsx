@@ -229,7 +229,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		};
 		inputs.forEach((input) => {
 			input.onmidimessage = (message) => {
-				console.log("onmessage");
+				console.log('onmessage');
 				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
 
