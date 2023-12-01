@@ -90,7 +90,7 @@ const protectedRoutes = () =>
 		},
 		Leaderboard: {
 			component: Leaderboardiew,
-			options: { title: translate('leaderboardTitle') },
+			options: { title: translate('leaderboardTitle'), headerShown: false },
 			link: '/leaderboard',
 		},
 		Error: {

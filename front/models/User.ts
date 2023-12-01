@@ -18,6 +18,7 @@ export const UserValidator = yup
 		googleID: yup.string().required().nullable(),
 		isGuest: yup.boolean().required(),
 		partyPlayed: yup.number().required(),
+		totalScore: yup.number().required(),
 	})
 	.concat(ModelValidator);
 
@@ -30,6 +31,7 @@ export const UserHandler: ResponseHandler<yup.InferType<typeof UserValidator>, U
 		premium: false,
 		data: {
 			gamesPlayed: value.partyPlayed as number,
+			totalScore: value.totalScore as number,
 			xp: 0,
 			createdAt: new Date('2023-04-09T00:00:00.000Z'),
 			avatar: `${API.baseUrl}/users/${value.id}/picture`,
@@ -51,7 +53,7 @@ interface User extends Model {
 interface UserData {
 	gamesPlayed: number;
 	xp: number;
-    totalScore: number;
+	totalScore: number;
 	avatar: string;
 	createdAt: Date;
 }
