@@ -1,7 +1,7 @@
-import React from "react";
-import "react-native";
+import React from 'react';
+import 'react-native';
 
-declare module "react-native" {
+declare module 'react-native' {
 	interface PressableStateCallbackType {
 		hovered?: boolean;
 		focused?: boolean;
@@ -16,7 +16,7 @@ declare module "react-native" {
 	interface TextProps {
 		href?: string;
 		hrefAttrs?: {
-			rel?: "noreferrer";
+			rel?: 'noreferrer';
 			target?: string;
 		};
 	}
@@ -24,8 +24,8 @@ declare module "react-native" {
 		dataSet?: Record<string, string>;
 		href?: string;
 		hrefAttrs?: {
-			rel: "noreferrer";
-			target?: "_blank";
+			rel: 'noreferrer';
+			target?: '_blank';
 		};
 		onClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 	}
