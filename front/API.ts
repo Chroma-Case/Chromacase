@@ -384,7 +384,6 @@ export default class API {
 		};
 	}
 
-
 	public static getGenres(): Query<Genre[]> {
 		return {
 			key: ['genres'],
@@ -395,7 +394,7 @@ export default class API {
 					},
 					{ handler: PlageHandler(GenreHandler) }
 				).then(({ data }) => data),
-		}
+		};
 	}
 
 	/**
@@ -434,14 +433,14 @@ export default class API {
 	public static getArtists(): Query<Artist[]> {
 		return {
 			key: ['artists'],
-			exec: () => 
+			exec: () =>
 				API.fetch(
 					{
 						route: `/artist`,
 					},
 					{ handler: PlageHandler(ArtistHandler) }
-				).then(({ data }) => data)
-		}
+				).then(({ data }) => data),
+		};
 	}
 
 	/**
