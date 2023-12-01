@@ -18,7 +18,7 @@ export const UserValidator = yup
 		googleID: yup.string().required().nullable(),
 		isGuest: yup.boolean().required(),
 		partyPlayed: yup.number().required(),
-		totalScore: yup.number().required().nullable(),
+		totalScore: yup.number().required(),
 	})
 	.concat(ModelValidator);
 
