@@ -6,6 +6,7 @@ import { LoadingView } from '../components/Loading';
 import { useNavigation, RouteProps } from '../Navigation';
 import { MedalStar } from 'iconsax-react-native';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
+import User from '../models/User';
 
 type PodiumCardProps = {
 	offset: number;
@@ -175,7 +176,7 @@ const BoardRowComponent = ({ userAvatarUrl, userPseudo, userLvl, index }: BoardR
 	);
 };
 
-const Leaderboardiew = (props: RouteProps<{}>) => {
+const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 	const navigation = useNavigation();
 	const scoresQuery = useQuery(API.getTopTwentyPlayers());
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
@@ -302,10 +303,11 @@ const Leaderboardiew = (props: RouteProps<{}>) => {
 							</View>
 						</View>
 					)}
-					{scoresQuery.data.slice(3).map((comp: any, index: number) => (
+					{scoresQuery.data.slice(3).map((comp: User, index: number) => (
 						<BoardRowComponent
+							key={index}
 							index={index}
-							userAvatarUrl={comp?.avatar ?? 'https://picsum.photos/50/50'}
+							userAvatarUrl={comp?.data.avatar ?? 'https://picsum.photos/50/50'}
 							userLvl={comp?.data.totalScore ?? 42}
 							userPseudo={comp?.name ?? '---'}
 						/>
