@@ -6,6 +6,10 @@ import SearchBarComponent from "../../components/V2/SearchBar";
 
 // return to search bar auto completion thing
 
+export class SearchQueryObject {
+
+}
+
 const SearchView = () => {
 	return (
 		<View style={{ display: 'flex', flexDirection: 'column', padding: 3 }} >
