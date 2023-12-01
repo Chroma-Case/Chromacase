@@ -4,6 +4,8 @@ Documentation       Tests of the /auth route.
 
 Resource            ../rest.resource
 Resource            ./auth.resource
+Test Setup          ApiKey
+
 
 
 *** Test Cases ***
