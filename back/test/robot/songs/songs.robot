@@ -4,6 +4,8 @@ Documentation       Tests of the /song route.
 
 Resource            ../rest.resource
 Resource            ../auth/auth.resource
+Resource            ../auth/auth.resource
+Test Setup          ApiKey
 
 
 *** Test Cases ***

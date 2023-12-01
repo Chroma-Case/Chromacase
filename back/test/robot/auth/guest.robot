@@ -66,7 +66,7 @@ GuestToNormal
     Integer    response status    200
     Boolean    response body isGuest    true
 
-    ${res}=    PUT    /auth/me    { "username": "toto", "password": "toto", "email": "a@b.c"}
+    ${res}=    PUT    /auth/me    { "username": "toto", "password": "toto", "email": "awdaw@b.c"}
     Output
     Integer    response status    200
     String    response body username    "toto"
