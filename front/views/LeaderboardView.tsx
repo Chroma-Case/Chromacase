@@ -131,7 +131,7 @@ const BoardRowComponent = ({ userAvatarUrl, userPseudo, userLvl, index }: BoardR
 				style={{
 					fontSize: 16,
 					fontStyle: 'normal',
-					flex: '1 1 0',
+					flex: 1,
 					marginHorizontal: 10,
 					fontWeight: '500',
 				}}
