@@ -7,6 +7,7 @@ import { useNavigation, RouteProps } from '../Navigation';
 import { MedalStar } from 'iconsax-react-native';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 import User from '../models/User';
+import { translate } from '../i18n/i18n';
 
 type PodiumCardProps = {
 	offset: number;
@@ -204,7 +205,7 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 						marginBottom: 16,
 					}}
 				>
-					Voici les meilleurs joueurs
+					{translate('leaderBoardHeading')}
 				</Text>
 				<Text
 					style={{
@@ -212,8 +213,7 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 						fontWeight: '500',
 					}}
 				>
-					Les joueurs présentant les meilleurs scores, grâce à leur précision
-					exceptionnelle, sont mis en lumière ici.
+					{translate('leaderBoardHeadingFull')}
 				</Text>
 				<View
 					style={{
