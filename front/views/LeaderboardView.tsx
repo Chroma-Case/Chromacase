@@ -197,21 +197,24 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 	return (
 		<ScaffoldCC routeName={props.route.name}>
 			<ScrollView style={{ marginBottom: 5 }}>
-                <Text style={{
-                        fontSize: 20,
-                        fontWeight: '500',
-                        marginBottom: 16,
-                    }}
-                >
-                    Voici les meilleurs joueurs
-                </Text>
-                <Text style={{
-                        fontSize: 14,
-                        fontWeight: '500',
-                    }}
-                >
-                    Les joueurs présentant les meilleurs scores, grâce à leur précision exceptionnelle, sont mis en lumière ici.
-                </Text>
+				<Text
+					style={{
+						fontSize: 20,
+						fontWeight: '500',
+						marginBottom: 16,
+					}}
+				>
+					Voici les meilleurs joueurs
+				</Text>
+				<Text
+					style={{
+						fontSize: 14,
+						fontWeight: '500',
+					}}
+				>
+					Les joueurs présentant les meilleurs scores, grâce à leur précision
+					exceptionnelle, sont mis en lumière ici.
+				</Text>
 				<View
 					style={{
 						display: 'flex',
