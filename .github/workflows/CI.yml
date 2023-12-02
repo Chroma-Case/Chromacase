@@ -125,6 +125,7 @@ jobs:
 
       - name: Run robot tests
         run: |
+          export API_KEY_ROBOT=ROBOTO
           pip install -r back/test/robot/requirements.txt
           robot -d out back/test/robot/
       - uses: actions/upload-artifact@v3
