@@ -119,6 +119,7 @@ jobs:
       - name: Run scorometer tests
         run: |
           pip install -r scorometer/requirements.txt
+          export API_KEY_SCORO_TEST=SCOROTEST
           cd scorometer/tests && ./runner.sh
 
       - name: Run robot tests
