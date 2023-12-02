@@ -26,10 +26,9 @@ from mido import MidiFile
 import uuid
 
 BACK_URL = os.environ.get("BACK_URL") or "http://back:3000"
-r = requests.post(f"{BACK_URL}/auth/guest")
-token = r.json()["access_token"]
+API_KEY = os.environ.get("API_KEY_SCORO")
 auth_header = {
-        "Authorization": f"Bearer {token}"
+        "Authorization": f"API Key {API_KEY}"
         }
 game_uuid = uuid.uuid4()
 

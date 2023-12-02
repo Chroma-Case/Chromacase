@@ -8,7 +8,10 @@ from mido import MidiFile
 from configparser import ConfigParser
 
 url = os.environ.get("API_URL")
+api_key = os.environ.get("API_KEY_POPULATE")
 auth_headers = {}
+auth_headers["Authorization"] = f"API Key {api_key}"
+
 
 def getOrCreateAlbum(name, artistId):
 	if not name:
@@ -68,18 +71,11 @@ def main():
 	global url
 	if url == None:
 		url = "http://localhost:3000"
-	print("Connecting as guest")
-	res = requests.post(f"{url}/auth/guest")
-	token = (res.json())["access_token"]
-	global auth_headers
-	auth_headers["Authorization"] = f"Bearer {token}"
 	print("Searching for files...")
 	for file in glob.glob("**/*.ini", recursive=True):
 		print(f"File found: {file}")
 		path = os.path.splitext(file)[0]
 		populateFile(file, path + ".midi", path + ".mxl")
-	print("Deleting guest")
-	requests.delete(f"{url}/auth/me", headers=auth_headers)
 
 if __name__ == "__main__":
 	exit(main())
