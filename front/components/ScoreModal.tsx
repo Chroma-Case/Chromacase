@@ -50,7 +50,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 		wrong: [props.score.wrong, 'error']
 	} as const
 
-	return <Column space={4} style={{ alignItems: 'center' }}>
+	return <Column w='xl' space={4} style={{ alignItems: 'center' }}>
 		<Row space={2} style={{ justifyContent: 'center' }}>
 			{[1, 2, 3].map((index) => (
 				<Star1
@@ -80,7 +80,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 				</Column>
 			))}
 		</Row>
-		<Row style={{ justifyContent: 'space-between' }}>
+		<Row w="100%" style={{ justifyContent: 'space-between' }}>
 			<ButtonBase
 				style={{}}
 				icon={Play}

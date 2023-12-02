@@ -89,7 +89,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
-	const [endResult, setEndResult] = useState();
+	const [endResult, setEndResult] = useState<unknown>();
 	const songHistory = useQuery(API.getSongHistory(songId));
 	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
@@ -336,12 +336,13 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					<PopupCC
 						isVisible={endResult != undefined}
 					>{
-						(() => endResult ? <ScoreModal {...endResult}/> : <></>)()
+						// eslint-disable-next-line @typescript-eslint/no-explicit-any
+						(() => endResult ? <ScoreModal {...endResult as any}/> : <></>)()
 					}</PopupCC>
 					<PopupCC
 						title={translate('selectPlayMode')}
 						description={translate('selectPlayModeExplaination')}
-						isVisible={false}
+						isVisible={type === undefined}
 						setIsVisible={
 							navigation.canGoBack()
 								? (isVisible) => {

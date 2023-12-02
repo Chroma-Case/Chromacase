@@ -7,7 +7,7 @@ volumes:
 
 services:
   back:
-    #platform: linux/amd64
+    platform: linux/amd64
     build:
       context: ./back
       dockerfile: Dockerfile.dev
