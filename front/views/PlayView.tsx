@@ -333,12 +333,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
-					<PopupCC
-						isVisible={endResult != undefined}
-					>{
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						(() => endResult ? <ScoreModal {...endResult as any}/> : <></>)()
-					}</PopupCC>
+					<PopupCC isVisible={endResult != undefined}>
+						{
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							(() => (endResult ? <ScoreModal {...(endResult as any)} /> : <></>))()
+						}
+					</PopupCC>
 					<PopupCC
 						title={translate('selectPlayMode')}
 						description={translate('selectPlayModeExplaination')}

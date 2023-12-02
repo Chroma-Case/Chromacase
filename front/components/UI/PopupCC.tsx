@@ -34,18 +34,20 @@ const PopupCC = ({ title, description, children, isVisible, setIsVisible }: Popu
 					}}
 					space={4}
 				>
-					{(setIsVisible || title) && <Heading size="md" mb={2} alignItems={'flex-end'}>
-						<Row style={{ flex: 1, width: '100%', alignItems: 'flex-end' }}>
-							<Text style={{ flex: 1, width: '100%' }}>{title}</Text>
-							{setIsVisible !== undefined && (
-								<ButtonBase
-									type="menu"
-									icon={CloseSquare}
-									onPress={async () => setIsVisible(false)}
-								/>
-							)}
-						</Row>
-					</Heading>}
+					{(setIsVisible || title) && (
+						<Heading size="md" mb={2} alignItems={'flex-end'}>
+							<Row style={{ flex: 1, width: '100%', alignItems: 'flex-end' }}>
+								<Text style={{ flex: 1, width: '100%' }}>{title}</Text>
+								{setIsVisible !== undefined && (
+									<ButtonBase
+										type="menu"
+										icon={CloseSquare}
+										onPress={async () => setIsVisible(false)}
+									/>
+								)}
+							</Row>
+						</Heading>
+					)}
 					{description !== undefined && <Text>{description}</Text>}
 					{children !== undefined && children}
 				</Column>
