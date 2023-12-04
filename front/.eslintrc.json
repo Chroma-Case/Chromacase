@@ -12,7 +12,8 @@
 		"webpack.config.js",
 		"babel.config.js",
 		"*.test.*",
-		"app.config.ts"
+		"app.config.ts",
+		"android/"
 	],
 	"rules": {
 		"react/react-in-jsx-scope": "off",

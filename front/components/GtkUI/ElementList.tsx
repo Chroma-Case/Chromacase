@@ -14,7 +14,6 @@ const ElementList = ({ elements, style }: ElementListProps) => {
 		borderRadius: 10,
 		shadowOpacity: 0.3,
 		shadowRadius: 4.65,
-		elevation: 8,
 		backgroundColor: 'transparent',
 		overflow: 'hidden',
 	} as const;

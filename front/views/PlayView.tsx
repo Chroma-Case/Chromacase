@@ -1,6 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { StackActions } from '@react-navigation/native';
-import React, { useEffect, useRef, useState, createContext } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
 import Animated, {
 	useSharedValue,
@@ -15,16 +15,15 @@ import { Text, Row, View, useToast } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
 import { useQuery } from '../Queries';
 import API from '../API';
-import LoadingComponent, { LoadingView } from '../components/Loading';
+import { LoadingView } from '../components/Loading';
 import { useSelector } from 'react-redux';
 import { RootState } from '../state/Store';
 import { Translate, translate } from '../i18n/i18n';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 import { useStopwatch } from 'react-use-precision-timer';
-import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@arthi-chaud/react-native-midi';
+import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
-import { PianoCanvasContext } from '../models/PianoGame';
 import PartitionMagic from '../components/Play/PartitionMagic';
 import useColorScheme from '../hooks/colorScheme';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -68,15 +67,8 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
-//create a context with an array of number
-export const PianoCC = createContext<PianoCanvasContext>({
-	pressedKeys: new Map(),
-	timestamp: 0,
-	messages: [],
-});
-
 const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
-	const [type, setType] = useState<'practice' | 'normal'>();
+	const [playType, setPlayType] = useState<'practice' | 'normal' | null>(null);
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
@@ -89,13 +81,11 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
 	const songHistory = useQuery(API.getSongHistory(songId));
-	const [partitionRendered, setPartitionRendered] = useState(false); // Used to know when partitionview can render
 	const [score, setScore] = useState(0); // Between 0 and 100
 	// const fadeAnim = useRef(new Animated.Value(0)).current;
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
-	const [pressedKeys, setPressedKeys] = useState<Map<number, number>>(new Map()); // [note, time]
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [streak, setStreak] = useState(0);
 	const scoreMessageScale = useSharedValue(0);
@@ -111,6 +101,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const statColor = colors.lightText;
 
 	const onPause = () => {
+		console.log('onPause');
 		stopwatch.pause();
 		setPause(true);
 		webSocket.current?.send(
@@ -166,7 +157,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 				JSON.stringify({
 					type: 'start',
 					id: song.data!.id,
-					mode: type,
+					mode: playType,
 					bearer: accessToken,
 				})
 			);
@@ -184,6 +175,11 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		webSocket.current.onmessage = (message) => {
 			try {
 				const data = JSON.parse(message.data);
+				if (data.error) {
+					console.error('Scoro msg: ', data.error);
+					toast.show({ description: 'Scoro: ' + data.error });
+					return;
+				}
 				if (data.type == 'end') {
 					endMsgReceived = true;
 					webSocket.current?.close();
@@ -234,19 +230,9 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		};
 		inputs.forEach((input) => {
 			input.onmidimessage = (message) => {
+				console.log('onmessage');
 				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
-				if (keyIsPressed) {
-					setPressedKeys((prev) => {
-						prev.set(note, getElapsedTime());
-						return prev;
-					});
-				} else {
-					setPressedKeys((prev) => {
-						prev.delete(note);
-						return prev;
-					});
-				}
 
 				webSocket.current?.send(
 					JSON.stringify({
@@ -267,7 +253,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
 			setTime(() => getElapsedTime()); // Countdown
-		}, 1);
+		}, 200);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
@@ -298,10 +284,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		if (navigation.getState().routes.at(-1)?.name != route.name) {
 			return;
 		}
-		if (song.data && !webSocket.current && partitionRendered) {
+		if (playType && song.data && !webSocket.current) {
 			requestMIDIAccess().then(onMIDISuccess).catch(onMIDIFailure);
 		}
-	}, [song.data, partitionRendered]);
+	}, [song.data, playType]);
 
 	if (!song.data) {
 		return <LoadingView />;
@@ -333,36 +319,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
-					<PopupCC
-						title={translate('selectPlayMode')}
-						description={translate('selectPlayModeExplaination')}
-						isVisible={type === undefined}
-						setIsVisible={
-							navigation.canGoBack()
-								? (isVisible) => {
-										if (!isVisible) {
-											// If we dismiss the popup, Go to previous page
-											navigation.goBack();
-										}
-								  }
-								: undefined
-						}
-					>
-						<Row style={{ justifyContent: 'space-between' }}>
-							<ButtonBase
-								style={{}}
-								type="outlined"
-								title={translate('practiceBtn')}
-								onPress={async () => setType('practice')}
-							/>
-							<ButtonBase
-								style={{}}
-								type="filled"
-								title={translate('playBtn')}
-								onPress={async () => setType('normal')}
-							/>
-						</Row>
-					</PopupCC>
 					{(
 						[
 							[
@@ -462,23 +418,18 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						backgroundColor: 'white',
 					}}
 				>
-					<PianoCC.Provider
-						value={{
-							pressedKeys: pressedKeys,
-							timestamp: time,
-							messages: [],
+					<PartitionMagic
+						timestamp={time}
+						songID={song.data.id}
+						onEndReached={() => {
+							setTimeout(() => {
+								onEnd();
+							}, 500);
 						}}
-					>
-						<PartitionMagic
-							songID={song.data.id}
-							onReady={() => setPartitionRendered(true)}
-							onEndReached={onEnd}
-							onError={() => {
-								console.log('error from partition magic');
-							}}
-						/>
-					</PianoCC.Provider>
-					{!partitionRendered && <LoadingComponent />}
+						onError={() => {
+							console.log('error from partition magic');
+						}}
+					/>
 				</View>
 				<PlayViewControlBar
 					score={score}
@@ -490,6 +441,36 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					onPause={onPause}
 					onResume={onResume}
 				/>
+				<PopupCC
+					title={translate('selectPlayMode')}
+					description={translate('selectPlayModeExplaination')}
+					isVisible={!playType}
+					setIsVisible={
+						navigation.canGoBack()
+							? (isVisible) => {
+									if (!isVisible) {
+										// If we dismiss the popup, Go to previous page
+										navigation.goBack();
+									}
+							  }
+							: undefined
+					}
+				>
+					<Row style={{ justifyContent: 'space-between' }}>
+						<ButtonBase
+							style={{}}
+							type="outlined"
+							title={translate('practiceBtn')}
+							onPress={async () => setPlayType('practice')}
+						/>
+						<ButtonBase
+							style={{}}
+							type="filled"
+							title={translate('playBtn')}
+							onPress={async () => setPlayType('normal')}
+						/>
+					</Row>
+				</PopupCC>
 			</SafeAreaView>
 			{colorScheme === 'dark' && (
 				<LinearGradient

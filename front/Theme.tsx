@@ -1,35 +1,53 @@
 import { NativeBaseProvider, extendTheme, useColorMode } from 'native-base';
 import useColorScheme from './hooks/colorScheme';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
+
+const defaultLightGlassmorphism = {
+	50: 'rgba(255,255,255,0.9)',
+	100: 'rgba(255,255,255,0.1)',
+	200: 'rgba(255,255,255,0.2)',
+	300: 'rgba(255,255,255,0.3)',
+	400: 'rgba(255,255,255,0.4)',
+	500: 'rgba(255,255,255,0.5)',
+	600: 'rgba(255,255,255,0.6)',
+	700: 'rgba(255,255,255,0.7)',
+	800: 'rgba(255,255,255,0.8)',
+	900: 'rgba(255,255,255,0.9)',
+	1000: 'rgba(255,255,255,1)',
+};
+// shodws are hugely visible on phone so we trick the colors without alpha
+const phoneLightGlassmorphism = {
+	50: 'rgb(200, 204, 254)',
+	100: 'rgb(204, 208, 254)',
+	200: 'rgb(210, 214, 254)',
+	300: 'rgb(214, 218, 254)',
+	400: 'rgb(220, 222, 254)',
+	500: 'rgb(230, 234, 254)',
+	600: 'rgb(234, 236, 254)',
+	700: 'rgb(240, 242, 254)',
+	800: 'rgb(244, 246, 254)',
+	900: 'rgb(248, 250, 254)',
+	1000: 'rgb(252, 254, 254)',
+};
+const lightGlassmorphism =
+	Platform.OS === 'web' ? defaultLightGlassmorphism : phoneLightGlassmorphism;
+const darkGlassmorphism = {
+	50: 'rgba(16,16,20,0.9)',
+	100: 'rgba(16,16,20,0.1)',
+	200: 'rgba(16,16,20,0.2)',
+	300: 'rgba(16,16,20,0.3)',
+	400: 'rgba(16,16,20,0.4)',
+	500: 'rgba(16,16,20,0.5)',
+	600: 'rgba(16,16,20,0.6)',
+	700: 'rgba(16,16,20,0.7)',
+	800: 'rgba(16,16,20,0.8)',
+	900: 'rgba(16,16,20,0.9)',
+	1000: 'rgba(16,16,20,1)',
+};
 
 const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	const colorScheme = useColorScheme();
-	const lightGlassmorphism = {
-		50: 'rgba(255,255,255,0.9)',
-		100: 'rgba(255,255,255,0.1)',
-		200: 'rgba(255,255,255,0.2)',
-		300: 'rgba(255,255,255,0.3)',
-		400: 'rgba(255,255,255,0.4)',
-		500: 'rgba(255,255,255,0.5)',
-		600: 'rgba(255,255,255,0.6)',
-		700: 'rgba(255,255,255,0.7)',
-		800: 'rgba(255,255,255,0.8)',
-		900: 'rgba(255,255,255,0.9)',
-		1000: 'rgba(255,255,255,1)',
-	};
-	const darkGlassmorphism = {
-		50: 'rgba(16,16,20,0.9)',
-		100: 'rgba(16,16,20,0.1)',
-		200: 'rgba(16,16,20,0.2)',
-		300: 'rgba(16,16,20,0.3)',
-		400: 'rgba(16,16,20,0.4)',
-		500: 'rgba(16,16,20,0.5)',
-		600: 'rgba(16,16,20,0.6)',
-		700: 'rgba(16,16,20,0.7)',
-		800: 'rgba(16,16,20,0.8)',
-		900: 'rgba(16,16,20,0.9)',
-		1000: 'rgba(16,16,20,1)',
-	};
 
 	const glassmorphism = colorScheme === 'light' ? lightGlassmorphism : darkGlassmorphism;
 	const text = colorScheme === 'light' ? darkGlassmorphism : lightGlassmorphism;
