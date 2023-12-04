@@ -1,5 +1,5 @@
 import { HStack, IconButton, Image, Text } from 'native-base';
-import Song  from '../models/Song';
+import Song from '../models/Song';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
 import { MaterialIcons } from '@expo/vector-icons';

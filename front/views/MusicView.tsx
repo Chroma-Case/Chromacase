@@ -25,20 +25,19 @@ export const FavoritesMusic = () => {
 	const likedSongs = useQuery(API.getLikedSongs(['artist']));
 
 	const musics =
-		likedSongs.data
-			?.map((x) => ({
-				artist: x.song.artist!.name,
-				song: x.song.name,
-				image: x.song.cover,
-				level: 42,
-				lastScore: 42,
-				bestScore: 42,
-				liked: true,
-				onLike: () => {
-					console.log('onLike');
-				},
-				onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
-			})) ?? [];
+		likedSongs.data?.map((x) => ({
+			artist: x.song.artist!.name,
+			song: x.song.name,
+			image: x.song.cover,
+			level: 42,
+			lastScore: 42,
+			bestScore: 42,
+			liked: true,
+			onLike: () => {
+				console.log('onLike');
+			},
+			onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
+		})) ?? [];
 
 	if (likedSongs.isLoading) {
 		return <LoadingView />;
@@ -92,7 +91,7 @@ export const FavoritesMusic = () => {
 			</View> */}
 			<MusicList
 				initialMusics={musics}
-			// musicsPerPage={7}
+				// musicsPerPage={7}
 			/>
 		</>
 	);

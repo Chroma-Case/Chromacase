@@ -3,7 +3,7 @@ import {
 	Injectable,
 	PipeTransform,
 	Query,
-} from '@nestjs/common';
+} from "@nestjs/common";
 
 @Injectable()
 export class FilterPipe implements PipeTransform {
@@ -12,13 +12,13 @@ export class FilterPipe implements PipeTransform {
 	transform(value: Record<string, string>) {
 		const filter = {};
 		for (const fieldIdentifier of this.fields) {
-			const field = fieldIdentifier.startsWith('+')
+			const field = fieldIdentifier.startsWith("+")
 				? fieldIdentifier.slice(1)
 				: fieldIdentifier;
 
 			if (value[field] === undefined) continue;
 
-			if (fieldIdentifier.startsWith('+')) {
+			if (fieldIdentifier.startsWith("+")) {
 				filter[field] = parseInt(value[field]);
 				if (isNaN(filter[field]))
 					throw new BadRequestException(

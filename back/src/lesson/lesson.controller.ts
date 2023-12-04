@@ -12,16 +12,16 @@ import {
 	Delete,
 	NotFoundException,
 	UseGuards,
-} from '@nestjs/common';
-import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
-import { LessonService } from './lesson.service';
-import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
-import { Prisma, Skill } from '@prisma/client';
-import { FilterQuery } from 'src/utils/filter.pipe';
-import { Lesson as _Lesson } from 'src/_gen/prisma-class/lesson';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { IncludeMap, mapInclude } from 'src/utils/include';
-import { Request } from 'express';
+} from "@nestjs/common";
+import { ApiOkResponsePlaginated, Plage } from "src/models/plage";
+import { LessonService } from "./lesson.service";
+import { ApiOperation, ApiProperty, ApiTags } from "@nestjs/swagger";
+import { Prisma, Skill } from "@prisma/client";
+import { FilterQuery } from "src/utils/filter.pipe";
+import { Lesson as _Lesson } from "src/_gen/prisma-class/lesson";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { IncludeMap, mapInclude } from "src/utils/include";
+import { Request } from "express";
 
 export class Lesson {
 	@ApiProperty()
@@ -36,15 +36,15 @@ export class Lesson {
 	mainSkill: Skill;
 }
 
-@ApiTags('lessons')
-@Controller('lesson')
+@ApiTags("lessons")
+@Controller("lesson")
 @UseGuards(JwtAuthGuard)
 export class LessonController {
 	static filterableFields: string[] = [
-		'+id',
-		'name',
-		'+requiredLevel',
-		'mainSkill',
+		"+id",
+		"name",
+		"+requiredLevel",
+		"mainSkill",
 	];
 	static includableFields: IncludeMap<Prisma.LessonInclude> = {
 		LessonHistory: true,
@@ -53,7 +53,7 @@ export class LessonController {
 	constructor(private lessonService: LessonService) {}
 
 	@ApiOperation({
-		summary: 'Get all lessons',
+		summary: "Get all lessons",
 	})
 	@Get()
 	@ApiOkResponsePlaginated(_Lesson)
@@ -61,9 +61,9 @@ export class LessonController {
 		@Req() request: Request,
 		@FilterQuery(LessonController.filterableFields)
 		where: Prisma.LessonWhereInput,
-		@Query('include') include: string,
-		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
+		@Query("include") include: string,
+		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
+		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Lesson>> {
 		const ret = await this.lessonService.getAll({
 			skip,
@@ -75,13 +75,13 @@ export class LessonController {
 	}
 
 	@ApiOperation({
-		summary: 'Get a particular lessons',
+		summary: "Get a particular lessons",
 	})
-	@Get(':id')
+	@Get(":id")
 	async get(
 		@Req() req: Request,
-		@Query('include') include: string,
-		@Param('id', ParseIntPipe) id: number,
+		@Query("include") include: string,
+		@Param("id", ParseIntPipe) id: number,
 	): Promise<Lesson> {
 		const ret = await this.lessonService.get(
 			id,
@@ -92,7 +92,7 @@ export class LessonController {
 	}
 
 	@ApiOperation({
-		summary: 'Create a lessons',
+		summary: "Create a lessons",
 	})
 	@Post()
 	async post(@Body() lesson: Lesson): Promise<Lesson> {
@@ -105,10 +105,10 @@ export class LessonController {
 	}
 
 	@ApiOperation({
-		summary: 'Delete a lessons',
+		summary: "Delete a lessons",
 	})
-	@Delete(':id')
-	async delete(@Param('id', ParseIntPipe) id: number): Promise<Lesson> {
+	@Delete(":id")
+	async delete(@Param("id", ParseIntPipe) id: number): Promise<Lesson> {
 		try {
 			return await this.lessonService.delete(id);
 		} catch {

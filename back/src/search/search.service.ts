@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { Artist, Prisma, Song, Genre } from '@prisma/client';
-import { HistoryService } from 'src/history/history.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable } from "@nestjs/common";
+import { Artist, Prisma, Song, Genre } from "@prisma/client";
+import { HistoryService } from "src/history/history.service";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class SearchService {
@@ -17,7 +17,7 @@ export class SearchService {
 	): Promise<Song[]> {
 		return this.prisma.song.findMany({
 			where: {
-				name: { contains: query, mode: 'insensitive' },
+				name: { contains: query, mode: "insensitive" },
 			},
 			include,
 		});
@@ -30,7 +30,7 @@ export class SearchService {
 	): Promise<Genre[]> {
 		return this.prisma.genre.findMany({
 			where: {
-				name: { contains: query, mode: 'insensitive' },
+				name: { contains: query, mode: "insensitive" },
 			},
 			include,
 		});
@@ -43,7 +43,7 @@ export class SearchService {
 	): Promise<Artist[]> {
 		return this.prisma.artist.findMany({
 			where: {
-				name: { contains: query, mode: 'insensitive' },
+				name: { contains: query, mode: "insensitive" },
 			},
 			include,
 		});

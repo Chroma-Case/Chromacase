@@ -14,25 +14,25 @@ import {
 	Req,
 	StreamableFile,
 	UseGuards,
-} from '@nestjs/common';
-import { ApiOkResponsePlaginated, Plage } from 'src/models/plage';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { Request } from 'express';
-import { GenreService } from './genre.service';
-import { Prisma, Genre } from '@prisma/client';
-import { ApiTags } from '@nestjs/swagger';
-import { createReadStream, existsSync } from 'fs';
-import { FilterQuery } from 'src/utils/filter.pipe';
-import { Genre as _Genre } from 'src/_gen/prisma-class/genre';
-import { IncludeMap, mapInclude } from 'src/utils/include';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Public } from 'src/auth/public';
+} from "@nestjs/common";
+import { ApiOkResponsePlaginated, Plage } from "src/models/plage";
+import { CreateGenreDto } from "./dto/create-genre.dto";
+import { Request } from "express";
+import { GenreService } from "./genre.service";
+import { Prisma, Genre } from "@prisma/client";
+import { ApiTags } from "@nestjs/swagger";
+import { createReadStream, existsSync } from "fs";
+import { FilterQuery } from "src/utils/filter.pipe";
+import { Genre as _Genre } from "src/_gen/prisma-class/genre";
+import { IncludeMap, mapInclude } from "src/utils/include";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { Public } from "src/auth/public";
 
-@Controller('genre')
-@ApiTags('genre')
+@Controller("genre")
+@ApiTags("genre")
 @UseGuards(JwtAuthGuard)
 export class GenreController {
-	static filterableFields: string[] = ['+id', 'name'];
+	static filterableFields: string[] = ["+id", "name"];
 	static includableFields: IncludeMap<Prisma.GenreInclude> = {
 		Song: true,
 	};
@@ -48,23 +48,23 @@ export class GenreController {
 		}
 	}
 
-	@Delete(':id')
-	async remove(@Param('id', ParseIntPipe) id: number) {
+	@Delete(":id")
+	async remove(@Param("id", ParseIntPipe) id: number) {
 		try {
 			return await this.service.delete({ id });
 		} catch {
-			throw new NotFoundException('Invalid ID');
+			throw new NotFoundException("Invalid ID");
 		}
 	}
 
-	@Get(':id/illustration')
+	@Get(":id/illustration")
 	@Public()
-	async getIllustration(@Param('id', ParseIntPipe) id: number) {
+	async getIllustration(@Param("id", ParseIntPipe) id: number) {
 		const genre = await this.service.get({ id });
-		if (!genre) throw new NotFoundException('Genre not found');
+		if (!genre) throw new NotFoundException("Genre not found");
 		const path = `/assets/genres/${genre.name}/illustration.png`;
 		if (!existsSync(path))
-			throw new NotFoundException('Illustration not found');
+			throw new NotFoundException("Illustration not found");
 
 		try {
 			const file = createReadStream(path);
@@ -80,9 +80,9 @@ export class GenreController {
 		@Req() req: Request,
 		@FilterQuery(GenreController.filterableFields)
 		where: Prisma.GenreWhereInput,
-		@Query('include') include: string,
-		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
+		@Query("include") include: string,
+		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
+		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Plage<Genre>> {
 		const ret = await this.service.list({
 			skip,
@@ -93,18 +93,18 @@ export class GenreController {
 		return new Plage(ret, req);
 	}
 
-	@Get(':id')
+	@Get(":id")
 	async findOne(
 		@Req() req: Request,
-		@Query('include') include: string,
-		@Param('id', ParseIntPipe) id: number,
+		@Query("include") include: string,
+		@Param("id", ParseIntPipe) id: number,
 	) {
 		const res = await this.service.get(
 			{ id },
 			mapInclude(include, req, GenreController.includableFields),
 		);
 
-		if (res === null) throw new NotFoundException('Genre not found');
+		if (res === null) throw new NotFoundException("Genre not found");
 		return res;
 	}
 }

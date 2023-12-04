@@ -12,7 +12,7 @@ import fetch from "node-fetch";
 
 @Injectable()
 export class UsersService {
-	constructor(private prisma: PrismaService) { }
+	constructor(private prisma: PrismaService) {}
 
 	async user(
 		userWhereUniqueInput: Prisma.UserWhereUniqueInput,
