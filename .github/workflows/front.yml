@@ -1,0 +1,78 @@
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - "front/**"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "front/**"
+
+jobs:
+
+  front_check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front
+    environment: Staging
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: front/package-lock.json
+      - run: yarn install --frozen-lockfile
+      - name: type check
+        run: yarn tsc
+      - name: prettier
+        run: yarn pretty:check .
+      - name: eslint
+        run: yarn lint
+    
+  front_build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front
+    environment: Staging
+    needs: [ front_check ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: front/package-lock.json
+      - run: yarn install --frozen-lockfile
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build Web App
+        uses: docker/build-push-action@v3
+        with:
+          context: ./front
+          push: false
+          tags: ${{steps.meta_front.outputs.tags}}
+          build-args: |
+            API_URL=${{secrets.API_URL}}
+            SCORO_URL=${{secrets.SCORO_URL}}
+
+      - name: Build Android APK
+        run: |
+          eas build -p android --profile production --local --non-interactive
+          mv *.apk chromacase.apk
+
+      - name: Upload Artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: chromacase.apk
+          path: front/

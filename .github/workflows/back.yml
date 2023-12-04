@@ -1,0 +1,85 @@
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - "back/**"
+      - "scorometer/**"
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "scorometer/**"
+
+jobs:
+  back_build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./back
+    environment: Staging
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker
+        run: docker build -t testback .
+
+
+  back_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [ back_build ]
+    environment: Staging
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Copy env file to github secret env file
+        run: cp .env.example .env
+
+      - name: Start the service
+        run: docker-compose up -d back db
+
+      - name: Perform healthchecks
+        run: |
+          docker-compose ps -a
+          docker-compose logs
+          wget --retry-connrefused http://localhost:3000 || (docker-compose logs && exit 1)
+
+      - name: Run scorometer tests
+        run: |
+          pip install -r scorometer/requirements.txt
+          cd scorometer/tests && ./runner.sh
+
+      - name: Run robot tests
+        run: |
+          pip install -r back/test/robot/requirements.txt
+          robot -d out back/test/robot/
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: results
+          path: out
+
+      - name: Write results to Pull Request and Summary
+        if: always() && github.event_name == 'pull_request'
+        uses: joonvena/robotframework-reporter-action@v2.1
+        with:
+          report_path: out/
+          gh_access_token: ${{ secrets.GITHUB_TOKEN }}
+          only_summary: false
+
+      - name: Write results to Summary
+        if: always() && github.event_name != 'pull_request'
+        uses: joonvena/robotframework-reporter-action@v2.1
+        with:
+          report_path: out/
+          gh_access_token: ${{ secrets.GITHUB_TOKEN }}
+          only_summary: true
+
+      - name: Remove .env && stop the service
+        run: docker-compose down && rm .env
