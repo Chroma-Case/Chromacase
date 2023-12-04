@@ -14,10 +14,8 @@ export class AuthService {
 	) {}
 
 	validateApiKey(apikey: string): boolean {
-		console.log("wow");
 		if (process.env.API_KEYS == null) return false;
 		const keys = process.env.API_KEYS.split(',');
-		console.log(keys);
 		return keys.includes(apikey);
 
 	}
