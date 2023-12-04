@@ -15,6 +15,7 @@ import { AlbumModule } from "./album/album.module";
 import { SearchModule } from "./search/search.module";
 import { HistoryModule } from "./history/history.module";
 import { MailerModule } from "@nestjs-modules/mailer";
+import { ScoresModule } from "./scores/scores.module";
 
 @Module({
 	imports: [
@@ -29,6 +30,7 @@ import { MailerModule } from "@nestjs-modules/mailer";
 		SearchModule,
 		SettingsModule,
 		HistoryModule,
+		ScoresModule,
 		MailerModule.forRoot({
 			transport: process.env.SMTP_TRANSPORT,
 			defaults: {

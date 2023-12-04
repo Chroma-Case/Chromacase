@@ -733,4 +733,25 @@ export default class API {
 	public static getPartitionSvgUrl(songId: number): string {
 		return `${API.baseUrl}/song/${songId}/assets/partition`;
 	}
+
+	public static async updateUserTotalScore(score: number): Promise<void> {
+		await API.fetch({
+			route: `/auth/me/score/${score}`,
+			method: 'PATCH',
+		});
+	}
+
+	public static getTopTwentyPlayers(): Query<User[]> {
+		return {
+			key: ['score'],
+			exec: () =>
+				API.fetch(
+					{
+						route: '/scores/top/20',
+						method: 'GET',
+					},
+					{ handler: ListHandler(UserHandler) }
+				),
+		};
+	}
 }

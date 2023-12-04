@@ -33,6 +33,7 @@ import PasswordResetView from './views/PasswordResetView';
 import ForgotPasswordView from './views/ForgotPasswordView';
 import DiscoveryView from './views/V2/DiscoveryView';
 import MusicView from './views/MusicView';
+import Leaderboardiew from './views/LeaderboardView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -86,6 +87,11 @@ const protectedRoutes = () =>
 			component: SearchView,
 			options: { headerShown: false },
 			link: '/search/:query?',
+		},
+		Leaderboard: {
+			component: Leaderboardiew,
+			options: { title: translate('leaderboardTitle'), headerShown: false },
+			link: '/leaderboard',
 		},
 		Error: {
 			component: ErrorView,
