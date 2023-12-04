@@ -29,7 +29,8 @@ export const PodiumCard = ({
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-                width: 140,
+				width: 140,
+				gap: 5,
 			}}
 		>
 			<View
@@ -60,36 +61,37 @@ export const PodiumCard = ({
 					</Avatar.Badge>
 				</Avatar>
 			</View>
-			<Text
-				mt={4}
-				style={{
-					fontSize: 20,
-					fontWeight: '500',
-					maxWidth: '100%',
-				}}
-				numberOfLines={2}
-				isTruncated
-			>
-				{userPseudo}
-			</Text>
-			<View
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'center',
-					gap: 5,
-				}}
-			>
+			<View>
 				<Text
 					style={{
-						fontSize: 24,
+						fontSize: 20,
 						fontWeight: '500',
+						maxWidth: '100%',
+					}}
+					numberOfLines={2}
+					isTruncated
+				>
+					{userPseudo}
+				</Text>
+				<View
+					style={{
+						display: 'flex',
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+						gap: 5,
 					}}
 				>
-					{userLvl ?? '-'}
-				</Text>
-				<MedalStar size="24" variant="Bold" color={medalColor} />
+					<Text
+						style={{
+							fontSize: 24,
+							fontWeight: '500',
+						}}
+					>
+						{userLvl ?? '-'}
+					</Text>
+					<MedalStar size="24" variant="Bold" color={medalColor} />
+				</View>
 			</View>
 		</View>
 	);
