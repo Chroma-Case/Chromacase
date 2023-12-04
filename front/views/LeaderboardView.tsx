@@ -73,13 +73,14 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 								justifyContent: 'center',
 								alignItems: 'center',
 								alignSelf: 'stretch',
+								gap: 32,
 								paddingBottom: 10,
 								marginBottom: 20,
 							}}
 						>
 							<PodiumCard
 								medalColor="#AE84FB"
-								offset={80}
+								offset={120}
 								userAvatarUrl={podiumUserData[2]?.data.avatar}
 								userPseudo={podiumUserData[2]?.name}
 								userLvl={podiumUserData[2]?.data.totalScore}
@@ -141,15 +142,26 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 							</View>
 						</View>
 					)}
-					{scoresQuery.data.slice(3).map((comp, index) => (
-						<BoardRow
-							key={index}
-							index={index}
-							userAvatarUrl={comp.data.avatar}
-							userLvl={comp.data.totalScore}
-							userPseudo={comp.name}
-						/>
-					))}
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							alignSelf: 'stretch',
+							gap: 15,
+							paddingRight: 10,
+						}}
+					>
+						{scoresQuery.data.slice(3, 20).map((comp, index) => (
+							<BoardRow
+								key={comp.name + index}
+								index={index + 4}
+								userAvatarUrl={comp.data.avatar}
+								userLvl={comp.data.totalScore}
+								userPseudo={comp.name}
+							/>
+						))}
+					</View>
 				</View>
 			</ScrollView>
 		</ScaffoldCC>

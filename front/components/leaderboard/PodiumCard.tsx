@@ -1,7 +1,7 @@
-import { Text, Avatar } from "native-base";
+import { Text, Avatar, useTheme } from 'native-base';
 import { MedalStar } from 'iconsax-react-native';
-import { View } from "react-native";
-import { getInitials } from "../UserAvatar";
+import { View } from 'react-native';
+import { getInitials } from '../UserAvatar';
 
 type PodiumCardProps = {
 	offset: number;
@@ -20,6 +20,7 @@ export const PodiumCard = ({
 	userPseudo,
 	userLvl,
 }: PodiumCardProps) => {
+	const { colors } = useTheme();
 	return (
 		<View
 			style={{
@@ -28,10 +29,9 @@ export const PodiumCard = ({
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
-				marginLeft: 32,
 			}}
 		>
-			<View /** image + medal container*/
+			<View
 				style={{
 					width: 140,
 					height: 140,
@@ -39,6 +39,7 @@ export const PodiumCard = ({
 			>
 				<Avatar
 					size="2xl"
+					bg={colors.coolGray[900]}
 					source={{
 						uri: userAvatarUrl,
 					}}
@@ -46,16 +47,17 @@ export const PodiumCard = ({
 						width: '100%',
 						height: '100%',
 						borderRadius: 12,
+						overflow: 'hidden',
+					}}
+					_image={{
+						borderRadius: 0,
 					}}
 				>
 					{userPseudo ? getInitials(userPseudo) : '---'}
+					<Avatar.Badge bg="coolGray.900">
+						<MedalStar size="24" variant="Bold" color={medalColor} />
+					</Avatar.Badge>
 				</Avatar>
-				<MedalStar
-					style={{ position: 'absolute', bottom: 0, right: 0 }}
-					size="42"
-					variant="Bold"
-					color={medalColor}
-				/>
 			</View>
 			<Text
 				mt={4}
@@ -66,15 +68,25 @@ export const PodiumCard = ({
 			>
 				{userPseudo}
 			</Text>
-			<Text
-				mt={1}
+			<View
 				style={{
-					fontSize: 24,
-					fontWeight: '500',
+					display: 'flex',
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'center',
+					gap: 5,
 				}}
 			>
-				{userLvl ?? '-'}
-			</Text>
+				<Text
+					style={{
+						fontSize: 24,
+						fontWeight: '500',
+					}}
+				>
+					{userLvl ?? '-'}
+				</Text>
+				<MedalStar size="24" variant="Bold" color={medalColor} />
+			</View>
 		</View>
 	);
 };

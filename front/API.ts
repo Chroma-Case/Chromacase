@@ -744,14 +744,31 @@ export default class API {
 	public static getTopTwentyPlayers(): Query<User[]> {
 		return {
 			key: ['score'],
-			exec: () =>
-				API.fetch(
-					{
-						route: '/scores/top/20',
-						method: 'GET',
+			exec: () => {
+				// API.fetch(
+				// 	{
+				// 		route: '/scores/top/20',
+				// 		method: 'GET',
+				// 	},
+				// 	{ handler: ListHandler(UserHandler) }
+				// ),
+				return Array.from(Array(21).keys()).map((value) => ({
+					id: Math.random() * 1000,
+					name: 'John Doe',
+					email: '',
+					emailVerified: false,
+					googleID: '',
+					isGuest: false,
+					premium: false,
+					data: {
+						gamesPlayed: 20,
+						xp: 0,
+						createdAt: new Date('2023-04-09T00:00:00.000Z'),
+						avatar: 'https://kyoo.sdg.moe/api/shows/16bit-sensation-another-layer/poster?quality=low',
+						totalScore: 97897,
 					},
-					{ handler: ListHandler(UserHandler) }
-				),
+				}));
+			},
 		};
 	}
 }
