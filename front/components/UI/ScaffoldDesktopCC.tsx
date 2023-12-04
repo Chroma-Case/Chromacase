@@ -3,7 +3,6 @@ import { View, Image, TouchableOpacity } from 'react-native';
 import { Divider, Text, ScrollView, Row, useMediaQuery, useTheme } from 'native-base';
 import { useQuery } from '../../Queries';
 import API from '../../API';
-import Song from '../../models/Song';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';

@@ -17,7 +17,6 @@ import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
 import API from '../API';
-import Song from '../models/Song';
 import { LoadingView } from '../components/Loading';
 
 export const FavoritesMusic = () => {

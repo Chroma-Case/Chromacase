@@ -7,7 +7,6 @@ import useColorScheme from '../../hooks/colorScheme';
 import { useQuery } from '../../Queries';
 import { NaviTab } from './TabNavigation';
 import API from '../../API';
-import Song from '../../models/Song';
 
 type TabNavigationDesktopProps = {
 	tabs: NaviTab[];

@@ -4,7 +4,7 @@ import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
 import Genre, { GenreHandler } from './models/Genre';
 import LessonHistory from './models/LessonHistory';
-import likedSong, { LikedSong, LikedSongHandler } from './models/LikedSong';
+import { LikedSong, LikedSongHandler } from './models/LikedSong';
 import Song, { SongHandler, SongInclude } from './models/Song';
 import { SongHistoryHandler, SongHistoryItem, SongHistoryItemHandler } from './models/SongHistory';
 import User, { UserHandler } from './models/User';

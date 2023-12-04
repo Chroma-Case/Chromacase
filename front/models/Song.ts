@@ -1,6 +1,6 @@
-import Model, { ModelValidator } from './Model';
-import SongDetails, { SongDetailsHandler, SongDetailsValidator } from './SongDetails';
-import Artist, { ArtistValidator } from './Artist';
+import { ModelValidator } from './Model';
+import { SongDetailsValidator } from './SongDetails';
+import { ArtistValidator } from './Artist';
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
 import API from '../API';
