@@ -35,7 +35,7 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 
 	return (
 		<ScaffoldCC routeName={props.route.name}>
-			<ScrollView style={{ marginBottom: 5 }}>
+			<ScrollView>
 				<Text
 					style={{
 						fontSize: 20,
@@ -58,10 +58,8 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'flex-start',
+						paddingTop: 20,
 						flex: 1,
-						flexGrow: 1,
-						flexShrink: 0,
-						flexBasis: 0,
 						alignSelf: 'stretch',
 					}}
 				>
@@ -111,8 +109,8 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 							}}
 						>
 							<PodiumCard
-								medalColor="#AE84FB"
-								offset={80}
+								medalColor="#EAD93C"
+								offset={0}
 								userAvatarUrl={podiumUserData[0]?.data.avatar}
 								userPseudo={podiumUserData[0]?.name}
 								userLvl={podiumUserData[0]?.data.totalScore}
@@ -123,17 +121,18 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 									flexDirection: 'row',
 									justifyContent: 'center',
 									alignItems: 'center',
+									gap: 64,
 								}}
 							>
 								<PodiumCard
-									medalColor="#EAD93C"
+									medalColor="#5F74F7"
 									offset={0}
 									userAvatarUrl={podiumUserData[1]?.data.avatar}
 									userPseudo={podiumUserData[1]?.name}
 									userLvl={podiumUserData[1]?.data.totalScore}
 								/>
 								<PodiumCard
-									medalColor="#5F74F7"
+									medalColor="#AE84FB"
 									offset={60}
 									userAvatarUrl={podiumUserData[2]?.data.avatar}
 									userPseudo={podiumUserData[2]?.name}

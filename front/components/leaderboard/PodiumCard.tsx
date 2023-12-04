@@ -29,6 +29,7 @@ export const PodiumCard = ({
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
+                width: 140,
 			}}
 		>
 			<View
@@ -64,7 +65,10 @@ export const PodiumCard = ({
 				style={{
 					fontSize: 20,
 					fontWeight: '500',
+					maxWidth: '100%',
 				}}
+				numberOfLines={2}
+				isTruncated
 			>
 				{userPseudo}
 			</Text>

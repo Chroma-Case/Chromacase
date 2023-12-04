@@ -35,7 +35,7 @@ export const BoardRow = ({ userAvatarUrl, userPseudo, userLvl, index }: BoardRow
 				}}
 			>
 				<Avatar
-                    bg={colors.coolGray[900]}
+					bg={colors.coolGray[900]}
 					source={{
 						uri: userAvatarUrl,
 					}}
@@ -58,7 +58,10 @@ export const BoardRow = ({ userAvatarUrl, userPseudo, userLvl, index }: BoardRow
 					flex: 1,
 					marginHorizontal: 10,
 					fontWeight: '500',
+					maxWidth: '100%',
 				}}
+				isTruncated
+				numberOfLines={2}
 			>
 				{userPseudo}
 			</Text>
