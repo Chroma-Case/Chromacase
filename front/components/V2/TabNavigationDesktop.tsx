@@ -118,7 +118,7 @@ const TabNavigationDesktop = (props: TabNavigationDesktopProps) => {
 								</Text>
 							)}
 							{history.data
-								?.map(x => x.song)
+								?.map((x) => x.song)
 								.filter(
 									(song, i, array) =>
 										array.map((s) => s.id).findIndex((id) => id == song.id) == i

@@ -30,7 +30,7 @@ import { mapInclude } from "src/utils/include";
 @Controller("history")
 @ApiTags("history")
 export class HistoryController {
-	constructor(private readonly historyService: HistoryService) { }
+	constructor(private readonly historyService: HistoryService) {}
 
 	@Get()
 	@HttpCode(200)

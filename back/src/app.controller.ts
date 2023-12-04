@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { Controller, Get } from "@nestjs/common";
+import { AppService } from "./app.service";
+import { ApiOkResponse } from "@nestjs/swagger";
 
 @Controller()
 export class AppController {
@@ -8,7 +8,7 @@ export class AppController {
 
 	@Get()
 	@ApiOkResponse({
-		description: 'Return a hello world message, used as a health route',
+		description: "Return a hello world message, used as a health route",
 	})
 	getHello(): string {
 		return this.appService.getHello();

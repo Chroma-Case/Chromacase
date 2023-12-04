@@ -58,12 +58,12 @@ export class AuthController {
 		private authService: AuthService,
 		private usersService: UsersService,
 		private settingsService: SettingsService,
-	) { }
+	) {}
 
 	@Get("login/google")
 	@UseGuards(AuthGuard("google"))
 	@ApiOperation({ description: "Redirect to google login page" })
-	googleLogin() { }
+	googleLogin() {}
 
 	@Get("logged/google")
 	@ApiOperation({

@@ -121,14 +121,14 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 											title={
 												!isSmallScreen
 													? translate(
-														value.title as
-														| 'menuDiscovery'
-														| 'menuProfile'
-														| 'menuMusic'
-														| 'menuSearch'
-														| 'menuLeaderBoard'
-														| 'menuSettings'
-													)
+															value.title as
+																| 'menuDiscovery'
+																| 'menuProfile'
+																| 'menuMusic'
+																| 'menuSearch'
+																| 'menuLeaderBoard'
+																| 'menuSettings'
+													  )
 													: undefined
 											}
 											isDisabled={props.routeName === value.link}
@@ -177,14 +177,14 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 									title={
 										!isSmallScreen
 											? translate(
-												value.title as
-												| 'menuDiscovery'
-												| 'menuProfile'
-												| 'menuMusic'
-												| 'menuSearch'
-												| 'menuLeaderBoard'
-												| 'menuSettings'
-											)
+													value.title as
+														| 'menuDiscovery'
+														| 'menuProfile'
+														| 'menuMusic'
+														| 'menuSearch'
+														| 'menuLeaderBoard'
+														| 'menuSettings'
+											  )
 											: undefined
 									}
 									isDisabled={props.routeName === value.link}

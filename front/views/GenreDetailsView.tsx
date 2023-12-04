@@ -13,7 +13,7 @@ type GenreDetailsViewProps = {
 
 const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
 	const genreQuery = useQuery(API.getGenre(genreId));
-	const songsQuery = useQuery(API.getSongsByGenre(genreId, ["artist"]));
+	const songsQuery = useQuery(API.getSongsByGenre(genreId, ['artist']));
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isMobileView = screenSize == 'small';
 	const navigation = useNavigation();
