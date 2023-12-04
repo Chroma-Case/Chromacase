@@ -1,5 +1,6 @@
-import { Text, Row, Heading, Column } from 'native-base';
+import { Text, Heading } from 'native-base';
 import ButtonBase from './ButtonBase';
+import { View } from 'react-native';
 import { CloseSquare } from 'iconsax-react-native';
 import { ReactNode } from 'react';
 import Modal from 'react-native-modal';
@@ -27,30 +28,45 @@ const PopupCC = ({ title, description, children, isVisible, setIsVisible }: Popu
 			}}
 		>
 			<GlassmorphismCC>
-				<Column
+				<View
 					style={{
 						maxWidth: 800,
 						padding: 20,
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'stretch',
+						justifyContent: 'flex-start',
+						gap: 10,
+						position: 'relative',
 					}}
-					space={4}
 				>
-					{(setIsVisible || title) && (
-						<Heading size="md" mb={2} alignItems={'flex-end'}>
-							<Row style={{ flex: 1, width: '100%', alignItems: 'flex-end' }}>
-								<Text style={{ flex: 1, width: '100%' }}>{title}</Text>
-								{setIsVisible !== undefined && (
-									<ButtonBase
-										type="menu"
-										icon={CloseSquare}
-										onPress={async () => setIsVisible(false)}
-									/>
-								)}
-							</Row>
-						</Heading>
+					{setIsVisible !== undefined && (
+						<ButtonBase
+							style={{
+								position: 'absolute',
+								top: 10,
+								right: 10,
+								zIndex: 100,
+							}}
+							type="menu"
+							icon={CloseSquare}
+							onPress={async () => setIsVisible(false)}
+						/>
 					)}
+					{title !== undefined && <Heading
+						size="md"
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'space-between',
+						}}
+					>
+						<Text style={{ flex: 1 }}>{title}</Text>
+					</Heading> }
 					{description !== undefined && <Text>{description}</Text>}
 					{children !== undefined && children}
-				</Column>
+				</View>
 			</GlassmorphismCC>
 		</Modal>
 	);

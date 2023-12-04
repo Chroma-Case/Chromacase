@@ -13,7 +13,8 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true
+			"supportsTablet": true,
+			"bundleIdentifier": "com.arthichaud.Chromacase"
 		},
 		"android": {
 			"adaptiveIcon": {
@@ -38,6 +39,7 @@
 					"photosPermission": "The app accesses your photos to let you set your personal avatar."
 				}
 			]
-		]
+		],
+		"owner": "arthi-chaud"
 	}
 }

@@ -12,12 +12,13 @@
 		"webpack.config.js",
 		"babel.config.js",
 		"*.test.*",
-		"app.config.ts"
+		"app.config.ts",
+		"android/"
 	],
 	"rules": {
 		"react/react-in-jsx-scope": "off",
 		"@typescript-eslint/no-unused-vars": "error",
-		"@typescript-eslint/no-explicit-any": "error",
+		"@typescript-eslint/no-explicit-any": "warn",
 		"@typescript-eslint/no-non-null-assertion": "off",
 		"@typescript-eslint/no-empty-function": "off",
 		"no-restricted-imports": [

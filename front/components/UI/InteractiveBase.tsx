@@ -242,6 +242,7 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 		<Animated.View style={[style, isDisabled ? disableStyle : animatedStyle]}>
 			<Pressable
 				focusable={focusable}
+				tabIndex={focusable ? 0 : -1}
 				disabled={isDisabled}
 				onHoverIn={handleMouseEnter}
 				onPressIn={handlePressIn}
