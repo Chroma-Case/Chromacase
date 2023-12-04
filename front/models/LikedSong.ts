@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
-import Song, { SongValidator } from './Song';
-import Model, { ModelValidator } from './Model';
+import { SongValidator } from './Song';
+import { ModelValidator } from './Model';
 
 export const LikedSongValidator = yup
 	.object({

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
 	VStack,
 	Heading,
@@ -23,7 +23,6 @@ import CardGridCustom from './CardGridCustom';
 import SearchHistoryCard from './HistoryCard';
 import Song from '../models/Song';
 import { useNavigation } from '../Navigation';
-import Artist from '../models/Artist';
 import SongRow from '../components/SongRow';
 import FavSongRow from './FavSongRow';
 

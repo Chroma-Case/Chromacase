@@ -8,7 +8,6 @@ import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable';
 import Translate from '../components/Translate';
 import TextButton from '../components/TextButton';
-import Song from '../models/Song';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 
