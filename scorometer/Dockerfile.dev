@@ -9,4 +9,4 @@ WORKDIR /app
 COPY ./requirements.txt .
 RUN pip install -r ./requirements.txt
 
-CMD /usr/bin/websocketd --port=6543 --devconsole -- python3 ./main.py
+CMD /usr/bin/websocketd --port=6543 --devconsole --passenv API_KEY_SCORO,BACK_URL,MUSICS_FOLDER -- python3 ./main.py

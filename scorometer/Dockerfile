@@ -10,4 +10,4 @@ COPY ./requirements.txt .
 RUN pip3 install -r ./requirements.txt
 
 COPY . .
-CMD /usr/bin/websocketd --port=6543 --staticdir=. -- python3 main.py
+CMD /usr/bin/websocketd --port=6543 --staticdir=. --passenv API_KEY_SCORO,BACK_URL,MUSICS_FOLDER -- python3 main.py
