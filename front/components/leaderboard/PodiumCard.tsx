@@ -71,7 +71,7 @@ export const PodiumCard = ({
 					numberOfLines={2}
 					isTruncated
 				>
-					{userPseudo}
+					{userPseudo ?? '---'}
 				</Text>
 				<View
 					style={{

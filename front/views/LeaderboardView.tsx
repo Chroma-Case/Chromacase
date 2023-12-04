@@ -121,7 +121,7 @@ const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
 								<View
 									style={{
 										display: 'flex',
-										flexDirection: 'row',
+										flexDirection: 'row-reverse',
 										justifyContent: 'center',
 										alignItems: 'center',
 										gap: 64,
