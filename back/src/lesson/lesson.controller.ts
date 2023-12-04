@@ -22,6 +22,7 @@ import { Lesson as _Lesson } from "src/_gen/prisma-class/lesson";
 import { IncludeMap, mapInclude } from "src/utils/include";
 import { Request } from "express";
 import { AuthGuard } from "@nestjs/passport";
+import { ChromaAuthGuard } from "src/auth/chroma-auth.guard";
 
 export class Lesson {
 	@ApiProperty()
@@ -38,7 +39,7 @@ export class Lesson {
 
 @ApiTags("lessons")
 @Controller("lesson")
-@UseGuards(AuthGuard(["jwt", "api-key"]))
+@UseGuards(ChromaAuthGuard)
 export class LessonController {
 	static filterableFields: string[] = [
 		"+id",
