@@ -50,6 +50,7 @@ import { writeFile } from "fs";
 import { PasswordResetDto } from "./dto/password_reset.dto ";
 import { mapInclude } from "src/utils/include";
 import { SongController } from "src/song/song.controller";
+import { ChromaAuthGuard } from "./chroma-auth.guard";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -167,7 +168,7 @@ export class AuthController {
 		return this.authService.login(user);
 	}
 
-	@UseGuards(AuthGuard(["jwt", "api-key"]))
+	@UseGuards(ChromaAuthGuard)
 	@ApiBearerAuth()
 	@ApiOperation({ description: "Get the profile picture of connected user" })
 	@ApiOkResponse({ description: "The user profile picture" })
@@ -177,7 +178,7 @@ export class AuthController {
 		return await this.usersService.getProfilePicture(req.user.id, res);
 	}
 
-	@UseGuards(AuthGuard(["jwt", "api-key"]))
+	@UseGuards(ChromaAuthGuard)
 	@ApiBearerAuth()
 	@ApiOkResponse({ description: "The user profile picture" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
@@ -215,7 +216,7 @@ export class AuthController {
 		return user;
 	}
 
-	@UseGuards(AuthGuard(["jwt", "api-key"]))
+	@UseGuards(ChromaAuthGuard)
 	@ApiBearerAuth()
 	@ApiOkResponse({ description: "Successfully edited profile", type: User })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })

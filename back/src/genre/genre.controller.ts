@@ -27,10 +27,11 @@ import { Genre as _Genre } from "src/_gen/prisma-class/genre";
 import { IncludeMap, mapInclude } from "src/utils/include";
 import { Public } from "src/auth/public";
 import { AuthGuard } from "@nestjs/passport";
+import { ChromaAuthGuard } from "src/auth/chroma-auth.guard";
 
 @Controller("genre")
 @ApiTags("genre")
-@UseGuards(AuthGuard(["jwt", "api-key"]))
+@UseGuards(ChromaAuthGuard)
 export class GenreController {
 	static filterableFields: string[] = ["+id", "name"];
 	static includableFields: IncludeMap<Prisma.GenreInclude> = {

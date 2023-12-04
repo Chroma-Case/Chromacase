@@ -23,10 +23,11 @@ import { FilterQuery } from "src/utils/filter.pipe";
 import { Album as _Album } from "src/_gen/prisma-class/album";
 import { IncludeMap, mapInclude } from "src/utils/include";
 import { AuthGuard } from "@nestjs/passport";
+import { ChromaAuthGuard } from "src/auth/chroma-auth.guard";
 
 @Controller("album")
 @ApiTags("album")
-@UseGuards(AuthGuard(["jwt", "api-key"]))
+@UseGuards(ChromaAuthGuard)
 export class AlbumController {
 	static filterableFields: string[] = ["+id", "name", "+artistId"];
 	static includableFields: IncludeMap<Prisma.AlbumInclude> = {

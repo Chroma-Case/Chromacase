@@ -32,10 +32,11 @@ import { Artist as _Artist } from "src/_gen/prisma-class/artist";
 import { IncludeMap, mapInclude } from "src/utils/include";
 import { Public } from "src/auth/public";
 import { AuthGuard } from "@nestjs/passport";
+import { ChromaAuthGuard } from "src/auth/chroma-auth.guard";
 
 @Controller("artist")
 @ApiTags("artist")
-@UseGuards(AuthGuard(["jwt", "api-key"]))
+@UseGuards(ChromaAuthGuard)
 export class ArtistController {
 	static filterableFields = ["+id", "name"];
 	static includableFields: IncludeMap<Prisma.ArtistInclude> = {
