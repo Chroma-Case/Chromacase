@@ -29,6 +29,6 @@ export const PlageHandler = <A, R>(
 	validator: PlageValidator(itemHandler.validator),
 	transformer: (plage) => ({
 		...plage,
-		data: plage.data.map((item) => itemHandler.transformer(item)),
+		data: plage.data.map((item) => itemHandler.transformer?.(item) ?? (item as unknown as R)),
 	}),
 });

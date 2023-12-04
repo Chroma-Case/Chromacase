@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcryptjs';
-import PayloadInterface from './interface/payload.interface';
-import { User } from 'src/models/user';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable } from "@nestjs/common";
+import { UsersService } from "../users/users.service";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from "bcryptjs";
+import PayloadInterface from "./interface/payload.interface";
+import { User } from "src/models/user";
+import { MailerService } from "@nestjs-modules/mailer";
 @Injectable()
 export class AuthService {
 	constructor(
@@ -12,6 +12,13 @@ export class AuthService {
 		private jwtService: JwtService,
 		private emailService: MailerService,
 	) {}
+
+	validateApiKey(apikey: string): boolean {
+		if (process.env.API_KEYS == null) return false;
+		const keys = process.env.API_KEYS.split(',');
+		return keys.includes(apikey);
+
+	}
 
 	async validateUser(
 		username: string,
@@ -36,37 +43,37 @@ export class AuthService {
 	}
 
 	async sendVerifyMail(user: User) {
-		if (process.env.IGNORE_MAILS === 'true') return;
+		if (process.env.IGNORE_MAILS === "true") return;
 		if (user.email == null) return;
-		console.log('Sending verification mail to', user.email);
+		console.log("Sending verification mail to", user.email);
 		const token = await this.jwtService.signAsync(
 			{
 				userId: user.id,
 			},
-			{ expiresIn: '10h' },
+			{ expiresIn: "10h" },
 		);
 		await this.emailService.sendMail({
 			to: user.email,
-			from: 'chromacase@octohub.app',
-			subject: 'Mail verification for Chromacase',
+			from: "chromacase@octohub.app",
+			subject: "Mail verification for Chromacase",
 			html: `To verify your mail, please click on this <a href="${process.env.PUBLIC_URL}/verify?token=${token}">link</a>.`,
 		});
 	}
 
 	async sendPasswordResetMail(user: User) {
-		if (process.env.IGNORE_MAILS === 'true') return;
+		if (process.env.IGNORE_MAILS === "true") return;
 		if (user.email == null) return;
-		console.log('Sending password reset mail to', user.email);
+		console.log("Sending password reset mail to", user.email);
 		const token = await this.jwtService.signAsync(
 			{
 				userId: user.id,
 			},
-			{ expiresIn: '10h' },
+			{ expiresIn: "10h" },
 		);
 		await this.emailService.sendMail({
 			to: user.email,
-			from: 'chromacase@octohub.app',
-			subject: 'Password reset for Chromacase',
+			from: "chromacase@octohub.app",
+			subject: "Password reset for Chromacase",
 			html: `To reset your password, please click on this <a href="${process.env.PUBLIC_URL}/password_reset?token=${token}">link</a>.`,
 		});
 	}
@@ -76,7 +83,7 @@ export class AuthService {
 		try {
 			verified = await this.jwtService.verifyAsync(token);
 		} catch (e) {
-			console.log('Password reset token failure', e);
+			console.log("Password reset token failure", e);
 			return false;
 		}
 		console.log(verified);
@@ -91,7 +98,7 @@ export class AuthService {
 		try {
 			await this.jwtService.verifyAsync(token);
 		} catch (e) {
-			console.log('Verify mail token failure', e);
+			console.log("Verify mail token failure", e);
 			return false;
 		}
 		await this.userService.updateUser({

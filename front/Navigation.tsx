@@ -34,6 +34,7 @@ import ForgotPasswordView from './views/ForgotPasswordView';
 import Leaderboardiew from './views/LeaderboardView';
 import DiscoveryView from './views/V2/DiscoveryView';
 import MusicView from './views/MusicView';
+import Leaderboardiew from './views/LeaderboardView';
 
 // Util function to hide route props in URL
 const removeMe = () => '';

@@ -1,17 +1,17 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import {
 	CallHandler,
 	ExecutionContext,
 	Injectable,
 	NestInterceptor,
 	ValidationPipe,
-} from '@nestjs/common';
-import { RequestLogger, RequestLoggerOptions } from 'json-logger-service';
-import { tap } from 'rxjs';
-import { PrismaModel } from './_gen/prisma-class';
-import { PrismaService } from './prisma/prisma.service';
+} from "@nestjs/common";
+import { RequestLogger, RequestLoggerOptions } from "json-logger-service";
+import { tap } from "rxjs";
+import { PrismaModel } from "./_gen/prisma-class";
+import { PrismaService } from "./prisma/prisma.service";
 
 @Injectable()
 export class AspectLogger implements NestInterceptor {
@@ -27,8 +27,8 @@ export class AspectLogger implements NestInterceptor {
 			params,
 			query,
 			body,
-			userId: user?.id ?? 'not logged in',
-			username: user?.username ?? 'not logged in',
+			userId: user?.id ?? "not logged in",
+			username: user?.username ?? "not logged in",
 		};
 
 		return next.handle().pipe(
@@ -48,20 +48,20 @@ async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
 	app.use(
 		RequestLogger.buildExpressRequestLogger({
-			doNotLogPaths: ['/health'],
+			doNotLogPaths: ["/health"],
 		} as RequestLoggerOptions),
 	);
 	app.enableShutdownHooks();
 
 	const config = new DocumentBuilder()
-		.setTitle('Chromacase')
-		.setDescription('The chromacase API')
-		.setVersion('1.0')
+		.setTitle("Chromacase")
+		.setDescription("The chromacase API")
+		.setVersion("1.0")
 		.build();
 	const document = SwaggerModule.createDocument(app, config, {
 		extraModels: [...PrismaModel.extraModels],
 	});
-	SwaggerModule.setup('api', app, document);
+	SwaggerModule.setup("api", app, document);
 
 	app.useGlobalPipes(new ValidationPipe());
 	app.enableCors();

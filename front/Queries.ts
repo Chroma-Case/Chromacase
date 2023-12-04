@@ -70,11 +70,4 @@ const transformQuery = <OldReturnType, NewReturnType>(
 	};
 };
 
-const useQueries = <ReturnTypes>(
-	queries: readonly QueryOrQueryFn<ReturnTypes>[],
-	options?: QueryOptions<ReturnTypes>
-) => {
-	return RQ.useQueries(queries.map((q) => buildRQuery(q, options)));
-};
-
-export { useQuery, useQueries, QueryRules, transformQuery };
+export { useQuery, QueryRules, transformQuery };

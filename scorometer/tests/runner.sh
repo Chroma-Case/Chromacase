@@ -1,8 +1,7 @@
 #!/bin/bash
-
-EMPTY_DB=$(curl localhost:3000/song/1 -s | jq '.statusCode == 404')
+EMPTY_DB=$(curl localhost:3000/song/1 -s  -H "Authorization: API Key $API_KEY_SCORO_TEST" | jq '.statusCode == 404')
 if [[ $EMPTY_DB == "true" ]]; then
-  curl localhost:3000/song -X POST --data '{"name": "SCORO_TEST", "difficulties": {}, "midiPath": "/assets/musics/SCORO_TEST/SCORO_TEST.midi", "musicXmlPath": "/assets/musics/SCORO_TEST/SCORO_TEST.mxl"}' -H "Content-Type: application/json" &> /dev/null
+  curl localhost:3000/song -H "Authorization: API Key $API_KEY_SCORO_TEST" -X POST --data '{"name": "SCORO_TEST", "difficulties": {}, "midiPath": "/assets/musics/SCORO_TEST/SCORO_TEST.midi", "musicXmlPath": "/assets/musics/SCORO_TEST/SCORO_TEST.mxl"}' -H "Content-Type: application/json" &> /dev/null
 fi
 
 TESTS_DONE=0
@@ -50,3 +49,4 @@ else
   exit $RET
 fi;
 
+curl localhost:3000/auth/me -X DELETE -H "Authorization: Bearer $TOKEN"

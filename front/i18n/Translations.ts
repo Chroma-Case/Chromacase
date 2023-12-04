@@ -301,6 +301,11 @@ export const en = {
 	selectPlayMode: 'Select a play mode',
 	selectPlayModeExplaination:
 		"'Practice' only considers the notes you play, while 'Play' mode also takes rhythm into account.",
+
+	//leaderboard things
+	leaderBoardHeading: 'These are the best players',
+	leaderBoardHeadingFull:
+		'The players having the best scores, thanks to their exceptional accuracy, are highlighted here.',
 };
 
 export const fr: typeof en = {
@@ -607,6 +612,11 @@ export const fr: typeof en = {
 	selectPlayMode: 'Sélectionnez un mode de jeu',
 	selectPlayModeExplaination:
 		"Le mode 'S'entrainer' ne compte que les notes, tandis que le mode 'Jouer' prend en compte à la fois les notes et le rythme.",
+
+	//leaderboard things
+	leaderBoardHeading: 'Voici les meilleurs joueurs',
+	leaderBoardHeadingFull:
+		'Les joueurs présentant les meilleurs scores, grâce à leur précision exceptionnelle, sont mis en lumière ici.',
 };
 
 export const sp: typeof en = {
@@ -919,4 +929,9 @@ export const sp: typeof en = {
 	selectPlayMode: 'Selecciona un modo de juego',
 	selectPlayModeExplaination:
 		"El modo 'práctica' solo cuenta notas, mientras que el modo 'reproducir' tiene en cuenta tanto las notas como el ritmo.",
+
+	//leaderboard things
+	leaderBoardHeading: 'Estos son los mejores jugadores.',
+	leaderBoardHeadingFull:
+		'Aquí se destacan los jugadores que tienen las mejores puntuaciones, gracias a su precisión excepcional.',
 };

@@ -4,6 +4,7 @@ Documentation       Tests of the /history route.
 
 Resource            ../rest.resource
 Resource            ../auth/auth.resource
+Test Setup          ApiKey
 
 
 *** Test Cases ***

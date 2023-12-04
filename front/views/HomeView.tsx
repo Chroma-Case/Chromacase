@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQueries, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import { Box, Flex, Stack, Heading, VStack, HStack } from 'native-base';
@@ -8,7 +8,6 @@ import SongCardGrid from '../components/SongCardGrid';
 import CompetenciesTable from '../components/CompetenciesTable';
 import Translate from '../components/Translate';
 import TextButton from '../components/TextButton';
-import Song from '../models/Song';
 import { FontAwesome5 } from '@expo/vector-icons';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 
@@ -16,20 +15,10 @@ import ScaffoldCC from '../components/UI/ScaffoldCC';
 const HomeView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
-	const playHistoryQuery = useQuery(API.getUserPlayHistory);
+	const playHistoryQuery = useQuery(API.getUserPlayHistory(['artist']));
 	const searchHistoryQuery = useQuery(API.getSearchHistory(0, 10));
 	const skillsQuery = useQuery(API.getUserSkills);
-	const nextStepQuery = useQuery(API.getSongSuggestions);
-	const songHistory = useQueries(
-		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
-	);
-	const artistsQueries = useQueries(
-		songHistory
-			.map((entry) => entry.data)
-			.concat(nextStepQuery.data ?? [])
-			.filter((s): s is Song => s !== undefined)
-			.map((song) => API.getArtist(song.artistId))
-	);
+	const nextStepQuery = useQuery(API.getSongSuggestions(['artist']));
 
 	if (
 		!userQuery.data ||
@@ -46,20 +35,12 @@ const HomeView = (props: RouteProps<{}>) => {
 					<SongCardGrid
 						heading={<Translate translationKey="goNextStep" />}
 						songs={
-							nextStepQuery.data
-								?.filter((song) =>
-									artistsQueries.find(
-										(artistQuery) => artistQuery.data?.id === song.artistId
-									)
-								)
-								.map((song) => ({
-									cover: song.cover,
-									name: song.name,
-									songId: song.id,
-									artistName: artistsQueries.find(
-										(artistQuery) => artistQuery.data?.id === song.artistId
-									)!.data!.name,
-								})) ?? []
+							nextStepQuery.data?.map((song) => ({
+								cover: song.cover,
+								name: song.name,
+								songId: song.id,
+								artistName: song.artist!.name,
+							})) ?? []
 						}
 					/>
 					<Stack direction={{ base: 'column', lg: 'row' }}>
@@ -75,29 +56,13 @@ const HomeView = (props: RouteProps<{}>) => {
 							<SongCardGrid
 								heading={<Translate translationKey="recentlyPlayed" />}
 								songs={
-									songHistory
-										.map(({ data }) => data)
-										.filter((data): data is Song => data !== undefined)
-										.filter(
-											(song, i, array) =>
-												array
-													.map((s) => s.id)
-													.findIndex((id) => id == song.id) == i
-										)
-										.filter((song) =>
-											artistsQueries.find(
-												(artistQuery) =>
-													artistQuery.data?.id === song.artistId
-											)
-										)
+									playHistoryQuery.data
+										?.map((x) => x.song)
 										.map((song) => ({
 											cover: song.cover,
 											name: song.name,
 											songId: song.id,
-											artistName: artistsQueries.find(
-												(artistQuery) =>
-													artistQuery.data?.id === song.artistId
-											)!.data!.name,
+											artistName: song.artist!.name,
 										})) ?? []
 								}
 							/>

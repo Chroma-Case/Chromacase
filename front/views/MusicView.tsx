@@ -15,54 +15,30 @@ import { RouteProps, useNavigation } from '../Navigation';
 import { TranslationKey, translate } from '../i18n/i18n';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
-import { useQueries, useQuery } from '../Queries';
+import { useQuery } from '../Queries';
 import API from '../API';
-import Song from '../models/Song';
 import { LoadingView } from '../components/Loading';
 
 export const FavoritesMusic = () => {
 	const navigation = useNavigation();
-	const playHistoryQuery = useQuery(API.getUserPlayHistory);
-	const nextStepQuery = useQuery(API.getSongSuggestions);
-	const songHistory = useQueries(
-		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
-	);
-	const artistsQueries = useQueries(
-		songHistory
-			.map((entry) => entry.data)
-			.concat(nextStepQuery.data ?? [])
-			.filter((s): s is Song => s !== undefined)
-			.map((song) => API.getArtist(song.artistId))
-	);
-
-	const isLoading =
-		playHistoryQuery.isLoading ||
-		nextStepQuery.isLoading ||
-		songHistory.some((query) => query.isLoading) ||
-		artistsQueries.some((query) => query.isLoading);
+	const likedSongs = useQuery(API.getLikedSongs(['artist']));
 
 	const musics =
-		nextStepQuery.data
-			?.filter((song: Song) =>
-				artistsQueries.find((artistQuery) => artistQuery.data?.id === song.artistId)
-			)
-			.map((song: Song) => ({
-				artist: artistsQueries.find(
-					(artistQuery) => artistQuery.data?.id === song.artistId
-				)!.data!.name,
-				song: song.name,
-				image: song.cover,
-				level: 42,
-				lastScore: 42,
-				bestScore: 42,
-				liked: false,
-				onLike: () => {
-					console.log('onLike');
-				},
-				onPlay: () => navigation.navigate('Play', { songId: song.id }),
-			})) ?? [];
+		likedSongs.data?.map((x) => ({
+			artist: x.song.artist!.name,
+			song: x.song.name,
+			image: x.song.cover,
+			level: 42,
+			lastScore: 42,
+			bestScore: 42,
+			liked: true,
+			onLike: () => {
+				console.log('onLike');
+			},
+			onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
+		})) ?? [];
 
-	if (isLoading) {
+	if (likedSongs.isLoading) {
 		return <LoadingView />;
 	}
 	return (

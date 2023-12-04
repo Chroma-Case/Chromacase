@@ -1,33 +1,20 @@
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
-import Song from './Song';
-import Model, { ModelValidator } from './Model';
+import { SongValidator } from './Song';
+import { ModelValidator } from './Model';
 
 export const LikedSongValidator = yup
 	.object({
 		songId: yup.number().required(),
+		song: yup.lazy(() => SongValidator.default(undefined)),
 		addedDate: yup.date().required(),
 	})
 	.concat(ModelValidator);
 
-export const LikedSongHandler: ResponseHandler<
-	yup.InferType<typeof LikedSongValidator>,
-	LikedSong
-> = {
-	validator: LikedSongValidator,
-	transformer: (likedSong) => ({
-		id: likedSong.id,
-		songId: likedSong.songId,
-		addedDate: likedSong.addedDate,
-	}),
-};
-interface LikedSong extends Model {
-	songId: number;
-	addedDate: Date;
-}
+export type LikedSong = yup.InferType<typeof LikedSongValidator>;
 
-export interface LikedSongWithDetails extends LikedSong {
-	details: Song;
-}
+export const LikedSongHandler: ResponseHandler<LikedSong> = {
+	validator: LikedSongValidator,
+};
 
 export default LikedSong;

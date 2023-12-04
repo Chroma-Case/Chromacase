@@ -3,6 +3,8 @@ Documentation       Tests of the /lesson route.
 ...                 Ensures that the lesson CRUD works corectly.
 
 Resource            ../rest.resource
+Resource            ../auth/auth.resource
+Test Setup          ApiKey
 
 
 *** Test Cases ***

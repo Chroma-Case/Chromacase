@@ -1,9 +1,13 @@
-import Model, { ModelValidator } from './Model';
-import SongDetails, { SongDetailsHandler, SongDetailsValidator } from './SongDetails';
-import Artist from './Artist';
+import { ModelValidator } from './Model';
+import { SongDetailsValidator } from './SongDetails';
+import { ArtistValidator } from './Artist';
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
 import API from '../API';
+import { AlbumValidator } from './Album';
+import { GenreValidator } from './Genre';
+
+export type SongInclude = 'artist' | 'album' | 'genre' | 'SongHistory' | 'likedByUsers';
 
 export const SongValidator = yup
 	.object({
@@ -14,35 +18,23 @@ export const SongValidator = yup
 		albumId: yup.number().required().nullable(),
 		genreId: yup.number().required().nullable(),
 		difficulties: SongDetailsValidator.required(),
-		illustrationPath: yup.string().required(),
+		details: SongDetailsValidator.required(),
+		cover: yup.string().required(),
+		artist: yup.lazy(() => ArtistValidator.default(undefined)).optional(),
+		album: yup.lazy(() => AlbumValidator.default(undefined)).optional(),
+		genre: yup.lazy(() => GenreValidator.default(undefined)).optional(),
 	})
-	.concat(ModelValidator);
-
-export const SongHandler: ResponseHandler<yup.InferType<typeof SongValidator>, Song> = {
-	validator: SongValidator,
-	transformer: (song) => ({
-		id: song.id,
-		name: song.name,
-		artistId: song.artistId,
-		albumId: song.albumId,
-		genreId: song.genreId,
-		details: SongDetailsHandler.transformer(song.difficulties),
+	.concat(ModelValidator)
+	.transform((song: Song) => ({
+		...song,
 		cover: `${API.baseUrl}/song/${song.id}/illustration`,
-	}),
+		details: song.difficulties,
+	}));
+
+export type Song = yup.InferType<typeof SongValidator>;
+
+export const SongHandler: ResponseHandler<Song> = {
+	validator: SongValidator,
 };
-
-interface Song extends Model {
-	id: number;
-	name: string;
-	artistId: number;
-	albumId: number | null;
-	genreId: number | null;
-	cover: string;
-	details: SongDetails;
-}
-
-export interface SongWithArtist extends Song {
-	artist: Artist;
-}
 
 export default Song;

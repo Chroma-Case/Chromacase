@@ -3,6 +3,8 @@ Documentation       Tests of the /artist route.
 ...                 Ensures that the artist CRUD works corectly.
 
 Resource            ../rest.resource
+Resource            ../auth/auth.resource
+Test Setup          ApiKey
 
 
 *** Test Cases ***
