@@ -86,6 +86,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const [score, setScore] = useState(0); // Between 0 and 100
 	// const fadeAnim = useRef(new Animated.Value(0)).current;
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

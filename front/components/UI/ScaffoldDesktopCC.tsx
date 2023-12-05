@@ -42,7 +42,7 @@ const SongHistory = (props: { quantity: number }) => {
 				if (acc.length === 0) {
 					return [curr];
 				}
-				if (acc.find((h) => h.song.id === curr.song.id)) {
+				if (acc.find((h) => h.song!.id === curr.song!.id)) {
 					return acc;
 				}
 				return [...acc, curr];
@@ -59,15 +59,17 @@ const SongHistory = (props: { quantity: number }) => {
 			) : (
 				musics.map((song) => (
 					<View
-						key={'short-history-tab' + song.id}
+						key={'short-history-tab' + song!.id}
 						style={{
 							paddingHorizontal: 16,
 							paddingVertical: 10,
 							flex: 1,
 						}}
 					>
-						<Pressable onPress={() => navigation.navigate('Play', { songId: song.id })}>
-							<Text numberOfLines={1}>{song.name}</Text>
+						<Pressable
+							onPress={() => navigation.navigate('Play', { songId: song!.id })}
+						>
+							<Text numberOfLines={1}>{song!.name}</Text>
 						</Pressable>
 					</View>
 				))
