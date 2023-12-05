@@ -3,6 +3,7 @@ import ButtonBase from './UI/ButtonBase';
 import { Translate, TranslationKey, translate } from '../i18n/i18n';
 import { Play, Star1 } from 'iconsax-react-native';
 import { useNavigation } from '../Navigation';
+import { StackActions } from '@react-navigation/native';
 
 type ScoreModalProps = {
 	songId: number;
@@ -61,7 +62,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 					/>
 				))}
 			</Row>
-			<Text fontSize="3xl">{score}%</Text>
+			<Text fontSize="3xl">{Math.max(score, 0)}%</Text>
 			<Row w="100%" style={{ justifyContent: 'space-between' }}>
 				<Translate translationKey="precision" />
 				<Text>{props.precision}%</Text>
@@ -95,7 +96,9 @@ const ScoreModal = (props: ScoreModalProps) => {
 					icon={Play}
 					type="outlined"
 					title={translate('playAgain')}
-					onPress={() => navigation.navigate('Play', { songId: props.songId })}
+					onPress={() =>
+						navigation.dispatch(StackActions.replace('Play', { songId: props.songId }))
+					}
 				/>
 				<ButtonBase
 					style={{}}
