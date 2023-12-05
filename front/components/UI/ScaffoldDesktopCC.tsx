@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, Image, Pressable } from 'react-native';
 import { Divider, Text, ScrollView, Row, useMediaQuery, useTheme } from 'native-base';
 import { useQuery } from '../../Queries';
 import API from '../../API';
@@ -66,11 +66,9 @@ const SongHistory = (props: { quantity: number }) => {
 							flex: 1,
 						}}
 					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate('Play', { songId: song.id })}
-						>
+						<Pressable onPress={() => navigation.navigate('Play', { songId: song.id })}>
 							<Text numberOfLines={1}>{song.name}</Text>
-						</TouchableOpacity>
+						</Pressable>
 					</View>
 				))
 			)}

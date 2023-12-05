@@ -360,12 +360,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						[
 							[
 								'lastScore',
-								songHistory.data?.best ?? 0,
+								songHistory.data?.history.at(0)?.score ?? 0,
 								() => <Clock color={statColor} />,
 							] as const,
 							[
 								'bestScore',
-								songHistory.data?.history.at(0)?.score ?? 0,
+								songHistory.data?.best ?? 0,
 								() => <Cup color={statColor} />,
 							],
 						] as const
