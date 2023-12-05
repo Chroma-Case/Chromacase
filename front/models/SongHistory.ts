@@ -1,10 +1,12 @@
 import * as yup from 'yup';
 import ResponseHandler from './ResponseHandler';
 import { ModelValidator } from './Model';
+import { SongValidator } from './Song';
 
 
 export const SongHistoryItemValidator = yup.object({
 	songID: yup.number().required(),
+	song: SongValidator.optional(),
 	userID: yup.number().required(),
 	info: yup.object({
 		good: yup.number().required(),
