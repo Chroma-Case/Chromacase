@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { SearchHistory, SongHistory } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { SearchHistoryDto } from './dto/SearchHistoryDto';
-import { SongHistoryDto } from './dto/SongHistoryDto';
+import { Injectable } from "@nestjs/common";
+import { Prisma, SearchHistory, SongHistory } from "@prisma/client";
+import { PrismaService } from "src/prisma/prisma.service";
+import { SearchHistoryDto } from "./dto/SearchHistoryDto";
+import { SongHistoryDto } from "./dto/SongHistoryDto";
 
 @Injectable()
 export class HistoryService {
@@ -45,12 +45,14 @@ export class HistoryService {
 	async getHistory(
 		playerId: number,
 		{ skip, take }: { skip?: number; take?: number },
+		include?: Prisma.SongInclude,
 	): Promise<SongHistory[]> {
 		return this.prisma.songHistory.findMany({
 			where: { user: { id: playerId } },
-			orderBy: { playDate: 'desc' },
+			orderBy: { playDate: "desc" },
 			skip,
 			take,
+			include: { song: include ? { include } : true },
 		});
 	}
 
@@ -63,7 +65,7 @@ export class HistoryService {
 	}): Promise<{ best: number; history: SongHistory[] }> {
 		const history = await this.prisma.songHistory.findMany({
 			where: { user: { id: playerId }, song: { id: songId } },
-			orderBy: { playDate: 'desc' },
+			orderBy: { playDate: "desc" },
 		});
 
 		return {
@@ -95,7 +97,7 @@ export class HistoryService {
 	): Promise<SearchHistory[]> {
 		return this.prisma.searchHistory.findMany({
 			where: { user: { id: playerId } },
-			orderBy: { searchDate: 'desc' },
+			orderBy: { searchDate: "desc" },
 			skip,
 			take,
 		});

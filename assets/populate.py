@@ -8,6 +8,10 @@ from mido import MidiFile
 from configparser import ConfigParser
 
 url = os.environ.get("API_URL")
+api_key = os.environ.get("API_KEY_POPULATE")
+auth_headers = {}
+auth_headers["Authorization"] = f"API Key {api_key}"
+
 
 def getOrCreateAlbum(name, artistId):
 	if not name:
@@ -15,7 +19,7 @@ def getOrCreateAlbum(name, artistId):
 	res = requests.post(f"{url}/album", json={
 		"name": name,
 		"artist": artistId,
-	})
+	},headers=auth_headers)
 	out = res.json()
 	print(out)
 	return out["id"]
@@ -25,7 +29,7 @@ def getOrCreateGenre(names):
 	for name in names.split(","):
 		res = requests.post(f"{url}/genre", json={
 			"name": name,
-		})
+		},headers=auth_headers)
 		out = res.json()
 		print(out)
 		ids += [out["id"]]
@@ -35,7 +39,7 @@ def getOrCreateGenre(names):
 def getOrCreateArtist(name):
 	res = requests.post(f"{url}/artist", json={
 		"name": name,
-	})
+	},headers=auth_headers)
 	out = res.json()
 	print(out)
 	return out["id"]
@@ -49,6 +53,7 @@ def populateFile(path, midi, mxl):
 	difficulties["length"] = round((mid.length), 2)
 	artistId = getOrCreateArtist(metadata["Artist"])
 	print(f"Populating {metadata['Name']}")
+	print(auth_headers)
 	res = requests.post(f"{url}/song", json={
 		"name": metadata["Name"],
 		"midiPath": f"/assets/{midi}",
@@ -58,8 +63,9 @@ def populateFile(path, midi, mxl):
 		"album": getOrCreateAlbum(metadata["Album"], artistId),
 		"genre": getOrCreateGenre(metadata["Genre"]),
 		"illustrationPath": f"/assets/{os.path.commonpath([midi, mxl])}/illustration.png"
-	})
+	}, headers=auth_headers)
 	print(res.json())
+
 
 def main():
 	global url

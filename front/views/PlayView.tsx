@@ -141,6 +141,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 				type: 'end',
 			})
 		);
+		API.updateUserTotalScore(score);
 	};
 
 	const onMIDISuccess = (access: MIDIAccess) => {

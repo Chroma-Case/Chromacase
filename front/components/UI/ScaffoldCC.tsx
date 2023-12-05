@@ -3,7 +3,7 @@ import useColorScheme from '../../hooks/colorScheme';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
+import { Cup, Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
 import ScaffoldDesktopCC from './ScaffoldDesktopCC';
 import ScaffoldMobileCC from './ScaffoldMobileCC';
@@ -13,6 +13,7 @@ const menu = [
 	{ type: 'main', title: 'menuProfile', icon: User, link: 'User' },
 	{ type: 'main', title: 'menuMusic', icon: Music, link: 'Music' },
 	{ type: 'main', title: 'menuSearch', icon: SearchNormal1, link: 'Search' },
+	{ type: 'main', title: 'menuLeaderBoard', icon: Cup, link: 'Leaderboard' },
 	{ type: 'sub', title: 'menuSettings', icon: Setting2, link: 'Settings' },
 ] as const;
 

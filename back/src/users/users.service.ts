@@ -2,13 +2,13 @@ import {
 	Injectable,
 	InternalServerErrorException,
 	NotFoundException,
-} from '@nestjs/common';
-import { User, Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import * as bcrypt from 'bcryptjs';
-import { createHash, randomUUID } from 'crypto';
-import { createReadStream, existsSync } from 'fs';
-import fetch from 'node-fetch';
+} from "@nestjs/common";
+import { User, Prisma } from "@prisma/client";
+import { PrismaService } from "src/prisma/prisma.service";
+import * as bcrypt from "bcryptjs";
+import { createHash, randomUUID } from "crypto";
+import { createReadStream, existsSync } from "fs";
+import fetch from "node-fetch";
 
 @Injectable()
 export class UsersService {
@@ -53,7 +53,7 @@ export class UsersService {
 				isGuest: true,
 				// Not realyl clean but better than a separate table or breaking the api by adding nulls.
 				email: null,
-				password: '',
+				password: "",
 			},
 		});
 	}
@@ -63,7 +63,7 @@ export class UsersService {
 		data: Prisma.UserUpdateInput;
 	}): Promise<User> {
 		const { where, data } = params;
-		if (typeof data.password === 'string')
+		if (typeof data.password === "string")
 			data.password = await bcrypt.hash(data.password, 8);
 		else if (data.password && data.password.set)
 			data.password = await bcrypt.hash(data.password.set, 8);
@@ -89,9 +89,9 @@ export class UsersService {
 		const user = await this.user({ id: userId });
 		if (!user) throw new InternalServerErrorException();
 		if (!user.email) throw new NotFoundException();
-		const hash = createHash('md5')
+		const hash = createHash("md5")
 			.update(user.email.trim().toLowerCase())
-			.digest('hex');
+			.digest("hex");
 		const resp = await fetch(
 			`https://www.gravatar.com/avatar/${hash}.jpg?d=404&s=200`,
 		);
@@ -105,9 +105,10 @@ export class UsersService {
 		});
 	}
 
-	async getLikedSongs(userId: number) {
+	async getLikedSongs(userId: number, include?: Prisma.SongInclude) {
 		return this.prisma.likedSongs.findMany({
 			where: { userId: userId },
+			include: { song: include ? { include } : true },
 		});
 	}
 
@@ -115,5 +116,19 @@ export class UsersService {
 		return this.prisma.likedSongs.deleteMany({
 			where: { userId: userId, songId: songId },
 		});
+	}
+
+	async addScore(
+		where: number,
+		score: number,
+	) {
+		return this.prisma.user.update({
+				where: { id: where },
+				data: {
+					partyPlayed: {
+						increment: score,
+					},
+				},
+			});
 	}
 }

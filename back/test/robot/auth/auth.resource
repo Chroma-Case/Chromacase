@@ -5,6 +5,11 @@ Resource            ../rest.resource
 
 
 *** Keywords ***
+ApiKey
+    [Documentation]    Set the API Key
+    Set Headers    {"Authorization": "API Key %{API_KEY_ROBOT}"}
+
+
 Login
     [Documentation]    Shortcut to login with the given username for future requests
     [Arguments]    ${username}

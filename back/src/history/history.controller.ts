@@ -9,68 +9,75 @@ import {
 	Query,
 	Request,
 	UseGuards,
-} from '@nestjs/common';
+} from "@nestjs/common";
 import {
 	ApiCreatedResponse,
 	ApiOkResponse,
 	ApiOperation,
 	ApiTags,
 	ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
-import { SearchHistory, SongHistory } from '@prisma/client';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { SongHistoryDto } from './dto/SongHistoryDto';
-import { HistoryService } from './history.service';
-import { SearchHistoryDto } from './dto/SearchHistoryDto';
-import { SongHistory as _SongHistory } from 'src/_gen/prisma-class/song_history';
-import { SearchHistory as _SearchHistory } from 'src/_gen/prisma-class/search_history';
+} from "@nestjs/swagger";
+import { SearchHistory, SongHistory } from "@prisma/client";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { SongHistoryDto } from "./dto/SongHistoryDto";
+import { HistoryService } from "./history.service";
+import { SearchHistoryDto } from "./dto/SearchHistoryDto";
+import { SongHistory as _SongHistory } from "src/_gen/prisma-class/song_history";
+import { SearchHistory as _SearchHistory } from "src/_gen/prisma-class/search_history";
+import { SongController } from "src/song/song.controller";
+import { mapInclude } from "src/utils/include";
 
-@Controller('history')
-@ApiTags('history')
+@Controller("history")
+@ApiTags("history")
 export class HistoryController {
 	constructor(private readonly historyService: HistoryService) {}
 
 	@Get()
 	@HttpCode(200)
-	@ApiOperation({ description: 'Get song history of connected user' })
+	@ApiOperation({ description: "Get song history of connected user" })
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({ type: _SongHistory, isArray: true })
-	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	async getHistory(
 		@Request() req: any,
-		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
+		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
+		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
+		@Query("include") include: string,
 	): Promise<SongHistory[]> {
-		return this.historyService.getHistory(req.user.id, { skip, take });
+		return this.historyService.getHistory(
+			req.user.id,
+			{ skip, take },
+			mapInclude(include, req, SongController.includableFields),
+		);
 	}
 
-	@Get('search')
+	@Get("search")
 	@HttpCode(200)
-	@ApiOperation({ description: 'Get search history of connected user' })
+	@ApiOperation({ description: "Get search history of connected user" })
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({ type: _SearchHistory, isArray: true })
-	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	async getSearchHistory(
 		@Request() req: any,
-		@Query('skip', new DefaultValuePipe(0), ParseIntPipe) skip: number,
-		@Query('take', new DefaultValuePipe(20), ParseIntPipe) take: number,
+		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
+		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<SearchHistory[]> {
 		return this.historyService.getSearchHistory(req.user.id, { skip, take });
 	}
 
 	@Post()
 	@HttpCode(201)
-	@ApiOperation({ description: 'Create a record of a song played by a user' })
-	@ApiCreatedResponse({ description: 'Succesfully created a record' })
+	@ApiOperation({ description: "Create a record of a song played by a user" })
+	@ApiCreatedResponse({ description: "Succesfully created a record" })
 	async create(@Body() record: SongHistoryDto): Promise<SongHistory> {
 		return this.historyService.createSongHistoryRecord(record);
 	}
 
-	@Post('search')
+	@Post("search")
 	@HttpCode(201)
-	@ApiOperation({ description: 'Creates a search record in the users history' })
+	@ApiOperation({ description: "Creates a search record in the users history" })
 	@UseGuards(JwtAuthGuard)
-	@ApiUnauthorizedResponse({ description: 'Invalid token' })
+	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	async createSearchHistory(
 		@Request() req: any,
 		@Body() record: SearchHistoryDto,

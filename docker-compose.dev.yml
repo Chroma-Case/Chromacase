@@ -36,6 +36,8 @@ services:
       - scoro_logs:/logs
     networks:
       - loki
+    env_file:
+      - .env
 
   db:
     container_name: db

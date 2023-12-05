@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 
 export class User {
 	@ApiProperty()
@@ -11,4 +11,6 @@ export class User {
 	isGuest: boolean;
 	@ApiProperty()
 	partyPlayed: number;
+    @ApiProperty()
+    totalScore: number;
 }

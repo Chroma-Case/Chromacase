@@ -3,7 +3,7 @@ import API from '../API';
 import { useQuery } from '../Queries';
 import { useMemo } from 'react';
 
-const getInitials = (name: string) => {
+export const getInitials = (name: string) => {
 	return name
 		.split(' ')
 		.map((n) => n[0])

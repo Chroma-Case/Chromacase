@@ -3,6 +3,8 @@ Documentation       Tests of the /album route.
 ...                 Ensures that the album CRUD works corectly.
 
 Resource            ../rest.resource
+Resource            ../auth/auth.resource
+Test Setup          ApiKey
 
 
 *** Test Cases ***

@@ -1,17 +1,18 @@
 import { HStack, IconButton, Image, Text } from 'native-base';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
-import { LikedSongWithDetails } from '../models/LikedSong';
 import { MaterialIcons } from '@expo/vector-icons';
 import API from '../API';
 import DurationComponent from './DurationComponent';
+import Song from '../models/Song';
 
 type FavSongRowProps = {
-	FavSong: LikedSongWithDetails; // TODO: remove Song
+	song: Song;
+	addedDate: Date;
 	onPress: () => void;
 };
 
-const FavSongRow = ({ FavSong, onPress }: FavSongRowProps) => {
+const FavSongRow = ({ song, addedDate, onPress }: FavSongRowProps) => {
 	return (
 		<RowCustom width={'100%'}>
 			<HStack px={2} space={5} justifyContent={'space-between'}>
@@ -20,8 +21,8 @@ const FavSongRow = ({ FavSong, onPress }: FavSongRowProps) => {
 					flexGrow={0}
 					pl={10}
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: 5 }}
-					source={{ uri: FavSong.details.cover }}
-					alt={FavSong.details.name}
+					source={{ uri: song.cover }}
+					alt={song.name}
 					borderColor={'white'}
 					borderWidth={1}
 				/>
@@ -45,7 +46,7 @@ const FavSongRow = ({ FavSong, onPress }: FavSongRowProps) => {
 						bold
 						fontSize="md"
 					>
-						{FavSong.details.name}
+						{song.name}
 					</Text>
 					<Text
 						style={{
@@ -53,16 +54,16 @@ const FavSongRow = ({ FavSong, onPress }: FavSongRowProps) => {
 						}}
 						fontSize={'sm'}
 					>
-						{FavSong.addedDate.toLocaleDateString()}
+						{addedDate.toLocaleDateString()}
 					</Text>
-					<DurationComponent length={FavSong.details.details.length} />
+					<DurationComponent length={song.difficulties.length} />
 				</HStack>
 				<IconButton
 					colorScheme="primary"
 					variant={'ghost'}
 					borderRadius={'full'}
 					onPress={() => {
-						API.removeLikedSong(FavSong.songId);
+						API.removeLikedSong(song.id);
 					}}
 					_icon={{
 						as: MaterialIcons,

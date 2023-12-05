@@ -3,6 +3,8 @@ Documentation       Tests of the /genre route.
 ...                 Ensures that the genre CRUD works corectly.
 
 Resource            ../rest.resource
+Resource            ../auth/auth.resource
+Test Setup          ApiKey
 
 
 *** Test Cases ***

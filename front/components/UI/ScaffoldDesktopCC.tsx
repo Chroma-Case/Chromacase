@@ -1,9 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import { View, Image, TouchableOpacity } from 'react-native';
 import { Divider, Text, ScrollView, Row, useMediaQuery, useTheme } from 'native-base';
-import { useQuery, useQueries } from '../../Queries';
+import { useQuery } from '../../Queries';
 import API from '../../API';
-import Song from '../../models/Song';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
@@ -30,42 +29,36 @@ type ScaffoldDesktopCCProps = {
 
 // TODO a tester avec un historique de plus de 3 musics différente mdr !!
 const SongHistory = (props: { quantity: number }) => {
-	const playHistoryQuery = useQuery(API.getUserPlayHistory);
-	const songHistory = useQueries(
-		playHistoryQuery.data?.map(({ songID }) => API.getSong(songID)) ?? []
-	);
+	const history = useQuery(API.getUserPlayHistory);
 	const navigation = useNavigation();
 
-	const musics = songHistory
-		.map((h) => h.data)
-		.filter((data): data is Song => data !== undefined)
-		.filter((song, i, array) => array.map((s) => s.id).findIndex((id) => id == song.id) == i)
-		?.slice(0, props.quantity)
-		.map((song: Song) => (
-			<View
-				key={'short-history-tab' + song.id}
-				style={{
-					paddingHorizontal: 16,
-					paddingVertical: 10,
-					flex: 1,
-				}}
-			>
-				<TouchableOpacity onPress={() => navigation.navigate('Play', { songId: song.id })}>
-					<Text numberOfLines={1}>{song.name}</Text>
-				</TouchableOpacity>
-			</View>
-		));
-
-	if (!playHistoryQuery.data || playHistoryQuery.isLoading || !songHistory) {
+	if (!history.data || history.isLoading) {
 		return <LoadingView />;
 	}
+
+	const musics = history.data.map((h) => h.song)?.slice(0, props.quantity);
 
 	return (
 		<View>
 			{musics.length === 0 ? (
 				<Text style={{ paddingHorizontal: 16 }}>{translate('menuNoSongsPlayedYet')}</Text>
 			) : (
-				musics
+				musics.map((song) => (
+					<View
+						key={'short-history-tab' + song.id}
+						style={{
+							paddingHorizontal: 16,
+							paddingVertical: 10,
+							flex: 1,
+						}}
+					>
+						<TouchableOpacity
+							onPress={() => navigation.navigate('Play', { songId: song.id })}
+						>
+							<Text numberOfLines={1}>{song.name}</Text>
+						</TouchableOpacity>
+					</View>
+				))
 			)}
 		</View>
 	);

@@ -28,6 +28,8 @@ services:
     volumes:
       - ./assets:/assets
       - scoro_logs:/logs
+    env_file:
+      - .env
   db:
     container_name: db
     image: postgres:alpine3.14
