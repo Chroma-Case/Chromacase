@@ -36,7 +36,21 @@ const SongHistory = (props: { quantity: number }) => {
 		return <LoadingView />;
 	}
 
-	const musics = history.data.map((h) => h.song)?.slice(0, props.quantity);
+	const musics = history.data
+		.reduce(
+			(acc, curr) => {
+				if (acc.length === 0) {
+					return [curr];
+				}
+				if (acc.find((h) => h.song.id === curr.song.id)) {
+					return acc;
+				}
+				return [...acc, curr];
+			},
+			[] as typeof history.data
+		)
+		.map((h) => h.song)
+		?.slice(0, props.quantity);
 
 	return (
 		<View>

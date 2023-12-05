@@ -472,7 +472,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					score={score}
 					time={time}
 					paused={paused}
-					disabled={!midiKeyboardFound}
 					song={song.data}
 					onEnd={onEnd}
 					onPause={onPause}
