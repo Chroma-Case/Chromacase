@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Text, Select } from 'native-base';
 import { ScrollView, TextInput, View } from 'react-native';
+import { Input } from 'native-base';
 import ButtonBase from '../UI/ButtonBase';
 import { AddSquare, CloseCircle, SearchNormal1 } from 'iconsax-react-native';
 import { useQuery } from '../../Queries';
 import API from '../../API';
-import { LoadingView } from '../Loading';
 import Genre from '../../models/Genre';
 
 type ArtistChipProps = {
@@ -17,7 +17,7 @@ type ArtistChipProps = {
 const ArtistChipComponent = (props: ArtistChipProps) => {
 	return (
 		<View>
-			<Button marginX={props.selected ? 0 : 26} variant={'ghost'} onPress={props.onPress}>
+			<Button variant={'ghost'} onPress={props.onPress}>
 				<View
 					style={{
 						display: 'flex',
@@ -46,10 +46,6 @@ const SearchBarComponent = () => {
 	const artistsQuery = useQuery(API.getAllArtists());
 	const genresQuery = useQuery(API.getAllGenres());
 
-	if (artistsQuery.isLoading || genresQuery.isLoading) {
-		return <LoadingView />;
-	}
-
 	return (
 		<View>
 			<View
@@ -59,44 +55,77 @@ const SearchBarComponent = () => {
 					display: 'flex',
 					flexDirection: 'row',
 					alignItems: 'center',
+					width: '100%',
 					margin: 5,
 					padding: 16,
 				}}
 			>
-				{artist ? (
-					<ArtistChipComponent
-						onPress={() => setArtist('')}
-						name={artist}
-						selected={true}
-					/>
-				) : null}
-				<TextInput
+				<View
+					style={{
+						flexGrow: 0,
+						flexShrink: 1,
+						flexDirection: 'row',
+						flexWrap: 'wrap',
+					}}
+				>
+					{artist && (
+						<ArtistChipComponent
+							onPress={() => setArtist('')}
+							name={artist}
+							selected={true}
+						/>
+					)}
+				</View>
+				<Input
+					type="text"
 					value={query}
 					placeholder="What are you looking for ?"
-					style={{ width: '100%', height: 30 }}
+					style={{ height: 30, flexGrow: 1, flexShrink: 1 }}
 					onChangeText={(value) => setQuery(value)}
 				/>
 
-				<ButtonBase type="menu" icon={SearchNormal1} />
+				<ButtonBase
+					type="menu"
+					icon={SearchNormal1}
+					style={{
+						flexShrink: 0,
+						flexGrow: 0,
+					}}
+				/>
 			</View>
 			<View
-				style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+				style={{
+					display: 'flex',
+					flexDirection: 'row',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+					gap: 10,
+				}}
 			>
 				<ScrollView
 					horizontal={true}
-					style={{ display: 'flex', flexDirection: 'row', paddingVertical: 10 }}
+					style={{
+						paddingBottom: 10,
+					}}
 				>
-					{!artist
-						? artistsQuery.data?.map((artist, index) => (
-								<ArtistChipComponent
-									key={index}
-									name={artist.name}
-									onPress={() => {
-										setArtist(artist.name);
-									}}
-								/>
-						  ))
-						: null}
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							gap: 10,
+						}}
+					>
+						{artistsQuery.data?.map((artist, index) => (
+							<ArtistChipComponent
+								key={index}
+								name={artist.name}
+								onPress={() => {
+									setArtist(artist.name);
+								}}
+							/>
+						))}
+					</View>
 				</ScrollView>
 				<View>
 					<Select

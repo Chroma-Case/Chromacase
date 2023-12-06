@@ -1,16 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
+import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import SearchBarComponent from '../../components/V2/SearchBar';
+import { RouteProps } from '../../Navigation';
 
-// search with all parameters from search bar function
-
-// return to search bar auto completion thing
-
-const SearchView = () => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+const SearchView = (props: RouteProps<{}>) => {
 	return (
-		<View style={{ display: 'flex', flexDirection: 'column', padding: 3 }}>
+		<ScaffoldCC routeName={props.route.name}>
 			<SearchBarComponent />
-		</View>
+		</ScaffoldCC>
 	);
 };
 
