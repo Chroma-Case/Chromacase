@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Text, Select } from 'native-base';
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { Input } from 'native-base';
 import ButtonBase from '../UI/ButtonBase';
 import { AddSquare, CloseCircle, SearchNormal1 } from 'iconsax-react-native';
@@ -58,6 +58,7 @@ const SearchBarComponent = () => {
 					width: '100%',
 					margin: 5,
 					padding: 16,
+					gap: 10,
 				}}
 			>
 				<View
@@ -76,14 +77,21 @@ const SearchBarComponent = () => {
 						/>
 					)}
 				</View>
-				<Input
-					type="text"
-					value={query}
-					placeholder="What are you looking for ?"
-					style={{ height: 30, flexGrow: 1, flexShrink: 1 }}
-					onChangeText={(value) => setQuery(value)}
-				/>
-
+				<View
+					style={{
+						flexGrow: 1,
+						flexShrink: 1,
+					}}
+				>
+					<Input
+						type="text"
+						value={query}
+						variant={'unstyled'}
+						placeholder="What are you looking for ?"
+						style={{ width: '100%', height: 30 }}
+						onChangeText={(value) => setQuery(value)}
+					/>
+				</View>
 				<ButtonBase
 					type="menu"
 					icon={SearchNormal1}
