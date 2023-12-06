@@ -88,7 +88,7 @@ const SearchBarComponent = () => {
 						type="text"
 						value={query}
 						variant={'unstyled'}
-						placeholder="What are you looking for ?"
+						placeholder={translate('searchBarPlaceholder')}
 						style={{ width: '100%', height: 30 }}
 						onChangeText={(value) => setQuery(value)}
 					/>

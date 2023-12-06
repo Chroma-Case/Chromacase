@@ -84,6 +84,7 @@ export const en = {
 	songsFilter: 'Songs',
 	genreFilter: 'Genres',
 	favoriteFilter: 'Favorites',
+    searchBarPlaceholder: 'What are you looking for ?',
 
 	// profile page
 	user: 'Profile',
@@ -396,6 +397,7 @@ export const fr: typeof en = {
     songsFilter: 'Morceaux',
     genreFilter: 'Genres',
     favoriteFilter: 'Favoris',
+    searchBarPlaceholder: 'Que recherchez vous ?',
 
     // Difficulty settings
     diffBtn: 'Difficulté',
@@ -701,6 +703,7 @@ export const sp: typeof en = {
     songsFilter: 'canciones',
     genreFilter: 'géneros',
     favoriteFilter: 'Favorites',
+    searchBarPlaceholder: 'Qué estás buscando ?',
 
     // Difficulty settings
     diffBtn: 'Dificultad',
