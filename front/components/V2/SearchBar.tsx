@@ -7,6 +7,7 @@ import { AddSquare, CloseCircle, SearchNormal1 } from 'iconsax-react-native';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import Genre from '../../models/Genre';
+import { translate } from '../../i18n/i18n';
 
 type ArtistChipProps = {
 	name: string;
@@ -138,7 +139,7 @@ const SearchBarComponent = () => {
 				<View>
 					<Select
 						selectedValue={genre?.name}
-						placeholder="Genre"
+						placeholder={translate('genreFilter')}
 						accessibilityLabel="Genre"
 						onValueChange={(itemValue) => {
 							setGenre(
@@ -148,6 +149,7 @@ const SearchBarComponent = () => {
 							);
 						}}
 					>
+						<Select.Item label={translate('emptySelection')} value=''/>
 						{genresQuery.data?.map((data, index) => (
 							<Select.Item key={index} label={data.name} value={data.name} />
 						))}
