@@ -106,6 +106,7 @@ const SearchBarComponent = () => {
 				style={{
 					display: 'flex',
 					flexDirection: 'row',
+					flexWrap: 'wrap',
 					justifyContent: 'space-between',
 					alignItems: 'center',
 					gap: 10,
@@ -115,6 +116,7 @@ const SearchBarComponent = () => {
 					horizontal={true}
 					style={{
 						paddingBottom: 10,
+						maxWidth: 1200,
 					}}
 				>
 					<View
@@ -125,7 +127,7 @@ const SearchBarComponent = () => {
 							gap: 10,
 						}}
 					>
-						{artistsQuery.data?.map((artist, index) => (
+						{ !artist ? artistsQuery.data?.map((artist, index) => (
 							<ArtistChipComponent
 								key={index}
 								name={artist.name}
@@ -133,7 +135,7 @@ const SearchBarComponent = () => {
 									setArtist(artist.name);
 								}}
 							/>
-						))}
+						)) : null}
 					</View>
 				</ScrollView>
 				<View>
