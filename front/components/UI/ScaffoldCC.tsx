@@ -10,7 +10,7 @@ import ScaffoldMobileCC from './ScaffoldMobileCC';
 import { useAssets } from 'expo-asset';
 
 const menu = [
-	{ type: 'main', title: 'menuDiscovery', icon: Discover, link: 'HomeNew' },
+	{ type: 'main', title: 'menuDiscovery', icon: Discover, link: 'Home' },
 	{ type: 'main', title: 'menuProfile', icon: User, link: 'User' },
 	{ type: 'main', title: 'menuMusic', icon: Music, link: 'Music' },
 	{ type: 'main', title: 'menuSearch', icon: SearchNormal1, link: 'Search' },

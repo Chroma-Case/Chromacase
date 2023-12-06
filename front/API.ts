@@ -400,7 +400,7 @@ export default class API {
 		};
 	}
 
-	public static getGenres(): Query<Genre[]> {
+	public static getAllGenres(): Query<Genre[]> {
 		return {
 			key: ['genres'],
 			exec: () =>
@@ -446,7 +446,7 @@ export default class API {
 		};
 	}
 
-	public static getArtists(): Query<Artist[]> {
+	public static getAllArtists(): Query<Artist[]> {
 		return {
 			key: ['artists'],
 			exec: () =>

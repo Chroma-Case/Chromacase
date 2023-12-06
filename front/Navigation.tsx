@@ -30,7 +30,6 @@ import SigninView from './views/SigninView';
 import SignupView from './views/SignupView';
 import PasswordResetView from './views/PasswordResetView';
 import ForgotPasswordView from './views/ForgotPasswordView';
-import Leaderboardiew from './views/LeaderboardView';
 import DiscoveryView from './views/V2/DiscoveryView';
 import MusicView from './views/MusicView';
 import Leaderboardiew from './views/LeaderboardView';
@@ -49,11 +48,6 @@ const protectedRoutes = () =>
 			component: MusicView,
 			options: { headerShown: false },
 			link: '/music',
-		},
-		HomeNew: {
-			component: DiscoveryView,
-			options: { headerShown: false },
-			link: '/V2',
 		},
 		Play: {
 			component: PlayView,

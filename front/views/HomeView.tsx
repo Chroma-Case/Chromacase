@@ -93,7 +93,7 @@ const HomeView = (props: RouteProps<{}>) => {
 							label={'V2'}
 							colorScheme="gray"
 							size="sm"
-							onPress={() => navigation.navigate('HomeNew', {})}
+							onPress={() => navigation.navigate('Home', {})}
 						/>
 					</HStack>
 					<Box style={{ width: '100%' }}>

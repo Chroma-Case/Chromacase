@@ -43,8 +43,8 @@ const SearchBarComponent = () => {
 	const [query, setQuery] = React.useState('');
 	const [genre, setGenre] = React.useState({} as Genre | undefined);
 	const [artist, setArtist] = React.useState('');
-	const artistsQuery = useQuery(API.getArtists());
-	const genresQuery = useQuery(API.getGenres());
+	const artistsQuery = useQuery(API.getAllArtists());
+	const genresQuery = useQuery(API.getAllGenres());
 
 	if (artistsQuery.isLoading || genresQuery.isLoading) {
 		return <LoadingView />;
