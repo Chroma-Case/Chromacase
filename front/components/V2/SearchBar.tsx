@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, Select } from 'native-base';
+import { Button, Text, Select, useBreakpointValue } from 'native-base';
 import { ScrollView, View } from 'react-native';
 import { Input } from 'native-base';
 import ButtonBase from '../UI/ButtonBase';
@@ -46,6 +46,8 @@ const SearchBarComponent = () => {
 	const [artist, setArtist] = React.useState('');
 	const artistsQuery = useQuery(API.getAllArtists());
 	const genresQuery = useQuery(API.getAllGenres());
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const isMobileView = screenSize == 'small';
 
 	return (
 		<View>
@@ -54,7 +56,7 @@ const SearchBarComponent = () => {
 					borderBottomWidth: 1,
 					borderBottomColor: '#9E9E9E',
 					display: 'flex',
-					flexDirection: 'row',
+					flexDirection: isMobileView ? 'column' : 'row',
 					alignItems: 'center',
 					width: '100%',
 					margin: 5,
@@ -65,7 +67,7 @@ const SearchBarComponent = () => {
 				<View
 					style={{
 						flexGrow: 0,
-						flexShrink: 1,
+						flexShrink: 0,
 						flexDirection: 'row',
 						flexWrap: 'wrap',
 					}}
@@ -80,27 +82,38 @@ const SearchBarComponent = () => {
 				</View>
 				<View
 					style={{
+						display: 'flex',
+						flexDirection: 'row',
+						justifyContent: 'space-between',
+						alignItems: 'center',
 						flexGrow: 1,
-						flexShrink: 1,
+						width: '100%',
 					}}
 				>
-					<Input
-						type="text"
-						value={query}
-						variant={'unstyled'}
-						placeholder={translate('searchBarPlaceholder')}
-						style={{ width: '100%', height: 30 }}
-						onChangeText={(value) => setQuery(value)}
+					<View
+						style={{
+							flexGrow: 1,
+							flexShrink: 1,
+						}}
+					>
+						<Input
+							type="text"
+							value={query}
+							variant={'unstyled'}
+							placeholder={translate('searchBarPlaceholder')}
+							style={{ width: '100%', height: 30 }}
+							onChangeText={(value) => setQuery(value)}
+						/>
+					</View>
+					<ButtonBase
+						type="menu"
+						icon={SearchNormal1}
+						style={{
+							flexShrink: 0,
+							flexGrow: 0,
+						}}
 					/>
 				</View>
-				<ButtonBase
-					type="menu"
-					icon={SearchNormal1}
-					style={{
-						flexShrink: 0,
-						flexGrow: 0,
-					}}
-				/>
 			</View>
 			<View
 				style={{
@@ -127,15 +140,17 @@ const SearchBarComponent = () => {
 							gap: 10,
 						}}
 					>
-						{ !artist ? artistsQuery.data?.map((artist, index) => (
-							<ArtistChipComponent
-								key={index}
-								name={artist.name}
-								onPress={() => {
-									setArtist(artist.name);
-								}}
-							/>
-						)) : null}
+						{!artist
+							? artistsQuery.data?.map((artist, index) => (
+									<ArtistChipComponent
+										key={index}
+										name={artist.name}
+										onPress={() => {
+											setArtist(artist.name);
+										}}
+									/>
+							))
+							: null}
 					</View>
 				</ScrollView>
 				<View>
@@ -151,7 +166,7 @@ const SearchBarComponent = () => {
 							);
 						}}
 					>
-						<Select.Item label={translate('emptySelection')} value=''/>
+						<Select.Item label={translate('emptySelection')} value="" />
 						{genresQuery.data?.map((data, index) => (
 							<Select.Item key={index} label={data.name} value={data.name} />
 						))}
