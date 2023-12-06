@@ -149,7 +149,7 @@ const SearchBarComponent = () => {
 											setArtist(artist.name);
 										}}
 									/>
-							))
+							  ))
 							: null}
 					</View>
 				</ScrollView>
