@@ -59,10 +59,10 @@ const HomeView = (props: RouteProps<{}>) => {
 									playHistoryQuery.data
 										?.map((x) => x.song)
 										.map((song) => ({
-											cover: song.cover,
-											name: song.name,
-											songId: song.id,
-											artistName: song.artist!.name,
+											cover: song!.cover,
+											name: song!.name,
+											songId: song!.id,
+											artistName: song!.artist!.name,
 										})) ?? []
 								}
 							/>

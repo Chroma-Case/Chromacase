@@ -8,7 +8,7 @@ import React from 'react';
 import GlassmorphismCC from './Glassmorphism';
 
 type PopupCCProps = {
-	title: string;
+	title?: string;
 	description?: string;
 	children?: ReactNode;
 	isVisible: boolean;
@@ -53,17 +53,19 @@ const PopupCC = ({ title, description, children, isVisible, setIsVisible }: Popu
 							onPress={async () => setIsVisible(false)}
 						/>
 					)}
-					<Heading
-						size="md"
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							alignItems: 'center',
-							justifyContent: 'space-between',
-						}}
-					>
-						<Text style={{ flex: 1 }}>{title}</Text>
-					</Heading>
+					{title !== undefined && (
+						<Heading
+							size="md"
+							style={{
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'space-between',
+							}}
+						>
+							<Text style={{ flex: 1 }}>{title}</Text>
+						</Heading>
+					)}
 					{description !== undefined && <Text>{description}</Text>}
 					{children !== undefined && children}
 				</View>

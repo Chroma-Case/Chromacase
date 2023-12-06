@@ -7,6 +7,7 @@ import { Cup, Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-rea
 import { LoadingView } from '../Loading';
 import ScaffoldDesktopCC from './ScaffoldDesktopCC';
 import ScaffoldMobileCC from './ScaffoldMobileCC';
+import { useAssets } from 'expo-asset';
 
 const menu = [
 	{ type: 'main', title: 'menuDiscovery', icon: Discover, link: 'HomeNew' },
@@ -37,10 +38,11 @@ const ScaffoldCC = ({
 		return <LoadingView />;
 	}
 	const colorScheme = useColorScheme();
-	const logo =
+	const [logo] = useAssets(
 		colorScheme == 'light'
 			? require('../../assets/icon_light.png')
-			: require('../../assets/icon_dark.png');
+			: require('../../assets/icon_dark.png')
+	);
 
 	return (
 		<Flex style={{ flex: 1, backgroundColor: '#cdd4fd' }}>
@@ -48,7 +50,7 @@ const ScaffoldCC = ({
 				<ScaffoldMobileCC
 					enableScroll={enableScroll}
 					user={userQuery.data}
-					logo={logo}
+					logo={logo?.at(0)?.uri ?? ''}
 					routeName={routeName}
 					menu={menu}
 					widthPadding={withPadding}
@@ -58,7 +60,7 @@ const ScaffoldCC = ({
 			) : (
 				<ScaffoldDesktopCC
 					user={userQuery.data}
-					logo={logo}
+					logo={logo?.at(0)?.uri ?? ''}
 					routeName={routeName}
 					menu={menu}
 					widthPadding={withPadding}

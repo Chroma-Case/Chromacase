@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { View, Image, TouchableOpacity } from 'react-native';
+import { View, Image, Pressable } from 'react-native';
 import { Divider, Text, ScrollView, Row, useMediaQuery, useTheme } from 'native-base';
 import { useQuery } from '../../Queries';
 import API from '../../API';
@@ -36,7 +36,21 @@ const SongHistory = (props: { quantity: number }) => {
 		return <LoadingView />;
 	}
 
-	const musics = history.data.map((h) => h.song)?.slice(0, props.quantity);
+	const musics = history.data
+		.reduce(
+			(acc, curr) => {
+				if (acc.length === 0) {
+					return [curr];
+				}
+				if (acc.find((h) => h.song!.id === curr.song!.id)) {
+					return acc;
+				}
+				return [...acc, curr];
+			},
+			[] as typeof history.data
+		)
+		.map((h) => h.song)
+		?.slice(0, props.quantity);
 
 	return (
 		<View>
@@ -45,18 +59,18 @@ const SongHistory = (props: { quantity: number }) => {
 			) : (
 				musics.map((song) => (
 					<View
-						key={'short-history-tab' + song.id}
+						key={'short-history-tab' + song!.id}
 						style={{
 							paddingHorizontal: 16,
 							paddingVertical: 10,
 							flex: 1,
 						}}
 					>
-						<TouchableOpacity
-							onPress={() => navigation.navigate('Play', { songId: song.id })}
+						<Pressable
+							onPress={() => navigation.navigate('Play', { songId: song!.id })}
 						>
-							<Text numberOfLines={1}>{song.name}</Text>
-						</TouchableOpacity>
+							<Text numberOfLines={1}>{song!.name}</Text>
+						</Pressable>
 					</View>
 				))
 			)}

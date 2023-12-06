@@ -32,6 +32,7 @@ import PopupCC from '../components/UI/PopupCC';
 import ButtonBase from '../components/UI/ButtonBase';
 import { Clock, Cup } from 'iconsax-react-native';
 import PlayViewControlBar from '../components/Play/PlayViewControlBar';
+import ScoreModal from '../components/ScoreModal';
 
 type PlayViewProps = {
 	songId: number;
@@ -80,10 +81,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
+	const [endResult, setEndResult] = useState<unknown>();
 	const songHistory = useQuery(API.getSongHistory(songId));
 	const [score, setScore] = useState(0); // Between 0 and 100
 	// const fadeAnim = useRef(new Animated.Value(0)).current;
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -183,11 +186,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 				if (data.type == 'end') {
 					endMsgReceived = true;
 					webSocket.current?.close();
-					navigation.dispatch(
-						StackActions.replace('Score', { songId: song.data!.id, ...data })
-					);
+					setEndResult({ songId: song.data!.id, ...data });
 					return;
 				}
+				console.log(data);
 
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
@@ -319,16 +321,52 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						zIndex: 100,
 					}}
 				>
+					<PopupCC isVisible={endResult != undefined}>
+						{
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							(() => (endResult ? <ScoreModal {...(endResult as any)} /> : <></>))()
+						}
+					</PopupCC>
+					<PopupCC
+						title={translate('selectPlayMode')}
+						description={translate('selectPlayModeExplaination')}
+						isVisible={playType == null}
+						setIsVisible={
+							navigation.canGoBack()
+								? (isVisible) => {
+										if (!isVisible) {
+											// If we dismiss the popup, Go to previous page
+											navigation.goBack();
+										}
+								  }
+								: undefined
+						}
+					>
+						<Row style={{ justifyContent: 'space-between' }}>
+							<ButtonBase
+								style={{}}
+								type="outlined"
+								title={translate('practiceBtn')}
+								onPress={async () => setPlayType('practice')}
+							/>
+							<ButtonBase
+								style={{}}
+								type="filled"
+								title={translate('playBtn')}
+								onPress={async () => setPlayType('normal')}
+							/>
+						</Row>
+					</PopupCC>
 					{(
 						[
 							[
 								'lastScore',
-								songHistory.data?.best ?? 0,
+								songHistory.data?.history.at(0)?.score ?? 0,
 								() => <Clock color={statColor} />,
 							] as const,
 							[
 								'bestScore',
-								songHistory.data?.history.at(0)?.score ?? 0,
+								songHistory.data?.best ?? 0,
 								() => <Cup color={statColor} />,
 							],
 						] as const
@@ -435,7 +473,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					score={score}
 					time={time}
 					paused={paused}
-					disabled={!midiKeyboardFound}
 					song={song.data}
 					onEnd={onEnd}
 					onPause={onPause}
