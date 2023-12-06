@@ -75,7 +75,7 @@ const HomeView = (props: RouteProps<{}>) => {
 							translate={{ translationKey: 'searchBtn' }}
 							colorScheme="secondary"
 							size="sm"
-							onPress={() => navigation.navigate('Search')}
+							onPress={() => navigation.navigate('Search', {})}
 						/>
 						<TextButton
 							translate={{ translationKey: 'settingsBtn' }}
@@ -126,7 +126,7 @@ const HomeView = (props: RouteProps<{}>) => {
 										size="xs"
 										colorScheme="primary"
 										label={query}
-										onPress={() => navigation.navigate('Search')}
+										onPress={() => navigation.navigate('Search', {})}
 									/>
 								))}
 						</Flex>
