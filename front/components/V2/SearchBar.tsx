@@ -50,14 +50,12 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 	const isMobileView = screenSize == 'small';
 
 	const handleValidate = () => {
-		// Construct an object with the data you want to pass to the parent component
 		const searchData = {
 			query: query,
 			artist: artistsQuery.data?.find((a) => a.name === artist)?.id ?? undefined,
 			genre: genresQuery.data?.find((g) => g.name === genre)?.id ?? undefined,
 		};
 
-		// Call the parent's onValidate callback with the searchData
 		props.onValidate(searchData);
 	};
 

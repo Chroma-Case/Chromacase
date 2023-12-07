@@ -16,35 +16,28 @@ export type searchProps = {
 // eslint-disable-next-line @typescript-eslint/ban-types
 const SearchView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
-	const [searchResult, setSearchResult] = React.useState([] as MusicItemType[]);
+	// const [searchResult, setSearchResult] = React.useState([] as MusicItemType[]);
 	const [searchQuery, setSearchQuery] = React.useState({artist: undefined, genre: undefined, query: ''} as searchProps)
-	const rawResult = useQuery(API.searchSongs(searchQuery), en);
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const handleSearch = async (searchQuery: searchProps) => {
-		// const rawResult = useQuery(API.searchSongs(searchQuery));
-		setSearchQuery(searchQuery);
-		const result =
-			rawResult.data?.map((song) => ({
-				artist: song.artist!.name,
-				song: song.name,
-				image: song.cover,
-				level: 42,
-				lastScore: 42,
-				bestScore: 42,
-				liked: true,
-				onLike: () => {
-					console.log('onLike');
-				},
-				onPlay: () => navigation.navigate('Play', { songId: song.id }),
-			})) ?? [];
-		setSearchResult(result ?? []);
-	};
+	const rawResult = useQuery(API.searchSongs(searchQuery), { enabled: !!searchQuery });
+	const result =
+	rawResult.data?.map((song) => ({
+		artist: song.artist!.name,
+		song: song.name,
+		image: song.cover,
+		level: 42,
+		lastScore: 42,
+		bestScore: 42,
+		liked: true,
+		onLike: () => {
+			console.log('onLike');
+		},
+		onPlay: () => navigation.navigate('Play', { songId: song.id }),
+	})) ?? [];
 
 	return (
 		<ScaffoldCC routeName={props.route.name}>
-			<SearchBarComponent onValidate={handleSearch} />
-			<MusicList initialMusics={searchResult} />
+			<SearchBarComponent onValidate={setSearchQuery} />
+			<MusicList initialMusics={result} />
 		</ScaffoldCC>
 	);
 };
