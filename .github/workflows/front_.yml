@@ -11,9 +11,6 @@ jobs:
 
   front_check:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./front
     steps:
     - name: Success
       run: |
@@ -21,9 +18,6 @@ jobs:
     
   front_build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./front
     needs: [ front_check ]
     steps:
     - name: Success
