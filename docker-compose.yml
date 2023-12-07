@@ -1,6 +1,6 @@
 networks:
     chroma:
-        driver: bridge
+        driver: host
 
 volumes:
   db:
