@@ -2,10 +2,10 @@ on:
   push:
     branches:
       - '*'
-    paths:
-      - "back/**"
-      - "scorometer/**"
-#  pull_request:
+#    paths:
+#      - "back/**"
+#      - "scorometer/**"
+##  pull_request:
 #    branches: [ main ]
 #    paths:
 #      - "scorometer/**"
