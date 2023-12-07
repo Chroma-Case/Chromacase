@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
-          cache-dependency-path: front/package-lock.json
+          cache-dependency-path: front/yarn.lock
       - run: yarn install --frozen-lockfile
       - name: type check
         run: yarn tsc
