@@ -118,17 +118,14 @@ export class UsersService {
 		});
 	}
 
-	async addScore(
-		where: number,
-		score: number,
-	) {
+	async addScore(where: number, score: number) {
 		return this.prisma.user.update({
-				where: { id: where },
-				data: {
-					partyPlayed: {
-						increment: score,
-					},
+			where: { id: where },
+			data: {
+				partyPlayed: {
+					increment: score,
 				},
-			});
+			},
+		});
 	}
 }

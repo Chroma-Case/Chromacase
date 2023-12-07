@@ -15,9 +15,8 @@ export class AuthService {
 
 	validateApiKey(apikey: string): boolean {
 		if (process.env.API_KEYS == null) return false;
-		const keys = process.env.API_KEYS.split(',');
+		const keys = process.env.API_KEYS.split(",");
 		return keys.includes(apikey);
-
 	}
 
 	async validateUser(
