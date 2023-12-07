@@ -101,6 +101,6 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7700"]
       interval: 10s
-      timeout: 5s
+      timeout: 10s
       retries: 5
 
