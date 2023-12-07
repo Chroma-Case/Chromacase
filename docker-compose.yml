@@ -18,8 +18,6 @@ services:
       db:
         condition: service_healthy
       
-      meilisearch:
-        condition: service_healthy
     env_file:
       - .env
     volumes:
