@@ -2,13 +2,34 @@ name: "Scoro"
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - "scorometer/**"
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    # Required permissions
+    permissions:
+      pull-requests: read
+    # Set job outputs to values from filter step
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      scoro: ${{ steps.filter.outputs.scoro }}
+    steps:
+    # For pull requests it's not necessary to checkout the code
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          backend:
+            - 'backend/**'
+          frontend:
+            - 'frontend/**'
+          scoro:
+            - 'scorometer/**'
   scoro_test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    needs: changes
+    if: ${{ needs.changes.outputs.scorometer == 'true' }}
 
     steps:
       - uses: actions/checkout@v3
