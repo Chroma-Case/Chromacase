@@ -6,7 +6,7 @@ import { SongValidator } from './Song';
 export const SongHistoryItemValidator = yup
 	.object({
 		songID: yup.number().required(),
-		song: SongValidator.optional(),
+		song: SongValidator.optional().default(undefined),
 		userID: yup.number().required(),
 		info: yup
 			.object({
