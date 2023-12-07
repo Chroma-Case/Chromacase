@@ -1,22 +1,12 @@
-name: "Back skip"
+name: "Scoro skip"
 on:
   pull_request:
     branches: [ main ]
     paths-ignore:
-      - "back/**"
+      - "scorometer/**"
 
 jobs:
-  back_build:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-
-    - name: Success
-      run: |
-        exit 0
-
-
-  back_test:
+  scoro_test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 

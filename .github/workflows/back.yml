@@ -4,7 +4,6 @@ on:
     branches: [ main ]
     paths:
       - "back/**"
-      - "scorometer/**"
 
 jobs:
   back_build:
@@ -41,13 +40,6 @@ jobs:
           docker-compose ps -a
           docker-compose logs
           wget --retry-connrefused http://localhost:3000 || (docker-compose logs && exit 1)
-
-      - name: Run scorometer tests
-        run: |
-          export API_KEY_SCORO_TEST=SCOROTEST
-          export API_KEY_SCORO=SCORO
-          pip install -r scorometer/requirements.txt
-          cd scorometer/tests && ./runner.sh
 
       - name: Run robot tests
         run: |

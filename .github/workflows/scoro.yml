@@ -1,0 +1,39 @@
+name: "Back"
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "scorometer/**"
+
+jobs:
+  scoro_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Copy env file to github secret env file
+        run: cp .env.example .env
+
+      - name: Build and start the service
+        run: docker-compose up -d back db
+
+      - name: Perform healthchecks
+        run: |
+          docker-compose ps -a
+          docker-compose logs
+          wget --retry-connrefused http://localhost:3000 || (docker-compose logs && exit 1)
+
+      - name: Run scorometer tests
+        run: |
+          export API_KEY_SCORO_TEST=SCOROTEST
+          export API_KEY_SCORO=SCORO
+          pip install -r scorometer/requirements.txt
+          cd scorometer/tests && ./runner.sh
+
+      - name: stop the service
+        run: docker-compose down
