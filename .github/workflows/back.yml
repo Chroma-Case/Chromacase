@@ -5,10 +5,10 @@ on:
     paths:
       - "back/**"
       - "scorometer/**"
-  pull_request:
-    branches: [ main ]
-    paths:
-      - "scorometer/**"
+#  pull_request:
+#    branches: [ main ]
+#    paths:
+#      - "scorometer/**"
 
 jobs:
   back_build:
@@ -17,8 +17,6 @@ jobs:
     defaults:
       run:
         working-directory: ./back
-    environment: Staging
-
     steps:
       - uses: actions/checkout@v3
 
@@ -29,19 +27,17 @@ jobs:
   back_test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [ back_build ]
-    environment: Staging
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          fetch-depth: 0
+ #       with:
+ #         submodules: recursive
+ #         fetch-depth: 0
 
       - name: Copy env file to github secret env file
         run: cp .env.example .env
 
-      - name: Start the service
+      - name: Build and start the service
         run: docker-compose up -d back db
 
       - name: Perform healthchecks
@@ -81,5 +77,5 @@ jobs:
           gh_access_token: ${{ secrets.GITHUB_TOKEN }}
           only_summary: true
 
-      - name: Remove .env && stop the service
-        run: docker-compose down && rm .env
+      - name: stop the service
+        run: docker-compose down
