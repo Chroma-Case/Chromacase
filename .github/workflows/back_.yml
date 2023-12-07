@@ -16,9 +16,17 @@ jobs:
         working-directory: ./back
     steps:
 
+    - name: Success
+      run: |
+        exit 0
+
 
   back_test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
+
+    - name: Success
+      run: |
+        exit 0
