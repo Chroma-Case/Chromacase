@@ -1,14 +1,10 @@
+name: "Back"
 on:
-#  push:
-#    branches:
-#      - '*'
-#    paths:
-#      - "back/**"
-#      - "scorometer/**"
   pull_request:
     branches: [ main ]
-#    paths:
-#      - "scorometer/**"
+    paths:
+      - "back/**"
+      - "scorometer/**"
 
 jobs:
   back_build:

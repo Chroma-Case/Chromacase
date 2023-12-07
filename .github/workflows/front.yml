@@ -1,10 +1,9 @@
+name: "Front"
 on:
-#    paths:
-#      - "front/**"
   pull_request:
     branches: [ main ]
-#    paths:
-#      - "front/**"
+    paths:
+      - "front/**"
 
 jobs:
 
