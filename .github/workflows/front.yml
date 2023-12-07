@@ -2,8 +2,6 @@ name: "Front"
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - "front/**"
 
 jobs:
 
@@ -12,7 +10,8 @@ jobs:
     defaults:
       run:
         working-directory: ./front
-    environment: Staging
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
