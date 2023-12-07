@@ -1,0 +1,25 @@
+name: "Front skip"
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "!front/**"
+
+
+jobs:
+
+  front_check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front
+    steps:
+    
+  front_build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front
+    needs: [ front_check ]
+    steps:

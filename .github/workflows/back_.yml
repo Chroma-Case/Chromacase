@@ -1,0 +1,24 @@
+name: "Back skip"
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - "!back/**"
+      - "!scorometer/**"
+      - '!.github/workflows/**'
+
+jobs:
+  back_build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ./back
+    steps:
+
+
+  back_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
