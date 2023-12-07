@@ -6,7 +6,6 @@ import ButtonBase from '../UI/ButtonBase';
 import { AddSquare, CloseCircle, SearchNormal1 } from 'iconsax-react-native';
 import { useQuery } from '../../Queries';
 import API from '../../API';
-import Genre from '../../models/Genre';
 import { translate } from '../../i18n/i18n';
 import { searchProps } from '../../views/V2/SearchView';
 
@@ -57,7 +56,7 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 			artist: artistsQuery.data?.find((a) => a.name === artist)?.id ?? undefined,
 			genre: genresQuery.data?.find((g) => g.name === genre)?.id ?? undefined,
 		};
-	
+
 		// Call the parent's onValidate callback with the searchData
 		props.onValidate(searchData);
 	};
@@ -162,8 +161,8 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 										onPress={() => {
 											setArtist(artist.name);
 										}}
-									/>
-							))
+									/>// eslint-disable-next-line no-mixed-spaces-and-tabs
+							  ))
 							: null}
 					</View>
 				</ScrollView>
@@ -172,7 +171,9 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 						selectedValue={genre}
 						placeholder={translate('genreFilter')}
 						accessibilityLabel="Genre"
-						onValueChange={(itemValue) => {setGenre(itemValue)}}
+						onValueChange={(itemValue) => {
+							setGenre(itemValue);
+						}}
 					>
 						<Select.Item label={translate('emptySelection')} value="" />
 						{genresQuery.data?.map((data, index) => (

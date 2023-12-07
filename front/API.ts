@@ -781,17 +781,17 @@ export default class API {
 		return `${API.baseUrl}/song/${songId}/assets/partition`;
 	}
 
-    public static searchSongs(query: searchProps): Query<Song[]> {
-        return {
-            key: ['search'],
-            exec: () => {
-                return API.fetch(
-                    {
-                        route: `/search/songs/`,
-                    },
-                    { handler: ListHandler(SongHandler) }
-                )
-            }
-        }
-    }
+	public static searchSongs(query: searchProps): Query<Song[]> {
+		return {
+			key: ['search'],
+			exec: () => {
+				return API.fetch(
+					{
+						route: `/search/songs/${query.query}`,
+					},
+					{ handler: ListHandler(SongHandler) }
+				);
+			},
+		};
+	}
 }

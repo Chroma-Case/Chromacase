@@ -51,8 +51,9 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 	const [filter, setFilter] = useState<Filter>('all');
 	const [stringQuery, setStringQuery] = useState<string>(props?.query ?? '');
 
+	//flemme de corriger de toute facon c'est déprecié et bientot remplacé
 	const { isLoading: isLoadingSong, data: songData = [] } = useQuery(
-		API.searchSongs(stringQuery),
+		API.searchSongs({ artist: undefined, genre: undefined, query: 'zeruigze' }),
 		{ enabled: !!stringQuery }
 	);
 
