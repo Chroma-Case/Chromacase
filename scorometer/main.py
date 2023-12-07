@@ -367,8 +367,6 @@ def handleStartMessage(start_message: StartMessage):
 	try:
 		r = requests.get(f"{BACK_URL}/song/{song_id}", headers=auth_header)
 		r.raise_for_status()
-		# Delete the guest account after getting song
-		requests.delete(f"{BACK_URL}/auth/me", headers=auth_header)
 		song_path = r.json()["midiPath"]
 		song_path = song_path.replace("/assets/musics/", MUSICS_FOLDER)
 	except Exception as e:
