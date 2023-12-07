@@ -99,7 +99,7 @@ services:
       - .env
     
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7700"]
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
       interval: 10s
       timeout: 10s
       retries: 5
