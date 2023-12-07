@@ -1,11 +1,8 @@
 on:
-  push:
-    branches:
-      - '*'
 #    paths:
 #      - "front/**"
-#  pull_request:
-#    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 #    paths:
 #      - "front/**"
 
