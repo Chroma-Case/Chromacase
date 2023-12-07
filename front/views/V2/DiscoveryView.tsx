@@ -20,7 +20,6 @@ const HomeView = (props: RouteProps<{}>) => {
 	const suggestions = suggestionsQuery.data?.slice(4) ?? [];
 
 	return (
-		<ScaffoldCC routeName={props.route.name}>
 			<ScrollView>
 				<View
 					style={{
@@ -84,7 +83,6 @@ const HomeView = (props: RouteProps<{}>) => {
 					</View>
 				</View>
 			</ScrollView>
-		</ScaffoldCC>
 	);
 };
 

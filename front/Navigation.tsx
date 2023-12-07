@@ -5,7 +5,7 @@ import {
 	ParamListBase,
 	useNavigation as navigationHook,
 } from '@react-navigation/native';
-import React, { useEffect, useMemo } from 'react';
+import React, { Component, ComponentProps, ComponentType, ReactElement, ReactNode, useEffect, useMemo } from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
@@ -33,6 +33,7 @@ import ForgotPasswordView from './views/ForgotPasswordView';
 import DiscoveryView from './views/V2/DiscoveryView';
 import MusicView from './views/MusicView';
 import Leaderboardiew from './views/LeaderboardView';
+import { LinearGradient } from 'expo-linear-gradient';
 
 // Util function to hide route props in URL
 const removeMe = () => '';
@@ -126,7 +127,7 @@ const publicRoutes = () =>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Route<Props = any> = {
-	component: (arg: RouteProps<Props>) => JSX.Element | (() => JSX.Element);
+	component: ComponentType<Props>;
 	options: object;
 };
 
@@ -134,7 +135,7 @@ type OmitOrUndefined<T, K extends string> = T extends undefined ? T : Omit<T, K>
 
 type RouteParams<Routes extends Record<string, Route>> = {
 	[RouteName in keyof Routes]: OmitOrUndefined<
-		Parameters<Routes[RouteName]['component']>[0],
+		ComponentProps<Routes[RouteName]['component']>,
 		keyof NativeStackScreenProps<{}>
 	>;
 };
@@ -145,23 +146,31 @@ type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
 
 const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 
-const RouteToScreen =
-	<T extends {}>(component: Route<T>['component']) =>
-	// eslint-disable-next-line react/display-name
-	(props: NativeStackScreenProps<T & ParamListBase>) => (
-		<>
-			{component({ ...props.route.params, route: props.route } as Parameters<
-				Route<T>['component']
-			>[0])}
-		</>
-	);
+const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
+	function Route(props: NativeStackScreenProps<T & ParamListBase>) {
+		const colorScheme = useColorScheme();
+
+		return (
+			<LinearGradient
+				colors={colorScheme === 'dark' ? ['#101014', '#6075F9'] : ['#cdd4fd']}
+				style={{
+					width: '100%',
+					height: '100%',
+					position: 'absolute',
+					zIndex: -2,
+				}}
+			>
+				<Component {...props.route.params as T} route={props.route} />
+			</LinearGradient>
+		);
+	};
 
 const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =>
 	Object.entries(routes).map(([name, route], routeIndex) => (
 		<Stack.Screen
 			key={'route-' + routeIndex}
 			name={name as keyof AppRouteParams}
-			options={route.options}
+			options={{ ...route.options, headerTransparent: true }}
 			component={RouteToScreen(route.component)}
 		/>
 	));

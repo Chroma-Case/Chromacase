@@ -68,17 +68,6 @@ const ScaffoldCC = ({
 					{children}
 				</ScaffoldDesktopCC>
 			)}
-			{colorScheme === 'dark' && (
-				<LinearGradient
-					colors={['#101014', '#6075F9']}
-					style={{
-						width: '100%',
-						height: '100%',
-						position: 'absolute',
-						zIndex: -2,
-					}}
-				/>
-			)}
 		</Flex>
 	);
 };
