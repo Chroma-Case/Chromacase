@@ -5,6 +5,7 @@ on:
     paths:
       - "back/**"
       - "scorometer/**"
+      - '.github/workflows/**'
 
 jobs:
   back_build:
