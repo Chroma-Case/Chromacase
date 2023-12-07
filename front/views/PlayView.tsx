@@ -147,9 +147,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 
 	const onMIDISuccess = (access: MIDIAccess) => {
 		const inputs = access.inputs;
+		console.log('MIDI inputs', inputs);
 		let endMsgReceived = false; // Used to know if to go to error screen when websocket closes
 
-		if (inputs.size < 2) {
+		if (inputs.size <= 0) {
 			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
 		}
@@ -232,7 +233,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		};
 		inputs.forEach((input) => {
 			input.onmidimessage = (message) => {
-				console.log('onmessage');
 				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
 
