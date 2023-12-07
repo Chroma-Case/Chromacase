@@ -1,4 +1,4 @@
-name: "Back"
+name: "Scoro"
 on:
   pull_request:
     branches: [ main ]
