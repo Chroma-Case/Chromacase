@@ -6,6 +6,10 @@ on:
     paths-ignore:
       - "front/**"
       - '.github/workflows/**'
+    
+    paths:
+      - "!front/**"
+      - '!.github/workflows/**'
 
 
 jobs:
