@@ -8,6 +8,7 @@ import { useQuery } from '../../Queries';
 import API from '../../API';
 import Genre from '../../models/Genre';
 import { translate } from '../../i18n/i18n';
+import { searchProps } from '../../views/V2/SearchView';
 
 type ArtistChipProps = {
 	name: string;
@@ -40,7 +41,7 @@ const ArtistChipComponent = (props: ArtistChipProps) => {
 	);
 };
 
-const SearchBarComponent = () => {
+const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => void }) => {
 	const [query, setQuery] = React.useState('');
 	const [genre, setGenre] = React.useState({} as Genre | undefined);
 	const [artist, setArtist] = React.useState('');
@@ -48,6 +49,18 @@ const SearchBarComponent = () => {
 	const genresQuery = useQuery(API.getAllGenres());
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isMobileView = screenSize == 'small';
+
+	const handleValidate = () => {
+		// Construct an object with the data you want to pass to the parent component
+		const searchData = {
+			query: "test",
+			artist: 1,
+			genre: 1,
+		};
+	
+		// Call the parent's onValidate callback with the searchData
+		props.onValidate(searchData);
+	};
 
 	return (
 		<View>
@@ -112,6 +125,7 @@ const SearchBarComponent = () => {
 							flexShrink: 0,
 							flexGrow: 0,
 						}}
+						onPress={handleValidate}
 					/>
 				</View>
 			</View>

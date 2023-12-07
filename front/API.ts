@@ -24,6 +24,7 @@ import * as yup from 'yup';
 import { base64ToBlob } from './utils/base64ToBlob';
 import { ImagePickerAsset } from 'expo-image-picker';
 import { SongCursorInfos, SongCursorInfosHandler } from './models/SongCursorInfos';
+import { searchProps } from './views/V2/SearchView';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -501,18 +502,18 @@ export default class API {
 	 * Search a song by its name
 	 * @param query the string used to find the songs
 	 */
-	public static searchSongs(query: string): Query<Song[]> {
-		return {
-			key: ['search', 'song', query],
-			exec: () =>
-				API.fetch(
-					{
-						route: `/search/songs/${query}`,
-					},
-					{ handler: ListHandler(SongHandler) }
-				),
-		};
-	}
+	// public static searchSongs(query: string): Query<Song[]> {
+	// 	return {
+	// 		key: ['search', 'song', query],
+	// 		exec: () =>
+	// 			API.fetch(
+	// 				{
+	// 					route: `/search/songs/${query}`,
+	// 				},
+	// 				{ handler: ListHandler(SongHandler) }
+	// 			),
+	// 	};
+	// }
 
 	/**
 	 * Search artists by name
@@ -779,4 +780,18 @@ export default class API {
 	public static getPartitionSvgUrl(songId: number): string {
 		return `${API.baseUrl}/song/${songId}/assets/partition`;
 	}
+
+    public static searchSongs(query: searchProps): Query<Song[]> {
+        return {
+            key: ['search'],
+            exec: () => {
+                return API.fetch(
+                    {
+                        route: `/search/songs/`,
+                    },
+                    { handler: ListHandler(SongHandler) }
+                )
+            }
+        }
+    }
 }
