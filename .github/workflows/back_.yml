@@ -5,6 +5,7 @@ on:
     paths-ignore:
       - "back/**"
       - "scorometer/**"
+      - "!.github/workflows/**"
 
 jobs:
   back_build:
