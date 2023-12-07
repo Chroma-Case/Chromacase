@@ -38,7 +38,7 @@ export class SearchService {
 				filter: [
 					...(artistId ? [`artistId = ${artistId}`] : []),
 					...(genreId ? [`genreId = ${genreId}`] : []),
-				].join(' AND '),
+				].join(" AND "),
 			})
 		).hits.map((x) => x.id);
 

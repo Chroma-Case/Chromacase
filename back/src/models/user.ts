@@ -11,6 +11,6 @@ export class User {
 	isGuest: boolean;
 	@ApiProperty()
 	partyPlayed: number;
-    @ApiProperty()
-    totalScore: number;
+	@ApiProperty()
+	totalScore: number;
 }
