@@ -1,7 +1,3 @@
-networks:
-  loki:
-
-
 volumes:
   db:
   scoro_logs:
