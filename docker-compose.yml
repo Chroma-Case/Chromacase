@@ -1,3 +1,7 @@
+networks:
+    chroma:
+        driver: bridge
+
 volumes:
   db:
   scoro_logs:
@@ -19,6 +23,8 @@ services:
     volumes:
       - ./assets:/assets
       - ./data:/data
+    networks:
+      - chroma
   scorometer:
     build: ./scorometer
     ports:
@@ -28,6 +34,8 @@ services:
       - scoro_logs:/logs
     env_file:
       - .env
+    networks:
+      - chroma
   db:
     container_name: db
     image: postgres:alpine3.14
@@ -44,7 +52,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
+    networks:
+      - chroma
   front:
     build: ./front
     environment:
@@ -57,6 +66,8 @@ services:
       - "back"
     env_file:
       - .env
+    networks:
+      - chroma
 
   meilisearch:
     image: getmeili/meilisearch:v1.5
@@ -71,3 +82,5 @@ services:
       interval: 10s
       timeout: 15s
       retries: 5
+    networks:
+      - chroma
