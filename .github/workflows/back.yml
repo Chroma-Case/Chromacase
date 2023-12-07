@@ -2,13 +2,37 @@ name: "Back"
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - "back/**"
 
 jobs:
+
+  changes:
+    runs-on: ubuntu-latest
+    # Required permissions
+    permissions:
+      pull-requests: read
+    # Set job outputs to values from filter step
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      scoro: ${{ steps.filter.outputs.scoro }}
+    steps:
+    # For pull requests it's not necessary to checkout the code
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          backend:
+            - 'backend/**'
+          frontend:
+            - 'frontend/**'
+          scoro:
+            - 'scorometer/**'
   back_build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     defaults:
       run:
         working-directory: ./back
@@ -22,6 +46,8 @@ jobs:
   back_test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    needs: [ back_build ]
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
 
     steps:
       - uses: actions/checkout@v3

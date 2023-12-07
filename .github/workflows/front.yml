@@ -54,7 +54,7 @@ jobs:
     defaults:
       run:
         working-directory: ./front
-    environment: Staging
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     needs: [ front_check ]
     steps:
       - uses: actions/checkout@v3
