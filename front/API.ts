@@ -400,6 +400,19 @@ export default class API {
 		};
 	}
 
+	public static getAllGenres(): Query<Genre[]> {
+		return {
+			key: ['genres'],
+			exec: () =>
+				API.fetch(
+					{
+						route: '/genre',
+					},
+					{ handler: PlageHandler(GenreHandler) }
+				).then(({ data }) => data),
+		};
+	}
+
 	/**
 	 * Retrive a song's musicXML partition
 	 * @param songId the id to find the song
@@ -430,6 +443,19 @@ export default class API {
 					},
 					{ handler: ArtistHandler }
 				),
+		};
+	}
+
+	public static getAllArtists(): Query<Artist[]> {
+		return {
+			key: ['artists'],
+			exec: () =>
+				API.fetch(
+					{
+						route: `/artist`,
+					},
+					{ handler: PlageHandler(ArtistHandler) }
+				).then(({ data }) => data),
 		};
 	}
 
@@ -716,24 +742,6 @@ export default class API {
 		};
 	}
 
-	public static getSongCursorInfos(songId: number): Query<SongCursorInfos> {
-		return {
-			key: ['cursorInfos', songId],
-			exec: () => {
-				return API.fetch(
-					{
-						route: `/song/${songId}/assets/cursors`,
-					},
-					{ handler: SongCursorInfosHandler }
-				);
-			},
-		};
-	}
-
-	public static getPartitionSvgUrl(songId: number): string {
-		return `${API.baseUrl}/song/${songId}/assets/partition`;
-	}
-
 	public static async updateUserTotalScore(score: number): Promise<void> {
 		await API.fetch({
 			route: `/auth/me/score/${score}`,
@@ -753,5 +761,22 @@ export default class API {
 					{ handler: ListHandler(UserHandler) }
 				),
 		};
+	}
+	public static getSongCursorInfos(songId: number): Query<SongCursorInfos> {
+		return {
+			key: ['cursorInfos', songId],
+			exec: () => {
+				return API.fetch(
+					{
+						route: `/song/${songId}/assets/cursors`,
+					},
+					{ handler: SongCursorInfosHandler }
+				);
+			},
+		};
+	}
+
+	public static getPartitionSvgUrl(songId: number): string {
+		return `${API.baseUrl}/song/${songId}/assets/partition`;
 	}
 }

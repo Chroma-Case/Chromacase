@@ -84,6 +84,7 @@ export const en = {
 	songsFilter: 'Songs',
 	genreFilter: 'Genres',
 	favoriteFilter: 'Favorites',
+	searchBarPlaceholder: 'What are you looking for ?',
 
 	// profile page
 	user: 'Profile',
@@ -306,6 +307,7 @@ export const en = {
 	leaderBoardHeading: 'These are the best players',
 	leaderBoardHeadingFull:
 		'The players having the best scores, thanks to their exceptional accuracy, are highlighted here.',
+	emptySelection: 'None,',
 };
 
 export const fr: typeof en = {
@@ -395,6 +397,7 @@ export const fr: typeof en = {
 	songsFilter: 'Morceaux',
 	genreFilter: 'Genres',
 	favoriteFilter: 'Favoris',
+	searchBarPlaceholder: 'Que recherchez vous ?',
 
 	// Difficulty settings
 	diffBtn: 'Difficulté',
@@ -617,6 +620,7 @@ export const fr: typeof en = {
 	leaderBoardHeading: 'Voici les meilleurs joueurs',
 	leaderBoardHeadingFull:
 		'Les joueurs présentant les meilleurs scores, grâce à leur précision exceptionnelle, sont mis en lumière ici.',
+	emptySelection: 'Aucun',
 };
 
 export const sp: typeof en = {
@@ -720,6 +724,7 @@ export const sp: typeof en = {
 	songsFilter: 'canciones',
 	genreFilter: 'géneros',
 	favoriteFilter: 'Favorites',
+	searchBarPlaceholder: 'Qué estás buscando ?',
 
 	// Difficulty settings
 	diffBtn: 'Dificultad',
@@ -934,4 +939,5 @@ export const sp: typeof en = {
 	leaderBoardHeading: 'Estos son los mejores jugadores.',
 	leaderBoardHeadingFull:
 		'Aquí se destacan los jugadores que tienen las mejores puntuaciones, gracias a su precisión excepcional.',
+	emptySelection: 'Nada',
 };
