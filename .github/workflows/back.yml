@@ -48,11 +48,14 @@ jobs:
 
       - name: Run scorometer tests
         run: |
+          export API_KEY_SCORO_TEST=SCOROTEST
+          export API_KEY_SCORO=SCORO
           pip install -r scorometer/requirements.txt
           cd scorometer/tests && ./runner.sh
 
       - name: Run robot tests
         run: |
+          export API_KEY_ROBOT=ROBOTO
           pip install -r back/test/robot/requirements.txt
           robot -d out back/test/robot/
       - uses: actions/upload-artifact@v3
