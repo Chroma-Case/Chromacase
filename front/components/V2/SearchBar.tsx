@@ -140,17 +140,16 @@ const SearchBarComponent = () => {
 							gap: 10,
 						}}
 					>
-						{!artist
-							? artistsQuery.data?.map((artist, index) => (
-									<ArtistChipComponent
-										key={index}
-										name={artist.name}
-										onPress={() => {
-											setArtist(artist.name);
-										}}
-									/>
-							))
-							: null}
+						{!artist &&
+							artistsQuery.data?.map((artist, index) => (
+								<ArtistChipComponent
+									key={index}
+									name={artist.name}
+									onPress={() => {
+										setArtist(artist.name);
+									}}
+								/>
+							))}
 					</View>
 				</ScrollView>
 				<View>
