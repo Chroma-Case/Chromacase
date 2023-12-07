@@ -9,8 +9,8 @@ import Song from '../../models/Song';
 import { MusicItemType } from '../../components/UI/MusicItem';
 
 export type searchProps = {
-	artist: number,
-	genre: number,
+	artist: number | undefined,
+	genre: number | undefined,
 	query: string,
 }
 

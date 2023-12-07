@@ -43,7 +43,7 @@ const ArtistChipComponent = (props: ArtistChipProps) => {
 
 const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => void }) => {
 	const [query, setQuery] = React.useState('');
-	const [genre, setGenre] = React.useState({} as Genre | undefined);
+	const [genre, setGenre] = React.useState('');
 	const [artist, setArtist] = React.useState('');
 	const artistsQuery = useQuery(API.getAllArtists());
 	const genresQuery = useQuery(API.getAllGenres());
@@ -53,9 +53,9 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 	const handleValidate = () => {
 		// Construct an object with the data you want to pass to the parent component
 		const searchData = {
-			query: "test",
-			artist: 1,
-			genre: 1,
+			query: query,
+			artist: artistsQuery.data?.find((a) => a.name === artist)?.id ?? undefined,
+			genre: genresQuery.data?.find((g) => g.name === genre)?.id ?? undefined,
 		};
 	
 		// Call the parent's onValidate callback with the searchData
@@ -169,16 +169,10 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 				</ScrollView>
 				<View>
 					<Select
-						selectedValue={genre?.name}
+						selectedValue={genre}
 						placeholder={translate('genreFilter')}
 						accessibilityLabel="Genre"
-						onValueChange={(itemValue) => {
-							setGenre(
-								genresQuery.data?.find((genre) => {
-									genre.name == itemValue;
-								})
-							);
-						}}
+						onValueChange={(itemValue) => {setGenre(itemValue)}}
 					>
 						<Select.Item label={translate('emptySelection')} value="" />
 						{genresQuery.data?.map((data, index) => (
