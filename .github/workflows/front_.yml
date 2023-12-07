@@ -3,8 +3,8 @@ name: "Front skip"
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - "!front/**"
+    paths-ignore:
+      - "front/**"
 
 
 jobs:
