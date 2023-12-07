@@ -2,10 +2,10 @@ name: "Back skip"
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - "!back/**"
-      - "!scorometer/**"
-      - '!.github/workflows/**'
+    paths-ignore:
+      - "back/**"
+      - "scorometer/**"
+      - '.github/workflows/**'
 
 jobs:
   back_build:
