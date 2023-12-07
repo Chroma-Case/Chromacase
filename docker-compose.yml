@@ -78,9 +78,13 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
-      interval: 10s
-      timeout: 15s
-      retries: 5
+      test:
+          - CMD
+          - wget
+          - '--no-verbose'
+          - '--spider'
+          - 'http://localhost:7700/health'
+      retries: 3
+      timeout: 5s
     networks:
       - chroma
