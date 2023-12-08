@@ -60,8 +60,6 @@ services:
       - "back"
     env_file:
       - .env
-    networks:
-      - chroma
 
   meilisearch:
     image: getmeili/meilisearch:v1.5
