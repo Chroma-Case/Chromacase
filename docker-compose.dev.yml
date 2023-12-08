@@ -22,6 +22,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      
+      meilisearch:
+        condition: service_healthy
     env_file:
       - .env
 
@@ -94,3 +97,10 @@ services:
       - meilisearch:/meili_data
     env_file:
       - .env
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
