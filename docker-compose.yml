@@ -1,6 +1,3 @@
-networks:
-    chroma:
-
 volumes:
   db:
   scoro_logs:
@@ -16,14 +13,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      meilisearch:
+        condition: service_healthy
       
     env_file:
       - .env
     volumes:
       - ./assets:/assets
       - ./data:/data
-    networks:
-      - chroma
+
   scorometer:
     build: ./scorometer
     ports:
@@ -33,8 +31,6 @@ services:
       - scoro_logs:/logs
     env_file:
       - .env
-    networks:
-      - chroma
   db:
     container_name: db
     image: postgres:alpine3.14
@@ -51,8 +47,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - chroma
+
   front:
     build: ./front
     environment:
@@ -85,5 +80,3 @@ services:
           - 'http://localhost:7700/health'
       retries: 3
       timeout: 5s
-    networks:
-      - chroma
