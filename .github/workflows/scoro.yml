@@ -41,7 +41,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Build and start the service
-        run: docker-compose up -d meilisearch && docker-compose up -d back db 
+        run: docker-compose up -d meilisearch back db 
 
       - name: Perform healthchecks
         run: |
