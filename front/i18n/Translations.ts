@@ -306,14 +306,15 @@ export const en = {
 	emptySelection: 'None,',
 	gamesPlayed: 'Games Played',
 	metronome: 'Metronome',
-	loading: "Loading... Please Wait",
+	loading: 'Loading... Please Wait',
 	emailCheckFailed: 'Email verification failed. The token has expired or is invalid.',
-	chromacasePitch: 'Chromacase is a free and open source project that aims to provide a complete learning experience for anyone willing to learn piano.',
+	chromacasePitch:
+		'Chromacase is a free and open source project that aims to provide a complete learning experience for anyone willing to learn piano.',
 	whatIsChromacase: 'What is Chromacase?',
 	clickHereForMoreInfo: 'Click here for more info',
 	forgotPassword: 'I forgot my password',
 	updateProfile: 'Update Profile',
-	accountCreatedOn: 'Account Created on'
+	accountCreatedOn: 'Account Created on',
 };
 
 export const fr: typeof en = {
@@ -624,14 +625,15 @@ export const fr: typeof en = {
 	emptySelection: 'Aucun',
 	gamesPlayed: 'Parties Jouées',
 	metronome: 'Métronome',
-	loading: "Chargement en cours... Veuillez Patienter",
+	loading: 'Chargement en cours... Veuillez Patienter',
 	emailCheckFailed: 'La vérification du mail a échouée',
-	chromacasePitch: 'ChromaCase est une solution gratuite et opens-source qui cherche à fournir une experience d\'apprentissage complete pour toutes les perosnne qui chercheraient à apprendre le piano.',
-	whatIsChromacase: 'Chromacase c\'est quoi?',
-	clickHereForMoreInfo: 'Cliquez ici pour plus d\'info',
-	forgotPassword: 'J\'ai oublié mon mot de passe',
+	chromacasePitch:
+		"ChromaCase est une solution gratuite et opens-source qui cherche à fournir une experience d'apprentissage complete pour toutes les perosnne qui chercheraient à apprendre le piano.",
+	whatIsChromacase: "Chromacase c'est quoi?",
+	clickHereForMoreInfo: "Cliquez ici pour plus d'info",
+	forgotPassword: "J'ai oublié mon mot de passe",
 	updateProfile: 'Changer le Profile',
-	accountCreatedOn: 'Compte créé le'
+	accountCreatedOn: 'Compte créé le',
 };
 
 export const sp: typeof en = {
@@ -949,12 +951,13 @@ export const sp: typeof en = {
 	emptySelection: 'Nada',
 	gamesPlayed: 'Juegos jugados',
 	metronome: 'Metrónomo',
-	loading: "Cargando por favor espere",
+	loading: 'Cargando por favor espere',
 	emailCheckFailed: 'Error en la verificación del correo electrónico',
-	chromacasePitch: 'ChromaCase es una solución gratuita y de código abierto que busca brindar una experiencia de aprendizaje completa para cualquiera que desee aprender a tocar el piano.',
+	chromacasePitch:
+		'ChromaCase es una solución gratuita y de código abierto que busca brindar una experiencia de aprendizaje completa para cualquiera que desee aprender a tocar el piano.',
 	whatIsChromacase: '¿Qué es la cromacasa?',
 	clickHereForMoreInfo: 'Haga clic aquí para más información',
 	forgotPassword: 'Olvidé mi contraseña',
 	updateProfile: 'Cambiar el perfil',
-	accountCreatedOn: 'Cuenta creada el'
+	accountCreatedOn: 'Cuenta creada el',
 };

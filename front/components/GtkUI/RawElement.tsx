@@ -150,7 +150,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 										/>
 									);
 								default:
-									return <Translate translationKey='unknownError'/>
+									return <Translate translationKey="unknownError" />;
 							}
 						})()}
 					</Row>

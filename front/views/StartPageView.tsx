@@ -153,9 +153,9 @@ const StartPageView = () => {
 					}}
 				>
 					<Heading fontSize="4xl" style={{ textAlign: 'center' }}>
-						<Translate translationKey='whatIsChromacase' />
+						<Translate translationKey="whatIsChromacase" />
 					</Heading>
-					<Translate fontSize={'xl'} translationKey='chromacasePitch' />
+					<Translate fontSize={'xl'} translationKey="chromacasePitch" />
 				</Box>
 
 				<Box
@@ -173,7 +173,7 @@ const StartPageView = () => {
 						}}
 					>
 						<Link href="http://eip.epitech.eu/2024/chromacase" isExternal>
-							<Translate translationKey='clickHereForMoreInfo' />
+							<Translate translationKey="clickHereForMoreInfo" />
 						</Link>
 					</Box>
 				</Box>
@@ -192,7 +192,7 @@ const StartPageView = () => {
 						}}
 					>
 						<Link href="/forgot_password">
-							<Translate translationKey='forgotPassword' />
+							<Translate translationKey="forgotPassword" />
 						</Link>
 					</Box>
 				</Box>

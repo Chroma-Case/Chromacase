@@ -55,7 +55,10 @@ const SongHistory = (props: { quantity: number }) => {
 	return (
 		<View>
 			{musics.length === 0 ? (
-				<Translate style={{ paddingHorizontal: 16 }} translationKey='menuNoSongsPlayedYet'/>
+				<Translate
+					style={{ paddingHorizontal: 16 }}
+					translationKey="menuNoSongsPlayedYet"
+				/>
 			) : (
 				musics.map((song) => (
 					<View

@@ -98,7 +98,7 @@ export const FavoritesMusic = () => {
 export const RecentlyPlayedMusic = () => {
 	return (
 		<Center style={{ flex: 1 }}>
-			<Translate translationKey='recentlyPlayed' />
+			<Translate translationKey="recentlyPlayed" />
 		</Center>
 	);
 };
@@ -106,7 +106,7 @@ export const RecentlyPlayedMusic = () => {
 export const StepUpMusic = () => {
 	return (
 		<Center style={{ flex: 1 }}>
-			<Translate translationKey='musicTabStepUp'/>
+			<Translate translationKey="musicTabStepUp" />
 		</Center>
 	);
 };
@@ -171,7 +171,10 @@ const MusicTab = (props: RouteProps<object>) => {
 			}}
 			renderLabel={({ route, color }) =>
 				layout.width > 800 && (
-					<Translate translationKey={route.title as TranslationKey} style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}/>
+					<Translate
+						translationKey={route.title as TranslationKey}
+						style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}
+					/>
 				)
 			}
 			tabStyle={{ flexDirection: 'row' }}
