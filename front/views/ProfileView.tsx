@@ -86,9 +86,13 @@ const ProfileView = (props: RouteProps<{}>) => {
 								onPress={async () => navigation.navigate('Settings', {})}
 							/>
 						</View>
-						<Translate style={{ paddingBottom: 10, fontWeight: 'bold' }} translationKey='accountCreatedOn' format={(e) => (
-							`${e} ${userQuery.data.data.createdAt.toLocaleDateString()}`
-						)} />
+						<Translate
+							style={{ paddingBottom: 10, fontWeight: 'bold' }}
+							translationKey="accountCreatedOn"
+							format={(e) =>
+								`${e} ${userQuery.data.data.createdAt.toLocaleDateString()}`
+							}
+						/>
 						<Flex
 							style={{
 								flexDirection: 'row',
@@ -96,12 +100,19 @@ const ProfileView = (props: RouteProps<{}>) => {
 								paddingBottom: 10,
 							}}
 						>
-							<Translate translationKey="gamesPlayed" format={(e) => `${userQuery.data.data.gamesPlayed} ${e}`} />
+							<Translate
+								translationKey="gamesPlayed"
+								format={(e) => `${userQuery.data.data.gamesPlayed} ${e}`}
+							/>
 						</Flex>
 					</Column>
 				</View>
 				<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
-					<Translate style={{ paddingRight: 20 }} translationKey='level'  format={(e) => `${e} ${level}`} />
+					<Translate
+						style={{ paddingRight: 20 }}
+						translationKey="level"
+						format={(e) => `${e} ${level}`}
+					/>
 					<Progress
 						bgColor={colors.coolGray[500]}
 						value={progessValue}

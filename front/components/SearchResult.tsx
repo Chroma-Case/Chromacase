@@ -92,7 +92,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 
 	return (
 		<ScrollView>
-			<Translate translationKey='songsFilter' fontSize="xl" fontWeight="bold" mt={4}/>
+			<Translate translationKey="songsFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			<Box>
 				{songData?.length ? (
 					songData.slice(0, props.maxRows).map((comp, index) => (
@@ -129,7 +129,7 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 
 	return (
 		<Box>
-			<Translate translationKey='artistFilter' fontSize="xl" fontWeight="bold" mt={4} />
+			<Translate translationKey="artistFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			{artistData?.length ? (
 				<CardGridCustom
 					content={artistData
@@ -158,7 +158,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 
 	return (
 		<Box>
-			<Translate translationKey='genreFilter' fontSize="xl" fontWeight="bold" mt={4}/>
+			<Translate translationKey="genreFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			{genreData?.length ? (
 				<CardGridCustom
 					content={genreData.slice(0, props.maxItems ?? genreData.length).map((g) => ({
@@ -193,7 +193,7 @@ const FavoritesComponent = () => {
 
 	return (
 		<ScrollView>
-			<Translate translationKey='songsFilter' fontSize="xl" fontWeight="bold" mt={4}/>
+			<Translate translationKey="songsFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			<Box>
 				{favoritesQuery.data?.map((songData) => (
 					<FavSongRow
@@ -259,7 +259,9 @@ const FilterSwitch = () => {
 		case 'favorites':
 			return <FavoritesComponent />;
 		default:
-			return <Translate translationKey='unknownError' format={(e) => `${e}: ${currentFilter}`}/>;
+			return (
+				<Translate translationKey="unknownError" format={(e) => `${e}: ${currentFilter}`} />
+			);
 	}
 };
 

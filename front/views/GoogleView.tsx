@@ -26,7 +26,7 @@ const GoogleView = () => {
 		run();
 	}, []);
 
-	return <Translate translate={'loading'} />
+	return <Translate translate={'loading'} />;
 };
 
 export default GoogleView;
