@@ -625,10 +625,10 @@ export const fr: typeof en = {
 	gamesPlayed: 'Parties Jouées',
 	metronome: 'Métronome',
 	loading: "Chargement en cours... Veuillez Patienter",
-	emailCheckFailed: 'La vérification du mail a échoué',
+	emailCheckFailed: 'La vérification du mail a échouée',
 	chromacasePitch: 'ChromaCase est une solution gratuite et opens-source qui cherche à fournir une experience d\'apprentissage complete pour toutes les perosnne qui chercheraient à apprendre le piano.',
 	whatIsChromacase: 'Chromacase c\'est quoi?',
-	clickHereForMoreInfo: 'cliquez ici pour plus d\'info',
+	clickHereForMoreInfo: 'Cliquez ici pour plus d\'info',
 	forgotPassword: 'J\'ai oublié mon mot de passe',
 	updateProfile: 'Changer le Profile',
 	accountCreatedOn: 'Compte créé le'
@@ -947,4 +947,14 @@ export const sp: typeof en = {
 	leaderBoardHeadingFull:
 		'Aquí se destacan los jugadores que tienen las mejores puntuaciones, gracias a su precisión excepcional.',
 	emptySelection: 'Nada',
+	gamesPlayed: 'Juegos jugados',
+	metronome: 'Metrónomo',
+	loading: "Cargando por favor espere",
+	emailCheckFailed: 'Error en la verificación del correo electrónico',
+	chromacasePitch: 'ChromaCase es una solución gratuita y de código abierto que busca brindar una experiencia de aprendizaje completa para cualquiera que desee aprender a tocar el piano.',
+	whatIsChromacase: '¿Qué es la cromacasa?',
+	clickHereForMoreInfo: 'Haga clic aquí para más información',
+	forgotPassword: 'Olvidé mi contraseña',
+	updateProfile: 'Cambiar el perfil',
+	accountCreatedOn: 'Cuenta creada el'
 };
