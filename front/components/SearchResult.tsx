@@ -2,7 +2,6 @@ import React from 'react';
 import {
 	VStack,
 	Heading,
-	Text,
 	Box,
 	Card,
 	Flex,
@@ -93,9 +92,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 
 	return (
 		<ScrollView>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('songsFilter')}
-			</Text>
+			<Translate translationKey='songsFilter' fontSize="xl" fontWeight="bold" mt={4}/>
 			<Box>
 				{songData?.length ? (
 					songData.slice(0, props.maxRows).map((comp, index) => (
@@ -132,9 +129,7 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 
 	return (
 		<Box>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('artistFilter')}
-			</Text>
+			<Translate translationKey='artistFilter' fontSize="xl" fontWeight="bold" mt={4} />
 			{artistData?.length ? (
 				<CardGridCustom
 					content={artistData
@@ -163,9 +158,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 
 	return (
 		<Box>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('genreFilter')}
-			</Text>
+			<Translate translationKey='genreFilter' fontSize="xl" fontWeight="bold" mt={4}/>
 			{genreData?.length ? (
 				<CardGridCustom
 					content={genreData.slice(0, props.maxItems ?? genreData.length).map((g) => ({
@@ -200,9 +193,7 @@ const FavoritesComponent = () => {
 
 	return (
 		<ScrollView>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('songsFilter')}
-			</Text>
+			<Translate translationKey='songsFilter' fontSize="xl" fontWeight="bold" mt={4}/>
 			<Box>
 				{favoritesQuery.data?.map((songData) => (
 					<FavSongRow

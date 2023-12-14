@@ -307,7 +307,13 @@ export const en = {
 	gamesPlayed: 'Games Played',
 	metronome: 'Metronome',
 	loading: "Loading... Please Wait",
-	emailCheckFailed: 'Email verification failed. The token has expired or is invalid.'
+	emailCheckFailed: 'Email verification failed. The token has expired or is invalid.',
+	chromacasePitch: 'Chromacase is a free and open source project that aims to provide a complete learning experience for anyone willing to learn piano.',
+	whatIsChromacase: 'What is Chromacase?',
+	clickHereForMoreInfo: 'Click here for more info',
+	forgotPassword: 'I forgot my password',
+	updateProfile: 'Update Profile',
+	accountCreatedOn: 'Account Created on'
 };
 
 export const fr: typeof en = {
@@ -619,7 +625,13 @@ export const fr: typeof en = {
 	gamesPlayed: 'Parties Jouées',
 	metronome: 'Métronome',
 	loading: "Chargement en cours... Veuillez Patienter",
-	emailCheckFailed: 'Email verification failed. The token has expired or is invalid.'
+	emailCheckFailed: 'La vérification du mail a échoué',
+	chromacasePitch: 'ChromaCase est une solution gratuite et opens-source qui cherche à fournir une experience d\'apprentissage complete pour toutes les perosnne qui chercheraient à apprendre le piano.',
+	whatIsChromacase: 'Chromacase c\'est quoi?',
+	clickHereForMoreInfo: 'cliquez ici pour plus d\'info',
+	forgotPassword: 'J\'ai oublié mon mot de passe',
+	updateProfile: 'Changer le Profile',
+	accountCreatedOn: 'Compte créé le'
 };
 
 export const sp: typeof en = {
