@@ -12,7 +12,7 @@ import {
 import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import { RouteProps, useNavigation } from '../Navigation';
-import { TranslationKey, translate } from '../i18n/i18n';
+import { Translate, TranslationKey, translate } from '../i18n/i18n';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
@@ -99,7 +99,7 @@ export const FavoritesMusic = () => {
 export const RecentlyPlayedMusic = () => {
 	return (
 		<Center style={{ flex: 1 }}>
-			<Text>RecentlyPlayedMusic</Text>
+			<Translate translationKey='recentlyPlayed' />
 		</Center>
 	);
 };
@@ -107,7 +107,7 @@ export const RecentlyPlayedMusic = () => {
 export const StepUpMusic = () => {
 	return (
 		<Center style={{ flex: 1 }}>
-			<Text>StepUpMusic</Text>
+			<Translate translationKey='musicTabStepUp'/>
 		</Center>
 	);
 };

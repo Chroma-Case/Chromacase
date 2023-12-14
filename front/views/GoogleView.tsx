@@ -5,6 +5,7 @@ import { setAccessToken } from '../state/UserSlice';
 import { Text } from 'native-base';
 import { useRoute } from '@react-navigation/native';
 import { AccessTokenResponseHandler } from '../models/AccessTokenResponse';
+import { Translate } from '../i18n/i18n';
 
 const GoogleView = () => {
 	const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const GoogleView = () => {
 		run();
 	}, []);
 
-	return <Text>Loading please wait</Text>;
+	return <Translate translate={'loading'} />
 };
 
 export default GoogleView;
