@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Text, useBreakpointValue, useTheme } from 'native-base';
+import { Center, useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -12,7 +12,7 @@ import {
 import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import { RouteProps, useNavigation } from '../Navigation';
-import { Translate, TranslationKey, translate } from '../i18n/i18n';
+import { Translate, TranslationKey } from '../i18n/i18n';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
@@ -172,9 +172,7 @@ const MusicTab = (props: RouteProps<object>) => {
 			}}
 			renderLabel={({ route, color }) =>
 				layout.width > 800 && (
-					<Text style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}>
-						{translate(route.title as TranslationKey)}
-					</Text>
+					<Translate translationKey={route.title as TranslationKey} style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}/>
 				)
 			}
 			tabStyle={{ flexDirection: 'row' }}

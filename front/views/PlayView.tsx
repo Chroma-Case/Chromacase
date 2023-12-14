@@ -380,9 +380,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								alignItems: 'center',
 							}}
 						>
-							<Text color={statColor} fontSize={12}>
-								<Translate translationKey={label} />
-							</Text>
+							<Translate translationKey={label} color={statColor} fontSize={12} />
 							<View
 								style={{
 									display: 'flex',

@@ -6,7 +6,7 @@ import API from '../../API';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
-import { TranslationKey, translate } from '../../i18n/i18n';
+import { Translate, TranslationKey, translate } from '../../i18n/i18n';
 import { useNavigation } from '../../Navigation';
 import Spacer from './Spacer';
 import User from '../../models/User';
@@ -55,7 +55,7 @@ const SongHistory = (props: { quantity: number }) => {
 	return (
 		<View>
 			{musics.length === 0 ? (
-				<Text style={{ paddingHorizontal: 16 }}>{translate('menuNoSongsPlayedYet')}</Text>
+				<Translate style={{ paddingHorizontal: 16 }} translationKey='menuNoSongsPlayedYet'/>
 			) : (
 				musics.map((song) => (
 					<View
@@ -117,7 +117,7 @@ const ScaffoldDesktopCC = (props: ScaffoldDesktopCCProps) => {
 						/>
 						{!isSmallScreen && (
 							<Text fontSize={'xl'} selectable={false}>
-								Chromacase
+								ChromaCase
 							</Text>
 						)}
 					</Row>

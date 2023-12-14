@@ -3,7 +3,6 @@ import React from 'react';
 import { useNavigation } from '../Navigation';
 import {
 	View,
-	Text,
 	Stack,
 	Box,
 	useToast,
@@ -21,7 +20,7 @@ import BigActionButton from '../components/BigActionButton';
 import API, { APIError } from '../API';
 import { setAccessToken } from '../state/UserSlice';
 import { useDispatch } from '../state/Store';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import useColorScheme from '../hooks/colorScheme';
 import { useAssets } from 'expo-asset';
 
@@ -73,7 +72,7 @@ const StartPageView = () => {
 						}
 						size={isSmallScreen ? '5xl' : '6xl'}
 					/>
-					<Heading fontSize={isSmallScreen ? '3xl' : '5xl'}>Chromacase</Heading>
+					<Heading fontSize={isSmallScreen ? '3xl' : '5xl'}>ChromaCase</Heading>
 				</Row>
 			</Center>
 			<Stack
@@ -154,12 +153,9 @@ const StartPageView = () => {
 					}}
 				>
 					<Heading fontSize="4xl" style={{ textAlign: 'center' }}>
-						What is Chromacase?
+						<Translate translationKey='whatIsChromacase' />
 					</Heading>
-					<Text fontSize={'xl'}>
-						Chromacase is a free and open source project that aims to provide a complete
-						learning experience for anyone willing to learn piano.
-					</Text>
+					<Translate fontSize={'xl'} translationKey='chromacasePitch' />
 				</Box>
 
 				<Box
@@ -177,7 +173,7 @@ const StartPageView = () => {
 						}}
 					>
 						<Link href="http://eip.epitech.eu/2024/chromacase" isExternal>
-							Click here for more info
+							<Translate translationKey='clickHereForMoreInfo' />
 						</Link>
 					</Box>
 				</Box>
@@ -195,7 +191,9 @@ const StartPageView = () => {
 							alignItems: 'center',
 						}}
 					>
-						<Link href="/forgot_password">I forgot my password</Link>
+						<Link href="/forgot_password">
+							<Translate translationKey='forgotPassword' />
+						</Link>
 					</Box>
 				</Box>
 			</Column>
