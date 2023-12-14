@@ -3,6 +3,7 @@ import { Slider, Text, View, IconButton, Icon } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { VolumeHigh, VolumeSlash } from 'iconsax-react-native';
+import { Translate } from '../i18n/i18n';
 
 export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
 	const audio = useRef<Audio.Sound | null>(null);
@@ -43,7 +44,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 					justifyContent: 'space-between',
 				}}
 			>
-				<Text>Metronome</Text>
+				<Translate translationKey="metronome" />
 				<Icon as={<MaterialCommunityIcons name="metronome" size={24} color="white" />} />
 			</View>
 			<View

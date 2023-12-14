@@ -7,7 +7,7 @@ import { LoadingView } from '../components/Loading';
 import { useQuery } from '../Queries';
 import API from '../API';
 import ButtonBase from '../components/UI/ButtonBase';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import ScoreGraph from '../components/ScoreGraph';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 
@@ -99,7 +99,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 							<Text style={{ paddingRight: 20 }}>
 								Your client ID is {userQuery.data.id}
 							</Text>
-							<Text>{userQuery.data.data.gamesPlayed} Games played</Text>
+							<Translate translationKey="gamesPlayed" format={(e) => `${userQuery.data.data.gamesPlayed} ${e}`} />
 						</Flex>
 					</Column>
 				</View>

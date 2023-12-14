@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native';
 import { SearchContext } from '../views/SearchView';
 import { useQuery } from '../Queries';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import API from '../API';
 import LoadingComponent, { LoadingView } from './Loading';
 import ArtistCard from './ArtistCard';
@@ -115,7 +115,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 						/>
 					))
 				) : (
-					<Text>{translate('errNoResults')}</Text>
+					<Translate translationKey="errNoResults" />
 				)}
 			</Box>
 		</ScrollView>
@@ -151,7 +151,7 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 					cardComponent={ArtistCard}
 				/>
 			) : (
-				<Text>{translate('errNoResults')}</Text>
+				<Translate translationKey="errNoResults" />
 			)}
 		</Box>
 	);
@@ -180,7 +180,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 					cardComponent={GenreCard}
 				/>
 			) : (
-				<Text>{translate('errNoResults')}</Text>
+				<Translate translationKey="errNoResults" />
 			)}
 		</Box>
 	);
@@ -268,7 +268,7 @@ const FilterSwitch = () => {
 		case 'favorites':
 			return <FavoritesComponent />;
 		default:
-			return <Text>Something very bad happened: {currentFilter}</Text>;
+			return <Translate translationKey='unknownError' format={(e) => `${e}: ${currentFilter}`}/>;
 	}
 };
 

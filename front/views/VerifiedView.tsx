@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import API from '../API';
-import { Text } from 'native-base';
 import { useNavigation } from '../Navigation';
 import { useRoute } from '@react-navigation/native';
+import { Translate } from '../i18n/i18n';
 
 const VerifiedView = () => {
 	const navigation = useNavigation();
@@ -26,9 +26,9 @@ const VerifiedView = () => {
 	}, []);
 
 	return failed ? (
-		<Text>Email verification failed. The token has expired or is invalid.</Text>
+		<Translate translationKey={'emailCheckFailed'} />
 	) : (
-		<Text>Loading please wait</Text>
+		<Translate translationKey={'loading'} />
 	);
 };
 

@@ -20,6 +20,7 @@ import {
 } from './ElementTypes';
 import { ArrowDown2 } from 'iconsax-react-native';
 import { useWindowDimensions } from 'react-native';
+import Translate from '../Translate';
 
 type RawElementProps = {
 	element: ElementProps;
@@ -149,7 +150,7 @@ export const RawElement = ({ element }: RawElementProps) => {
 										/>
 									);
 								default:
-									return <Text>Unknown type</Text>;
+									return <Translate translationKey='unknownError'/>
 							}
 						})()}
 					</Row>

@@ -226,9 +226,6 @@ export const en = {
 	SettingsPreferencesTabLanguageSectionDescription: 'Set the language of your application',
 	SettingsPreferencesTabDifficultySectionTitle: 'Difficulty',
 	SettingsPreferencesTabDifficultySectionDescription: 'The precision of the tempo increases',
-	SettingsPreferencesTabColorblindModeSectionTitle: 'Colorblind Mode',
-	SettingsPreferencesTabColorblindModeSectionDescription: 'Increases contrast',
-	SettingsPreferencesTabMicVolumeSectionTitle: 'Mic Volume',
 	SettingsPreferencesTabMicVolumeSectionDescription:
 		'Adjust the volume of your microphone according to your preference',
 	// Notifications Tab
@@ -277,7 +274,6 @@ export const en = {
 	SettingsPreferencesTheme: 'Theme',
 	SettingsPreferencesLanguage: 'Language',
 	SettingsPreferencesDifficulty: 'Difficulty',
-	SettingsPreferencesColorblindMode: 'Colorblind mode',
 	SettingsPreferencesMicVolume: 'Mic volume',
 	SettingsPreferencesDevice: 'Device',
 
@@ -308,6 +304,10 @@ export const en = {
 	leaderBoardHeadingFull:
 		'The players having the best scores, thanks to their exceptional accuracy, are highlighted here.',
 	emptySelection: 'None,',
+	gamesPlayed: 'Games Played',
+	metronome: 'Metronome',
+	loading: "Loading... Please Wait",
+	emailCheckFailed: 'Email verification failed. The token has expired or is invalid.'
 };
 
 export const fr: typeof en = {
@@ -371,7 +371,7 @@ export const fr: typeof en = {
 	menuLeaderBoard: 'Classement',
 	menuSettings: 'Paramètres',
 
-	menuRecentlyPlayed: 'Récemment jouée',
+	menuRecentlyPlayed: 'Récemment joués',
 	menuNoSongsPlayedYet: "Aucune chanson jouée pour l'instant",
 
 	//signup
@@ -389,7 +389,7 @@ export const fr: typeof en = {
 	//music
 	musicTabFavorites: 'Favoris',
 	musicTabRecentlyPlayed: 'Récemment joué',
-	musicTabStepUp: 'Recommandation',
+	musicTabStepUp: 'Recommandations',
 
 	//search
 	allFilter: 'Tout',
@@ -538,9 +538,6 @@ export const fr: typeof en = {
 	SettingsPreferencesTabDifficultySectionTitle: 'Difficulté',
 	SettingsPreferencesTabDifficultySectionDescription:
 		'La précision du tempo est de plus en plus élevée',
-	SettingsPreferencesTabColorblindModeSectionTitle: 'Mode daltonien',
-	SettingsPreferencesTabColorblindModeSectionDescription: 'Augmente le contraste',
-	SettingsPreferencesTabMicVolumeSectionTitle: 'Volume du micro',
 	SettingsPreferencesTabMicVolumeSectionDescription:
 		'Réglez le volume de votre micro selon vos préférences',
 	// Notifications Tab
@@ -582,8 +579,6 @@ export const fr: typeof en = {
 	SettingsNotificationsPushNotifications: 'Notifications push',
 	SettingsNotificationsReleaseAlert: 'Alertes de nouvelles Sorties',
 	SettingsNotificationsTrainingReminder: "Rappel d'entrainement",
-
-	SettingsPreferencesColorblindMode: 'Mode daltonien',
 	SettingsPreferencesDevice: 'Appareil',
 	SettingsPreferencesDifficulty: 'Difficulté',
 	SettingsPreferencesLanguage: 'Langue',
@@ -621,6 +616,10 @@ export const fr: typeof en = {
 	leaderBoardHeadingFull:
 		'Les joueurs présentant les meilleurs scores, grâce à leur précision exceptionnelle, sont mis en lumière ici.',
 	emptySelection: 'Aucun',
+	gamesPlayed: 'Parties Jouées',
+	metronome: 'Métronome',
+	loading: "Chargement en cours... Veuillez Patienter",
+	emailCheckFailed: 'Email verification failed. The token has expired or is invalid.'
 };
 
 export const sp: typeof en = {
@@ -854,9 +853,6 @@ export const sp: typeof en = {
 	SettingsPreferencesTabLanguageSectionDescription: 'Establece el idioma de tu aplicación',
 	SettingsPreferencesTabDifficultySectionTitle: 'Dificultad',
 	SettingsPreferencesTabDifficultySectionDescription: 'La precisión del tempo aumenta',
-	SettingsPreferencesTabColorblindModeSectionTitle: 'Modo para daltónicos',
-	SettingsPreferencesTabColorblindModeSectionDescription: 'Aumenta el contraste',
-	SettingsPreferencesTabMicVolumeSectionTitle: 'Volumen del micrófono',
 	SettingsPreferencesTabMicVolumeSectionDescription:
 		'Ajusta el volumen de tu micrófono según tus preferencias',
 	// Notifications Tab
@@ -900,7 +896,6 @@ export const sp: typeof en = {
 	SettingsNotificationsReleaseAlert: 'Alertas de nuevas Sorties',
 	SettingsNotificationsTrainingReminder: 'Recordatorio de entrenamiento',
 
-	SettingsPreferencesColorblindMode: 'Modo daltoniano',
 	SettingsPreferencesDevice: 'Dispositivo',
 	SettingsPreferencesDifficulty: 'Dificultad',
 	SettingsPreferencesLanguage: 'Idioma',
