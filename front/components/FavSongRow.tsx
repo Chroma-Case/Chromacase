@@ -2,9 +2,9 @@ import { HStack, IconButton, Image, Text } from 'native-base';
 import RowCustom from './RowCustom';
 import TextButton from './TextButton';
 import { MaterialIcons } from '@expo/vector-icons';
-import API from '../API';
 import DurationComponent from './DurationComponent';
 import Song from '../models/Song';
+import { useLikeSongMutation } from '../utils/likeSongMutation';
 
 type FavSongRowProps = {
 	song: Song;
@@ -13,6 +13,8 @@ type FavSongRowProps = {
 };
 
 const FavSongRow = ({ song, addedDate, onPress }: FavSongRowProps) => {
+	const { mutate } = useLikeSongMutation();
+
 	return (
 		<RowCustom width={'100%'}>
 			<HStack px={2} space={5} justifyContent={'space-between'}>
@@ -63,7 +65,7 @@ const FavSongRow = ({ song, addedDate, onPress }: FavSongRowProps) => {
 					variant={'ghost'}
 					borderRadius={'full'}
 					onPress={() => {
-						API.removeLikedSong(song.id);
+						mutate({ songId: song.id, like: false });
 					}}
 					_icon={{
 						as: MaterialIcons,

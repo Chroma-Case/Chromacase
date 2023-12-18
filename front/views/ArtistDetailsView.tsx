@@ -7,6 +7,7 @@ import SongRow from '../components/SongRow';
 import { Key } from 'react';
 import { RouteProps, useNavigation } from '../Navigation';
 import { ImageBackground } from 'react-native';
+import { useLikeSongMutation } from '../utils/likeSongMutation';
 
 type ArtistDetailsViewProps = {
 	artistId: number;
@@ -20,11 +21,7 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 	const navigation = useNavigation();
 
 	const favoritesQuery = useQuery(API.getLikedSongs());
-
-	const handleFavoriteButton = async (state: boolean, songId: number): Promise<void> => {
-		if (state == false) await API.removeLikedSong(songId);
-		else await API.addLikedSong(songId);
-	};
+	const { mutate } = useLikeSongMutation();
 
 	if (artistQuery.isError || songsQuery.isError) {
 		navigation.navigate('Error');
@@ -53,8 +50,8 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 								isLiked={
 									!favoritesQuery.data?.find((query) => query?.songId == comp.id)
 								}
-								handleLike={(state: boolean, songId: number) =>
-									handleFavoriteButton(state, songId)
+								handleLike={async (state: boolean, songId: number) =>
+									mutate({ songId: songId, like: state })
 								}
 								onPress={() => {
 									API.createSearchHistoryEntry(comp.name, 'song');

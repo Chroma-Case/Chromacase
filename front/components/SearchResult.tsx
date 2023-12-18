@@ -24,6 +24,7 @@ import Song from '../models/Song';
 import { useNavigation } from '../Navigation';
 import SongRow from '../components/SongRow';
 import FavSongRow from './FavSongRow';
+import { useLikeSongMutation } from '../utils/likeSongMutation';
 
 const swaToSongCardProps = (song: Song) => ({
 	songId: song.id,
@@ -89,6 +90,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 		if (state == false) await API.removeLikedSong(songId);
 		else await API.addLikedSong(songId);
 	};
+	const { mutate } = useLikeSongMutation();
 
 	return (
 		<ScrollView>
@@ -102,8 +104,8 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 							isLiked={
 								!favoritesQuery.data?.find((query) => query?.songId == comp.id)
 							}
-							handleLike={(state: boolean, songId: number) =>
-								handleFavoriteButton(state, songId)
+							handleLike={async (state: boolean, songId: number) =>
+								mutate({ songId: songId, like: state })
 							}
 							onPress={() => {
 								API.createSearchHistoryEntry(comp.name, 'song');
