@@ -1,8 +1,12 @@
 import Song from '../../models/Song';
 import React from 'react';
 import { Image, View } from 'react-native';
-import { Pressable, Text, PresenceTransition, Icon, useBreakpointValue } from 'native-base';
+import { Pressable, Text, IconButton, PresenceTransition, Icon, useBreakpointValue } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
+import { useQuery } from '../../Queries';
+import API from '../../API';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useLikeSongMutation } from '../../utils/likeSongMutation';
 
 type SongCardInfoProps = {
 	song: Song;
@@ -16,6 +20,9 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 	const [isPlayHovered, setIsPlayHovered] = React.useState(false);
 	const [isHovered, setIsHovered] = React.useState(false);
 	const [isSlided, setIsSlided] = React.useState(false);
+	const user = useQuery(API.getUserInfo);
+	const isLiked = (props.song.likedByUsers ?? []).filter(({ userId }) => userId === user.data?.id).length > 0;
+	const { mutate } = useLikeSongMutation();
 
 	const CardDims = {
 		height: isPhone ? 160 : 200,
@@ -185,13 +192,18 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 										{props.song.artist?.name}
 									</Text>
 								</View>
-								<Ionicons
-									style={{
-										flexShrink: 0,
-									}}
-									name="bookmark-outline"
+								<IconButton
+									variant={'ghost'}
+									borderRadius={'full'}
 									size={17}
 									color="#6075F9"
+									onPress={async () => {
+										mutate({ songId: props.song.id, like: !isLiked });
+									}}
+									_icon={{
+										as: MaterialIcons,
+										name: isLiked ? 'favorite' : 'favorite-outline',
+									}}
 								/>
 							</View>
 						</View>
