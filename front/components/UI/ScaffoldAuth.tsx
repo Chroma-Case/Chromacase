@@ -145,7 +145,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							<ButtonBase
 								style={{ width: '100%' }}
 								type="outlined"
-								iconImage="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2008px-Google_%22G%22_Logo.svg.png"
+								iconImage={require('../../assets/google.png')}
 								title={translate('continuewithgoogle')}
 								onPress={() => Linking.openURL(`${API.baseUrl}/auth/login/google`)}
 							/>
