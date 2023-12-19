@@ -3,7 +3,7 @@ import { FlatList, HStack, View, useBreakpointValue, useTheme, Text, Row } from 
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import MusicItem, { MusicItemType } from './MusicItem';
 import ButtonBase from './ButtonBase';
-import { ArrowDown2, Chart2, ArrowRotateLeft, Cup, Icon } from 'iconsax-react-native';
+import { ArrowDown2, ArrowRotateLeft, Cup, Icon } from 'iconsax-react-native';
 import { translate } from '../../i18n/i18n';
 
 // Props type definition for MusicItemTitle.
@@ -176,7 +176,6 @@ function MusicListComponent({
 					{translate('musicListTitleSong')}
 				</Text>
 				{[
-					{ text: translate('musicListTitleLevel'), icon: Chart2 },
 					{ text: translate('musicListTitleLastScore'), icon: ArrowRotateLeft },
 					{ text: translate('musicListTitleBestScore'), icon: Cup },
 				].map((value) => (

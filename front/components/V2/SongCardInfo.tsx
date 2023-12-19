@@ -10,21 +10,6 @@ type SongCardInfoProps = {
 	onPlay: () => void;
 };
 
-const Scores = [
-	{
-		icon: 'warning',
-		score: 3,
-	},
-	{
-		icon: 'star',
-		score: -225,
-	},
-	{
-		icon: 'trophy',
-		score: 100,
-	},
-];
-
 const SongCardInfo = (props: SongCardInfoProps) => {
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
@@ -36,6 +21,18 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 		height: isPhone ? 160 : 200,
 		width: isPhone ? 160 : 200,
 	};
+
+
+const Scores = [
+	{
+		icon: 'time',
+		score: props.song.lastScore ?? '?',
+	},
+	{
+		icon: 'trophy',
+		score: props.song.bestScore ?? '?',
+	},
+];
 
 	return (
 		<View
