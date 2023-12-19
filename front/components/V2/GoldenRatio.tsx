@@ -38,7 +38,7 @@ const GoldenRatio = (props: GoldenRatioProps) => {
 				>
 					<GoldenRatioPanel
 						direction={isPhone ? 'row-reverse' : 'column-reverse'}
-						header={<HomeMainSongCard {...cards[3]!} />}
+						header={<HomeMainSongCard numLinesHeader={1} {...cards[3]!} />}
 					>
 						<View style={{ display: 'flex', width: '100%', height: '100%' }}></View>
 					</GoldenRatioPanel>
