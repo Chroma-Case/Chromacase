@@ -3,7 +3,7 @@ import Card, { CardBorderRadius } from './Card';
 import { VStack, Text, Image } from 'native-base';
 
 type ArtistCardProps = {
-	image: string;
+	image?: string;
 	name: string;
 	id: number;
 	onPress: () => void;
@@ -18,6 +18,7 @@ const ArtistCard = (props: ArtistCardProps) => {
 				<Image
 					style={{ zIndex: 0, aspectRatio: 1, borderRadius: CardBorderRadius }}
 					source={{ uri: image }}
+					fallbackSource={{ uri: require('../assets/icon.jpg') }}
 					alt={name}
 				/>
 				<VStack>
@@ -28,13 +29,6 @@ const ArtistCard = (props: ArtistCardProps) => {
 			</VStack>
 		</Card>
 	);
-};
-
-ArtistCard.defaultProps = {
-	image: 'https://picsum.photos/200',
-	name: 'Artist',
-	id: 0,
-	onPress: () => {},
 };
 
 export default ArtistCard;

@@ -29,7 +29,7 @@ const swaToSongCardProps = (song: Song) => ({
 	songId: song.id,
 	name: song.name,
 	artistName: song.artist!.name,
-	cover: song.cover ?? 'https://picsum.photos/200',
+	cover: song.cover
 });
 
 const HomeSearchComponent = () => {
