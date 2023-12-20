@@ -22,17 +22,16 @@ const SongCardInfo = (props: SongCardInfoProps) => {
 		width: isPhone ? 160 : 200,
 	};
 
-
-const Scores = [
-	{
-		icon: 'time',
-		score: props.song.lastScore ?? '?',
-	},
-	{
-		icon: 'trophy',
-		score: props.song.bestScore ?? '?',
-	},
-];
+	const Scores = [
+		{
+			icon: 'time',
+			score: props.song.lastScore ?? '?',
+		},
+		{
+			icon: 'trophy',
+			score: props.song.bestScore ?? '?',
+		},
+	];
 
 	return (
 		<View

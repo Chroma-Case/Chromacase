@@ -27,10 +27,11 @@ export const SongHistoryItemWithoutSongValidator = yup
 	})
 	.concat(ModelValidator);
 
-export const SongHistoryItemValidator = SongHistoryItemWithoutSongValidator
-	.concat(yup.object({
+export const SongHistoryItemValidator = SongHistoryItemWithoutSongValidator.concat(
+	yup.object({
 		song: yup.lazy(() => SongValidator.default(undefined)).optional(),
-	}));
+	})
+);
 
 export type SongHistoryItem = yup.InferType<typeof SongHistoryItemValidator>;
 
