@@ -11,7 +11,8 @@ import { SongHistoryItemWithoutSongValidator } from './SongHistory';
 export type SongInclude = 'artist' | 'album' | 'genre' | 'SongHistory' | 'likedByUsers';
 
 export const SongValidator = yup
-	.object().shape({
+	.object()
+	.shape({
 		name: yup.string().required(),
 		midiPath: yup.string().required(),
 		musicXmlPath: yup.string().required(),
@@ -41,7 +42,11 @@ export const SongValidator = yup
 				.at(-1) ?? null,
 		lastScore:
 			song.SongHistory?.map(({ info, playDate }) => ({ info, playDate }))
-				.sort((a, b) => yup.date().cast(a.playDate)!.getTime() - yup.date().cast(b.playDate)!.getTime())
+				.sort(
+					(a, b) =>
+						yup.date().cast(a.playDate)!.getTime() -
+						yup.date().cast(b.playDate)!.getTime()
+				)
 				.at(0)?.info.score ?? null,
 	}));
 
