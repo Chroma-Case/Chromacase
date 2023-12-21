@@ -10,10 +10,12 @@ import GoldenRatio from '../../components/V2/GoldenRatio';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const HomeView = (props: RouteProps<{}>) => {
-	const songsQuery = useQuery(API.getSongSuggestions(['artist']));
+	const suggestionsQuery = useQuery(API.getSongSuggestions(['artist', 'SongHistory']));
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
+	const topSuggestions = suggestionsQuery.data?.slice(0, 4) ?? [];
+	const suggestions = suggestionsQuery.data?.slice(4) ?? [];
 
 	return (
 		<ScaffoldCC routeName={props.route.name}>
@@ -33,7 +35,7 @@ const HomeView = (props: RouteProps<{}>) => {
 							aspectRatio: isPhone ? 0.618 : 1.618,
 						}}
 					>
-						<GoldenRatio />
+						<GoldenRatio songs={topSuggestions} />
 					</View>
 					<View
 						style={{
@@ -64,7 +66,7 @@ const HomeView = (props: RouteProps<{}>) => {
 								gap: 16,
 							}}
 						>
-							{songsQuery.data?.map((song) => (
+							{suggestions.map((song) => (
 								<SongCardInfo
 									key={song.id}
 									song={song}

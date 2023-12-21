@@ -21,16 +21,15 @@ import { LoadingView } from '../components/Loading';
 
 export const FavoritesMusic = () => {
 	const navigation = useNavigation();
-	const likedSongs = useQuery(API.getLikedSongs(['artist']));
+	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory']));
 
 	const musics =
 		likedSongs.data?.map((x) => ({
 			artist: x.song.artist!.name,
 			song: x.song.name,
 			image: x.song.cover,
-			level: 42,
-			lastScore: 42,
-			bestScore: 42,
+			lastScore: x.song.lastScore,
+			bestScore: x.song.bestScore,
 			liked: true,
 			onLike: () => {
 				console.log('onLike');
