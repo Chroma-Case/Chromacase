@@ -628,7 +628,7 @@ export const fr: typeof en = {
 	loading: 'Chargement en cours... Veuillez Patienter',
 	emailCheckFailed: 'La vérification du mail a échouée',
 	chromacasePitch:
-		"ChromaCase est une solution gratuite et opens-source qui cherche à fournir une experience d'apprentissage complete pour toutes les perosnne qui chercheraient à apprendre le piano.",
+		"ChromaCase est une solution gratuite et open-source qui cherche à fournir une expérience d'apprentissage complète pour toutes les personnes qui cherchent à apprendre le piano.",
 	whatIsChromacase: "Chromacase c'est quoi?",
 	clickHereForMoreInfo: "Cliquez ici pour plus d'info",
 	forgotPassword: "J'ai oublié mon mot de passe",
