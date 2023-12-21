@@ -29,13 +29,11 @@ const getTabData = (key: string) => {
 		case 'profile':
 			return { index: 0, icon: UserEdit };
 		case 'preferences':
-			return { index: 2, icon: HeartEdit };
-		case 'notifications':
-			return { index: 3, icon: Notification };
+			return { index: 1, icon: HeartEdit };
 		case 'privacy':
-			return { index: 4, icon: SecurityUser };
+			return { index: 2, icon: SecurityUser };
 		default:
-			return { index: 6, icon: FolderCross };
+			return { index: 3, icon: FolderCross };
 	}
 };
 
