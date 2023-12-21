@@ -6,6 +6,7 @@ import MusicList from '../../components/UI/MusicList';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import { MusicItemType } from '../../components/UI/MusicItem';
+import { View } from 'react-native';
 
 export type searchProps = {
 	artist: number | undefined;
@@ -17,13 +18,13 @@ export type searchProps = {
 const SearchView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	// const [searchResult, setSearchResult] = React.useState([] as MusicItemType[]);
-	const [searchQuery, setSearchQuery] = React.useState({artist: undefined, genre: undefined, query: ''} as searchProps)
-	const rawResult = useQuery(API.searchSongs(searchQuery), { enabled: !!searchQuery });
+	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
+	const rawResult = useQuery(API.searchSongs(searchQuery), {enabled: !!searchQuery.query});
 	const result =
 	rawResult.data?.map((song) => ({
-		artist: song.artist!.name,
-		song: song.name,
-		image: song.cover,
+		artist: song?.artist?.name ?? 'duh',
+		song: song?.name,
+		image: song?.cover,
 		level: 42,
 		lastScore: 42,
 		bestScore: 42,
@@ -34,10 +35,18 @@ const SearchView = (props: RouteProps<{}>) => {
 		onPlay: () => navigation.navigate('Play', { songId: song.id }),
 	})) ?? [];
 
+	const handleLog = (query: searchProps) => {
+		console.log("got query: ", query.query);
+		setSearchQuery(query);
+		// rawResult.refetch();
+	}
+
 	return (
 		<ScaffoldCC routeName={props.route.name}>
-			<SearchBarComponent onValidate={setSearchQuery} />
-			<MusicList initialMusics={result} />
+			<View style={{display: 'flex', gap: 20}} >
+			<SearchBarComponent onValidate={(data) => handleLog(data)} />
+			{/* {result ? <MusicList initialMusics={result} /> : null} */}
+			</View>
 		</ScaffoldCC>
 	);
 };

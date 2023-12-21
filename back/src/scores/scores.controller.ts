@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Put } from "@nestjs/common";
 import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { ScoresService } from "./scores.service";
 import { User } from "@prisma/client";
@@ -13,4 +13,10 @@ export class ScoresController {
 	getTopTwenty(): Promise<User[]> {
 		return this.scoresService.topTwenty();
 	}
+
+	// @ApiOkResponse{{description: "Successfully updated the user's total score"}}
+	// @Put("/add")
+	// addScore(): Promise<void> {
+	// 	return this.ScoresService.add()
+	// }
 }
