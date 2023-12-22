@@ -29,7 +29,7 @@ const swaToSongCardProps = (song: Song) => ({
 	songId: song.id,
 	name: song.name,
 	artistName: song.artist!.name,
-	cover: song.cover
+	cover: song.cover,
 });
 
 const HomeSearchComponent = () => {
@@ -83,7 +83,7 @@ type SongsSearchComponentProps = {
 const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 	const navigation = useNavigation();
 	const { songData } = React.useContext(SearchContext);
-	const favoritesQuery = useQuery(API.getLikedSongs());
+	const favoritesQuery = useQuery(API.getLikedSongs(['artist']));
 
 	const handleFavoriteButton = async (state: boolean, songId: number): Promise<void> => {
 		if (state == false) await API.removeLikedSong(songId);

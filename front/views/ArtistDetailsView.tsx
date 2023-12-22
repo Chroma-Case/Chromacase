@@ -49,7 +49,7 @@ const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => 
 						{songsQuery.data.map((comp: Song, index: Key | null | undefined) => (
 							<SongRow
 								key={index}
-								song={comp}
+								song={{ ...comp, artist: artistQuery.data }}
 								isLiked={
 									!favoritesQuery.data?.find((query) => query?.songId == comp.id)
 								}

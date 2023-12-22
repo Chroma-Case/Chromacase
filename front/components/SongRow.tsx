@@ -54,7 +54,7 @@ const SongRow = ({ song, onPress, handleLike, isLiked }: SongRowProps) => {
 						}}
 						fontSize={'sm'}
 					>
-						{song.artistId ?? 'artist'}
+						{song.artist?.name ?? ''}
 					</Text>
 					{/* <DurationInfo length={song.details.length} /> */}
 					<DurationComponent length={song.details.length} />
