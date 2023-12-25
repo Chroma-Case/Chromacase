@@ -74,7 +74,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
-	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
+	const song = useQuery(API.getSong(songId, ['artist']), { staleTime: Infinity });
 	const toast = useToast();
 	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();

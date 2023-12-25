@@ -89,9 +89,11 @@ const PlayViewControlBar = ({
 						<Text color={textColor[800]} fontSize={14} maxW={'100%'} isTruncated>
 							{song.name}
 						</Text>
-						<Text color={textColor[900]} fontSize={12} maxW={'100%'} isTruncated>
-							{song.artistId}
-						</Text>
+						{song.artist && (
+							<Text color={textColor[900]} fontSize={12} maxW={'100%'} isTruncated>
+								{song.artist?.name}
+							</Text>
+						)}
 					</View>
 				</View>
 			</View>
