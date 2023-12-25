@@ -11,9 +11,9 @@ export const useLikeSongMutation = () => {
 		const apiCall = like ? API.addLikedSong : API.removeLikedSong
 		
 		return apiCall(songId).then(() => {
-			queryClient.invalidateQueries('liked songs')
-			queryClient.invalidateQueries('songs')
-			queryClient.invalidateQueries([songId])
+			queryClient.invalidateQueries({ queryKey: ['liked songs'] })
+			queryClient.invalidateQueries({ queryKey: ['songs'] })
+			queryClient.invalidateQueries({ queryKey: [songId] })
 		});
 	});
 }
