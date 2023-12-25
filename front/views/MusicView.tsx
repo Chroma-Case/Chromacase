@@ -1,9 +1,5 @@
 import React from 'react';
-<<<<<<< HEAD
-import { Center, useBreakpointValue, useTheme } from 'native-base';
-=======
 import { Center, Text, Toast, useBreakpointValue, useTheme } from 'native-base';
->>>>>>> 06cfa56 (Front: Use Mutations to update 'liked' state)
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -28,6 +24,7 @@ export const FavoritesMusic = () => {
 	const navigation = useNavigation();
 	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory']));
 	const { mutate } = useLikeSongMutation();
+	const { mutateAsync } = useLikeSongMutation();
 
 	const musics =
 		likedSongs.data?.map((x) => ({
@@ -38,8 +35,7 @@ export const FavoritesMusic = () => {
 			bestScore: x.song.bestScore,
 			liked: true,
 			onLike: () => {
-				Toast.show({ description: 'aaaaaaa' })
-				mutate({ songId: x.id, like: false })
+				mutateAsync({ songId: x.song.id, like: false }).then(() => likedSongs.refetch());
 			},
 			onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
 		})) ?? [];
