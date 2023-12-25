@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, View, Text, Wrap, Image, Row, Column, ScrollView, useToast } from 'native-base';
 import { FunctionComponent } from 'react';
-import { Linking, useWindowDimensions } from 'react-native';
+import { Linking, Platform, useWindowDimensions } from 'react-native';
 import ButtonBase from './ButtonBase';
 import { translate } from '../../i18n/i18n';
 import API, { APIError } from '../../API';
@@ -11,6 +11,7 @@ import { useDispatch } from '../../state/Store';
 import { setAccessToken } from '../../state/UserSlice';
 import useColorScheme from '../../hooks/colorScheme';
 import { useAssets } from 'expo-asset';
+import APKDownloadButton from '../APKDownloadButton';
 
 const handleGuestLogin = async (apiSetter: (accessToken: string) => void): Promise<string> => {
 	const apiAccess = await API.createAndGetGuestAccount();
@@ -81,7 +82,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 						)}
 					</Row>
 					<ButtonBase
-						title="guest mode"
+						title={translate('guestMode')}
 						onPress={async () => {
 							try {
 								handleGuestLogin((accessToken: string) => {
@@ -164,6 +165,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 								<Text>{link.label}</Text>
 								<LinkBase text={link.text} onPress={link.onPress} />
 							</Wrap>
+							{ Platform.OS === "web" && <APKDownloadButton/> }
 						</Stack>
 					</View>
 				</ScrollView>

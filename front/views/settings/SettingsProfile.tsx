@@ -10,7 +10,8 @@ import { Google, PasswordCheck, SmsEdit, UserSquare, Verify } from 'iconsax-reac
 import ChangeEmailForm from '../../components/forms/changeEmailForm';
 import ChangePasswordForm from '../../components/forms/changePasswordForm';
 import LogoutButtonCC from '../../components/UI/LogoutButtonCC';
-import { ScrollView } from 'react-native';
+import { Platform, ScrollView } from 'react-native';
+import APKDownloadButton from '../../components/APKDownloadButton';
 
 const handleChangeEmail = async (newEmail: string): Promise<string> => {
 	await API.updateUserEmail(newEmail);
@@ -162,6 +163,7 @@ const ProfileSettings = () => {
 						},
 					]}
 				/>
+				{ Platform.OS === "web" && <APKDownloadButton/> }
 				<LogoutButtonCC isGuest={user.isGuest} buttonType={'filled'} />
 			</Column>
 		</ScrollView>
