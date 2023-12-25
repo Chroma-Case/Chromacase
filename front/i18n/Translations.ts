@@ -1,5 +1,7 @@
 export const en = {
 	error: 'Error',
+	guestMode: "Guest Mode",
+	downloadAPK: "Download Android App",
 	goBackHome: 'Go Back Home',
 	anErrorOccured: 'An Error Occured',
 	welcome: 'Welcome',
@@ -319,6 +321,8 @@ export const en = {
 
 export const fr: typeof en = {
 	error: 'Erreur',
+	downloadAPK: "Télécharger l'App Android",
+	guestMode: "Mode Invité",
 	goBackHome: "Retourner à l'accueil",
 	anErrorOccured: 'Une erreur est survenue',
 	welcome: 'Bienvenue',
@@ -638,6 +642,8 @@ export const fr: typeof en = {
 
 export const sp: typeof en = {
 	error: 'Error',
+	downloadAPK: "Descarga la Aplicación de Android",
+	guestMode: "Modo Invitado",
 	anErrorOccured: 'ocurrió un error',
 	goBackHome: 'regresar a casa',
 	welcomeMessage: 'Benvenido',
