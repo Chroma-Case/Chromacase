@@ -317,6 +317,7 @@ export const en = {
 	forgotPassword: 'I forgot my password',
 	updateProfile: 'Update Profile',
 	accountCreatedOn: 'Account Created on',
+	downloadAPKInstructions: 'Go to the latest release, unfold the \'Assets\' section, and click \'android-build.apk\'.'
 };
 
 export const fr: typeof en = {
@@ -638,6 +639,7 @@ export const fr: typeof en = {
 	forgotPassword: "J'ai oublié mon mot de passe",
 	updateProfile: 'Changer le Profile',
 	accountCreatedOn: 'Compte créé le',
+	downloadAPKInstructions: 'Descargue \'android-build.apk\' en la sección \'Assets\' de la última versión.'
 };
 
 export const sp: typeof en = {
@@ -966,4 +968,5 @@ export const sp: typeof en = {
 	forgotPassword: 'Olvidé mi contraseña',
 	updateProfile: 'Cambiar el perfil',
 	accountCreatedOn: 'Cuenta creada el',
+	downloadAPKInstructions: 'Télécharger \'android-build.apk\' dans la section \'Assets\' de la dernière release'
 };
