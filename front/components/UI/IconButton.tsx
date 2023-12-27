@@ -195,12 +195,12 @@ const IconButton: React.FC<IconButtonProps> = ({
 				Animated.timing(scaleValue, {
 					toValue: scaleFactor,
 					duration: animationDuration,
-					useNativeDriver: true,
+					useNativeDriver: false,
 				}),
 				Animated.timing(scaleValue, {
 					toValue: 1,
 					duration: animationDuration,
-					useNativeDriver: true,
+					useNativeDriver: false,
 				}),
 			]),
 		];
