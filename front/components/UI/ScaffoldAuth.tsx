@@ -45,6 +45,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	);
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
+	const [googleLogo] = useAssets(require('../../assets/google.png'));
 
 	return (
 		<View
@@ -146,7 +147,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							<ButtonBase
 								style={{ width: '100%' }}
 								type="outlined"
-								iconImage={require('../../assets/google.png')}
+								iconImage={googleLogo?.at(0)?.uri}
 								title={translate('continuewithgoogle')}
 								onPress={() => Linking.openURL(`${API.baseUrl}/auth/login/google`)}
 							/>
