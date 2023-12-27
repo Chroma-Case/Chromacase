@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Text, Toast, useBreakpointValue, useTheme } from 'native-base';
+import { Center, useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -23,7 +23,6 @@ import { useLikeSongMutation } from '../utils/likeSongMutation';
 export const FavoritesMusic = () => {
 	const navigation = useNavigation();
 	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory']));
-	const { mutate } = useLikeSongMutation();
 	const { mutateAsync } = useLikeSongMutation();
 
 	const musics =
