@@ -12,7 +12,7 @@ import {
 	Route,
 	SceneRendererProps,
 } from 'react-native-tab-view';
-import { HeartEdit, UserEdit, Notification, SecurityUser, FolderCross } from 'iconsax-react-native';
+import { HeartEdit, UserEdit, SecurityUser, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import { RouteProps } from '../../Navigation';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';

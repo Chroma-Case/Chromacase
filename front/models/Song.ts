@@ -30,7 +30,11 @@ export const SongValidator = yup
 		artist: yup.lazy(() => ArtistValidator.default(undefined)).optional(),
 		album: yup.lazy(() => AlbumValidator.default(undefined)).optional(),
 		genre: yup.lazy(() => GenreValidator.default(undefined)).optional(),
-		likedByUsers: yup.lazy(() => yup.array(yup.object({ userId: yup.number().required() })).default(undefined)).optional(),
+		likedByUsers: yup
+			.lazy(() =>
+				yup.array(yup.object({ userId: yup.number().required() })).default(undefined)
+			)
+			.optional(),
 	})
 	.concat(ModelValidator)
 	.transform((song: Song) => ({

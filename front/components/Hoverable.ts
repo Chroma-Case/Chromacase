@@ -125,7 +125,7 @@ export default function Hoverable({
 		};
 	}
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	return React.cloneElement(React.Children.only(children) as any, {
 		...webProps,
 		// if child is Touchable
