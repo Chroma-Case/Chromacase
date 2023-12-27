@@ -1,19 +1,11 @@
 import Song from '../../models/Song';
 import React from 'react';
 import { Image, Platform, View } from 'react-native';
-import {
-	Pressable,
-	Text,
-	IconButton,
-	PresenceTransition,
-	Icon,
-	useBreakpointValue,
-} from 'native-base';
+import { Pressable, Text, PresenceTransition, Icon, useBreakpointValue } from 'native-base';
 import { LikeButton } from './SongCardInfoLikeBtn';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '../../Queries';
 import API from '../../API';
-import { MaterialIcons } from '@expo/vector-icons';
 import { useLikeSongMutation } from '../../utils/likeSongMutation';
 import Hoverable from '../Hoverable';
 

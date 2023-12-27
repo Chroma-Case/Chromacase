@@ -1,6 +1,6 @@
 import React from 'react';
-import { Translate, translate } from '../i18n/i18n';
-import { Box, Text, VStack, Progress, Stack } from 'native-base';
+import { Translate } from '../i18n/i18n';
+import { Box, VStack, Progress, Stack } from 'native-base';
 import { useNavigation } from '../Navigation';
 import Card from '../components/Card';
 import UserAvatar from './UserAvatar';

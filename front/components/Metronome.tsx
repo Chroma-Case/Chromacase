@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Slider, Text, View, IconButton, Icon } from 'native-base';
+import { Slider, View, IconButton, Icon } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { VolumeHigh, VolumeSlash } from 'iconsax-react-native';
