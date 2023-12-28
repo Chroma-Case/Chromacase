@@ -236,6 +236,10 @@ const styles = StyleSheet.create({
 
 // Using `memo` to optimize rendering performance by memorizing the component's output.
 // This ensures that the component only re-renders when its props change.
-const MusicList = memo(MusicListComponent);
+const MusicList = memo(MusicListComponent, (prev, next) => {
+	console.log('AAAAA');
+	console.log(prev.initialMusics, next.initialMusics);
+	return prev.initialMusics.length == next.initialMusics.length;
+});
 
 export default MusicList;

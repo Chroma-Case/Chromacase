@@ -85,11 +85,6 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 	const navigation = useNavigation();
 	const { songData } = React.useContext(SearchContext);
 	const favoritesQuery = useQuery(API.getLikedSongs(['artist']));
-
-	const handleFavoriteButton = async (state: boolean, songId: number): Promise<void> => {
-		if (state == false) await API.removeLikedSong(songId);
-		else await API.addLikedSong(songId);
-	};
 	const { mutate } = useLikeSongMutation();
 
 	return (

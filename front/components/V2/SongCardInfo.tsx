@@ -2,13 +2,7 @@ import Song from '../../models/Song';
 import React from 'react';
 import { LikeButton } from './SongCardInfoLikeBtn';
 import { Image, Platform, View } from 'react-native';
-import {
-	Pressable,
-	Text,
-	PresenceTransition,
-	Icon,
-	useBreakpointValue,
-} from 'native-base';
+import { Pressable, Text, PresenceTransition, Icon, useBreakpointValue } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { useQuery } from '../../Queries';
 import API from '../../API';
