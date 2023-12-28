@@ -165,7 +165,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 								<Text>{link.label}</Text>
 								<LinkBase text={link.text} onPress={link.onPress} />
 							</Wrap>
-							{ Platform.OS === "web" && <APKDownloadButton/> }
+							{Platform.OS === 'web' && <APKDownloadButton />}
 						</Stack>
 					</View>
 				</ScrollView>

@@ -7,7 +7,7 @@ import PopupCC from './UI/PopupCC';
 
 const APKDownloadButton = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	// 
+
 	return (
 		<>
 			<ButtonBase
@@ -28,8 +28,10 @@ const APKDownloadButton = () => {
 					icon={ArrowCircleDown2}
 					type={'filled'}
 					title={translate('downloadAPK')}
-					onPress={() => Linking.openURL('https://github.com/Chroma-Case/Chromacase/releases')}
-				/>	
+					onPress={() =>
+						Linking.openURL('https://github.com/Chroma-Case/Chromacase/releases')
+					}
+				/>
 			</PopupCC>
 		</>
 	);

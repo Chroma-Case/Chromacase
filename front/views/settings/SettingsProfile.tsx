@@ -163,7 +163,7 @@ const ProfileSettings = () => {
 						},
 					]}
 				/>
-				{ Platform.OS === "web" && <APKDownloadButton/> }
+				{Platform.OS === 'web' && <APKDownloadButton />}
 				<LogoutButtonCC isGuest={user.isGuest} buttonType={'filled'} />
 			</Column>
 		</ScrollView>
