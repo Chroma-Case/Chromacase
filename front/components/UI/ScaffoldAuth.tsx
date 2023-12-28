@@ -45,6 +45,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	);
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const [googleLogo] = useAssets(require('../../assets/google.png'));
 
 	return (
