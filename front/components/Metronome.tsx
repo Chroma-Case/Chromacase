@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Slider, View, IconButton, Icon } from 'native-base';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Audio } from 'expo-av';
+// import { Audio } from 'expo-av';
 import { VolumeHigh, VolumeSlash } from 'iconsax-react-native';
 import { Translate } from '../i18n/i18n';
 
 export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; bpm: number }) => {
-	const audio = useRef<Audio.Sound | null>(null);
+	const audio = useRef<null>(null);
 	const [enabled, setEnabled] = useState<boolean>(false);
 	const volume = useRef<number>(50);
 
@@ -15,12 +15,12 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 			return;
 		} else if (!audio.current) {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			Audio.Sound.createAsync(require('../assets/metronome.mp3')).then((a) => {
-				audio.current = a.sound;
-			});
+			// Audio.Sound.createAsync(require('../assets/metronome.mp3')).then((a) => {
+			// 	audio.current = a.sound;
+			// });
 		}
 		return () => {
-			audio.current?.unloadAsync();
+			// audio.current?.unloadAsync();
 		};
 	}, [enabled]);
 	useEffect(() => {
@@ -28,12 +28,12 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 		const int = setInterval(() => {
 			if (!enabled) return;
 			if (!audio.current) return;
-			audio.current?.playAsync();
+			// audio.current?.playAsync();
 		}, 60000 / bpm);
 		return () => clearInterval(int);
 	}, [bpm, paused]);
 	useEffect(() => {
-		audio.current?.setVolumeAsync(volume.current / 100);
+		// audio.current?.setVolumeAsync(volume.current / 100);
 	}, [volume.current]);
 	return (
 		<View flex={1}>

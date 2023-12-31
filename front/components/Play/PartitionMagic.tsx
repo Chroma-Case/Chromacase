@@ -5,9 +5,12 @@ import { useQuery } from '../../Queries';
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { PianoNotes } from '../../state/SoundPlayerSlice';
-import { Audio } from 'expo-av';
+// import { Audio } from 'expo-av';
 import { SvgContainer } from './SvgContainer';
 import LoadingComponent from '../Loading';
+import Sound from 'react-native-sound';
+
+Sound.setCategory('Playback');
 
 // note we are also using timestamp in a context
 export type ParitionMagicProps = {
@@ -51,7 +54,7 @@ const PartitionMagic = ({
 	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
 	const [isPartitionSvgLoaded, setIsPartitionSvgLoaded] = React.useState(false);
 	const partitionOffset = useSharedValue(0);
-	const pianoSounds = React.useRef<Record<string, Audio.Sound> | null>(null);
+	const pianoSounds = React.useRef<Record<string, Sound> | null>(null);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
@@ -72,21 +75,40 @@ const PartitionMagic = ({
 	React.useEffect(() => {
 		if (!pianoSounds.current) {
 			Promise.all(
-				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
-					Audio.Sound.createAsync(noteResource, {
-						volume: 1,
-						progressUpdateIntervalMillis: 100,
-					}).then((sound) => [midiNumber, sound.sound] as const)
-				)
+				Object.entries(PianoNotes).map(([midiNumber, noteResource]) => {
+					// Audio.Sound.createAsync(noteResource, {
+					// 	volume: 1,
+					// 	progressUpdateIntervalMillis: 100,
+					// }).then((sound) => [midiNumber, sound.sound] as const)
+					return new Promise((resolve, reject) => {
+						const sound = new Sound(noteResource, Sound.MAIN_BUNDLE, (error: any) => {
+							if (error) {
+								reject(error);
+							} else {
+								resolve([midiNumber, sound] as const);
+							}
+						});
+					});
+				})
 			).then((res) => {
-				pianoSounds.current = res.reduce(
-					(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
-					{}
-				);
+				// pianoSounds.current = res.reduce(
+				// 	(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
+				// 	{}
+				// );
+				pianoSounds.current = {};
+				(res as [string, Sound][]).forEach((curr) => {
+					pianoSounds.current![curr[0]] = curr[1];
+				});
 				console.log('sound loaded');
 			});
 		}
-	}, []);
+	}, [
+		() => {
+			pianoSounds.current?.forEach((sound) => {
+				sound.release();
+			});
+		},
+	]);
 	const partitionDims = React.useMemo<[number, number]>(() => {
 		return [data?.pageWidth ?? 0, data?.pageHeight ?? 1];
 	}, [data]);
@@ -122,22 +144,27 @@ const PartitionMagic = ({
 				cursor.notes.forEach(({ note, duration }) => {
 					try {
 						const sound = pianoSounds.current![note]!;
-						sound.playAsync().catch(console.error);
+						// sound.playAsync().catch(console.error);
+						sound.play((success) => {
+							if (!success) {
+								console.log('Sound did not play');
+							}
+						});
 						setTimeout(() => {
-							sound.stopAsync();
-						}, duration - 10);
+							sound.stop();
+						}, duration);
 					} catch (e) {
-						console.log(e);
+						console.log('Error key: ', note, e);
 					}
 				});
 			}
-			partitionOffset.value = withTiming(
-				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
-				{
-					duration: transitionDuration,
-					easing: Easing.inOut(Easing.ease),
-				}
-			);
+			// partitionOffset.value = withTiming(
+			// 	-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
+			// 	{
+			// 		duration: transitionDuration,
+			// 		easing: Easing.inOut(Easing.ease),
+			// 	}
+			// );
 		}
 	);
 
