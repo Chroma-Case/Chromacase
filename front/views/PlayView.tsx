@@ -74,7 +74,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const navigation = useNavigation();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
-	const song = useQuery(API.getSong(songId), { staleTime: Infinity });
+	const song = useQuery(API.getSong(songId, ['artist']), { staleTime: Infinity });
 	const toast = useToast();
 	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
@@ -147,9 +147,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 
 	const onMIDISuccess = (access: MIDIAccess) => {
 		const inputs = access.inputs;
+		console.log('MIDI inputs', inputs);
 		let endMsgReceived = false; // Used to know if to go to error screen when websocket closes
 
-		if (inputs.size < 2) {
+		if (inputs.size <= 0) {
 			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
 		}
@@ -232,7 +233,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		};
 		inputs.forEach((input) => {
 			input.onmidimessage = (message) => {
-				console.log('onmessage');
 				const { command, note } = parseMidiMessage(message);
 				const keyIsPressed = command == 9;
 
@@ -380,9 +380,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 								alignItems: 'center',
 							}}
 						>
-							<Text color={statColor} fontSize={12}>
-								<Translate translationKey={label} />
-							</Text>
+							<Translate translationKey={label} color={statColor} fontSize={12} />
 							<View
 								style={{
 									display: 'flex',

@@ -3,6 +3,7 @@ networks:
 
 volumes:
   scoro_logs:
+  meilisearch:
 
 
 services:
@@ -20,6 +21,9 @@ services:
       - ./data:/data
     depends_on:
       db:
+        condition: service_healthy
+      
+      meilisearch:
         condition: service_healthy
     env_file:
       - .env
@@ -86,3 +90,17 @@ services:
       - "./front/nginx.conf.template.dev:/etc/nginx/templates/default.conf.template:ro"
     ports:
       - "4567:4567"
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.4
+    volumes:
+      - meilisearch:/meili_data
+    env_file:
+      - .env
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+

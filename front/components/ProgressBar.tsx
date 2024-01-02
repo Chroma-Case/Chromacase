@@ -1,6 +1,6 @@
 import React from 'react';
-import { translate } from '../i18n/i18n';
-import { Box, Text, VStack, Progress, Stack } from 'native-base';
+import { Translate } from '../i18n/i18n';
+import { Box, VStack, Progress, Stack } from 'native-base';
 import { useNavigation } from '../Navigation';
 import Card from '../components/Card';
 import UserAvatar from './UserAvatar';
@@ -18,13 +18,14 @@ const ProgressBar = ({ xp }: { xp: number }) => {
 			<Stack padding={4} space={2} direction="row" alignItems="center">
 				<UserAvatar />
 				<VStack alignItems={'center'} flexGrow={1} space={2}>
-					<Text>{`${translate('level')} ${level}`}</Text>
+					<Translate translationKey="level" format={(e) => `${e} ${level}`} />
 					<Box w="100%">
 						<Progress value={progessValue} mx="4" />
 					</Box>
-					<Text>
-						{xp} / {nextLevelThreshold} {translate('levelProgress')}
-					</Text>
+					<Translate
+						translationKey="levelProgress"
+						format={(e) => `${xp} / ${nextLevelThreshold} ${e}`}
+					/>
 				</VStack>
 			</Stack>
 		</Card>

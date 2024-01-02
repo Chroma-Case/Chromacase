@@ -7,7 +7,7 @@ import { LoadingView } from '../components/Loading';
 import { useQuery } from '../Queries';
 import API from '../API';
 import ButtonBase from '../components/UI/ButtonBase';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import ScoreGraph from '../components/ScoreGraph';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 
@@ -81,14 +81,18 @@ const ProfileView = (props: RouteProps<{}>) => {
 								{userQuery.data.name}
 							</Text>
 							<ButtonBase
-								title="Modifier profil"
+								title={translate('updateProfile')}
 								type={'filled'}
 								onPress={async () => navigation.navigate('Settings', {})}
 							/>
 						</View>
-						<Text style={{ paddingBottom: 10, fontWeight: 'bold' }}>
-							Account created on {userQuery.data.data.createdAt.toLocaleDateString()}
-						</Text>
+						<Translate
+							style={{ paddingBottom: 10, fontWeight: 'bold' }}
+							translationKey="accountCreatedOn"
+							format={(e) =>
+								`${e} ${userQuery.data.data.createdAt.toLocaleDateString()}`
+							}
+						/>
 						<Flex
 							style={{
 								flexDirection: 'row',
@@ -96,15 +100,19 @@ const ProfileView = (props: RouteProps<{}>) => {
 								paddingBottom: 10,
 							}}
 						>
-							<Text style={{ paddingRight: 20 }}>
-								Your client ID is {userQuery.data.id}
-							</Text>
-							<Text>{userQuery.data.data.gamesPlayed} Games played</Text>
+							<Translate
+								translationKey="gamesPlayed"
+								format={(e) => `${userQuery.data.data.gamesPlayed} ${e}`}
+							/>
 						</Flex>
 					</Column>
 				</View>
 				<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
-					<Text style={{ paddingRight: 20 }}>{`${translate('level')} ${level}`}</Text>
+					<Translate
+						style={{ paddingRight: 20 }}
+						translationKey="level"
+						format={(e) => `${e} ${level}`}
+					/>
 					<Progress
 						bgColor={colors.coolGray[500]}
 						value={progessValue}
