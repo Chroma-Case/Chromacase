@@ -149,6 +149,7 @@ const SearchBarComponent = () => {
 											setArtist(artist.name);
 										}}
 									/>
+							// eslint-disable-next-line no-mixed-spaces-and-tabs
 							  ))
 							: null}
 					</View>
