@@ -72,20 +72,27 @@ const PartitionMagic = ({
 	React.useEffect(() => {
 		if (!pianoSounds.current) {
 			Promise.all(
-				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
-					Audio.Sound.createAsync(noteResource, {
-						volume: 1,
-						progressUpdateIntervalMillis: 100,
-					}).then((sound) => [midiNumber, sound.sound] as const)
-				)
-			).then((res) => {
-				pianoSounds.current = res.reduce(
-					(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
-					{}
-				);
-				console.log('sound loaded');
+				Object.entries(PianoNotes).map(async ([midiNumber, noteResource]) => {
+					const { sound: s } = await Audio.Sound.createAsync(noteResource, {
+						progressUpdateIntervalMillis: 500,
+					});
+					// const truc = await s.setProgressUpdateIntervalAsync(50);
+					// console.warn(truc);
+					return [midiNumber, s] as const;
+				})
+			).then((sounds) => {
+				pianoSounds.current = Object.fromEntries(sounds);
+				console.log('piano sounds loaded');
 			});
 		}
+		const freeSounds = () => {
+			if (pianoSounds.current) {
+				Object.values(pianoSounds.current).forEach((s) => {
+					s.unloadAsync();
+				});
+			}
+		};
+		return freeSounds;
 	}, []);
 	const partitionDims = React.useMemo<[number, number]>(() => {
 		return [data?.pageWidth ?? 0, data?.pageHeight ?? 1];
@@ -122,7 +129,13 @@ const PartitionMagic = ({
 				cursor.notes.forEach(({ note, duration }) => {
 					try {
 						const sound = pianoSounds.current![note]!;
-						sound.playAsync().catch(console.error);
+						sound
+							.playAsync()
+							.then((t) => {
+								console.log('ts', timestamp, 'dur', duration, 'infos', note, t);
+							})
+							.catch(console.error);
+						console.log('playing note', note);
 						setTimeout(() => {
 							sound.stopAsync();
 						}, duration - 10);
