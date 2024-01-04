@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
 	NavigationProp,
 	ParamListBase,
 	useNavigation as navigationHook,
 } from '@react-navigation/native';
-import React, { Component, ComponentProps, ComponentType, ReactElement, ReactNode, useEffect, useMemo } from 'react';
+import React, { ComponentProps, ComponentType, useEffect, useMemo } from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
 import { useDispatch } from 'react-redux';
@@ -35,100 +36,126 @@ import MusicView from './views/MusicView';
 import Leaderboardiew from './views/LeaderboardView';
 import { LinearGradient } from 'expo-linear-gradient';
 
+const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
+const Tab = createBottomTabNavigator<AppRouteParams & { Loading: never; Oops: never }>();
+
+const Tabs = () => {
+	return (
+		<Tab.Navigator>
+			{Object.entries(tabRoutes).map(([name, route], routeIndex) => (
+				<Tab.Screen
+					key={'route-' + routeIndex}
+					name={name}
+					options={{ ...route.options, headerTransparent: true }}
+					component={RouteToScreen(route.component)}
+				/>
+			))}
+		</Tab.Navigator>
+	);
+};
+
 // Util function to hide route props in URL
 const removeMe = () => '';
 
-const protectedRoutes = () =>
-	({
-		Home: {
-			component: DiscoveryView,
-			options: { headerShown: false },
-			link: '/',
+const tabRoutes = {
+	Home: {
+		component: DiscoveryView,
+		options: { headerShown: false },
+		link: '/',
+	},
+	Settings: {
+		component: SettingsTab,
+		options: { headerShown: false },
+		link: '/settings/:screen?',
+		stringify: {
+			screen: removeMe,
 		},
-		Music: {
-			component: MusicView,
-			options: { headerShown: false },
-			link: '/music',
-		},
-		Play: {
-			component: PlayView,
-			options: { headerShown: false, title: translate('play') },
-			link: '/play/:songId',
-		},
-		Settings: {
-			component: SettingsTab,
-			options: { headerShown: false },
-			link: '/settings/:screen?',
-			stringify: {
-				screen: removeMe,
-			},
-		},
-		Artist: {
-			component: ArtistDetailsView,
-			options: { title: translate('artistFilter') },
-			link: '/artist/:artistId',
-		},
-		Genre: {
-			component: GenreDetailsView,
-			options: { title: translate('genreFilter') },
-			link: '/genre/:genreId',
-		},
-		Search: {
-			component: SearchView,
-			options: { headerShown: false },
-			link: '/search/:query?',
-		},
-		Leaderboard: {
-			component: Leaderboardiew,
-			options: { title: translate('leaderboardTitle'), headerShown: false },
-			link: '/leaderboard',
-		},
-		Error: {
-			component: ErrorView,
-			options: { title: translate('error'), headerLeft: null },
-			link: undefined,
-		},
-		User: { component: ProfileView, options: { headerShown: false }, link: '/user' },
-		Verified: {
-			component: VerifiedView,
-			options: { title: 'Verify email', headerShown: false },
-			link: '/verify',
-		},
-	}) as const;
+	},
+	User: { component: ProfileView, options: { headerShown: false }, link: '/user' },
+	Music: {
+		component: MusicView,
+		options: { headerShown: false },
+		link: '/music',
+	},
+	Search: {
+		component: SearchView,
+		options: { headerShown: false },
+		link: '/search/:query?',
+	},
+	Leaderboard: {
+		component: Leaderboardiew,
+		options: { title: translate('leaderboardTitle'), headerShown: false },
+		link: '/leaderboard',
+	},
+};
 
-const publicRoutes = () =>
-	({
-		Login: {
-			component: SigninView,
-			options: { title: translate('signInBtn'), headerShown: false },
-			link: '/login',
-		},
-		Signup: {
-			component: SignupView,
-			options: { title: translate('signUpBtn'), headerShown: false },
-			link: '/signup',
-		},
-		Google: {
-			component: GoogleView,
-			options: { title: 'Google signin', headerShown: false },
-			link: '/logged/google',
-		},
-		PasswordReset: {
-			component: PasswordResetView,
-			options: { title: 'Password reset form', headerShown: false },
-			link: '/password_reset',
-		},
-		ForgotPassword: {
-			component: ForgotPasswordView,
-			options: { title: 'Password reset form', headerShown: false },
-			link: '/forgot_password',
-		},
-	}) as const;
+const protectedRoutes = {
+	Tabs: {
+		component: Tabs,
+		options: { headerShown: false, path: '' },
+		link: '',
+		childRoutes: tabRoutes,
+	},
+	Play: {
+		component: PlayView,
+		options: { headerShown: false, title: translate('play') },
+		link: '/play/:songId',
+	},
+	Artist: {
+		component: ArtistDetailsView,
+		options: { title: translate('artistFilter') },
+		link: '/artist/:artistId',
+	},
+	Genre: {
+		component: GenreDetailsView,
+		options: { title: translate('genreFilter') },
+		link: '/genre/:genreId',
+	},
+	Error: {
+		component: ErrorView,
+		options: { title: translate('error'), headerLeft: null },
+		link: undefined,
+	},
+	Verified: {
+		component: VerifiedView,
+		options: { title: 'Verify email', headerShown: false },
+		link: '/verify',
+	},
+};
+
+const publicRoutes = {
+	Login: {
+		component: SigninView,
+		options: { title: translate('signInBtn'), headerShown: false },
+		link: '/login',
+	},
+	Signup: {
+		component: SignupView,
+		options: { title: translate('signUpBtn'), headerShown: false },
+		link: '/signup',
+	},
+	Google: {
+		component: GoogleView,
+		options: { title: 'Google signin', headerShown: false },
+		link: '/logged/google',
+	},
+	PasswordReset: {
+		component: PasswordResetView,
+		options: { title: 'Password reset form', headerShown: false },
+		link: '/password_reset',
+	},
+	ForgotPassword: {
+		component: ForgotPasswordView,
+		options: { title: 'Password reset form', headerShown: false },
+		link: '/forgot_password',
+	},
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Route<Props = any> = {
 	component: ComponentType<Props>;
 	options: object;
+	link?: string;
 };
 
 type OmitOrUndefined<T, K extends string> = T extends undefined ? T : Omit<T, K>;
@@ -140,11 +167,9 @@ type RouteParams<Routes extends Record<string, Route>> = {
 	>;
 };
 
-type PrivateRoutesParams = RouteParams<ReturnType<typeof protectedRoutes>>;
-type PublicRoutesParams = RouteParams<ReturnType<typeof publicRoutes>>;
+type PrivateRoutesParams = RouteParams<typeof protectedRoutes>;
+type PublicRoutesParams = RouteParams<typeof publicRoutes>;
 type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
-
-const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 
 const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
 	function Route(props: NativeStackScreenProps<T & ParamListBase>) {
@@ -160,7 +185,7 @@ const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
 					zIndex: -2,
 				}}
 			>
-				<Component {...props.route.params as T} route={props.route} />
+				<Component {...(props.route.params as T)} route={props.route} />
 			</LinearGradient>
 		);
 	};
@@ -175,20 +200,24 @@ const routesToScreens = (routes: Partial<Record<keyof AppRouteParams, Route>>) =
 		/>
 	));
 
-const routesToLinkingConfig = (
-	routes: Partial<
-		Record<keyof AppRouteParams, { link?: string; stringify?: Record<string, () => string> }>
-	>
-) => {
+type RouteDescription = Record<
+	string,
+	{ link?: string; stringify?: Record<string, () => string>; childRoutes?: RouteDescription }
+>;
+
+const routesToLinkingConfig = (routes: RouteDescription) => {
 	// Too lazy to (find the) type
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const pagesToRoute = {} as Record<keyof AppRouteParams, any>;
 	Object.keys(routes).forEach((route) => {
 		const index = route as keyof AppRouteParams;
-		if (routes[index]?.link) {
+		if (routes[index]?.link !== undefined) {
 			pagesToRoute[index] = {
 				path: routes[index]!.link!,
 				stringify: routes[index]!.stringify,
+				screens: routes[index]!.childRoutes
+					? routesToLinkingConfig(routes[index]!.childRoutes!).config.screens
+					: undefined,
 			};
 		}
 	});
@@ -248,12 +277,6 @@ export const Router = () => {
 		}
 		return 'noAuth';
 	}, [userProfile, accessToken]);
-	const routes = useMemo(() => {
-		if (authStatus == 'authed') {
-			return protectedRoutes();
-		}
-		return publicRoutes();
-	}, [authStatus]);
 
 	useEffect(() => {
 		if (accessToken) {
@@ -268,7 +291,9 @@ export const Router = () => {
 
 	return (
 		<NavigationContainer
-			linking={routesToLinkingConfig(routes)}
+			linking={routesToLinkingConfig(
+				authStatus == 'authed' ? { ...protectedRoutes } : publicRoutes
+			)}
 			fallback={<LoadingView />}
 			theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}
 		>
@@ -281,10 +306,10 @@ export const Router = () => {
 								<ProfileErrorView onTryAgain={() => userProfile.refetch()} />
 							))}
 						/>
-						{routesToScreens(publicRoutes())}
+						{routesToScreens(publicRoutes)}
 					</>
 				) : (
-					routesToScreens(routes)
+					routesToScreens(protectedRoutes)
 				)}
 			</Stack.Navigator>
 		</NavigationContainer>
