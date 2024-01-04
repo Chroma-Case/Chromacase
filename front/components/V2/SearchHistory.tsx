@@ -46,7 +46,7 @@ const HistoryRowComponent = (props: historyRowProps) => {
 				</View>
 				<Text>{props.query}</Text>
 			</View>
-			<Text>{props.timestamp.toLocaleDateString()}</Text>
+			<Text>{props.timestamp.toLocaleDateString(["fr-FR", "en-GB"])}</Text>
 		</View>
 	);
 };
