@@ -13,7 +13,6 @@ import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import { RouteProps, useNavigation } from '../Navigation';
 import { Translate, TranslationKey } from '../i18n/i18n';
-import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
 import API from '../API';
@@ -162,22 +161,20 @@ const MusicTab = (props: RouteProps<object>) => {
 	);
 
 	return (
-		<ScaffoldCC routeName={props.route.name} withPadding={false}>
-			<TabView
-				sceneContainerStyle={{
-					flex: 1,
-					alignSelf: 'center',
-					padding: isSmallScreen ? 8 : 20,
-					paddingTop: 32,
-					width: '100%',
-				}}
-				renderTabBar={renderTabBar}
-				navigationState={{ index, routes }}
-				renderScene={renderScene}
-				onIndexChange={setIndex}
-				initialLayout={{ width: layout.width }}
-			/>
-		</ScaffoldCC>
+		<TabView
+			sceneContainerStyle={{
+				flex: 1,
+				alignSelf: 'center',
+				padding: isSmallScreen ? 8 : 20,
+				paddingTop: 32,
+				width: '100%',
+			}}
+			renderTabBar={renderTabBar}
+			navigationState={{ index, routes }}
+			renderScene={renderScene}
+			onIndexChange={setIndex}
+			initialLayout={{ width: layout.width }}
+		/>
 	);
 };
 

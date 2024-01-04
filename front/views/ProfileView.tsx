@@ -9,7 +9,6 @@ import API from '../API';
 import ButtonBase from '../components/UI/ButtonBase';
 import { Translate, translate } from '../i18n/i18n';
 import ScoreGraph from '../components/ScoreGraph';
-import ScaffoldCC from '../components/UI/ScaffoldCC';
 
 function xpToLevel(xp: number): number {
 	return Math.floor(xp / 1000);
@@ -26,11 +25,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 	const userQuery = useQuery(API.getUserInfo);
 
 	if (!userQuery.data) {
-		return (
-			<ScaffoldCC routeName={props.route.name}>
-				<LoadingView />
-			</ScaffoldCC>
-		);
+		return <LoadingView />;
 	}
 
 	const progessValue = xpToProgressBarValue(userQuery.data.data.xp);
@@ -40,89 +35,85 @@ const ProfileView = (props: RouteProps<{}>) => {
 	const isBigScreen = layout.width > 650;
 
 	return (
-		<ScaffoldCC routeName={props.route.name}>
-			<Flex flex={1}>
+		<Flex flex={1}>
+			<View
+				style={{
+					display: 'flex',
+					flexDirection: isBigScreen ? 'row' : 'column',
+					alignItems: isBigScreen ? 'flex-start' : 'center',
+					paddingBottom: 20,
+					gap: 5,
+					justifyContent: 'space-between',
+				}}
+			>
 				<View
 					style={{
-						display: 'flex',
-						flexDirection: isBigScreen ? 'row' : 'column',
-						alignItems: isBigScreen ? 'flex-start' : 'center',
-						paddingBottom: 20,
-						gap: 5,
-						justifyContent: 'space-between',
+						flexGrow: 0,
+						flexShrink: 0,
+					}}
+				>
+					<UserAvatar size={isBigScreen ? 'xl' : '2xl'} />
+				</View>
+				<Column
+					style={{
+						paddingLeft: isBigScreen ? 20 : 0,
+						paddingTop: isBigScreen ? 0 : 20,
+						flexGrow: 1,
+						flexShrink: 1,
+						width: '100%',
 					}}
 				>
 					<View
 						style={{
-							flexGrow: 0,
-							flexShrink: 0,
+							display: 'flex',
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'space-between',
 						}}
 					>
-						<UserAvatar size={isBigScreen ? 'xl' : '2xl'} />
-					</View>
-					<Column
-						style={{
-							paddingLeft: isBigScreen ? 20 : 0,
-							paddingTop: isBigScreen ? 0 : 20,
-							flexGrow: 1,
-							flexShrink: 1,
-							width: '100%',
-						}}
-					>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								alignItems: 'center',
-								justifyContent: 'space-between',
-							}}
-						>
-							<Text fontSize={'xl'} style={{ paddingRight: 'auto' }}>
-								{userQuery.data.name}
-							</Text>
-							<ButtonBase
-								title={translate('updateProfile')}
-								type={'filled'}
-								onPress={async () => navigation.navigate('Settings', {})}
-							/>
-						</View>
-						<Translate
-							style={{ paddingBottom: 10, fontWeight: 'bold' }}
-							translationKey="accountCreatedOn"
-							format={(e) =>
-								`${e} ${userQuery.data.data.createdAt.toLocaleDateString()}`
-							}
+						<Text fontSize={'xl'} style={{ paddingRight: 'auto' }}>
+							{userQuery.data.name}
+						</Text>
+						<ButtonBase
+							title={translate('updateProfile')}
+							type={'filled'}
+							onPress={async () => navigation.navigate('Settings', {})}
 						/>
-						<Flex
-							style={{
-								flexDirection: 'row',
-								alignItems: 'center',
-								paddingBottom: 10,
-							}}
-						>
-							<Translate
-								translationKey="gamesPlayed"
-								format={(e) => `${userQuery.data.data.gamesPlayed} ${e}`}
-							/>
-						</Flex>
-					</Column>
-				</View>
-				<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
+					</View>
 					<Translate
-						style={{ paddingRight: 20 }}
-						translationKey="level"
-						format={(e) => `${e} ${level}`}
+						style={{ paddingBottom: 10, fontWeight: 'bold' }}
+						translationKey="accountCreatedOn"
+						format={(e) => `${e} ${userQuery.data.data.createdAt.toLocaleDateString()}`}
 					/>
-					<Progress
-						bgColor={colors.coolGray[500]}
-						value={progessValue}
-						maxW={'800'}
-						flex={1}
-					/>
-				</Row>
-				<ScoreGraph />
-			</Flex>
-		</ScaffoldCC>
+					<Flex
+						style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							paddingBottom: 10,
+						}}
+					>
+						<Translate
+							translationKey="gamesPlayed"
+							format={(e) => `${userQuery.data.data.gamesPlayed} ${e}`}
+						/>
+					</Flex>
+				</Column>
+			</View>
+			<Row style={{ alignItems: 'center', paddingBottom: 20 }}>
+				<Translate
+					style={{ paddingRight: 20 }}
+					translationKey="level"
+					format={(e) => `${e} ${level}`}
+				/>
+				<Progress
+					bgColor={colors.coolGray[500]}
+					value={progessValue}
+					maxW={'800'}
+					flex={1}
+				/>
+			</Row>
+			<ScoreGraph />
+		</Flex>
 	);
 };
 

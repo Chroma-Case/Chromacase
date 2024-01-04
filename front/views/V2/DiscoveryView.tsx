@@ -5,7 +5,6 @@ import { useQuery } from '../../Queries';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
 import { RouteProps, useNavigation } from '../../Navigation';
-import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import GoldenRatio from '../../components/V2/GoldenRatio';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
