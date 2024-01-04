@@ -20,14 +20,11 @@ export interface MusicItemType {
 	/** The URL for the song's cover image. */
 	image: string;
 
-	/** The level of the song difficulty . */
-	level: number;
-
 	/** The last score achieved for this song. */
-	lastScore: number;
+	lastScore: number | null | undefined;
 
 	/** The highest score achieved for this song. */
-	bestScore: number;
+	bestScore: number | null | undefined;
 
 	/** Indicates whether the song is liked/favorited by the user. */
 	liked: boolean;
@@ -141,9 +138,8 @@ function MusicItemComponent(props: MusicItemType) {
 	);
 
 	// Memoizing formatted numbers to avoid unnecessary computations.
-	const formattedLevel = useMemo(() => formatNumber(props.level), [props.level]);
-	const formattedLastScore = useMemo(() => formatNumber(props.lastScore), [props.lastScore]);
-	const formattedBestScore = useMemo(() => formatNumber(props.bestScore), [props.bestScore]);
+	const formattedLastScore = useMemo(() => formatNumber(props.lastScore ?? 0), [props.lastScore]);
+	const formattedBestScore = useMemo(() => formatNumber(props.bestScore ?? 0), [props.bestScore]);
 
 	return (
 		<HStack space={screenSize === 'xl' ? 2 : 1} style={[styles.container, props.style]}>
@@ -179,7 +175,7 @@ function MusicItemComponent(props: MusicItemType) {
 					/>
 				</Row>
 			</Column>
-			{[formattedLevel, formattedLastScore, formattedBestScore].map((value, index) => (
+			{[formattedLastScore, formattedBestScore].map((value, index) => (
 				<Text key={index} style={styles.stats}>
 					{value}
 				</Text>

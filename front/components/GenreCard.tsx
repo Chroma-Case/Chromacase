@@ -30,6 +30,7 @@ const GenreCard = (props: GenreCardProps) => {
 						source={{
 							uri: image,
 						}}
+						fallbackSource={{ uri: require('../assets/icon.jpg') }}
 						size="md"
 					/>
 				</Box>
@@ -41,12 +42,6 @@ const GenreCard = (props: GenreCardProps) => {
 			</VStack>
 		</Card>
 	);
-};
-
-GenreCard.defaultProps = {
-	icon: 'https://picsum.photos/200',
-	name: 'Genre',
-	onPress: () => {},
 };
 
 export default GenreCard;

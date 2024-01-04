@@ -1,0 +1,95 @@
+name: "Front"
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  changes:
+    runs-on: ubuntu-latest
+    # Required permissions
+    permissions:
+      pull-requests: read
+    # Set job outputs to values from filter step
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      scoro: ${{ steps.filter.outputs.scoro }}
+    steps:
+    # For pull requests it's not necessary to checkout the code
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          backend:
+            - 'backend/**'
+          frontend:
+            - 'frontend/**'
+          scoro:
+            - 'scorometer/**'
+  front_check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: front/yarn.lock
+      - run: yarn install --frozen-lockfile
+      - name: type check
+        run: yarn tsc
+      - name: prettier
+        run: yarn pretty:check .
+      - name: eslint
+        run: yarn lint
+    
+  front_build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./front
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    needs: [ front_check ]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+          cache-dependency-path: front/yarn.lock
+      - run: yarn install --frozen-lockfile
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build Web App
+        uses: docker/build-push-action@v3
+        with:
+          context: ./front
+          push: false
+          tags: ${{steps.meta_front.outputs.tags}}
+          build-args: |
+            API_URL=${{secrets.API_URL}}
+            SCORO_URL=${{secrets.SCORO_URL}}
+
+      - name: Build Android APK
+        run: |
+          eas build -p android --profile production --local --non-interactive
+          mv *.apk chromacase.apk
+
+      - name: Upload Artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: chromacase.apk
+          path: front/

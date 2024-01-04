@@ -1,5 +1,7 @@
 export const en = {
 	error: 'Error',
+	guestMode: 'Guest Mode',
+	downloadAPK: 'Download Android App',
 	goBackHome: 'Go Back Home',
 	anErrorOccured: 'An Error Occured',
 	welcome: 'Welcome',
@@ -226,9 +228,6 @@ export const en = {
 	SettingsPreferencesTabLanguageSectionDescription: 'Set the language of your application',
 	SettingsPreferencesTabDifficultySectionTitle: 'Difficulty',
 	SettingsPreferencesTabDifficultySectionDescription: 'The precision of the tempo increases',
-	SettingsPreferencesTabColorblindModeSectionTitle: 'Colorblind Mode',
-	SettingsPreferencesTabColorblindModeSectionDescription: 'Increases contrast',
-	SettingsPreferencesTabMicVolumeSectionTitle: 'Mic Volume',
 	SettingsPreferencesTabMicVolumeSectionDescription:
 		'Adjust the volume of your microphone according to your preference',
 	// Notifications Tab
@@ -277,7 +276,6 @@ export const en = {
 	SettingsPreferencesTheme: 'Theme',
 	SettingsPreferencesLanguage: 'Language',
 	SettingsPreferencesDifficulty: 'Difficulty',
-	SettingsPreferencesColorblindMode: 'Colorblind mode',
 	SettingsPreferencesMicVolume: 'Mic volume',
 	SettingsPreferencesDevice: 'Device',
 
@@ -308,10 +306,25 @@ export const en = {
 	leaderBoardHeadingFull:
 		'The players having the best scores, thanks to their exceptional accuracy, are highlighted here.',
 	emptySelection: 'None,',
+	gamesPlayed: 'Games Played',
+	metronome: 'Metronome',
+	loading: 'Loading... Please Wait',
+	emailCheckFailed: 'Email verification failed. The token has expired or is invalid.',
+	chromacasePitch:
+		'Chromacase is a free and open source project that aims to provide a complete learning experience for anyone willing to learn piano.',
+	whatIsChromacase: 'What is Chromacase?',
+	clickHereForMoreInfo: 'Click here for more info',
+	forgotPassword: 'I forgot my password',
+	updateProfile: 'Update Profile',
+	accountCreatedOn: 'Account Created on',
+	downloadAPKInstructions:
+		"Go to the latest release, unfold the 'Assets' section, and click 'android-build.apk'.",
 };
 
 export const fr: typeof en = {
 	error: 'Erreur',
+	downloadAPK: "Télécharger l'App Android",
+	guestMode: 'Mode Invité',
 	goBackHome: "Retourner à l'accueil",
 	anErrorOccured: 'Une erreur est survenue',
 	welcome: 'Bienvenue',
@@ -371,7 +384,7 @@ export const fr: typeof en = {
 	menuLeaderBoard: 'Classement',
 	menuSettings: 'Paramètres',
 
-	menuRecentlyPlayed: 'Récemment jouée',
+	menuRecentlyPlayed: 'Récemment joués',
 	menuNoSongsPlayedYet: "Aucune chanson jouée pour l'instant",
 
 	//signup
@@ -389,7 +402,7 @@ export const fr: typeof en = {
 	//music
 	musicTabFavorites: 'Favoris',
 	musicTabRecentlyPlayed: 'Récemment joué',
-	musicTabStepUp: 'Recommandation',
+	musicTabStepUp: 'Recommandations',
 
 	//search
 	allFilter: 'Tout',
@@ -538,9 +551,6 @@ export const fr: typeof en = {
 	SettingsPreferencesTabDifficultySectionTitle: 'Difficulté',
 	SettingsPreferencesTabDifficultySectionDescription:
 		'La précision du tempo est de plus en plus élevée',
-	SettingsPreferencesTabColorblindModeSectionTitle: 'Mode daltonien',
-	SettingsPreferencesTabColorblindModeSectionDescription: 'Augmente le contraste',
-	SettingsPreferencesTabMicVolumeSectionTitle: 'Volume du micro',
 	SettingsPreferencesTabMicVolumeSectionDescription:
 		'Réglez le volume de votre micro selon vos préférences',
 	// Notifications Tab
@@ -582,8 +592,6 @@ export const fr: typeof en = {
 	SettingsNotificationsPushNotifications: 'Notifications push',
 	SettingsNotificationsReleaseAlert: 'Alertes de nouvelles Sorties',
 	SettingsNotificationsTrainingReminder: "Rappel d'entrainement",
-
-	SettingsPreferencesColorblindMode: 'Mode daltonien',
 	SettingsPreferencesDevice: 'Appareil',
 	SettingsPreferencesDifficulty: 'Difficulté',
 	SettingsPreferencesLanguage: 'Langue',
@@ -621,10 +629,25 @@ export const fr: typeof en = {
 	leaderBoardHeadingFull:
 		'Les joueurs présentant les meilleurs scores, grâce à leur précision exceptionnelle, sont mis en lumière ici.',
 	emptySelection: 'Aucun',
+	gamesPlayed: 'Parties Jouées',
+	metronome: 'Métronome',
+	loading: 'Chargement en cours... Veuillez Patienter',
+	emailCheckFailed: 'La vérification du mail a échouée',
+	chromacasePitch:
+		"ChromaCase est une solution gratuite et open-source qui cherche à fournir une expérience d'apprentissage complète pour toutes les personnes qui cherchent à apprendre le piano.",
+	whatIsChromacase: "Chromacase c'est quoi?",
+	clickHereForMoreInfo: "Cliquez ici pour plus d'info",
+	forgotPassword: "J'ai oublié mon mot de passe",
+	updateProfile: 'Changer le Profile',
+	accountCreatedOn: 'Compte créé le',
+	downloadAPKInstructions:
+		"Descargue 'android-build.apk' en la sección 'Assets' de la última versión.",
 };
 
 export const sp: typeof en = {
 	error: 'Error',
+	downloadAPK: 'Descarga la Aplicación de Android',
+	guestMode: 'Modo Invitado',
 	anErrorOccured: 'ocurrió un error',
 	goBackHome: 'regresar a casa',
 	welcomeMessage: 'Benvenido',
@@ -854,9 +877,6 @@ export const sp: typeof en = {
 	SettingsPreferencesTabLanguageSectionDescription: 'Establece el idioma de tu aplicación',
 	SettingsPreferencesTabDifficultySectionTitle: 'Dificultad',
 	SettingsPreferencesTabDifficultySectionDescription: 'La precisión del tempo aumenta',
-	SettingsPreferencesTabColorblindModeSectionTitle: 'Modo para daltónicos',
-	SettingsPreferencesTabColorblindModeSectionDescription: 'Aumenta el contraste',
-	SettingsPreferencesTabMicVolumeSectionTitle: 'Volumen del micrófono',
 	SettingsPreferencesTabMicVolumeSectionDescription:
 		'Ajusta el volumen de tu micrófono según tus preferencias',
 	// Notifications Tab
@@ -900,7 +920,6 @@ export const sp: typeof en = {
 	SettingsNotificationsReleaseAlert: 'Alertas de nuevas Sorties',
 	SettingsNotificationsTrainingReminder: 'Recordatorio de entrenamiento',
 
-	SettingsPreferencesColorblindMode: 'Modo daltoniano',
 	SettingsPreferencesDevice: 'Dispositivo',
 	SettingsPreferencesDifficulty: 'Dificultad',
 	SettingsPreferencesLanguage: 'Idioma',
@@ -940,4 +959,17 @@ export const sp: typeof en = {
 	leaderBoardHeadingFull:
 		'Aquí se destacan los jugadores que tienen las mejores puntuaciones, gracias a su precisión excepcional.',
 	emptySelection: 'Nada',
+	gamesPlayed: 'Juegos jugados',
+	metronome: 'Metrónomo',
+	loading: 'Cargando por favor espere',
+	emailCheckFailed: 'Error en la verificación del correo electrónico',
+	chromacasePitch:
+		'ChromaCase es una solución gratuita y de código abierto que busca brindar una experiencia de aprendizaje completa para cualquiera que desee aprender a tocar el piano.',
+	whatIsChromacase: '¿Qué es la cromacasa?',
+	clickHereForMoreInfo: 'Haga clic aquí para más información',
+	forgotPassword: 'Olvidé mi contraseña',
+	updateProfile: 'Cambiar el perfil',
+	accountCreatedOn: 'Cuenta creada el',
+	downloadAPKInstructions:
+		"Télécharger 'android-build.apk' dans la section 'Assets' de la dernière release",
 };

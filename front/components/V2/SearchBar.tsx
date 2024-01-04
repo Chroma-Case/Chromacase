@@ -150,17 +150,16 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 							gap: 10,
 						}}
 					>
-						{!artist
-							? artistsQuery.data?.map((artist, index) => (
-									<ArtistChipComponent
-										key={index}
-										name={artist.name}
-										onPress={() => {
-											setArtist(artist.name);
-										}}
-									/>// eslint-disable-next-line no-mixed-spaces-and-tabs
-							  ))
-							: null}
+						{!artist &&
+							artistsQuery.data?.map((artist, index) => (
+								<ArtistChipComponent
+									key={index}
+									name={artist.name}
+									onPress={() => {
+										setArtist(artist.name);
+									}}
+								/>
+							))}
 					</View>
 				</ScrollView>
 				<View>

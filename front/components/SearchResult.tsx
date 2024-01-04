@@ -2,7 +2,6 @@ import React from 'react';
 import {
 	VStack,
 	Heading,
-	Text,
 	Box,
 	Card,
 	Flex,
@@ -13,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native';
 import { SearchContext } from '../views/SearchView';
 import { useQuery } from '../Queries';
-import { translate } from '../i18n/i18n';
+import { Translate, translate } from '../i18n/i18n';
 import API from '../API';
 import LoadingComponent, { LoadingView } from './Loading';
 import ArtistCard from './ArtistCard';
@@ -25,12 +24,13 @@ import Song from '../models/Song';
 import { useNavigation } from '../Navigation';
 import SongRow from '../components/SongRow';
 import FavSongRow from './FavSongRow';
+import { useLikeSongMutation } from '../utils/likeSongMutation';
 
 const swaToSongCardProps = (song: Song) => ({
 	songId: song.id,
 	name: song.name,
 	artistName: song.artist!.name,
-	cover: song.cover ?? 'https://picsum.photos/200',
+	cover: song.cover,
 });
 
 const HomeSearchComponent = () => {
@@ -84,18 +84,12 @@ type SongsSearchComponentProps = {
 const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 	const navigation = useNavigation();
 	const { songData } = React.useContext(SearchContext);
-	const favoritesQuery = useQuery(API.getLikedSongs());
-
-	const handleFavoriteButton = async (state: boolean, songId: number): Promise<void> => {
-		if (state == false) await API.removeLikedSong(songId);
-		else await API.addLikedSong(songId);
-	};
+	const favoritesQuery = useQuery(API.getLikedSongs(['artist']));
+	const { mutate } = useLikeSongMutation();
 
 	return (
 		<ScrollView>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('songsFilter')}
-			</Text>
+			<Translate translationKey="songsFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			<Box>
 				{songData?.length ? (
 					songData.slice(0, props.maxRows).map((comp, index) => (
@@ -105,8 +99,8 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 							isLiked={
 								!favoritesQuery.data?.find((query) => query?.songId == comp.id)
 							}
-							handleLike={(state: boolean, songId: number) =>
-								handleFavoriteButton(state, songId)
+							handleLike={async (state: boolean, songId: number) =>
+								mutate({ songId: songId, like: state })
 							}
 							onPress={() => {
 								API.createSearchHistoryEntry(comp.name, 'song');
@@ -115,7 +109,7 @@ const SongsSearchComponent = (props: SongsSearchComponentProps) => {
 						/>
 					))
 				) : (
-					<Text>{translate('errNoResults')}</Text>
+					<Translate translationKey="errNoResults" />
 				)}
 			</Box>
 		</ScrollView>
@@ -132,9 +126,7 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 
 	return (
 		<Box>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('artistFilter')}
-			</Text>
+			<Translate translationKey="artistFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			{artistData?.length ? (
 				<CardGridCustom
 					content={artistData
@@ -151,7 +143,7 @@ const ArtistSearchComponent = (props: ItemSearchComponentProps) => {
 					cardComponent={ArtistCard}
 				/>
 			) : (
-				<Text>{translate('errNoResults')}</Text>
+				<Translate translationKey="errNoResults" />
 			)}
 		</Box>
 	);
@@ -163,9 +155,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 
 	return (
 		<Box>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('genreFilter')}
-			</Text>
+			<Translate translationKey="genreFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			{genreData?.length ? (
 				<CardGridCustom
 					content={genreData.slice(0, props.maxItems ?? genreData.length).map((g) => ({
@@ -180,7 +170,7 @@ const GenreSearchComponent = (props: ItemSearchComponentProps) => {
 					cardComponent={GenreCard}
 				/>
 			) : (
-				<Text>{translate('errNoResults')}</Text>
+				<Translate translationKey="errNoResults" />
 			)}
 		</Box>
 	);
@@ -200,9 +190,7 @@ const FavoritesComponent = () => {
 
 	return (
 		<ScrollView>
-			<Text fontSize="xl" fontWeight="bold" mt={4}>
-				{translate('songsFilter')}
-			</Text>
+			<Translate translationKey="songsFilter" fontSize="xl" fontWeight="bold" mt={4} />
 			<Box>
 				{favoritesQuery.data?.map((songData) => (
 					<FavSongRow
@@ -268,7 +256,9 @@ const FilterSwitch = () => {
 		case 'favorites':
 			return <FavoritesComponent />;
 		default:
-			return <Text>Something very bad happened: {currentFilter}</Text>;
+			return (
+				<Translate translationKey="unknownError" format={(e) => `${e}: ${currentFilter}`} />
+			);
 	}
 };
 

@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, View, Text, Wrap, Image, Row, Column, ScrollView, useToast } from 'native-base';
 import { FunctionComponent } from 'react';
-import { Linking, useWindowDimensions } from 'react-native';
+import { Linking, Platform, useWindowDimensions } from 'react-native';
 import ButtonBase from './ButtonBase';
 import { translate } from '../../i18n/i18n';
 import API, { APIError } from '../../API';
@@ -11,6 +11,7 @@ import { useDispatch } from '../../state/Store';
 import { setAccessToken } from '../../state/UserSlice';
 import useColorScheme from '../../hooks/colorScheme';
 import { useAssets } from 'expo-asset';
+import APKDownloadButton from '../APKDownloadButton';
 
 const handleGuestLogin = async (apiSetter: (accessToken: string) => void): Promise<string> => {
 	const apiAccess = await API.createAndGetGuestAccount();
@@ -44,6 +45,8 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	);
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const [banner] = useAssets(require('../../assets/banner.jpg'));
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const [googleLogo] = useAssets(require('../../assets/google.png'));
 
 	return (
 		<View
@@ -81,7 +84,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 						)}
 					</Row>
 					<ButtonBase
-						title="guest mode"
+						title={translate('guestMode')}
 						onPress={async () => {
 							try {
 								handleGuestLogin((accessToken: string) => {
@@ -145,7 +148,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 							<ButtonBase
 								style={{ width: '100%' }}
 								type="outlined"
-								iconImage="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2008px-Google_%22G%22_Logo.svg.png"
+								iconImage={googleLogo?.at(0)?.uri}
 								title={translate('continuewithgoogle')}
 								onPress={() => Linking.openURL(`${API.baseUrl}/auth/login/google`)}
 							/>
@@ -164,6 +167,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 								<Text>{link.label}</Text>
 								<LinkBase text={link.text} onPress={link.onPress} />
 							</Wrap>
+							{Platform.OS === 'web' && <APKDownloadButton />}
 						</Stack>
 					</View>
 				</ScrollView>

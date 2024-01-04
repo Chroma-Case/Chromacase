@@ -6,6 +6,7 @@ type HomeMainSongCardProps = {
 	title: string;
 	artist: string;
 	fontSize: number;
+	numLinesHeader: number;
 	onPress: () => void;
 };
 
@@ -66,7 +67,7 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 									fontSize: props.fontSize,
 									fontWeight: 'bold',
 								}}
-								numberOfLines={2}
+								numberOfLines={props.numLinesHeader}
 								selectable={false}
 							>
 								{props.title}
@@ -94,6 +95,7 @@ const HomeMainSongCard = (props: HomeMainSongCardProps) => {
 HomeMainSongCard.defaultProps = {
 	onPress: () => {},
 	fontSize: 16,
+	numLinesHeader: 2,
 };
 
 export default HomeMainSongCard;

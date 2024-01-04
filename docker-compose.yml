@@ -1,10 +1,7 @@
-networks:
-  loki:
-
-
 volumes:
   db:
   scoro_logs:
+  meilisearch:
 
 
 services:
@@ -16,11 +13,15 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+      
     env_file:
       - .env
     volumes:
       - ./assets:/assets
       - ./data:/data
+
   scorometer:
     build: ./scorometer
     ports:
@@ -59,3 +60,21 @@ services:
       - "back"
     env_file:
       - .env
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.5
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilisearch:/meili_data
+    env_file:
+      - .env
+    healthcheck:
+      test:
+          - CMD
+          - wget
+          - '--no-verbose'
+          - '--spider'
+          - 'http://localhost:7700/health'
+      retries: 3
+      timeout: 5s

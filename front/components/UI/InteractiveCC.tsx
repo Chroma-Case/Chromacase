@@ -124,7 +124,7 @@ const InteractiveCC: React.FC<InteractiveCCProps> = ({
 			Animated.timing(animatedValues[key]!, {
 				toValue: stateValue,
 				duration: duration,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			}).start();
 		});
 	};

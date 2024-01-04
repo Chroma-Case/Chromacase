@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, Text, useBreakpointValue, useTheme } from 'native-base';
+import { Center, useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -12,28 +12,29 @@ import {
 import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import { RouteProps, useNavigation } from '../Navigation';
-import { TranslationKey, translate } from '../i18n/i18n';
+import { Translate, TranslationKey } from '../i18n/i18n';
 import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
+import { useLikeSongMutation } from '../utils/likeSongMutation';
 
 export const FavoritesMusic = () => {
 	const navigation = useNavigation();
-	const likedSongs = useQuery(API.getLikedSongs(['artist']));
+	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory']));
+	const { mutateAsync } = useLikeSongMutation();
 
 	const musics =
 		likedSongs.data?.map((x) => ({
 			artist: x.song.artist!.name,
 			song: x.song.name,
 			image: x.song.cover,
-			level: 42,
-			lastScore: 42,
-			bestScore: 42,
+			lastScore: x.song.lastScore,
+			bestScore: x.song.bestScore,
 			liked: true,
 			onLike: () => {
-				console.log('onLike');
+				mutateAsync({ songId: x.song.id, like: false }).then(() => likedSongs.refetch());
 			},
 			onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
 		})) ?? [];
@@ -99,7 +100,7 @@ export const FavoritesMusic = () => {
 export const RecentlyPlayedMusic = () => {
 	return (
 		<Center style={{ flex: 1 }}>
-			<Text>RecentlyPlayedMusic</Text>
+			<Translate translationKey="recentlyPlayed" />
 		</Center>
 	);
 };
@@ -107,7 +108,7 @@ export const RecentlyPlayedMusic = () => {
 export const StepUpMusic = () => {
 	return (
 		<Center style={{ flex: 1 }}>
-			<Text>StepUpMusic</Text>
+			<Translate translationKey="musicTabStepUp" />
 		</Center>
 	);
 };
@@ -172,9 +173,10 @@ const MusicTab = (props: RouteProps<object>) => {
 			}}
 			renderLabel={({ route, color }) =>
 				layout.width > 800 && (
-					<Text style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}>
-						{translate(route.title as TranslationKey)}
-					</Text>
+					<Translate
+						translationKey={route.title as TranslationKey}
+						style={{ color: color, paddingLeft: 10, overflow: 'hidden' }}
+					/>
 				)
 			}
 			tabStyle={{ flexDirection: 'row' }}

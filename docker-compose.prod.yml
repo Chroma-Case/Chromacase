@@ -3,6 +3,8 @@ networks:
 
 volumes:
   scoro_logs:
+  meilisearch:
+  db:
 
 services:
   back:
@@ -51,5 +53,12 @@ services:
       - "80:80"
     depends_on:
       - "back"
+    env_file:
+      - .env
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.4
+    volumes:
+      - meilisearch:/meili_data
     env_file:
       - .env

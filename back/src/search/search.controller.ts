@@ -1,9 +1,11 @@
 import {
 	Controller,
+	DefaultValuePipe,
 	Get,
 	InternalServerErrorException,
 	NotFoundException,
 	Param,
+	ParseIntPipe,
 	Query,
 	Request,
 	UseGuards,
@@ -27,6 +29,7 @@ import { ArtistController } from "src/artist/artist.controller";
 
 @ApiTags("search")
 @Controller("search")
+@UseGuards(JwtAuthGuard)
 export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
@@ -34,46 +37,23 @@ export class SearchController {
 	@ApiOkResponse({ type: _Song, isArray: true })
 	@ApiOperation({ description: "Search a song" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
-	@UseGuards(JwtAuthGuard)
 	async searchSong(
 		@Request() req: any,
-		@Query("include") include: string,
 		@Param("query") query: string,
+		@Query("artistId") artistId: number,
+		@Query("genreId") genreId: number,
+		@Query("include") include: string,
+		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
+		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Song[] | null> {
-		try {
-			const ret = await this.searchService.songByGuess(
-				query,
-				req.user?.id,
-				mapInclude(include, req, SongController.includableFields),
-			);
-			if (!ret.length) throw new NotFoundException();
-			else return ret;
-		} catch (error) {
-			throw new InternalServerErrorException();
-		}
-	}
-
-	@Get("genres/:query")
-	@UseGuards(JwtAuthGuard)
-	@ApiUnauthorizedResponse({ description: "Invalid token" })
-	@ApiOkResponse({ type: _Genre, isArray: true })
-	@ApiOperation({ description: "Search a genre" })
-	async searchGenre(
-		@Request() req: any,
-		@Query("include") include: string,
-		@Param("query") query: string,
-	): Promise<Genre[] | null> {
-		try {
-			const ret = await this.searchService.genreByGuess(
-				query,
-				req.user?.id,
-				mapInclude(include, req, GenreController.includableFields),
-			);
-			if (!ret.length) throw new NotFoundException();
-			else return ret;
-		} catch (error) {
-			throw new InternalServerErrorException();
-		}
+		return await this.searchService.searchSong(
+			query,
+			artistId,
+			genreId,
+			mapInclude(include, req, SongController.includableFields),
+			skip,
+			take,
+		);
 	}
 
 	@Get("artists/:query")
@@ -85,17 +65,14 @@ export class SearchController {
 		@Request() req: any,
 		@Query("include") include: string,
 		@Param("query") query: string,
+		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
+		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
 	): Promise<Artist[] | null> {
-		try {
-			const ret = await this.searchService.artistByGuess(
-				query,
-				req.user?.id,
-				mapInclude(include, req, ArtistController.includableFields),
-			);
-			if (!ret.length) throw new NotFoundException();
-			else return ret;
-		} catch (error) {
-			throw new InternalServerErrorException();
-		}
+		return await this.searchService.searchArtists(
+			query,
+			mapInclude(include, req, ArtistController.includableFields),
+			skip,
+			take,
+		);
 	}
 }

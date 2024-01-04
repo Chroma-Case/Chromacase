@@ -7,7 +7,7 @@ import { useSelector } from '../../state/Store';
 import { updateSettings } from '../../state/SettingsSlice';
 import ElementList from '../../components/GtkUI/ElementList';
 import LocalSettings from '../../models/LocalSettings';
-import { Brush2, Colorfilter, LanguageSquare, Rank, Sound } from 'iconsax-react-native';
+import { Brush2, LanguageSquare, Rank } from 'iconsax-react-native';
 
 const PreferencesSettings = () => {
 	const dispatch = useDispatch();
@@ -82,59 +82,6 @@ const PreferencesSettings = () => {
 							],
 						},
 					},
-				]}
-			/>
-			<ElementList
-				elements={[
-					{
-						icon: Colorfilter,
-						type: 'toggle',
-						title: translate('SettingsPreferencesTabColorblindModeSectionTitle'),
-						description: translate(
-							'SettingsPreferencesTabColorblindModeSectionDescription'
-						),
-						data: {
-							value: settings.colorBlind,
-							onToggle: () => {
-								dispatch(updateSettings({ colorBlind: !settings.colorBlind }));
-							},
-						},
-					},
-				]}
-			/>
-			<ElementList
-				elements={[
-					{
-						icon: Sound,
-						type: 'range',
-						title: translate('SettingsPreferencesTabMicVolumeSectionTitle'),
-						description: translate('SettingsPreferencesTabMicVolumeSectionDescription'),
-						data: {
-							value: settings.micVolume,
-							min: 0,
-							max: 1000,
-							step: 10,
-							onChange: (value) => {
-								dispatch(updateSettings({ micVolume: value }));
-							},
-						},
-					},
-					/*{
-						type: "dropdown",
-						title: translate("SettingsPreferencesDevice"),
-						data: {
-							value: settings.preferedInputName || "0",
-							defaultValue: "0",
-							onSelect: (itemValue: string) => {
-								dispatch(updateSettings({ preferedInputName: itemValue }));
-							},
-							options: [
-								{ label: "Mic_0", value: "0" },
-								{ label: "Mic_1", value: "1" },
-								{ label: "Mic_2", value: "2" },
-							],
-						},
-					},*/
 				]}
 			/>
 		</Column>
