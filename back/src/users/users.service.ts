@@ -6,7 +6,7 @@ import {
 import { User, Prisma } from "@prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
 import * as bcrypt from "bcryptjs";
-import { createHash, randomUUID } from "crypto";
+import { createHash } from "crypto";
 import { createReadStream, existsSync } from "fs";
 import fetch from "node-fetch";
 
@@ -46,10 +46,10 @@ export class UsersService {
 		});
 	}
 
-	async createGuest(): Promise<User> {
+	async createGuest(displayName: string): Promise<User> {
 		return this.prisma.user.create({
 			data: {
-				username: `Guest ${randomUUID()}`,
+				username: displayName,
 				isGuest: true,
 				// Not realyl clean but better than a separate table or breaking the api by adding nulls.
 				email: null,

@@ -51,6 +51,7 @@ import { PasswordResetDto } from "./dto/password_reset.dto ";
 import { mapInclude } from "src/utils/include";
 import { SongController } from "src/song/song.controller";
 import { ChromaAuthGuard } from "./chroma-auth.guard";
+import { GuestDto } from "./dto/guest.dto";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -162,8 +163,8 @@ export class AuthController {
 	@HttpCode(200)
 	@ApiOperation({ description: "Login as a guest account" })
 	@ApiOkResponse({ description: "Successfully logged in", type: JwtToken })
-	async guest(): Promise<JwtToken> {
-		const user = await this.usersService.createGuest();
+	async guest(@Body() guestdto: GuestDto): Promise<JwtToken> {
+		const user = await this.usersService.createGuest(guestdto.username);
 		await this.settingsService.createUserSetting(user.id);
 		return this.authService.login(user);
 	}
