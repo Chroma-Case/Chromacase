@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Stack, View, Text, Wrap, Image, Row, Column, ScrollView, useToast } from 'native-base';
+import { Stack, View, Text, Wrap, Image, Row, Column, ScrollView } from 'native-base';
 import { FunctionComponent, useState } from 'react';
 import { Linking, Platform, useWindowDimensions } from 'react-native';
 import ButtonBase from './ButtonBase';
@@ -41,7 +41,6 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 }) => {
 	const layout = useWindowDimensions();
 	const dispatch = useDispatch();
-	const toast = useToast();
 	const colorScheme = useColorScheme();
 	const [guestModalIsOpen, openGuestModal] = useState(false);
 	const [logo] = useAssets(
@@ -100,24 +99,21 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 					setIsVisible={openGuestModal}
 				>
 					<GuestForm
-						onSubmit={(username) => {
-							return handleGuestLogin(username, (accessToken: string) => {
+						onSubmit={(username) =>
+							handleGuestLogin(username, (accessToken: string) => {
 								dispatch(setAccessToken(accessToken));
 							})
-								.catch((error) => {
-									if (error instanceof APIError) {
-										toast.show({
-											description: translate(error.userMessage),
-										});
-										return;
-									}
-									toast.show({ description: error as string });
-								})
 								.then(() => {
 									openGuestModal(false);
 									return translate('loggedIn');
-								});
-						}}
+								})
+								.catch((error) => {
+									if (error instanceof APIError) {
+										return translate('usernameTaken');
+									}
+									return error as string;
+								})
+						}
 					/>
 				</PopupCC>
 				<ScrollView

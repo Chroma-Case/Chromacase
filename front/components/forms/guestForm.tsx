@@ -51,9 +51,13 @@ const GuestForm = ({ onSubmit }: GuestFormProps) => {
 				title={translate('submitBtn')}
 				style={{ marginVertical: 10 }}
 				onPress={() => {
-					onSubmit(formData.username.value).catch((e) => {
-						toast.show({ description: e as string });
-					});
+					onSubmit(formData.username.value)
+						.then((e) => {
+							toast.show({ description: e as string });
+						})
+						.catch((e) => {
+							toast.show({ description: e as string });
+						});
 				}}
 			/>
 		</Column>
