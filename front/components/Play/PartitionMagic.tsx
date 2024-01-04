@@ -104,7 +104,7 @@ const PartitionMagic = ({
 		}
 	}, [
 		() => {
-			pianoSounds.current?.forEach((sound) => {
+			pianoSounds?.current?.forEach((sound) => {
 				sound.release();
 			});
 		},
@@ -144,7 +144,6 @@ const PartitionMagic = ({
 				cursor.notes.forEach(({ note, duration }) => {
 					try {
 						const sound = pianoSounds.current![note]!;
-						// sound.playAsync().catch(console.error);
 						sound.play((success) => {
 							if (!success) {
 								console.log('Sound did not play');
@@ -152,19 +151,19 @@ const PartitionMagic = ({
 						});
 						setTimeout(() => {
 							sound.stop();
-						}, duration);
+						}, duration - 10);
 					} catch (e) {
 						console.log('Error key: ', note, e);
 					}
 				});
 			}
-			// partitionOffset.value = withTiming(
-			// 	-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
-			// 	{
-			// 		duration: transitionDuration,
-			// 		easing: Easing.inOut(Easing.ease),
-			// 	}
-			// );
+			partitionOffset.value = withTiming(
+				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
+				{
+					duration: transitionDuration,
+					easing: Easing.inOut(Easing.ease),
+				}
+			);
 		}
 	);
 
