@@ -9,6 +9,7 @@ import SignUpForm from '../../components/forms/signupform';
 import API, { APIError } from '../../API';
 import PopupCC from './PopupCC';
 import { StyleProp, ViewStyle } from 'react-native';
+import { useQuery } from '../../Queries';
 
 const handleSubmit = async (username: string, password: string, email: string) => {
 	try {
@@ -36,6 +37,7 @@ const LogoutButtonCC = ({
 }: LogoutButtonCCProps) => {
 	const dispatch = useDispatch();
 	const [isVisible, setIsVisible] = useState(false);
+	const user = useQuery(API.getUserInfo);
 
 	return (
 		<>
@@ -54,7 +56,7 @@ const LogoutButtonCC = ({
 				isVisible={isVisible}
 				setIsVisible={setIsVisible}
 			>
-				<SignUpForm onSubmit={handleSubmit} />
+				<SignUpForm onSubmit={handleSubmit} defaultValues={{ username: user.data?.name }} />
 				<ButtonBase
 					style={!collapse ? { width: '100%' } : {}}
 					type="outlined"

@@ -1,9 +1,9 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, View, Text, Wrap, Image, Row, Column, ScrollView, useToast } from 'native-base';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 import { Linking, Platform, useWindowDimensions } from 'react-native';
 import ButtonBase from './ButtonBase';
-import { translate } from '../../i18n/i18n';
+import { Translate, translate } from '../../i18n/i18n';
 import API, { APIError } from '../../API';
 import SeparatorBase from './SeparatorBase';
 import LinkBase from './LinkBase';
@@ -12,9 +12,14 @@ import { setAccessToken } from '../../state/UserSlice';
 import useColorScheme from '../../hooks/colorScheme';
 import { useAssets } from 'expo-asset';
 import APKDownloadButton from '../APKDownloadButton';
+import PopupCC from './PopupCC';
+import GuestForm from '../forms/guestForm';
 
-const handleGuestLogin = async (apiSetter: (accessToken: string) => void): Promise<string> => {
-	const apiAccess = await API.createAndGetGuestAccount();
+const handleGuestLogin = async (
+	username: string,
+	apiSetter: (accessToken: string) => void
+): Promise<string> => {
+	const apiAccess = await API.createAndGetGuestAccount(username);
 	apiSetter(apiAccess);
 	return translate('loggedIn');
 };
@@ -38,6 +43,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const colorScheme = useColorScheme();
+	const [guestModalIsOpen, openGuestModal] = useState(false);
 	const [logo] = useAssets(
 		colorScheme == 'light'
 			? require('../../assets/icon_light.png')
@@ -85,21 +91,35 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 					</Row>
 					<ButtonBase
 						title={translate('guestMode')}
-						onPress={async () => {
-							try {
-								handleGuestLogin((accessToken: string) => {
-									dispatch(setAccessToken(accessToken));
-								});
-							} catch (error) {
-								if (error instanceof APIError) {
-									toast.show({ description: translate(error.userMessage) });
-									return;
-								}
-								toast.show({ description: error as string });
-							}
-						}}
+						onPress={() => openGuestModal(true)}
 					/>
 				</Wrap>
+				<PopupCC
+					title={translate('guestMode')}
+					isVisible={guestModalIsOpen}
+					setIsVisible={openGuestModal}
+				>
+					<GuestForm
+						onSubmit={(username) => {
+							return handleGuestLogin(username, (accessToken: string) => {
+								dispatch(setAccessToken(accessToken));
+							})
+								.catch((error) => {
+									if (error instanceof APIError) {
+										toast.show({
+											description: translate(error.userMessage),
+										});
+										return;
+									}
+									toast.show({ description: error as string });
+								})
+								.then(() => {
+									openGuestModal(false);
+									return translate('loggedIn');
+								});
+						}}
+					/>
+				</PopupCC>
 				<ScrollView
 					contentContainerStyle={{
 						padding: 16,
@@ -152,7 +172,9 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 								title={translate('continuewithgoogle')}
 								onPress={() => Linking.openURL(`${API.baseUrl}/auth/login/google`)}
 							/>
-							<SeparatorBase>or</SeparatorBase>
+							<SeparatorBase>
+								<Translate translationKey="or" />
+							</SeparatorBase>
 							<Stack
 								space={3}
 								justifyContent="center"

@@ -10,13 +10,14 @@ import ButtonBase from '../UI/ButtonBase';
 import Spacer from '../UI/Spacer';
 
 interface SignupFormProps {
+	defaultValues: Partial<{ username: string }>;
 	onSubmit: (username: string, password: string, email: string) => Promise<string>;
 }
 
-const SignUpForm = ({ onSubmit }: SignupFormProps) => {
+const SignUpForm = ({ onSubmit, defaultValues }: SignupFormProps) => {
 	const [formData, setFormData] = React.useState({
 		username: {
-			value: '',
+			value: defaultValues.username || '',
 			error: null as string | null,
 		},
 		password: {

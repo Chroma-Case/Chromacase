@@ -187,12 +187,12 @@ export default class API {
 		});
 	}
 
-	public static async createAndGetGuestAccount(): Promise<AccessToken> {
+	public static async createAndGetGuestAccount(username: string): Promise<AccessToken> {
 		return API.fetch(
 			{
 				route: '/auth/guest',
 				method: 'POST',
-				body: undefined,
+				body: { username },
 			},
 			{ handler: AccessTokenResponseHandler }
 		)
