@@ -15,7 +15,6 @@ import {
 import { HeartEdit, UserEdit, SecurityUser, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
 import { RouteProps } from '../../Navigation';
-import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import { translate } from '../../i18n/i18n';
 
 const renderScene = SceneMap({
@@ -94,23 +93,21 @@ const SettingsTab = (props: RouteProps<{}>) => {
 	);
 
 	return (
-		<ScaffoldCC routeName={props.route.name} withPadding={false}>
-			<TabView
-				sceneContainerStyle={{
-					flex: 1,
-					alignSelf: 'center',
-					paddingTop: 32,
-					padding: isSmallScreen ? 8 : 20,
-					maxWidth: 850,
-					width: '100%',
-				}}
-				renderTabBar={renderTabBar}
-				navigationState={{ index, routes }}
-				renderScene={renderScene}
-				onIndexChange={setIndex}
-				initialLayout={{ width: layout.width }}
-			/>
-		</ScaffoldCC>
+		<TabView
+			sceneContainerStyle={{
+				flex: 1,
+				alignSelf: 'center',
+				paddingTop: 32,
+				padding: isSmallScreen ? 8 : 20,
+				maxWidth: 850,
+				width: '100%',
+			}}
+			renderTabBar={renderTabBar}
+			navigationState={{ index, routes }}
+			renderScene={renderScene}
+			onIndexChange={setIndex}
+			initialLayout={{ width: layout.width }}
+		/>
 	);
 };
 
