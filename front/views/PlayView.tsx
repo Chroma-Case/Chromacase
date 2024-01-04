@@ -82,10 +82,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
 	const [endResult, setEndResult] = useState<unknown>();
+	const [shouldPlay, setShouldPlay] = useState(false);
 	const songHistory = useQuery(API.getSongHistory(songId));
 	const [score, setScore] = useState(0); // Between 0 and 100
-	// const fadeAnim = useRef(new Animated.Value(0)).current;
-	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
+	const getElapsedTime = () => stopwatch.getElapsedRunningTime();
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
@@ -130,6 +130,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 			})
 		);
 	};
+
 	const onEnd = () => {
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
@@ -455,6 +456,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					}}
 				>
 					<PartitionMagic
+						shouldPlay={shouldPlay}
 						timestamp={time}
 						songID={song.data.id}
 						onEndReached={() => {
@@ -465,6 +467,8 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						onError={() => {
 							console.log('error from partition magic');
 						}}
+						onPlay={onResume}
+						onPause={onPause}
 					/>
 				</View>
 				<PlayViewControlBar
@@ -473,8 +477,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					paused={paused}
 					song={song.data}
 					onEnd={onEnd}
-					onPause={onPause}
-					onResume={onResume}
+					onPause={() => {
+						setShouldPlay(false);
+					}}
+					onResume={() => {
+						setShouldPlay(true);
+					}}
 				/>
 				<PopupCC
 					title={translate('selectPlayMode')}
