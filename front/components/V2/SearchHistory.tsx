@@ -1,9 +1,10 @@
 import { View } from 'react-native';
-import { Text } from 'native-base';
+import { Text, theme } from 'native-base';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import { translate } from '../../i18n/i18n';
 import { LoadingView } from '../Loading';
+import useColorScheme from '../../hooks/colorScheme';
 
 type historyRowProps = {
 	type: string;
@@ -12,11 +13,14 @@ type historyRowProps = {
 };
 
 const HistoryRowComponent = (props: historyRowProps) => {
+	const colorScheme = useColorScheme();
+
 	return (
 		<View
 			style={{
 				borderTopWidth: 1,
-				borderTopColor: '#9E9E9E',
+				borderColor:
+					colorScheme == 'dark' ? theme.colors.coolGray[400] : theme.colors.coolGray[800],
 				paddingTop: 5,
 				display: 'flex',
 				flexDirection: 'row',
@@ -28,7 +32,10 @@ const HistoryRowComponent = (props: historyRowProps) => {
 			<View>
 				<View
 					style={{
-						backgroundColor: 'gray',
+						backgroundColor:
+							colorScheme == 'dark'
+								? theme.colors.coolGray[600]
+								: theme.colors.coolGray[400],
 						borderRadius: 8,
 						paddingVertical: 4,
 						paddingHorizontal: 12,
