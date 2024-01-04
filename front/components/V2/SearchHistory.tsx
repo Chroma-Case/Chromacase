@@ -32,6 +32,7 @@ const HistoryRowComponent = (props: historyRowProps) => {
 						borderRadius: 8,
 						paddingVertical: 4,
 						paddingHorizontal: 12,
+						alignSelf: 'flex-start',
 					}}
 				>
 					<Text>{props.type}</Text>
