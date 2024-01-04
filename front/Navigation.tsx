@@ -35,13 +35,16 @@ import DiscoveryView from './views/V2/DiscoveryView';
 import MusicView from './views/MusicView';
 import Leaderboardiew from './views/LeaderboardView';
 import { LinearGradient } from 'expo-linear-gradient';
+import ScaffoldMobileCC  from './components/UI/ScaffoldMobileCC';
 
 const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 const Tab = createBottomTabNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 
 const Tabs = () => {
 	return (
-		<Tab.Navigator>
+		<Tab.Navigator
+			tabBar={ScaffoldMobileCC}
+		>
 			{Object.entries(tabRoutes).map(([name, route], routeIndex) => (
 				<Tab.Screen
 					key={'route-' + routeIndex}

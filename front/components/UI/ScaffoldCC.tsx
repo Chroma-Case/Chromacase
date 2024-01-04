@@ -28,8 +28,6 @@ type ScaffoldCCProps = {
 const ScaffoldCC = ({
 	children,
 	routeName,
-	withPadding = true,
-	enableScroll = true,
 }: ScaffoldCCProps) => {
 	const userQuery = useQuery(API.getUserInfo);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
@@ -48,12 +46,8 @@ const ScaffoldCC = ({
 		<Flex style={{ flex: 1, backgroundColor: '#cdd4fd' }}>
 			{screenSize === 'small' ? (
 				<ScaffoldMobileCC
-					enableScroll={enableScroll}
-					user={userQuery.data}
-					logo={logo?.at(0)?.uri ?? ''}
 					routeName={routeName}
 					menu={menu}
-					widthPadding={withPadding}
 				>
 					{children}
 				</ScaffoldMobileCC>
@@ -63,7 +57,7 @@ const ScaffoldCC = ({
 					logo={logo?.at(0)?.uri ?? ''}
 					routeName={routeName}
 					menu={menu}
-					widthPadding={withPadding}
+					widthPadding={true}
 				>
 					{children}
 				</ScaffoldDesktopCC>
