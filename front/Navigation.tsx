@@ -39,6 +39,7 @@ import ScaffoldMobileCC from './components/UI/ScaffoldMobileCC';
 import ScaffoldDesktopCC from './components/UI/ScaffoldDesktopCC';
 import { createCustomNavigator } from './utils/navigator';
 import { Cup, Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 const Tab = createCustomNavigator<AppRouteParams & { Loading: never; Oops: never }>();
@@ -182,12 +183,17 @@ type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
 const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
 	function Route(props: NativeStackScreenProps<T & ParamListBase>) {
 		const colorScheme = useColorScheme();
+		const insets = useSafeAreaInsets();
 
 		return (
 			<LinearGradient
 				colors={colorScheme === 'dark' ? ['#101014', '#6075F9'] : ['#cdd4fd', '#cdd4fd']}
 				style={{
 					flex: 1,
+					paddingTop: insets.top,
+					paddingBottom: insets.bottom,
+					paddingLeft: insets.left,
+					paddingRight: insets.right,
 				}}
 			>
 				<Component {...(props.route.params as T)} route={props.route} />
@@ -301,7 +307,7 @@ export const Router = () => {
 			fallback={<LoadingView />}
 			theme={colorScheme == 'light' ? DefaultTheme : DarkTheme}
 		>
-			<Stack.Navigator>
+			<Stack.Navigator screenOptions={{ navigationBarColor: 'transparent' }}>
 				{authStatus == 'error' ? (
 					<>
 						<Stack.Screen
