@@ -4,4 +4,4 @@ WORKDIR /app
 RUN yarn global add npx expo-cli
 
 ENV DEVAPIURL http://back:3000
-CMD npx expo start
+CMD npx expo start --web
