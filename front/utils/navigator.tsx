@@ -22,7 +22,7 @@ import { BottomTabView } from '@react-navigation/bottom-tabs';
 import { Screen, Header, getHeaderTitle, SafeAreaProviderCompat } from '@react-navigation/elements';
 
 import ScaffoldMobileCC from '../components/UI/ScaffoldMobileCC';
-import { useBreakpointValue } from 'native-base';
+import { useBreakpointValue, useTheme } from 'native-base';
 import ScaffoldDesktopCC from '../components/UI/ScaffoldDesktopCC';
 
 type Props = DefaultNavigatorOptions<
@@ -84,7 +84,7 @@ function BottomTabNavigator({
 					state={state}
 					navigation={navigation}
 					descriptors={descriptors}
-					sceneContainerStyle={sceneContainerStyle}
+					sceneContainerStyle={[sceneContainerStyle, { backgroundColor: "transparent" }]}
 				/>
 			) : (
 				<ScaffoldDesktopCC state={state} navigation={navigation} descriptors={descriptors}>
@@ -102,7 +102,7 @@ function BottomTabNavigator({
 								descriptor.navigation as BottomTabNavigationProp<ParamListBase>,
 							options: descriptor.options,
 						})}
-						style={sceneContainerStyle}
+						style={[sceneContainerStyle, { backgroundColor: "transparent" }]}
 					>
 						{descriptor.render()}
 					</Screen>

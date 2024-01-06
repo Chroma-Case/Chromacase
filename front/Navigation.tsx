@@ -51,7 +51,7 @@ const Tabs = () => {
 					key={'route-' + routeIndex}
 					name={name}
 					options={{ ...route.options, headerTransparent: true }}
-					component={RouteToScreen(route.component)}
+					component={route.component}
 				/>
 			))}
 		</Tab.Navigator>
