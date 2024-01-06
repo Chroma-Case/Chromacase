@@ -1,5 +1,5 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { View, Image, Pressable, useColorScheme } from 'react-native';
+import { View, Image, Pressable, useColorScheme, ViewStyle } from 'react-native';
 import { Divider, Text, ScrollView, Row, useMediaQuery, useTheme } from 'native-base';
 import { useAssets } from 'expo-asset';
 import { useQuery } from '../../Queries';
@@ -123,7 +123,8 @@ const ScaffoldDesktopCC = ({
 	descriptors,
 	navigation,
 	children,
-}: Omit<BottomTabBarProps, 'insets'> & { children: ReactElement }) => {
+	style,
+}: Omit<BottomTabBarProps, 'insets'> & { children: ReactElement; style?: ViewStyle }) => {
 	const user = useQuery(API.getUserInfo);
 	const [isSmallScreen] = useMediaQuery({ maxWidth: 1100 });
 	const { colors } = useTheme();
@@ -135,7 +136,7 @@ const ScaffoldDesktopCC = ({
 	);
 
 	return (
-		<View style={{ height: '100%', flexDirection: 'row', overflow: 'hidden' }}>
+		<View style={[{ height: '100%', flexDirection: 'row', overflow: 'hidden' }, style]}>
 			<View
 				style={{
 					display: 'flex',
@@ -241,7 +242,7 @@ const ScaffoldDesktopCC = ({
 					borderRadius: 12,
 					// Become the same height as the child so if the child has overflow: auto, the child's scrollbar
 					// is hidden and we use this component's scrollbar.
-					minHeight: "auto"
+					minHeight: 'auto',
 				}}
 			>
 				{children}
