@@ -6,7 +6,7 @@ import MusicList from '../../components/UI/MusicList';
 import { useQuery } from '../../Queries';
 import API from '../../API';
 import { View } from 'react-native';
-import { Text } from 'native-base';
+import SearchHistory from '../../components/V2/SearchHistory';
 
 export type searchProps = {
 	artist: number | undefined;
@@ -50,8 +50,9 @@ const SearchView = (props: RouteProps<{}>) => {
 	return (
 		<ScaffoldCC routeName={props.route.name}>
 			<View style={{display: 'flex', gap: 20}} >
-			<SearchBarComponent onValidate={(data) => handleLog(data)} />
-			<MusicList initialMusics={result} />
+				<SearchBarComponent onValidate={(data) => handleLog(data)} />
+				{result ? <MusicList initialMusics={result} />
+				: <SearchHistory />}
 			</View>
 		</ScaffoldCC>
 	);
