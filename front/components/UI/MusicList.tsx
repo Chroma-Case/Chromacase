@@ -3,7 +3,7 @@ import { FlatList, HStack, View, useBreakpointValue, useTheme, Text, Row } from 
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import MusicItem, { MusicItemType } from './MusicItem';
 import ButtonBase from './ButtonBase';
-import { ArrowDown2, ArrowRotateLeft, Cup, Icon } from 'iconsax-react-native';
+import { ArrowDown2, ArrowRotateLeft, Cup, Icon, Music } from 'iconsax-react-native';
 import { translate } from '../../i18n/i18n';
 
 // Props type definition for MusicItemTitle.
@@ -98,11 +98,11 @@ type MusicListProps = {
  *   making it suitable for use cases where the list of items is expected to grow over time.
  * - The layout and styling are optimized for performance and responsiveness.
  */
-function MusicListComponent({
+const MusicListComponent = ({
 	initialMusics,
 	loadMoreMusics,
 	musicsPerPage = loadMoreMusics ? 50 : initialMusics.length,
-}: MusicListProps) {
+}: MusicListProps) => {
 	// State initialization for MusicList.
 	// 'allMusics': all music items.
 	// 'displayedMusics': items displayed per page.
@@ -236,8 +236,8 @@ const styles = StyleSheet.create({
 
 // Using `memo` to optimize rendering performance by memorizing the component's output.
 // This ensures that the component only re-renders when its props change.
-const MusicList = memo(MusicListComponent, (prev, next) => {
-	return prev.initialMusics.length == next.initialMusics.length;
-});
+// const MusicList = memo(MusicListComponent, (prev, next) => {
+// 	return prev.initialMusics.length == next.initialMusics.length;
+// });
 
-export default MusicList;
+export default MusicListComponent;
