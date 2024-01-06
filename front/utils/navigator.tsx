@@ -12,10 +12,14 @@ import * as React from 'react';
 
 import type { BottomTabNavigationConfig } from '@react-navigation/bottom-tabs/src/types';
 import type {
+	BottomTabHeaderProps,
 	BottomTabNavigationEventMap,
 	BottomTabNavigationOptions,
+	BottomTabNavigationProp,
 } from '@react-navigation/bottom-tabs';
 import { BottomTabView } from '@react-navigation/bottom-tabs';
+
+import { Screen, Header, getHeaderTitle, SafeAreaProviderCompat } from '@react-navigation/elements';
 
 import ScaffoldMobileCC from '../components/UI/ScaffoldMobileCC';
 import { useBreakpointValue } from 'native-base';
@@ -59,6 +63,18 @@ function BottomTabNavigator({
 	});
 
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
+	const descriptor = descriptors[state.routes[state.index]!.key]!;
+	const header =
+		descriptor.options.header ??
+		(({ layout, options }: BottomTabHeaderProps) => (
+			<Header
+				{...options}
+				layout={layout}
+				title={getHeaderTitle(options, state.routes[state.index]!.name)}
+			/>
+		));
+	const dimensions = SafeAreaProviderCompat.initialMetrics.frame;
+
 	return (
 		<NavigationContent>
 			{screenSize === 'small' ? (
@@ -71,11 +87,25 @@ function BottomTabNavigator({
 					sceneContainerStyle={sceneContainerStyle}
 				/>
 			) : (
-				<ScaffoldDesktopCC
-					state={state}
-					navigation={navigation}
-					descriptors={descriptors}>
-					{descriptors[state.routes[state.index]!.key]!.render()}
+				<ScaffoldDesktopCC state={state} navigation={navigation} descriptors={descriptors}>
+					<Screen
+						focused
+						navigation={descriptor.navigation}
+						route={descriptor.route}
+						headerShown={descriptor.options.headerShown}
+						headerStatusBarHeight={descriptor.options.headerStatusBarHeight}
+						headerTransparent={descriptor.options.headerTransparent}
+						header={header({
+							layout: dimensions,
+							route: descriptor.route,
+							navigation:
+								descriptor.navigation as BottomTabNavigationProp<ParamListBase>,
+							options: descriptor.options,
+						})}
+						style={sceneContainerStyle}
+					>
+						{descriptor.render()}
+					</Screen>
 				</ScaffoldDesktopCC>
 			)}
 		</NavigationContent>
