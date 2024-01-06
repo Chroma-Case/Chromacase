@@ -363,12 +363,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 							[
 								'lastScore',
 								songHistory.data?.history.at(0)?.score ?? 0,
-								() => <Clock color={statColor} />,
+								<Clock key={'lS'} color={statColor} />,
 							] as const,
 							[
 								'bestScore',
 								songHistory.data?.best ?? 0,
-								() => <Cup color={statColor} />,
+								<Cup key={'bS'} color={statColor} />,
 							],
 						] as const
 					).map(([label, value, icon]) => (
@@ -389,7 +389,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 									gap: 5,
 								}}
 							>
-								{icon()}
+								{icon}
 								<Text color={statColor} fontSize={12} bold>
 									{value}
 								</Text>
@@ -484,36 +484,6 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						setShouldPlay(true);
 					}}
 				/>
-				<PopupCC
-					title={translate('selectPlayMode')}
-					description={translate('selectPlayModeExplaination')}
-					isVisible={!playType}
-					setIsVisible={
-						navigation.canGoBack()
-							? (isVisible) => {
-									if (!isVisible) {
-										// If we dismiss the popup, Go to previous page
-										navigation.goBack();
-									}
-							  }
-							: undefined
-					}
-				>
-					<Row style={{ justifyContent: 'space-between' }}>
-						<ButtonBase
-							style={{}}
-							type="outlined"
-							title={translate('practiceBtn')}
-							onPress={async () => setPlayType('practice')}
-						/>
-						<ButtonBase
-							style={{}}
-							type="filled"
-							title={translate('playBtn')}
-							onPress={async () => setPlayType('normal')}
-						/>
-					</Row>
-				</PopupCC>
 			</SafeAreaView>
 			{colorScheme === 'dark' && (
 				<LinearGradient
