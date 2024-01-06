@@ -36,13 +36,16 @@ import MusicView from './views/MusicView';
 import Leaderboardiew from './views/LeaderboardView';
 import { LinearGradient } from 'expo-linear-gradient';
 import ScaffoldMobileCC from './components/UI/ScaffoldMobileCC';
+import ScaffoldDesktopCC from './components/UI/ScaffoldDesktopCC';
+import { createCustomNavigator } from './utils/navigator';
+import { Cup, Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
 
 const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
-const Tab = createBottomTabNavigator<AppRouteParams & { Loading: never; Oops: never }>();
+const Tab = createCustomNavigator<AppRouteParams & { Loading: never; Oops: never }>();
 
 const Tabs = () => {
 	return (
-		<Tab.Navigator tabBar={ScaffoldMobileCC}>
+		<Tab.Navigator>
 			{Object.entries(tabRoutes).map(([name, route], routeIndex) => (
 				<Tab.Screen
 					key={'route-' + routeIndex}
@@ -61,32 +64,36 @@ const removeMe = () => '';
 const tabRoutes = {
 	Home: {
 		component: DiscoveryView,
-		options: { headerShown: false },
+		options: { headerShown: false, tabBarIcon: Discover },
 		link: '/',
 	},
-	Settings: {
-		component: SettingsTab,
-		options: { headerShown: false },
-		link: '/settings/:screen?',
-		stringify: {
-			screen: removeMe,
-		},
+	User: {
+		component: ProfileView,
+		options: { headerShown: false, tabBarIcon: User },
+		link: '/user',
 	},
-	User: { component: ProfileView, options: { headerShown: false }, link: '/user' },
 	Music: {
 		component: MusicView,
-		options: { headerShown: false },
+		options: { headerShown: false, tabBarIcon: Music },
 		link: '/music',
 	},
 	Search: {
 		component: SearchView,
-		options: { headerShown: false },
+		options: { headerShown: false, tabBarIcon: SearchNormal1 },
 		link: '/search/:query?',
 	},
 	Leaderboard: {
 		component: Leaderboardiew,
-		options: { title: translate('leaderboardTitle'), headerShown: false },
+		options: { title: translate('leaderboardTitle'), headerShown: false, tabBarIcon: Cup },
 		link: '/leaderboard',
+	},
+	Settings: {
+		component: SettingsTab,
+		options: { headerShown: false, tabBarIcon: Setting2, subMenu: true },
+		link: '/settings/:screen?',
+		stringify: {
+			screen: removeMe,
+		},
 	},
 };
 
@@ -178,7 +185,7 @@ const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
 
 		return (
 			<LinearGradient
-				colors={colorScheme === 'dark' ? ['#101014', '#6075F9'] : ['#cdd4fd', "#cdd4fd"]}
+				colors={colorScheme === 'dark' ? ['#101014', '#6075F9'] : ['#cdd4fd', '#cdd4fd']}
 				style={{
 					width: '100%',
 					height: '100%',
