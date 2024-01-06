@@ -22,9 +22,8 @@ import { BottomTabView } from '@react-navigation/bottom-tabs';
 import { Screen, Header, getHeaderTitle, SafeAreaProviderCompat } from '@react-navigation/elements';
 
 import ScaffoldMobileCC from '../components/UI/ScaffoldMobileCC';
-import { useBreakpointValue, useTheme } from 'native-base';
+import { useBreakpointValue } from 'native-base';
 import ScaffoldDesktopCC from '../components/UI/ScaffoldDesktopCC';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = DefaultNavigatorOptions<
 	ParamListBase,
@@ -76,8 +75,6 @@ function BottomTabNavigator({
 		));
 	const dimensions = SafeAreaProviderCompat.initialMetrics.frame;
 
-	const insets = useSafeAreaInsets();
-
 	return (
 		<NavigationContent>
 			{screenSize === 'small' ? (
@@ -91,26 +88,12 @@ function BottomTabNavigator({
 						sceneContainerStyle,
 						{
 							backgroundColor: 'transparent',
-							paddingTop: insets.top,
-							paddingLeft: insets.left,
-							paddingRight: insets.right,
-							// Keep some margin with the tabbar (insets already applied there)
 							paddingBottom: 8,
 						},
 					]}
 				/>
 			) : (
-				<ScaffoldDesktopCC
-					state={state}
-					navigation={navigation}
-					descriptors={descriptors}
-					style={{
-						paddingTop: insets.top,
-						paddingBottom: insets.bottom,
-						paddingLeft: insets.left,
-						paddingRight: insets.right,
-					}}
-				>
+				<ScaffoldDesktopCC state={state} navigation={navigation} descriptors={descriptors}>
 					<Screen
 						focused
 						navigation={descriptor.navigation}
