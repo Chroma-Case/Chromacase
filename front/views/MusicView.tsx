@@ -19,116 +19,74 @@ import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import { useLikeSongMutation } from '../utils/likeSongMutation';
+import Song from '../models/Song';
 
-export const FavoritesMusic = () => {
-	const navigation = useNavigation();
-	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory']));
-	const { mutateAsync } = useLikeSongMutation();
-
-	const musics =
-		likedSongs.data?.map((x) => ({
-			artist: x.song.artist!.name,
-			song: x.song.name,
-			image: x.song.cover,
-			lastScore: x.song.lastScore,
-			bestScore: x.song.bestScore,
-			liked: true,
-			onLike: () => {
-				mutateAsync({ songId: x.song.id, like: false }).then(() => likedSongs.refetch());
-			},
-			onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
-		})) ?? [];
-
-	if (likedSongs.isLoading) {
-		return <LoadingView />;
-	}
-	return (
-		<MusicList
-			initialMusics={musics}
-			musicsPerPage={25}
-		/>
-	);
+type MusicListCCProps = {
+    data: Song[] | undefined;
+    isLoading: boolean;
+    refetch: () => void;
 };
 
-export const RecentlyPlayedMusic = () => {
-	const navigation = useNavigation();
-	const playHistory = useQuery(API.getUserPlayHistory(['artist', 'SongHistory', 'likedByUsers']));
-	const { mutateAsync } = useLikeSongMutation();
-	const user = useQuery(API.getUserInfo);
+const MusicListCC = ({ data, isLoading, refetch }: MusicListCCProps) => {
+    const navigation = useNavigation();
+    const { mutateAsync } = useLikeSongMutation();
+    const user = useQuery(API.getUserInfo);
 
-	const musics = playHistory.data
-    ?.filter((x) => x.song !== undefined)
-    .map((x) => ({
-        artist: x.song!.artist!.name,
-        song: x.song!.name,
-        image: x.song!.cover,
-        lastScore: x.song!.lastScore,
-        bestScore: x.song!.bestScore,
-		liked: x.song!.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false,
-        onLike: () => {
-            mutateAsync({ songId: x.song!.id, like: false }).then(() => playHistory.refetch());
-        },
-        onPlay: () => navigation.navigate('Play', { songId: x.song!.id }),
-    }))
-    ?? [];
+	const musics = (data ?? [])
+	.map((song) => {
+		const isLiked = song.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false;
 
+        return {
+            artist: song.artist!.name,
+            song: song.name,
+            image: song.cover,
+            lastScore: song.lastScore,
+            bestScore: song.bestScore,
+            liked: isLiked,
+            onLike: () => {
+				mutateAsync({ songId: song.id, like: !isLiked }).then(() => refetch());
+			},
+            onPlay: () => navigation.navigate('Play', { songId: song.id }),
+        };
+    });
 
-	if (playHistory.isLoading) {
-		return <LoadingView />;
-	}
+    if (isLoading) {
+        return <LoadingView />;
+    }
 
-	return (
-		<MusicList
-			initialMusics={musics}
-			musicsPerPage={25}
-		/>
-	);
+    return (
+        <MusicList
+            initialMusics={musics}
+            musicsPerPage={25}
+        />
+    );
 };
 
-export const StepUpMusic = () => {
-	const navigation = useNavigation();
-	const nextStep = useQuery(API.getSongSuggestions(['artist', 'SongHistory', 'likedByUsers']));
-	const { mutateAsync } = useLikeSongMutation();
-	const user = useQuery(API.getUserInfo);
+const FavoritesMusic = () => {
+    const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory', 'likedByUsers']));
+    return <MusicListCC
+		data={likedSongs.data?.map(x => x.song)}
+		isLoading={likedSongs.isLoading}
+		refetch={likedSongs.refetch}
+	/>
+};
 
-	console.log(
-		"nextStep",
-		nextStep.data?.map((x) => ({
-			artist: x.artist!.name,
-			song: x.name,
-			image: x.cover,
-			lastScore: x.lastScore,
-			bestScore: x.bestScore,
-			liked: x.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false,
-			id: x.id,
-		}))
-	)
+const RecentlyPlayedMusic = () => {
+    const playHistory = useQuery(API.getUserPlayHistory(['artist', 'SongHistory', 'likedByUsers']));
+    return <MusicListCC
+		data={playHistory.data?.filter(x => x.song !== undefined).map(x => x.song) as Song[]}
+		isLoading={playHistory.isLoading}
+		refetch={playHistory.refetch}
+	/>
+};
 
-	const musics =
-		nextStep.data?.map((x) => ({
-			artist: x.artist!.name,
-			song: x.name,
-			image: x.cover,
-			lastScore: x.lastScore,
-			bestScore: x.bestScore,
-			liked: x.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false,
-			onLike: () => {
-				console.log(x.id, x.name, "LIKED !!!!!!!!!!!!!!!")
-				mutateAsync({ songId: x.id, like: false }).then(() => nextStep.refetch());
-			},
-			onPlay: () => navigation.navigate('Play', { songId: x.id }),
-		})) ?? [];
-
-	if (nextStep.isLoading) {
-		return <LoadingView />;
-	}
-
-	return (
-		<MusicList
-			initialMusics={musics}
-			musicsPerPage={25}
-		/>
-	);
+const StepUpMusic = () => {
+    const nextStep = useQuery(API.getSongSuggestions(['artist', 'SongHistory', 'likedByUsers']));
+    return <MusicListCC
+		data={nextStep.data ?? []}
+		isLoading={nextStep.isLoading}
+		refetch={nextStep.refetch}
+	/>
 };
 
 const renderScene = SceneMap({
