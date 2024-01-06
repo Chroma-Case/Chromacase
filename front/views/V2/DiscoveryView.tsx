@@ -7,8 +7,7 @@ import API from '../../API';
 import { RouteProps, useNavigation } from '../../Navigation';
 import GoldenRatio from '../../components/V2/GoldenRatio';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-const HomeView = (props: RouteProps<{}>) => {
+const HomeView = () => {
 	const suggestionsQuery = useQuery(
 		API.getSongSuggestions(['artist', 'likedByUsers', 'SongHistory'])
 	);
