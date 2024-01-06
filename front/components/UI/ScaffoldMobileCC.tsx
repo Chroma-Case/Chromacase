@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
-import { Discover } from 'iconsax-react-native';
+import { Discover, Icon } from 'iconsax-react-native';
 import { translate } from '../../i18n/i18n';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { ComponentProps } from 'react';
@@ -25,13 +25,14 @@ const ScaffoldMobileCC = ({ state, descriptors, navigation }: BottomTabBarProps)
 				{state.routes.map((route, index) => {
 					const { options } = descriptors[route.key]!;
 					const label = options.title !== undefined ? options.title : route.name;
+					const icon = options.tabBarIcon as Icon;
 					const isFocused = state.index === index;
 
 					return (
 						<ButtonBase
 							key={'key-menu-link-' + label}
 							type="menu"
-							icon={Discover}
+							icon={icon}
 							title={
 								isFocused && !isSmallScreen ? translate(label as any) : undefined
 							}

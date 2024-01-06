@@ -18,6 +18,8 @@ import type {
 import { BottomTabView } from '@react-navigation/bottom-tabs';
 
 import ScaffoldMobileCC from '../components/UI/ScaffoldMobileCC';
+import { useBreakpointValue } from 'native-base';
+import ScaffoldDesktopCC from '../components/UI/ScaffoldDesktopCC';
 
 type Props = DefaultNavigatorOptions<
 	ParamListBase,
@@ -56,15 +58,26 @@ function BottomTabNavigator({
 		screenOptions,
 	});
 
+	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	return (
 		<NavigationContent>
-			<BottomTabView
-				{...rest}
-				state={state}
-				navigation={navigation}
-				descriptors={descriptors}
-				sceneContainerStyle={sceneContainerStyle}
-			/>
+			{screenSize === 'small' ? (
+				<BottomTabView
+					tabBar={ScaffoldMobileCC}
+					{...rest}
+					state={state}
+					navigation={navigation}
+					descriptors={descriptors}
+					sceneContainerStyle={sceneContainerStyle}
+				/>
+			) : (
+				<ScaffoldDesktopCC
+					state={state}
+					navigation={navigation}
+					descriptors={descriptors}>
+					{descriptors[state.routes[state.index]!.key]!.render()}
+				</ScaffoldDesktopCC>
+			)}
 		</NavigationContent>
 	);
 }
