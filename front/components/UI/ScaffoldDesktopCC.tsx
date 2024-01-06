@@ -231,22 +231,20 @@ const ScaffoldDesktopCC = ({
 					/>
 				</View>
 			</View>
-			<ScrollView style={{ flex: 1, maxHeight: '100%' }} contentContainerStyle={{ flex: 1 }}>
-				<View
-					style={{
-						backgroundColor: colors.coolGray[500],
-						flex: 1,
-						margin: 8,
-						marginBottom: 0,
-						marginLeft: 0,
-						padding: 20,
-						borderRadius: 12,
-						minHeight: 'auto',
-					}}
-				>
-					{children}
-				</View>
-				<Spacer height="xs" />
+			<ScrollView
+				style={{ flex: 1, maxHeight: '100%' }}
+				contentContainerStyle={{
+					flex: 1,
+					backgroundColor: colors.coolGray[500],
+					margin: 8,
+					padding: 20,
+					borderRadius: 12,
+					// Become the same height as the child so if the child has overflow: auto, the child's scrollbar
+					// is hidden and we use this component's scrollbar.
+					minHeight: "auto"
+				}}
+			>
+				{children}
 			</ScrollView>
 		</View>
 	);

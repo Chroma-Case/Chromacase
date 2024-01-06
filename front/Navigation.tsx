@@ -187,10 +187,7 @@ const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
 			<LinearGradient
 				colors={colorScheme === 'dark' ? ['#101014', '#6075F9'] : ['#cdd4fd', '#cdd4fd']}
 				style={{
-					width: '100%',
-					height: '100%',
-					position: 'absolute',
-					zIndex: -2,
+					flex: 1,
 				}}
 			>
 				<Component {...(props.route.params as T)} route={props.route} />
