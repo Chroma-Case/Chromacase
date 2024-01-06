@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, useBreakpointValue, useTheme } from 'native-base';
+import { useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -43,73 +43,91 @@ export const FavoritesMusic = () => {
 		return <LoadingView />;
 	}
 	return (
-		<>
-			{/* <View style={{margin: 30}}>
-				<InteractiveCC
-					// duration={80}
-					styleContainer={{
-						borderRadius: 10,
-					}}
-					style={{
-						width: '100%',
-						paddingHorizontal: 20,
-						paddingVertical: 10,
-						// borderRadius: 10,
-					}}
-					defaultStyle={{
-						transform: [{ scale: 1,}],
-						shadowOpacity: 0.3,
-						shadowRadius: 4.65,
-						elevation: 8,
-						backgroundColor: colors.primary[300],
-					}}
-					hoverStyle={{
-						transform: [{ scale: 1.02,}],
-						shadowOpacity: 0.37,
-						shadowRadius: 7.49,
-						elevation: 12,
-						backgroundColor: colors.primary[400],
-					}}
-					pressStyle={{
-						transform: [{ scale: 0.98,}],
-						shadowOpacity: 0.23,
-						shadowRadius: 2.62,
-						elevation: 4,
-						backgroundColor: colors.primary[500],
-					}}
-					onPress={() => console.log("A que coucou!")}
-				>
-					<Text selectable={false} style={{color: '#fff'}}>
-						Coucou
-					</Text>
-				</InteractiveCC>
-				<ButtonBase
-					title="Coucou"
-					style={{ marginTop: 20 }}
-					type={'filled'}
-				/>
-			</View> */}
-			<MusicList
-				initialMusics={musics}
-				// musicsPerPage={7}
-			/>
-		</>
+		<MusicList
+			initialMusics={musics}
+			musicsPerPage={25}
+		/>
 	);
 };
 
 export const RecentlyPlayedMusic = () => {
+	const navigation = useNavigation();
+	const playHistory = useQuery(API.getUserPlayHistory(['artist', 'SongHistory', 'likedByUsers']));
+	const { mutateAsync } = useLikeSongMutation();
+	const user = useQuery(API.getUserInfo);
+
+	const musics = playHistory.data
+    ?.filter((x) => x.song !== undefined)
+    .map((x) => ({
+        artist: x.song!.artist!.name,
+        song: x.song!.name,
+        image: x.song!.cover,
+        lastScore: x.song!.lastScore,
+        bestScore: x.song!.bestScore,
+		liked: x.song!.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false,
+        onLike: () => {
+            mutateAsync({ songId: x.song!.id, like: false }).then(() => playHistory.refetch());
+        },
+        onPlay: () => navigation.navigate('Play', { songId: x.song!.id }),
+    }))
+    ?? [];
+
+
+	if (playHistory.isLoading) {
+		return <LoadingView />;
+	}
+
 	return (
-		<Center style={{ flex: 1 }}>
-			<Translate translationKey="recentlyPlayed" />
-		</Center>
+		<MusicList
+			initialMusics={musics}
+			musicsPerPage={25}
+		/>
 	);
 };
 
 export const StepUpMusic = () => {
+	const navigation = useNavigation();
+	const nextStep = useQuery(API.getSongSuggestions(['artist', 'SongHistory', 'likedByUsers']));
+	const { mutateAsync } = useLikeSongMutation();
+	const user = useQuery(API.getUserInfo);
+
+	console.log(
+		"nextStep",
+		nextStep.data?.map((x) => ({
+			artist: x.artist!.name,
+			song: x.name,
+			image: x.cover,
+			lastScore: x.lastScore,
+			bestScore: x.bestScore,
+			liked: x.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false,
+			id: x.id,
+		}))
+	)
+
+	const musics =
+		nextStep.data?.map((x) => ({
+			artist: x.artist!.name,
+			song: x.name,
+			image: x.cover,
+			lastScore: x.lastScore,
+			bestScore: x.bestScore,
+			liked: x.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false,
+			onLike: () => {
+				console.log(x.id, x.name, "LIKED !!!!!!!!!!!!!!!")
+				mutateAsync({ songId: x.id, like: false }).then(() => nextStep.refetch());
+			},
+			onPlay: () => navigation.navigate('Play', { songId: x.id }),
+		})) ?? [];
+
+	if (nextStep.isLoading) {
+		return <LoadingView />;
+	}
+
 	return (
-		<Center style={{ flex: 1 }}>
-			<Translate translationKey="musicTabStepUp" />
-		</Center>
+		<MusicList
+			initialMusics={musics}
+			musicsPerPage={25}
+		/>
 	);
 };
 
