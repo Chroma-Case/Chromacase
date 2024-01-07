@@ -4,7 +4,7 @@ import React from 'react';
 import { useQuery } from '../../Queries';
 import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
-import { RouteProps, useNavigation } from '../../Navigation';
+import { useNavigation } from '../../Navigation';
 import GoldenRatio from '../../components/V2/GoldenRatio';
 
 const HomeView = () => {

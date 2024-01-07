@@ -1,7 +1,7 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
 import { Column, Flex, Progress, Row, Text, View, useTheme } from 'native-base';
-import { RouteProps, useNavigation } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import UserAvatar from '../components/UserAvatar';
 import { LoadingView } from '../components/Loading';
 import { useQuery } from '../Queries';
@@ -18,8 +18,7 @@ function xpToProgressBarValue(xp: number): number {
 	return Math.floor(xp / 10);
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-const ProfileView = (props: RouteProps<{}>) => {
+const ProfileView = () => {
 	const layout = useWindowDimensions();
 	const navigation = useNavigation();
 	const userQuery = useQuery(API.getUserInfo);
@@ -77,7 +76,7 @@ const ProfileView = (props: RouteProps<{}>) => {
 						<ButtonBase
 							title={translate('updateProfile')}
 							type={'filled'}
-							onPress={async () => navigation.navigate('Settings', {})}
+							onPress={async () => navigation.navigate('Settings')}
 						/>
 					</View>
 					<Translate

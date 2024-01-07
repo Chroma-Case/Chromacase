@@ -9,7 +9,6 @@ import { SearchResultComponent } from '../components/SearchResult';
 import { SafeAreaView } from 'react-native';
 import { Filter } from '../components/SearchBar';
 import { ScrollView } from 'native-base';
-import { RouteProps } from '../Navigation';
 import LikedSong from '../models/LikedSong';
 
 interface SearchContextType {
@@ -46,7 +45,7 @@ type SearchViewProps = {
 	query?: string;
 };
 
-const SearchView = (props: RouteProps<SearchViewProps>) => {
+const SearchView = (props: SearchViewProps) => {
 	const [filter, setFilter] = useState<Filter>('all');
 	const [stringQuery, setStringQuery] = useState<string>(props?.query ?? '');
 

@@ -14,7 +14,6 @@ import {
 } from 'react-native-tab-view';
 import { HeartEdit, UserEdit, SecurityUser, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import { RouteProps } from '../../Navigation';
 import { translate } from '../../i18n/i18n';
 
 const renderScene = SceneMap({
@@ -36,8 +35,7 @@ const getTabData = (key: string) => {
 	}
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-const SettingsTab = (props: RouteProps<{}>) => {
+const SettingsTab = () => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
 	const { colors } = useTheme();

@@ -3,12 +3,12 @@ import { SafeAreaView, View } from 'react-native';
 import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
-import { useNavigation, RouteProps } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import { translate } from '../i18n/i18n';
 import { PodiumCard } from '../components/leaderboard/PodiumCard';
 import { BoardRow } from '../components/leaderboard/BoardRow';
 
-const Leaderboardiew = (props: RouteProps<Record<string, never>>) => {
+const Leaderboardiew = () => {
 	const navigation = useNavigation();
 	const scoresQuery = useQuery(API.getTopTwentyPlayers());
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });

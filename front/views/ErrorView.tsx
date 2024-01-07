@@ -8,7 +8,7 @@ const ErrorView = () => {
 		<Center style={{ flexGrow: 1 }}>
 			<VStack space={3} alignItems="center">
 				<Translate translationKey="anErrorOccured" />
-				<Button onPress={() => navigation.navigate('Home', {})}>
+				<Button onPress={() => navigation.navigate('Home')}>
 					<Translate translationKey="goBackHome" />
 				</Button>
 			</VStack>
