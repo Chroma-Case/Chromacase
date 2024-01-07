@@ -712,7 +712,7 @@ export default class API {
 		const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
 		return {
-			key: ['search'],
+			key: ['search', query.query],
 			exec: () => {
 			return API.fetch(
 				{
