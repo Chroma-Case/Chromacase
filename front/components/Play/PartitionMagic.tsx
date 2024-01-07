@@ -77,7 +77,7 @@ const PartitionMagic = ({
 	React.useEffect(() => {
 		if (!melodySound.current) {
 			Audio.Sound.createAsync({
-				uri: 'https://cdn.discordapp.com/attachments/717080637038788731/1192502931681984622/melody.mp3?ex=65a94fe6&is=6596dae6&hm=af0879593154fb54b78a9b49c77ae27da9f11d59e676f01fa9eb2a8d5a997708&',
+				uri: API.getPartitionMelodyUrl(songID),
 			}).then(({ sound }) => {
 				melodySound.current = sound;
 			});

@@ -14,7 +14,7 @@ import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
 export type ScoreMessage = {
 	content: string;
 	color?: ColorSchemeType;
-    id: number;
+	id: number;
 };
 
 type PlayScoreProps = {
@@ -90,7 +90,7 @@ export const PlayScore = ({ score, streak, message }: PlayScoreProps) => {
 						}}
 					>
 						<Text color={textColor[900]} fontSize={20}>
-							{message}
+							{message.content}
 						</Text>
 						{streak > 0 && (
 							<Text color={textColor[900]} fontSize={15} bold>

@@ -779,4 +779,8 @@ export default class API {
 	public static getPartitionSvgUrl(songId: number): string {
 		return `${API.baseUrl}/song/${songId}/assets/partition`;
 	}
+
+	public static getPartitionMelodyUrl(songId: number): string {
+		return `${API.baseUrl}/song/${songId}/assets/melody`;
+	}
 }
