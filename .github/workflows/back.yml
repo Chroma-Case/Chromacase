@@ -12,27 +12,30 @@ jobs:
       pull-requests: read
     # Set job outputs to values from filter step
     outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      frontend: ${{ steps.filter.outputs.frontend }}
-      scoro: ${{ steps.filter.outputs.scoro }}
+      back: ${{ steps.filter.outputs.back }}
+      front: ${{ steps.filter.outputs.front }}
+      scorometer: ${{ steps.filter.outputs.scorometer }}
     steps:
     # For pull requests it's not necessary to checkout the code
     - uses: dorny/paths-filter@v2
       id: filter
       with:
         filters: |
-          backend:
-            - 'backend/**'
-          frontend:
-            - 'frontend/**'
-          scoro:
+          back:
+            - 'back/**'
+            - '.github/workflows/back.yml'
+          front:
+            - 'front/**'
+            - '.github/workflows/front.yml'
+          scorometer:
             - 'scorometer/**'
+            - '.github/workflows/scoro.yml'
   back_build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    if: ${{ needs.changes.outputs.back == 'true' }}
     defaults:
       run:
         working-directory: ./back
@@ -47,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [ back_build ]
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    if: ${{ needs.changes.outputs.back == 'true' }}
 
     steps:
       - uses: actions/checkout@v3
