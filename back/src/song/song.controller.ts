@@ -177,6 +177,31 @@ export class SongController {
 		}
 	}
 
+	@Get(":id/assets/melody")
+	@ApiOperation({
+		description: "Streams the mp3 file of the requested song",
+	})
+	@ApiNotFoundResponse({ description: "Song not found" })
+	@ApiOkResponse({ description: "Returns the mp3 file succesfully" })
+	@Header("Cache-Control", "max-age=86400")
+	@Header("Content-Type", "audio/mpeg")
+	@Public()
+	async getMelody(@Param("id", ParseIntPipe) id: number) {
+		const song = await this.songService.song({ id });
+		if (!song) throw new NotFoundException("Song not found");
+
+		const path = song.musicXmlPath;
+		// mp3 file is next to the musicXML file and called melody.mp3
+		const pathWithoutFile = path.substring(0, path.lastIndexOf("/"));
+
+		try {
+			const file = createReadStream(pathWithoutFile + "/melody.mp3");
+			return new StreamableFile(file, { type: "audio/mpeg" });
+		} catch {
+			throw new InternalServerErrorException();
+		}
+	}
+
 	@Post()
 	@ApiOperation({
 		description:
