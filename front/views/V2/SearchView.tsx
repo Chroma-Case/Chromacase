@@ -88,11 +88,12 @@ const Oui = ({yes}: {yes: any[]}) => {
 // eslint-disable-next-line @typescript-eslint/ban-types
 const SearchView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
+    const artists = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
 	const rawResult = useQuery(API.searchSongs(searchQuery));
 	const result =
 	rawResult.data?.map((song) => ({
-		artist: song?.artist?.name ?? 'duh',
+		artist: artists.data?.find((artist) => artist.id === song?.artist?.id)?.name ?? 'unknown artist',
 		song: song?.name,
 		image: song?.cover,
 		level: 42,
