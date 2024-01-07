@@ -23,10 +23,13 @@ jobs:
         filters: |
           back:
             - 'back/**'
+            - '.github/workflows/back.yml'
           front:
             - 'front/**'
+            - '.github/workflows/front.yml'
           scorometer:
             - 'scorometer/**'
+            - '.github/workflows/scoro.yml'
   back_build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -47,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [ back_build ]
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    if: ${{ needs.changes.outputs.back == 'true' }}
 
     steps:
       - uses: actions/checkout@v3

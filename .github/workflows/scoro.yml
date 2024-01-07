@@ -22,10 +22,13 @@ jobs:
         filters: |
           back:
             - 'back/**'
+            - '.github/workflows/back.yml'
           front:
             - 'front/**'
+            - '.github/workflows/front.yml'
           scorometer:
             - 'scorometer/**'
+            - '.github/workflows/scoro.yml'
   scoro_test:
     runs-on: ubuntu-latest
     needs: changes
