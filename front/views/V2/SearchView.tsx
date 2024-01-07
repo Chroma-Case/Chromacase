@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react';
-import ScaffoldCC from '../../components/UI/ScaffoldCC';
-import SearchBarComponent from '../../components/V2/SearchBar';
-import { RouteProps, useNavigation } from '../../Navigation';
-import { useQuery } from '../../Queries';
-import API from '../../API';
-import { View, StyleSheet } from 'react-native';
-import SearchHistory from '../../components/V2/SearchHistory';
-import MusicItem from '../../components/UI/MusicItem';
 import { FlatList, HStack, useBreakpointValue, useTheme, Text, Row } from 'native-base';
+import { RouteProps, useNavigation } from '../../Navigation';
+import { ArrowRotateLeft, Cup } from 'iconsax-react-native';
+import { View, StyleSheet } from 'react-native';
+import { useQuery } from '../../Queries';
 import { translate } from '../../i18n/i18n';
-import { ArrowDown2, ArrowRotateLeft, Cup, Icon } from 'iconsax-react-native';
+import SearchBarComponent from '../../components/V2/SearchBar';
+import SearchHistory from '../../components/V2/SearchHistory';
+import ScaffoldCC from '../../components/UI/ScaffoldCC';
+import MusicItem from '../../components/UI/MusicItem';
+import API from '../../API';
 
 export type searchProps = {
 	artist: number | undefined;
@@ -74,22 +74,6 @@ const Oui = ({yes}: {yes: any[]}) => {
 	);
 
 	return (
-		// <View>
-		// 	{yes.map((song) => (
-		// 		<MusicItem
-		// 		artist={song?.artist}
-		// 		song={song?.song}
-		// 		image={song?.cover}
-		// 		lastScore={42}
-		// 		bestScore={42}
-		// 		liked={true}
-		// 		onLike={() => {
-		// 			console.log('onLike');
-		// 		}}
-		// 		onPlay={() => navigation.navigate('Play', { songId: song.id })}
-		// 		/>
-		// 	))}
-		// </View>
 		<FlatList
 			nestedScrollEnabled
 			style={styles.container}
@@ -97,21 +81,6 @@ const Oui = ({yes}: {yes: any[]}) => {
 			data={yes}
 			renderItem={({ item }) => <MusicItem style={{ marginBottom: 2 }} {...item} />}
 			keyExtractor={(item) => item.artist + item.song}
-			// ListFooterComponent={
-			// 	musicListState.hasMoreMusics ? (
-			// 		<View style={styles.footerContainer}>
-			// 			{musicListState.loading ? (
-			// 				<ActivityIndicator color={colors.primary[300]} />
-			// 			) : (
-			// 				<ButtonBase
-			// 					style={{ borderRadius: 999 }}
-			// 					onPress={loadMoreMusicItems}
-			// 					icon={ArrowDown2}
-			// 				/>
-			// 			)}
-			// 		</View>
-			// 	) : null
-			// }
 		/>
 	);
 }
@@ -120,7 +89,7 @@ const Oui = ({yes}: {yes: any[]}) => {
 const SearchView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
-	const rawResult = useQuery(API.getAllSongs(searchQuery.query));
+	const rawResult = useQuery(API.searchSongs(searchQuery));
 	const result =
 	rawResult.data?.map((song) => ({
 		artist: song?.artist?.name ?? 'duh',
@@ -142,18 +111,10 @@ const SearchView = (props: RouteProps<{}>) => {
 		console.log('raw:' + rawResult);
 	}
 
-	const handleClear = () => {
-		console.log('stage cleared');
-		setSearchQuery({} as searchProps);
-	}
-
-	console.table('result:', result);
-	console.table('raw:', rawResult);
-
 	return (
 		<ScaffoldCC routeName={props.route.name}>
 			<View style={{display: 'flex', gap: 20}} >
-				<SearchBarComponent onValidate={(data) => handleLog(data)} />
+				<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
 				{result.length != 0
 				? <Oui yes={result} />
 				: <SearchHistory />}
@@ -168,12 +129,7 @@ const styles = StyleSheet.create({
 		gap: 2,
 		borderRadius: 10,
 		overflow: 'hidden',
-	},
-	footerContainer: {
-		height: 60,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
+	}
 });
 
 export default SearchView;

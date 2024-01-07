@@ -499,84 +499,6 @@ export default class API {
 	}
 
 	/**
-	 * Search a song by its name
-	 * @param query the string used to find the songs
-	 */
-	// public static searchSongs(query: string): Query<Song[]> {
-	// 	return {
-	// 		key: ['search', 'song', query],
-	// 		exec: () =>
-	// 			API.fetch(
-	// 				{
-	// 					route: `/search/songs/${query}`,
-	// 				},
-	// 				{ handler: ListHandler(SongHandler) }
-	// 			),
-	// 	};
-	// }
-
-	/**
-	 * Search artists by name
-	 * @param query the string used to find the artists
-	 */
-	public static searchArtists(query: string): Query<Artist[]> {
-		return {
-			key: ['search', 'artist', query],
-			exec: () =>
-				API.fetch(
-					{
-						route: `/search/artists/${query}`,
-					},
-					{ handler: ListHandler(ArtistHandler) }
-				),
-		};
-	}
-
-	/**
-	 * Search Album by name
-	 * @param query the string used to find the album
-	 */
-	public static searchAlbum(query: string): Query<Album[]> {
-		return {
-			key: ['search', 'album', query],
-			exec: async () => [
-				{
-					id: 1,
-					name: 'Super Trooper',
-				},
-				{
-					id: 2,
-					name: 'Kingdom Heart 365/2 OST',
-				},
-				{
-					id: 3,
-					name: 'The Legend Of Zelda Ocarina Of Time OST',
-				},
-				{
-					id: 4,
-					name: 'Random Access Memories',
-				},
-			],
-		};
-	}
-
-	/**
-	 * Retrieve music genres
-	 */
-	public static searchGenres(query: string): Query<Genre[]> {
-		return {
-			key: ['search', 'genre', query],
-			exec: () =>
-				API.fetch(
-					{
-						route: `/search/genres/${query}`,
-					},
-					{ handler: ListHandler(GenreHandler) }
-				),
-		};
-	}
-
-	/**
 	 * Retrieve a lesson
 	 * @param lessonId the id to find the lesson
 	 */
@@ -782,12 +704,19 @@ export default class API {
 	}
 
 	public static searchSongs(query: searchProps): Query<Song[]> {
+		const queryParams: string[] = [];
+
+		if (query.artist) queryParams.push(`artistId=${query.artist}`);
+		if (query.genre) queryParams.push(`genreId=${query.genre}`);
+
+		const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
 		return {
 			key: ['search'],
 			exec: () => {
-				return API.fetch(
-					{
-						route: `/search/songs/${query.query}`,
+			return API.fetch(
+				{
+				route: `/search/songs/${query.query}${queryString}`,
 					},
 					{ handler: ListHandler(SongHandler) }
 				);
