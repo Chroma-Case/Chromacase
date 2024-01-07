@@ -17,7 +17,7 @@ export type searchProps = {
 	query: string;
 };
 
-const Oui = ({yes}: {yes: any[]}) => {
+const Oui = ({ yes }: { yes: any[] }) => {
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'md', xl: 'xl' });
 	const isBigScreen = screenSize === 'xl';
@@ -49,24 +49,25 @@ const Oui = ({yes}: {yes: any[]}) => {
 					{ text: translate('musicListTitleBestScore'), icon: Cup },
 				].map((value) => (
 					<Row
-			style={{
-				display: 'flex',
-				flex: 1,
-				maxWidth: isBigScreen ? 150 : 50,
-				height: '100%',
-				alignItems: 'center',
-				justifyContent: isBigScreen ? 'flex-end' : 'center',
-			}}
-		>
-			{/* Conditional rendering based on screen size. */}
-			{isBigScreen && (
-				<Text fontSize="lg" style={{ paddingRight: 8 }}>
-					{value.text}
-				</Text>
-			)}
-			{/* Icon with color based on the current color scheme. */}
-			<value.icon size={18} color={colors.text[700]} />
-		</Row>
+						key={value.text}
+						style={{
+							display: 'flex',
+							flex: 1,
+							maxWidth: isBigScreen ? 150 : 50,
+							height: '100%',
+							alignItems: 'center',
+							justifyContent: isBigScreen ? 'flex-end' : 'center',
+						}}
+					>
+						{/* Conditional rendering based on screen size. */}
+						{isBigScreen && (
+							<Text fontSize="lg" style={{ paddingRight: 8 }}>
+								{value.text}
+							</Text>
+						)}
+						{/* Icon with color based on the current color scheme. */}
+						<value.icon size={18} color={colors.text[700]} />
+					</Row>
 				))}
 			</HStack>
 		),
@@ -83,42 +84,36 @@ const Oui = ({yes}: {yes: any[]}) => {
 			keyExtractor={(item) => item.artist + item.song}
 		/>
 	);
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 const SearchView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
-    const artists = useQuery(API.getAllArtists());
+	const artists = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
 	const rawResult = useQuery(API.searchSongs(searchQuery));
 	const result =
-	rawResult.data?.map((song) => ({
-		artist: artists.data?.find((artist) => artist.id === song?.artist?.id)?.name ?? 'unknown artist',
-		song: song?.name,
-		image: song?.cover,
-		level: 42,
-		lastScore: 42,
-		bestScore: 42,
-		liked: true,
-		onLike: () => {
-			console.log('onLike');
-		},
-		onPlay: () => navigation.navigate('Play', { songId: song.id }),
-	})) ?? [];
-
-	const handleLog = (query: searchProps) => {
-		console.log("got query: ", query.query);
-		setSearchQuery(query);
-		console.log('raw:' + rawResult);
-	}
+		rawResult.data?.map((song) => ({
+			artist:
+				artists.data?.find((artist) => artist.id === song?.artist?.id)?.name ??
+				'unknown artist',
+			song: song?.name,
+			image: song?.cover,
+			level: 42,
+			lastScore: 42,
+			bestScore: 42,
+			liked: true,
+			onLike: () => {
+				console.log('onLike');
+			},
+			onPlay: () => navigation.navigate('Play', { songId: song.id }),
+		})) ?? [];
 
 	return (
 		<ScaffoldCC routeName={props.route.name}>
-			<View style={{display: 'flex', gap: 20}} >
+			<View style={{ display: 'flex', gap: 20 }}>
 				<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
-				{result.length != 0
-				? <Oui yes={result} />
-				: <SearchHistory />}
+				{result.length != 0 ? <Oui yes={result} /> : <SearchHistory />}
 			</View>
 		</ScaffoldCC>
 	);
@@ -130,7 +125,7 @@ const styles = StyleSheet.create({
 		gap: 2,
 		borderRadius: 10,
 		overflow: 'hidden',
-	}
+	},
 });
 
 export default SearchView;

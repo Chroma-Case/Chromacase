@@ -1,5 +1,4 @@
 import Artist, { ArtistHandler } from './models/Artist';
-import Album from './models/Album';
 import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
 import Genre, { GenreHandler } from './models/Genre';
@@ -714,9 +713,9 @@ export default class API {
 		return {
 			key: ['search', query.query],
 			exec: () => {
-			return API.fetch(
-				{
-				route: `/search/songs/${query.query}${queryString}`,
+				return API.fetch(
+					{
+						route: `/search/songs/${query.query}${queryString}`,
 					},
 					{ handler: ListHandler(SongHandler) }
 				);
