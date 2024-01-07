@@ -277,10 +277,10 @@ export default class API {
 		};
 	}
 
-	public static getAllSongs(falseQuery: string, include?: SongInclude[]): Query<Song[]> {
+	public static getAllSongs(include?: SongInclude[]): Query<Song[]> {
 		include ??= [];
 		return {
-			key: ['songs', falseQuery, include],
+			key: ['songs', include],
 			exec: () =>
 				API.fetch(
 					{
