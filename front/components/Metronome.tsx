@@ -63,7 +63,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 					}
 					onPress={() => setEnabled(!enabled)}
 				/>
-				<Slider
+				{/* <Slider
 					maxWidth={'500px'}
 					flex={1}
 					defaultValue={volume.current}
@@ -73,7 +73,7 @@ export const MetronomeControls = ({ paused = false, bpm }: { paused?: boolean; b
 						<Slider.FilledTrack />
 					</Slider.Track>
 					<Slider.Thumb />
-				</Slider>
+				</Slider> */}
 			</View>
 		</View>
 	);
