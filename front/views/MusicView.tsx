@@ -11,7 +11,7 @@ import {
 } from 'react-native-tab-view';
 import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import { RouteProps, useNavigation } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import { Translate, TranslationKey } from '../i18n/i18n';
 import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
@@ -109,7 +109,7 @@ const getTabData = (key: string) => {
 	}
 };
 
-const MusicTab = (props: RouteProps<object>) => {
+const MusicTab = () => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
 	const { colors } = useTheme();

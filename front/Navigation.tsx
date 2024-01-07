@@ -41,8 +41,8 @@ import { createCustomNavigator } from './utils/navigator';
 import { Cup, Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const Stack = createNativeStackNavigator<AppRouteParams & { Loading: never; Oops: never }>();
-const Tab = createCustomNavigator<AppRouteParams & { Loading: never; Oops: never }>();
+const Stack = createNativeStackNavigator<AppRouteParams>();
+const Tab = createCustomNavigator<AppRouteParams>();
 
 const Tabs = () => {
 	return (
@@ -50,7 +50,7 @@ const Tabs = () => {
 			{Object.entries(tabRoutes).map(([name, route], routeIndex) => (
 				<Tab.Screen
 					key={'route-' + routeIndex}
-					name={name}
+					name={name as keyof AppRouteParams}
 					options={{ ...route.options, headerTransparent: true }}
 					component={route.component}
 				/>
@@ -167,18 +167,19 @@ type Route<Props = any> = {
 	link?: string;
 };
 
-type OmitOrUndefined<T, K extends string> = T extends undefined ? T : Omit<T, K>;
+// if the component has no props, ComponentProps return unknown so we remove those
+type RemoveNonObjects<T> = [T] extends [{}] ? T : undefined;
 
 type RouteParams<Routes extends Record<string, Route>> = {
-	[RouteName in keyof Routes]: OmitOrUndefined<
-		ComponentProps<Routes[RouteName]['component']>,
-		keyof NativeStackScreenProps<{}>
-	>;
+	[RouteName in keyof Routes]: RemoveNonObjects<ComponentProps<Routes[RouteName]['component']>>;
 };
 
 type PrivateRoutesParams = RouteParams<typeof protectedRoutes>;
 type PublicRoutesParams = RouteParams<typeof publicRoutes>;
-type AppRouteParams = PrivateRoutesParams & PublicRoutesParams;
+type TabsRoutesParams = RouteParams<typeof tabRoutes>;
+type AppRouteParams = PrivateRoutesParams &
+	PublicRoutesParams &
+	TabsRoutesParams & { Oops: undefined };
 
 const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
 	function Route(props: NativeStackScreenProps<T & ParamListBase>) {
@@ -325,7 +326,5 @@ export const Router = () => {
 		</NavigationContainer>
 	);
 };
-
-export type RouteProps<T> = T & Pick<NativeStackScreenProps<T & ParamListBase>, 'route'>;
 
 export const useNavigation = () => navigationHook<NavigationProp<AppRouteParams>>();

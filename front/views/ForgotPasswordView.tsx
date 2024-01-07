@@ -12,7 +12,7 @@ const ForgotPasswordView = () => {
 				route: `/auth/forgot-password?email=${email}`,
 				method: 'PUT',
 			});
-			navigation.navigate('Home', {});
+			navigation.navigate('Home');
 			return 'email sent';
 		} catch {
 			return 'Error with email, please contact support';

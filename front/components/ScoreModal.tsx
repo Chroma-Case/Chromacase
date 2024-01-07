@@ -108,7 +108,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 					onPress={() =>
 						navigation.canGoBack()
 							? navigation.goBack()
-							: navigation.navigate('Home', {})
+							: navigation.navigate('Home')
 					}
 				/>
 			</Row>
