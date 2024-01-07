@@ -43,8 +43,8 @@ const MusicListCC = ({ data, isLoading, refetch }: MusicListCCProps) => {
             lastScore: song.lastScore,
             bestScore: song.bestScore,
             liked: isLiked,
-            onLike: () => {
-				mutateAsync({ songId: song.id, like: !isLiked }).then(() => refetch());
+            onLike: (state: boolean) => {
+				mutateAsync({ songId: song.id, like: state }).then(() => refetch());
 			},
             onPlay: () => navigation.navigate('Play', { songId: song.id }),
         };
