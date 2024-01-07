@@ -33,7 +33,7 @@ export interface MusicItemType {
 	style?: ViewStyle | ViewStyle[];
 
 	/** Callback function triggered when the like button is pressed. */
-	onLike: () => void;
+	onLike: (state: boolean) => void;
 
 	/** Callback function triggered when the song is played. */
 	onPlay: () => void;
