@@ -119,6 +119,8 @@ const PartitionMagic = ({
 
 	React.useEffect(() => {
 		if (endPartitionReached) {
+			// if the audio is unsync
+			melodySound.current?.pauseAsync();
 			onEndReached();
 		}
 	}, [endPartitionReached]);

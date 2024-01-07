@@ -2,14 +2,6 @@
 import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
-import Animated, {
-	useSharedValue,
-	withTiming,
-	Easing,
-	useAnimatedStyle,
-	withSequence,
-	withDelay,
-} from 'react-native-reanimated';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Text, Row, View, useToast } from 'native-base';
 import { RouteProps, useNavigation } from '../Navigation';
@@ -33,14 +25,10 @@ import ButtonBase from '../components/UI/ButtonBase';
 import { Clock, Cup } from 'iconsax-react-native';
 import PlayViewControlBar from '../components/Play/PlayViewControlBar';
 import ScoreModal from '../components/ScoreModal';
+import { PlayScore, ScoreMessage } from '../components/Play/PlayScore';
 
 type PlayViewProps = {
 	songId: number;
-};
-
-type ScoreMessage = {
-	content: string;
-	color?: ColorSchemeType;
 };
 
 // this a hot fix this should be reverted soon
@@ -91,16 +79,8 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	// first number is the note, the other is the time when pressed on release the key is removed
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [streak, setStreak] = useState(0);
-	const scoreMessageScale = useSharedValue(0);
-	// this style should bounce in on enter and fade away
-	const scoreMsgStyle = useAnimatedStyle(() => {
-		return {
-			transform: [{ scale: scoreMessageScale.value }],
-		};
-	});
 	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
-	const textColor = colors.text;
 	const statColor = colors.lightText;
 
 	const onPause = () => {
@@ -227,7 +207,11 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 							break;
 					}
 				}
-				setLastScoreMessage({ content: formattedMessage, color: messageColor });
+				setLastScoreMessage({
+					content: formattedMessage,
+					color: messageColor,
+					id: (lastScoreMessage?.id ?? 0) + 1,
+				});
 			} catch (e) {
 				console.error(e);
 			}
@@ -264,23 +248,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 			clearInterval(interval);
 		};
 	}, []);
-	useEffect(() => {
-		if (lastScoreMessage) {
-			scoreMessageScale.value = withSequence(
-				withTiming(1, {
-					duration: 400,
-					easing: Easing.elastic(3),
-				}),
-				withDelay(
-					700,
-					withTiming(0, {
-						duration: 300,
-						easing: Easing.out(Easing.cubic),
-					})
-				)
-			);
-		}
-	}, [lastScoreMessage]);
+
 	useEffect(() => {
 		// Song.data is updated on navigation.navigate (do not know why)
 		// Hotfix to prevent midi setup process from reruning on game end
@@ -403,48 +371,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						left: 0,
 						zIndex: 100,
 						width: '100%',
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'center',
-						alignItems: 'center',
-						gap: 3,
 						position: 'absolute',
 					}}
 				>
-					<View
-						style={{
-							backgroundColor: 'rgba(16, 16, 20, 0.8)',
-							paddingHorizontal: 20,
-							paddingVertical: 5,
-							borderRadius: 12,
-						}}
-					>
-						<Text color={textColor[900]} fontSize={24}>
-							{score}
-						</Text>
-					</View>
-					<Animated.View style={[scoreMsgStyle]}>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								gap: 7,
-								justifyContent: 'center',
-								alignItems: 'center',
-								backgroundColor: 'rgba(16, 16, 20, 0.8)',
-								paddingHorizontal: 20,
-								paddingVertical: 5,
-								borderRadius: 12,
-							}}
-						>
-							<Text color={textColor[900]} fontSize={20}>
-								{lastScoreMessage?.content}
-							</Text>
-							<Text color={textColor[900]} fontSize={15} bold>
-								{streak > 0 && `x${streak}`}
-							</Text>
-						</View>
-					</Animated.View>
+					<PlayScore score={score} streak={streak} message={lastScoreMessage} />
 				</View>
 				<View
 					style={{
@@ -462,7 +392,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						onEndReached={() => {
 							setTimeout(() => {
 								onEnd();
-							}, 500);
+							}, 200);
 						}}
 						onError={() => {
 							console.log('error from partition magic');
