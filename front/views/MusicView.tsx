@@ -22,71 +22,73 @@ import { useLikeSongMutation } from '../utils/likeSongMutation';
 import Song from '../models/Song';
 
 type MusicListCCProps = {
-    data: Song[] | undefined;
-    isLoading: boolean;
-    refetch: () => void;
+	data: Song[] | undefined;
+	isLoading: boolean;
+	refetch: () => void;
 };
 
 const MusicListCC = ({ data, isLoading, refetch }: MusicListCCProps) => {
-    const navigation = useNavigation();
-    const { mutateAsync } = useLikeSongMutation();
-    const user = useQuery(API.getUserInfo);
+	const navigation = useNavigation();
+	const { mutateAsync } = useLikeSongMutation();
+	const user = useQuery(API.getUserInfo);
 
-	const musics = (data ?? [])
-	.map((song) => {
+	const musics = (data ?? []).map((song) => {
 		const isLiked = song.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false;
 
-        return {
-            artist: song.artist!.name,
-            song: song.name,
-            image: song.cover,
-            lastScore: song.lastScore,
-            bestScore: song.bestScore,
-            liked: isLiked,
-            onLike: (state: boolean) => {
+		return {
+			artist: song.artist!.name,
+			song: song.name,
+			image: song.cover,
+			lastScore: song.lastScore,
+			bestScore: song.bestScore,
+			liked: isLiked,
+			onLike: (state: boolean) => {
 				mutateAsync({ songId: song.id, like: state }).then(() => refetch());
 			},
-            onPlay: () => navigation.navigate('Play', { songId: song.id }),
-        };
-    });
+			onPlay: () => navigation.navigate('Play', { songId: song.id }),
+		};
+	});
 
-    if (isLoading) {
-        return <LoadingView />;
-    }
+	if (isLoading) {
+		return <LoadingView />;
+	}
 
-    return (
-        <MusicList
-            initialMusics={musics}
-            musicsPerPage={25}
-        />
-    );
+	return <MusicList initialMusics={musics} musicsPerPage={25} />;
 };
 
 const FavoritesMusic = () => {
-    const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory', 'likedByUsers']));
-    return <MusicListCC
-		data={likedSongs.data?.map(x => x.song)}
-		isLoading={likedSongs.isLoading}
-		refetch={likedSongs.refetch}
-	/>
+	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory', 'likedByUsers']));
+	return (
+		<MusicListCC
+			data={likedSongs.data?.map((x) => x.song)}
+			isLoading={likedSongs.isLoading}
+			refetch={likedSongs.refetch}
+		/>
+	);
 };
 
 const RecentlyPlayedMusic = () => {
-    const playHistory = useQuery(API.getUserPlayHistory(['artist', 'SongHistory', 'likedByUsers']));
-    return <MusicListCC
-		data={playHistory.data?.filter(x => x.song !== undefined).map(x => x.song) as Song[]}
-		isLoading={playHistory.isLoading}
-		refetch={playHistory.refetch}
-	/>
+	const playHistory = useQuery(API.getUserPlayHistory(['artist', 'SongHistory', 'likedByUsers']));
+	return (
+		<MusicListCC
+			data={
+				playHistory.data?.filter((x) => x.song !== undefined).map((x) => x.song) as Song[]
+			}
+			isLoading={playHistory.isLoading}
+			refetch={playHistory.refetch}
+		/>
+	);
 };
 
 const StepUpMusic = () => {
-    const nextStep = useQuery(API.getSongSuggestions(['artist', 'SongHistory', 'likedByUsers']));
-    return <MusicListCC
-		data={nextStep.data ?? []}
-		isLoading={nextStep.isLoading}
-		refetch={nextStep.refetch}
-	/>
+	const nextStep = useQuery(API.getSongSuggestions(['artist', 'SongHistory', 'likedByUsers']));
+	return (
+		<MusicListCC
+			data={nextStep.data ?? []}
+			isLoading={nextStep.isLoading}
+			refetch={nextStep.refetch}
+		/>
+	);
 };
 
 const renderScene = SceneMap({
