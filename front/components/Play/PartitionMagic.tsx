@@ -41,8 +41,9 @@ const getCursorToPlay = (
 	}
 };
 
+const transitionDuration = 50;
+
 const PartitionMagic = ({
-	timestamp,
 	songID,
 	shouldPlay,
 	onEndReached,
@@ -78,8 +79,8 @@ const PartitionMagic = ({
 		if (!melodySound.current) {
 			Audio.Sound.createAsync({
 				uri: API.getPartitionMelodyUrl(songID),
-			}).then(({ sound }) => {
-				melodySound.current = sound;
+			}).then((track) => {
+				melodySound.current = track.sound;
 			});
 		}
 		return () => {
@@ -125,25 +126,30 @@ const PartitionMagic = ({
 		}
 	}, [endPartitionReached]);
 
-	const transitionDuration = 200;
-
 	React.useEffect(() => {
-		getCursorToPlay(
-			data?.cursors ?? [],
-			currentCurIdx.current,
-			timestamp - transitionDuration,
-			(cursor, idx) => {
-				currentCurIdx.current = idx;
-				partitionOffset.value = withTiming(
-					-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
-					{
-						duration: transitionDuration,
-						easing: Easing.inOut(Easing.ease),
-					}
-				);
-			}
-		);
-	}, [timestamp]);
+		if (!melodySound.current || !melodySound.current._loaded) return;
+		if (data?.cursors.length === 0) return;
+
+		melodySound.current.setOnPlaybackStatusUpdate((status) => {
+			const timestamp = status?.positionMillis ?? 0;
+			getCursorToPlay(
+				data?.cursors ?? [],
+				currentCurIdx.current,
+				timestamp - transitionDuration,
+				(cursor, idx) => {
+					console.log('cursor', cursor, idx);
+					currentCurIdx.current = idx;
+					partitionOffset.value = withTiming(
+						-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
+						{
+							duration: transitionDuration,
+							easing: Easing.inOut(Easing.ease),
+						}
+					);
+				}
+			);
+		});
+	}, [data?.cursors, melodySound.current?._loaded]);
 
 	return (
 		<View
