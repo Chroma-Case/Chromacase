@@ -10,6 +10,9 @@ import SearchHistory from '../../components/V2/SearchHistory';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import MusicItem from '../../components/UI/MusicItem';
 import API from '../../API';
+import { useMutation, useQueryClient } from 'react-query';
+import LoadingComponent from '../../components/Loading';
+import ErrorView from '../ErrorView';
 
 export type searchProps = {
 	artist: number | undefined;
@@ -92,22 +95,57 @@ const SearchView = (props: RouteProps<{}>) => {
 	const artists = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
 	const rawResult = useQuery(API.searchSongs(searchQuery));
-	const result =
-		rawResult.data?.map((song) => ({
+	const queryClient = useQueryClient();
+	const userQuery = useQuery(API.getUserInfo());
+	let result: any[];
+	
+	const { mutate } = useMutation(
+		(songId: number) => API.addLikedSong(songId),
+		{
+			onSuccess: () => {
+			queryClient.setQueryData(['search'], (prevData: any[] | undefined) => {
+				if (prevData) {
+				return prevData.map((song) => {
+					if (song.id === songId) {
+					return {
+						...song,
+						liked: !song.liked,
+					};
+					}
+					return song;
+				});
+				}
+				return prevData;
+			});
+			},
+		}
+	);
+
+	if (userQuery.isLoading) {
+		return <LoadingComponent/>
+	}
+
+	if (userQuery.isError) {
+		return <ErrorView/>
+	}
+
+	if (userQuery.isSuccess) {
+		result = rawResult.data?.map((song) => ({
 			artist:
 				artists.data?.find((artist) => artist.id === song?.artist?.id)?.name ??
 				'unknown artist',
 			song: song?.name,
 			image: song?.cover,
-			level: 42,
-			lastScore: 42,
-			bestScore: 42,
-			liked: true,
+			level: song?.difficulties.chordcomplexity,
+			lastScore: song?.lastScore,
+			bestScore: song?.bestScore,
+			liked: song?.likedByUsers?.includes(userQuery.data.id) ? true : false,
 			onLike: () => {
-				console.log('onLike');
+				mutate(song.id);
 			},
 			onPlay: () => navigation.navigate('Play', { songId: song.id }),
 		})) ?? [];
+	}
 
 	return (
 		<ScaffoldCC routeName={props.route.name}>
