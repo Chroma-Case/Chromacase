@@ -18,69 +18,69 @@ const HomeView = () => {
 	const suggestions = suggestionsQuery.data?.slice(4) ?? [];
 
 	return (
-			<ScrollView>
+		<ScrollView>
+			<View
+				style={{
+					width: '100%',
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 16,
+				}}
+			>
 				<View
 					style={{
 						width: '100%',
-						display: 'flex',
+						maxWidth: 1100,
+						aspectRatio: isPhone ? 0.618 : 1.618,
+					}}
+				>
+					<GoldenRatio songs={topSuggestions} />
+				</View>
+				<View
+					style={{
+						width: '100%',
 						flexDirection: 'column',
+						justifyContent: 'flex-start',
+						alignItems: 'stretch',
 						gap: 16,
 					}}
 				>
-					<View
+					<Text
 						style={{
-							width: '100%',
-							maxWidth: 1100,
-							aspectRatio: isPhone ? 0.618 : 1.618,
+							fontSize: 24,
+							fontWeight: 'bold',
+							marginLeft: 16,
+							marginBottom: 16,
+							marginTop: 24,
 						}}
 					>
-						<GoldenRatio songs={topSuggestions} />
-					</View>
+						{'Suggestions'}
+					</Text>
 					<View
 						style={{
-							width: '100%',
-							flexDirection: 'column',
-							justifyContent: 'flex-start',
-							alignItems: 'stretch',
+							flexDirection: 'row',
+							flexWrap: 'wrap',
+							justifyContent: isPhone ? 'center' : 'flex-start',
+							alignItems: 'flex-start',
 							gap: 16,
 						}}
 					>
-						<Text
-							style={{
-								fontSize: 24,
-								fontWeight: 'bold',
-								marginLeft: 16,
-								marginBottom: 16,
-								marginTop: 24,
-							}}
-						>
-							{'Suggestions'}
-						</Text>
-						<View
-							style={{
-								flexDirection: 'row',
-								flexWrap: 'wrap',
-								justifyContent: isPhone ? 'center' : 'flex-start',
-								alignItems: 'flex-start',
-								gap: 16,
-							}}
-						>
-							{suggestions.map((song) => (
-								<SongCardInfo
-									key={song.id}
-									song={song}
-									onPress={() => {
-										navigation.navigate('Play', { songId: song.id });
-									}}
-									onPlay={() => {
-										console.log('play');
-									}}
-								/>
-							))}
-						</View>
+						{suggestions.map((song) => (
+							<SongCardInfo
+								key={song.id}
+								song={song}
+								onPress={() => {
+									navigation.navigate('Play', { songId: song.id });
+								}}
+								onPlay={() => {
+									console.log('play');
+								}}
+							/>
+						))}
 					</View>
 				</View>
-			</ScrollView>
+			</View>
+		</ScrollView>
 	);
 };
 

@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
-import { Discover, Icon } from 'iconsax-react-native';
+import { Icon } from 'iconsax-react-native';
 import { translate } from '../../i18n/i18n';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { ComponentProps } from 'react';
@@ -66,6 +66,6 @@ const ScaffoldMobileCC = ({ state, descriptors, navigation }: BottomTabBarProps)
 // This is needed to bypass a bug in react-navigation that calls custom tabBars weirdly
 const Wrapper = (props: ComponentProps<typeof ScaffoldMobileCC>) => {
 	return <ScaffoldMobileCC {...props} />;
-}
+};
 
 export default Wrapper;
