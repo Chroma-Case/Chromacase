@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
 	NavigationProp,
 	ParamListBase,
@@ -35,8 +34,6 @@ import DiscoveryView from './views/V2/DiscoveryView';
 import MusicView from './views/MusicView';
 import Leaderboardiew from './views/LeaderboardView';
 import { LinearGradient } from 'expo-linear-gradient';
-import ScaffoldMobileCC from './components/UI/ScaffoldMobileCC';
-import ScaffoldDesktopCC from './components/UI/ScaffoldDesktopCC';
 import { createCustomNavigator } from './utils/navigator';
 import { Cup, Discover, Music, SearchNormal1, Setting2, User } from 'iconsax-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

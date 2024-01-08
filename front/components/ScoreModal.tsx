@@ -106,9 +106,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 					type="filled"
 					title={translate('menuMusic')}
 					onPress={() =>
-						navigation.canGoBack()
-							? navigation.goBack()
-							: navigation.navigate('Home')
+						navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Home')
 					}
 				/>
 			</Row>

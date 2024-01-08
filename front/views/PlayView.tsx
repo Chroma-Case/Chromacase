@@ -283,7 +283,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	useEffect(() => {
 		// Song.data is updated on navigation.navigate (do not know why)
 		// Hotfix to prevent midi setup process from reruning on game end
-		if (navigation.getState().routes.at(-1)?.name != "Play") {
+		if (navigation.getState().routes.at(-1)?.name != 'Play') {
 			return;
 		}
 		if (playType && song.data && !webSocket.current) {

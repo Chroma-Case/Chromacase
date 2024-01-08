@@ -80,7 +80,6 @@ const SearchView = (props: SearchViewProps) => {
 	};
 
 	return (
-
 		<ScrollView>
 			<SafeAreaView>
 				<SearchContext.Provider
@@ -98,13 +97,12 @@ const SearchView = (props: SearchViewProps) => {
 						updateFilter,
 						updateStringQuery,
 					}}
-					>
+				>
 					<SearchBar />
 					<SearchResultComponent />
 				</SearchContext.Provider>
 			</SafeAreaView>
 		</ScrollView>
-
 	);
 };
 

@@ -7,15 +7,13 @@ import API from '../../API';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
 import { LoadingView } from '../Loading';
-import { Translate, TranslationKey, translate } from '../../i18n/i18n';
+import { Translate, translate } from '../../i18n/i18n';
 import { useNavigation } from '../../Navigation';
 import Spacer from './Spacer';
-import User from '../../models/User';
 import LogoutButtonCC from './LogoutButtonCC';
-import GlassmorphismCC from './Glassmorphism';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { ReactElement } from 'react';
-import { NavigationState, ParamListBase } from '@react-navigation/native';
+import { NavigationState } from '@react-navigation/native';
 
 // TODO a tester avec un historique de plus de 3 musics différente mdr !!
 const SongHistory = (props: { quantity: number }) => {
@@ -176,6 +174,7 @@ const ScaffoldDesktopCC = ({
 							if ((options as any).subMenu) return null;
 							return (
 								<NavigationButton
+									key={route.name}
 									isSmallScreen={!!isSmallScreen}
 									label={options.title !== undefined ? options.title : route.name}
 									icon={options.tabBarIcon as Icon}
@@ -214,6 +213,7 @@ const ScaffoldDesktopCC = ({
 						if (!(options as any).subMenu) return null;
 						return (
 							<NavigationButton
+								key={route.key}
 								isSmallScreen={!!isSmallScreen}
 								label={options.title !== undefined ? options.title : route.name}
 								icon={options.tabBarIcon as Icon}
