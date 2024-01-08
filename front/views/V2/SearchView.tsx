@@ -79,7 +79,7 @@ const MusicListNoOpti = ({ list }: { list: any[] }) => {
 			nestedScrollEnabled
 			style={styles.container}
 			ListHeaderComponent={headerComponent}
-			data={yes}
+			data={list}
 			renderItem={({ item }) => <MusicItem style={{ marginBottom: 2 }} {...item} />}
 			keyExtractor={(item) => item.artist + item.song}
 		/>
