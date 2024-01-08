@@ -17,7 +17,7 @@ export type searchProps = {
 	query: string;
 };
 
-const Oui = ({ yes }: { yes: any[] }) => {
+const MusicListNoOpti = ({ list }: { list: any[] }) => {
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'md', xl: 'xl' });
 	const isBigScreen = screenSize === 'xl';
@@ -113,7 +113,7 @@ const SearchView = (props: RouteProps<{}>) => {
 		<ScaffoldCC routeName={props.route.name}>
 			<View style={{ display: 'flex', gap: 20 }}>
 				<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
-				{result.length != 0 ? <Oui yes={result} /> : <SearchHistory />}
+				{result.length != 0 ? <MusicListNoOpti list={result} /> : <SearchHistory />}
 			</View>
 		</ScaffoldCC>
 	);
