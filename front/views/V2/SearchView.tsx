@@ -95,31 +95,16 @@ const SearchView = (props: RouteProps<{}>) => {
 	const artists = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
 	const rawResult = useQuery(API.searchSongs(searchQuery));
-	const queryClient = useQueryClient();
 	const userQuery = useQuery(API.getUserInfo());
-	let result: any[];
-	
+	let result: any[] = [];
+
 	const { mutate } = useMutation(
-		(songId: number) => API.addLikedSong(songId),
-		{
+		(songId: number) => API.addLikedSong(songId), {
 			onSuccess: () => {
-			queryClient.setQueryData(['search'], (prevData: any[] | undefined) => {
-				if (prevData) {
-				return prevData.map((song) => {
-					if (song.id === songId) {
-					return {
-						...song,
-						liked: !song.liked,
-					};
-					}
-					return song;
-				});
-				}
-				return prevData;
-			});
-			},
+			rawResult.refetch();
+			}
 		}
-	);
+		);
 
 	if (userQuery.isLoading) {
 		return <LoadingComponent/>
@@ -139,7 +124,7 @@ const SearchView = (props: RouteProps<{}>) => {
 			level: song?.difficulties.chordcomplexity,
 			lastScore: song?.lastScore,
 			bestScore: song?.bestScore,
-			liked: song?.likedByUsers?.includes(userQuery.data.id) ? true : false,
+			liked: song?.likedByUsers?.some((user) => user.userId === userQuery.data.id) ?? false,
 			onLike: () => {
 				mutate(song.id);
 			},
