@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp, NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
 	NavigationProp,
 	ParamListBase,
@@ -174,7 +174,7 @@ type RouteParams<Routes extends Record<string, Route>> = {
 type PrivateRoutesParams = RouteParams<typeof protectedRoutes>;
 type PublicRoutesParams = RouteParams<typeof publicRoutes>;
 type TabsRoutesParams = RouteParams<typeof tabRoutes>;
-type AppRouteParams = PrivateRoutesParams &
+type AppRouteParams = Omit<PrivateRoutesParams, "Tabs"> & { Tabs: { screen: keyof TabsRoutesParams } } &
 	PublicRoutesParams &
 	TabsRoutesParams & { Oops: undefined };
 
@@ -324,4 +324,4 @@ export const Router = () => {
 	);
 };
 
-export const useNavigation = () => navigationHook<NavigationProp<AppRouteParams>>();
+export const useNavigation = () => navigationHook<NativeStackNavigationProp<AppRouteParams>>();

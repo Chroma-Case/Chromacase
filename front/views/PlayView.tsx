@@ -134,7 +134,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
 			console.warn('onEnd: Websocket not open');
-			navigation.dispatch(StackActions.replace('Home', {}));
+			navigation.replace('Tabs', { screen: 'Home' });
 			return;
 		}
 		webSocket.current?.send(

@@ -194,7 +194,6 @@ function MusicListComponent({
 	// FlatList: Renders list efficiently, only rendering visible items.
 	return (
 		<FlatList
-			nestedScrollEnabled
 			style={styles.container}
 			ListHeaderComponent={headerComponent}
 			data={musicListState.displayedMusics}
@@ -225,7 +224,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		gap: 2,
 		borderRadius: 10,
-		overflow: 'hidden',
 	},
 	footerContainer: {
 		height: 60,

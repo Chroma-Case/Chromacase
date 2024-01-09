@@ -29,138 +29,136 @@ const Leaderboardiew = () => {
 	] as const;
 
 	return (
-		<SafeAreaView>
-			<ScrollView>
-				<Text
-					style={{
-						fontSize: 20,
-						fontWeight: '500',
-						marginBottom: 16,
-					}}
-				>
-					{translate('leaderBoardHeading')}
-				</Text>
-				<Text
-					style={{
-						fontSize: 14,
-						fontWeight: '500',
-					}}
-				>
-					{translate('leaderBoardHeadingFull')}
-				</Text>
-				<View
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'flex-start',
-						paddingTop: 20,
-						flex: 1,
-						alignSelf: 'stretch',
-					}}
-				>
-					{!isPhone ? (
-						<View /** podium view */
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignSelf: 'stretch',
-								gap: 32,
-								paddingBottom: 10,
-								marginBottom: 20,
-							}}
-						>
-							<PodiumCard
-								medalColor="#AE84FB"
-								offset={120}
-								userAvatarUrl={podiumUserData[2]?.data.avatar}
-								userPseudo={podiumUserData[2]?.name}
-								userLvl={podiumUserData[2]?.data.totalScore}
-							/>
-							<PodiumCard
-								medalColor="#EAD93C"
-								offset={0}
-								userAvatarUrl={podiumUserData[0]?.data.avatar}
-								userPseudo={podiumUserData[0]?.name}
-								userLvl={podiumUserData[0]?.data.totalScore}
-							/>
-							<PodiumCard
-								medalColor="#5F74F7"
-								offset={60}
-								userAvatarUrl={podiumUserData[1]?.data.avatar}
-								userPseudo={podiumUserData[1]?.name}
-								userLvl={podiumUserData[1]?.data.totalScore}
-							/>
-						</View>
-					) : (
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignSelf: 'stretch',
-								marginBottom: 20,
-								marginHorizontal: 10,
-							}}
-						>
-							<PodiumCard
-								medalColor="#EAD93C"
-								offset={0}
-								userAvatarUrl={podiumUserData[0]?.data.avatar}
-								userPseudo={podiumUserData[0]?.name}
-								userLvl={podiumUserData[0]?.data.totalScore}
-							/>
-							<View
-								style={{
-									display: 'flex',
-									flexDirection: 'row-reverse',
-									justifyContent: 'center',
-									alignItems: 'center',
-									gap: 64,
-								}}
-							>
-								<PodiumCard
-									medalColor="#5F74F7"
-									offset={0}
-									userAvatarUrl={podiumUserData[1]?.data.avatar}
-									userPseudo={podiumUserData[1]?.name}
-									userLvl={podiumUserData[1]?.data.totalScore}
-								/>
-								<PodiumCard
-									medalColor="#AE84FB"
-									offset={60}
-									userAvatarUrl={podiumUserData[2]?.data.avatar}
-									userPseudo={podiumUserData[2]?.name}
-									userLvl={podiumUserData[2]?.data.totalScore}
-								/>
-							</View>
-						</View>
-					)}
+		<ScrollView>
+			<Text
+				style={{
+					fontSize: 20,
+					fontWeight: '500',
+					marginBottom: 16,
+				}}
+			>
+				{translate('leaderBoardHeading')}
+			</Text>
+			<Text
+				style={{
+					fontSize: 14,
+					fontWeight: '500',
+				}}
+			>
+				{translate('leaderBoardHeadingFull')}
+			</Text>
+			<View
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'flex-start',
+					paddingTop: 20,
+					flex: 1,
+					alignSelf: 'stretch',
+				}}
+			>
+				{!isPhone ? (
+					<View /** podium view */
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+							alignItems: 'center',
+							alignSelf: 'stretch',
+							gap: 32,
+							paddingBottom: 10,
+							marginBottom: 20,
+						}}
+					>
+						<PodiumCard
+							medalColor="#AE84FB"
+							offset={120}
+							userAvatarUrl={podiumUserData[2]?.data.avatar}
+							userPseudo={podiumUserData[2]?.name}
+							userLvl={podiumUserData[2]?.data.totalScore}
+						/>
+						<PodiumCard
+							medalColor="#EAD93C"
+							offset={0}
+							userAvatarUrl={podiumUserData[0]?.data.avatar}
+							userPseudo={podiumUserData[0]?.name}
+							userLvl={podiumUserData[0]?.data.totalScore}
+						/>
+						<PodiumCard
+							medalColor="#5F74F7"
+							offset={60}
+							userAvatarUrl={podiumUserData[1]?.data.avatar}
+							userPseudo={podiumUserData[1]?.name}
+							userLvl={podiumUserData[1]?.data.totalScore}
+						/>
+					</View>
+				) : (
 					<View
 						style={{
 							display: 'flex',
 							flexDirection: 'column',
+							justifyContent: 'center',
 							alignItems: 'center',
 							alignSelf: 'stretch',
-							gap: 10,
-							paddingRight: 10,
+							marginBottom: 20,
+							marginHorizontal: 10,
 						}}
 					>
-						{scoresQuery.data.slice(3, 20).map((comp, index) => (
-							<BoardRow
-								key={comp.name + index}
-								index={index + 4}
-								userAvatarUrl={comp.data.avatar}
-								userLvl={comp.data.totalScore}
-								userPseudo={comp.name}
+						<PodiumCard
+							medalColor="#EAD93C"
+							offset={0}
+							userAvatarUrl={podiumUserData[0]?.data.avatar}
+							userPseudo={podiumUserData[0]?.name}
+							userLvl={podiumUserData[0]?.data.totalScore}
+						/>
+						<View
+							style={{
+								display: 'flex',
+								flexDirection: 'row-reverse',
+								justifyContent: 'center',
+								alignItems: 'center',
+								gap: 64,
+							}}
+						>
+							<PodiumCard
+								medalColor="#5F74F7"
+								offset={0}
+								userAvatarUrl={podiumUserData[1]?.data.avatar}
+								userPseudo={podiumUserData[1]?.name}
+								userLvl={podiumUserData[1]?.data.totalScore}
 							/>
-						))}
+							<PodiumCard
+								medalColor="#AE84FB"
+								offset={60}
+								userAvatarUrl={podiumUserData[2]?.data.avatar}
+								userPseudo={podiumUserData[2]?.name}
+								userLvl={podiumUserData[2]?.data.totalScore}
+							/>
+						</View>
 					</View>
+				)}
+				<View
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						alignSelf: 'stretch',
+						gap: 10,
+						paddingRight: 10,
+					}}
+				>
+					{scoresQuery.data.slice(3, 20).map((comp, index) => (
+						<BoardRow
+							key={comp.name + index}
+							index={index + 4}
+							userAvatarUrl={comp.data.avatar}
+							userLvl={comp.data.totalScore}
+							userPseudo={comp.name}
+						/>
+					))}
 				</View>
-			</ScrollView>
-		</SafeAreaView>
+			</View>
+		</ScrollView>
 	);
 };
 

@@ -97,7 +97,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 					type="outlined"
 					title={translate('playAgain')}
 					onPress={() =>
-						navigation.dispatch(StackActions.replace('Play', { songId: props.songId }))
+						navigation.replace('Play', { songId: props.songId })
 					}
 				/>
 				<ButtonBase
@@ -105,9 +105,11 @@ const ScoreModal = (props: ScoreModalProps) => {
 					icon={Play}
 					type="filled"
 					title={translate('menuMusic')}
-					onPress={() =>
-						navigation.canGoBack() ? navigation.goBack() : navigation.navigate('Home')
-					}
+					onPress={() => {
+						navigation.canGoBack()
+							? navigation.goBack()
+							: navigation.replace('Tabs', { screen: 'Home' });
+					}}
 				/>
 			</Row>
 		</Column>

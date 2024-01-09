@@ -1,6 +1,6 @@
 import React from 'react';
 import { useBreakpointValue, useTheme } from 'native-base';
-import { useWindowDimensions } from 'react-native';
+import { ScrollView, useWindowDimensions } from 'react-native';
 import {
 	TabView,
 	SceneMap,
