@@ -73,6 +73,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const songHistory = useQuery(API.getSongHistory(songId));
 	const [score, setScore] = useState(0); // Between 0 and 100
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime();
+	const [readyToPlay, setReadyToPlay] = useState(false);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
@@ -396,6 +397,10 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						onError={() => {
 							console.log('error from partition magic');
 						}}
+						onReady={() => {
+							console.log('ready from partition magic');
+							setReadyToPlay(true);
+						}}
 						onPlay={onResume}
 						onPause={onPause}
 					/>
@@ -404,6 +409,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					score={score}
 					time={time}
 					paused={paused}
+					disabled={playType == null || !readyToPlay}
 					song={song.data}
 					onEnd={onEnd}
 					onPause={() => {
