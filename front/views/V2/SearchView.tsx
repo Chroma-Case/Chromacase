@@ -10,7 +10,7 @@ import SearchHistory from '../../components/V2/SearchHistory';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import MusicItem from '../../components/UI/MusicItem';
 import API from '../../API';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import LoadingComponent from '../../components/Loading';
 import ErrorView from '../ErrorView';
 
@@ -98,38 +98,38 @@ const SearchView = (props: RouteProps<{}>) => {
 	const userQuery = useQuery(API.getUserInfo());
 	let result: any[] = [];
 
-	const { mutate } = useMutation(
-		(songId: number) => API.addLikedSong(songId), {
-			onSuccess: () => {
+	const { mutate } = useMutation((songId: number) => API.addLikedSong(songId), {
+		onSuccess: () => {
 			rawResult.refetch();
-			}
-		}
-		);
+		},
+	});
 
 	if (userQuery.isLoading) {
-		return <LoadingComponent/>
+		return <LoadingComponent />;
 	}
 
 	if (userQuery.isError) {
-		return <ErrorView/>
+		return <ErrorView />;
 	}
 
 	if (userQuery.isSuccess) {
-		result = rawResult.data?.map((song) => ({
-			artist:
-				artists.data?.find((artist) => artist.id === song?.artist?.id)?.name ??
-				'unknown artist',
-			song: song?.name,
-			image: song?.cover,
-			level: song?.difficulties.chordcomplexity,
-			lastScore: song?.lastScore,
-			bestScore: song?.bestScore,
-			liked: song?.likedByUsers?.some((user) => user.userId === userQuery.data.id) ?? false,
-			onLike: () => {
-				mutate(song.id);
-			},
-			onPlay: () => navigation.navigate('Play', { songId: song.id }),
-		})) ?? [];
+		result =
+			rawResult.data?.map((song) => ({
+				artist:
+					artists.data?.find((artist) => artist.id === song?.artist?.id)?.name ??
+					'unknown artist',
+				song: song?.name,
+				image: song?.cover,
+				level: song?.difficulties.chordcomplexity,
+				lastScore: song?.lastScore,
+				bestScore: song?.bestScore,
+				liked:
+					song?.likedByUsers?.some((user) => user.userId === userQuery.data.id) ?? false,
+				onLike: () => {
+					mutate(song.id);
+				},
+				onPlay: () => navigation.navigate('Play', { songId: song.id }),
+			})) ?? [];
 	}
 
 	return (
