@@ -1,5 +1,5 @@
 import { useBreakpointValue, ScrollView, Text } from 'native-base';
-import { SafeAreaView, View } from 'react-native';
+import { View } from 'react-native';
 import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';

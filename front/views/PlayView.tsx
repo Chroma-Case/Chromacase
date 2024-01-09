@@ -1,5 +1,4 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
 import Animated, {
