@@ -1,6 +1,6 @@
 import React from 'react';
-import { useBreakpointValue, useTheme } from 'native-base';
-import { useWindowDimensions } from 'react-native';
+import { View, useBreakpointValue, useTheme, Text } from 'native-base';
+import { StyleProp, ViewStyle, useWindowDimensions } from 'react-native';
 import {
 	TabView,
 	SceneMap,
@@ -20,6 +20,68 @@ import API from '../API';
 import { LoadingView } from '../components/Loading';
 import { useLikeSongMutation } from '../utils/likeSongMutation';
 import Song from '../models/Song';
+import InteractiveCC from '../components/UI/InteractiveCC';
+import ButtonBase from '../components/UI/ButtonBase';
+import InteractiveBase from '../components/UI/InteractiveBaseV2';
+import AnimatedBase from '../components/UI/AnimatedBase';
+import useInteractionState from '../components/UI/useInteractionState';
+
+// import React from 'react';
+// import { Text, View } from 'react-native';
+// import InteractiveBase from './InteractiveBase';
+// import AnimatedBase from './AnimatedBase';
+// import useInteractionState from './useInteractionState';
+
+interface LinkBaseProps {
+	text: string;
+	style?: StyleProp<ViewStyle>;
+	textStyle?: StyleProp<ViewStyle>;
+	underlineStyle?: StyleProp<ViewStyle>;
+	fontSize?: number;
+	onPress: () => void;
+}
+
+const AnimatedLink = ({ text, style, textStyle, underlineStyle, fontSize = 14 }: LinkBaseProps) => {
+  const interaction = useInteractionState({
+	onPressOut: () => { console.log("AnimatedLink is activate")}
+  });
+  const { colors } = useTheme();
+
+  const defaultUnderlineStyle = { height: fontSize / 8, bottom: 0 };
+  const hoverUnderlineStyle = { height: fontSize * 1.5, bottom: 0 };
+  const pressUnderlineStyle = { height: 0, bottom: fontSize * 1.5 };
+
+  return (
+	<View style={{ flex: 1, alignItems: 'flex-start', position: 'relative'}}>
+		<InteractiveBase {...interaction} style={style}>
+			<AnimatedBase
+				defaultStyle={{ fontSize: 14 }}
+				hoverStyle={{ fontSize: 16 }}
+				pressStyle={{ fontSize: 8 }}
+				currentState={interaction.state}
+			>
+				<Text selectable={false} style={[textStyle]}>
+				{/* {fontSize: fontSize},  */}
+					{text}
+				</Text>
+			</AnimatedBase>
+			<AnimatedBase
+				style={[{
+					minWidth: '100%',
+					position: 'absolute',
+					zIndex: -1,
+					backgroundColor: colors.primary[600],
+				}, underlineStyle && {underlineStyle}]}
+				defaultStyle={{ ...defaultUnderlineStyle }}
+				hoverStyle={{ ...hoverUnderlineStyle }}
+				pressStyle={{ ...pressUnderlineStyle }}
+				currentState={interaction.state}
+			/>
+		</InteractiveBase>
+	</View>
+  );
+};
+
 
 type MusicListCCProps = {
 	data: Song[] | undefined;
@@ -58,12 +120,81 @@ const MusicListCC = ({ data, isLoading, refetch }: MusicListCCProps) => {
 
 const FavoritesMusic = () => {
 	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory', 'likedByUsers']));
+	const { colors } = useTheme();
+	const interaction = useInteractionState();
+
 	return (
-		<MusicListCC
-			data={likedSongs.data?.map((x) => x.song)}
-			isLoading={likedSongs.isLoading}
-			refetch={likedSongs.refetch}
-		/>
+		<>
+			<View style={{margin: 30}}>
+				<AnimatedLink text="coucou Je suis un link zosidjofsijdfosijfosifdjo" onPress={() => console.log("Je suis le lien !!!")}/>
+				<InteractiveBase {...interaction} style={{ marginTop: 20 }}>
+					<AnimatedBase
+						defaultStyle={{
+							backgroundColor: colors.primary[300],
+						}}
+						hoverStyle={{
+							backgroundColor: colors.primary[900],
+						}}
+						pressStyle={{
+							backgroundColor: colors.primary[100],
+						}}
+						currentState={interaction.state}
+					>
+						<Text>
+							Text
+						</Text>
+					</AnimatedBase>
+				</InteractiveBase>
+				<InteractiveCC
+					// duration={80}
+					styleContainer={{
+						borderRadius: 10,
+					}}
+					style={{
+						width: '100%',
+						paddingHorizontal: 20,
+						paddingVertical: 10,
+						// borderRadius: 10,
+					}}
+					defaultStyle={{
+						transform: [{ scale: 1,}],
+						shadowOpacity: 0.3,
+						shadowRadius: 4.65,
+						elevation: 8,
+						backgroundColor: colors.primary[300],
+					}}
+					hoverStyle={{
+						transform: [{ scale: 1.02,}],
+						shadowOpacity: 0.37,
+						shadowRadius: 7.49,
+						elevation: 12,
+						backgroundColor: colors.primary[400],
+					}}
+					pressStyle={{
+						transform: [{ scale: 0.98,}],
+						shadowOpacity: 0.23,
+						shadowRadius: 2.62,
+						elevation: 4,
+						backgroundColor: colors.primary[500],
+					}}
+					onPress={() => console.log("A que coucou!")}
+				>
+					<Text selectable={false} style={{color: '#fff'}}>
+						Coucou
+					</Text>
+				</InteractiveCC>
+				<ButtonBase
+					title="Coucou"
+					style={{ marginTop: 20 }}
+					type={'filled'}
+				/>
+			</View>
+			<MusicListCC
+				data={likedSongs.data?.map((x) => x.song)}
+				isLoading={likedSongs.isLoading}
+				refetch={likedSongs.refetch}
+			/>
+		</>
 	);
 };
 
