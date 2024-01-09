@@ -3,7 +3,6 @@ import ButtonBase from './UI/ButtonBase';
 import { Translate, TranslationKey, translate } from '../i18n/i18n';
 import { Play, Star1 } from 'iconsax-react-native';
 import { useNavigation } from '../Navigation';
-import { StackActions } from '@react-navigation/native';
 
 type ScoreModalProps = {
 	songId: number;
@@ -22,21 +21,6 @@ type ScoreModalProps = {
 };
 
 const ScoreModal = (props: ScoreModalProps) => {
-	// const props = {
-	// 	songId: 1,
-	// 	overallScore: 74,
-	// 	precision: 0,
-	// 	score: {
-	// 		missed: 9,
-	// 		good: 1,
-	// 		great: 2,
-	// 		perfect: 4,
-	// 		wrong: 0,
-	// 		max_score: 100,
-	// 		current_streak: 1,
-	// 		max_streak: 11,
-	// 	} as const
-	// } as const; //TODO DELETE ME
 	const navigation = useNavigation();
 	const theme = useTheme();
 	const score = (props.overallScore * 100) / props.score.max_score;
@@ -96,9 +80,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 					icon={Play}
 					type="outlined"
 					title={translate('playAgain')}
-					onPress={() =>
-						navigation.replace('Play', { songId: props.songId })
-					}
+					onPress={() => navigation.replace('Play', { songId: props.songId })}
 				/>
 				<ButtonBase
 					style={{}}

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { NativeStackNavigationProp, NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
-	NavigationProp,
-	ParamListBase,
-	useNavigation as navigationHook,
-} from '@react-navigation/native';
+	NativeStackNavigationProp,
+	NativeStackScreenProps,
+	createNativeStackNavigator,
+} from '@react-navigation/native-stack';
+import { ParamListBase, useNavigation as navigationHook } from '@react-navigation/native';
 import React, { ComponentProps, ComponentType, useEffect, useMemo } from 'react';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootState, useSelector } from './state/Store';
@@ -174,8 +174,9 @@ type RouteParams<Routes extends Record<string, Route>> = {
 type PrivateRoutesParams = RouteParams<typeof protectedRoutes>;
 type PublicRoutesParams = RouteParams<typeof publicRoutes>;
 type TabsRoutesParams = RouteParams<typeof tabRoutes>;
-type AppRouteParams = Omit<PrivateRoutesParams, "Tabs"> & { Tabs: { screen: keyof TabsRoutesParams } } &
-	PublicRoutesParams &
+type AppRouteParams = Omit<PrivateRoutesParams, 'Tabs'> & {
+	Tabs: { screen: keyof TabsRoutesParams };
+} & PublicRoutesParams &
 	TabsRoutesParams & { Oops: undefined };
 
 const RouteToScreen = <T extends {}>(Component: Route<T>['component']) =>
