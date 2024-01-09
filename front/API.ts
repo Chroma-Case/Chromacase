@@ -72,6 +72,7 @@ function getBaseAPIUrl() {
 		}
 		return '/api';
 	}
+	console.log(process.env.EXPO_PUBLIC_API_URL);
 	if (process.env.EXPO_PUBLIC_API_URL) {
 		return process.env.EXPO_PUBLIC_API_URL;
 	}
@@ -781,6 +782,7 @@ export default class API {
 	}
 
 	public static getPartitionMelodyUrl(songId: number): string {
+		// return 'https://cdn.discordapp.com/attachments/717080637038788731/1193948941914488862/Short1.mp3?ex=65ae929a&is=659c1d9a&hm=ea21e4b67f8f04388b67fe70e8de11e0110a1ac5c9b13714e21d921a08300992&';
 		return `${API.baseUrl}/song/${songId}/assets/melody`;
 	}
 }
