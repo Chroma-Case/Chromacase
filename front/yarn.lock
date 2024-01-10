@@ -10764,6 +10764,11 @@ slugify@^1.3.4:
   resolved "https://registry.yarnpkg.com/slugify/-/slugify-1.6.6.tgz#2d4ac0eacb47add6af9e04d3be79319cbcc7924b"
   integrity sha512-h+z7HKHYXj6wJU+AnS/+IH8Uh9fdcX1Lrhg1/VMdf9PwoBQXFcXiAdsy2tSK0P6gKwJLXp02r90ahUCqHk9rrw==
 
+smplr@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/smplr/-/smplr-0.12.1.tgz#53895a6928c2a3093d72e639440ca4be0b480e54"
+  integrity sha512-GEHuuP2vCtgu7+HY2F0DEnIxB5JHfxsZt4lJd9i/zxiZz1eBHheiy9h5Th32XGkLGObm/MMCfVs8Fwz6N/BKMw==
+
 sockjs@^0.3.24:
   version "0.3.24"
   resolved "https://registry.yarnpkg.com/sockjs/-/sockjs-0.3.24.tgz#c9bc8995f33a111bea0395ec30aa3206bdb5ccce"
