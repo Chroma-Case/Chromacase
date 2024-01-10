@@ -101,6 +101,7 @@ const PartitionMagic = ({
 			if (melodySound.current) {
 				melodySound.current.pauseAsync();
 				melodySound.current.unloadAsync();
+				melodySound.current = null;
 			}
 			if (piano.current) {
 				piano.current.stop();
@@ -138,18 +139,6 @@ const PartitionMagic = ({
 			return;
 		}
 		if (shouldPlay) {
-			melodySound.current.getStatusAsync().then((status) => {
-				const lastCur = data!.cursors[data!.cursors.length - 1]!;
-				const maxTs = lastCur.timestamp + lastCur.timing;
-				//@ts-expect-error error in the type
-				const newRate = status.durationMillis! / maxTs;
-				console.log('newRate', newRate);
-				if (newRate < 0 || newRate > 2) {
-					console.error('wrong rate');
-				} else {
-					melodySound.current?.setRateAsync(newRate, false);
-				}
-			});
 			melodySound.current.playAsync().then(onPlay).catch(console.error);
 		} else {
 			melodySound.current.pauseAsync().then(onPause).catch(console.error);
@@ -176,7 +165,6 @@ const PartitionMagic = ({
 				currentCurIdx.current,
 				timestamp + transitionDuration,
 				(cursor, idx) => {
-					console.log('cursor', cursor, status);
 					currentCurIdx.current = idx;
 					partitionOffset.value = withTiming(
 						-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
@@ -199,7 +187,6 @@ const PartitionMagic = ({
 			currentCurIdx.current,
 			timestamp + transitionDuration,
 			(cursor, idx) => {
-				console.log('cursor', cursor);
 				currentCurIdx.current = idx;
 				partitionOffset.value = withTiming(
 					-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
