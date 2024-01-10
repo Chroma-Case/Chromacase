@@ -1,6 +1,5 @@
 import userReducer from '../state/UserSlice';
 import settingsReducer from './SettingsSlice';
-import SoundPlayerSliceReducer from './SoundPlayerSlice';
 import { StateFromReducersMapObject, configureStore } from '@reduxjs/toolkit';
 import languageReducer from './LanguageSlice';
 import {
@@ -30,7 +29,6 @@ const reducers = {
 	user: userReducer,
 	language: languageReducer,
 	settings: settingsReducer,
-	soundPlayer: SoundPlayerSliceReducer,
 };
 
 type State = StateFromReducersMapObject<typeof reducers>;
