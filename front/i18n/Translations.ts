@@ -646,7 +646,7 @@ export const fr: typeof en = {
 	updateProfile: 'Changer le Profile',
 	accountCreatedOn: 'Compte créé le',
 	downloadAPKInstructions:
-		"Descargue 'android-build.apk' en la sección 'Assets' de la última versión.",
+		"Télécharger 'android-build.apk' dans la section 'Assets' de la dernière release",
 };
 
 export const sp: typeof en = {
@@ -979,5 +979,5 @@ export const sp: typeof en = {
 	updateProfile: 'Cambiar el perfil',
 	accountCreatedOn: 'Cuenta creada el',
 	downloadAPKInstructions:
-		"Télécharger 'android-build.apk' dans la section 'Assets' de la dernière release",
+		"Descargue 'android-build.apk' en la sección 'Assets' de la última versión",
 };
