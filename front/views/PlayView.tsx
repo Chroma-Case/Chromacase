@@ -1,10 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Text, Row, View, useToast } from 'native-base';
-import { RouteProps, useNavigation } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
@@ -56,7 +55,7 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
-const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
+const PlayView = ({ songId }: PlayViewProps) => {
 	const [playType, setPlayType] = useState<'practice' | 'normal' | null>(null);
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -116,7 +115,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
 			console.warn('onEnd: Websocket not open');
-			navigation.dispatch(StackActions.replace('Home', {}));
+			navigation.replace('Tabs', { screen: 'Home' });
 			return;
 		}
 		webSocket.current?.send(
@@ -253,7 +252,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	useEffect(() => {
 		// Song.data is updated on navigation.navigate (do not know why)
 		// Hotfix to prevent midi setup process from reruning on game end
-		if (navigation.getState().routes.at(-1)?.name != route.name) {
+		if (navigation.getState().routes.at(-1)?.name != 'Play') {
 			return;
 		}
 		if (playType && song.data && !webSocket.current) {

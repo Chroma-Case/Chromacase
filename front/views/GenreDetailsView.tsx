@@ -1,7 +1,7 @@
 import { Flex, Heading, useBreakpointValue, ScrollView } from 'native-base';
 import { useQuery } from '../Queries';
 import { LoadingView } from '../components/Loading';
-import { RouteProps, useNavigation } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import API from '../API';
 import CardGridCustom from '../components/CardGridCustom';
 import SongCard from '../components/SongCard';
@@ -11,7 +11,7 @@ type GenreDetailsViewProps = {
 	genreId: number;
 };
 
-const GenreDetailsView = ({ genreId }: RouteProps<GenreDetailsViewProps>) => {
+const GenreDetailsView = ({ genreId }: GenreDetailsViewProps) => {
 	const genreQuery = useQuery(API.getGenre(genreId));
 	const songsQuery = useQuery(API.getSongsByGenre(genreId, ['artist']));
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });

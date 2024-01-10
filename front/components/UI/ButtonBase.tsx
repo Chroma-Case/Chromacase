@@ -11,6 +11,7 @@ interface ButtonProps {
 	title?: string;
 	style?: StyleProp<ViewStyle>;
 	onPress?: () => void | Promise<void>;
+	onLongPress?: () => void | Promise<void>;
 	isDisabled?: boolean;
 	icon?: Icon;
 	iconVariant?: 'Bold' | 'Outline';
@@ -22,6 +23,7 @@ const ButtonBase: React.FC<ButtonProps> = ({
 	title,
 	style,
 	onPress,
+	onLongPress,
 	isDisabled,
 	icon,
 	iconImage,
@@ -116,6 +118,18 @@ const ButtonBase: React.FC<ButtonProps> = ({
 					setLoading(true);
 					try {
 						await onPress();
+					} catch (error) {
+						console.error(error);
+					} finally {
+						setLoading(false);
+					}
+				}
+			}}
+			onLongPress={async () => {
+				if (onLongPress && !isDisabled) {
+					setLoading(true);
+					try {
+						await onLongPress();
 					} catch (error) {
 						console.error(error);
 					} finally {

@@ -9,9 +9,7 @@ import { SearchResultComponent } from '../components/SearchResult';
 import { SafeAreaView } from 'react-native';
 import { Filter } from '../components/SearchBar';
 import { ScrollView } from 'native-base';
-import { RouteProps } from '../Navigation';
 import LikedSong from '../models/LikedSong';
-import ScaffoldCC from '../components/UI/ScaffoldCC';
 
 interface SearchContextType {
 	filter: 'artist' | 'song' | 'genre' | 'all' | 'favorites';
@@ -47,7 +45,7 @@ type SearchViewProps = {
 	query?: string;
 };
 
-const SearchView = (props: RouteProps<SearchViewProps>) => {
+const SearchView = (props: SearchViewProps) => {
 	const [filter, setFilter] = useState<Filter>('all');
 	const [stringQuery, setStringQuery] = useState<string>(props?.query ?? '');
 
@@ -82,31 +80,29 @@ const SearchView = (props: RouteProps<SearchViewProps>) => {
 	};
 
 	return (
-		<ScaffoldCC routeName={props.route.name}>
-			<ScrollView>
-				<SafeAreaView>
-					<SearchContext.Provider
-						value={{
-							filter,
-							stringQuery,
-							songData,
-							artistData,
-							genreData,
-							favoriteData,
-							isLoadingSong,
-							isLoadingArtist,
-							isLoadingGenre,
-							isLoadingFavorite,
-							updateFilter,
-							updateStringQuery,
-						}}
-					>
-						<SearchBar />
-						<SearchResultComponent />
-					</SearchContext.Provider>
-				</SafeAreaView>
-			</ScrollView>
-		</ScaffoldCC>
+		<ScrollView>
+			<SafeAreaView>
+				<SearchContext.Provider
+					value={{
+						filter,
+						stringQuery,
+						songData,
+						artistData,
+						genreData,
+						favoriteData,
+						isLoadingSong,
+						isLoadingArtist,
+						isLoadingGenre,
+						isLoadingFavorite,
+						updateFilter,
+						updateStringQuery,
+					}}
+				>
+					<SearchBar />
+					<SearchResultComponent />
+				</SearchContext.Provider>
+			</SafeAreaView>
+		</ScrollView>
 	);
 };
 

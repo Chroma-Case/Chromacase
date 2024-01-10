@@ -87,6 +87,8 @@ export const en = {
 	genreFilter: 'Genres',
 	favoriteFilter: 'Favorites',
 	searchBarPlaceholder: 'What are you looking for ?',
+	histoHeading: 'Your last researches',
+	histoDesc: 'Quickly find the tracks that you recently searched. Search and play away !',
 
 	// profile page
 	user: 'Profile',
@@ -411,6 +413,9 @@ export const fr: typeof en = {
 	genreFilter: 'Genres',
 	favoriteFilter: 'Favoris',
 	searchBarPlaceholder: 'Que recherchez vous ?',
+	histoHeading: 'Vos Dernières Recherches',
+	histoDesc:
+		'Retrouvez rapidement les morceaux que vous avez cherchés récemment. Continuez à explorer et à jouer !',
 
 	// Difficulty settings
 	diffBtn: 'Difficulté',
@@ -748,6 +753,9 @@ export const sp: typeof en = {
 	genreFilter: 'géneros',
 	favoriteFilter: 'Favorites',
 	searchBarPlaceholder: 'Qué estás buscando ?',
+	histoHeading: 'Tus últimas investigaciones',
+	histoDesc:
+		'Encuentra rápidamente las canciones que has estado buscando recientemente. ¡Sigue explorando y jugando!',
 
 	// Difficulty settings
 	diffBtn: 'Dificultad',

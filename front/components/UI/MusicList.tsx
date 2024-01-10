@@ -194,7 +194,6 @@ function MusicListComponent({
 	// FlatList: Renders list efficiently, only rendering visible items.
 	return (
 		<FlatList
-			nestedScrollEnabled
 			style={styles.container}
 			ListHeaderComponent={headerComponent}
 			data={musicListState.displayedMusics}
@@ -225,7 +224,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		gap: 2,
 		borderRadius: 10,
-		overflow: 'hidden',
 	},
 	footerContainer: {
 		height: 60,
@@ -237,8 +235,6 @@ const styles = StyleSheet.create({
 // Using `memo` to optimize rendering performance by memorizing the component's output.
 // This ensures that the component only re-renders when its props change.
 const MusicList = memo(MusicListComponent, (prev, next) => {
-	console.log('AAAAA');
-	console.log(prev.initialMusics, next.initialMusics);
 	return prev.initialMusics.length == next.initialMusics.length;
 });
 

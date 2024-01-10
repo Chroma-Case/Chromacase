@@ -1,79 +1,71 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 import { View } from 'react-native';
 import { Flex, useMediaQuery, useTheme } from 'native-base';
 import ButtonBase from './ButtonBase';
 import { Icon } from 'iconsax-react-native';
-import { useNavigation } from '../../Navigation';
-import User from '../../models/User';
 import { translate } from '../../i18n/i18n';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { ComponentProps } from 'react';
 
-type ScaffoldMobileCCProps = {
-	children?: React.ReactNode;
-	user: User;
-	logo: string;
-	routeName: string;
-	widthPadding: boolean;
-	enableScroll: boolean;
-	menu: readonly {
-		type: 'main' | 'sub';
-		title:
-			| 'menuDiscovery'
-			| 'menuProfile'
-			| 'menuMusic'
-			| 'menuSearch'
-			| 'menuLeaderBoard'
-			| 'menuSettings';
-		icon: Icon;
-		link: string;
-	}[];
-};
-
-const ScaffoldMobileCC = (props: ScaffoldMobileCCProps) => {
-	const navigation = useNavigation();
+const ScaffoldMobileCC = ({ state, descriptors, navigation }: BottomTabBarProps) => {
 	const [isSmallScreen] = useMediaQuery({ maxWidth: 400 });
 	const { colors } = useTheme();
 
 	return (
-		<View style={{ height: '100%', flexDirection: 'column', overflow: 'hidden' }}>
-			<View
+		<View style={{ padding: 8, paddingTop: 0 }}>
+			<Flex
 				style={{
-					flex: 1,
-					maxHeight: '100%',
-					padding: props.widthPadding ? 8 : 0,
+					width: '100%',
+					flexDirection: 'row',
+					backgroundColor: colors.coolGray[500],
+					padding: 8,
+					justifyContent: 'space-between',
+					borderRadius: 8,
 				}}
 			>
-				{props.children}
-			</View>
-			<View style={{ padding: 8, paddingTop: 0 }}>
-				<Flex
-					style={{
-						width: '100%',
-						flexDirection: 'row',
-						backgroundColor: colors.coolGray[500],
-						padding: 8,
-						justifyContent: 'space-between',
-						borderRadius: 8,
-					}}
-				>
-					{props.menu.map((value) => (
+				{state.routes.map((route, index) => {
+					const { options } = descriptors[route.key]!;
+					const label = options.title !== undefined ? options.title : route.name;
+					const icon = options.tabBarIcon as Icon;
+					const isFocused = state.index === index;
+
+					return (
 						<ButtonBase
-							key={'key-menu-link-' + value.title}
+							key={'key-menu-link-' + label}
 							type="menu"
-							icon={value.icon}
+							icon={icon}
 							title={
-								props.routeName === value.link && !isSmallScreen
-									? translate(value.title)
-									: undefined
+								isFocused && !isSmallScreen ? translate(label as any) : undefined
 							}
-							isDisabled={props.routeName === value.link}
-							iconVariant={props.routeName === value.link ? 'Bold' : 'Outline'}
-							onPress={async () => navigation.navigate(value.link as never)}
+							isDisabled={isFocused}
+							iconVariant={isFocused ? 'Bold' : 'Outline'}
+							onPress={() => {
+								const event = navigation.emit({
+									type: 'tabPress',
+									target: route.key,
+									canPreventDefault: true,
+								});
+
+								if (!isFocused && !event.defaultPrevented) {
+									navigation.navigate(route.name, route.params);
+								}
+							}}
+							onLongPress={() => {
+								navigation.emit({
+									type: 'tabLongPress',
+									target: route.key,
+								});
+							}}
 						/>
-					))}
-				</Flex>
-			</View>
+					);
+				})}
+			</Flex>
 		</View>
 	);
 };
 
-export default ScaffoldMobileCC;
+// This is needed to bypass a bug in react-navigation that calls custom tabBars weirdly
+const Wrapper = (props: ComponentProps<typeof ScaffoldMobileCC>) => {
+	return <ScaffoldMobileCC {...props} />;
+};
+
+export default Wrapper;
