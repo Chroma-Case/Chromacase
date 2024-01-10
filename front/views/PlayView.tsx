@@ -388,7 +388,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 				>
 					<PartitionMagic
 						shouldPlay={shouldPlay}
-						// timestamp={time}
+						timestamp={time}
 						songID={song.data.id}
 						onEndReached={() => {
 							setTimeout(() => {

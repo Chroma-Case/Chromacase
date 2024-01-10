@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import * as React from 'react';
-import { Row, Image, Text, Icon, useBreakpointValue, IconButton } from 'native-base';
-// import IconButton from '../IconButton';
+import { Row, Image, Text, useBreakpointValue, IconButton } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { MetronomeControls } from '../Metronome';
 import StarProgress from '../StarProgress';
