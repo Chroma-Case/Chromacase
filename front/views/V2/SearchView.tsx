@@ -93,7 +93,7 @@ const MusicListNoOpti = ({ list }: { list: any[] }) => {
 // eslint-disable-next-line @typescript-eslint/ban-types
 const SearchView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
-	const artists = useQuery(API.getAllArtists());
+	const artistsQuery = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
 	const rawResult = useQuery(API.searchSongs(searchQuery));
 	const userQuery = useQuery(API.getUserInfo());
@@ -102,7 +102,7 @@ const SearchView = (props: RouteProps<{}>) => {
 
 	let result: any[] = [];;
 
-	if (userQuery.isLoading || likedSongs.isLoading || userQuery.isLoading) {
+	if (userQuery.isLoading || likedSongs.isLoading || artistsQuery.isLoading) {
 		return <LoadingComponent />;
 	}
 
@@ -114,14 +114,14 @@ const SearchView = (props: RouteProps<{}>) => {
 		result =
 			rawResult.data?.map((song) => ({
 				artist:
-					artists.data?.find((artist) => artist.id === song?.artist?.id)?.name ??
+					artistsQuery.data?.find((artist) => artist.id == song?.artist?.id)?.name ??
 					'unknown artist',
 				song: song?.name,
 				image: song?.cover,
 				level: song?.difficulties.chordcomplexity,
 				lastScore: song?.lastScore,
 				bestScore: song?.bestScore,
-				liked: likedSongs.data?.some(x => x.songId === song.id) ?? false,
+				liked: likedSongs.data?.some(x => x.songId == song.id) ?? false,
 				onLike: () => {
 						mutateAsync({ songId: song.id, like: false }).then(() => likedSongs.refetch());
 					},
