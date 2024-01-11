@@ -13,6 +13,7 @@ import API from '../../API';
 import { useMutation } from 'react-query';
 import LoadingComponent from '../../components/Loading';
 import ErrorView from '../ErrorView';
+import { useLikeSongMutation } from '../../utils/likeSongMutation';
 
 export type searchProps = {
 	artist: number | undefined;
@@ -96,15 +97,12 @@ const SearchView = (props: RouteProps<{}>) => {
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
 	const rawResult = useQuery(API.searchSongs(searchQuery));
 	const userQuery = useQuery(API.getUserInfo());
-	let result: any[] = [];
+	const likedSongs = useQuery(API.getLikedSongs());
+	const { mutateAsync } = useLikeSongMutation();
 
-	const { mutate } = useMutation((songId: number) => API.addLikedSong(songId), {
-		onSuccess: () => {
-			rawResult.refetch();
-		},
-	});
+	let result: any[] = [];;
 
-	if (userQuery.isLoading) {
+	if (userQuery.isLoading || likedSongs.isLoading || userQuery.isLoading) {
 		return <LoadingComponent />;
 	}
 
@@ -123,11 +121,10 @@ const SearchView = (props: RouteProps<{}>) => {
 				level: song?.difficulties.chordcomplexity,
 				lastScore: song?.lastScore,
 				bestScore: song?.bestScore,
-				liked:
-					song?.likedByUsers?.some((user) => user.userId === userQuery.data.id) ?? false,
+				liked: likedSongs.data?.some(x => x.songId === song.id) ?? false,
 				onLike: () => {
-					mutate(song.id);
-				},
+						mutateAsync({ songId: song.id, like: false }).then(() => likedSongs.refetch());
+					},
 				onPlay: () => navigation.navigate('Play', { songId: song.id }),
 			})) ?? [];
 	}
