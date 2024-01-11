@@ -156,7 +156,13 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 									key={index}
 									name={artist.name}
 									onPress={() => {
-										props.onValidate({artist: artist.id, genre: genresQuery.data?.find((g) => g.name === genre)?.id ?? undefined, query: query})
+										props.onValidate({
+											artist: artist.id,
+											genre:
+												genresQuery.data?.find((g) => g.name === genre)
+													?.id ?? undefined,
+											query: query,
+										});
 										setArtist(artist.name);
 									}}
 								/>

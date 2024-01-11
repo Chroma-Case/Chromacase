@@ -10,7 +10,6 @@ import SearchHistory from '../../components/V2/SearchHistory';
 import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import MusicItem from '../../components/UI/MusicItem';
 import API from '../../API';
-import { useMutation } from 'react-query';
 import LoadingComponent from '../../components/Loading';
 import ErrorView from '../ErrorView';
 import { useLikeSongMutation } from '../../utils/likeSongMutation';
@@ -100,7 +99,7 @@ const SearchView = (props: RouteProps<{}>) => {
 	const likedSongs = useQuery(API.getLikedSongs());
 	const { mutateAsync } = useLikeSongMutation();
 
-	let result: any[] = [];;
+	let result: any[] = [];
 
 	if (userQuery.isLoading || likedSongs.isLoading || artistsQuery.isLoading) {
 		return <LoadingComponent />;
@@ -121,10 +120,10 @@ const SearchView = (props: RouteProps<{}>) => {
 				level: song?.difficulties.chordcomplexity,
 				lastScore: song?.lastScore,
 				bestScore: song?.bestScore,
-				liked: likedSongs.data?.some(x => x.songId == song.id) ?? false,
+				liked: likedSongs.data?.some((x) => x.songId == song.id) ?? false,
 				onLike: () => {
-						mutateAsync({ songId: song.id, like: false }).then(() => likedSongs.refetch());
-					},
+					mutateAsync({ songId: song.id, like: false }).then(() => likedSongs.refetch());
+				},
 				onPlay: () => navigation.navigate('Play', { songId: song.id }),
 			})) ?? [];
 	}
