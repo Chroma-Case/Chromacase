@@ -111,21 +111,27 @@ const SearchView = (props: RouteProps<{}>) => {
 
 	if (userQuery.isSuccess) {
 		result =
-			rawResult.data?.map((song) => ({
-				artist:
-					artistsQuery.data?.find((artist) => artist.id == song?.artist?.id)?.name ??
-					'unknown artist',
-				song: song?.name,
-				image: song?.cover,
-				level: song?.difficulties.chordcomplexity,
-				lastScore: song?.lastScore,
-				bestScore: song?.bestScore,
-				liked: likedSongs.data?.some((x) => x.songId == song.id) ?? false,
-				onLike: () => {
-					mutateAsync({ songId: song.id, like: false }).then(() => likedSongs.refetch());
-				},
-				onPlay: () => navigation.navigate('Play', { songId: song.id }),
-			})) ?? [];
+			rawResult.data?.map((song) => {
+				const isLiked = likedSongs.data?.some((x) => x.songId == song.id) ?? false;
+
+				return {
+					artist:
+						artistsQuery.data?.find((artist) => artist.id == song?.artist?.id)?.name ??
+						'unknown artist',
+					song: song?.name,
+					image: song?.cover,
+					level: song?.difficulties.chordcomplexity,
+					lastScore: song?.lastScore,
+					bestScore: song?.bestScore,
+					liked: isLiked,
+					onLike: () => {
+						mutateAsync({ songId: song.id, like: !isLiked }).then(() =>
+							likedSongs.refetch()
+						);
+					},
+					onPlay: () => navigation.navigate('Play', { songId: song.id }),
+				};
+			}) ?? [];
 	}
 
 	return (
