@@ -94,7 +94,15 @@ const SearchView = (props: RouteProps<{}>) => {
 	const navigation = useNavigation();
 	const artistsQuery = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
-	const rawResult = useQuery(API.searchSongs(searchQuery));
+	const rawResult = useQuery(API.searchSongs(searchQuery), {
+		onSuccess() {
+			const artist =
+				artistsQuery?.data?.find(({ id }) => id == searchQuery.artist)?.name ??
+				'unknown artist';
+			searchQuery.query ? API.createSearchHistoryEntry(searchQuery.query, 'song') : null;
+			if (artist != 'unknown artist') API.createSearchHistoryEntry(artist, 'artist');
+		},
+	});
 	const userQuery = useQuery(API.getUserInfo());
 	const likedSongs = useQuery(API.getLikedSongs());
 	const { mutateAsync } = useLikeSongMutation();
