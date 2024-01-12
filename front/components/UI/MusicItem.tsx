@@ -184,8 +184,6 @@ function MusicItemComponent(props: MusicItemType) {
 	);
 }
 
-// Using `memo` to optimize rendering performance by memorizing the component's output.
-// This ensures that the component only re-renders when its props change.
 const MusicItem = memo(MusicItemComponent);
 
 export default MusicItem;
