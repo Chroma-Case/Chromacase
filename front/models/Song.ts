@@ -35,6 +35,7 @@ export const SongValidator = yup
 				yup.array(yup.object({ userId: yup.number().required() })).default(undefined)
 			)
 			.optional(),
+		isLiked: yup.bool().optional(),
 	})
 	.concat(ModelValidator)
 	.transform((song: Song) => ({
@@ -53,6 +54,7 @@ export const SongValidator = yup
 						yup.date().cast(b.playDate)!.getTime()
 				)
 				.at(0)?.info.score ?? null,
+		isLiked: song.likedByUsers?.some(() => true),
 	}));
 
 export type Song = yup.InferType<typeof SongValidator>;
