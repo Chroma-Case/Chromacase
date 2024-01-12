@@ -317,7 +317,7 @@ export class AuthController {
 	@ApiOkResponse({ description: "Successfully added score" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	@Patch("me/score/:score")
-	addScore(@Request() req: any, @Param("id") score: number) {
+	addScore(@Request() req: any, @Param("score") score: number) {
 		return this.usersService.addScore(+req.user.id, score);
 	}
 }
