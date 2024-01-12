@@ -116,7 +116,7 @@ const SearchView = (props: RouteProps<{}>) => {
 
 				return {
 					artist:
-						artistsQuery.data?.find((artist) => artist.id == song?.artist?.id)?.name ??
+						artistsQuery?.data?.find(({ id }) => id == song?.artistId)?.name ??
 						'unknown artist',
 					song: song?.name,
 					image: song?.cover,

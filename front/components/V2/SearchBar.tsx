@@ -66,7 +66,7 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 					borderBottomColor: '#9E9E9E',
 					display: 'flex',
 					flexDirection: isMobileView ? 'column' : 'row',
-					alignItems: 'center',
+					maxWidth: '100%',
 					width: '100%',
 					margin: 5,
 					padding: 16,
@@ -78,7 +78,8 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 						flexGrow: 0,
 						flexShrink: 0,
 						flexDirection: 'row',
-						flexWrap: 'wrap',
+						flexWrap: 'nowrap',
+						maxWidth: '100%',
 					}}
 				>
 					{artist && (
@@ -91,36 +92,26 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 				</View>
 				<View
 					style={{
+						flex: 1,
 						display: 'flex',
 						flexDirection: 'row',
-						justifyContent: 'space-between',
 						alignItems: 'center',
-						flexGrow: 1,
-						width: '100%',
 					}}
 				>
-					<View
-						style={{
-							flexGrow: 1,
-							flexShrink: 1,
-						}}
-					>
+					<View style={{ flex: 1 }}>
 						<Input
 							type="text"
 							value={query}
 							variant={'unstyled'}
 							placeholder={translate('searchBarPlaceholder')}
-							style={{ width: '100%', height: 30 }}
+							style={{ height: 30 }}
 							onChangeText={(value) => setQuery(value)}
 						/>
 					</View>
 					<ButtonBase
 						type="menu"
 						icon={SearchNormal1}
-						style={{
-							flexShrink: 0,
-							flexGrow: 0,
-						}}
+						style={{}}
 						onPress={handleValidate}
 					/>
 				</View>
