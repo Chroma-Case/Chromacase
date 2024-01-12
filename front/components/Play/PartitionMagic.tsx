@@ -8,20 +8,16 @@ import { Audio } from 'expo-av';
 import { SvgContainer } from './SvgContainer';
 import LoadingComponent from '../Loading';
 import { SplendidGrandPiano } from 'smplr';
+import { atom, useAtom } from 'jotai';
+
+export const timestampAtom = atom(0);
+export const shouldPlayAtom = atom(false);
+export const partitionStateAtom = atom(
+	'loading' as 'loading' | 'ready' | 'playing' | 'paused' | 'ended' | 'error'
+);
 
 export type ParitionMagicProps = {
-	timestamp: number;
 	songID: number;
-	shouldPlay: boolean;
-	onEndReached: () => void;
-	onError: (err: string) => void;
-	onReady: () => void;
-	onPlay: () => void;
-	onPause: () => void;
-};
-
-const getSVGURL = (songID: number) => {
-	return API.getPartitionSvgUrl(songID);
 };
 
 const getCursorToPlay = (
@@ -43,16 +39,7 @@ const getCursorToPlay = (
 
 const transitionDuration = 50;
 
-const PartitionMagic = ({
-	timestamp,
-	songID,
-	shouldPlay,
-	onEndReached,
-	onError,
-	onReady,
-	onPlay,
-	onPause,
-}: ParitionMagicProps) => {
+const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const currentCurIdx = React.useRef(-1);
 	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
@@ -61,6 +48,9 @@ const PartitionMagic = ({
 	const melodySound = React.useRef<Audio.Sound | null>(null);
 	const piano = React.useRef<SplendidGrandPiano | null>(null);
 	const [isPianoLoaded, setIsPianoLoaded] = React.useState(false);
+	const timestamp = useAtom(timestampAtom)[0];
+	const shouldPlay = useAtom(shouldPlayAtom)[0];
+	const [, setPartitionState] = useAtom(partitionStateAtom);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
@@ -75,7 +65,8 @@ const PartitionMagic = ({
 	if (!endPartitionReached && currentCurIdx.current + 1 === data?.cursors.length) {
 		// weird contraption but the mobile don't want classic functions to be called
 		// with the withTiming function :(
-		setEndPartitionReached(true);
+		melodySound.current?.pauseAsync();
+		setPartitionState('ended');
 	}
 
 	React.useEffect(() => {
@@ -115,15 +106,14 @@ const PartitionMagic = ({
 	}, [data]);
 
 	React.useEffect(() => {
-		if (onError && isError) {
-			onError('Error while loading partition');
-			return;
+		if (isError) {
+			setPartitionState('error');
 		}
-	}, [onError, isError]);
+	}, [isError]);
 
 	React.useEffect(() => {
 		if (isPartitionSvgLoaded && !isLoading && (melodySound.current?._loaded || isPianoLoaded)) {
-			onReady();
+			setPartitionState('ready');
 		}
 	}, [isPartitionSvgLoaded, isLoading, melodySound.current?._loaded, isPianoLoaded]);
 
@@ -132,26 +122,28 @@ const PartitionMagic = ({
 			if (!piano.current || !isPianoLoaded) {
 				return;
 			}
-			shouldPlay ? onPlay() : onPause();
+			setPartitionState(shouldPlay ? 'playing' : 'paused');
 			return;
 		}
 		if (!melodySound.current || !melodySound.current._loaded) {
 			return;
 		}
 		if (shouldPlay) {
-			melodySound.current.playAsync().then(onPlay).catch(console.error);
+			melodySound.current
+				.playAsync()
+				.then(() => {
+					setPartitionState('playing');
+				})
+				.catch(console.error);
 		} else {
-			melodySound.current.pauseAsync().then(onPause).catch(console.error);
+			melodySound.current
+				.pauseAsync()
+				.then(() => {
+					setPartitionState('paused');
+				})
+				.catch(console.error);
 		}
 	}, [shouldPlay]);
-
-	React.useEffect(() => {
-		if (endPartitionReached) {
-			// if the audio is unsync
-			melodySound.current?.pauseAsync();
-			onEndReached();
-		}
-	}, [endPartitionReached]);
 
 	React.useEffect(() => {
 		if (!melodySound.current || !melodySound.current._loaded) return;
@@ -249,7 +241,7 @@ const PartitionMagic = ({
 					}}
 				>
 					<SvgContainer
-						url={getSVGURL(songID)}
+						url={API.getPartitionSvgUrl(songID)}
 						onReady={() => {
 							setIsPartitionSvgLoaded(true);
 						}}
@@ -275,13 +267,6 @@ const PartitionMagic = ({
 			</View>
 		</View>
 	);
-};
-
-PartitionMagic.defaultProps = {
-	onError: () => {},
-	onReady: () => {},
-	onPlay: () => {},
-	onPause: () => {},
 };
 
 export default PartitionMagic;

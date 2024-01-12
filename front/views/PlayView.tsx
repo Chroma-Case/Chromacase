@@ -374,7 +374,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						position: 'absolute',
 					}}
 				>
-					<PlayScore score={score} streak={streak} message={lastScoreMessage} />
+					<PlayScore />
 				</View>
 				<View
 					style={{
@@ -386,23 +386,21 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					}}
 				>
 					<PartitionMagic
-						shouldPlay={shouldPlay}
-						timestamp={time}
 						songID={song.data.id}
-						onEndReached={() => {
-							setTimeout(() => {
-								onEnd();
-							}, 200);
-						}}
-						onError={() => {
-							console.log('error from partition magic');
-						}}
-						onReady={() => {
-							console.log('ready from partition magic');
-							setReadyToPlay(true);
-						}}
-						onPlay={onResume}
-						onPause={onPause}
+						// onEndReached={() => {
+						// 	setTimeout(() => {
+						// 		onEnd();
+						// 	}, 200);
+						// }}
+						// onError={() => {
+						// 	console.log('error from partition magic');
+						// }}
+						// onReady={() => {
+						// 	console.log('ready from partition magic');
+						// 	setReadyToPlay(true);
+						// }}
+						// onPlay={onResume}
+						// onPause={onPause}
 					/>
 				</View>
 				<PlayViewControlBar

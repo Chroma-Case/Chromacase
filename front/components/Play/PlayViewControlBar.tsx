@@ -6,33 +6,27 @@ import { MetronomeControls } from '../Metronome';
 import StarProgress from '../StarProgress';
 import Song from '../../models/Song';
 import { useTheme } from 'native-base';
+import { atom, useAtom } from 'jotai';
+import { partitionStateAtom, shouldPlayAtom } from './PartitionMagic';
+import { TimestampDisplay } from './PartitionTimestampText';
+
+export const shouldEndAtom = atom(false);
 
 type PlayViewControlBarProps = {
 	song: Song;
-	time: number;
-	paused: boolean;
-	score: number;
-	disabled: boolean;
-	onResume: () => void;
-	onPause: () => void;
-	onEnd: () => void;
 };
 
-const PlayViewControlBar = ({
-	song,
-	time,
-	paused,
-	score,
-	disabled,
-	onResume,
-	onPause,
-	onEnd,
-}: PlayViewControlBarProps) => {
+const PlayViewControlBar = ({ song }: PlayViewControlBarProps) => {
+	const [, setShouldPlay] = useAtom(shouldPlayAtom);
+	const [partitionState] = useAtom(partitionStateAtom);
+	const [, setShouldEnd] = useAtom(shouldEndAtom);
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isPhone = screenSize === 'small';
 	const bpm = React.useRef<number>(60);
 	const { colors } = useTheme();
 	const textColor = colors.text;
+	const paused = partitionState === 'paused';
+	const disabled = partitionState === 'loading' || partitionState === 'error';
 	return (
 		<Row
 			style={{
@@ -116,7 +110,7 @@ const PlayViewControlBar = ({
 						color: colors.coolGray[900],
 						name: paused ? 'play' : 'pause',
 					}}
-					onPress={paused ? onResume : onPause}
+					onPress={() => setShouldPlay(paused)}
 				/>
 				<IconButton
 					size="sm"
@@ -126,22 +120,10 @@ const PlayViewControlBar = ({
 						as: Ionicons,
 						name: 'stop',
 					}}
-					onPress={onEnd}
+					onPress={() => setShouldEnd(true)}
 				/>
-				<Text color={textColor[900]}>
-					{time < 0
-						? paused
-							? '0:00'
-							: Math.floor((time % 60000) / 1000)
-									.toFixed(0)
-									.toString()
-						: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000)
-								.toFixed(0)
-								.toString()
-								.padStart(2, '0')}`}
-				</Text>
+				<TimestampDisplay />
 				<StarProgress
-					value={score}
 					max={100}
 					starSteps={[50, 75, 90]}
 					style={{
@@ -166,13 +148,6 @@ const PlayViewControlBar = ({
 			</View>
 		</Row>
 	);
-};
-
-PlayViewControlBar.defaultProps = {
-	onResume: () => {},
-	onPause: () => {},
-	onEnd: () => {},
-	disabled: false,
 };
 
 export default PlayViewControlBar;

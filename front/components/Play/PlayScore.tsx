@@ -10,20 +10,21 @@ import Animated, {
 	Easing,
 } from 'react-native-reanimated';
 import { ColorSchemeType } from 'native-base/lib/typescript/components/types';
+import { atom, useAtom } from 'jotai';
+
+export const scoreMessageAtom = atom<ScoreMessage | null>(null);
+export const scoreAtom = atom(0);
 
 export type ScoreMessage = {
 	content: string;
 	color?: ColorSchemeType;
-	id: number;
-};
-
-type PlayScoreProps = {
-	score: number;
+	timestamp: number;
 	streak: number;
-	message?: ScoreMessage;
 };
 
-export const PlayScore = ({ score, streak, message }: PlayScoreProps) => {
+export const PlayScore = () => {
+	const [message] = useAtom(scoreMessageAtom);
+	const [score] = useAtom(scoreAtom);
 	const scoreMessageScale = useSharedValue(0);
 	// this style should bounce in on enter and fade away
 	const scoreMsgStyle = useAnimatedStyle(() => {
@@ -92,9 +93,9 @@ export const PlayScore = ({ score, streak, message }: PlayScoreProps) => {
 						<Text color={textColor[900]} fontSize={20}>
 							{message.content}
 						</Text>
-						{streak > 0 && (
+						{message.streak > 0 && (
 							<Text color={textColor[900]} fontSize={15} bold>
-								{`x${streak}`}
+								{`x${message.streak}`}
 							</Text>
 						)}
 					</View>

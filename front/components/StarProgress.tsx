@@ -2,15 +2,17 @@ import * as React from 'react';
 import { Progress } from 'native-base';
 import { View, ViewStyle, StyleProp } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { scoreAtom } from './Play/PlayScore';
+import { useAtom } from 'jotai';
 
 export interface StarProgressProps {
-	value: number;
 	max: number;
 	starSteps: number[];
 	style?: StyleProp<ViewStyle>;
 }
 
 const StarProgress = (props: StarProgressProps) => {
+	const [score] = useAtom(scoreAtom);
 	return (
 		<View
 			style={[
@@ -29,15 +31,15 @@ const StarProgress = (props: StarProgressProps) => {
 				style={{
 					flex: 1,
 				}}
-				value={props.value}
+				value={score}
 				max={props.max}
 			/>
 			{props.starSteps.map((step) => {
 				return (
 					<Ionicons
 						key={step}
-						name={step <= props.value ? 'star' : 'star-outline'}
-						color={step <= props.value ? '#EBDA3C' : '#6075F9'}
+						name={step <= score ? 'star' : 'star-outline'}
+						color={step <= score ? '#EBDA3C' : '#6075F9'}
 						size={20}
 						style={{
 							position: 'absolute',
