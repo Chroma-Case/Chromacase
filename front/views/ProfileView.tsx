@@ -34,7 +34,12 @@ const ProfileView = () => {
 	const isBigScreen = layout.width > 650;
 
 	return (
-		<Flex flex={1}>
+		<Flex
+			flex={1}
+			style={{
+				padding: 8,
+			}}
+		>
 			<View
 				style={{
 					display: 'flex',
@@ -68,9 +73,15 @@ const ProfileView = () => {
 							flexDirection: 'row',
 							alignItems: 'center',
 							justifyContent: 'space-between',
+							gap: 5,
 						}}
 					>
-						<Text fontSize={'xl'} style={{ paddingRight: 'auto' }}>
+						<Text
+							fontSize={'xl'}
+							isTruncated
+							numberOfLines={2}
+							style={{ flexShrink: 1 }}
+						>
 							{userQuery.data.name}
 						</Text>
 						<ButtonBase
