@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react';
 import { FlatList, HStack, useBreakpointValue, useTheme, Text, Row } from 'native-base';
-import { RouteProps, useNavigation } from '../../Navigation';
+import { useNavigation } from '../../Navigation';
 import { ArrowRotateLeft, Cup } from 'iconsax-react-native';
 import { View, StyleSheet } from 'react-native';
 import { useQuery } from '../../Queries';
 import { translate } from '../../i18n/i18n';
 import SearchBarComponent from '../../components/V2/SearchBar';
 import SearchHistory from '../../components/V2/SearchHistory';
-import ScaffoldCC from '../../components/UI/ScaffoldCC';
 import MusicItem from '../../components/UI/MusicItem';
 import API from '../../API';
 import LoadingComponent from '../../components/Loading';
@@ -90,7 +89,7 @@ const MusicListNoOpti = ({ list }: { list: any[] }) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const SearchView = (props: RouteProps<{}>) => {
+const SearchView = () => {
 	const navigation = useNavigation();
 	const artistsQuery = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
@@ -143,12 +142,10 @@ const SearchView = (props: RouteProps<{}>) => {
 	}
 
 	return (
-		<ScaffoldCC routeName={props.route.name}>
 			<View style={{ display: 'flex', gap: 20 }}>
 				<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
 				{result.length != 0 ? <MusicListNoOpti list={result} /> : <SearchHistory />}
 			</View>
-		</ScaffoldCC>
 	);
 };
 

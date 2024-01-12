@@ -17,7 +17,7 @@ const VerifiedView = () => {
 					route: `/auth/verify?token=${(route.params as any).token}`,
 					method: 'PUT',
 				});
-				navigation.navigate('Home', {});
+				navigation.navigate('Home');
 			} catch {
 				setFailed(true);
 			}

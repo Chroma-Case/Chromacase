@@ -14,7 +14,7 @@ const ProgressBar = ({ xp }: { xp: number }) => {
 	const nav = useNavigation();
 
 	return (
-		<Card w="100%" onPress={() => nav.navigate('User', {})}>
+		<Card w="100%" onPress={() => nav.navigate('User')}>
 			<Stack padding={4} space={2} direction="row" alignItems="center">
 				<UserAvatar />
 				<VStack alignItems={'center'} flexGrow={1} space={2}>

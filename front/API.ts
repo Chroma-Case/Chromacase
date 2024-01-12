@@ -721,5 +721,9 @@ export default class API {
 				);
 			},
 		};
+    }
+
+	public static getPartitionMelodyUrl(songId: number): string {
+		return `${API.baseUrl}/song/${songId}/assets/melody`;
 	}
 }

@@ -67,6 +67,7 @@ services:
       - NGINX_PORT=4567
     ports:
       - "19006:19006"
+      - "8081:8081"
     volumes:
       - ./front:/app
     depends_on:

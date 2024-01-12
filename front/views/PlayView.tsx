@@ -1,18 +1,9 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { StackActions } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView, Platform } from 'react-native';
-import Animated, {
-	useSharedValue,
-	withTiming,
-	Easing,
-	useAnimatedStyle,
-	withSequence,
-	withDelay,
-} from 'react-native-reanimated';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { Text, Row, View, useToast } from 'native-base';
-import { RouteProps, useNavigation } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
@@ -33,14 +24,10 @@ import ButtonBase from '../components/UI/ButtonBase';
 import { Clock, Cup } from 'iconsax-react-native';
 import PlayViewControlBar from '../components/Play/PlayViewControlBar';
 import ScoreModal from '../components/ScoreModal';
+import { PlayScore, ScoreMessage } from '../components/Play/PlayScore';
 
 type PlayViewProps = {
 	songId: number;
-};
-
-type ScoreMessage = {
-	content: string;
-	color?: ColorSchemeType;
 };
 
 // this a hot fix this should be reverted soon
@@ -68,7 +55,7 @@ function parseMidiMessage(message: MIDIMessageEvent) {
 	};
 }
 
-const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
+const PlayView = ({ songId }: PlayViewProps) => {
 	const [playType, setPlayType] = useState<'practice' | 'normal' | null>(null);
 	const accessToken = useSelector((state: RootState) => state.user.accessToken);
 	const navigation = useNavigation();
@@ -82,25 +69,18 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 	const stopwatch = useStopwatch();
 	const [time, setTime] = useState(0);
 	const [endResult, setEndResult] = useState<unknown>();
+	const [shouldPlay, setShouldPlay] = useState(false);
 	const songHistory = useQuery(API.getSongHistory(songId));
 	const [score, setScore] = useState(0); // Between 0 and 100
-	// const fadeAnim = useRef(new Animated.Value(0)).current;
-	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
+	const getElapsedTime = () => stopwatch.getElapsedRunningTime();
+	const [readyToPlay, setReadyToPlay] = useState(false);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [streak, setStreak] = useState(0);
-	const scoreMessageScale = useSharedValue(0);
-	// this style should bounce in on enter and fade away
-	const scoreMsgStyle = useAnimatedStyle(() => {
-		return {
-			transform: [{ scale: scoreMessageScale.value }],
-		};
-	});
 	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
-	const textColor = colors.text;
 	const statColor = colors.lightText;
 
 	const onPause = () => {
@@ -130,11 +110,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 			})
 		);
 	};
+
 	const onEnd = () => {
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {
 			console.warn('onEnd: Websocket not open');
-			navigation.dispatch(StackActions.replace('Home', {}));
+			navigation.replace('Tabs', { screen: 'Home' });
 			return;
 		}
 		webSocket.current?.send(
@@ -226,7 +207,11 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 							break;
 					}
 				}
-				setLastScoreMessage({ content: formattedMessage, color: messageColor });
+				setLastScoreMessage({
+					content: formattedMessage,
+					color: messageColor,
+					id: (lastScoreMessage?.id ?? 0) + 1,
+				});
 			} catch (e) {
 				console.error(e);
 			}
@@ -263,27 +248,11 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 			clearInterval(interval);
 		};
 	}, []);
-	useEffect(() => {
-		if (lastScoreMessage) {
-			scoreMessageScale.value = withSequence(
-				withTiming(1, {
-					duration: 400,
-					easing: Easing.elastic(3),
-				}),
-				withDelay(
-					700,
-					withTiming(0, {
-						duration: 300,
-						easing: Easing.out(Easing.cubic),
-					})
-				)
-			);
-		}
-	}, [lastScoreMessage]);
+
 	useEffect(() => {
 		// Song.data is updated on navigation.navigate (do not know why)
 		// Hotfix to prevent midi setup process from reruning on game end
-		if (navigation.getState().routes.at(-1)?.name != route.name) {
+		if (navigation.getState().routes.at(-1)?.name != 'Play') {
 			return;
 		}
 		if (playType && song.data && !webSocket.current) {
@@ -362,12 +331,12 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 							[
 								'lastScore',
 								songHistory.data?.history.at(0)?.score ?? 0,
-								() => <Clock color={statColor} />,
+								<Clock key={'lS'} color={statColor} />,
 							] as const,
 							[
 								'bestScore',
 								songHistory.data?.best ?? 0,
-								() => <Cup color={statColor} />,
+								<Cup key={'bS'} color={statColor} />,
 							],
 						] as const
 					).map(([label, value, icon]) => (
@@ -388,7 +357,7 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 									gap: 5,
 								}}
 							>
-								{icon()}
+								{icon}
 								<Text color={statColor} fontSize={12} bold>
 									{value}
 								</Text>
@@ -402,48 +371,10 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 						left: 0,
 						zIndex: 100,
 						width: '100%',
-						display: 'flex',
-						flexDirection: 'column',
-						justifyContent: 'center',
-						alignItems: 'center',
-						gap: 3,
 						position: 'absolute',
 					}}
 				>
-					<View
-						style={{
-							backgroundColor: 'rgba(16, 16, 20, 0.8)',
-							paddingHorizontal: 20,
-							paddingVertical: 5,
-							borderRadius: 12,
-						}}
-					>
-						<Text color={textColor[900]} fontSize={24}>
-							{score}
-						</Text>
-					</View>
-					<Animated.View style={[scoreMsgStyle]}>
-						<View
-							style={{
-								display: 'flex',
-								flexDirection: 'row',
-								gap: 7,
-								justifyContent: 'center',
-								alignItems: 'center',
-								backgroundColor: 'rgba(16, 16, 20, 0.8)',
-								paddingHorizontal: 20,
-								paddingVertical: 5,
-								borderRadius: 12,
-							}}
-						>
-							<Text color={textColor[900]} fontSize={20}>
-								{lastScoreMessage?.content}
-							</Text>
-							<Text color={textColor[900]} fontSize={15} bold>
-								{streak > 0 && `x${streak}`}
-							</Text>
-						</View>
-					</Animated.View>
+					<PlayScore score={score} streak={streak} message={lastScoreMessage} />
 				</View>
 				<View
 					style={{
@@ -455,57 +386,39 @@ const PlayView = ({ songId, route }: RouteProps<PlayViewProps>) => {
 					}}
 				>
 					<PartitionMagic
+						shouldPlay={shouldPlay}
 						timestamp={time}
 						songID={song.data.id}
 						onEndReached={() => {
 							setTimeout(() => {
 								onEnd();
-							}, 500);
+							}, 200);
 						}}
 						onError={() => {
 							console.log('error from partition magic');
 						}}
+						onReady={() => {
+							console.log('ready from partition magic');
+							setReadyToPlay(true);
+						}}
+						onPlay={onResume}
+						onPause={onPause}
 					/>
 				</View>
 				<PlayViewControlBar
 					score={score}
 					time={time}
 					paused={paused}
+					disabled={playType == null || !readyToPlay}
 					song={song.data}
 					onEnd={onEnd}
-					onPause={onPause}
-					onResume={onResume}
+					onPause={() => {
+						setShouldPlay(false);
+					}}
+					onResume={() => {
+						setShouldPlay(true);
+					}}
 				/>
-				<PopupCC
-					title={translate('selectPlayMode')}
-					description={translate('selectPlayModeExplaination')}
-					isVisible={!playType}
-					setIsVisible={
-						navigation.canGoBack()
-							? (isVisible) => {
-									if (!isVisible) {
-										// If we dismiss the popup, Go to previous page
-										navigation.goBack();
-									}
-							  }
-							: undefined
-					}
-				>
-					<Row style={{ justifyContent: 'space-between' }}>
-						<ButtonBase
-							style={{}}
-							type="outlined"
-							title={translate('practiceBtn')}
-							onPress={async () => setPlayType('practice')}
-						/>
-						<ButtonBase
-							style={{}}
-							type="filled"
-							title={translate('playBtn')}
-							onPress={async () => setPlayType('normal')}
-						/>
-					</Row>
-				</PopupCC>
 			</SafeAreaView>
 			{colorScheme === 'dark' && (
 				<LinearGradient

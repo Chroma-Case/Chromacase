@@ -5,8 +5,9 @@ pkgs.mkShell {
     nodePackages.prisma
     nodePackages."@nestjs/cli"
     nodePackages.npm
+    nodePackages.eas-cli
     eslint_d
-    nodejs_16
+    nodejs_18
     yarn
     (python3.withPackages (ps: with ps; [requests mido]))
     pkg-config

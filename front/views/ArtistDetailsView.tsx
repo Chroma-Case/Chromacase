@@ -5,7 +5,7 @@ import API from '../API';
 import Song from '../models/Song';
 import SongRow from '../components/SongRow';
 import { Key } from 'react';
-import { RouteProps, useNavigation } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import { ImageBackground } from 'react-native';
 import { useLikeSongMutation } from '../utils/likeSongMutation';
 
@@ -13,7 +13,7 @@ type ArtistDetailsViewProps = {
 	artistId: number;
 };
 
-const ArtistDetailsView = ({ artistId }: RouteProps<ArtistDetailsViewProps>) => {
+const ArtistDetailsView = ({ artistId }: ArtistDetailsViewProps) => {
 	const artistQuery = useQuery(API.getArtist(artistId));
 	const songsQuery = useQuery(API.getSongsByArtist(artistId));
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });

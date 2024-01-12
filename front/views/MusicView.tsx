@@ -1,5 +1,5 @@
 import React from 'react';
-import { Center, useBreakpointValue, useTheme } from 'native-base';
+import { useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
 	TabView,
@@ -11,105 +11,82 @@ import {
 } from 'react-native-tab-view';
 import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import { RouteProps, useNavigation } from '../Navigation';
+import { useNavigation } from '../Navigation';
 import { Translate, TranslationKey } from '../i18n/i18n';
-import ScaffoldCC from '../components/UI/ScaffoldCC';
 import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
 import API from '../API';
 import { LoadingView } from '../components/Loading';
 import { useLikeSongMutation } from '../utils/likeSongMutation';
+import Song from '../models/Song';
 
-export const FavoritesMusic = () => {
+type MusicListCCProps = {
+	data: Song[] | undefined;
+	isLoading: boolean;
+	refetch: () => void;
+};
+
+const MusicListCC = ({ data, isLoading, refetch }: MusicListCCProps) => {
 	const navigation = useNavigation();
-	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory']));
 	const { mutateAsync } = useLikeSongMutation();
+	const user = useQuery(API.getUserInfo);
 
-	const musics =
-		likedSongs.data?.map((x) => ({
-			artist: x.song.artist!.name,
-			song: x.song.name,
-			image: x.song.cover,
-			lastScore: x.song.lastScore,
-			bestScore: x.song.bestScore,
-			liked: true,
-			onLike: () => {
-				mutateAsync({ songId: x.song.id, like: false }).then(() => likedSongs.refetch());
+	const musics = (data ?? []).map((song) => {
+		const isLiked = song.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false;
+
+		return {
+			artist: song.artist!.name,
+			song: song.name,
+			image: song.cover,
+			lastScore: song.lastScore,
+			bestScore: song.bestScore,
+			liked: isLiked,
+			onLike: (state: boolean) => {
+				mutateAsync({ songId: song.id, like: state }).then(() => refetch());
 			},
-			onPlay: () => navigation.navigate('Play', { songId: x.song.id }),
-		})) ?? [];
+			onPlay: () => navigation.navigate('Play', { songId: song.id }),
+		};
+	});
 
-	if (likedSongs.isLoading) {
+	if (isLoading) {
 		return <LoadingView />;
 	}
+
+	return <MusicList initialMusics={musics} musicsPerPage={25} />;
+};
+
+const FavoritesMusic = () => {
+	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory', 'likedByUsers']));
 	return (
-		<>
-			{/* <View style={{margin: 30}}>
-				<InteractiveCC
-					// duration={80}
-					styleContainer={{
-						borderRadius: 10,
-					}}
-					style={{
-						width: '100%',
-						paddingHorizontal: 20,
-						paddingVertical: 10,
-						// borderRadius: 10,
-					}}
-					defaultStyle={{
-						transform: [{ scale: 1,}],
-						shadowOpacity: 0.3,
-						shadowRadius: 4.65,
-						elevation: 8,
-						backgroundColor: colors.primary[300],
-					}}
-					hoverStyle={{
-						transform: [{ scale: 1.02,}],
-						shadowOpacity: 0.37,
-						shadowRadius: 7.49,
-						elevation: 12,
-						backgroundColor: colors.primary[400],
-					}}
-					pressStyle={{
-						transform: [{ scale: 0.98,}],
-						shadowOpacity: 0.23,
-						shadowRadius: 2.62,
-						elevation: 4,
-						backgroundColor: colors.primary[500],
-					}}
-					onPress={() => console.log("A que coucou!")}
-				>
-					<Text selectable={false} style={{color: '#fff'}}>
-						Coucou
-					</Text>
-				</InteractiveCC>
-				<ButtonBase
-					title="Coucou"
-					style={{ marginTop: 20 }}
-					type={'filled'}
-				/>
-			</View> */}
-			<MusicList
-				initialMusics={musics}
-				// musicsPerPage={7}
-			/>
-		</>
+		<MusicListCC
+			data={likedSongs.data?.map((x) => x.song)}
+			isLoading={likedSongs.isLoading}
+			refetch={likedSongs.refetch}
+		/>
 	);
 };
 
-export const RecentlyPlayedMusic = () => {
+const RecentlyPlayedMusic = () => {
+	const playHistory = useQuery(API.getUserPlayHistory(['artist', 'SongHistory', 'likedByUsers']));
 	return (
-		<Center style={{ flex: 1 }}>
-			<Translate translationKey="recentlyPlayed" />
-		</Center>
+		<MusicListCC
+			data={
+				playHistory.data?.filter((x) => x.song !== undefined).map((x) => x.song) as Song[]
+			}
+			isLoading={playHistory.isLoading}
+			refetch={playHistory.refetch}
+		/>
 	);
 };
 
-export const StepUpMusic = () => {
+const StepUpMusic = () => {
+	const nextStep = useQuery(API.getSongSuggestions(['artist', 'SongHistory', 'likedByUsers']));
 	return (
-		<Center style={{ flex: 1 }}>
-			<Translate translationKey="musicTabStepUp" />
-		</Center>
+		<MusicListCC
+			data={nextStep.data ?? []}
+			isLoading={nextStep.isLoading}
+			refetch={nextStep.refetch}
+		/>
 	);
 };
 
@@ -132,7 +109,7 @@ const getTabData = (key: string) => {
 	}
 };
 
-const MusicTab = (props: RouteProps<object>) => {
+const MusicTab = () => {
 	const layout = useWindowDimensions();
 	const [index, setIndex] = React.useState(0);
 	const { colors } = useTheme();
@@ -184,22 +161,20 @@ const MusicTab = (props: RouteProps<object>) => {
 	);
 
 	return (
-		<ScaffoldCC routeName={props.route.name} withPadding={false}>
-			<TabView
-				sceneContainerStyle={{
-					flex: 1,
-					alignSelf: 'center',
-					padding: isSmallScreen ? 8 : 20,
-					paddingTop: 32,
-					width: '100%',
-				}}
-				renderTabBar={renderTabBar}
-				navigationState={{ index, routes }}
-				renderScene={renderScene}
-				onIndexChange={setIndex}
-				initialLayout={{ width: layout.width }}
-			/>
-		</ScaffoldCC>
+		<TabView
+			sceneContainerStyle={{
+				flex: 1,
+				alignSelf: 'center',
+				padding: isSmallScreen ? 8 : 20,
+				paddingTop: 32,
+				width: '100%',
+			}}
+			renderTabBar={renderTabBar}
+			navigationState={{ index, routes }}
+			renderScene={renderScene}
+			onIndexChange={setIndex}
+			initialLayout={{ width: layout.width }}
+		/>
 	);
 };
 

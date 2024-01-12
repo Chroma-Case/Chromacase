@@ -5,6 +5,7 @@ import { Animated, StyleProp, ViewStyle } from 'react-native';
 interface InteractiveBaseProps {
 	children?: React.ReactNode;
 	onPress?: () => Promise<void>;
+	onLongPress?: () => Promise<void>;
 	isDisabled?: boolean;
 	isOutlined?: boolean;
 	focusable?: boolean;
@@ -44,6 +45,7 @@ interface InteractiveBaseProps {
 const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 	children,
 	onPress,
+	onLongPress,
 	style,
 	styleAnimate,
 	isDisabled = false,
@@ -183,10 +185,6 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 				useNativeDriver: false,
 			}),
 		]).start();
-
-		if (onPress && !isDisabled) {
-			onPress();
-		}
 	};
 	// Mouse Leave
 	const handleMouseLeave = () => {
@@ -248,6 +246,8 @@ const InteractiveBase: React.FC<InteractiveBaseProps> = ({
 				onPressIn={handlePressIn}
 				onPressOut={handlePressOut}
 				onHoverOut={handleMouseLeave}
+				onPress={onPress}
+				onLongPress={onLongPress}
 			>
 				{children}
 			</Pressable>

@@ -30,7 +30,7 @@ type IconButtonProps = {
 	/**
 	 * Callback function triggered when the button is pressed.
 	 */
-	onPress?: () => void | Promise<void>;
+	onPress?: (state: boolean) => void | Promise<void>;
 
 	/**
 	 * Size of the icon.
@@ -183,7 +183,7 @@ const IconButton: React.FC<IconButtonProps> = ({
 	const toggleState = async () => {
 		// Execute onPress if provided.
 		if (onPress) {
-			await onPress();
+			await onPress(!isActiveState);
 		}
 
 		// Toggle isActiveState.

@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import * as React from 'react';
-import { Row, Image, Text, Icon, useBreakpointValue } from 'native-base';
-import IconButton from '../IconButton';
+import { Row, Image, Text, useBreakpointValue, IconButton } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { MetronomeControls } from '../Metronome';
 import StarProgress from '../StarProgress';
@@ -112,30 +111,22 @@ const PlayViewControlBar = ({
 					size="sm"
 					variant="solid"
 					disabled={disabled}
-					icon={
-						<Icon
-							as={Ionicons}
-							color={colors.coolGray[900]}
-							name={paused ? 'play' : 'pause'}
-						/>
-					}
-					onPress={() => {
-						if (paused) {
-							onResume();
-						} else {
-							onPause();
-						}
+					_icon={{
+						as: Ionicons,
+						color: colors.coolGray[900],
+						name: paused ? 'play' : 'pause',
 					}}
+					onPress={paused ? onResume : onPause}
 				/>
 				<IconButton
 					size="sm"
 					colorScheme="coolGray"
 					variant="solid"
-					disabled={disabled}
-					icon={<Icon as={Ionicons} name="stop" />}
-					onPress={() => {
-						onEnd();
+					_icon={{
+						as: Ionicons,
+						name: 'stop',
 					}}
+					onPress={onEnd}
 				/>
 				<Text color={textColor[900]}>
 					{time < 0

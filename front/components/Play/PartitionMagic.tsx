@@ -1,21 +1,23 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
 import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
-import { PianoNotes } from '../../state/SoundPlayerSlice';
 import { Audio } from 'expo-av';
 import { SvgContainer } from './SvgContainer';
 import LoadingComponent from '../Loading';
+import { SplendidGrandPiano } from 'smplr';
 
-// note we are also using timestamp in a context
 export type ParitionMagicProps = {
 	timestamp: number;
 	songID: number;
+	shouldPlay: boolean;
 	onEndReached: () => void;
-	onError?: (err: string) => void;
-	onReady?: () => void;
+	onError: (err: string) => void;
+	onReady: () => void;
+	onPlay: () => void;
+	onPause: () => void;
 };
 
 const getSVGURL = (songID: number) => {
@@ -39,19 +41,26 @@ const getCursorToPlay = (
 	}
 };
 
+const transitionDuration = 50;
+
 const PartitionMagic = ({
 	timestamp,
 	songID,
+	shouldPlay,
 	onEndReached,
 	onError,
 	onReady,
+	onPlay,
+	onPause,
 }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const currentCurIdx = React.useRef(-1);
 	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
 	const [isPartitionSvgLoaded, setIsPartitionSvgLoaded] = React.useState(false);
 	const partitionOffset = useSharedValue(0);
-	const pianoSounds = React.useRef<Record<string, Audio.Sound> | null>(null);
+	const melodySound = React.useRef<Audio.Sound | null>(null);
+	const piano = React.useRef<SplendidGrandPiano | null>(null);
+	const [isPianoLoaded, setIsPianoLoaded] = React.useState(false);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
@@ -70,22 +79,36 @@ const PartitionMagic = ({
 	}
 
 	React.useEffect(() => {
-		if (!pianoSounds.current) {
-			Promise.all(
-				Object.entries(PianoNotes).map(([midiNumber, noteResource]) =>
-					Audio.Sound.createAsync(noteResource, {
-						volume: 1,
-						progressUpdateIntervalMillis: 100,
-					}).then((sound) => [midiNumber, sound.sound] as const)
-				)
-			).then((res) => {
-				pianoSounds.current = res.reduce(
-					(prev, curr) => ({ ...prev, [curr[0]]: curr[1] }),
-					{}
-				);
-				console.log('sound loaded');
+		if (Platform.OS === 'web' && !piano.current) {
+			const audio = new AudioContext();
+			piano.current = new SplendidGrandPiano(audio);
+			piano.current.load.then(() => {
+				setIsPianoLoaded(true);
+			});
+		} else if (!melodySound.current) {
+			Audio.Sound.createAsync(
+				{
+					uri: API.getPartitionMelodyUrl(songID),
+				},
+				{
+					progressUpdateIntervalMillis: 200,
+				}
+			).then((track) => {
+				melodySound.current = track.sound;
 			});
 		}
+		return () => {
+			if (melodySound.current) {
+				melodySound.current.pauseAsync();
+				melodySound.current.unloadAsync();
+				melodySound.current = null;
+			}
+			if (piano.current) {
+				piano.current.stop();
+				piano.current.context.close();
+				piano.current = null;
+			}
+		};
 	}, []);
 	const partitionDims = React.useMemo<[number, number]>(() => {
 		return [data?.pageWidth ?? 0, data?.pageHeight ?? 1];
@@ -99,47 +122,88 @@ const PartitionMagic = ({
 	}, [onError, isError]);
 
 	React.useEffect(() => {
-		if (onReady && isPartitionSvgLoaded && !isLoading) {
+		if (isPartitionSvgLoaded && !isLoading && (melodySound.current?._loaded || isPianoLoaded)) {
 			onReady();
 		}
-	}, [onReady, isPartitionSvgLoaded, isLoading]);
+	}, [isPartitionSvgLoaded, isLoading, melodySound.current?._loaded, isPianoLoaded]);
+
+	React.useEffect(() => {
+		if (Platform.OS === 'web') {
+			if (!piano.current || !isPianoLoaded) {
+				return;
+			}
+			shouldPlay ? onPlay() : onPause();
+			return;
+		}
+		if (!melodySound.current || !melodySound.current._loaded) {
+			return;
+		}
+		if (shouldPlay) {
+			melodySound.current.playAsync().then(onPlay).catch(console.error);
+		} else {
+			melodySound.current.pauseAsync().then(onPause).catch(console.error);
+		}
+	}, [shouldPlay]);
 
 	React.useEffect(() => {
 		if (endPartitionReached) {
+			// if the audio is unsync
+			melodySound.current?.pauseAsync();
 			onEndReached();
 		}
 	}, [endPartitionReached]);
 
-	const transitionDuration = 200;
+	React.useEffect(() => {
+		if (!melodySound.current || !melodySound.current._loaded) return;
+		if (!data || data?.cursors.length === 0) return;
 
-	getCursorToPlay(
-		data?.cursors ?? [],
-		currentCurIdx.current,
-		timestamp - transitionDuration,
-		(cursor, idx) => {
-			currentCurIdx.current = idx;
-			if (pianoSounds.current) {
-				cursor.notes.forEach(({ note, duration }) => {
-					try {
-						const sound = pianoSounds.current![note]!;
-						sound.playAsync().catch(console.error);
-						setTimeout(() => {
-							sound.stopAsync();
-						}, duration - 10);
-					} catch (e) {
-						console.log(e);
-					}
-				});
-			}
-			partitionOffset.value = withTiming(
-				-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
-				{
-					duration: transitionDuration,
-					easing: Easing.inOut(Easing.ease),
+		melodySound.current.setOnPlaybackStatusUpdate((status) => {
+			//@ts-expect-error positionMillis is not in the type
+			const timestamp = status?.positionMillis ?? 0;
+			getCursorToPlay(
+				data!.cursors,
+				currentCurIdx.current,
+				timestamp + transitionDuration,
+				(cursor, idx) => {
+					currentCurIdx.current = idx;
+					partitionOffset.value = withTiming(
+						-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
+						{
+							duration: transitionDuration,
+							easing: Easing.inOut(Easing.ease),
+						}
+					);
 				}
 			);
-		}
-	);
+		});
+	}, [data?.cursors, melodySound.current?._loaded]);
+
+	React.useEffect(() => {
+		if (!shouldPlay) return;
+		if (!piano.current || !isPianoLoaded) return;
+		if (!data || data?.cursors.length === 0) return;
+		getCursorToPlay(
+			data!.cursors,
+			currentCurIdx.current,
+			timestamp + transitionDuration,
+			(cursor, idx) => {
+				currentCurIdx.current = idx;
+				partitionOffset.value = withTiming(
+					-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
+					{
+						duration: transitionDuration,
+						easing: Easing.inOut(Easing.ease),
+					}
+				);
+				cursor.notes.forEach((note) => {
+					piano.current?.start({
+						note: note.note,
+						duration: note.duration,
+					});
+				});
+			}
+		);
+	}, [timestamp, data?.cursors, isPianoLoaded]);
 
 	return (
 		<View
@@ -211,6 +275,13 @@ const PartitionMagic = ({
 			</View>
 		</View>
 	);
+};
+
+PartitionMagic.defaultProps = {
+	onError: () => {},
+	onReady: () => {},
+	onPlay: () => {},
+	onPause: () => {},
 };
 
 export default PartitionMagic;
