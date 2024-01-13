@@ -2,9 +2,6 @@ import {
 	Controller,
 	DefaultValuePipe,
 	Get,
-	InternalServerErrorException,
-	NotFoundException,
-	Param,
 	ParseIntPipe,
 	Query,
 	Request,
@@ -16,15 +13,13 @@ import {
 	ApiTags,
 	ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { Artist, Genre, Song } from "@prisma/client";
+import { Artist, Song } from "@prisma/client";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { SearchService } from "./search.service";
 import { Song as _Song } from "src/_gen/prisma-class/song";
-import { Genre as _Genre } from "src/_gen/prisma-class/genre";
 import { Artist as _Artist } from "src/_gen/prisma-class/artist";
 import { mapInclude } from "src/utils/include";
 import { SongController } from "src/song/song.controller";
-import { GenreController } from "src/genre/genre.controller";
 import { ArtistController } from "src/artist/artist.controller";
 
 @ApiTags("search")
@@ -39,15 +34,15 @@ export class SearchController {
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	async searchSong(
 		@Request() req: any,
-		@Param("query") query: string,
+		@Query("q") query: string | null,
 		@Query("artistId") artistId: number,
 		@Query("genreId") genreId: number,
 		@Query("include") include: string,
 		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
-	): Promise<Song[] | null> {
+	): Promise<Song[]> {
 		return await this.searchService.searchSong(
-			query,
+			query ?? "",
 			artistId,
 			genreId,
 			mapInclude(include, req, SongController.includableFields),
@@ -64,12 +59,12 @@ export class SearchController {
 	async searchArtists(
 		@Request() req: any,
 		@Query("include") include: string,
-		@Param("query") query: string,
+		@Query("q") query: string | null,
 		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
-	): Promise<Artist[] | null> {
+	): Promise<Artist[]> {
 		return await this.searchService.searchArtists(
-			query,
+			query ?? "",
 			mapInclude(include, req, ArtistController.includableFields),
 			skip,
 			take,

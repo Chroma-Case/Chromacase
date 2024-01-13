@@ -1,4 +1,3 @@
-import React from 'react';
 import { useBreakpointValue, useTheme } from 'native-base';
 import { useWindowDimensions } from 'react-native';
 import {
@@ -11,57 +10,20 @@ import {
 } from 'react-native-tab-view';
 import { Heart, Clock, StatusUp, FolderCross } from 'iconsax-react-native';
 import { Scene } from 'react-native-tab-view/lib/typescript/src/types';
-import { useNavigation } from '../Navigation';
 import { Translate, TranslationKey } from '../i18n/i18n';
-import MusicList from '../components/UI/MusicList';
 import { useQuery } from '../Queries';
 import API from '../API';
-import { LoadingView } from '../components/Loading';
-import { useLikeSongMutation } from '../utils/likeSongMutation';
 import Song from '../models/Song';
-
-type MusicListCCProps = {
-	data: Song[] | undefined;
-	isLoading: boolean;
-	refetch: () => void;
-};
-
-const MusicListCC = ({ data, isLoading, refetch }: MusicListCCProps) => {
-	const navigation = useNavigation();
-	const { mutateAsync } = useLikeSongMutation();
-	const user = useQuery(API.getUserInfo);
-
-	const musics = (data ?? []).map((song) => {
-		const isLiked = song.likedByUsers?.some(({ userId }) => userId === user.data?.id) ?? false;
-
-		return {
-			artist: song.artist!.name,
-			song: song.name,
-			image: song.cover,
-			lastScore: song.lastScore,
-			bestScore: song.bestScore,
-			liked: isLiked,
-			onLike: (state: boolean) => {
-				mutateAsync({ songId: song.id, like: state }).then(() => refetch());
-			},
-			onPlay: () => navigation.navigate('Play', { songId: song.id }),
-		};
-	});
-
-	if (isLoading) {
-		return <LoadingView />;
-	}
-
-	return <MusicList initialMusics={musics} musicsPerPage={25} />;
-};
+import { useState } from 'react';
+import MusicListCC from '../components/UI/MusicList';
 
 const FavoritesMusic = () => {
 	const likedSongs = useQuery(API.getLikedSongs(['artist', 'SongHistory', 'likedByUsers']));
 	return (
 		<MusicListCC
-			data={likedSongs.data?.map((x) => x.song)}
-			isLoading={likedSongs.isLoading}
+			musics={likedSongs.data?.map((x) => x.song)}
 			refetch={likedSongs.refetch}
+			isFetching={likedSongs.isFetching}
 		/>
 	);
 };
@@ -70,11 +32,9 @@ const RecentlyPlayedMusic = () => {
 	const playHistory = useQuery(API.getUserPlayHistory(['artist', 'SongHistory', 'likedByUsers']));
 	return (
 		<MusicListCC
-			data={
-				playHistory.data?.filter((x) => x.song !== undefined).map((x) => x.song) as Song[]
-			}
-			isLoading={playHistory.isLoading}
+			musics={playHistory.data?.map((x) => x.song) as Song[]}
 			refetch={playHistory.refetch}
+			isFetching={playHistory.isFetching}
 		/>
 	);
 };
@@ -83,9 +43,9 @@ const StepUpMusic = () => {
 	const nextStep = useQuery(API.getSongSuggestions(['artist', 'SongHistory', 'likedByUsers']));
 	return (
 		<MusicListCC
-			data={nextStep.data ?? []}
-			isLoading={nextStep.isLoading}
+			musics={nextStep.data}
 			refetch={nextStep.refetch}
+			isFetching={nextStep.isFetching}
 		/>
 	);
 };
@@ -111,7 +71,7 @@ const getTabData = (key: string) => {
 
 const MusicTab = () => {
 	const layout = useWindowDimensions();
-	const [index, setIndex] = React.useState(0);
+	const [index, setIndex] = useState(0);
 	const { colors } = useTheme();
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isSmallScreen = screenSize === 'small';

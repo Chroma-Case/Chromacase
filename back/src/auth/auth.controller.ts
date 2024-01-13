@@ -21,6 +21,7 @@ import {
 	Response,
 	Query,
 	Param,
+	ParseIntPipe,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { JwtAuthGuard } from "./jwt-auth.guard";
@@ -287,8 +288,8 @@ export class AuthController {
 	@ApiOkResponse({ description: "Successfully added liked song" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	@Post("me/likes/:id")
-	addLikedSong(@Request() req: any, @Param("id") songId: number) {
-		return this.usersService.addLikedSong(+req.user.id, +songId);
+	addLikedSong(@Request() req: any, @Param("id", ParseIntPipe) songId: number) {
+		return this.usersService.addLikedSong(+req.user.id, songId);
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -296,8 +297,11 @@ export class AuthController {
 	@ApiOkResponse({ description: "Successfully removed liked song" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	@Delete("me/likes/:id")
-	removeLikedSong(@Request() req: any, @Param("id") songId: number) {
-		return this.usersService.removeLikedSong(+req.user.id, +songId);
+	removeLikedSong(
+		@Request() req: any,
+		@Param("id", ParseIntPipe) songId: number,
+	) {
+		return this.usersService.removeLikedSong(+req.user.id, songId);
 	}
 
 	@UseGuards(JwtAuthGuard)
@@ -317,7 +321,7 @@ export class AuthController {
 	@ApiOkResponse({ description: "Successfully added score" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	@Patch("me/score/:score")
-	addScore(@Request() req: any, @Param("id") score: number) {
+	addScore(@Request() req: any, @Param("score", ParseIntPipe) score: number) {
 		return this.usersService.addScore(+req.user.id, score);
 	}
 }

@@ -122,7 +122,7 @@ export class UsersService {
 		return this.prisma.user.update({
 			where: { id: where },
 			data: {
-				partyPlayed: {
+				totalScore: {
 					increment: score,
 				},
 			},
