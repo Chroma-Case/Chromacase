@@ -307,7 +307,7 @@ export const en = {
 	leaderBoardHeading: 'These are the best players',
 	leaderBoardHeadingFull:
 		'The players having the best scores, thanks to their exceptional accuracy, are highlighted here.',
-	emptySelection: 'None,',
+	emptySelection: 'None',
 	gamesPlayed: 'Games Played',
 	metronome: 'Metronome',
 	loading: 'Loading... Please Wait',

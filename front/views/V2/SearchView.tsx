@@ -94,6 +94,7 @@ const SearchView = () => {
 	const artistsQuery = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
 	const rawResult = useQuery(API.searchSongs(searchQuery), {
+		enabled: !!searchQuery.query || !!searchQuery.artist || !!searchQuery.genre,
 		onSuccess() {
 			const artist =
 				artistsQuery?.data?.find(({ id }) => id == searchQuery.artist)?.name ??
@@ -142,10 +143,10 @@ const SearchView = () => {
 	}
 
 	return (
-			<View style={{ display: 'flex', gap: 20 }}>
-				<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
-				{result.length != 0 ? <MusicListNoOpti list={result} /> : <SearchHistory />}
-			</View>
+		<View style={{ display: 'flex', gap: 20 }}>
+			<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
+			{result.length != 0 ? <MusicListNoOpti list={result} /> : <SearchHistory />}
+		</View>
 	);
 };
 

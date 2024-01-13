@@ -150,7 +150,7 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 										props.onValidate({
 											artist: artist.id,
 											genre:
-												genresQuery.data?.find((g) => g.name === genre)
+												genresQuery.data?.find((a) => a.name === genre)
 													?.id ?? undefined,
 											query: query,
 										});
@@ -167,6 +167,15 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 						accessibilityLabel="Genre"
 						onValueChange={(itemValue) => {
 							setGenre(itemValue);
+							props.onValidate({
+								artist:
+									artistsQuery.data?.find((a) => a.name === artist)?.id ??
+									undefined,
+								genre:
+									genresQuery.data?.find((g) => g.name === itemValue)?.id ??
+									undefined,
+								query: query,
+							});
 						}}
 					>
 						<Select.Item label={translate('emptySelection')} value="" />

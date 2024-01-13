@@ -705,6 +705,7 @@ export default class API {
 	public static searchSongs(query: searchProps): Query<Song[]> {
 		const queryParams: string[] = [];
 
+		if (query.query) queryParams.push(`q=${encodeURIComponent(query.query)}`);
 		if (query.artist) queryParams.push(`artistId=${query.artist}`);
 		if (query.genre) queryParams.push(`genreId=${query.genre}`);
 
@@ -715,13 +716,13 @@ export default class API {
 			exec: () => {
 				return API.fetch(
 					{
-						route: `/search/songs/${query.query}${queryString}`,
+						route: `/search/songs${queryString}`,
 					},
 					{ handler: ListHandler(SongHandler) }
 				);
 			},
 		};
-    }
+	}
 
 	public static getPartitionMelodyUrl(songId: number): string {
 		return `${API.baseUrl}/song/${songId}/assets/melody`;
