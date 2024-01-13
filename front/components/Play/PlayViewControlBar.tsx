@@ -25,7 +25,7 @@ const PlayViewControlBar = ({ song }: PlayViewControlBarProps) => {
 	const bpm = React.useRef<number>(60);
 	const { colors } = useTheme();
 	const textColor = colors.text;
-	const paused = partitionState === 'paused';
+	const isPlaying = partitionState === 'playing';
 	const disabled = partitionState === 'loading' || partitionState === 'error';
 	return (
 		<Row
@@ -108,9 +108,9 @@ const PlayViewControlBar = ({ song }: PlayViewControlBarProps) => {
 					_icon={{
 						as: Ionicons,
 						color: colors.coolGray[900],
-						name: paused ? 'play' : 'pause',
+						name: isPlaying ? 'pause' : 'play',
 					}}
-					onPress={() => setShouldPlay(paused)}
+					onPress={() => setShouldPlay(!isPlaying)}
 				/>
 				<IconButton
 					size="sm"
@@ -144,7 +144,7 @@ const PlayViewControlBar = ({ song }: PlayViewControlBarProps) => {
 					minWidth: 120,
 				}}
 			>
-				<MetronomeControls paused={paused} bpm={bpm.current} />
+				<MetronomeControls paused={isPlaying} bpm={bpm.current} />
 			</View>
 		</Row>
 	);

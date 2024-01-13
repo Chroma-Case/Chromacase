@@ -25,6 +25,7 @@ import { Clock, Cup } from 'iconsax-react-native';
 import PlayViewControlBar from '../components/Play/PlayViewControlBar';
 import ScoreModal from '../components/ScoreModal';
 import { PlayScore, ScoreMessage } from '../components/Play/PlayScore';
+import { PlayEndModal } from '../components/Play/PlayEndModal';
 
 type PlayViewProps = {
 	songId: number;
@@ -63,22 +64,22 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const isPhone = screenSize === 'small';
 	const song = useQuery(API.getSong(songId, ['artist']), { staleTime: Infinity });
 	const toast = useToast();
-	const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
+	// const [lastScoreMessage, setLastScoreMessage] = useState<ScoreMessage>();
 	const webSocket = useRef<WebSocket>();
-	const [paused, setPause] = useState<boolean>(true);
-	const stopwatch = useStopwatch();
-	const [time, setTime] = useState(0);
+	// const [paused, setPause] = useState<boolean>(true);
+	// const stopwatch = useStopwatch();
+	// const [time, setTime] = useState(0);
 	const [endResult, setEndResult] = useState<unknown>();
-	const [shouldPlay, setShouldPlay] = useState(false);
+	// const [shouldPlay, setShouldPlay] = useState(false);
 	const songHistory = useQuery(API.getSongHistory(songId));
-	const [score, setScore] = useState(0); // Between 0 and 100
-	const getElapsedTime = () => stopwatch.getElapsedRunningTime();
-	const [readyToPlay, setReadyToPlay] = useState(false);
+	// const [score, setScore] = useState(0); // Between 0 and 100
+	// const getElapsedTime = () => stopwatch.getElapsedRunningTime();
+	// const [readyToPlay, setReadyToPlay] = useState(false);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
 	// first number is the note, the other is the time when pressed on release the key is removed
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [streak, setStreak] = useState(0);
+	// const [streak, setStreak] = useState(0);
 	const colorScheme = useColorScheme();
 	const { colors } = useTheme();
 	const statColor = colors.lightText;
@@ -131,7 +132,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 		console.log('MIDI inputs', inputs);
 		let endMsgReceived = false; // Used to know if to go to error screen when websocket closes
 
-		if (inputs.size <= 0) {
+		if (inputs.size <= 10) {
 			toast.show({ description: 'No MIDI Keyboard found' });
 			return;
 		}
@@ -238,14 +239,14 @@ const PlayView = ({ songId }: PlayViewProps) => {
 
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
-		const interval = setInterval(() => {
-			setTime(() => getElapsedTime()); // Countdown
-		}, 200);
+		// const interval = setInterval(() => {
+		// 	setTime(() => getElapsedTime()); // Countdown
+		// }, 200);
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
-			stopwatch.stop();
-			clearInterval(interval);
+			// stopwatch.stop();
+			// clearInterval(interval);
 		};
 	}, []);
 
@@ -290,12 +291,13 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						zIndex: 100,
 					}}
 				>
-					<PopupCC isVisible={endResult != undefined}>
+					<PlayEndModal />
+					{/* <PopupCC isVisible={endResult != undefined}>
 						{
 							// eslint-disable-next-line @typescript-eslint/no-explicit-any
-							(() => (endResult ? <ScoreModal {...(endResult as any)} /> : <></>))()
+							endResult ? <ScoreModal {...(endResult as any)} /> : <></>
 						}
-					</PopupCC>
+					</PopupCC> */}
 					<PopupCC
 						title={translate('selectPlayMode')}
 						description={translate('selectPlayModeExplaination')}
@@ -404,18 +406,18 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					/>
 				</View>
 				<PlayViewControlBar
-					score={score}
-					time={time}
-					paused={paused}
-					disabled={playType == null || !readyToPlay}
+					// score={score}
+					// time={time}
+					// paused={paused}
+					// disabled={playType == null || !readyToPlay}
 					song={song.data}
-					onEnd={onEnd}
-					onPause={() => {
-						setShouldPlay(false);
-					}}
-					onResume={() => {
-						setShouldPlay(true);
-					}}
+					// onEnd={onEnd}
+					// onPause={() => {
+					// 	setShouldPlay(false);
+					// }}
+					// onResume={() => {
+					// 	setShouldPlay(true);
+					// }}
 				/>
 			</SafeAreaView>
 			{colorScheme === 'dark' && (

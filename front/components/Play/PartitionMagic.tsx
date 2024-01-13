@@ -9,6 +9,7 @@ import { SvgContainer } from './SvgContainer';
 import LoadingComponent from '../Loading';
 import { SplendidGrandPiano } from 'smplr';
 import { atom, useAtom } from 'jotai';
+import { useStopwatch } from 'react-use-precision-timer';
 
 export const timestampAtom = atom(0);
 export const shouldPlayAtom = atom(false);
@@ -37,20 +38,21 @@ const getCursorToPlay = (
 	}
 };
 
-const transitionDuration = 50;
+const transitionDuration = 200;
 
 const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	const { data, isLoading, isError } = useQuery(API.getSongCursorInfos(songID));
 	const currentCurIdx = React.useRef(-1);
+	const stopwatch = useStopwatch();
 	const [endPartitionReached, setEndPartitionReached] = React.useState(false);
 	const [isPartitionSvgLoaded, setIsPartitionSvgLoaded] = React.useState(false);
 	const partitionOffset = useSharedValue(0);
 	const melodySound = React.useRef<Audio.Sound | null>(null);
 	const piano = React.useRef<SplendidGrandPiano | null>(null);
 	const [isPianoLoaded, setIsPianoLoaded] = React.useState(false);
-	const timestamp = useAtom(timestampAtom)[0];
+	const [timestamp, setTimestamp] = useAtom(timestampAtom);
 	const shouldPlay = useAtom(shouldPlayAtom)[0];
-	const [, setPartitionState] = useAtom(partitionStateAtom);
+	const [partitionState, setPartitionState] = useAtom(partitionStateAtom);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
 
@@ -62,12 +64,27 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
+	console.log('state', partitionState);
+
 	if (!endPartitionReached && currentCurIdx.current + 1 === data?.cursors.length) {
 		// weird contraption but the mobile don't want classic functions to be called
 		// with the withTiming function :(
 		melodySound.current?.pauseAsync();
+		piano.current?.stop();
 		setPartitionState('ended');
 	}
+
+	React.useEffect(() => {
+		if (isError) {
+			setPartitionState('error');
+		}
+	}, [isError]);
+
+	React.useEffect(() => {
+		if (isPartitionSvgLoaded && !isLoading && (melodySound.current?._loaded || isPianoLoaded)) {
+			setPartitionState('ready');
+		}
+	}, [isPartitionSvgLoaded, isLoading, melodySound.current?._loaded, isPianoLoaded]);
 
 	React.useEffect(() => {
 		if (Platform.OS === 'web' && !piano.current) {
@@ -106,28 +123,23 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	}, [data]);
 
 	React.useEffect(() => {
-		if (isError) {
-			setPartitionState('error');
-		}
-	}, [isError]);
-
-	React.useEffect(() => {
-		if (isPartitionSvgLoaded && !isLoading && (melodySound.current?._loaded || isPianoLoaded)) {
-			setPartitionState('ready');
-		}
-	}, [isPartitionSvgLoaded, isLoading, melodySound.current?._loaded, isPianoLoaded]);
+		const interval = setInterval(() => {
+			setTimestamp(stopwatch.getElapsedRunningTime());
+		}, 200);
+		return () => {
+			clearInterval(interval);
+		};
+	}, []);
 
 	React.useEffect(() => {
 		if (Platform.OS === 'web') {
-			if (!piano.current || !isPianoLoaded) {
-				return;
-			}
+			if (!piano.current || !isPianoLoaded) return;
+			shouldPlay ? stopwatch.start() : stopwatch.pause();
 			setPartitionState(shouldPlay ? 'playing' : 'paused');
 			return;
 		}
-		if (!melodySound.current || !melodySound.current._loaded) {
-			return;
-		}
+		if (!melodySound.current || !melodySound.current._loaded) return;
+		shouldPlay ? stopwatch.start() : stopwatch.pause();
 		if (shouldPlay) {
 			melodySound.current
 				.playAsync()
