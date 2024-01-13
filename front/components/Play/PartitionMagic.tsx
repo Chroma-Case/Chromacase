@@ -34,6 +34,7 @@ const getCursorToPlay = (
 		const cursorInfo = cursorInfos[i]!;
 		if (cursorInfo.timestamp <= timestamp) {
 			onCursorMove(cursorInfo, i);
+			return;
 		}
 	}
 };
@@ -63,7 +64,7 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	const piano = React.useRef<SplendidGrandPiano | null>(null);
 	const [isPianoLoaded, setIsPianoLoaded] = React.useState(false);
 	const [timestamp, setTimestamp] = useAtom(timestampAtom);
-	const shouldPlay = useAtom(shouldPlayAtom)[0];
+	const [shouldPlay, setShouldPlay] = useAtom(shouldPlayAtom);
 	const [partitionState, setPartitionState] = useAtom(partitionStateAtom);
 	const cursorPaddingVertical = 10;
 	const cursorPaddingHorizontal = 3;
@@ -76,7 +77,7 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
-	console.log('state', partitionState);
+	console.log('state', partitionState, timestamp);
 
 	if (!endPartitionReached && currentCurIdx.current + 1 === data?.cursors.length) {
 		// weird contraption but the mobile don't want classic functions to be called
@@ -101,6 +102,8 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 
 		return () => {
 			setPartitionState('loading');
+			setTimestamp(0);
+			setShouldPlay(false);
 		};
 	}, [isPartitionSvgLoaded, isLoading, melodySound.current?._loaded, isPianoLoaded]);
 
@@ -112,14 +115,9 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 				setIsPianoLoaded(true);
 			});
 		} else if (!melodySound.current) {
-			Audio.Sound.createAsync(
-				{
-					uri: API.getPartitionMelodyUrl(songID),
-				},
-				{
-					progressUpdateIntervalMillis: 200,
-				}
-			).then((track) => {
+			Audio.Sound.createAsync({
+				uri: API.getPartitionMelodyUrl(songID),
+			}).then((track) => {
 				melodySound.current = track.sound;
 			});
 		}
@@ -141,9 +139,13 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	}, [data]);
 
 	React.useEffect(() => {
-		const interval = setInterval(() => {
-			setTimestamp(stopwatch.getElapsedRunningTime());
-		}, 200);
+		const interval = setInterval(
+			() => {
+				// if (partitionState !== 'playing') return;
+				setTimestamp(stopwatch.getElapsedRunningTime());
+			},
+			Platform.OS === 'web' ? 200 : 500
+		);
 		return () => {
 			clearInterval(interval);
 		};
@@ -152,13 +154,13 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	React.useEffect(() => {
 		if (Platform.OS === 'web') {
 			if (!piano.current || !isPianoLoaded) return;
-			startResumePauseWatch(stopwatch, shouldPlay);
 			setPartitionState(shouldPlay ? 'playing' : 'paused');
+			startResumePauseWatch(stopwatch, shouldPlay);
 			return;
 		}
 		if (!melodySound.current || !melodySound.current._loaded) return;
-		startResumePauseWatch(stopwatch, shouldPlay);
 		setPartitionState(shouldPlay ? 'playing' : 'paused');
+		startResumePauseWatch(stopwatch, shouldPlay);
 		if (shouldPlay) {
 			melodySound.current.playAsync().catch(console.error);
 		} else {
@@ -167,33 +169,8 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	}, [shouldPlay]);
 
 	React.useEffect(() => {
-		if (!melodySound.current || !melodySound.current._loaded) return;
-		if (!data || data?.cursors.length === 0) return;
-
-		melodySound.current.setOnPlaybackStatusUpdate((status) => {
-			//@ts-expect-error positionMillis is not in the type
-			const timestamp = status?.positionMillis ?? 0;
-			getCursorToPlay(
-				data!.cursors,
-				currentCurIdx.current,
-				timestamp + transitionDuration,
-				(cursor, idx) => {
-					currentCurIdx.current = idx;
-					partitionOffset.value = withTiming(
-						-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
-						{
-							duration: transitionDuration,
-							easing: Easing.inOut(Easing.ease),
-						}
-					);
-				}
-			);
-		});
-	}, [data?.cursors, melodySound.current?._loaded]);
-
-	React.useEffect(() => {
 		if (!shouldPlay) return;
-		if (!piano.current || !isPianoLoaded) return;
+		if (!melodySound.current || !melodySound.current._loaded) return;
 		if (!data || data?.cursors.length === 0) return;
 		getCursorToPlay(
 			data!.cursors,
@@ -208,6 +185,7 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 						easing: Easing.inOut(Easing.ease),
 					}
 				);
+				if (!piano.current || !isPianoLoaded) return;
 				cursor.notes.forEach((note) => {
 					piano.current?.start({
 						note: note.note,

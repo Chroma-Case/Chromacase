@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import * as React from 'react';
-import { Row, Image, Text, useBreakpointValue, IconButton } from 'native-base';
+import { Row, Image, Text, useBreakpointValue, IconButton, Button } from 'native-base';
 import { Ionicons } from '@expo/vector-icons';
 import { MetronomeControls } from '../Metronome';
 import StarProgress from '../StarProgress';
@@ -26,7 +26,7 @@ const PlayViewControlBar = ({ song }: PlayViewControlBarProps) => {
 	const { colors } = useTheme();
 	const textColor = colors.text;
 	const isPlaying = partitionState === 'playing';
-	const disabled = partitionState === 'loading' || partitionState === 'error';
+	const isPartitionLoading = partitionState === 'loading';
 
 	React.useEffect(() => {
 		return () => {
@@ -109,17 +109,20 @@ const PlayViewControlBar = ({ song }: PlayViewControlBarProps) => {
 					gap: isPhone ? 10 : 25,
 				}}
 			>
-				<IconButton
-					size="sm"
-					variant="solid"
-					disabled={disabled}
-					_icon={{
-						as: Ionicons,
-						color: colors.coolGray[900],
-						name: isPlaying ? 'pause' : 'play',
-					}}
-					onPress={() => setShouldPlay(!isPlaying)}
-				/>
+				{isPartitionLoading ? (
+					<Button isLoading size="sm" variant="solid" color={colors.coolGray[900]} />
+				) : (
+					<IconButton
+						size="sm"
+						variant="solid"
+						_icon={{
+							as: Ionicons,
+							color: colors.coolGray[900],
+							name: isPlaying ? 'pause' : 'play',
+						}}
+						onPress={() => setShouldPlay(!isPlaying)}
+					/>
+				)}
 				<IconButton
 					size="sm"
 					colorScheme="coolGray"
