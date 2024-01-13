@@ -27,6 +27,14 @@ const PlayViewControlBar = ({ song }: PlayViewControlBarProps) => {
 	const textColor = colors.text;
 	const isPlaying = partitionState === 'playing';
 	const disabled = partitionState === 'loading' || partitionState === 'error';
+
+	React.useEffect(() => {
+		return () => {
+			setShouldPlay(false);
+			setShouldEnd(false);
+		};
+	}, []);
+
 	return (
 		<Row
 			style={{

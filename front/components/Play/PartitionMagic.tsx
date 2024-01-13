@@ -38,6 +38,18 @@ const getCursorToPlay = (
 	}
 };
 
+const startResumePauseWatch = (stopwatch: ReturnType<typeof useStopwatch>, shouldPlay: boolean) => {
+	if (shouldPlay) {
+		if (stopwatch.isPaused()) {
+			stopwatch.resume();
+			return;
+		}
+		stopwatch.start();
+		return;
+	}
+	stopwatch.pause();
+};
+
 const transitionDuration = 200;
 
 const PartitionMagic = ({ songID }: ParitionMagicProps) => {
@@ -83,7 +95,13 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	React.useEffect(() => {
 		if (isPartitionSvgLoaded && !isLoading && (melodySound.current?._loaded || isPianoLoaded)) {
 			setPartitionState('ready');
+		} else if (partitionState !== 'loading') {
+			setPartitionState('loading');
 		}
+
+		return () => {
+			setPartitionState('loading');
+		};
 	}, [isPartitionSvgLoaded, isLoading, melodySound.current?._loaded, isPianoLoaded]);
 
 	React.useEffect(() => {
@@ -134,26 +152,17 @@ const PartitionMagic = ({ songID }: ParitionMagicProps) => {
 	React.useEffect(() => {
 		if (Platform.OS === 'web') {
 			if (!piano.current || !isPianoLoaded) return;
-			shouldPlay ? stopwatch.start() : stopwatch.pause();
+			startResumePauseWatch(stopwatch, shouldPlay);
 			setPartitionState(shouldPlay ? 'playing' : 'paused');
 			return;
 		}
 		if (!melodySound.current || !melodySound.current._loaded) return;
-		shouldPlay ? stopwatch.start() : stopwatch.pause();
+		startResumePauseWatch(stopwatch, shouldPlay);
+		setPartitionState(shouldPlay ? 'playing' : 'paused');
 		if (shouldPlay) {
-			melodySound.current
-				.playAsync()
-				.then(() => {
-					setPartitionState('playing');
-				})
-				.catch(console.error);
+			melodySound.current.playAsync().catch(console.error);
 		} else {
-			melodySound.current
-				.pauseAsync()
-				.then(() => {
-					setPartitionState('paused');
-				})
-				.catch(console.error);
+			melodySound.current.pauseAsync().catch(console.error);
 		}
 	}, [shouldPlay]);
 
