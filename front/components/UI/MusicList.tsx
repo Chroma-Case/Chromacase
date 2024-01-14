@@ -157,7 +157,7 @@ function MusicListCC({
 // Styles for the MusicList component
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flexGrow: 1,
 		gap: 2,
 		borderRadius: 10,
 	},
