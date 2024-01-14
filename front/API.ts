@@ -708,7 +708,7 @@ export default class API {
 		if (query.query) queryParams.push(`q=${encodeURIComponent(query.query)}`);
 		if (query.artist) queryParams.push(`artistId=${query.artist}`);
 		if (query.genre) queryParams.push(`genreId=${query.genre}`);
-		if (include) queryParams.push(`include=${include.join(',')}`)
+		if (include) queryParams.push(`include=${include.join(',')}`);
 
 		const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
