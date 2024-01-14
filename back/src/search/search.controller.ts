@@ -28,7 +28,7 @@ import { ArtistController } from "src/artist/artist.controller";
 export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
-	@Get("songs/:query")
+	@Get("songs")
 	@ApiOkResponse({ type: _Song, isArray: true })
 	@ApiOperation({ description: "Search a song" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
@@ -51,7 +51,7 @@ export class SearchController {
 		);
 	}
 
-	@Get("artists/:query")
+	@Get("artists")
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({ type: _Artist, isArray: true })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
