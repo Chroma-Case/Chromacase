@@ -62,15 +62,7 @@ export const PodiumCard = ({
 				</Avatar>
 			</View>
 			<View>
-				<Text
-					style={{
-						fontSize: 20,
-						fontWeight: '500',
-						maxWidth: '100%',
-					}}
-					numberOfLines={2}
-					isTruncated
-				>
+				<Text fontSize={20} numberOfLines={2} isTruncated>
 					{userPseudo ?? '---'}
 				</Text>
 				<View
@@ -82,12 +74,7 @@ export const PodiumCard = ({
 						gap: 5,
 					}}
 				>
-					<Text
-						style={{
-							fontSize: 24,
-							fontWeight: '500',
-						}}
-					>
+					<Text fontSize={24} fontWeight={'bold'}>
 						{userLvl ?? '-'}
 					</Text>
 					<MedalStar size="24" variant="Bold" color={medalColor} />

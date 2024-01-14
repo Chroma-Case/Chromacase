@@ -29,24 +29,21 @@ const Leaderboardiew = () => {
 	] as const;
 
 	return (
-		<ScrollView style={{
-			padding: 8,
-		}}>
+		<ScrollView
+			style={{
+				padding: 8,
+			}}
+		>
 			<Text
+				fontSize={20}
+				fontWeight={'500'}
 				style={{
-					fontSize: 20,
-					fontWeight: '500',
 					marginBottom: 16,
 				}}
 			>
 				{translate('leaderBoardHeading')}
 			</Text>
-			<Text
-				style={{
-					fontSize: 14,
-					fontWeight: '500',
-				}}
-			>
+			<Text fontSize={14} fontWeight={'500'}>
 				{translate('leaderBoardHeadingFull')}
 			</Text>
 			<View

@@ -4,6 +4,7 @@ import { FunctionComponent } from 'react';
 import { Linking, Platform, useWindowDimensions } from 'react-native';
 import ButtonBase from './ButtonBase';
 import { translate } from '../../i18n/i18n';
+import { useTranslation } from 'react-i18next';
 import API, { APIError } from '../../API';
 import SeparatorBase from './SeparatorBase';
 import LinkBase from './LinkBase';
@@ -38,6 +39,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 	const dispatch = useDispatch();
 	const toast = useToast();
 	const colorScheme = useColorScheme();
+	const { t } = useTranslation();
 	const [logo] = useAssets(
 		colorScheme == 'light'
 			? require('../../assets/icon_light.png')
@@ -84,7 +86,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 						)}
 					</Row>
 					<ButtonBase
-						title={translate('guestMode')}
+						title={t('guestMode')}
 						onPress={async () => {
 							try {
 								handleGuestLogin((accessToken: string) => {
@@ -152,7 +154,7 @@ const ScaffoldAuth: FunctionComponent<ScaffoldAuthProps> = ({
 								title={translate('continuewithgoogle')}
 								onPress={() => Linking.openURL(`${API.baseUrl}/auth/login/google`)}
 							/>
-							<SeparatorBase>or</SeparatorBase>
+							<SeparatorBase>{t('authOrSection')}</SeparatorBase>
 							<Stack
 								space={3}
 								justifyContent="center"
