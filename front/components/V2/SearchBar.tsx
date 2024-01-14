@@ -29,9 +29,9 @@ const ArtistChipComponent = (props: ArtistChipProps) => {
 					}}
 				>
 					{props.selected ? (
-						<CloseCircle size="32" color={'#ED4A51'} />
+						<CloseCircle size="24" color={'#ED4A51'} />
 					) : (
-						<AddSquare size="32" color={'#6075F9'} />
+						<AddSquare size="24" color={'#6075F9'} />
 					)}
 					<Text>{props.name}</Text>
 				</View>
@@ -82,7 +82,7 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 						maxWidth: '100%',
 					}}
 				>
-					{artist && (
+					{!!artist && (
 						<ArtistChipComponent
 							onPress={() => setArtist('')}
 							name={artist}

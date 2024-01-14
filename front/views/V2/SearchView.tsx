@@ -12,6 +12,7 @@ import API from '../../API';
 import LoadingComponent from '../../components/Loading';
 import ErrorView from '../ErrorView';
 import { useLikeSongMutation } from '../../utils/likeSongMutation';
+import MusicListCC from '../../components/UI/MusicList';
 
 export type searchProps = {
 	artist: number | undefined;
@@ -88,12 +89,10 @@ const MusicListNoOpti = ({ list }: { list: any[] }) => {
 	);
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 const SearchView = () => {
-	const navigation = useNavigation();
 	const artistsQuery = useQuery(API.getAllArtists());
 	const [searchQuery, setSearchQuery] = React.useState({} as searchProps);
-	const rawResult = useQuery(API.searchSongs(searchQuery), {
+	const rawResult = useQuery(API.searchSongs(searchQuery, ['artist']), {
 		enabled: !!searchQuery.query || !!searchQuery.artist || !!searchQuery.genre,
 		onSuccess() {
 			const artist =
@@ -103,49 +102,15 @@ const SearchView = () => {
 			if (artist != 'unknown artist') API.createSearchHistoryEntry(artist, 'artist');
 		},
 	});
-	const userQuery = useQuery(API.getUserInfo());
-	const likedSongs = useQuery(API.getLikedSongs());
-	const { mutateAsync } = useLikeSongMutation();
 
-	let result: any[] = [];
-
-	if (userQuery.isLoading || likedSongs.isLoading || artistsQuery.isLoading) {
+	if (artistsQuery.isLoading) {
 		return <LoadingComponent />;
-	}
-
-	if (userQuery.isError) {
-		return <ErrorView />;
-	}
-
-	if (userQuery.isSuccess) {
-		result =
-			rawResult.data?.map((song) => {
-				const isLiked = likedSongs.data?.some((x) => x.songId == song.id) ?? false;
-
-				return {
-					artist:
-						artistsQuery?.data?.find(({ id }) => id == song?.artistId)?.name ??
-						'unknown artist',
-					song: song?.name,
-					image: song?.cover,
-					level: song?.difficulties.chordcomplexity,
-					lastScore: song?.lastScore,
-					bestScore: song?.bestScore,
-					liked: isLiked,
-					onLike: () => {
-						mutateAsync({ songId: song.id, like: !isLiked }).then(() =>
-							likedSongs.refetch()
-						);
-					},
-					onPlay: () => navigation.navigate('Play', { songId: song.id }),
-				};
-			}) ?? [];
 	}
 
 	return (
 		<View style={{ display: 'flex', gap: 20 }}>
 			<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
-			{result.length != 0 ? <MusicListNoOpti list={result} /> : <SearchHistory />}
+			{rawResult.isSuccess ? <MusicListCC musics={rawResult.data} isFetching={rawResult.isFetching} refetch={rawResult.refetch} /> : <SearchHistory />}
 		</View>
 	);
 };

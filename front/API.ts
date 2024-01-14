@@ -702,17 +702,18 @@ export default class API {
 		return `${API.baseUrl}/song/${songId}/assets/partition`;
 	}
 
-	public static searchSongs(query: searchProps): Query<Song[]> {
+	public static searchSongs(query: searchProps, include?: SongInclude[]): Query<Song[]> {
 		const queryParams: string[] = [];
 
 		if (query.query) queryParams.push(`q=${encodeURIComponent(query.query)}`);
 		if (query.artist) queryParams.push(`artistId=${query.artist}`);
 		if (query.genre) queryParams.push(`genreId=${query.genre}`);
+		if (include) queryParams.push(`include=${include.join(',')}`)
 
 		const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
 		return {
-			key: ['search', query.query, query.artist, query.genre],
+			key: ['search', query.query, query.artist, query.genre, include],
 			exec: () => {
 				return API.fetch(
 					{
