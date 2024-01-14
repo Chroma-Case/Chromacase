@@ -6,7 +6,7 @@ import SongCardInfo from '../../components/V2/SongCardInfo';
 import API from '../../API';
 import { useNavigation } from '../../Navigation';
 import GoldenRatio from '../../components/V2/GoldenRatio';
-import { useTranslation } from 'react-i18next';
+import { translate } from '../../i18n/i18n';
 
 const HomeView = () => {
 	const suggestionsQuery = useQuery(
@@ -17,8 +17,6 @@ const HomeView = () => {
 	const isPhone = screenSize === 'small';
 	const topSuggestions = suggestionsQuery.data?.slice(0, 4) ?? [];
 	const suggestions = suggestionsQuery.data?.slice(4) ?? [];
-	const { t } = useTranslation();
-
 	return (
 		<ScrollView>
 			<View
@@ -57,7 +55,7 @@ const HomeView = () => {
 							marginTop: 24,
 						}}
 					>
-						{t('discoverySuggestionSectionTitle')}
+						{translate('discoverySuggestionSectionTitle')}
 					</Text>
 					<View
 						style={{

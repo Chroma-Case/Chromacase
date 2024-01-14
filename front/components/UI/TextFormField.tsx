@@ -9,7 +9,7 @@ interface TextFormFieldProps extends TextFieldBaseProps {
 	error: string | null;
 }
 
-const ERROR_HEIGHT = 20;
+const ERROR_HEIGHT = 25;
 const ERROR_PADDING_TOP = 8;
 
 const TextFormField: React.FC<TextFormFieldProps> = ({ error, style, ...textFieldBaseProps }) => {
@@ -49,7 +49,12 @@ const TextFormField: React.FC<TextFormFieldProps> = ({ error, style, ...textFiel
 				}}
 			>
 				<Warning2 size="16" color="#f7253d" variant="Bold" />
-				<Text isTruncated maxW={'100%'} style={styles.errorText}>
+				<Text
+					isTruncated
+					maxW={'100%'}
+					fontSize={styles.errorText.fontSize}
+					color={styles.errorText.color}
+				>
 					{error}
 				</Text>
 			</Animated.View>
@@ -62,14 +67,14 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	errorContainer: {
+		display: 'flex',
+		gap: 8,
 		flexDirection: 'row',
-		alignItems: 'center',
 		paddingLeft: 12,
 	},
 	errorText: {
 		color: '#f7253d',
 		fontSize: 12,
-		marginLeft: 8,
 	},
 });
 
