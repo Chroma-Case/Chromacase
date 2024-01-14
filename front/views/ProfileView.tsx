@@ -80,9 +80,14 @@ const ProfileView = () => {
 						/>
 					</View>
 					<Translate
-						style={{ paddingBottom: 10, fontWeight: 'bold' }}
+						style={{ fontWeight: 'bold' }}
 						translationKey="accountCreatedOn"
 						format={(e) => `${e} ${userQuery.data.data.createdAt.toLocaleDateString()}`}
+					/>
+					<Translate
+						style={{ fontWeight: 'bold', paddingBottom: 10 }}
+						translationKey="email"
+						format={(e) => `${e} ${userQuery.data.email}`}
 					/>
 					<Flex
 						style={{
