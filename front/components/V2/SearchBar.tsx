@@ -66,52 +66,50 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 					borderBottomColor: '#9E9E9E',
 					display: 'flex',
 					flexDirection: isMobileView ? 'column' : 'row',
-					maxWidth: '100%',
 					width: '100%',
 					margin: 5,
-					padding: 16,
+					padding: isMobileView ? 8 : 16,
 					gap: 10,
 				}}
 			>
-				<View
-					style={{
-						flexGrow: 0,
-						flexShrink: 0,
-						flexDirection: 'row',
-						flexWrap: 'nowrap',
-						maxWidth: '100%',
-					}}
-				>
-					{!!artist && (
+				{!!artist && (
+					<View
+						style={{
+							flexGrow: 0,
+							flexShrink: 0,
+							flexDirection: 'row',
+							flexWrap: 'nowrap',
+							maxWidth: '100%',
+						}}
+					>
 						<ArtistChipComponent
 							onPress={() => setArtist('')}
 							name={artist}
 							selected={true}
 						/>
-					)}
-				</View>
+					</View>
+				)}
 				<View
 					style={{
-						flex: 1,
+						flexGrow: 1,
 						display: 'flex',
 						flexDirection: 'row',
 						alignItems: 'center',
 					}}
 				>
-					<View style={{ flex: 1 }}>
+					<View style={{ flexGrow: 1 }}>
 						<Input
 							type="text"
 							value={query}
 							variant={'unstyled'}
 							placeholder={translate('searchBarPlaceholder')}
-							style={{ height: 30 }}
+							style={{ height: 30, flex: 1 }}
 							onChangeText={(value) => setQuery(value)}
 						/>
 					</View>
 					<ButtonBase
 						type="menu"
 						icon={SearchNormal1}
-						style={{}}
 						onPress={handleValidate}
 					/>
 				</View>
