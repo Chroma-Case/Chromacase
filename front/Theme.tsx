@@ -30,9 +30,8 @@ const phoneLightGlassmorphism = {
 	900: 'rgb(248, 250, 254)',
 	1000: 'rgb(252, 254, 254)',
 };
-const lightGlassmorphism =
-	Platform.OS === 'web' ? defaultLightGlassmorphism : phoneLightGlassmorphism;
-const darkGlassmorphism = {
+
+const defaultDarkGlassmorphism = {
 	50: 'rgba(16,16,20,0.9)',
 	100: 'rgba(16,16,20,0.1)',
 	200: 'rgba(16,16,20,0.2)',
@@ -45,6 +44,24 @@ const darkGlassmorphism = {
 	900: 'rgba(16,16,20,0.9)',
 	1000: 'rgba(16,16,20,1)',
 };
+
+const phoneDarkGlassmorphism = {
+	50: 'rgb(10, 14, 38)',
+	100: 'rgb(14, 18, 42)',
+	200: 'rgb(18, 22, 46)',
+	300: 'rgb(22, 26, 50)',
+	400: 'rgb(26, 30, 54)',
+	500: 'rgb(10, 20, 54)',
+	600: 'rgb(14, 24, 58)',
+	700: 'rgb(18, 28, 62)',
+	800: 'rgb(22, 32, 66)',
+	900: 'rgb(26, 36, 70)',
+	1000: 'rgb(30, 40, 74)',
+};
+
+const lightGlassmorphism =
+	Platform.OS === 'web' ? defaultLightGlassmorphism : phoneLightGlassmorphism;
+const darkGlassmorphism = Platform.OS === 'web' ? defaultDarkGlassmorphism : phoneDarkGlassmorphism;
 
 const ThemeProvider = ({ children }: { children: JSX.Element }) => {
 	const colorScheme = useColorScheme();
