@@ -645,7 +645,7 @@ export const fr: typeof en = {
 	whatIsChromacase: "Chromacase c'est quoi?",
 	clickHereForMoreInfo: "Cliquez ici pour plus d'info",
 	forgotPassword: "J'ai oublié mon mot de passe",
-	updateProfile: 'Changer le Profile',
+	updateProfile: 'Changer le Profil',
 	accountCreatedOn: 'Compte créé le',
 	downloadAPKInstructions:
 		"Télécharger 'android-build.apk' dans la section 'Assets' de la dernière release",
