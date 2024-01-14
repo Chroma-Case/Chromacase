@@ -322,6 +322,7 @@ export const en = {
 	downloadAPKInstructions:
 		"Go to the latest release, unfold the 'Assets' section, and click 'android-build.apk'.",
 	discoverySuggestionSectionTitle: 'Suggested for you',
+	authOrSection: 'or',
 };
 
 export const fr: typeof en = {
@@ -649,6 +650,7 @@ export const fr: typeof en = {
 	downloadAPKInstructions:
 		"Télécharger 'android-build.apk' dans la section 'Assets' de la dernière release",
 	discoverySuggestionSectionTitle: 'Suggéré pour vous',
+	authOrSection: 'ou',
 };
 
 export const sp: typeof en = {
@@ -983,4 +985,5 @@ export const sp: typeof en = {
 	downloadAPKInstructions:
 		"Descargue 'android-build.apk' en la sección 'Assets' de la última versión",
 	discoverySuggestionSectionTitle: 'Sugerido para ti',
+	authOrSection: 'o',
 };

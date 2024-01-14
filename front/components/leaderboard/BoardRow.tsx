@@ -52,12 +52,10 @@ export const BoardRow = ({ userAvatarUrl, userPseudo, userLvl, index }: BoardRow
 			</View>
 
 			<Text
+				fontSize={16}
 				style={{
-					fontSize: 16,
-					fontStyle: 'normal',
 					flex: 1,
 					marginHorizontal: 10,
-					fontWeight: '500',
 					maxWidth: '100%',
 				}}
 				isTruncated
@@ -86,14 +84,7 @@ export const BoardRow = ({ userAvatarUrl, userPseudo, userLvl, index }: BoardRow
 					justifyContent: 'center',
 				}}
 			>
-				<Text
-					style={{
-						fontSize: 16,
-						fontStyle: 'normal',
-						fontWeight: '500',
-						textAlign: 'center',
-					}}
-				>
+				<Text fontSize={16} textAlign={'center'}>
 					{index}
 				</Text>
 			</View>
