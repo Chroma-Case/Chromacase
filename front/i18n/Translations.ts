@@ -321,6 +321,7 @@ export const en = {
 	accountCreatedOn: 'Account Created on',
 	downloadAPKInstructions:
 		"Go to the latest release, unfold the 'Assets' section, and click 'android-build.apk'.",
+	discoverySuggestionSectionTitle: 'Suggested for you',
 };
 
 export const fr: typeof en = {
@@ -647,6 +648,7 @@ export const fr: typeof en = {
 	accountCreatedOn: 'Compte créé le',
 	downloadAPKInstructions:
 		"Télécharger 'android-build.apk' dans la section 'Assets' de la dernière release",
+	discoverySuggestionSectionTitle: 'Suggéré pour vous',
 };
 
 export const sp: typeof en = {
@@ -980,4 +982,5 @@ export const sp: typeof en = {
 	accountCreatedOn: 'Cuenta creada el',
 	downloadAPKInstructions:
 		"Descargue 'android-build.apk' en la sección 'Assets' de la última versión",
+	discoverySuggestionSectionTitle: 'Sugerido para ti',
 };

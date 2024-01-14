@@ -32,7 +32,7 @@ const SearchView = () => {
 	}
 
 	return (
-		<View style={{ display: 'flex', gap: 20 }}>
+		<View style={{ display: 'flex', gap: 20, padding: 8 }}>
 			<SearchBarComponent onValidate={(query) => setSearchQuery(query)} />
 			{rawResult.isSuccess ? (
 				<MusicListCC

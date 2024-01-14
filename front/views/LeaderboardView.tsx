@@ -29,7 +29,9 @@ const Leaderboardiew = () => {
 	] as const;
 
 	return (
-		<ScrollView>
+		<ScrollView style={{
+			padding: 8,
+		}}>
 			<Text
 				style={{
 					fontSize: 20,
