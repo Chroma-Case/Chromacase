@@ -28,15 +28,15 @@ import { ArtistController } from "src/artist/artist.controller";
 export class SearchController {
 	constructor(private readonly searchService: SearchService) {}
 
-	@Get("songs/:query")
+	@Get("songs")
 	@ApiOkResponse({ type: _Song, isArray: true })
 	@ApiOperation({ description: "Search a song" })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
 	async searchSong(
 		@Request() req: any,
 		@Query("q") query: string | null,
-		@Query("artistId") artistId: number,
-		@Query("genreId") genreId: number,
+		@Query("artistId", new ParseIntPipe({ optional: true })) artistId: number,
+		@Query("genreId", new ParseIntPipe({ optional: true })) genreId: number,
 		@Query("include") include: string,
 		@Query("skip", new DefaultValuePipe(0), ParseIntPipe) skip: number,
 		@Query("take", new DefaultValuePipe(20), ParseIntPipe) take: number,
@@ -51,7 +51,7 @@ export class SearchController {
 		);
 	}
 
-	@Get("artists/:query")
+	@Get("artists")
 	@UseGuards(JwtAuthGuard)
 	@ApiOkResponse({ type: _Artist, isArray: true })
 	@ApiUnauthorizedResponse({ description: "Invalid token" })
