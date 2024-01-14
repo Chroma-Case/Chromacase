@@ -121,7 +121,7 @@ const Graph = ({ songId, since }: GraphProps) => {
 
 const ScoreGraph = () => {
 	const layout = useWindowDimensions();
-	const songs = useQuery(API.getAllSongs);
+	const songs = useQuery(API.getAllSongs());
 	const rangeOptions = [
 		{ label: '3 derniers jours', value: '3days' },
 		{ label: 'Dernière semaine', value: 'week' },

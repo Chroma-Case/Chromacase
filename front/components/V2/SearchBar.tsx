@@ -6,8 +6,8 @@ import ButtonBase from '../UI/ButtonBase';
 import { AddSquare, CloseCircle, SearchNormal1 } from 'iconsax-react-native';
 import { useQuery } from '../../Queries';
 import API from '../../API';
-import Genre from '../../models/Genre';
 import { translate } from '../../i18n/i18n';
+import { searchProps } from '../../views/V2/SearchView';
 
 type ArtistChipProps = {
 	name: string;
@@ -29,9 +29,9 @@ const ArtistChipComponent = (props: ArtistChipProps) => {
 					}}
 				>
 					{props.selected ? (
-						<CloseCircle size="32" color={'#ED4A51'} />
+						<CloseCircle size="24" color={'#ED4A51'} />
 					) : (
-						<AddSquare size="32" color={'#6075F9'} />
+						<AddSquare size="24" color={'#6075F9'} />
 					)}
 					<Text>{props.name}</Text>
 				</View>
@@ -40,14 +40,23 @@ const ArtistChipComponent = (props: ArtistChipProps) => {
 	);
 };
 
-const SearchBarComponent = () => {
+const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => void }) => {
 	const [query, setQuery] = React.useState('');
-	const [genre, setGenre] = React.useState({} as Genre | undefined);
+	const [genre, setGenre] = React.useState('');
 	const [artist, setArtist] = React.useState('');
 	const artistsQuery = useQuery(API.getAllArtists());
 	const genresQuery = useQuery(API.getAllGenres());
 	const screenSize = useBreakpointValue({ base: 'small', md: 'big' });
 	const isMobileView = screenSize == 'small';
+
+	const handleValidate = () => {
+		const searchData = {
+			query: query,
+			artist: artistsQuery.data?.find((a) => a.name === artist)?.id ?? undefined,
+			genre: genresQuery.data?.find((g) => g.name === genre)?.id ?? undefined,
+		};
+		props.onValidate(searchData);
+	};
 
 	return (
 		<View>
@@ -57,7 +66,7 @@ const SearchBarComponent = () => {
 					borderBottomColor: '#9E9E9E',
 					display: 'flex',
 					flexDirection: isMobileView ? 'column' : 'row',
-					alignItems: 'center',
+					maxWidth: '100%',
 					width: '100%',
 					margin: 5,
 					padding: 16,
@@ -69,10 +78,11 @@ const SearchBarComponent = () => {
 						flexGrow: 0,
 						flexShrink: 0,
 						flexDirection: 'row',
-						flexWrap: 'wrap',
+						flexWrap: 'nowrap',
+						maxWidth: '100%',
 					}}
 				>
-					{artist && (
+					{!!artist && (
 						<ArtistChipComponent
 							onPress={() => setArtist('')}
 							name={artist}
@@ -82,36 +92,27 @@ const SearchBarComponent = () => {
 				</View>
 				<View
 					style={{
+						flex: 1,
 						display: 'flex',
 						flexDirection: 'row',
-						justifyContent: 'space-between',
 						alignItems: 'center',
-						flexGrow: 1,
-						width: '100%',
 					}}
 				>
-					<View
-						style={{
-							flexGrow: 1,
-							flexShrink: 1,
-						}}
-					>
+					<View style={{ flex: 1 }}>
 						<Input
 							type="text"
 							value={query}
 							variant={'unstyled'}
 							placeholder={translate('searchBarPlaceholder')}
-							style={{ width: '100%', height: 30 }}
+							style={{ height: 30 }}
 							onChangeText={(value) => setQuery(value)}
 						/>
 					</View>
 					<ButtonBase
 						type="menu"
 						icon={SearchNormal1}
-						style={{
-							flexShrink: 0,
-							flexGrow: 0,
-						}}
+						style={{}}
+						onPress={handleValidate}
 					/>
 				</View>
 			</View>
@@ -146,6 +147,13 @@ const SearchBarComponent = () => {
 									key={index}
 									name={artist.name}
 									onPress={() => {
+										props.onValidate({
+											artist: artist.id,
+											genre:
+												genresQuery.data?.find((a) => a.name === genre)
+													?.id ?? undefined,
+											query: query,
+										});
 										setArtist(artist.name);
 									}}
 								/>
@@ -154,15 +162,20 @@ const SearchBarComponent = () => {
 				</ScrollView>
 				<View>
 					<Select
-						selectedValue={genre?.name}
+						selectedValue={genre}
 						placeholder={translate('genreFilter')}
 						accessibilityLabel="Genre"
 						onValueChange={(itemValue) => {
-							setGenre(
-								genresQuery.data?.find((genre) => {
-									genre.name == itemValue;
-								})
-							);
+							setGenre(itemValue);
+							props.onValidate({
+								artist:
+									artistsQuery.data?.find((a) => a.name === artist)?.id ??
+									undefined,
+								genre:
+									genresQuery.data?.find((g) => g.name === itemValue)?.id ??
+									undefined,
+								query: query,
+							});
 						}}
 					>
 						<Select.Item label={translate('emptySelection')} value="" />

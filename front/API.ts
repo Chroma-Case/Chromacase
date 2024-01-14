@@ -1,5 +1,4 @@
 import Artist, { ArtistHandler } from './models/Artist';
-import Album from './models/Album';
 import Chapter from './models/Chapter';
 import Lesson from './models/Lesson';
 import Genre, { GenreHandler } from './models/Genre';
@@ -24,6 +23,7 @@ import * as yup from 'yup';
 import { base64ToBlob } from './utils/base64ToBlob';
 import { ImagePickerAsset } from 'expo-image-picker';
 import { SongCursorInfos, SongCursorInfosHandler } from './models/SongCursorInfos';
+import { searchProps } from './views/V2/SearchView';
 
 type AuthenticationInput = { username: string; password: string };
 type RegistrationInput = AuthenticationInput & { email: string };
@@ -498,84 +498,6 @@ export default class API {
 	}
 
 	/**
-	 * Search a song by its name
-	 * @param query the string used to find the songs
-	 */
-	public static searchSongs(query: string): Query<Song[]> {
-		return {
-			key: ['search', 'song', query],
-			exec: () =>
-				API.fetch(
-					{
-						route: `/search/songs/${query}`,
-					},
-					{ handler: ListHandler(SongHandler) }
-				),
-		};
-	}
-
-	/**
-	 * Search artists by name
-	 * @param query the string used to find the artists
-	 */
-	public static searchArtists(query: string): Query<Artist[]> {
-		return {
-			key: ['search', 'artist', query],
-			exec: () =>
-				API.fetch(
-					{
-						route: `/search/artists/${query}`,
-					},
-					{ handler: ListHandler(ArtistHandler) }
-				),
-		};
-	}
-
-	/**
-	 * Search Album by name
-	 * @param query the string used to find the album
-	 */
-	public static searchAlbum(query: string): Query<Album[]> {
-		return {
-			key: ['search', 'album', query],
-			exec: async () => [
-				{
-					id: 1,
-					name: 'Super Trooper',
-				},
-				{
-					id: 2,
-					name: 'Kingdom Heart 365/2 OST',
-				},
-				{
-					id: 3,
-					name: 'The Legend Of Zelda Ocarina Of Time OST',
-				},
-				{
-					id: 4,
-					name: 'Random Access Memories',
-				},
-			],
-		};
-	}
-
-	/**
-	 * Retrieve music genres
-	 */
-	public static searchGenres(query: string): Query<Genre[]> {
-		return {
-			key: ['search', 'genre', query],
-			exec: () =>
-				API.fetch(
-					{
-						route: `/search/genres/${query}`,
-					},
-					{ handler: ListHandler(GenreHandler) }
-				),
-		};
-	}
-
-	/**
 	 * Retrieve a lesson
 	 * @param lessonId the id to find the lesson
 	 */
@@ -778,6 +700,29 @@ export default class API {
 
 	public static getPartitionSvgUrl(songId: number): string {
 		return `${API.baseUrl}/song/${songId}/assets/partition`;
+	}
+
+	public static searchSongs(query: searchProps, include?: SongInclude[]): Query<Song[]> {
+		const queryParams: string[] = [];
+
+		if (query.query) queryParams.push(`q=${encodeURIComponent(query.query)}`);
+		if (query.artist) queryParams.push(`artistId=${query.artist}`);
+		if (query.genre) queryParams.push(`genreId=${query.genre}`);
+		if (include) queryParams.push(`include=${include.join(',')}`);
+
+		const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+		return {
+			key: ['search', query.query, query.artist, query.genre, include],
+			exec: () => {
+				return API.fetch(
+					{
+						route: `/search/songs${queryString}`,
+					},
+					{ handler: ListHandler(SongHandler) }
+				);
+			},
+		};
 	}
 
 	public static getPartitionMelodyUrl(songId: number): string {
