@@ -10,6 +10,7 @@ import LoadingComponent from '../Loading';
 import { SplendidGrandPiano } from 'smplr';
 
 export type ParitionMagicProps = {
+	playType: 'practice' | 'normal' | null
 	timestamp: number;
 	songID: number;
 	shouldPlay: boolean;
@@ -44,6 +45,7 @@ const getCursorToPlay = (
 const transitionDuration = 50;
 
 const PartitionMagic = ({
+	playType,
 	timestamp,
 	songID,
 	shouldPlay,
@@ -79,6 +81,11 @@ const PartitionMagic = ({
 	}
 
 	React.useEffect(() => {
+		// In practice mode, no sound is played so just act as the piano is loaded
+		if (playType == 'practice') {
+			setIsPianoLoaded(true);
+			return;
+		}
 		if (Platform.OS === 'web' && !piano.current) {
 			const audio = new AudioContext();
 			piano.current = new SplendidGrandPiano(audio);

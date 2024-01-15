@@ -171,6 +171,11 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					setEndResult({ songId: song.data!.id, ...data });
 					return;
 				}
+				if (data.type == 'step') {
+					setTime(data.timestamp)
+					//set idx += 1
+					return
+				}
 				console.log(data);
 
 				const points = data.info.score;
@@ -239,7 +244,9 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	useEffect(() => {
 		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 		const interval = setInterval(() => {
-			setTime(() => getElapsedTime()); // Countdown
+			if (playType != 'practice') {
+				setTime(() => getElapsedTime());
+			} // Countdown
 		}, 200);
 
 		return () => {
@@ -247,7 +254,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 			stopwatch.stop();
 			clearInterval(interval);
 		};
-	}, []);
+	}, [playType]);
 
 	useEffect(() => {
 		// Song.data is updated on navigation.navigate (do not know why)
@@ -386,6 +393,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					}}
 				>
 					<PartitionMagic
+						playType={playType}
 						shouldPlay={shouldPlay}
 						timestamp={time}
 						songID={song.data.id}
