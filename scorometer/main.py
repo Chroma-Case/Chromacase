@@ -88,7 +88,7 @@ class Scorometer:
 		self.practice_partition: list[list[Key]] = self.getPracticePartition(mode)
 		# the log generated is so long that it's longer than the stderr buffer resulting in a crash
 		# logging.debug({"partition": self.partition.notes})
-		self.keys_down = []
+		self.keys_down: list[Key] = []
 		self.mode: int = mode
 		self.song_id: int = song_id
 		self.user_id: int = user_id
@@ -105,6 +105,11 @@ class Scorometer:
 			"current_streak": 0,
 			"max_streak": 0,
 		}
+
+		# Practice variables
+		self.to_play = set([x.key for x in self.practice_partition.pop(0)])
+		self.keys_down_practice: set = set()
+
 
 	def send(self, obj):
 		obj["info"] = self.info
@@ -195,11 +200,20 @@ class Scorometer:
 			logging.warning("note_off: no key to play but it was not a wrong note_on")
 
 	def handleNoteOnPractice(self, message: NoteOnMessage):
-		is_down = any(x[0] == message.note for x in self.keys_down)
+		#is_down = any(x[0] == message.note for x in self.keys_down)
 		logging.debug({"note_on": message.note})
-		if is_down:
-			return
-		self.keys_down.append((message.note, message.time))
+		#if is_down:
+		#	return
+		#self.keys_down.append((message.note, message.time))
+		self.keys_down_practice.add(message.note)
+		if self.to_play == self.keys_down_practice:
+			self.send({"type": "step", "message": "Good"})
+			if len(self.practice_partition) == 0:
+				self.endGamePractice()
+			self.to_play = set([x.key for x in self.practice_partition.pop(0)])
+
+		'''
+		self.to_play
 		key = Key(key=message.note, start=message.time, duration=0)
 		keys_to_play = next(
 			(i for i in self.practice_partition if any(x.done is not True for x in i)),
@@ -221,9 +235,12 @@ class Scorometer:
 			logging.debug({"note_on": f"wrong key {message.note}"})
 			self.info["current_streak"] = 0
 			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
+		'''
 
 	def handleNoteOffPractice(self, message: NoteOffMessage):
 		logging.debug({"note_off": message.note})
+		self.keys_down_practice.remove(message.note)
+		'''
 		down_since = next(
 			since for (h_key, since) in self.keys_down if h_key == message.note
 		)
@@ -256,6 +273,7 @@ class Scorometer:
 			self.send({"type": "duration", "id": message.id, "duration": perf})
 		else:
 			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
+		'''
 
 	def getDurationScore(self, key: Key, to_play: Key):
 		tempo_percent = abs((key.duration / to_play.duration) - 1)
@@ -344,6 +362,17 @@ class Scorometer:
 				},
 				headers=auth_header
 			)
+		exit()
+	
+	def endGamePractice(self):
+		send(
+			{
+				"type": "end",
+				#"overallScore": self.info["score"],
+				#"precision": round(((self.info["perfect"] + self.info["great"] + self.info["good"]) / (len(self.partition.notes) + self.info["wrong"]) * 100), 2),
+				#"score": self.info,
+			}
+		)
 		exit()
 
 
