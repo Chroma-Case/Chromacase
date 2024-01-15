@@ -172,6 +172,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					return;
 				}
 				if (data.type == 'step') {
+					console.log(data.timestamp)
 					setTime(data.timestamp)
 					//set idx += 1
 					return

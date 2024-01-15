@@ -200,80 +200,21 @@ class Scorometer:
 			logging.warning("note_off: no key to play but it was not a wrong note_on")
 
 	def handleNoteOnPractice(self, message: NoteOnMessage):
-		#is_down = any(x[0] == message.note for x in self.keys_down)
 		logging.debug({"note_on": message.note})
-		#if is_down:
-		#	return
-		#self.keys_down.append((message.note, message.time))
 		self.keys_down_practice.add(message.note)
+		self.practiceCheck()
+
+	def handleNoteOffPractice(self, message: NoteOffMessage):
+		logging.debug({"note_off": message.note})
+		self.keys_down_practice.remove(message.note)
+		self.practiceCheck()
+	
+	def practiceCheck(self):
 		if self.to_play == self.keys_down_practice:
 			if len(self.practice_partition) == 0:
 				self.endGamePractice()
 			self.send({"type": "step", "timestamp": self.practice_partition[0][0].start + 1})
 			self.to_play = set([x.key for x in self.practice_partition.pop(0)])
-
-		'''
-		self.to_play
-		key = Key(key=message.note, start=message.time, duration=0)
-		keys_to_play = next(
-			(i for i in self.practice_partition if any(x.done is not True for x in i)),
-			None,
-		)
-		if keys_to_play is None:
-			self.send({"type": "error", "error": "no keys should be played"})
-			return
-		to_play = next(
-			(i for i in keys_to_play if i.key == key.key and i.done is not True), None
-		)
-		if to_play:
-			perf = "practice"
-			logging.debug({"note_on": f"{perf} on {message.note}"})
-			self.incrementStreak()
-			self.send({"type": "timing", "id": message.id, "timing": perf})
-		else:
-			self.wrong_ids += [message.id]
-			logging.debug({"note_on": f"wrong key {message.note}"})
-			self.info["current_streak"] = 0
-			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
-		'''
-
-	def handleNoteOffPractice(self, message: NoteOffMessage):
-		logging.debug({"note_off": message.note})
-		self.keys_down_practice.remove(message.note)
-		'''
-		down_since = next(
-			since for (h_key, since) in self.keys_down if h_key == message.note
-		)
-		self.keys_down.remove((message.note, down_since))
-		if message.id in self.wrong_ids:
-			logging.debug({"note_off": f"wrong key {message.note}"})
-			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
-			self.info["wrong"] += 1;
-			return
-		key = Key(
-			key=message.note, start=down_since, duration=(message.time - down_since)
-		)
-		keys_to_play = next(
-			(i for i in self.practice_partition if any(x.done is not True for x in i)),
-			None,
-		)
-		if keys_to_play is None:
-			logging.info("Invalid key.")
-			self.info["score"] -= 50
-			# TODO: I dont think this if is right
-			# self.sendScore(message.id, "wrong key", "wrong key")
-			return
-		to_play = next(
-			(i for i in keys_to_play if i.key == key.key and i.done is not True), None
-		)
-		if to_play:
-			perf = "practice"
-			to_play.done = True
-			logging.debug({"note_off": f"{perf} on {message.note}"})
-			self.send({"type": "duration", "id": message.id, "duration": perf})
-		else:
-			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
-		'''
 
 	def getDurationScore(self, key: Key, to_play: Key):
 		tempo_percent = abs((key.duration / to_play.duration) - 1)
