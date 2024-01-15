@@ -223,8 +223,9 @@ const PlayView = ({ songId }: PlayViewProps) => {
 		};
 		inputs.forEach((input) => {
 			input.onmidimessage = (message) => {
-				const { command, note } = parseMidiMessage(message);
-				const keyIsPressed = command == 9;
+				const { command, note, velocity } = parseMidiMessage(message);
+				let keyIsPressed = command == 9;
+				if (velocity == 0) keyIsPressed = false;
 
 				webSocket.current?.send(
 					JSON.stringify({

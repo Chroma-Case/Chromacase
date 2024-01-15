@@ -207,9 +207,9 @@ class Scorometer:
 		#self.keys_down.append((message.note, message.time))
 		self.keys_down_practice.add(message.note)
 		if self.to_play == self.keys_down_practice:
-			self.send({"type": "step", "timestamp": self.practice_partition[0][0].start + 1})
 			if len(self.practice_partition) == 0:
 				self.endGamePractice()
+			self.send({"type": "step", "timestamp": self.practice_partition[0][0].start + 1})
 			self.to_play = set([x.key for x in self.practice_partition.pop(0)])
 
 		'''
@@ -368,9 +368,9 @@ class Scorometer:
 		send(
 			{
 				"type": "end",
-				#"overallScore": self.info["score"],
-				#"precision": round(((self.info["perfect"] + self.info["great"] + self.info["good"]) / (len(self.partition.notes) + self.info["wrong"]) * 100), 2),
-				#"score": self.info,
+				"overallScore": self.info["score"],
+				"precision": round(((self.info["perfect"] + self.info["great"] + self.info["good"]) / (len(self.partition.notes) + self.info["wrong"]) * 100), 2),
+				"score": self.info,
 			}
 		)
 		exit()
