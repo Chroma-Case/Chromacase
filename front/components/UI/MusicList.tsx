@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { FlatList, HStack, View, useBreakpointValue, useTheme, Text, Row } from 'native-base';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import MusicItem from './MusicItem';
@@ -107,6 +107,9 @@ function MusicListCC({
 	const { mutateAsync } = useLikeSongMutation();
 	const navigation = useNavigation();
 	const { colors } = useTheme();
+	// since we can not easily extract a unique key for each
+	// item because there is multiple time the same song played
+	const musicItemTracker = useRef<Map<number, number>>(new Map());
 
 	if (!musics) {
 		return <LoadingView />;
@@ -132,7 +135,16 @@ function MusicListCC({
 					style={{ marginBottom: 2 }}
 				/>
 			)}
-			keyExtractor={(item) => item.id.toString()}
+			keyExtractor={(item) => {
+				if (!musicItemTracker.current.has(item.id)) {
+					musicItemTracker.current.set(item.id, 0);
+				}
+				const count = musicItemTracker.current.get(item.id)!;
+				musicItemTracker.current.set(item.id, count + 1);
+				// this is fine because the musics are
+				// always returned in the same order of play
+				return `${item.id}-${count}`;
+			}}
 			ListFooterComponent={
 				hasMore ? (
 					<View style={styles.footerContainer}>
