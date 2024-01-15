@@ -186,7 +186,7 @@ const PartitionMagic = ({
 	}, [data?.cursors, melodySound.current?._loaded]);
 
 	React.useEffect(() => {
-		if (!shouldPlay) return;
+		if (!shouldPlay && playType != 'practice') return;
 		if (!piano.current || !isPianoLoaded) return;
 		if (!data || data?.cursors.length === 0) return;
 		getCursorToPlay(
