@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useMemo, memo } from 'react';
-import { StyleSheet, ViewStyle, Image } from 'react-native';
+import { StyleSheet, ViewStyle, Image, Platform } from 'react-native';
 import {
 	Column,
 	HStack,
@@ -12,7 +12,7 @@ import {
 	IconButton,
 } from 'native-base';
 import { HeartAdd, HeartRemove, Play } from 'iconsax-react-native';
-// import IconButton from './IconButton';
+import WebIconButton from './IconButton';
 import Spacer from '../../components/UI/Spacer';
 import { useTranslation } from 'react-i18next';
 
@@ -167,28 +167,48 @@ function MusicItemComponent(props: MusicItemType) {
 				</Text>
 				{screenSize === 'xl' && <Spacer height="xs" />}
 				<Row style={styles.songContainer}>
-					<Text isTruncated numberOfLines={1} style={{
-						flexShrink: 1,
-					}}>{props.song}</Text>
-					<IconButton
-						icon={
-							props.liked ? (
-								<HeartRemove
-									size={screenSize === 'xl' ? 24 : 18}
-									color={colors.primary[700]}
-									variant="Bold"
-								/>
-							) : (
-								<HeartAdd
-									size={screenSize === 'xl' ? 24 : 18}
-									color={colors.primary[300]}
-								/>
-							)
-						}
-						onPress={() => {
-							props.onLike(!props.liked);
+					<Text
+						isTruncated
+						numberOfLines={1}
+						style={{
+							flexShrink: 1,
 						}}
-					/>
+					>
+						{props.song}
+					</Text>
+					{Platform.OS === 'web' ? (
+						<WebIconButton
+							colorActive={colors.text[700]}
+							color={colors.primary[300]}
+							icon={HeartAdd}
+							iconActive={HeartRemove}
+							activeVariant="Bold"
+							size={screenSize === 'xl' ? 24 : 18}
+							isActive={props.liked}
+							onPress={props.onLike}
+						/>
+					) : (
+						<IconButton
+							variant={'unstyled'}
+							icon={
+								props.liked ? (
+									<HeartRemove
+										size={screenSize === 'xl' ? 24 : 18}
+										color={colors.primary[700]}
+										variant="Bold"
+									/>
+								) : (
+									<HeartAdd
+										size={screenSize === 'xl' ? 24 : 18}
+										color={colors.primary[300]}
+									/>
+								)
+							}
+							onPress={() => {
+								props.onLike(!props.liked);
+							}}
+						/>
+					)}
 				</Row>
 			</Column>
 			{[formattedLastScore, formattedBestScore].map((value, index) => (
