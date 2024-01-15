@@ -107,7 +107,10 @@ class Scorometer:
 		}
 
 		# Practice variables
-		self.to_play = set([x.key for x in self.practice_partition.pop(0)])
+		if self.mode == PRACTICE:
+			self.to_play = set([x.key for x in self.practice_partition.pop(0)])
+		else:
+			self.to_play = set()
 		self.keys_down_practice: set = set()
 
 
@@ -159,6 +162,7 @@ class Scorometer:
 				else 50
 			)
 			self.incrementStreak()
+			to_play.half_done = True
 			logging.debug({"note_on": f"{perf} on {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": perf})
 		else:
@@ -280,7 +284,7 @@ class Scorometer:
 
 	def endGame(self):
 		for i in self.partition.notes:
-			if i.done is False:
+			if i.done is False and not i.half_done:
 				self.info["score"] -= 25
 				self.info["missed"] += 1
 		send(
