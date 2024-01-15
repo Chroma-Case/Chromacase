@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo } from 'react';
 import { FlatList, HStack, View, useBreakpointValue, useTheme, Text, Row } from 'native-base';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import MusicItem from './MusicItem';

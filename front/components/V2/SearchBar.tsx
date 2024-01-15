@@ -107,11 +107,7 @@ const SearchBarComponent = (props: { onValidate: (searchData: searchProps) => vo
 							onChangeText={(value) => setQuery(value)}
 						/>
 					</View>
-					<ButtonBase
-						type="menu"
-						icon={SearchNormal1}
-						onPress={handleValidate}
-					/>
+					<ButtonBase type="menu" icon={SearchNormal1} onPress={handleValidate} />
 				</View>
 			</View>
 			<View
