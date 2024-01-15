@@ -1,9 +1,18 @@
 /* eslint-disable react/prop-types */
 import React, { useMemo, memo } from 'react';
 import { StyleSheet, ViewStyle, Image } from 'react-native';
-import { Column, HStack, Row, Stack, Text, useBreakpointValue, useTheme } from 'native-base';
+import {
+	Column,
+	HStack,
+	Row,
+	Stack,
+	Text,
+	useBreakpointValue,
+	useTheme,
+	IconButton,
+} from 'native-base';
 import { HeartAdd, HeartRemove, Play } from 'iconsax-react-native';
-import IconButton from './IconButton';
+// import IconButton from './IconButton';
 import Spacer from '../../components/UI/Spacer';
 import { useTranslation } from 'react-i18next';
 
@@ -103,18 +112,15 @@ function MusicItemComponent(props: MusicItemType) {
 					backgroundColor: colors.coolGray[500],
 					paddingRight: screenSize === 'small' ? 8 : 16,
 				},
-				playButtonContainer: {
+				playButton: {
+					backgroundColor: colors.primary[300],
+					borderRadius: 999,
 					zIndex: 1,
 					position: 'absolute',
 					right: -8,
 					bottom: -6,
 				},
-				playButton: {
-					backgroundColor: colors.primary[300],
-					borderRadius: 999,
-				},
 				image: {
-					position: 'relative',
 					width: screenSize === 'xl' ? 80 : 60,
 					height: screenSize === 'xl' ? 80 : 60,
 				},
@@ -124,6 +130,10 @@ function MusicItemComponent(props: MusicItemType) {
 				},
 				songContainer: {
 					width: '100%',
+					display: 'flex',
+					flexDirection: 'row',
+					gap: 2,
+					alignItems: 'center',
 				},
 				stats: {
 					display: 'flex',
@@ -144,34 +154,40 @@ function MusicItemComponent(props: MusicItemType) {
 	return (
 		<HStack space={screenSize === 'xl' ? 2 : 1} style={[styles.container, props.style]}>
 			<Stack style={{ position: 'relative', overflow: 'hidden' }}>
-				<IconButton
-					containerStyle={styles.playButtonContainer}
-					style={styles.playButton}
-					padding={8}
-					onPress={props.onPlay}
-					color="#FFF"
-					icon={Play}
-					variant="Bold"
-					size={24}
-				/>
 				<Image source={{ uri: props.image }} style={styles.image} />
+				<IconButton
+					style={styles.playButton}
+					onPress={props.onPlay}
+					icon={<Play size={24} variant="Bold" color="#FFF" />}
+				/>
 			</Stack>
 			<Column style={{ flex: 4, width: '100%', justifyContent: 'center' }}>
-				<Text numberOfLines={1} style={styles.artistText}>
+				<Text isTruncated numberOfLines={1} style={styles.artistText}>
 					{props.artist}
 				</Text>
 				{screenSize === 'xl' && <Spacer height="xs" />}
-				<Row space={2} style={styles.songContainer}>
-					<Text numberOfLines={1}>{props.song}</Text>
+				<Row style={styles.songContainer}>
+					<Text isTruncated numberOfLines={1} style={{
+						flexShrink: 1,
+					}}>{props.song}</Text>
 					<IconButton
-						colorActive={colors.text[700]}
-						color={colors.primary[300]}
-						icon={HeartAdd}
-						iconActive={HeartRemove}
-						activeVariant="Bold"
-						size={screenSize === 'xl' ? 24 : 18}
-						isActive={props.liked}
-						onPress={props.onLike}
+						icon={
+							props.liked ? (
+								<HeartRemove
+									size={screenSize === 'xl' ? 24 : 18}
+									color={colors.primary[700]}
+									variant="Bold"
+								/>
+							) : (
+								<HeartAdd
+									size={screenSize === 'xl' ? 24 : 18}
+									color={colors.primary[300]}
+								/>
+							)
+						}
+						onPress={() => {
+							props.onLike(!props.liked);
+						}}
 					/>
 				</Row>
 			</Column>
