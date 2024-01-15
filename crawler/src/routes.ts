@@ -19,9 +19,9 @@ router.addDefaultHandler(async ({ enqueueLinks }) => {
 router.addHandler("SONG", async ({ request, page }) => {
   await Dataset.pushData({ url: request.loadedUrl });
   await page.waitForSelector('aside div div section button[name="download"]');
-  let title = await page.locator("h1").textContent();
-  if (title == null) return
-  title = slug(title);
+  let og_title = await page.locator("h1").textContent();
+  if (og_title == null) return
+  let title = slug(og_title);
   let artist = await page
     .locator(
       "body > div.js-page.react-container > div > section > aside > div:nth-child(5) > div > section > h3:nth-child(2) > a"
@@ -71,7 +71,7 @@ router.addHandler("SONG", async ({ request, page }) => {
     `../musics/a/${title}/${title}.ini`,
     `
 [Metadata]
-Name=${title}
+Name=${og_title}
 Artist=${artist}
 Genre=${genres}
 Album=

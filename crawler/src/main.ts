@@ -17,5 +17,5 @@ const crawler = new PlaywrightCrawler({
 
 // Add first URL to the queue and start the crawl.
 await crawler.run([
-  "https://musescore.com/sheetmusic?complexity=1&instrument=2&license=to_modify_commercially%2Cto_use_commercially&recording_type=public-domain",
+  "https://musescore.com/sheetmusic?complexity=1&instrument=2&instrumentation=114&license=to_modify_commercially%2Cto_use_commercially&recording_type=public-domain&sort=rating",
 ]);
