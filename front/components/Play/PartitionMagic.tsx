@@ -10,7 +10,7 @@ import LoadingComponent from '../Loading';
 import { SplendidGrandPiano } from 'smplr';
 
 export type ParitionMagicProps = {
-	playType: 'practice' | 'normal' | null
+	playType: 'practice' | 'normal' | null;
 	timestamp: number;
 	songID: number;
 	shouldPlay: boolean;
@@ -202,8 +202,7 @@ const PartitionMagic = ({
 						easing: Easing.inOut(Easing.ease),
 					}
 				);
-				if (playType == 'practice')
-					return;
+				if (playType == 'practice') return;
 				cursor.notes.forEach((note) => {
 					piano.current?.start({
 						note: note.note,

@@ -109,18 +109,19 @@ const PlayViewControlBar = ({
 					gap: isPhone ? 10 : 25,
 				}}
 			>
-				{ playType != 'practice' &&
-				<IconButton
-					size="sm"
-					variant="solid"
-					disabled={disabled}
-					_icon={{
-						as: Ionicons,
-						color: colors.coolGray[900],
-						name: paused ? 'play' : 'pause',
-					}}
-					onPress={paused ? onResume : onPause}
-				/>}
+				{playType != 'practice' && (
+					<IconButton
+						size="sm"
+						variant="solid"
+						disabled={disabled}
+						_icon={{
+							as: Ionicons,
+							color: colors.coolGray[900],
+							name: paused ? 'play' : 'pause',
+						}}
+						onPress={paused ? onResume : onPause}
+					/>
+				)}
 				<IconButton
 					size="sm"
 					colorScheme="coolGray"
@@ -165,8 +166,7 @@ const PlayViewControlBar = ({
 					minWidth: 120,
 				}}
 			>
-				{ playType != 'practice' &&
-				<MetronomeControls paused={paused} bpm={bpm.current} />}
+				{playType != 'practice' && <MetronomeControls paused={paused} bpm={bpm.current} />}
 			</View>
 		</Row>
 	);
