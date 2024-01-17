@@ -174,8 +174,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					toast.show({ description: 'Scoro: ' + data.error });
 					return;
 				}
-				if (data.type == 'pong')
-					return;
+				if (data.type == 'pong') return;
 				if (data.type == 'end') {
 					const maxPoints = data.score.max_score || 1;
 					const points = data.overallScore;
@@ -193,8 +192,8 @@ const PlayView = ({ songId }: PlayViewProps) => {
 				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
 				if (data.type == 'step') {
-					setTime(data.timestamp)
-					return
+					setTime(data.timestamp);
+					return;
 				}
 				let formattedMessage = '';
 				let messageColor: ColorSchemeType | undefined;
