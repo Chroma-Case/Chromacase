@@ -46,7 +46,7 @@ const ScoreModal = (props: ScoreModalProps) => {
 					/>
 				))}
 			</Row>
-			<Text fontSize="3xl">{Math.max(score, 0)}%</Text>
+			<Text fontSize="3xl">{Math.max(score, 0).toFixed(2)}%</Text>
 			<Row w="100%" style={{ justifyContent: 'space-between' }}>
 				<Translate translationKey="precision" />
 				<Text>{props.precision}%</Text>

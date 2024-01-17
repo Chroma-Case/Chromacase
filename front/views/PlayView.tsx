@@ -336,7 +336,10 @@ const PlayView = ({ songId }: PlayViewProps) => {
 								style={{}}
 								type="outlined"
 								title={translate('practiceBtn')}
-								onPress={async () => setPlayType('practice')}
+								onPress={async () => {
+									setPlayType('practice');
+									setShouldPlay(true);
+								}}
 							/>
 							<ButtonBase
 								style={{}}
