@@ -35,9 +35,8 @@ const getCursorToPlay = (
 		return;
 	}
 	for (let i = cursorInfos.length - 1; i > currentCurIdx; i--) {
-		const cursorInfo = cursorInfos[i]!;
-		if (cursorInfo.timestamp <= timestamp) {
-			onCursorMove(cursorInfo, i);
+		if (cursorInfos[i]!.timestamp <= timestamp) {
+			onCursorMove(cursorInfos[i]!, i);
 		}
 	}
 };
@@ -186,7 +185,7 @@ const PartitionMagic = ({
 	}, [data?.cursors, melodySound.current?._loaded]);
 
 	React.useEffect(() => {
-		if (!shouldPlay && playType != 'practice') return;
+		if (!shouldPlay) return;
 		if (!piano.current || !isPianoLoaded) return;
 		if (!data || data?.cursors.length === 0) return;
 		getCursorToPlay(
@@ -194,6 +193,8 @@ const PartitionMagic = ({
 			currentCurIdx.current,
 			timestamp + transitionDuration,
 			(cursor, idx) => {
+				console.log(data.cursors)
+				console.log("b ", timestamp, cursor, currentCurIdx.current)
 				currentCurIdx.current = idx;
 				partitionOffset.value = withTiming(
 					-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
@@ -202,7 +203,7 @@ const PartitionMagic = ({
 						easing: Easing.inOut(Easing.ease),
 					}
 				);
-				if (playType == 'practice') return;
+				if (playType === 'practice') return;
 				cursor.notes.forEach((note) => {
 					piano.current?.start({
 						note: note.note,
