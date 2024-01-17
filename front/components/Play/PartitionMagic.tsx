@@ -202,6 +202,8 @@ const PartitionMagic = ({
 						easing: Easing.inOut(Easing.ease),
 					}
 				);
+				if (playType == 'practice')
+					return;
 				cursor.notes.forEach((note) => {
 					piano.current?.start({
 						note: note.note,

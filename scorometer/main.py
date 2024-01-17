@@ -17,6 +17,7 @@ from chroma_case.Message import (
 	NoteOffMessage,
 	NoteOnMessage,
 	PauseMessage,
+	PingMessage,
 	StartMessage,
 	getMessage,
 )
@@ -215,6 +216,9 @@ class Scorometer:
 	
 	def practiceCheck(self):
 		if self.to_play == self.keys_down_practice:
+
+			self.info["perfect"] += len(self.to_play)
+			self.info["score"] += 100 * len(self.to_play)
 			if len(self.practice_partition) == 0:
 				self.endGamePractice()
 			self.send({"type": "step", "timestamp": self.practice_partition[0][0].start + 1})
@@ -250,13 +254,16 @@ class Scorometer:
 		| NoteOnMessage
 		| NoteOffMessage
 		| PauseMessage
-		| InvalidMessage,
+		| InvalidMessage
+		| PingMessage,
 		line: str,
 	):
 		match message:
 			case InvalidMessage(error):
 				logging.warning(f"Invalid message {line} with error: {error}")
 				self.send({"error": f"Invalid message {line} with error: {error}"})
+			case PingMessage():
+				self.send({"type": "pong"})
 			case NoteOnMessage():
 				if self.mode == NORMAL:
 					self.handleNoteOn(message)
