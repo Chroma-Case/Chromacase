@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Platform, View } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
-import Animated, { useSharedValue, withTiming, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, withTiming, Easing, useAnimatedStyle } from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { Audio } from 'expo-av';
 import { SvgContainer } from './SvgContainer';
@@ -36,7 +36,7 @@ const getCursorToPlay = (
 	}
 	for (let i = cursorInfos.length - 1; i > currentCurIdx; i--) {
 		if (cursorInfos[i]!.timestamp <= timestamp) {
-			onCursorMove(cursorInfos[i]!, i);
+			return onCursorMove(cursorInfos[i]!, i);
 		}
 	}
 };
@@ -152,7 +152,7 @@ const PartitionMagic = ({
 	}, [shouldPlay]);
 
 	React.useEffect(() => {
-		if (endPartitionReached) {
+		if (endPartitionReached && playType === 'normal') {
 			// if the audio is unsync
 			melodySound.current?.pauseAsync();
 			onEndReached();
@@ -193,8 +193,6 @@ const PartitionMagic = ({
 			currentCurIdx.current,
 			timestamp + transitionDuration,
 			(cursor, idx) => {
-				console.log(data.cursors)
-				console.log("b ", timestamp, cursor, currentCurIdx.current)
 				currentCurIdx.current = idx;
 				partitionOffset.value = withTiming(
 					-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
@@ -214,6 +212,9 @@ const PartitionMagic = ({
 		);
 	}, [timestamp, data?.cursors, isPianoLoaded]);
 
+	const animatedStyle = useAnimatedStyle(() => ({
+		left: `${partitionOffset.value * 100}%`,
+	}))
 	return (
 		<View
 			style={{
@@ -247,15 +248,14 @@ const PartitionMagic = ({
 				}}
 			>
 				<Animated.View
-					style={{
+					style={[animatedStyle, {
 						position: 'absolute',
 						height: '100%',
 						aspectRatio: partitionDims[0] / partitionDims[1],
-						left: `${partitionOffset.value * 100}%`,
 						display: 'flex',
 						alignItems: 'stretch',
 						justifyContent: 'flex-start',
-					}}
+					}]}
 				>
 					<SvgContainer
 						url={getSVGURL(songID)}
