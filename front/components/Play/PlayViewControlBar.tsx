@@ -8,6 +8,7 @@ import Song from '../../models/Song';
 import { useTheme } from 'native-base';
 
 type PlayViewControlBarProps = {
+	playType: 'practice' | 'normal' | null;
 	song: Song;
 	time: number;
 	paused: boolean;
@@ -19,6 +20,7 @@ type PlayViewControlBarProps = {
 };
 
 const PlayViewControlBar = ({
+	playType,
 	song,
 	time,
 	paused,
@@ -107,6 +109,7 @@ const PlayViewControlBar = ({
 					gap: isPhone ? 10 : 25,
 				}}
 			>
+				{ playType != 'practice' &&
 				<IconButton
 					size="sm"
 					variant="solid"
@@ -117,7 +120,7 @@ const PlayViewControlBar = ({
 						name: paused ? 'play' : 'pause',
 					}}
 					onPress={paused ? onResume : onPause}
-				/>
+				/>}
 				<IconButton
 					size="sm"
 					colorScheme="coolGray"
@@ -162,7 +165,8 @@ const PlayViewControlBar = ({
 					minWidth: 120,
 				}}
 			>
-				<MetronomeControls paused={paused} bpm={bpm.current} />
+				{ playType != 'practice' &&
+				<MetronomeControls paused={paused} bpm={bpm.current} />}
 			</View>
 		</Row>
 	);

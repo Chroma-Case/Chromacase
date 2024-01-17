@@ -32,6 +32,7 @@ type PlayViewProps = {
 
 // this a hot fix this should be reverted soon
 let scoroBaseApiUrl = process.env.EXPO_PUBLIC_SCORO_URL!;
+let interval: NodeJS.Timeout;
 
 if (process.env.NODE_ENV != 'development' && Platform.OS === 'web') {
 	Linking.getInitialURL().then((initUrl) => {
@@ -146,8 +147,16 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					bearer: accessToken,
 				})
 			);
+			interval = setInterval(() => {
+				webSocket.current!.send(
+					JSON.stringify({
+						type: 'ping',
+					})
+				);
+			}, 15000);
 		};
 		webSocket.current.onclose = () => {
+			clearInterval(interval);
 			console.log('Websocket closed', endMsgReceived);
 			if (!endMsgReceived) {
 				toast.show({ description: 'Connection lost with Scorometer' });
@@ -165,25 +174,28 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					toast.show({ description: 'Scoro: ' + data.error });
 					return;
 				}
+				if (data.type == 'pong')
+					return;
 				if (data.type == 'end') {
+					const maxPoints = data.score.max_score || 1;
+					const points = data.overallScore;
+
 					endMsgReceived = true;
 					webSocket.current?.close();
+					setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 					setEndResult({ songId: song.data!.id, ...data });
 					return;
 				}
-				if (data.type == 'step') {
-					console.log(data.timestamp)
-					setTime(data.timestamp)
-					//set idx += 1
-					return
-				}
-				console.log(data);
 
 				const points = data.info.score;
 				const maxPoints = data.info.max_score || 1;
 
 				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
+				if (data.type == 'step') {
+					setTime(data.timestamp)
+					return
+				}
 				let formattedMessage = '';
 				let messageColor: ColorSchemeType | undefined;
 
@@ -416,6 +428,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 					/>
 				</View>
 				<PlayViewControlBar
+					playType={playType}
 					score={score}
 					time={time}
 					paused={paused}

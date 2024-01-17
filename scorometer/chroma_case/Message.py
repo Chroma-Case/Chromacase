@@ -17,6 +17,11 @@ class StartMessage(ValidatedDC):
 	mode: Literal["normal", "practice"]
 	type: Literal["start"] = "start"
 
+@dataclass
+class PingMessage(ValidatedDC):
+	type: Literal["ping"] = "ping"
+
+
 
 @dataclass
 class EndMessage(ValidatedDC):
@@ -52,6 +57,7 @@ message_map = {
 	"note_on": NoteOnMessage,
 	"note_off": NoteOffMessage,
 	"pause": PauseMessage,
+	"ping": PingMessage,
 }
 
 
@@ -62,7 +68,8 @@ def getMessage() -> (
 		| NoteOnMessage
 		| NoteOffMessage
 		| PauseMessage
-		| InvalidMessage,
+		| InvalidMessage
+		| PingMessage,
 		str,
 	]
 ):
