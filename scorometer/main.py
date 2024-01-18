@@ -95,7 +95,7 @@ class Scorometer:
 		self.mode: int = mode
 		self.song_id: int = song_id
 		self.user_id: int = user_id
-		self.wrong_ids = []
+		self.wrong_ids = set()
 		self.difficulties = {}
 		self.info: ScoroInfo = {
 			"max_score": len(self.partition.notes) * 100,
@@ -172,7 +172,7 @@ class Scorometer:
 			self.info["score"] -= 25
 			self.info["wrong"] += 1
 			self.info["current_streak"] = 0
-			self.wrong_ids += [message.id]
+			self.wrong_ids.add(message.id)
 			logging.debug({"note_on": f"wrong key {message.note}"})
 			self.send({"type": "timing", "id": message.id, "timing": "wrong"})
 
@@ -183,8 +183,10 @@ class Scorometer:
 		)
 		self.keys_down.remove((message.note, down_since))
 		if message.id in self.wrong_ids:
+			self.wrong_ids.remove(message.id)
 			logging.debug({"note_off": f"wrong key {message.note}"})
 			self.send({"type": "duration", "id": message.id, "duration": "wrong"})
+			
 			return
 		key = Key(
 			key=message.note, start=down_since, duration=(message.time - down_since)
