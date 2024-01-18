@@ -72,7 +72,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const [endResult, setEndResult] = useState<unknown>();
 	const [shouldPlay, setShouldPlay] = useState(false);
 	const songHistory = useQuery(API.getSongHistory(songId));
-	const endCalled = useRef(false)
+	const endCalled = useRef(false);
 	const [score, setScore] = useState(0); // Between 0 and 100
 	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
 	const [readyToPlay, setReadyToPlay] = useState(false);
@@ -114,8 +114,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	};
 
 	const onEnd = () => {
-		if (endCalled.current == true)
-			return;
+		if (endCalled.current == true) return;
 		endCalled.current = true;
 		stopwatch.stop();
 		if (webSocket.current?.readyState != WebSocket.OPEN) {

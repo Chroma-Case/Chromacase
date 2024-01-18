@@ -2,7 +2,12 @@ import * as React from 'react';
 import { Platform, View } from 'react-native';
 import API from '../../API';
 import { useQuery } from '../../Queries';
-import Animated, { useSharedValue, withTiming, Easing, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, {
+	useSharedValue,
+	withTiming,
+	Easing,
+	useAnimatedStyle,
+} from 'react-native-reanimated';
 import { CursorInfoItem } from '../../models/SongCursorInfos';
 import { Audio } from 'expo-av';
 import { SvgContainer } from './SvgContainer';
@@ -214,7 +219,7 @@ const PartitionMagic = ({
 
 	const animatedStyle = useAnimatedStyle(() => ({
 		left: `${partitionOffset.value * 100}%`,
-	}))
+	}));
 	return (
 		<View
 			style={{
@@ -248,14 +253,17 @@ const PartitionMagic = ({
 				}}
 			>
 				<Animated.View
-					style={[animatedStyle, {
-						position: 'absolute',
-						height: '100%',
-						aspectRatio: partitionDims[0] / partitionDims[1],
-						display: 'flex',
-						alignItems: 'stretch',
-						justifyContent: 'flex-start',
-					}]}
+					style={[
+						animatedStyle,
+						{
+							position: 'absolute',
+							height: '100%',
+							aspectRatio: partitionDims[0] / partitionDims[1],
+							display: 'flex',
+							alignItems: 'stretch',
+							justifyContent: 'flex-start',
+						},
+					]}
 				>
 					<SvgContainer
 						url={getSVGURL(songID)}
