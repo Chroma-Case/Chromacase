@@ -16,7 +16,7 @@ import { SplendidGrandPiano } from 'smplr';
 
 export type ParitionMagicProps = {
 	playType: 'practice' | 'normal' | null;
-	timestamp: number;
+	timestamp: React.MutableRefObject<number>;
 	songID: number;
 	shouldPlay: boolean;
 	onEndReached: () => void;
@@ -48,6 +48,8 @@ const getCursorToPlay = (
 
 const transitionDuration = 50;
 
+export let updateCursor: (() => void) | undefined = undefined;
+
 const PartitionMagic = ({
 	playType,
 	timestamp,
@@ -78,7 +80,36 @@ const PartitionMagic = ({
 	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
-	console.log(melodySound.current?._loaded);
+	updateCursor = () => {
+		if (!shouldPlay) return;
+		if (!data || data?.cursors.length === 0) return;
+		getCursorToPlay(
+			data!.cursors,
+			currentCurIdx.current,
+			timestamp.current + transitionDuration,
+			(cursor, idx) => {
+				currentCurIdx.current = idx;
+				partitionOffset.value = withTiming(
+					-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
+					{
+						duration: transitionDuration,
+						easing: Easing.inOut(Easing.ease),
+					}
+				);
+				if (idx === data!.cursors.length - 1) {
+					setEndPartitionReached(true);
+				}
+				if (playType === 'practice') return;
+				if (!isPianoLoaded) return;
+				cursor.notes.forEach((note) => {
+					piano.current?.start({
+						note: note.note,
+						duration: note.duration,
+					});
+				});
+			}
+		);
+	};
 
 	if (!endPartitionReached && currentCurIdx.current + 1 === data?.cursors.length) {
 		// weird contraption but the mobile don't want classic functions to be called
@@ -166,58 +197,7 @@ const PartitionMagic = ({
 		}
 	}, [endPartitionReached]);
 
-	React.useEffect(() => {
-		if (!melodySound.current || !melodySound.current._loaded) return;
-		if (!data || data?.cursors.length === 0) return;
-
-		melodySound.current.setOnPlaybackStatusUpdate((status) => {
-			//@ts-expect-error positionMillis is not in the type
-			const timestamp = status?.positionMillis ?? 0;
-			getCursorToPlay(
-				data!.cursors,
-				currentCurIdx.current,
-				timestamp + transitionDuration,
-				(cursor, idx) => {
-					currentCurIdx.current = idx;
-					partitionOffset.value = withTiming(
-						-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
-						{
-							duration: transitionDuration,
-							easing: Easing.inOut(Easing.ease),
-						}
-					);
-				}
-			);
-		});
-	}, [data?.cursors, melodySound.current?._loaded]);
-
-	React.useEffect(() => {
-		if (!shouldPlay) return;
-		if (!isPianoLoaded || melodySound.current) return;
-		if (!data || data?.cursors.length === 0) return;
-		getCursorToPlay(
-			data!.cursors,
-			currentCurIdx.current,
-			timestamp + transitionDuration,
-			(cursor, idx) => {
-				currentCurIdx.current = idx;
-				partitionOffset.value = withTiming(
-					-(cursor.x - data!.cursors[0]!.x) / partitionDims[0],
-					{
-						duration: transitionDuration,
-						easing: Easing.inOut(Easing.ease),
-					}
-				);
-				if (playType === 'practice') return;
-				cursor.notes.forEach((note) => {
-					piano.current?.start({
-						note: note.note,
-						duration: note.duration,
-					});
-				});
-			}
-		);
-	}, [timestamp, data?.cursors, isPianoLoaded]);
+	React.useEffect(updateCursor, [data?.cursors, isPianoLoaded, timestamp.current]);
 
 	const animatedStyle = useAnimatedStyle(() => ({
 		left: `${partitionOffset.value * 100}%`,

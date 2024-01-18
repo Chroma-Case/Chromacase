@@ -15,7 +15,7 @@ import { useStopwatch } from 'react-use-precision-timer';
 import { MIDIAccess, MIDIMessageEvent, requestMIDIAccess } from '@motiz88/react-native-midi';
 import * as Linking from 'expo-linking';
 import url from 'url';
-import PartitionMagic from '../components/Play/PartitionMagic';
+import PartitionMagic, { updateCursor } from '../components/Play/PartitionMagic';
 import useColorScheme from '../hooks/colorScheme';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme, useBreakpointValue } from 'native-base';
@@ -25,6 +25,7 @@ import { Clock, Cup } from 'iconsax-react-native';
 import PlayViewControlBar from '../components/Play/PlayViewControlBar';
 import ScoreModal from '../components/ScoreModal';
 import { PlayScore, ScoreMessage } from '../components/Play/PlayScore';
+import { updateTime as updateTimeControlBar } from '../components/Play/PlayTimestampShow';
 
 type PlayViewProps = {
 	songId: number;
@@ -68,7 +69,8 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const webSocket = useRef<WebSocket>();
 	const [paused, setPause] = useState<boolean>(true);
 	const stopwatch = useStopwatch();
-	const [time, setTime] = useState(0);
+	// const [time, setTime] = useState(0);
+	const time = useRef(0);
 	const [endResult, setEndResult] = useState<unknown>();
 	const [shouldPlay, setShouldPlay] = useState(false);
 	const songHistory = useQuery(API.getSongHistory(songId));
@@ -195,7 +197,10 @@ const PlayView = ({ songId }: PlayViewProps) => {
 				setScore(Math.floor((Math.max(points, 0) * 100) / maxPoints));
 
 				if (data.type == 'step') {
-					setTime(data.timestamp);
+					// setTime(data.timestamp);
+					time.current = data.timestamp;
+					updateCursor?.();
+					updateTimeControlBar?.();
 					return;
 				}
 				let formattedMessage = '';
@@ -261,7 +266,9 @@ const PlayView = ({ songId }: PlayViewProps) => {
 		if (playType == 'practice') return;
 
 		const interval = setInterval(() => {
-			setTime(() => getElapsedTime());
+			time.current = getElapsedTime();
+			updateCursor?.();
+			updateTimeControlBar?.();
 		}, 200);
 		return () => clearInterval(interval);
 	}, [playType]);
