@@ -258,19 +258,22 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	};
 
 	useEffect(() => {
-		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
+		if (playType == 'practice') return;
+
 		const interval = setInterval(() => {
-			if (playType != 'practice') {
-				setTime(() => getElapsedTime());
-			} // Countdown
+			setTime(() => getElapsedTime());
 		}, 200);
+		return () => clearInterval(interval);
+	}, [playType]);
+
+	useEffect(() => {
+		ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE).catch(() => {});
 
 		return () => {
 			ScreenOrientation.unlockAsync().catch(() => {});
 			stopwatch.stop();
-			clearInterval(interval);
 		};
-	}, [playType]);
+	}, []);
 
 	useEffect(() => {
 		// Song.data is updated on navigation.navigate (do not know why)
