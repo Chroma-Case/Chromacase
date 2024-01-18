@@ -18,11 +18,7 @@ const ForgotPasswordView = () => {
 			return 'Error with email, please contact support';
 		}
 	}
-	return (
-		<div>
-			<ForgotPasswordForm onSubmit={handleSubmit} />
-		</div>
-	);
+	return <ForgotPasswordForm onSubmit={handleSubmit} />;
 };
 
 export default ForgotPasswordView;
