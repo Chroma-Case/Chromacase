@@ -78,6 +78,8 @@ const PartitionMagic = ({
 	const cursorTop = (data?.cursors[cursorDisplayIdx]?.y ?? 0) - cursorPaddingVertical;
 	const cursorLeft = (data?.cursors[0]?.x ?? 0) - cursorPaddingHorizontal;
 
+	console.log(melodySound.current?._loaded);
+
 	if (!endPartitionReached && currentCurIdx.current + 1 === data?.cursors.length) {
 		// weird contraption but the mobile don't want classic functions to be called
 		// with the withTiming function :(
@@ -86,7 +88,7 @@ const PartitionMagic = ({
 
 	React.useEffect(() => {
 		// In practice mode, no sound is played so just act as the piano is loaded
-		if (playType === 'practice' || playType === undefined) {
+		if (playType === 'practice' || !playType) {
 			setIsPianoLoaded(true);
 			return;
 		}
@@ -120,7 +122,7 @@ const PartitionMagic = ({
 				piano.current = null;
 			}
 		};
-	}, []);
+	}, [playType]);
 	const partitionDims = React.useMemo<[number, number]>(() => {
 		return [data?.pageWidth ?? 0, data?.pageHeight ?? 1];
 	}, [data]);
