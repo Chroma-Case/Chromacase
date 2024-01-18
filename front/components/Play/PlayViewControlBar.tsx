@@ -6,11 +6,12 @@ import { MetronomeControls } from '../Metronome';
 import StarProgress from '../StarProgress';
 import Song from '../../models/Song';
 import { useTheme } from 'native-base';
+import { PlayTimestampShow } from './PlayTimestampShow';
 
 type PlayViewControlBarProps = {
 	playType: 'practice' | 'normal' | null;
 	song: Song;
-	time: number;
+	time: React.MutableRefObject<number>;
 	paused: boolean;
 	score: number;
 	disabled: boolean;
@@ -132,18 +133,7 @@ const PlayViewControlBar = ({
 					}}
 					onPress={onEnd}
 				/>
-				<Text color={textColor[900]}>
-					{time < 0
-						? paused
-							? '0:00'
-							: Math.floor((time % 60000) / 1000)
-									.toFixed(0)
-									.toString()
-						: `${Math.floor(time / 60000)}:${Math.floor((time % 60000) / 1000)
-								.toFixed(0)
-								.toString()
-								.padStart(2, '0')}`}
-				</Text>
+				<PlayTimestampShow paused={paused} time={time} />
 				<StarProgress
 					value={score}
 					max={100}
