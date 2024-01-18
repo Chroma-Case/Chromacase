@@ -74,7 +74,7 @@ const PlayView = ({ songId }: PlayViewProps) => {
 	const songHistory = useQuery(API.getSongHistory(songId));
 	const endCalled = useRef(false);
 	const [score, setScore] = useState(0); // Between 0 and 100
-	const getElapsedTime = () => stopwatch.getElapsedRunningTime() - 3000;
+	const getElapsedTime = () => stopwatch.getElapsedRunningTime();
 	const [readyToPlay, setReadyToPlay] = useState(false);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [midiKeyboardFound, setMidiKeyboardFound] = useState<boolean>();
@@ -444,7 +444,9 @@ const PlayView = ({ songId }: PlayViewProps) => {
 						setShouldPlay(false);
 					}}
 					onResume={() => {
-						setShouldPlay(true);
+						setTimeout(() => {
+							setShouldPlay(true);
+						}, 3000);
 					}}
 				/>
 			</SafeAreaView>
