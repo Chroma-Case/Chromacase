@@ -85,7 +85,9 @@ def send(o):
 
 class Scorometer:
 	def __init__(self, mode: int, midiFile: str, song_id: int, user_id: int) -> None:
-		self.partition: Partition = getPartition(midiFile)
+		r = requests.get(f"{BACK_URL}/song/{song_id}/assets/cursors", headers=auth_header).json()
+		cursors = r["cursors"]
+		self.partition: Partition = getPartition(midiFile, cursors)
 		self.practice_partition: list[list[Key]] = self.getPracticePartition(mode)
 		# the log generated is so long that it's longer than the stderr buffer resulting in a crash
 		# logging.debug({"partition": self.partition.notes})
