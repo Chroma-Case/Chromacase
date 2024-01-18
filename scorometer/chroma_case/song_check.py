@@ -9,8 +9,12 @@ from mido import MidiFile
 
 RATIO = 1.0
 
-def getPartition(midiFile: str) -> Partition:
+def getPartition(midiFile: str, cursors) -> Partition:
 		notes = []
+		for cursor in cursors:
+			for i in cursor["notes"]:
+				notes += [Key(i["note"], cursor["timestamp"], i["duration"])]
+		'''
 		s = 0
 		notes_on = {}
 		prev_note_on = {}
@@ -29,6 +33,7 @@ def getPartition(midiFile: str) -> Partition:
 				note_start = notes_on[d["note"]]
 				notes.append(Key(d["note"], note_start, duration - 10))
 				notes_on[d["note"]] = s  # 500
+		'''		
 		return Partition(midiFile, notes)
 
 
