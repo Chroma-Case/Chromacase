@@ -86,7 +86,7 @@ const PartitionMagic = ({
 
 	React.useEffect(() => {
 		// In practice mode, no sound is played so just act as the piano is loaded
-		if (playType == 'practice') {
+		if (playType === 'practice' || playType === undefined) {
 			setIsPianoLoaded(true);
 			return;
 		}
@@ -191,7 +191,7 @@ const PartitionMagic = ({
 
 	React.useEffect(() => {
 		if (!shouldPlay) return;
-		if (!piano.current || !isPianoLoaded) return;
+		if (!isPianoLoaded || melodySound.current) return;
 		if (!data || data?.cursors.length === 0) return;
 		getCursorToPlay(
 			data!.cursors,
